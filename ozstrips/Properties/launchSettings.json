@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ozstrips": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files (x86)\\vatSys\\bin\\vatSys.exe",
+      "workingDirectory": "C:\\Program Files (x86)\\vatSys",
+      "nativeDebugging": true
+    }
+  }
+}
