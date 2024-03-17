@@ -21,7 +21,7 @@ namespace maxrumsey.ozstrips.gui
             this.child = child;
 
             gb_cont.Controls.Add(child);
-            child.Anchor = AnchorStyles.None;
+            child.Anchor = AnchorStyles.Top;
             child.Location = new Point(6, 16);
             
             this.Text = text;

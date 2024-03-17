@@ -57,11 +57,13 @@ namespace maxrumsey.ozstrips.gui
 
         public void OpenHdgAltModal()
         {
-            AltHdgControl modalChild = new AltHdgControl();
+            AltHdgControl modalChild = new AltHdgControl(stripController);
             BaseModal bm = new BaseModal(modalChild, "Edit");
             bm.ReturnEvent += new ReturnEventHandler(HeadingAltReturned);
-            bm.SetDesktopLocation(Cursor.Position.X, Cursor.Position.Y);
+            //bm.SetDesktopLocation(Cursor.Position.X, Cursor.Position.Y);
             bm.ShowDialog();
+            SetModalCoord(bm);
+
         }
 
         /*
@@ -72,8 +74,14 @@ namespace maxrumsey.ozstrips.gui
             AltHdgControl control = (AltHdgControl) args.child;
             if (control.Alt != "") stripController.CFL = control.Alt;
             if (control.Hdg != "") stripController.HDG = control.Hdg;
+            if (control.Runway != "") stripController.DepRWY = control.Runway;
 
+        }
 
+        public void SetModalCoord(BaseModal bm)
+        {
+            int screenCount = Screen.AllScreens.Count();
+            bm.Location = new Point(Cursor.Position.X, Cursor.Position.Y);
         }
     }
     

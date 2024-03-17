@@ -30,9 +30,25 @@ namespace maxrumsey.ozstrips.gui
             stripControl = new Strip(this);
             //stripHolderControl = new 
         }
-        public void FDRUpdate()
+        public void UpdateFDR()
         {
             stripControl.UpdateStrip();
+        }
+        public static void UpdateFDR(FDP2.FDR fdr)
+        {
+            bool found = false;
+            foreach (StripController controller in stripControllers)
+            {
+                if (controller.fdr == fdr)
+                {
+                    found = true;
+                    controller.UpdateFDR();
+                }
+            }
+            if (!found)
+            {
+
+            }
         }
         public String CFL
         {
@@ -48,7 +64,35 @@ namespace maxrumsey.ozstrips.gui
                 FDP2.SetGlobalOps(fdr, "H" + value);
             }
         }
+        public String DepRWY
+        {
+            get
+            {
+                return fdr.DepartureRunway.Name;
+            }
+            set
+            {
+                String aerodrome = fdr.DepAirport;
+                List<Airspace2.SystemRunway> runways = Airspace2.GetRunways(aerodrome);
+                foreach (Airspace2.SystemRunway runway in runways)
+                {
+                    if (runway.Name == value)
+                    {
+                        FDP2.SetDepartureRunway(fdr, runway);
+                    }
+                }
 
+
+            }
+        }
+        public List<Airspace2.SystemRunway> PossibleDepRunways
+        {
+            get
+            {
+                String aerodrome = fdr.DepAirport;
+                return Airspace2.GetRunways(aerodrome);
+            }
+        }
 
 
     }

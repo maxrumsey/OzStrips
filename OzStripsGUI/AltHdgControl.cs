@@ -7,18 +7,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using vatsys;
+using static vatsys.FDP2;
+using static vatsys.SectorsVolumes;
 
 namespace maxrumsey.ozstrips.gui
 {
     public partial class AltHdgControl : UserControl
     {
-        public AltHdgControl()
+        private List<Airspace2.SystemRunway> runways;
+        private List<Airspace2.SIDSTAR> sids;
+        private StripController stripController;
+        public AltHdgControl(StripController controller)
         {
+            stripController = controller;
+            runways = controller.PossibleDepRunways;
             InitializeComponent();
+            foreach (Airspace2.SystemRunway runway in runways)
+            {
+                cb_runway.Items.Add(runway.Name);
+            }
         }
 
         public string Hdg { get { return tb_hdg.Text; } }
         public string Alt { get { return tb_alt.Text; } }
+        public string Runway { get { return cb_runway.Text; } }
+        public string SID { get { return cb_sid.Text; } }
+
 
         private void AltHdgControl_Load(object sender, EventArgs e)
         {
@@ -99,5 +114,32 @@ namespace maxrumsey.ozstrips.gui
         {
             AddHdgVal(9);
         }
+
+        private void cb_runway_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateSIDS();
+
+        }
+        private void updateSIDS()
+        {
+            String aerodrome = stripController.fdr.DepAirport;
+
+            List<Airspace2.SystemRunway> runways = Airspace2.GetRunways(aerodrome);
+            Airspace2.SystemRunway sysRunway;
+            foreach (Airspace2.SystemRunway runway in runways)
+            {
+                if (runway.Name == Runway)
+                {
+                    sysRunway = runway;
+                    foreach (Airspace2.SystemRunway.SIDSTARKey sid in sysRunway.SIDs)
+                    {
+                        cb_sid.Items.Add(sid.sidStar.Name);
+                    }
+            
+                }
+            }
+
+        }
     }
 }
+
