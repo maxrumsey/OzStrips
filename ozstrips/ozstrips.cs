@@ -32,11 +32,8 @@ namespace maxrumsey.ozstrips
 
         private void Connected(object sender, EventArgs e)
         {
-            Errors.Add(new Exception("Connection Established"));
             vatsysConn = Network.Me;
             isObs = !vatsysConn.IsRealATC;
-
-            MMI.InvokeOnGUI((System.Windows.Forms.MethodInvoker)delegate () { OpenGUI(); });
             
            try
             {

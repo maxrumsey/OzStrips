@@ -92,6 +92,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AltHdgControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AltHdgControl.Designer.cs">
+      <DependentUpon>AltHdgControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="BaseModal.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -121,6 +127,9 @@
     <Compile Include="Strip.Designer.cs">
       <DependentUpon>Strip.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="AltHdgControl.resx">
+      <DependentUpon>AltHdgControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="BaseModal.resx">
       <DependentUpon>BaseModal.cs</DependentUpon>
     </EmbeddedResource>

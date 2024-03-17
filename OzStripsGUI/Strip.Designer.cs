@@ -50,6 +50,11 @@
             this.pl_std = new System.Windows.Forms.Panel();
             this.lb_std = new System.Windows.Forms.Label();
             this.tp_rte = new System.Windows.Forms.ToolTip(this.components);
+            this.pl_multi3 = new System.Windows.Forms.Panel();
+            this.pl_hdg = new System.Windows.Forms.Panel();
+            this.lb_hdg = new System.Windows.Forms.Label();
+            this.pl_alt = new System.Windows.Forms.Panel();
+            this.lb_alt = new System.Windows.Forms.Label();
             this.pl_eobt.SuspendLayout();
             this.pl_acid.SuspendLayout();
             this.pl_multi.SuspendLayout();
@@ -61,6 +66,9 @@
             this.pl_ades.SuspendLayout();
             this.pl_sid.SuspendLayout();
             this.pl_std.SuspendLayout();
+            this.pl_multi3.SuspendLayout();
+            this.pl_hdg.SuspendLayout();
+            this.pl_alt.SuspendLayout();
             this.SuspendLayout();
             // 
             // pl_eobt
@@ -270,11 +278,63 @@
             this.lb_std.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lb_std.Click += new System.EventHandler(this.lb_std_Click);
             // 
+            // pl_multi3
+            // 
+            this.pl_multi3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pl_multi3.Controls.Add(this.pl_hdg);
+            this.pl_multi3.Controls.Add(this.pl_alt);
+            this.pl_multi3.Location = new System.Drawing.Point(435, 0);
+            this.pl_multi3.Margin = new System.Windows.Forms.Padding(0);
+            this.pl_multi3.Name = "pl_multi3";
+            this.pl_multi3.Size = new System.Drawing.Size(100, 52);
+            this.pl_multi3.TabIndex = 4;
+            this.pl_multi3.Click += new System.EventHandler(this.pl_multi3_Click);
+            // 
+            // pl_hdg
+            // 
+            this.pl_hdg.Controls.Add(this.lb_hdg);
+            this.pl_hdg.Location = new System.Drawing.Point(-1, 29);
+            this.pl_hdg.Name = "pl_hdg";
+            this.pl_hdg.Size = new System.Drawing.Size(100, 19);
+            this.pl_hdg.TabIndex = 1;
+            // 
+            // lb_hdg
+            // 
+            this.lb_hdg.AutoEllipsis = true;
+            this.lb_hdg.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lb_hdg.Location = new System.Drawing.Point(0, 0);
+            this.lb_hdg.Name = "lb_hdg";
+            this.lb_hdg.Size = new System.Drawing.Size(100, 19);
+            this.lb_hdg.TabIndex = 0;
+            this.lb_hdg.Text = "Hdg";
+            this.lb_hdg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lb_hdg.Click += new System.EventHandler(this.lb_hdg_Click);
+            // 
+            // pl_alt
+            // 
+            this.pl_alt.Controls.Add(this.lb_alt);
+            this.pl_alt.Location = new System.Drawing.Point(-1, 0);
+            this.pl_alt.Name = "pl_alt";
+            this.pl_alt.Size = new System.Drawing.Size(100, 29);
+            this.pl_alt.TabIndex = 0;
+            // 
+            // lb_alt
+            // 
+            this.lb_alt.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lb_alt.Location = new System.Drawing.Point(0, 0);
+            this.lb_alt.Name = "lb_alt";
+            this.lb_alt.Size = new System.Drawing.Size(100, 29);
+            this.lb_alt.TabIndex = 0;
+            this.lb_alt.Text = "Alt";
+            this.lb_alt.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lb_alt.Click += new System.EventHandler(this.lb_alt_Click);
+            // 
             // Strip
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.pl_multi3);
             this.Controls.Add(this.pl_std);
             this.Controls.Add(this.pl_sid);
             this.Controls.Add(this.pl_multi2);
@@ -294,6 +354,9 @@
             this.pl_ades.ResumeLayout(false);
             this.pl_sid.ResumeLayout(false);
             this.pl_std.ResumeLayout(false);
+            this.pl_multi3.ResumeLayout(false);
+            this.pl_hdg.ResumeLayout(false);
+            this.pl_alt.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -321,5 +384,10 @@
         private System.Windows.Forms.Panel pl_std;
         private System.Windows.Forms.Label lb_std;
         private System.Windows.Forms.ToolTip tp_rte;
+        private System.Windows.Forms.Panel pl_multi3;
+        private System.Windows.Forms.Panel pl_hdg;
+        private System.Windows.Forms.Label lb_hdg;
+        private System.Windows.Forms.Panel pl_alt;
+        private System.Windows.Forms.Label lb_alt;
     }
 }

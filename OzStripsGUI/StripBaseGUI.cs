@@ -54,6 +54,27 @@ namespace maxrumsey.ozstrips.gui
         {
 
         }
+
+        public void OpenHdgAltModal()
+        {
+            AltHdgControl modalChild = new AltHdgControl();
+            BaseModal bm = new BaseModal(modalChild, "Edit");
+            bm.ReturnEvent += new ReturnEventHandler(HeadingAltReturned);
+            bm.SetDesktopLocation(Cursor.Position.X, Cursor.Position.Y);
+            bm.ShowDialog();
+        }
+
+        /*
+         *  Returned event args from handler
+         */
+        public void HeadingAltReturned(object source, ModalReturnArgs args)
+        {
+            AltHdgControl control = (AltHdgControl) args.child;
+            if (control.Alt != "") stripController.CFL = control.Alt;
+            if (control.Hdg != "") stripController.HDG = control.Hdg;
+
+
+        }
     }
     
 }

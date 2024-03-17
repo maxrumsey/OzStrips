@@ -115,7 +115,7 @@
             this.flp_bay.FlowDirection = System.Windows.Forms.FlowDirection.BottomUp;
             this.flp_bay.Location = new System.Drawing.Point(5, 28);
             this.flp_bay.Name = "flp_bay";
-            this.flp_bay.Size = new System.Drawing.Size(521, 882);
+            this.flp_bay.Size = new System.Drawing.Size(695, 882);
             this.flp_bay.TabIndex = 2;
             this.flp_bay.WrapContents = false;
             // 

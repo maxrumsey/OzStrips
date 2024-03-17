@@ -72,5 +72,23 @@ namespace maxrumsey.ozstrips.gui
             BaseModal bm = new BaseModal(child, "a");
             bm.ShowDialog();
         }
+
+
+        // open hdg-alt box
+        private void pl_multi3_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void lb_hdg_Click(object sender, EventArgs e)
+        {
+            OpenHdgAltModal();
+        }
+
+        private void lb_alt_Click(object sender, EventArgs e)
+        {
+            OpenHdgAltModal();
+
+        }
     }
 }

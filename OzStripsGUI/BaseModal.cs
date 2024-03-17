@@ -10,9 +10,11 @@ using System.Windows.Forms;
 
 namespace maxrumsey.ozstrips.gui
 {
+
     public partial class BaseModal : Form
     {
         Control child;
+        public event ReturnEventHandler ReturnEvent;
         public BaseModal(Control child, String text)
         {
             InitializeComponent();
@@ -34,8 +36,19 @@ namespace maxrumsey.ozstrips.gui
         {
             // to add
             // child.confirm();
-
+            ReturnEvent(this, new ModalReturnArgs(this.child));
             this.Close();
         }
+
+       
     }
+    public class ModalReturnArgs : EventArgs
+    {
+        public Control child;
+        public ModalReturnArgs(Object child)
+        {
+            this.child = (Control) child;
+        }
+    }
+    public delegate void ReturnEventHandler(object source, ModalReturnArgs e);
 }

@@ -8,7 +8,7 @@ using vatsys;
 
 namespace maxrumsey.ozstrips.gui
 {
-    
+
     public class StripController
     {
         public FDP2.FDR fdr;
@@ -34,6 +34,22 @@ namespace maxrumsey.ozstrips.gui
         {
             stripControl.UpdateStrip();
         }
+        public String CFL
+        {
+            get => this.fdr.CFLString; set
+            {
+                FDP2.SetCFL(fdr, value);
+            }
+        }
+        public String HDG
+        {
+            set
+            {
+                FDP2.SetGlobalOps(fdr, "H" + value);
+            }
+        }
+
+
 
     }
 
