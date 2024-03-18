@@ -29,6 +29,13 @@ namespace maxrumsey.ozstrips.gui
             Bays.Add(bay);
         }
 
+        public void ForceRerender()
+        {
+            foreach (Bay bay in Bays)
+            {
+                bay.ForceRerender();
+            }
+        }
          
     }
 }

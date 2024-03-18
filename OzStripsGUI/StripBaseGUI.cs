@@ -50,10 +50,8 @@ namespace maxrumsey.ozstrips.gui
 
         }
 
-        public void UpdateStrip()
-        {
+        public virtual void UpdateStrip() { }
 
-        }
 
         public void OpenHdgAltModal()
         {

@@ -55,7 +55,7 @@ namespace maxrumsey.ozstrips
             //Errors.Add(new Exception("mew"));
             //System.Diagnostics.Process.Start("http://google.com");
             socketClient.SendFDR(updated);
-            if (GUI != null) GUI.Invoke((System.Windows.Forms.MethodInvoker)delegate () { GUI.UpdateFDR(updated); });
+            if (GUI != null && GUI.IsHandleCreated) GUI.Invoke((System.Windows.Forms.MethodInvoker)delegate () { GUI.UpdateFDR(updated); });
         }
         
         /// Not needed for this plugin. But you could for instance, use the new position of the radar track or its change in state (cancelled, etc.) to do some processing. 

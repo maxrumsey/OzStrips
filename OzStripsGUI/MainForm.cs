@@ -61,14 +61,19 @@ namespace maxrumsey.ozstrips.gui
         {
             tb_Time.Text = DateTime.UtcNow.ToString("HH:mm:ss");
         }
-        /*public void FDRDownlink(List<FDP2.FDR> fdrs)
+
+        private void forceRerenderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            flp_bay.Controls.Clear();
-            foreach (FDP2.FDR fdr in fdrs)
-            {
-                flp_bay.Controls.Add(new Strip(fdr));
-            }
-        }*/
+            bayManager.ForceRerender();
+        }
+        /*public void FDRDownlink(List<FDP2.FDR> fdrs)
+{
+   flp_bay.Controls.Clear();
+   foreach (FDP2.FDR fdr in fdrs)
+   {
+       flp_bay.Controls.Add(new Strip(fdr));
+   }
+}*/
 
     }
 }

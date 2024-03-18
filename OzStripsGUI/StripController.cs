@@ -136,11 +136,11 @@ namespace maxrumsey.ozstrips.gui
             }
         }
 
-        public void CreateError(String error)
+        public static void CreateError(String error)
         {
             CreateError(new Exception(error));
         }
-        public void CreateError(Exception error)
+        public static void CreateError(Exception error)
         {
             Errors.Add(error, "OzStrips");
         }

@@ -36,6 +36,13 @@ namespace maxrumsey.ozstrips.gui
             Strips.Add(stripController); // todo: add control action
             ChildPanel.Controls.Add(stripController.stripControl);
         }
+        public void ForceRerender()
+        {
+            foreach (StripController s in Strips)
+            {
+                s.UpdateFDR();
+            }
+        }
 
     }
 }

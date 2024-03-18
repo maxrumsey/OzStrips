@@ -35,6 +35,7 @@
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.flp_bay = new System.Windows.Forms.FlowLayoutPanel();
+            this.forceRerenderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -99,7 +100,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.closeToolStripMenuItem});
+            this.closeToolStripMenuItem,
+            this.forceRerenderToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1784, 24);
@@ -118,6 +120,13 @@
             this.flp_bay.Size = new System.Drawing.Size(695, 882);
             this.flp_bay.TabIndex = 2;
             this.flp_bay.WrapContents = false;
+            // 
+            // forceRerenderToolStripMenuItem
+            // 
+            this.forceRerenderToolStripMenuItem.Name = "forceRerenderToolStripMenuItem";
+            this.forceRerenderToolStripMenuItem.Size = new System.Drawing.Size(98, 20);
+            this.forceRerenderToolStripMenuItem.Text = "Force Rerender";
+            this.forceRerenderToolStripMenuItem.Click += new System.EventHandler(this.forceRerenderToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -152,6 +161,7 @@
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.FlowLayoutPanel flp_bay;
+        private System.Windows.Forms.ToolStripMenuItem forceRerenderToolStripMenuItem;
     }
 }
 

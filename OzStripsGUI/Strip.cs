@@ -29,13 +29,13 @@ namespace maxrumsey.ozstrips.gui
 
         }
 
-        public new void UpdateStrip()
+        public override void UpdateStrip()
         {
             if (fdr == null) return;
             System.Console.WriteLine(fdr.Callsign + ":" + fdr.AssignedSSRCode);
             lb_eobt.Text = fdr.ETD.ToString("HHmm");
             lb_acid.Text = fdr.Callsign;
-            lb_ssr.Text = (fdr.AssignedSSRCode == -1) ? "XXXX" : Convert.ToString(fdr.AssignedSSRCode, 8);
+            lb_ssr.Text = (fdr.AssignedSSRCode == -1) ? "XXXX" : Convert.ToString(fdr.AssignedSSRCode, 8).PadLeft(4, '0');
             lb_type.Text = fdr.AircraftType;
             lb_frul.Text = fdr.FlightRules;
             lb_route.Text = fdr.Route;
