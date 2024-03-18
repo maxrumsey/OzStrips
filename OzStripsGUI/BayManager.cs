@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace maxrumsey.ozstrips.gui
 {
-    internal class BayManager
+    public class BayManager
     {
         public List<Bay> Bays;
         public BayManager() {
@@ -29,5 +29,6 @@ namespace maxrumsey.ozstrips.gui
             Bays.Add(bay);
         }
 
+         
     }
 }

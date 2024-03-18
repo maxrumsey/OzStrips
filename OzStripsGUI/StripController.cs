@@ -37,7 +37,7 @@ namespace maxrumsey.ozstrips.gui
         {
             stripControl.UpdateStrip();
         }
-        public static void UpdateFDR(FDP2.FDR fdr)
+        public static void UpdateFDR(FDP2.FDR fdr, BayManager bayManager)
         {
             bool found = false;
             foreach (StripController controller in stripControllers)
@@ -50,7 +50,9 @@ namespace maxrumsey.ozstrips.gui
             }
             if (!found)
             {
-                // todo: add creation of new strip
+                // todo: add this logic into separate static function
+                StripController stripController = new StripController(fdr);
+                bayManager.AddStrip(stripController);
             }
         }
         public String CFL

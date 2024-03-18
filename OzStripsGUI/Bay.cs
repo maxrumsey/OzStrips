@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace maxrumsey.ozstrips.gui
 {
-    internal class Bay
+    public class Bay
     {
         public List<StripBay> BayTypes;
         public BayManager Manager;

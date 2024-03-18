@@ -54,7 +54,7 @@ namespace maxrumsey.ozstrips.gui
 
         public void UpdateFDR(FDP2.FDR fdr)
         {
-            StripController.UpdateFDR(fdr);
+            StripController.UpdateFDR(fdr, bayManager);
         }
 
         private void updateTimer(object sender, EventArgs e)
