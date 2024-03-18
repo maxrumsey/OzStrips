@@ -38,10 +38,10 @@ namespace maxrumsey.ozstrips.gui
             lb_type.Text = fdr.AircraftType;
             lb_frul.Text = fdr.FlightRules;
             lb_route.Text = fdr.Route;
-            lb_sid.Text = fdr.SIDSTARString;
+            lb_sid.Text = stripController.SID;
             lb_ades.Text = fdr.DesAirport;
-
-
+            lb_alt.Text = stripController.CFL;
+            lb_hdg.Text = stripController.HDG;
         }
 
         private void lb_sid_Click(object sender, EventArgs e)

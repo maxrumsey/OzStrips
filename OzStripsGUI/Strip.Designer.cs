@@ -193,7 +193,7 @@
             this.pl_multi2.Location = new System.Drawing.Point(218, 0);
             this.pl_multi2.Margin = new System.Windows.Forms.Padding(0);
             this.pl_multi2.Name = "pl_multi2";
-            this.pl_multi2.Size = new System.Drawing.Size(63, 52);
+            this.pl_multi2.Size = new System.Drawing.Size(128, 52);
             this.pl_multi2.TabIndex = 3;
             // 
             // pl_route
@@ -201,7 +201,7 @@
             this.pl_route.Controls.Add(this.lb_route);
             this.pl_route.Location = new System.Drawing.Point(-1, 29);
             this.pl_route.Name = "pl_route";
-            this.pl_route.Size = new System.Drawing.Size(63, 19);
+            this.pl_route.Size = new System.Drawing.Size(128, 19);
             this.pl_route.TabIndex = 1;
             this.pl_route.MouseHover += new System.EventHandler(this.pl_route_MouseHover);
             // 
@@ -211,7 +211,7 @@
             this.lb_route.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lb_route.Location = new System.Drawing.Point(0, 0);
             this.lb_route.Name = "lb_route";
-            this.lb_route.Size = new System.Drawing.Size(63, 19);
+            this.lb_route.Size = new System.Drawing.Size(128, 19);
             this.lb_route.TabIndex = 0;
             this.lb_route.Text = "rte";
             this.lb_route.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -222,7 +222,7 @@
             this.pl_ades.Controls.Add(this.lb_ades);
             this.pl_ades.Location = new System.Drawing.Point(-1, 0);
             this.pl_ades.Name = "pl_ades";
-            this.pl_ades.Size = new System.Drawing.Size(63, 29);
+            this.pl_ades.Size = new System.Drawing.Size(128, 29);
             this.pl_ades.TabIndex = 0;
             // 
             // lb_ades
@@ -230,7 +230,7 @@
             this.lb_ades.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lb_ades.Location = new System.Drawing.Point(0, 0);
             this.lb_ades.Name = "lb_ades";
-            this.lb_ades.Size = new System.Drawing.Size(63, 29);
+            this.lb_ades.Size = new System.Drawing.Size(128, 29);
             this.lb_ades.TabIndex = 0;
             this.lb_ades.Text = "ades";
             this.lb_ades.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -241,7 +241,7 @@
             this.pl_sid.BackColor = System.Drawing.SystemColors.ControlDark;
             this.pl_sid.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pl_sid.Controls.Add(this.lb_sid);
-            this.pl_sid.Location = new System.Drawing.Point(368, -1);
+            this.pl_sid.Location = new System.Drawing.Point(433, -1);
             this.pl_sid.Margin = new System.Windows.Forms.Padding(0);
             this.pl_sid.Name = "pl_sid";
             this.pl_sid.Size = new System.Drawing.Size(61, 52);
@@ -262,7 +262,7 @@
             // 
             this.pl_std.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pl_std.Controls.Add(this.lb_std);
-            this.pl_std.Location = new System.Drawing.Point(281, -1);
+            this.pl_std.Location = new System.Drawing.Point(346, -1);
             this.pl_std.Margin = new System.Windows.Forms.Padding(0);
             this.pl_std.Name = "pl_std";
             this.pl_std.Size = new System.Drawing.Size(44, 52);
@@ -285,7 +285,7 @@
             this.pl_multi3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pl_multi3.Controls.Add(this.pl_hdg);
             this.pl_multi3.Controls.Add(this.pl_alt);
-            this.pl_multi3.Location = new System.Drawing.Point(325, 0);
+            this.pl_multi3.Location = new System.Drawing.Point(390, 0);
             this.pl_multi3.Margin = new System.Windows.Forms.Padding(0);
             this.pl_multi3.Name = "pl_multi3";
             this.pl_multi3.Size = new System.Drawing.Size(43, 52);
@@ -344,7 +344,7 @@
             this.Controls.Add(this.pl_acid);
             this.Controls.Add(this.pl_eobt);
             this.Name = "Strip";
-            this.Size = new System.Drawing.Size(428, 50);
+            this.Size = new System.Drawing.Size(492, 50);
             this.pl_eobt.ResumeLayout(false);
             this.pl_acid.ResumeLayout(false);
             this.pl_multi.ResumeLayout(false);

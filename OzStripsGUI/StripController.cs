@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using vatsys;
@@ -63,6 +65,16 @@ namespace maxrumsey.ozstrips.gui
             set
             {
                 FDP2.SetGlobalOps(fdr, "H" + value);
+            }
+            get
+            {
+                Regex r = new Regex(@"H(\d{3})");
+                Match hdgMatch = r.Match(fdr.GlobalOpData);
+                if (hdgMatch.Success)
+                {
+                    return hdgMatch.Value;
+                }
+                else return "";
             }
         }
         public String DepRWY

@@ -12,7 +12,7 @@
 * create strips from fdr creation
  - requires strip bays and all that jazz
 * make more error robust
-
+* add ades and adep strips
 
 # Bugs
 * Quickly closing and reopening causes a full crash
