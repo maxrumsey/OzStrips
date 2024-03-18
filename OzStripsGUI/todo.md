@@ -11,3 +11,8 @@
 * open modal @ cursor pos ???
 * create strips from fdr creation
  - requires strip bays and all that jazz
+* make more error robust
+
+
+# Bugs
+* Quickly closing and reopening causes a full crash

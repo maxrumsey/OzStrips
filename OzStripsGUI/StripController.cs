@@ -30,6 +30,7 @@ namespace maxrumsey.ozstrips.gui
             stripControl = new Strip(this);
             //stripHolderControl = new 
         }
+
         public void UpdateFDR()
         {
             stripControl.UpdateStrip();
@@ -128,6 +129,10 @@ namespace maxrumsey.ozstrips.gui
         public void CreateError(Exception error)
         {
             Errors.Add(error, "OzStrips");
+        }
+        public void OpenVatsysFDR()
+        {
+            MMI.OpenFPWindow(fdr);
         }
     }
 

@@ -66,6 +66,12 @@ namespace maxrumsey.ozstrips.gui
 
         }
 
+        public void OpenVatsysFDRModMenu()
+        {
+            //MMI.OpenFPWindow(stripController.fdr);
+            stripController.OpenVatsysFDR();
+        }
+
         /*
          *  Returned event args from handler
          */

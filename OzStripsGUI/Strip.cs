@@ -90,5 +90,15 @@ namespace maxrumsey.ozstrips.gui
             OpenHdgAltModal();
 
         }
+
+        private void lb_route_Click(object sender, EventArgs e)
+        {
+            OpenVatsysFDRModMenu();
+        }
+
+        private void lb_ades_Click(object sender, EventArgs e)
+        {
+            OpenVatsysFDRModMenu();
+        }
     }
 }
