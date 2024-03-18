@@ -27,6 +27,11 @@ namespace maxrumsey.ozstrips.gui
             {
                 cb_runway.Items.Add(runway.Name);
             }
+            tb_alt.Text = controller.CFL;
+            if (controller.CFL != "") cb_alt.Text = controller.CFL;
+            //tb_hdg.Text = controller.HDG; // todo: add some sort of parsing for this
+            cb_runway.Text = controller.DepRWY;
+            cb_sid.Text = controller.SID;
         }
 
         public string Hdg { get { return tb_hdg.Text; } }

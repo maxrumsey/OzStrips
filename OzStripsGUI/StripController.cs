@@ -68,7 +68,8 @@ namespace maxrumsey.ozstrips.gui
         {
             get
             {
-                return fdr.DepartureRunway.Name;
+                if (fdr.DepartureRunway != null) return fdr.DepartureRunway.Name;
+                else return "";
             }
             set
             {
