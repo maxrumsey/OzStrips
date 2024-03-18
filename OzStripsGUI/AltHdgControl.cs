@@ -124,6 +124,8 @@ namespace maxrumsey.ozstrips.gui
         {
             String aerodrome = stripController.fdr.DepAirport;
 
+            cb_sid.Items.Clear();
+
             List<Airspace2.SystemRunway> runways = Airspace2.GetRunways(aerodrome);
             Airspace2.SystemRunway sysRunway;
             foreach (Airspace2.SystemRunway runway in runways)

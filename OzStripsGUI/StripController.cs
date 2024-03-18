@@ -47,7 +47,7 @@ namespace maxrumsey.ozstrips.gui
             }
             if (!found)
             {
-
+                // todo: add creation of new strip
             }
         }
         public String CFL
@@ -85,6 +85,32 @@ namespace maxrumsey.ozstrips.gui
 
             }
         }
+
+        public String SID
+        {
+            get
+            {
+                return fdr.SIDSTARString;
+            }
+            set
+            {
+                bool found = false;
+                foreach (Airspace2.SystemRunway.SIDSTARKey possibleSID in fdr.DepartureRunway.SIDs)
+                {
+                    if (possibleSID.sidStar.Name == value)
+                    {
+                        FDP2.SetSID(fdr, possibleSID.sidStar);
+                        found = true;
+                    }
+                }
+                if (!found)
+                {
+                    CreateError("Attempted to set invalid SID");
+                }
+
+            }
+        }
+
         public List<Airspace2.SystemRunway> PossibleDepRunways
         {
             get
@@ -94,7 +120,14 @@ namespace maxrumsey.ozstrips.gui
             }
         }
 
-
+        public void CreateError(String error)
+        {
+            CreateError(new Exception(error));
+        }
+        public void CreateError(Exception error)
+        {
+            Errors.Add(error, "OzStrips");
+        }
     }
 
     public enum StripBay

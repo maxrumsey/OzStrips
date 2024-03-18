@@ -75,7 +75,9 @@ namespace maxrumsey.ozstrips.gui
             if (control.Alt != "") stripController.CFL = control.Alt;
             if (control.Hdg != "") stripController.HDG = control.Hdg;
             if (control.Runway != "") stripController.DepRWY = control.Runway;
-
+            if (control.SID != "") {
+                stripController.SID = control.SID;
+            }
         }
 
         public void SetModalCoord(BaseModal bm)
