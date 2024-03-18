@@ -15,6 +15,7 @@
 * add ades and adep strips
 * auto assign SSR
 * handle deletion of strips and 
+* add sid triggering and all that
 
 # Bugs
 * Quickly closing and reopening causes a full crash

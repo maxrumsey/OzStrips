@@ -28,11 +28,18 @@ namespace maxrumsey.ozstrips.gui
             timer.Tick += updateTimer;
             timer.Start();
 
-            bayManager = new BayManager();
+            bayManager = new BayManager(flp_main) ;
             Bay bay1 = new Bay(new List<StripBay>() { StripBay.BAY_PREA },bayManager, "Bay1");
             bayManager.AddBay(bay1);
-            bay1.ChildPanel = flp_bay;
+            Bay bay2 = new Bay(new List<StripBay>() { StripBay.BAY_PREA }, bayManager, "Bay2");
+            bayManager.AddBay(bay2);
+            Bay bay3 = new Bay(new List<StripBay>() { StripBay.BAY_PREA }, bayManager, "Bay3");
+            bayManager.AddBay(bay3);
 
+            bay1.ChildPanel = flp_bay1;
+            bay2.ChildPanel = flp_bay2;
+            bay3.ChildPanel = flp_bay3;
+            bayManager.Resize();
             foreach (FDP2.FDR fdr in fdrs)
             {
                 StripController stripController = new StripController(fdr);
@@ -66,13 +73,18 @@ namespace maxrumsey.ozstrips.gui
         {
             bayManager.ForceRerender();
         }
+
+        private void MainForm_SizeChanged(object sender, EventArgs e)
+        {
+            bayManager.Resize();
+        }
         /*public void FDRDownlink(List<FDP2.FDR> fdrs)
 {
-   flp_bay.Controls.Clear();
-   foreach (FDP2.FDR fdr in fdrs)
-   {
-       flp_bay.Controls.Add(new Strip(fdr));
-   }
+flp_bay.Controls.Clear();
+foreach (FDP2.FDR fdr in fdrs)
+{
+flp_bay.Controls.Add(new Strip(fdr));
+}
 }*/
 
     }
