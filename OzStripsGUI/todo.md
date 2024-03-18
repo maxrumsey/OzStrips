@@ -13,6 +13,8 @@
  - requires strip bays and all that jazz
 * make more error robust
 * add ades and adep strips
+* auto assign SSR
+* handle deletion of strips and 
 
 # Bugs
 * Quickly closing and reopening causes a full crash

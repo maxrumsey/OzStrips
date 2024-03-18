@@ -11,7 +11,6 @@ using vatsys;
 using maxrumsey.ozstrips;
 using System.Net.Sockets;
 using System.Net.Http.Headers;
-using static vatsys.FDP2;
 
 namespace maxrumsey.ozstrips.gui
 {
@@ -19,6 +18,7 @@ namespace maxrumsey.ozstrips.gui
     {
         Timer timer;
         Socket socket;
+        BayManager bayManager;
         public MainForm(Socket _socket, List<FDP2.FDR> fdrs)
         {
             socket = _socket;
@@ -28,16 +28,22 @@ namespace maxrumsey.ozstrips.gui
             timer.Tick += updateTimer;
             timer.Start();
 
+            bayManager = new BayManager();
+            Bay bay1 = new Bay(new List<StripBay>() { StripBay.BAY_PREA },bayManager, "Bay1");
+            bayManager.AddBay(bay1);
+            bay1.ChildPanel = flp_bay;
+
             foreach (FDP2.FDR fdr in fdrs)
             {
                 StripController stripController = new StripController(fdr);
+                bayManager.AddStrip(stripController);
             }
-            flp_bay.Controls.Clear();
+            /*flp_bay.Controls.Clear();
             foreach (StripController controller in StripController.stripControllers)
             {
                 flp_bay.Controls.Add(controller.stripControl);
 
-            }
+            }*/
         }
 
 

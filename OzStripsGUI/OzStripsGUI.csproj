@@ -104,6 +104,8 @@
     <Compile Include="BaseModal.Designer.cs">
       <DependentUpon>BaseModal.cs</DependentUpon>
     </Compile>
+    <Compile Include="Bay.cs" />
+    <Compile Include="BayManager.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

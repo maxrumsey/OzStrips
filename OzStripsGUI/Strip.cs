@@ -17,7 +17,6 @@ namespace maxrumsey.ozstrips.gui
         {
             this.fdr = controller.fdr;
             InitializeComponent();
-            UpdateStrip();
 
             this.cockColourControls = new Panel[] {
                 this.pl_eobt,
@@ -26,6 +25,8 @@ namespace maxrumsey.ozstrips.gui
                 };
 
             this.stripController = controller;
+            UpdateStrip();
+
         }
 
         public new void UpdateStrip()
