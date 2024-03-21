@@ -11,7 +11,7 @@ namespace maxrumsey.ozstrips.gui
     public class BayManager
     {
         public List<Bay> Bays;
-        private FlowLayoutPanel flp_main;
+        public FlowLayoutPanel flp_main;
         public BayManager(FlowLayoutPanel main) {
             Bays = new List<Bay>();
             this.flp_main = main;
@@ -31,6 +31,8 @@ namespace maxrumsey.ozstrips.gui
         public void AddBay(Bay bay)
         {
             Bays.Add(bay);
+            flp_main.Controls.Add(bay.ChildPanel);
+            flp_main.PerformLayout();
         }
 
         public void ForceRerender()

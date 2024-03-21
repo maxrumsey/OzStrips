@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,8 +20,18 @@ namespace maxrumsey.ozstrips.gui
             BayTypes = bays;
             Manager = bm;
             Name = name;
+
+            FlowLayoutPanel flp = new FlowLayoutPanel();
+            flp.AutoScroll = true;
+            flp.BackColor = Color.Green;
+            flp.Margin = new Padding(0);
+            flp.Size = new Size(100, 100);
+            flp.Location = new Point(0, 0);
+            flp.Name = "flp_" + name;
+            this.ChildPanel = flp;
+
         }
-        
+
         public bool ResponsibleFor(StripBay bay)
         {
             if (BayTypes.Contains(bay))

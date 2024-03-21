@@ -9,7 +9,7 @@
 <  - add sid setting
 <  - fix no auto pop of values
 * open modal @ cursor pos ???
-* create strips from fdr creation
+< create strips from fdr creation
  - requires strip bays and all that jazz
 * make more error robust
 * add ades and adep strips

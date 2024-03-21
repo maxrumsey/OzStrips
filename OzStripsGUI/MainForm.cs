@@ -28,17 +28,15 @@ namespace maxrumsey.ozstrips.gui
             timer.Tick += updateTimer;
             timer.Start();
 
+
             bayManager = new BayManager(flp_main) ;
             Bay bay1 = new Bay(new List<StripBay>() { StripBay.BAY_PREA },bayManager, "Bay1");
             bayManager.AddBay(bay1);
-            Bay bay2 = new Bay(new List<StripBay>() { StripBay.BAY_PREA }, bayManager, "Bay2");
+            Bay bay2 = new Bay(new List<StripBay>() { StripBay.BAY_TAXI }, bayManager, "Bay2");
             bayManager.AddBay(bay2);
-            Bay bay3 = new Bay(new List<StripBay>() { StripBay.BAY_PREA }, bayManager, "Bay3");
+            Bay bay3 = new Bay(new List<StripBay>() { StripBay.BAY_RUNWAY }, bayManager, "Bay3");
             bayManager.AddBay(bay3);
 
-            bay1.ChildPanel = flp_bay1;
-            bay2.ChildPanel = flp_bay2;
-            bay3.ChildPanel = flp_bay3;
             bayManager.Resize();
             foreach (FDP2.FDR fdr in fdrs)
             {
@@ -67,6 +65,7 @@ namespace maxrumsey.ozstrips.gui
         private void updateTimer(object sender, EventArgs e)
         {
             tb_Time.Text = DateTime.UtcNow.ToString("HH:mm:ss");
+            bayManager.ForceRerender();
         }
 
         private void forceRerenderToolStripMenuItem_Click(object sender, EventArgs e)

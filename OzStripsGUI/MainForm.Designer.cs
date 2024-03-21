@@ -36,13 +36,9 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.forceRerenderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flp_main = new System.Windows.Forms.FlowLayoutPanel();
-            this.flp_bay3 = new System.Windows.Forms.FlowLayoutPanel();
-            this.flp_bay2 = new System.Windows.Forms.FlowLayoutPanel();
-            this.flp_bay1 = new System.Windows.Forms.FlowLayoutPanel();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
-            this.flp_main.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -74,7 +70,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(25, 13);
+            this.label1.Location = new System.Drawing.Point(28, 11);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(39, 16);
             this.label1.TabIndex = 0;
@@ -122,49 +118,12 @@
             // flp_main
             // 
             this.flp_main.AutoScroll = true;
-            this.flp_main.Controls.Add(this.flp_bay1);
-            this.flp_main.Controls.Add(this.flp_bay2);
-            this.flp_main.Controls.Add(this.flp_bay3);
             this.flp_main.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flp_main.Location = new System.Drawing.Point(0, 24);
             this.flp_main.Name = "flp_main";
             this.flp_main.Size = new System.Drawing.Size(1784, 892);
             this.flp_main.TabIndex = 2;
             this.flp_main.WrapContents = false;
-            // 
-            // flp_bay3
-            // 
-            this.flp_bay3.AutoScroll = true;
-            this.flp_bay3.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.flp_bay3.Location = new System.Drawing.Point(1200, 0);
-            this.flp_bay3.Margin = new System.Windows.Forms.Padding(0);
-            this.flp_bay3.Name = "flp_bay3";
-            this.flp_bay3.Padding = new System.Windows.Forms.Padding(2);
-            this.flp_bay3.Size = new System.Drawing.Size(600, 100);
-            this.flp_bay3.TabIndex = 0;
-            // 
-            // flp_bay2
-            // 
-            this.flp_bay2.AutoScroll = true;
-            this.flp_bay2.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.flp_bay2.Location = new System.Drawing.Point(600, 0);
-            this.flp_bay2.Margin = new System.Windows.Forms.Padding(0);
-            this.flp_bay2.Name = "flp_bay2";
-            this.flp_bay2.Padding = new System.Windows.Forms.Padding(2);
-            this.flp_bay2.Size = new System.Drawing.Size(600, 100);
-            this.flp_bay2.TabIndex = 1;
-            // 
-            // flp_bay1
-            // 
-            this.flp_bay1.AutoScroll = true;
-            this.flp_bay1.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.flp_bay1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flp_bay1.Location = new System.Drawing.Point(0, 0);
-            this.flp_bay1.Margin = new System.Windows.Forms.Padding(0);
-            this.flp_bay1.Name = "flp_bay1";
-            this.flp_bay1.Padding = new System.Windows.Forms.Padding(2);
-            this.flp_bay1.Size = new System.Drawing.Size(600, 100);
-            this.flp_bay1.TabIndex = 1;
             // 
             // MainForm
             // 
@@ -186,7 +145,6 @@
             this.panel2.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            this.flp_main.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -202,9 +160,6 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem forceRerenderToolStripMenuItem;
         private System.Windows.Forms.FlowLayoutPanel flp_main;
-        private System.Windows.Forms.FlowLayoutPanel flp_bay3;
-        private System.Windows.Forms.FlowLayoutPanel flp_bay1;
-        private System.Windows.Forms.FlowLayoutPanel flp_bay2;
     }
 }
 
