@@ -85,13 +85,13 @@ namespace maxrumsey.ozstrips.gui
             {
                 panel.Size = new System.Drawing.Size(x_each, y_main);
                 panel.Margin = new System.Windows.Forms.Padding();
-                panel.Padding = new System.Windows.Forms.Padding(3);
+                panel.Padding = new System.Windows.Forms.Padding(2);
 
             }
             foreach (Bay bay in Bays)
             {
                 int childnum = flp_vert_boards[bay.VerticalBoardNumber].Controls.Count;
-                bay.ChildPanel.Size = new System.Drawing.Size(x_each, y_main / childnum);
+                bay.ChildPanel.Size = new System.Drawing.Size(x_each-4, (y_main-4) / childnum);
             }
         }
          
