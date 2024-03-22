@@ -12,9 +12,15 @@ namespace maxrumsey.ozstrips.gui
     {
         public List<Bay> Bays;
         public FlowLayoutPanel flp_main;
+        public List<FlowLayoutPanel> flp_vert_boards = new List<FlowLayoutPanel>();
         public BayManager(FlowLayoutPanel main) {
             Bays = new List<Bay>();
             this.flp_main = main;
+        }
+
+        public void AddVertBoard(FlowLayoutPanel flp_vert)
+        {
+            flp_vert_boards.Add(flp_vert);
         }
 
         public void AddStrip(StripController stripController)
@@ -53,11 +59,11 @@ namespace maxrumsey.ozstrips.gui
             AddStrip(stripController);
         }
 
-        public void AddBay(Bay bay)
+        public void AddBay(Bay bay, int vertboardnum)
         {
             Bays.Add(bay);
-            flp_main.Controls.Add(bay.ChildPanel);
-            flp_main.PerformLayout();
+            flp_vert_boards[vertboardnum].Controls.Add(bay.ChildPanel);
+            //flp_main.PerformLayout();
         }
 
         public void ForceRerender()
@@ -75,13 +81,17 @@ namespace maxrumsey.ozstrips.gui
 
             int x_each = flp_main.Size.Width / 3;
 
+            foreach (FlowLayoutPanel panel in flp_vert_boards)
+            {
+                panel.Size = new System.Drawing.Size(x_each, y_main);
+                panel.Margin = new System.Windows.Forms.Padding();
+                panel.Padding = new System.Windows.Forms.Padding(3);
+
+            }
             foreach (Bay bay in Bays)
             {
-                if (bay.ChildPanel == null) continue;
-                bay.ChildPanel.Size = new System.Drawing.Size(x_each, y_main);
-                bay.ChildPanel.Margin = new System.Windows.Forms.Padding();
-                bay.ChildPanel.Padding = new System.Windows.Forms.Padding(3);
-
+                int childnum = flp_vert_boards[bay.VerticalBoardNumber].Controls.Count;
+                bay.ChildPanel.Size = new System.Drawing.Size(x_each, y_main / childnum);
             }
         }
          

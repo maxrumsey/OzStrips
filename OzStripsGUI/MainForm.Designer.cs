@@ -120,6 +120,7 @@
             this.flp_main.AutoScroll = true;
             this.flp_main.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flp_main.Location = new System.Drawing.Point(0, 24);
+            this.flp_main.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
             this.flp_main.Name = "flp_main";
             this.flp_main.Size = new System.Drawing.Size(1784, 892);
             this.flp_main.TabIndex = 2;

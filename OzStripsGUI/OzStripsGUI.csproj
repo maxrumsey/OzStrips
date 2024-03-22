@@ -105,6 +105,12 @@
       <DependentUpon>BaseModal.cs</DependentUpon>
     </Compile>
     <Compile Include="Bay.cs" />
+    <Compile Include="BayControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BayControl.Designer.cs">
+      <DependentUpon>BayControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="BayManager.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -134,6 +140,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="BaseModal.resx">
       <DependentUpon>BaseModal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BayControl.resx">
+      <DependentUpon>BayControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

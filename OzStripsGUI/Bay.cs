@@ -14,21 +14,15 @@ namespace maxrumsey.ozstrips.gui
         public BayManager Manager;
         public String Name;
         public List<StripController> Strips = new List<StripController>();
-        public FlowLayoutPanel ChildPanel;
-        public Bay(List<StripBay> bays, BayManager bm, String name)
+        public BayControl ChildPanel;
+        public int VerticalBoardNumber;
+        public Bay(List<StripBay> bays, BayManager bm, String name, int vertboardnum)
         {
             BayTypes = bays;
             Manager = bm;
             Name = name;
-
-            FlowLayoutPanel flp = new FlowLayoutPanel();
-            flp.AutoScroll = true;
-            flp.BackColor = Color.Green;
-            flp.Margin = new Padding(0);
-            flp.Size = new Size(100, 100);
-            flp.Location = new Point(0, 0);
-            flp.Name = "flp_" + name;
-            this.ChildPanel = flp;
+            VerticalBoardNumber = vertboardnum;
+            this.ChildPanel = new BayControl(name);
 
         }
 
@@ -49,13 +43,14 @@ namespace maxrumsey.ozstrips.gui
         public void RemoveStrip(StripController controller)
         {
             Strips.Remove(controller);
+
         }
 
         //todo: check for dupes
         public void AddStrip(StripController stripController)
         {
             Strips.Add(stripController); // todo: add control action
-            ChildPanel.Controls.Add(stripController.stripControl);
+            ChildPanel.ChildPanel.Controls.Add(stripController.stripControl);
         }
         public void ForceRerender()
         {
