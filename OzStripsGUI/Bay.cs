@@ -50,7 +50,7 @@ namespace maxrumsey.ozstrips.gui
         public void AddStrip(StripController stripController)
         {
             Strips.Add(stripController); // todo: add control action
-            ChildPanel.ChildPanel.Controls.Add(stripController.stripControl);
+            ChildPanel.ChildPanel.Controls.Add(stripController.stripHolderControl);
         }
         public void ForceRerender()
         {

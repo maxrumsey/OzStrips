@@ -23,6 +23,7 @@ namespace maxrumsey.ozstrips.gui
         public StripBaseGUI()
         {
             InitializeComponent();
+            this.Dock = DockStyle.Fill;
         }
         public void Cock(int _cockLevel)
         {

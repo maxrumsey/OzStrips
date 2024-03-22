@@ -276,6 +276,7 @@
             this.lb_std.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lb_std.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lb_std.Location = new System.Drawing.Point(0, 0);
+            this.lb_std.Margin = new System.Windows.Forms.Padding(3);
             this.lb_std.Name = "lb_std";
             this.lb_std.Size = new System.Drawing.Size(42, 50);
             this.lb_std.TabIndex = 0;

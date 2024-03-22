@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -30,7 +31,18 @@ namespace maxrumsey.ozstrips.gui
         }
         public void CreateStripObj()
         {
+            stripHolderControl = new Panel();
+            stripHolderControl.BackColor = Color.Blue;
+            stripHolderControl.Padding = new Padding(3);
+            stripHolderControl.Margin = new Padding(0);
+
+            //stripHolderControl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            stripHolderControl.Size = new Size(100, 100);
+
             stripControl = new Strip(this);
+            stripHolderControl.Size = new Size(stripControl.Size.Width, stripControl.Size.Height+6);
+            stripHolderControl.Controls.Add(stripControl);
+
             //stripHolderControl = new 
         }
 
