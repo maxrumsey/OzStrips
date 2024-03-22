@@ -55,6 +55,8 @@
             this.lb_hdg = new System.Windows.Forms.Label();
             this.pl_alt = new System.Windows.Forms.Panel();
             this.lb_alt = new System.Windows.Forms.Label();
+            this.pl_rwy = new System.Windows.Forms.Panel();
+            this.lb_rwy = new System.Windows.Forms.Label();
             this.pl_eobt.SuspendLayout();
             this.pl_acid.SuspendLayout();
             this.pl_multi.SuspendLayout();
@@ -69,6 +71,7 @@
             this.pl_multi3.SuspendLayout();
             this.pl_hdg.SuspendLayout();
             this.pl_alt.SuspendLayout();
+            this.pl_rwy.SuspendLayout();
             this.SuspendLayout();
             // 
             // pl_eobt
@@ -241,7 +244,7 @@
             this.pl_sid.BackColor = System.Drawing.SystemColors.ControlDark;
             this.pl_sid.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pl_sid.Controls.Add(this.lb_sid);
-            this.pl_sid.Location = new System.Drawing.Point(433, -1);
+            this.pl_sid.Location = new System.Drawing.Point(477, -1);
             this.pl_sid.Margin = new System.Windows.Forms.Padding(0);
             this.pl_sid.Name = "pl_sid";
             this.pl_sid.Size = new System.Drawing.Size(61, 52);
@@ -331,11 +334,34 @@
             this.lb_alt.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lb_alt.Click += new System.EventHandler(this.lb_alt_Click);
             // 
+            // pl_rwy
+            // 
+            this.pl_rwy.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pl_rwy.Controls.Add(this.lb_rwy);
+            this.pl_rwy.Location = new System.Drawing.Point(433, 0);
+            this.pl_rwy.Margin = new System.Windows.Forms.Padding(0);
+            this.pl_rwy.Name = "pl_rwy";
+            this.pl_rwy.Size = new System.Drawing.Size(44, 52);
+            this.pl_rwy.TabIndex = 3;
+            // 
+            // lb_rwy
+            // 
+            this.lb_rwy.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lb_rwy.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_rwy.Location = new System.Drawing.Point(0, 0);
+            this.lb_rwy.Name = "lb_rwy";
+            this.lb_rwy.Size = new System.Drawing.Size(42, 50);
+            this.lb_rwy.TabIndex = 0;
+            this.lb_rwy.Text = "rwy";
+            this.lb_rwy.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lb_rwy.Click += new System.EventHandler(this.lb_hdg_Click);
+            // 
             // Strip
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.pl_rwy);
             this.Controls.Add(this.pl_multi3);
             this.Controls.Add(this.pl_std);
             this.Controls.Add(this.pl_sid);
@@ -344,7 +370,7 @@
             this.Controls.Add(this.pl_acid);
             this.Controls.Add(this.pl_eobt);
             this.Name = "Strip";
-            this.Size = new System.Drawing.Size(492, 50);
+            this.Size = new System.Drawing.Size(538, 50);
             this.pl_eobt.ResumeLayout(false);
             this.pl_acid.ResumeLayout(false);
             this.pl_multi.ResumeLayout(false);
@@ -359,6 +385,7 @@
             this.pl_multi3.ResumeLayout(false);
             this.pl_hdg.ResumeLayout(false);
             this.pl_alt.ResumeLayout(false);
+            this.pl_rwy.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -391,5 +418,7 @@
         private System.Windows.Forms.Label lb_hdg;
         private System.Windows.Forms.Panel pl_alt;
         private System.Windows.Forms.Label lb_alt;
+        private System.Windows.Forms.Panel pl_rwy;
+        private System.Windows.Forms.Label lb_rwy;
     }
 }

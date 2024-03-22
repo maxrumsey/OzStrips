@@ -19,6 +19,7 @@ namespace maxrumsey.ozstrips.gui
 
         public void AddStrip(StripController stripController)
         {
+            stripController.BayManager = this;
             foreach (Bay bay in Bays)
             {
                 if (bay.ResponsibleFor(stripController.currentBay))
@@ -26,6 +27,30 @@ namespace maxrumsey.ozstrips.gui
                     bay.AddStrip(stripController);
                 }
             }
+        }
+
+        public Bay FindBay(StripController stripController) {
+            foreach (Bay bay in Bays)
+            {
+                if (bay.OwnsStrip(stripController))
+                {
+                    return bay;
+                }
+            }
+            return null;
+
+        }
+
+        public void UpdateBay(StripController stripController)
+        {
+            foreach (Bay bay in Bays)
+            {
+                if (bay.OwnsStrip(stripController))
+                {
+                    bay.RemoveStrip(stripController);
+                }
+            }
+            AddStrip(stripController);
         }
 
         public void AddBay(Bay bay)

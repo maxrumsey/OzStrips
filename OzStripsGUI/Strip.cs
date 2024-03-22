@@ -43,11 +43,12 @@ namespace maxrumsey.ozstrips.gui
             lb_ades.Text = fdr.DesAirport;
             lb_alt.Text = stripController.CFL;
             lb_hdg.Text = stripController.HDG;
+            lb_rwy.Text = stripController.DepRWY;
         }
 
         private void lb_sid_Click(object sender, EventArgs e)
         {
-
+            stripController.SIDTrigger();
         }
 
         private void lb_eobt_Click(object sender, EventArgs e)

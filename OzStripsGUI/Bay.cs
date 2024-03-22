@@ -41,6 +41,16 @@ namespace maxrumsey.ozstrips.gui
             else return false;
         }
 
+        public bool OwnsStrip(StripController controller)
+        {
+            return Strips.Contains(controller);
+        }
+
+        public void RemoveStrip(StripController controller)
+        {
+            Strips.Remove(controller);
+        }
+
         //todo: check for dupes
         public void AddStrip(StripController stripController)
         {

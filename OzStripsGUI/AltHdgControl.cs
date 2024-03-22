@@ -16,7 +16,6 @@ namespace maxrumsey.ozstrips.gui
     public partial class AltHdgControl : UserControl
     {
         private List<Airspace2.SystemRunway> runways;
-        private List<Airspace2.SIDSTAR> sids;
         private StripController stripController;
         public AltHdgControl(StripController controller)
         {

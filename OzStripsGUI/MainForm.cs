@@ -32,9 +32,9 @@ namespace maxrumsey.ozstrips.gui
             bayManager = new BayManager(flp_main) ;
             Bay bay1 = new Bay(new List<StripBay>() { StripBay.BAY_PREA },bayManager, "Bay1");
             bayManager.AddBay(bay1);
-            Bay bay2 = new Bay(new List<StripBay>() { StripBay.BAY_TAXI }, bayManager, "Bay2");
+            Bay bay2 = new Bay(new List<StripBay>() { StripBay.BAY_CLEARED }, bayManager, "Bay2");
             bayManager.AddBay(bay2);
-            Bay bay3 = new Bay(new List<StripBay>() { StripBay.BAY_RUNWAY }, bayManager, "Bay3");
+            Bay bay3 = new Bay(new List<StripBay>() { StripBay.BAY_PUSHED }, bayManager, "Bay3");
             bayManager.AddBay(bay3);
 
             bayManager.Resize();

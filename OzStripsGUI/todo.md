@@ -1,6 +1,7 @@
 ﻿# Todo
 
-* Add strip bays
+* Add strip bays 
+*  - add strip movement horizontally
 * Add vert movement of strips
 < Add container class for FDR/Strip
 < Add base control for strip common elements

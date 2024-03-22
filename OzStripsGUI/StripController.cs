@@ -18,6 +18,7 @@ namespace maxrumsey.ozstrips.gui
         public int cockLevel = 0;
         public StripBaseGUI stripControl;
         public Control stripHolderControl;
+        public BayManager BayManager;
 
         public static List<StripController> stripControllers = new List<StripController>();
 
@@ -55,6 +56,13 @@ namespace maxrumsey.ozstrips.gui
                 bayManager.AddStrip(stripController);
             }
         }
+
+        public void SIDTrigger()
+        {
+            currentBay++;
+            BayManager.UpdateBay(this);
+        }
+
         public String CFL
         {
             get => this.fdr.CFLString; set
