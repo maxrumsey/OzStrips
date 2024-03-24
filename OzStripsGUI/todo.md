@@ -4,6 +4,7 @@
 *  - add strip movement horizontally
 * - add hmi for strip bays*
 * - add pick and drop movement of strips
+	< pick done
 * Add vert movement of strips
 < Add container class for FDR/Strip
 < Add base control for strip common elements
