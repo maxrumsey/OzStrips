@@ -37,14 +37,14 @@ namespace maxrumsey.ozstrips.gui
             AddVerticalStripBoard();
             AddVerticalStripBoard();
 
-            Bay bay1 = new Bay(new List<StripBay>() { StripBay.BAY_PREA },bayManager, "Bay1", 0);
-            bayManager.AddBay(bay1, 0);
-            Bay bay2 = new Bay(new List<StripBay>() { StripBay.BAY_CLEARED }, bayManager, "Bay2", 0);
-            bayManager.AddBay(bay2, 0);
-            Bay bay3 = new Bay(new List<StripBay>() { StripBay.BAY_PUSHED }, bayManager, "Bay3", 1);
-            bayManager.AddBay(bay3, 1);
-            Bay bay4 = new Bay(new List<StripBay>() { StripBay.BAY_TAXI }, bayManager, "Bay3", 1);
-            bayManager.AddBay(bay4, 2);
+            Bay bay_pr = new Bay(new List<StripBay>() { StripBay.BAY_PREA },bayManager, "Preactive", 0);
+            Bay bay_cl = new Bay(new List<StripBay>() { StripBay.BAY_CLEARED }, bayManager, "Cleared", 0);
+            Bay bay_pb = new Bay(new List<StripBay>() { StripBay.BAY_PUSHED }, bayManager, "Pushback", 1);
+            Bay bay_tx = new Bay(new List<StripBay>() { StripBay.BAY_TAXI }, bayManager, "Taxi", 1);
+            Bay bay_hp = new Bay(new List<StripBay>() { StripBay.BAY_HOLDSHORT }, bayManager, "Holding Point", 1);
+            Bay bay_rw = new Bay(new List<StripBay>() { StripBay.BAY_RUNWAY }, bayManager, "Runway", 2);
+            Bay bay_out = new Bay(new List<StripBay>() { StripBay.BAY_OUT }, bayManager, "Departed", 2);
+            Bay bay_arr = new Bay(new List<StripBay>() { StripBay.BAY_ARRIVAL }, bayManager, "Arrivals", 2);
 
             bayManager.Resize();
             foreach (FDP2.FDR fdr in fdrs)

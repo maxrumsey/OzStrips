@@ -197,7 +197,6 @@ namespace maxrumsey.ozstrips.gui
         BAY_HOLDSHORT,
         BAY_RUNWAY,
         BAY_OUT,
-        BAY_ARRIVAL_PREA,
-        BAY_ARRIVAL_CONT
+        BAY_ARRIVAL
     }
 }

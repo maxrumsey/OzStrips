@@ -24,6 +24,8 @@ namespace maxrumsey.ozstrips.gui
             VerticalBoardNumber = vertboardnum;
             this.ChildPanel = new BayControl(bm, name, this);
 
+            bm.AddBay(this, vertboardnum);
+
         }
 
         public bool ResponsibleFor(StripBay bay)
