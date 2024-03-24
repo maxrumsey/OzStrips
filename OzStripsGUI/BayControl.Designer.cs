@@ -57,6 +57,7 @@
             this.flp_stripbay.Size = new System.Drawing.Size(481, 280);
             this.flp_stripbay.TabIndex = 1;
             this.flp_stripbay.WrapContents = false;
+            this.flp_stripbay.Click += new System.EventHandler(this.lb_bay_name_Click);
             // 
             // panel2
             // 
@@ -79,6 +80,7 @@
             this.lb_bay_name.TabIndex = 0;
             this.lb_bay_name.Text = "Bay Name";
             this.lb_bay_name.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lb_bay_name.Click += new System.EventHandler(this.lb_bay_name_Click);
             // 
             // BayControl
             // 

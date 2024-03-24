@@ -14,12 +14,26 @@ namespace maxrumsey.ozstrips.gui
     
     {
         public FlowLayoutPanel ChildPanel;
-        public BayControl(String name)
+        private Bay OwnerBay;
+        private BayManager BayManager;
+        public BayControl(BayManager bm, String name, Bay bay)
         {
             InitializeComponent();
             lb_bay_name.Text = name;
             ChildPanel = flp_stripbay;
             flp_stripbay.VerticalScroll.Visible = true;
+            this.BayManager = bm;
+            OwnerBay = bay;
+        }
+
+        private void lb_bay_name_Click(object sender, EventArgs e)
+        {
+            BayManager.DropStrip(OwnerBay);
+        }
+
+        private void flp_stripbay_Paint(object sender, PaintEventArgs e)
+        {
+            BayManager.DropStrip(OwnerBay);
         }
     }
 }

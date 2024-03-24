@@ -19,6 +19,16 @@ namespace maxrumsey.ozstrips.gui
             this.flp_main = main;
         }
 
+        public void DropStrip(Bay bay)
+        {
+            if (Picked != null)
+            {
+                Picked.currentBay = bay.BayTypes.FirstOrDefault();
+                UpdateBay(Picked);
+                SetPicked();
+            }
+        }
+
         public void AddVertBoard(FlowLayoutPanel flp_vert)
         {
             flp_vert_boards.Add(flp_vert);

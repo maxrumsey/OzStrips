@@ -22,7 +22,7 @@ namespace maxrumsey.ozstrips.gui
             Manager = bm;
             Name = name;
             VerticalBoardNumber = vertboardnum;
-            this.ChildPanel = new BayControl(name);
+            this.ChildPanel = new BayControl(bm, name, this);
 
         }
 
