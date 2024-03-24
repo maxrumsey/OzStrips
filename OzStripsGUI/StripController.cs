@@ -29,6 +29,12 @@ namespace maxrumsey.ozstrips.gui
             stripControllers.Add(this);
             CreateStripObj();
         }
+
+        public void HMI_SetPicked(bool picked)
+        {
+            stripControl.HMI_TogglePick(picked);
+        }
+
         public void CreateStripObj()
         {
             stripHolderControl = new Panel();
@@ -71,8 +77,19 @@ namespace maxrumsey.ozstrips.gui
 
         public void SIDTrigger()
         {
-            currentBay++;
+            currentBay++; // todo: fix
             BayManager.UpdateBay(this);
+        }
+
+        public void TogglePick()
+        {
+            if (BayManager.Picked == this)
+            {
+                BayManager.SetPicked();
+            } else
+            {
+                BayManager.SetPicked(this);
+            }
         }
 
         public String CFL

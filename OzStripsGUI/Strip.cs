@@ -18,6 +18,8 @@ namespace maxrumsey.ozstrips.gui
             this.fdr = controller.fdr;
             InitializeComponent();
 
+            pickToggleControl = pl_acid;
+
             this.cockColourControls = new Panel[] {
                 this.pl_eobt,
                 this.pl_multi,
@@ -101,6 +103,21 @@ namespace maxrumsey.ozstrips.gui
         private void lb_ades_Click(object sender, EventArgs e)
         {
             OpenVatsysFDRModMenu();
+        }
+
+        private void Strip_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Strip_Load_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lb_acid_Click(object sender, EventArgs e)
+        {
+            TogglePick();
         }
     }
 }

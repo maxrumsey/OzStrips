@@ -19,11 +19,11 @@ namespace maxrumsey.ozstrips.gui
         public Color defColor = Color.WhiteSmoke;
         public Panel[] cockColourControls;
         public StripController stripController;
-
+        public Panel pickToggleControl;
         public StripBaseGUI()
         {
             InitializeComponent();
-            this.Dock = DockStyle.Fill;
+            //this.Dock = DockStyle.Fill;
         }
         public void Cock(int _cockLevel)
         {
@@ -89,6 +89,25 @@ namespace maxrumsey.ozstrips.gui
         {
             int screenCount = Screen.AllScreens.Count();
             bm.Location = new Point(Cursor.Position.X, Cursor.Position.Y);
+        }
+
+        public void TogglePick()
+        {
+            if (stripController != null)
+            {
+                stripController.TogglePick();
+            }
+        }
+
+        public void HMI_TogglePick(bool picked)
+        {
+            if (pickToggleControl != null)
+            {
+                Color color = Color.Gainsboro;
+                if (picked) color = Color.Silver;
+
+                pickToggleControl.BackColor = color;
+            }
         }
     }
     

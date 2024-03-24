@@ -98,6 +98,7 @@
             // 
             // pl_acid
             // 
+            this.pl_acid.BackColor = System.Drawing.Color.Gainsboro;
             this.pl_acid.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pl_acid.Controls.Add(this.lb_acid);
             this.pl_acid.Location = new System.Drawing.Point(49, 0);
@@ -116,6 +117,7 @@
             this.lb_acid.TabIndex = 0;
             this.lb_acid.Text = "acid";
             this.lb_acid.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lb_acid.Click += new System.EventHandler(this.lb_acid_Click);
             // 
             // pl_multi
             // 
@@ -131,7 +133,6 @@
             // 
             // pl_frul
             // 
-            this.pl_frul.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.pl_frul.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pl_frul.Controls.Add(this.lb_frul);
             this.pl_frul.Location = new System.Drawing.Point(46, 29);
@@ -151,7 +152,6 @@
             // 
             // pl_ssr
             // 
-            this.pl_ssr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.pl_ssr.Controls.Add(this.lb_ssr);
             this.pl_ssr.Location = new System.Drawing.Point(-1, 29);
             this.pl_ssr.Name = "pl_ssr";
@@ -171,7 +171,6 @@
             // 
             // pl_type
             // 
-            this.pl_type.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.pl_type.Controls.Add(this.lb_type);
             this.pl_type.Location = new System.Drawing.Point(-1, 0);
             this.pl_type.Name = "pl_type";
@@ -373,6 +372,7 @@
             this.Controls.Add(this.pl_eobt);
             this.Name = "Strip";
             this.Size = new System.Drawing.Size(538, 50);
+            this.Load += new System.EventHandler(this.Strip_Load_1);
             this.pl_eobt.ResumeLayout(false);
             this.pl_acid.ResumeLayout(false);
             this.pl_multi.ResumeLayout(false);

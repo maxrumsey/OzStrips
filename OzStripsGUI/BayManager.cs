@@ -13,6 +13,7 @@ namespace maxrumsey.ozstrips.gui
         public List<Bay> Bays;
         public FlowLayoutPanel flp_main;
         public List<FlowLayoutPanel> flp_vert_boards = new List<FlowLayoutPanel>();
+        public StripController Picked;
         public BayManager(FlowLayoutPanel main) {
             Bays = new List<Bay>();
             this.flp_main = main;
@@ -21,6 +22,18 @@ namespace maxrumsey.ozstrips.gui
         public void AddVertBoard(FlowLayoutPanel flp_vert)
         {
             flp_vert_boards.Add(flp_vert);
+        }
+
+        public void SetPicked(StripController controller)
+        {
+            if (Picked != null) Picked.HMI_SetPicked(false);
+            Picked = controller;
+            controller.HMI_SetPicked(true);
+        }
+        public void SetPicked()
+        {
+            Picked.HMI_SetPicked(false);
+            Picked = null;
         }
 
         public void AddStrip(StripController stripController)
