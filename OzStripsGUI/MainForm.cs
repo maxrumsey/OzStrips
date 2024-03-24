@@ -20,6 +20,7 @@ namespace maxrumsey.ozstrips.gui
         Timer timer;
         Socket socket;
         BayManager bayManager;
+        
         public MainForm(Socket _socket, List<FDP2.FDR> fdrs)
         {
             socket = _socket;
@@ -28,6 +29,10 @@ namespace maxrumsey.ozstrips.gui
             timer.Interval = 100;
             timer.Tick += updateTimer;
             timer.Start();
+
+            AddAerodrome("YMML"); //to add more ads
+            AddAerodrome("YSSY");
+            AddAerodrome("YBBN");
 
 
 
@@ -49,7 +54,7 @@ namespace maxrumsey.ozstrips.gui
             bayManager.Resize();
             foreach (FDP2.FDR fdr in fdrs)
             {
-                StripController stripController = new StripController(fdr);
+                StripController stripController = new StripController(fdr, bayManager.AerodromeName);
                 bayManager.AddStrip(stripController);
             }
             /*flp_bay.Controls.Clear();
@@ -59,6 +64,7 @@ namespace maxrumsey.ozstrips.gui
 
             }*/
         }
+
 
 
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -98,7 +104,25 @@ namespace maxrumsey.ozstrips.gui
             flp_main.Controls.Add(flp);
             bayManager.AddVertBoard(flp);
         }
-
+        private void AddAerodrome(String name)
+        {
+            ToolStripMenuItem toolStripMenuItem = new ToolStripMenuItem {
+                Text = name
+            };
+            toolStripMenuItem.Click += (Object sender, EventArgs e) =>
+            {
+                SetAerodrome(name);
+            };
+            ts_ad.DropDownItems.Add(toolStripMenuItem);
+        }
+        private void SetAerodrome(String name)
+        {
+            if (bayManager != null)
+            {
+                bayManager.SetAerodrome(name);
+                lb_ad.Text = name;
+            }
+        }
         /*public void FDRDownlink(List<FDP2.FDR> fdrs)
 {
 flp_bay.Controls.Clear();

@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Configuration;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static vatsys.FDP2;
+using vatsys;
 
 // todo: separate GUI components into separate class
 namespace maxrumsey.ozstrips.gui
@@ -14,6 +17,7 @@ namespace maxrumsey.ozstrips.gui
         public FlowLayoutPanel flp_main;
         public List<FlowLayoutPanel> flp_vert_boards = new List<FlowLayoutPanel>();
         public StripController Picked;
+        public String AerodromeName = "YMML";
         public BayManager(FlowLayoutPanel main) {
             Bays = new List<Bay>();
             this.flp_main = main;
@@ -26,6 +30,19 @@ namespace maxrumsey.ozstrips.gui
                 Picked.currentBay = bay.BayTypes.FirstOrDefault();
                 UpdateBay(Picked);
                 SetPicked();
+            }
+        }
+
+        public void SetAerodrome(String name)
+        {
+            AerodromeName = name;
+            WipeStrips();
+            StripController.stripControllers = new List<StripController>();
+
+            foreach (FDP2.FDR fdr in FDP2.GetFDRs)
+            {
+                StripController stripController = new StripController(fdr, AerodromeName);
+                AddStrip(stripController);
             }
         }
 
@@ -44,6 +61,14 @@ namespace maxrumsey.ozstrips.gui
         {
             Picked.HMI_SetPicked(false);
             Picked = null;
+        }
+
+        public void WipeStrips()
+        {
+            foreach (Bay bay in Bays)
+            {
+                bay.WipeStrips();
+            }
         }
 
         public void AddStrip(StripController stripController)

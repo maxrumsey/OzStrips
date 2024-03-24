@@ -42,10 +42,24 @@ namespace maxrumsey.ozstrips.gui
             return Strips.Contains(controller);
         }
 
+        public void RemoveStrip(StripController controller, bool remove)
+        {
+            ChildPanel.ChildPanel.Controls.Remove(controller.stripHolderControl);
+            if (remove) Strips.Remove(controller);
+
+        }
         public void RemoveStrip(StripController controller)
         {
-            Strips.Remove(controller);
+            RemoveStrip(controller, true);
 
+        }
+        public void WipeStrips()
+        {
+            foreach (StripController strip in Strips)
+            {
+                RemoveStrip(strip, false);
+            }
+            Strips = new List<StripController>();
         }
 
         //todo: check for dupes

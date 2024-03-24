@@ -20,10 +20,11 @@ namespace maxrumsey.ozstrips.gui
         public StripBaseGUI stripControl;
         public Control stripHolderControl;
         public BayManager BayManager;
+        public StripTypes StripTye;
 
         public static List<StripController> stripControllers = new List<StripController>();
 
-        public StripController(FDP2.FDR fdr) {
+        public StripController(FDP2.FDR fdr, String AD) {
             this.fdr = fdr;
             this.currentBay = StripBay.BAY_PREA;
             stripControllers.Add(this);
@@ -46,6 +47,7 @@ namespace maxrumsey.ozstrips.gui
             stripHolderControl.Size = new Size(100, 100);
 
             stripControl = new Strip(this);
+            stripControl.Initialise();
             stripHolderControl.Size = new Size(stripControl.Size.Width, stripControl.Size.Height+6);
             stripHolderControl.Controls.Add(stripControl);
 
@@ -70,7 +72,7 @@ namespace maxrumsey.ozstrips.gui
             if (!found)
             {
                 // todo: add this logic into separate static function
-                StripController stripController = new StripController(fdr);
+                StripController stripController = new StripController(fdr, bayManager.AerodromeName);
                 bayManager.AddStrip(stripController);
             }
         }
@@ -199,4 +201,13 @@ namespace maxrumsey.ozstrips.gui
         BAY_OUT,
         BAY_ARRIVAL
     }
+    public enum StripTypes {
+        STRIP_ACD,
+        STRIP_DEP_SMC,
+        STRIP_DEP_ADC,
+        STRIP_ARR_ADC,
+        STRIP_ARR_SMC
+    }
+
+
 }

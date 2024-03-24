@@ -23,7 +23,6 @@ namespace maxrumsey.ozstrips.gui
         public StripBaseGUI()
         {
             InitializeComponent();
-            this.Dock = DockStyle.Fill;
         }
         public void Cock(int _cockLevel)
         {
@@ -109,6 +108,12 @@ namespace maxrumsey.ozstrips.gui
                 pickToggleControl.BackColor = color;
             }
         }
+        public void Initialise()
+        {
+            this.Dock = DockStyle.Fill;
+
+        }
+
     }
     
 }

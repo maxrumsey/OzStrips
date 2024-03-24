@@ -28,53 +28,58 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
+            this.pl_controlbar = new System.Windows.Forms.Panel();
+            this.pl_stat = new System.Windows.Forms.Panel();
+            this.lb_stat = new System.Windows.Forms.Label();
             this.tb_Time = new System.Windows.Forms.TextBox();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.forceRerenderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flp_main = new System.Windows.Forms.FlowLayoutPanel();
-            this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
+            this.ts_ad = new System.Windows.Forms.ToolStripMenuItem();
+            this.pl_ad = new System.Windows.Forms.Panel();
+            this.lb_ad = new System.Windows.Forms.Label();
+            this.pl_controlbar.SuspendLayout();
+            this.pl_stat.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.pl_ad.SuspendLayout();
             this.SuspendLayout();
             // 
-            // panel1
+            // pl_controlbar
             // 
-            this.panel1.BackColor = System.Drawing.Color.Gainsboro;
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.panel2);
-            this.panel1.Controls.Add(this.tb_Time);
-            this.panel1.Cursor = System.Windows.Forms.Cursors.Default;
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 916);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1784, 45);
-            this.panel1.TabIndex = 0;
+            this.pl_controlbar.BackColor = System.Drawing.Color.Gainsboro;
+            this.pl_controlbar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pl_controlbar.Controls.Add(this.pl_ad);
+            this.pl_controlbar.Controls.Add(this.pl_stat);
+            this.pl_controlbar.Controls.Add(this.tb_Time);
+            this.pl_controlbar.Cursor = System.Windows.Forms.Cursors.Default;
+            this.pl_controlbar.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pl_controlbar.Location = new System.Drawing.Point(0, 916);
+            this.pl_controlbar.Name = "pl_controlbar";
+            this.pl_controlbar.Size = new System.Drawing.Size(1784, 45);
+            this.pl_controlbar.TabIndex = 0;
             // 
-            // panel2
+            // pl_stat
             // 
-            this.panel2.BackColor = System.Drawing.Color.OrangeRed;
-            this.panel2.Controls.Add(this.label1);
-            this.panel2.Location = new System.Drawing.Point(4, 3);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(96, 37);
-            this.panel2.TabIndex = 1;
+            this.pl_stat.BackColor = System.Drawing.Color.OrangeRed;
+            this.pl_stat.Controls.Add(this.lb_stat);
+            this.pl_stat.Location = new System.Drawing.Point(4, 3);
+            this.pl_stat.Name = "pl_stat";
+            this.pl_stat.Size = new System.Drawing.Size(96, 37);
+            this.pl_stat.TabIndex = 1;
             // 
-            // label1
+            // lb_stat
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.lb_stat.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(28, 11);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(39, 16);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "DISC";
+            this.lb_stat.AutoSize = true;
+            this.lb_stat.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_stat.Location = new System.Drawing.Point(28, 11);
+            this.lb_stat.Name = "lb_stat";
+            this.lb_stat.Size = new System.Drawing.Size(39, 16);
+            this.lb_stat.TabIndex = 0;
+            this.lb_stat.Text = "DISC";
             // 
             // tb_Time
             // 
@@ -101,7 +106,8 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.closeToolStripMenuItem,
-            this.forceRerenderToolStripMenuItem});
+            this.forceRerenderToolStripMenuItem,
+            this.ts_ad});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1784, 24);
@@ -120,11 +126,39 @@
             this.flp_main.AutoScroll = true;
             this.flp_main.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flp_main.Location = new System.Drawing.Point(0, 24);
-            this.flp_main.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+            this.flp_main.Margin = new System.Windows.Forms.Padding(0);
             this.flp_main.Name = "flp_main";
             this.flp_main.Size = new System.Drawing.Size(1784, 892);
             this.flp_main.TabIndex = 2;
             this.flp_main.WrapContents = false;
+            // 
+            // ts_ad
+            // 
+            this.ts_ad.Name = "ts_ad";
+            this.ts_ad.Size = new System.Drawing.Size(79, 20);
+            this.ts_ad.Text = "Aerodrome";
+            // 
+            // pl_ad
+            // 
+            this.pl_ad.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.pl_ad.Controls.Add(this.lb_ad);
+            this.pl_ad.Location = new System.Drawing.Point(247, 3);
+            this.pl_ad.Name = "pl_ad";
+            this.pl_ad.Size = new System.Drawing.Size(96, 37);
+            this.pl_ad.TabIndex = 2;
+            // 
+            // lb_ad
+            // 
+            this.lb_ad.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lb_ad.AutoSize = true;
+            this.lb_ad.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_ad.Location = new System.Drawing.Point(28, 11);
+            this.lb_ad.Name = "lb_ad";
+            this.lb_ad.Size = new System.Drawing.Size(39, 16);
+            this.lb_ad.TabIndex = 0;
+            this.lb_ad.Text = "????";
             // 
             // MainForm
             // 
@@ -133,19 +167,21 @@
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1784, 961);
             this.Controls.Add(this.flp_main);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.pl_controlbar);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.ShowIcon = false;
             this.Text = "OzStrips";
             this.SizeChanged += new System.EventHandler(this.MainForm_SizeChanged);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
+            this.pl_controlbar.ResumeLayout(false);
+            this.pl_controlbar.PerformLayout();
+            this.pl_stat.ResumeLayout(false);
+            this.pl_stat.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.pl_ad.ResumeLayout(false);
+            this.pl_ad.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -153,14 +189,17 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel pl_controlbar;
         private System.Windows.Forms.TextBox tb_Time;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Panel pl_stat;
+        private System.Windows.Forms.Label lb_stat;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem forceRerenderToolStripMenuItem;
         private System.Windows.Forms.FlowLayoutPanel flp_main;
+        private System.Windows.Forms.ToolStripMenuItem ts_ad;
+        private System.Windows.Forms.Panel pl_ad;
+        private System.Windows.Forms.Label lb_ad;
     }
 }
 
