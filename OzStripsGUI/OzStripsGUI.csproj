@@ -127,6 +127,18 @@
       <DependentUpon>StripBaseGUI.cs</DependentUpon>
     </Compile>
     <Compile Include="StripController.cs" />
+    <Compile Include="Strip_Arr.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Strip_Arr.Designer.cs">
+      <DependentUpon>Strip_Arr.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Strip_SMC_Dep.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Strip_SMC_Dep.Designer.cs">
+      <DependentUpon>Strip_SMC_Dep.cs</DependentUpon>
+    </Compile>
     <Compile Include="UpdatePacket.cs" />
     <Compile Include="UpdatePacketFactory.cs" />
     <Compile Include="Strip_ACD.cs">
@@ -157,6 +169,14 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Strip_Arr.resx">
+      <DependentUpon>Strip_Arr.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Strip_SMC_Dep.resx">
+      <DependentUpon>Strip_SMC_Dep.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Strip_ACD.resx">
       <DependentUpon>Strip_ACD.cs</DependentUpon>
       <SubType>Designer</SubType>

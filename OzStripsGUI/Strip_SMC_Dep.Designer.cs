@@ -1,6 +1,6 @@
 ﻿namespace maxrumsey.ozstrips.gui
 {
-    partial class Strip_ACD
+    partial class Strip_SMC_Dep
     {
         /// <summary> 
         /// Required designer variable.
@@ -57,6 +57,8 @@
             this.lb_alt = new System.Windows.Forms.Label();
             this.pl_rwy = new System.Windows.Forms.Panel();
             this.lb_rwy = new System.Windows.Forms.Label();
+            this.pl_clx = new System.Windows.Forms.Panel();
+            this.lb_clx = new System.Windows.Forms.Label();
             this.pl_eobt.SuspendLayout();
             this.pl_acid.SuspendLayout();
             this.pl_multi.SuspendLayout();
@@ -73,6 +75,7 @@
             this.pl_hdg.SuspendLayout();
             this.pl_alt.SuspendLayout();
             this.pl_rwy.SuspendLayout();
+            this.pl_clx.SuspendLayout();
             this.SuspendLayout();
             // 
             // pl_eobt
@@ -263,7 +266,7 @@
             this.pl_sid.BackColor = System.Drawing.SystemColors.ControlDark;
             this.pl_sid.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pl_sid.Controls.Add(this.lb_sid);
-            this.pl_sid.Location = new System.Drawing.Point(408, -1);
+            this.pl_sid.Location = new System.Drawing.Point(452, -1);
             this.pl_sid.Margin = new System.Windows.Forms.Padding(0);
             this.pl_sid.Name = "pl_sid";
             this.pl_sid.Size = new System.Drawing.Size(61, 52);
@@ -308,7 +311,7 @@
             this.pl_multi3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pl_multi3.Controls.Add(this.pl_hdg);
             this.pl_multi3.Controls.Add(this.pl_alt);
-            this.pl_multi3.Location = new System.Drawing.Point(321, 0);
+            this.pl_multi3.Location = new System.Drawing.Point(365, 0);
             this.pl_multi3.Margin = new System.Windows.Forms.Padding(0);
             this.pl_multi3.Name = "pl_multi3";
             this.pl_multi3.Size = new System.Drawing.Size(43, 52);
@@ -358,7 +361,7 @@
             // 
             this.pl_rwy.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pl_rwy.Controls.Add(this.lb_rwy);
-            this.pl_rwy.Location = new System.Drawing.Point(364, 0);
+            this.pl_rwy.Location = new System.Drawing.Point(408, 0);
             this.pl_rwy.Margin = new System.Windows.Forms.Padding(0);
             this.pl_rwy.Name = "pl_rwy";
             this.pl_rwy.Size = new System.Drawing.Size(44, 52);
@@ -376,12 +379,35 @@
             this.lb_rwy.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lb_rwy.Click += new System.EventHandler(this.lb_hdg_Click);
             // 
-            // Strip_ACD
+            // pl_clx
+            // 
+            this.pl_clx.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pl_clx.Controls.Add(this.lb_clx);
+            this.pl_clx.Location = new System.Drawing.Point(321, 0);
+            this.pl_clx.Margin = new System.Windows.Forms.Padding(0);
+            this.pl_clx.Name = "pl_clx";
+            this.pl_clx.Size = new System.Drawing.Size(44, 52);
+            this.pl_clx.TabIndex = 3;
+            // 
+            // lb_clx
+            // 
+            this.lb_clx.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lb_clx.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_clx.Location = new System.Drawing.Point(0, 0);
+            this.lb_clx.Margin = new System.Windows.Forms.Padding(3);
+            this.lb_clx.Name = "lb_clx";
+            this.lb_clx.Size = new System.Drawing.Size(42, 50);
+            this.lb_clx.TabIndex = 0;
+            this.lb_clx.Text = "std";
+            this.lb_clx.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // Strip_SMC_Dep
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.pl_clx);
             this.Controls.Add(this.pl_rwy);
             this.Controls.Add(this.pl_multi3);
             this.Controls.Add(this.pl_std);
@@ -390,8 +416,8 @@
             this.Controls.Add(this.pl_multi);
             this.Controls.Add(this.pl_acid);
             this.Controls.Add(this.pl_eobt);
-            this.Name = "Strip_ACD";
-            this.Size = new System.Drawing.Size(468, 50);
+            this.Name = "Strip_SMC_Dep";
+            this.Size = new System.Drawing.Size(513, 50);
             this.Load += new System.EventHandler(this.Strip_Load_1);
             this.pl_eobt.ResumeLayout(false);
             this.pl_acid.ResumeLayout(false);
@@ -409,6 +435,7 @@
             this.pl_hdg.ResumeLayout(false);
             this.pl_alt.ResumeLayout(false);
             this.pl_rwy.ResumeLayout(false);
+            this.pl_clx.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -444,5 +471,7 @@
         private System.Windows.Forms.Label lb_rwy;
         private System.Windows.Forms.Panel pl_wtc;
         private System.Windows.Forms.Label lb_wtc;
+        private System.Windows.Forms.Panel pl_clx;
+        private System.Windows.Forms.Label lb_clx;
     }
 }

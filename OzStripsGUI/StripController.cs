@@ -40,18 +40,33 @@ namespace maxrumsey.ozstrips.gui
         {
             stripHolderControl = new Panel();
             stripHolderControl.BackColor = Color.Blue;
+            if (ArrDepType == StripArrDepType.ARRIVAL) stripHolderControl.BackColor = Color.Yellow;
+
             stripHolderControl.Padding = new Padding(3);
             stripHolderControl.Margin = new Padding(0);
 
             //stripHolderControl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             stripHolderControl.Size = new Size(100, 100);
 
-            stripControl = new Strip_ACD(this);
+            if (ArrDepType == StripArrDepType.ARRIVAL) stripControl = new Strip_Arr(this);
+            else if (ArrDepType == StripArrDepType.DEPARTURE && (currentBay == StripBay.BAY_PREA || currentBay == StripBay.BAY_CLEARED)) stripControl = new Strip_ACD(this);
+            else if (ArrDepType == StripArrDepType.DEPARTURE && (currentBay < StripBay.BAY_RUNWAY)) stripControl = new Strip_SMC_Dep(this);
+            else stripControl = new Strip_SMC_Dep(this);
+
             stripControl.Initialise();
             stripHolderControl.Size = new Size(stripControl.Size.Width, stripControl.Size.Height+6);
             stripHolderControl.Controls.Add(stripControl);
 
             //stripHolderControl = new 
+        }
+
+        public void ClearStripControl()
+        {
+            if (stripHolderControl != null && stripControl != null)
+            {
+                stripHolderControl.Controls.Clear();
+
+            }
         }
 
         public void UpdateFDR()
@@ -142,6 +157,16 @@ namespace maxrumsey.ozstrips.gui
                 {
                     return hdgMatch.Value;
                 }
+                else return "";
+            }
+        }
+
+        public String Time
+        {
+            get
+            {
+                if (ArrDepType == StripArrDepType.DEPARTURE && fdr.ATD == DateTime.MaxValue) return fdr.ETD.ToString("HHmm");
+                else if (ArrDepType == StripArrDepType.DEPARTURE) return fdr.ATD.ToString("HHmm");
                 else return "";
             }
         }

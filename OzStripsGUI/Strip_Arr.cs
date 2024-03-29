@@ -11,9 +11,9 @@ using vatsys;
 
 namespace maxrumsey.ozstrips.gui
 {
-    public partial class Strip_ACD : StripBaseGUI
+    public partial class Strip_Arr : StripBaseGUI
     {
-        public Strip_ACD(StripController controller)
+        public Strip_Arr(StripController controller)
         {
             this.fdr = controller.fdr;
             InitializeComponent();
@@ -26,18 +26,16 @@ namespace maxrumsey.ozstrips.gui
             base.lb_type = lb_type;
             base.lb_frul = lb_frul;
             base.lb_route = lb_route;
-            base.lb_sid = lb_sid;
             base.lb_ades = lb_ades;
             base.lb_alt = lb_alt;
             base.lb_hdg = lb_hdg;
             base.lb_rwy = lb_rwy;
             base.lb_wtc = lb_wtc;
             base.lb_std = lb_std;
-
+            base.lb_clx = lb_clx;
             this.cockColourControls = new Panel[] {
                 this.pl_eobt,
-                this.pl_multi,
-                this.pl_multi2
+                this.pl_multi
                 };
 
             this.stripController = controller;

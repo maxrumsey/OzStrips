@@ -107,7 +107,10 @@ namespace maxrumsey.ozstrips.gui
                     bay.RemoveStrip(stripController);
                 }
             }
+            stripController.ClearStripControl();
+            stripController.CreateStripObj();
             AddStrip(stripController);
+
         }
 
         public void AddBay(Bay bay, int vertboardnum)
