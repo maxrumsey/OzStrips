@@ -46,7 +46,7 @@ namespace maxrumsey.ozstrips.gui
             //stripHolderControl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             stripHolderControl.Size = new Size(100, 100);
 
-            stripControl = new Strip(this);
+            stripControl = new Strip_ACD(this);
             stripControl.Initialise();
             stripHolderControl.Size = new Size(stripControl.Size.Width, stripControl.Size.Height+6);
             stripHolderControl.Controls.Add(stripControl);

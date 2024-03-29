@@ -1,6 +1,6 @@
 ﻿namespace maxrumsey.ozstrips.gui
 {
-    partial class Strip
+    partial class Strip_ACD
     {
         /// <summary> 
         /// Required designer variable.
@@ -57,6 +57,8 @@
             this.lb_alt = new System.Windows.Forms.Label();
             this.pl_rwy = new System.Windows.Forms.Panel();
             this.lb_rwy = new System.Windows.Forms.Label();
+            this.pl_wtc = new System.Windows.Forms.Panel();
+            this.lb_wtc = new System.Windows.Forms.Label();
             this.pl_eobt.SuspendLayout();
             this.pl_acid.SuspendLayout();
             this.pl_multi.SuspendLayout();
@@ -72,6 +74,7 @@
             this.pl_hdg.SuspendLayout();
             this.pl_alt.SuspendLayout();
             this.pl_rwy.SuspendLayout();
+            this.pl_wtc.SuspendLayout();
             this.SuspendLayout();
             // 
             // pl_eobt
@@ -122,6 +125,7 @@
             // pl_multi
             // 
             this.pl_multi.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pl_multi.Controls.Add(this.pl_wtc);
             this.pl_multi.Controls.Add(this.pl_frul);
             this.pl_multi.Controls.Add(this.pl_ssr);
             this.pl_multi.Controls.Add(this.pl_type);
@@ -174,7 +178,7 @@
             this.pl_type.Controls.Add(this.lb_type);
             this.pl_type.Location = new System.Drawing.Point(-1, 0);
             this.pl_type.Name = "pl_type";
-            this.pl_type.Size = new System.Drawing.Size(70, 29);
+            this.pl_type.Size = new System.Drawing.Size(42, 29);
             this.pl_type.TabIndex = 0;
             // 
             // lb_type
@@ -182,7 +186,7 @@
             this.lb_type.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lb_type.Location = new System.Drawing.Point(0, 0);
             this.lb_type.Name = "lb_type";
-            this.lb_type.Size = new System.Drawing.Size(70, 29);
+            this.lb_type.Size = new System.Drawing.Size(42, 29);
             this.lb_type.TabIndex = 0;
             this.lb_type.Text = "type";
             this.lb_type.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -195,7 +199,7 @@
             this.pl_multi2.Location = new System.Drawing.Point(218, 0);
             this.pl_multi2.Margin = new System.Windows.Forms.Padding(0);
             this.pl_multi2.Name = "pl_multi2";
-            this.pl_multi2.Size = new System.Drawing.Size(128, 52);
+            this.pl_multi2.Size = new System.Drawing.Size(59, 52);
             this.pl_multi2.TabIndex = 3;
             // 
             // pl_route
@@ -203,7 +207,7 @@
             this.pl_route.Controls.Add(this.lb_route);
             this.pl_route.Location = new System.Drawing.Point(-1, 29);
             this.pl_route.Name = "pl_route";
-            this.pl_route.Size = new System.Drawing.Size(128, 19);
+            this.pl_route.Size = new System.Drawing.Size(54, 19);
             this.pl_route.TabIndex = 1;
             this.pl_route.MouseHover += new System.EventHandler(this.pl_route_MouseHover);
             // 
@@ -213,7 +217,7 @@
             this.lb_route.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lb_route.Location = new System.Drawing.Point(0, 0);
             this.lb_route.Name = "lb_route";
-            this.lb_route.Size = new System.Drawing.Size(128, 19);
+            this.lb_route.Size = new System.Drawing.Size(54, 19);
             this.lb_route.TabIndex = 0;
             this.lb_route.Text = "rte";
             this.lb_route.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -224,7 +228,7 @@
             this.pl_ades.Controls.Add(this.lb_ades);
             this.pl_ades.Location = new System.Drawing.Point(-1, 0);
             this.pl_ades.Name = "pl_ades";
-            this.pl_ades.Size = new System.Drawing.Size(128, 29);
+            this.pl_ades.Size = new System.Drawing.Size(54, 29);
             this.pl_ades.TabIndex = 0;
             // 
             // lb_ades
@@ -232,7 +236,7 @@
             this.lb_ades.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lb_ades.Location = new System.Drawing.Point(0, 0);
             this.lb_ades.Name = "lb_ades";
-            this.lb_ades.Size = new System.Drawing.Size(128, 29);
+            this.lb_ades.Size = new System.Drawing.Size(54, 29);
             this.lb_ades.TabIndex = 0;
             this.lb_ades.Text = "ades";
             this.lb_ades.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -243,7 +247,7 @@
             this.pl_sid.BackColor = System.Drawing.SystemColors.ControlDark;
             this.pl_sid.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pl_sid.Controls.Add(this.lb_sid);
-            this.pl_sid.Location = new System.Drawing.Point(477, -1);
+            this.pl_sid.Location = new System.Drawing.Point(408, -1);
             this.pl_sid.Margin = new System.Windows.Forms.Padding(0);
             this.pl_sid.Name = "pl_sid";
             this.pl_sid.Size = new System.Drawing.Size(61, 52);
@@ -264,7 +268,7 @@
             // 
             this.pl_std.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pl_std.Controls.Add(this.lb_std);
-            this.pl_std.Location = new System.Drawing.Point(346, -1);
+            this.pl_std.Location = new System.Drawing.Point(277, -1);
             this.pl_std.Margin = new System.Windows.Forms.Padding(0);
             this.pl_std.Name = "pl_std";
             this.pl_std.Size = new System.Drawing.Size(44, 52);
@@ -288,7 +292,7 @@
             this.pl_multi3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pl_multi3.Controls.Add(this.pl_hdg);
             this.pl_multi3.Controls.Add(this.pl_alt);
-            this.pl_multi3.Location = new System.Drawing.Point(390, 0);
+            this.pl_multi3.Location = new System.Drawing.Point(321, 0);
             this.pl_multi3.Margin = new System.Windows.Forms.Padding(0);
             this.pl_multi3.Name = "pl_multi3";
             this.pl_multi3.Size = new System.Drawing.Size(43, 52);
@@ -338,7 +342,7 @@
             // 
             this.pl_rwy.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pl_rwy.Controls.Add(this.lb_rwy);
-            this.pl_rwy.Location = new System.Drawing.Point(433, 0);
+            this.pl_rwy.Location = new System.Drawing.Point(364, 0);
             this.pl_rwy.Margin = new System.Windows.Forms.Padding(0);
             this.pl_rwy.Name = "pl_rwy";
             this.pl_rwy.Size = new System.Drawing.Size(44, 52);
@@ -356,6 +360,25 @@
             this.lb_rwy.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lb_rwy.Click += new System.EventHandler(this.lb_hdg_Click);
             // 
+            // pl_wtc
+            // 
+            this.pl_wtc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pl_wtc.Controls.Add(this.lb_wtc);
+            this.pl_wtc.Location = new System.Drawing.Point(46, 0);
+            this.pl_wtc.Name = "pl_wtc";
+            this.pl_wtc.Size = new System.Drawing.Size(23, 22);
+            this.pl_wtc.TabIndex = 3;
+            // 
+            // lb_wtc
+            // 
+            this.lb_wtc.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lb_wtc.Location = new System.Drawing.Point(0, 0);
+            this.lb_wtc.Name = "lb_wtc";
+            this.lb_wtc.Size = new System.Drawing.Size(21, 20);
+            this.lb_wtc.TabIndex = 0;
+            this.lb_wtc.Text = "L";
+            this.lb_wtc.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // Strip
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -371,7 +394,7 @@
             this.Controls.Add(this.pl_acid);
             this.Controls.Add(this.pl_eobt);
             this.Name = "Strip";
-            this.Size = new System.Drawing.Size(538, 50);
+            this.Size = new System.Drawing.Size(469, 50);
             this.Load += new System.EventHandler(this.Strip_Load_1);
             this.pl_eobt.ResumeLayout(false);
             this.pl_acid.ResumeLayout(false);
@@ -388,6 +411,7 @@
             this.pl_hdg.ResumeLayout(false);
             this.pl_alt.ResumeLayout(false);
             this.pl_rwy.ResumeLayout(false);
+            this.pl_wtc.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -422,5 +446,7 @@
         private System.Windows.Forms.Label lb_alt;
         private System.Windows.Forms.Panel pl_rwy;
         private System.Windows.Forms.Label lb_rwy;
+        private System.Windows.Forms.Panel pl_wtc;
+        private System.Windows.Forms.Label lb_wtc;
     }
 }

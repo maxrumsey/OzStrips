@@ -11,9 +11,9 @@ using vatsys;
 
 namespace maxrumsey.ozstrips.gui
 {
-    public partial class Strip : StripBaseGUI
+    public partial class Strip_ACD : StripBaseGUI
     {
-        public Strip(StripController controller)
+        public Strip_ACD(StripController controller)
         {
             this.fdr = controller.fdr;
             InitializeComponent();
