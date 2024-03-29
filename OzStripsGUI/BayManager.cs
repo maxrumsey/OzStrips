@@ -74,6 +74,9 @@ namespace maxrumsey.ozstrips.gui
         public void AddStrip(StripController stripController)
         {
             stripController.BayManager = this;
+
+            if (stripController.ApplicableToAerodrome(AerodromeName) == false) return;
+
             foreach (Bay bay in Bays)
             {
                 if (bay.ResponsibleFor(stripController.currentBay))

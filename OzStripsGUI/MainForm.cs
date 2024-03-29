@@ -52,11 +52,7 @@ namespace maxrumsey.ozstrips.gui
             Bay bay_arr = new Bay(new List<StripBay>() { StripBay.BAY_ARRIVAL }, bayManager, "Arrivals", 2);
 
             bayManager.Resize();
-            foreach (FDP2.FDR fdr in fdrs)
-            {
-                StripController stripController = new StripController(fdr, bayManager.AerodromeName);
-                bayManager.AddStrip(stripController);
-            }
+            
             /*flp_bay.Controls.Clear();
             foreach (StripController controller in StripController.stripControllers)
             {

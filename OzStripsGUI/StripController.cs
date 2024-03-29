@@ -20,7 +20,7 @@ namespace maxrumsey.ozstrips.gui
         public StripBaseGUI stripControl;
         public Control stripHolderControl;
         public BayManager BayManager;
-        public StripTypes StripTye;
+        public StripLayoutTypes StripType;
 
         public static List<StripController> stripControllers = new List<StripController>();
 
@@ -93,6 +93,31 @@ namespace maxrumsey.ozstrips.gui
                 BayManager.SetPicked(this);
             }
         }
+
+        public bool ApplicableToAerodrome(String name)
+        {
+            if (fdr.DepAirport == name || fdr.DesAirport == name)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public StripArrDepType ArrDepType
+        {
+            get {
+                if (fdr.DesAirport == BayManager.AerodromeName) {
+                    return StripArrDepType.ARRIVAL;
+                } else if (fdr.DepAirport == BayManager.AerodromeName)
+                {
+                    return StripArrDepType.DEPARTURE;
+                } else
+                {
+                    return StripArrDepType.UNKNOWN;
+                }
+            }
+        }
+
 
         public String CFL
         {
@@ -201,7 +226,7 @@ namespace maxrumsey.ozstrips.gui
         BAY_OUT,
         BAY_ARRIVAL
     }
-    public enum StripTypes {
+    public enum StripLayoutTypes {
         STRIP_ACD,
         STRIP_DEP_SMC,
         STRIP_DEP_ADC,
@@ -209,5 +234,10 @@ namespace maxrumsey.ozstrips.gui
         STRIP_ARR_SMC
     }
 
-
+    public enum StripArrDepType
+    {
+        ARRIVAL,
+        DEPARTURE,
+        UNKNOWN
+    }
 }
