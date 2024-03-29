@@ -143,22 +143,26 @@ namespace maxrumsey.ozstrips.gui
                 else return "";
             }
         }
-        public String DepRWY
+        public String RWY
         {
             get
             {
-                if (fdr.DepartureRunway != null) return fdr.DepartureRunway.Name;
+                if (ArrDepType == StripArrDepType.DEPARTURE && fdr.DepartureRunway != null) return fdr.DepartureRunway.Name;
+                else if (ArrDepType == StripArrDepType.ARRIVAL && fdr.ArrivalRunway != null) return fdr.ArrivalRunway.Name;
                 else return "";
             }
             set
             {
-                String aerodrome = fdr.DepAirport;
-                List<Airspace2.SystemRunway> runways = Airspace2.GetRunways(aerodrome);
-                foreach (Airspace2.SystemRunway runway in runways)
+                if (ArrDepType == StripArrDepType.DEPARTURE)
                 {
-                    if (runway.Name == value)
+                    String aerodrome = fdr.DepAirport;
+                    List<Airspace2.SystemRunway> runways = Airspace2.GetRunways(aerodrome);
+                    foreach (Airspace2.SystemRunway runway in runways)
                     {
-                        FDP2.SetDepartureRunway(fdr, runway);
+                        if (runway.Name == value)
+                        {
+                            FDP2.SetDepartureRunway(fdr, runway);
+                        }
                     }
                 }
 

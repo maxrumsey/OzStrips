@@ -34,7 +34,6 @@ namespace maxrumsey.ozstrips.gui
         public override void UpdateStrip()
         {
             if (fdr == null) return;
-            System.Console.WriteLine(fdr.Callsign + ":" + fdr.AssignedSSRCode);
             lb_eobt.Text = fdr.ETD.ToString("HHmm");
             lb_acid.Text = fdr.Callsign;
             lb_ssr.Text = (fdr.AssignedSSRCode == -1) ? "XXXX" : Convert.ToString(fdr.AssignedSSRCode, 8).PadLeft(4, '0');
@@ -45,7 +44,7 @@ namespace maxrumsey.ozstrips.gui
             lb_ades.Text = fdr.DesAirport;
             lb_alt.Text = stripController.CFL;
             lb_hdg.Text = stripController.HDG;
-            lb_rwy.Text = stripController.DepRWY;
+            lb_rwy.Text = stripController.RWY;
         }
 
         private void lb_sid_Click(object sender, EventArgs e)
@@ -70,11 +69,7 @@ namespace maxrumsey.ozstrips.gui
 
         private void lb_std_Click(object sender, EventArgs e)
         {
-            Label child = new Label();
-            child.Text = "abcd";
 
-            BaseModal bm = new BaseModal(child, "a");
-            bm.ShowDialog();
         }
 
 

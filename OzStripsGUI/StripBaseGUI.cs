@@ -78,7 +78,7 @@ namespace maxrumsey.ozstrips.gui
             AltHdgControl control = (AltHdgControl) args.child;
             if (control.Alt != "") stripController.CFL = control.Alt;
             if (control.Hdg != "") stripController.HDG = control.Hdg;
-            if (control.Runway != "") stripController.DepRWY = control.Runway;
+            if (control.Runway != "") stripController.RWY = control.Runway;
             if (control.SID != "") {
                 stripController.SID = control.SID;
             }
