@@ -75,7 +75,12 @@ namespace maxrumsey.ozstrips.gui
             lb_ssr.Text = (fdr.AssignedSSRCode == -1) ? "XXXX" : Convert.ToString(fdr.AssignedSSRCode, 8).PadLeft(4, '0');
             lb_type.Text = fdr.AircraftType;
             lb_frul.Text = fdr.FlightRules;
-            lb_route.Text = fdr.Route;
+
+            String rteItem =  fdr.Route.Split(' ').ToList().Find(x => !x.Contains("/"));
+            if (rteItem == null) rteItem = fdr.Route;
+
+            lb_route.Text = rteItem;
+
             lb_sid.Text = stripController.SID;
             lb_ades.Text = fdr.DesAirport;
             lb_alt.Text = stripController.CFL;
