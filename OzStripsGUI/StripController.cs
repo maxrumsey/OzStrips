@@ -106,6 +106,8 @@ namespace maxrumsey.ozstrips.gui
         public StripArrDepType ArrDepType
         {
             get {
+                if (BayManager == null) return StripArrDepType.UNKNOWN;
+
                 if (fdr.DesAirport == BayManager.AerodromeName) {
                     return StripArrDepType.ARRIVAL;
                 } else if (fdr.DepAirport == BayManager.AerodromeName)

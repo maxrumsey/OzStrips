@@ -20,6 +20,18 @@ namespace maxrumsey.ozstrips.gui
 
             pickToggleControl = pl_acid;
 
+            base.lb_eobt = lb_eobt;
+            base.lb_acid = lb_acid;
+            base.lb_ssr = lb_ssr;
+            base.lb_type = lb_type;
+            base.lb_frul = lb_frul;
+            base.lb_route = lb_route;
+            base.lb_sid = lb_sid;
+            base.lb_ades = lb_ades;
+            base.lb_alt = lb_alt;
+            base.lb_hdg = lb_hdg;
+            base.lb_rwy = lb_rwy;
+            
             this.cockColourControls = new Panel[] {
                 this.pl_eobt,
                 this.pl_multi,
@@ -29,22 +41,6 @@ namespace maxrumsey.ozstrips.gui
             this.stripController = controller;
             UpdateStrip();
 
-        }
-
-        public override void UpdateStrip()
-        {
-            if (fdr == null) return;
-            lb_eobt.Text = fdr.ETD.ToString("HHmm");
-            lb_acid.Text = fdr.Callsign;
-            lb_ssr.Text = (fdr.AssignedSSRCode == -1) ? "XXXX" : Convert.ToString(fdr.AssignedSSRCode, 8).PadLeft(4, '0');
-            lb_type.Text = fdr.AircraftType;
-            lb_frul.Text = fdr.FlightRules;
-            lb_route.Text = fdr.Route;
-            lb_sid.Text = stripController.SID;
-            lb_ades.Text = fdr.DesAirport;
-            lb_alt.Text = stripController.CFL;
-            lb_hdg.Text = stripController.HDG;
-            lb_rwy.Text = stripController.RWY;
         }
 
         private void lb_sid_Click(object sender, EventArgs e)
@@ -98,11 +94,6 @@ namespace maxrumsey.ozstrips.gui
         private void lb_ades_Click(object sender, EventArgs e)
         {
             OpenVatsysFDRModMenu();
-        }
-
-        private void Strip_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void Strip_Load_1(object sender, EventArgs e)

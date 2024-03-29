@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,10 +21,26 @@ namespace maxrumsey.ozstrips.gui
         public Panel[] cockColourControls;
         public StripController stripController;
         public Panel pickToggleControl;
+
+        public Label lb_eobt;
+        public Label lb_acid;
+        public Label lb_ssr;
+        public Label lb_type;
+        public Label lb_frul;
+        public Label lb_route;
+        public Label lb_sid;
+        public Label lb_ades;
+        public Label lb_alt;
+        public Label lb_hdg;
+        public Label lb_rwy;
+
         public StripBaseGUI()
         {
             InitializeComponent();
         }
+
+
+
         public void Cock(int _cockLevel)
         {
             if (_cockLevel == -1)
@@ -50,7 +67,21 @@ namespace maxrumsey.ozstrips.gui
 
         }
 
-        public virtual void UpdateStrip() { }
+        public void UpdateStrip()
+        {
+            if (fdr == null) return;
+            lb_eobt.Text = fdr.ETD.ToString("HHmm");
+            lb_acid.Text = fdr.Callsign;
+            lb_ssr.Text = (fdr.AssignedSSRCode == -1) ? "XXXX" : Convert.ToString(fdr.AssignedSSRCode, 8).PadLeft(4, '0');
+            lb_type.Text = fdr.AircraftType;
+            lb_frul.Text = fdr.FlightRules;
+            lb_route.Text = fdr.Route;
+            lb_sid.Text = stripController.SID;
+            lb_ades.Text = fdr.DesAirport;
+            lb_alt.Text = stripController.CFL;
+            lb_hdg.Text = stripController.HDG;
+            lb_rwy.Text = stripController.RWY;
+        }
 
 
         public void OpenHdgAltModal()
