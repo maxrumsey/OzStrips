@@ -24,9 +24,11 @@ namespace maxrumsey.ozstrips.gui
 
         public static List<StripController> stripControllers = new List<StripController>();
 
-        public StripController(FDP2.FDR fdr, String AD) {
+        public StripController(FDP2.FDR fdr, BayManager bm) {
             this.fdr = fdr;
+            this.BayManager = bm;
             this.currentBay = StripBay.BAY_PREA;
+            if (ArrDepType == StripArrDepType.ARRIVAL ) this.currentBay = StripBay.BAY_ARRIVAL;
             stripControllers.Add(this);
             CreateStripObj();
         }
@@ -87,7 +89,7 @@ namespace maxrumsey.ozstrips.gui
             if (!found)
             {
                 // todo: add this logic into separate static function
-                StripController stripController = new StripController(fdr, bayManager.AerodromeName);
+                StripController stripController = new StripController(fdr, bayManager);
                 bayManager.AddStrip(stripController);
             }
         }

@@ -41,7 +41,7 @@ namespace maxrumsey.ozstrips.gui
 
             foreach (FDP2.FDR fdr in FDP2.GetFDRs)
             {
-                StripController stripController = new StripController(fdr, AerodromeName);
+                StripController stripController = new StripController(fdr, this);
                 AddStrip(stripController);
             }
         }
