@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.flp_stripbay = new System.Windows.Forms.FlowLayoutPanel();
+            this.flp_stripbay = new CustomFLP();
             this.panel2 = new System.Windows.Forms.Panel();
             this.lb_bay_name = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
@@ -101,6 +101,6 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label lb_bay_name;
-        private System.Windows.Forms.FlowLayoutPanel flp_stripbay;
+        private CustomFLP flp_stripbay;
     }
 }

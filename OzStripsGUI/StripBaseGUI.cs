@@ -72,6 +72,7 @@ namespace maxrumsey.ozstrips.gui
 
         public void UpdateStrip()
         {
+            SuspendLayout();
             if (fdr == null) return;
             lb_eobt.Text = stripController.Time;
             lb_acid.Text = fdr.Callsign;
@@ -90,6 +91,7 @@ namespace maxrumsey.ozstrips.gui
             if (lb_hdg != null) lb_hdg.Text = stripController.HDG;
             lb_rwy.Text = stripController.RWY;
             lb_wtc.Text = fdr.AircraftWake;
+            ResumeLayout();
         }
 
 

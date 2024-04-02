@@ -44,8 +44,8 @@ namespace maxrumsey.ozstrips.gui
 
         public void RemoveStrip(StripController controller, bool remove)
         {
-            ChildPanel.ChildPanel.Controls.Remove(controller.stripHolderControl);
             if (remove) Strips.Remove(controller);
+            orderStrips();
 
         }
         public void RemoveStrip(StripController controller)
@@ -66,7 +66,6 @@ namespace maxrumsey.ozstrips.gui
         public void AddStrip(StripController stripController)
         {
             Strips.Add(stripController); // todo: add control action
-            ChildPanel.ChildPanel.Controls.Add(stripController.stripHolderControl);
             orderStrips();
         }
         public void ForceRerender()

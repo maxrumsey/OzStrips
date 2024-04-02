@@ -20,8 +20,9 @@ namespace maxrumsey.ozstrips.gui
         {
             InitializeComponent();
             lb_bay_name.Text = name;
-            ChildPanel = flp_stripbay;
+            ChildPanel = (FlowLayoutPanel) flp_stripbay;
             flp_stripbay.VerticalScroll.Visible = true;
+
             this.BayManager = bm;
             OwnerBay = bay;
         }

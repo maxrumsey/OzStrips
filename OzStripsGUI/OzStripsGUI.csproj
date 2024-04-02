@@ -112,6 +112,9 @@
       <DependentUpon>BayControl.cs</DependentUpon>
     </Compile>
     <Compile Include="BayManager.cs" />
+    <Compile Include="CustomFLP.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
