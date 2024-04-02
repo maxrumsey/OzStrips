@@ -67,6 +67,7 @@ namespace maxrumsey.ozstrips.gui
         {
             Strips.Add(stripController); // todo: add control action
             ChildPanel.ChildPanel.Controls.Add(stripController.stripHolderControl);
+            orderStrips();
         }
         public void ForceRerender()
         {
@@ -75,6 +76,28 @@ namespace maxrumsey.ozstrips.gui
                 s.UpdateFDR();
             }
         }
+        private void orderStrips()
+        {
+            ChildPanel.ChildPanel.SuspendLayout();
+            ChildPanel.ChildPanel.Controls.Clear();
+            for (int i = 0; i < Strips.Count; i++)
+            {
+                ChildPanel.ChildPanel.Controls.Add(Strips[i].stripHolderControl);
+            }
+            ChildPanel.ChildPanel.ResumeLayout();
 
+        }
+
+        public void ChangeStripPosition(StripController sc, int relpos)
+        {
+            int originalPosition = Strips.FindIndex(a => a == sc);
+            int newPosition = originalPosition + relpos;
+
+            if (newPosition < 0 || newPosition > (Strips.Count - 1)) return;
+
+            Strips.RemoveAt(originalPosition);
+            Strips.Insert(newPosition, sc);
+            orderStrips();
+        }
     }
 }

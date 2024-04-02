@@ -51,7 +51,7 @@
             // 
             this.flp_stripbay.AutoScroll = true;
             this.flp_stripbay.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flp_stripbay.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flp_stripbay.FlowDirection = System.Windows.Forms.FlowDirection.BottomUp;
             this.flp_stripbay.Location = new System.Drawing.Point(0, 42);
             this.flp_stripbay.Name = "flp_stripbay";
             this.flp_stripbay.Size = new System.Drawing.Size(481, 280);

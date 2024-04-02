@@ -119,6 +119,20 @@ namespace maxrumsey.ozstrips.gui
                 lb_ad.Text = name;
             }
         }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Up)
+            {
+                bayManager.PositionKey(1);
+            } else if (keyData == Keys.Down)
+            {
+                bayManager.PositionKey(-1);
+            }
+            
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
         /*public void FDRDownlink(List<FDP2.FDR> fdrs)
 {
 flp_bay.Controls.Clear();

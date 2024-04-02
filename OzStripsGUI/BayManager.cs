@@ -148,6 +148,15 @@ namespace maxrumsey.ozstrips.gui
                 bay.ChildPanel.Size = new System.Drawing.Size(x_each-4, (y_main-4) / childnum);
             }
         }
-         
+
+        public void PositionKey(int relPos)
+        {
+            if (Picked != null)
+            {
+                FindBay(Picked)?.ChangeStripPosition(Picked, relPos);
+
+            }
+        }
+
     }
 }
