@@ -40,6 +40,11 @@ namespace maxrumsey.ozstrips.gui
         {
             tb_clx.Text = "";
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            tb_bay.Text = "";
+        }
     }
 }
 
