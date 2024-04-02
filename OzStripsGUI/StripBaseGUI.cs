@@ -89,6 +89,8 @@ namespace maxrumsey.ozstrips.gui
             if (lb_ades != null) lb_ades.Text = fdr.DesAirport;
             if (lb_alt != null) lb_alt.Text = stripController.CFL;
             if (lb_hdg != null) lb_hdg.Text = stripController.HDG;
+            if (lb_clx != null) lb_clx.Text = stripController.CLX;
+            if (lb_std != null) lb_std.Text = stripController.BAY;
             lb_rwy.Text = stripController.RWY;
             lb_wtc.Text = fdr.AircraftWake;
             ResumeLayout();
@@ -98,14 +100,21 @@ namespace maxrumsey.ozstrips.gui
         public void OpenHdgAltModal()
         {
             AltHdgControl modalChild = new AltHdgControl(stripController);
-            BaseModal bm = new BaseModal(modalChild, "Edit");
+            BaseModal bm = new BaseModal(modalChild, "ACD Menu");
             bm.ReturnEvent += new ReturnEventHandler(HeadingAltReturned);
-            //bm.SetDesktopLocation(Cursor.Position.X, Cursor.Position.Y);
             bm.ShowDialog();
             SetModalCoord(bm);
 
         }
+        public void OpenCLXBayModal()
+        {
+            BayCLXControl modalChild = new BayCLXControl(stripController);
+            BaseModal bm = new BaseModal(modalChild, "SMC Menu");
+            bm.ReturnEvent += new ReturnEventHandler(CLXBayReturned);
+            bm.ShowDialog();
+            SetModalCoord(bm);
 
+        }
         public void OpenVatsysFDRModMenu()
         {
             //MMI.OpenFPWindow(stripController.fdr);
@@ -124,6 +133,13 @@ namespace maxrumsey.ozstrips.gui
             if (control.SID != "") {
                 stripController.SID = control.SID;
             }
+        }
+        public void CLXBayReturned(object source, ModalReturnArgs args)
+        {
+            BayCLXControl control = (BayCLXControl) args.child;
+            if (control.CLX != "") stripController.CLX = control.CLX;
+            if (control.BAY != "") stripController.BAY = control.BAY;
+           
         }
 
         public void SetModalCoord(BaseModal bm)

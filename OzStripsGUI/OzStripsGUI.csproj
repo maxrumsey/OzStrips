@@ -92,6 +92,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BayCLXControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BayCLXControl.Designer.cs">
+      <DependentUpon>BayCLXControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="AltHdgControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -150,6 +156,9 @@
     <Compile Include="Strip_ACD.Designer.cs">
       <DependentUpon>Strip_ACD.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="BayCLXControl.resx">
+      <DependentUpon>BayCLXControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AltHdgControl.resx">
       <DependentUpon>AltHdgControl.cs</DependentUpon>
     </EmbeddedResource>

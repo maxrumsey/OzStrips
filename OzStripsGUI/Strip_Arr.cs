@@ -61,7 +61,7 @@ namespace maxrumsey.ozstrips.gui
 
         private void lb_std_Click(object sender, EventArgs e)
         {
-
+            OpenCLXBayModal();
         }
 
 

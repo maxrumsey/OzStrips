@@ -11,9 +11,5 @@
 * sid triggering - prevent triggering onto rwy
 * prevent OBS from touching things
 * add conn to server
-< fix bug where arr strips are dep strips == test better ==
 * add filter to bays
-* fix tearing on scroll
-* 
-# Bugs
-* Quickly closing and reopening causes a full crash
+* fix tearing on scroll & strip add

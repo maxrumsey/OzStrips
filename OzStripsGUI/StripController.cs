@@ -145,6 +145,10 @@ namespace maxrumsey.ozstrips.gui
                 FDP2.SetCFL(fdr, value);
             }
         }
+
+        public String CLX = "";
+        public String BAY = "";
+
         public String HDG
         {
             set

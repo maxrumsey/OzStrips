@@ -282,6 +282,7 @@
             this.lb_clx.TabIndex = 0;
             this.lb_clx.Text = "std";
             this.lb_clx.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lb_clx.Click += new System.EventHandler(this.lb_std_Click);
             // 
             // Strip_Arr
             // 
