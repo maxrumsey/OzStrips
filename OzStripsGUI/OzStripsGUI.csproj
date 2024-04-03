@@ -121,6 +121,12 @@
     <Compile Include="CustomFLP.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DividerBarControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DividerBarControl.Designer.cs">
+      <DependentUpon>DividerBarControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -167,6 +173,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="BayControl.resx">
       <DependentUpon>BayControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DividerBarControl.resx">
+      <DependentUpon>DividerBarControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

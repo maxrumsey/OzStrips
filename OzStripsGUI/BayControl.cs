@@ -36,5 +36,15 @@ namespace maxrumsey.ozstrips.gui
         {
             BayManager.DropStrip(OwnerBay);
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            OwnerBay.AddDivider(false);
+        }
+
+        private void bt_queue_Click(object sender, EventArgs e)
+        {
+            OwnerBay.QueueUp();
+        }
     }
 }

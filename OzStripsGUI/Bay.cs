@@ -66,7 +66,9 @@ namespace maxrumsey.ozstrips.gui
             {
                 RemoveStrip(strip.StripController, false);
             }
+
             Strips = new List<StripListItem>();
+            orderStrips();
         }
 
         //todo: check for dupes
@@ -83,7 +85,7 @@ namespace maxrumsey.ozstrips.gui
         {
             foreach (StripListItem s in Strips)
             {
-                s.StripController.UpdateFDR();
+                if (s.Type == StripItemType.STRIP) s.StripController.UpdateFDR();
             }
         }
         private void orderStrips()
@@ -92,7 +94,11 @@ namespace maxrumsey.ozstrips.gui
             ChildPanel.ChildPanel.Controls.Clear();
             for (int i = 0; i < Strips.Count; i++)
             {
-                ChildPanel.ChildPanel.Controls.Add(Strips[i].StripController.stripHolderControl);
+                if (Strips[i].Type == StripItemType.STRIP) ChildPanel.ChildPanel.Controls.Add(Strips[i].StripController.stripHolderControl);
+                if (Strips[i].Type == StripItemType.QUEUEBAR)
+                {
+                    ChildPanel.ChildPanel.Controls.Add(Strips[i].DividerBarControl);
+                }
             }
             ChildPanel.ChildPanel.ResumeLayout();
 
@@ -110,15 +116,75 @@ namespace maxrumsey.ozstrips.gui
             Strips.Insert(newPosition, stripItem);
             orderStrips();
         }
+        public void ChangeStripPositionAbs(StripListItem item, int abspos)
+        {
+
+            if (abspos < 0 || abspos > (Strips.Count - 1)) return;
+
+            Strips.Remove(item);
+            Strips.Insert(abspos, item);
+            orderStrips();
+        }
+        public void AddDivider(bool? force)
+        {
+            bool containsDiv = false;
+            StripListItem currentItem = null;
+            foreach (StripListItem item in Strips)
+            {
+                if (item.Type == StripItemType.QUEUEBAR) { 
+                    containsDiv = true;
+                    currentItem = item;
+                }
+            }
+
+            if (!containsDiv)
+            {
+                StripListItem newItem = new StripListItem();
+                newItem.Type = StripItemType.QUEUEBAR;
+                newItem.DividerBarControl = new DividerBarControl();
+                Strips.Add(newItem);
+            } else if (force == null || force == false)
+            {
+                Strips.Remove(currentItem);
+            }
+            orderStrips();
+
+        }
+
+        public void QueueUp()
+        {
+
+            if (Manager.Picked != null && OwnsStrip(Manager.Picked))
+            {
+                AddDivider(true);
+                StripListItem item = Strips.Find(a => a?.StripController == Manager.Picked);
+                ChangeStripPositionAbs(item, DivPosition);
+                Manager.SetPicked();
+            }
+        }
+
+        public int DivPosition
+        {
+            get
+            {
+                int val = 0;
+                for (int i = 0; i < Strips.Count; i++)
+                {
+                    if (Strips[i].Type == StripItemType.QUEUEBAR) val = i;
+                }
+                return val;
+            }
+        }
     }
 
     public class StripListItem
     {
         public StripController StripController;
         public StripItemType Type;
+        public DividerBarControl DividerBarControl;
 
-        
-        
+
+
     }
 
     public enum StripItemType
