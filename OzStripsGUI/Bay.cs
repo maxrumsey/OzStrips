@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using vatsys;
 
 namespace maxrumsey.ozstrips.gui
 {
@@ -13,7 +14,7 @@ namespace maxrumsey.ozstrips.gui
         public List<StripBay> BayTypes;
         public BayManager Manager;
         public String Name;
-        public List<StripController> Strips = new List<StripController>();
+        public List<StripListItem> Strips = new List<StripListItem>();
         public BayControl ChildPanel;
         public int VerticalBoardNumber;
         public Bay(List<StripBay> bays, BayManager bm, String name, int vertboardnum)
@@ -39,12 +40,18 @@ namespace maxrumsey.ozstrips.gui
 
         public bool OwnsStrip(StripController controller)
         {
-            return Strips.Contains(controller);
+            bool found = false;
+            foreach (StripListItem item in Strips)
+            {
+                if (item.StripController == controller) found = true;
+            }
+
+            return found;
         }
 
         public void RemoveStrip(StripController controller, bool remove)
         {
-            if (remove) Strips.Remove(controller);
+            if (remove) Strips.RemoveAll(item => item.StripController == controller);
             orderStrips();
 
         }
@@ -55,24 +62,28 @@ namespace maxrumsey.ozstrips.gui
         }
         public void WipeStrips()
         {
-            foreach (StripController strip in Strips)
+            foreach (StripListItem strip in Strips)
             {
-                RemoveStrip(strip, false);
+                RemoveStrip(strip.StripController, false);
             }
-            Strips = new List<StripController>();
+            Strips = new List<StripListItem>();
         }
 
         //todo: check for dupes
         public void AddStrip(StripController stripController)
         {
-            Strips.Add(stripController); // todo: add control action
+            StripListItem strip = new StripListItem();
+            strip.StripController = stripController;
+            strip.Type = StripItemType.STRIP;
+
+            Strips.Add(strip); // todo: add control action
             orderStrips();
         }
         public void ForceRerender()
         {
-            foreach (StripController s in Strips)
+            foreach (StripListItem s in Strips)
             {
-                s.UpdateFDR();
+                s.StripController.UpdateFDR();
             }
         }
         private void orderStrips()
@@ -81,7 +92,7 @@ namespace maxrumsey.ozstrips.gui
             ChildPanel.ChildPanel.Controls.Clear();
             for (int i = 0; i < Strips.Count; i++)
             {
-                ChildPanel.ChildPanel.Controls.Add(Strips[i].stripHolderControl);
+                ChildPanel.ChildPanel.Controls.Add(Strips[i].StripController.stripHolderControl);
             }
             ChildPanel.ChildPanel.ResumeLayout();
 
@@ -89,14 +100,33 @@ namespace maxrumsey.ozstrips.gui
 
         public void ChangeStripPosition(StripController sc, int relpos)
         {
-            int originalPosition = Strips.FindIndex(a => a == sc);
+            int originalPosition = Strips.FindIndex(a => a.StripController == sc);
+            StripListItem stripItem = Strips[originalPosition];
             int newPosition = originalPosition + relpos;
 
             if (newPosition < 0 || newPosition > (Strips.Count - 1)) return;
 
             Strips.RemoveAt(originalPosition);
-            Strips.Insert(newPosition, sc);
+            Strips.Insert(newPosition, stripItem);
             orderStrips();
         }
     }
+
+    public class StripListItem
+    {
+        public StripController StripController;
+        public StripItemType Type;
+
+        
+        
+    }
+
+    public enum StripItemType
+    {
+        STRIP,
+        QUEUEBAR,
+        BLOCKED
+    }
 }
+
+
