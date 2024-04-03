@@ -83,8 +83,16 @@ namespace maxrumsey.ozstrips.gui
                 if (controller.fdr == fdr)
                 {
                     found = true;
+                    if (FDP2.GetFDRIndex(fdr.Callsign) == -1)
+                    {
+                        bayManager.DeleteStrip(controller);
+                    }
                     controller.UpdateFDR();
                 }
+            }
+            if (FDP2.GetFDRIndex(fdr.Callsign) == -1 && found)
+            {
+
             }
             if (!found)
             {

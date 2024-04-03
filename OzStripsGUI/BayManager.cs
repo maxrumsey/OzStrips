@@ -33,6 +33,12 @@ namespace maxrumsey.ozstrips.gui
             }
         }
 
+        public void DeleteStrip(StripController strip)
+        {
+            FindBay(strip).RemoveStrip(strip, true);
+            StripController.stripControllers.Remove(strip);
+        }
+
         public void SetAerodrome(String name)
         {
             AerodromeName = name;
