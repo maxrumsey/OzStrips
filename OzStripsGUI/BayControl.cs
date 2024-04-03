@@ -32,11 +32,6 @@ namespace maxrumsey.ozstrips.gui
             BayManager.DropStrip(OwnerBay);
         }
 
-        private void flp_stripbay_Paint(object sender, PaintEventArgs e)
-        {
-            BayManager.DropStrip(OwnerBay);
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             OwnerBay.AddDivider(false);

@@ -192,6 +192,7 @@
             this.lb_ssr.TabIndex = 0;
             this.lb_ssr.Text = "ssr";
             this.lb_ssr.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lb_ssr.Click += new System.EventHandler(this.lb_ssr_Click);
             // 
             // pl_type
             // 

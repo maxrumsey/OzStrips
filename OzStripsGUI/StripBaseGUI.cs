@@ -172,6 +172,10 @@ namespace maxrumsey.ozstrips.gui
 
         }
 
+        public void AssignSSR()
+        {
+            FDP2.SetASSR(stripController.fdr);
+        }
     }
     
 }

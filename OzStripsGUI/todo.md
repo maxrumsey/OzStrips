@@ -1,8 +1,6 @@
 ﻿# Todo
 
 * add strip board HMI
-< Add vert movement of strips
-*  - add HMI to control bar
 * open modal @ cursor pos ???
 * make more error robust
 * add ability to switch to non-standard AD

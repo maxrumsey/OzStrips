@@ -103,5 +103,10 @@ namespace maxrumsey.ozstrips.gui
         {
             TogglePick();
         }
+
+        private void lb_ssr_Click(object sender, EventArgs e)
+        {
+            AssignSSR();
+        }
     }
 }
