@@ -73,6 +73,13 @@ namespace maxrumsey.ozstrips.gui
         public void UpdateFDR()
         {
             stripControl.UpdateStrip();
+
+            double distance = GetDistToAerodrome(BayManager.AerodromeName);
+
+            if (distance == -1 || distance > 50)
+            {
+                BayManager.DeleteStrip(this);
+            }
         }
         public static void UpdateFDR(FDP2.FDR fdr, BayManager bayManager)
         {
@@ -82,16 +89,14 @@ namespace maxrumsey.ozstrips.gui
                 if (controller.fdr == fdr)
                 {
                     found = true;
+
                     if (FDP2.GetFDRIndex(fdr.Callsign) == -1)
                     {
                         bayManager.DeleteStrip(controller);
                     }
                     controller.UpdateFDR();
+                    return;
                 }
-            }
-            if (FDP2.GetFDRIndex(fdr.Callsign) == -1 && found) // fdr deled
-            {
-
             }
             if (!found)
             {
@@ -144,6 +149,21 @@ namespace maxrumsey.ozstrips.gui
             }
         }
 
+        public double GetDistToAerodrome(String aerodrome)
+        {
+            Coordinate coord = Airspace2.GetAirport(aerodrome)?.LatLong;
+            try {
+                if (coord != null) {
+                    double distance = Conversions.CalculateDistance(coord, fdr.PredictedPosition.Location);
+                    return distance;
+                }
+            } catch (Exception e)
+            {
+
+            }
+            return -1;
+
+        }
 
         public String CFL
         {

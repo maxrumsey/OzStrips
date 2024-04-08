@@ -79,8 +79,10 @@ namespace maxrumsey.ozstrips.gui
         public void AddStrip(StripController stripController)
         {
             stripController.BayManager = this;
+            double distance = stripController.GetDistToAerodrome(AerodromeName);
 
             if (stripController.ApplicableToAerodrome(AerodromeName) == false) return;
+            if (distance > 50 || distance == -1) return;
 
             foreach (Bay bay in Bays)
             {
