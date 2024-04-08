@@ -142,7 +142,7 @@ namespace maxrumsey.ozstrips.gui
                 StripListItem newItem = new StripListItem();
                 newItem.Type = StripItemType.QUEUEBAR;
                 newItem.DividerBarControl = new DividerBarControl();
-                Strips.Add(newItem);
+                Strips.Insert(0, newItem);
             } else if (force == null || force == false)
             {
                 Strips.Remove(currentItem);
