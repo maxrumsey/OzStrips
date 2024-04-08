@@ -30,7 +30,7 @@ namespace maxrumsey.ozstrips.gui
             timer.Tick += updateTimer;
             timer.Start();
 
-            AddAerodrome("YMML"); //to add more ads
+            AddAerodrome("YMML"); //todo: add more ads
             AddAerodrome("YSSY");
             AddAerodrome("YBBN");
 

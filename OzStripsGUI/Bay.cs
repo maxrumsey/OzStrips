@@ -83,9 +83,13 @@ namespace maxrumsey.ozstrips.gui
         }
         public void ForceRerender()
         {
-            foreach (StripListItem s in Strips)
+            StripListItem[] stripList = new StripListItem[Strips.Count];
+            Strips.CopyTo(stripList);
+
+            foreach (StripListItem s in stripList)
             {
                 if (s.Type == StripItemType.STRIP) s.StripController.UpdateFDR();
+
             }
         }
         private void orderStrips()

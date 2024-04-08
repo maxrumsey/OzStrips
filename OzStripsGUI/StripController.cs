@@ -108,8 +108,25 @@ namespace maxrumsey.ozstrips.gui
 
         public void SIDTrigger()
         {
-            currentBay++; // todo: fix
-            BayManager.UpdateBay(this);
+            Dictionary<StripBay, StripBay> stripBayResultDict;
+            if (ArrDepType == StripArrDepType.ARRIVAL)
+            {
+                stripBayResultDict = NextBayArr;
+            } else if (ArrDepType == StripArrDepType.DEPARTURE)
+            {
+                stripBayResultDict = NextBayDep;
+
+            }
+            else
+            {
+                return;
+            }
+            StripBay nextBay;
+            if (stripBayResultDict.TryGetValue(currentBay, out nextBay))
+            {
+                currentBay = nextBay;
+                BayManager.UpdateBay(this);
+            }
         }
 
         public void TogglePick()
@@ -157,7 +174,7 @@ namespace maxrumsey.ozstrips.gui
                     double distance = Conversions.CalculateDistance(coord, fdr.PredictedPosition.Location);
                     return distance;
                 }
-            } catch (Exception e)
+            } catch
             {
 
             }
@@ -276,6 +293,23 @@ namespace maxrumsey.ozstrips.gui
         {
             MMI.OpenFPWindow(fdr);
         }
+
+        public static Dictionary<StripBay, StripBay> NextBayDep = new Dictionary<StripBay, StripBay>
+        {
+            { StripBay.BAY_PREA, StripBay.BAY_CLEARED },
+            { StripBay.BAY_CLEARED, StripBay.BAY_PUSHED },
+            { StripBay.BAY_PUSHED, StripBay.BAY_TAXI },
+            { StripBay.BAY_TAXI, StripBay.BAY_HOLDSHORT },
+            { StripBay.BAY_RUNWAY, StripBay.BAY_OUT },
+            { StripBay.BAY_OUT, StripBay.BAY_DEAD }
+        };
+
+        public static Dictionary<StripBay, StripBay> NextBayArr = new Dictionary<StripBay, StripBay>
+        {
+
+            { StripBay.BAY_TAXI, StripBay.BAY_DEAD },
+            { StripBay.BAY_RUNWAY, StripBay.BAY_TAXI }
+        };
     }
 
     public enum StripBay
@@ -304,4 +338,6 @@ namespace maxrumsey.ozstrips.gui
         DEPARTURE,
         UNKNOWN
     }
+
+
 }
