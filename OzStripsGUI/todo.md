@@ -11,3 +11,4 @@
 * add conn to server
 * add filter to bays
 * fix tearing on scroll & strip add
+* prevent strips far away from AD from displaying

@@ -29,7 +29,6 @@ namespace maxrumsey.ozstrips.gui
             this.BayManager = bm;
             this.currentBay = StripBay.BAY_PREA;
             if (ArrDepType == StripArrDepType.ARRIVAL ) this.currentBay = StripBay.BAY_ARRIVAL;
-            stripControllers.Add(this);
             CreateStripObj();
         }
 
@@ -90,7 +89,7 @@ namespace maxrumsey.ozstrips.gui
                     controller.UpdateFDR();
                 }
             }
-            if (FDP2.GetFDRIndex(fdr.Callsign) == -1 && found)
+            if (FDP2.GetFDRIndex(fdr.Callsign) == -1 && found) // fdr deled
             {
 
             }

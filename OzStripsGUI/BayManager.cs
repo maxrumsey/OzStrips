@@ -47,8 +47,7 @@ namespace maxrumsey.ozstrips.gui
 
             foreach (FDP2.FDR fdr in FDP2.GetFDRs)
             {
-                StripController stripController = new StripController(fdr, this);
-                AddStrip(stripController);
+                StripController.UpdateFDR(fdr, this);
             }
         }
 
@@ -90,6 +89,8 @@ namespace maxrumsey.ozstrips.gui
                     bay.AddStrip(stripController);
                 }
             }
+
+            StripController.stripControllers.Add(stripController);
         }
 
         public Bay FindBay(StripController stripController) {
