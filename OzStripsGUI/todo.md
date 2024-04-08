@@ -3,7 +3,6 @@
 * add strip board HMI
 * open modal @ cursor pos ???
 * make more error robust
-* add ability to switch to non-standard AD
 < auto assign SSR - todo test
 < handle deletion of strips and - todo test - should work
 * prevent OBS from touching things
@@ -12,3 +11,6 @@
 * fix tearing on scroll & strip add
 * allow tabbing in althdg modal
 * make clx/bay menu into textboxes?
+* add child controller modes (smc, adc, acd)
+* add inhib button
+* add crossing highlight

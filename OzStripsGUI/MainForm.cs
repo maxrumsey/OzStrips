@@ -133,6 +133,17 @@ namespace maxrumsey.ozstrips.gui
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
+        private void toolStripTextBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (bayManager != null && e.KeyChar == Convert.ToChar(Keys.Enter))
+            {
+                bayManager.SetAerodrome(toolStripTextBox1.Text.ToUpper()); ;
+                lb_ad.Text = toolStripTextBox1.Text.ToUpper();
+                e.Handled = true;
+
+            }
+        }
+
         /*public void FDRDownlink(List<FDP2.FDR> fdrs)
 {
 flp_bay.Controls.Clear();

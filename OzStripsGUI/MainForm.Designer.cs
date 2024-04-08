@@ -38,6 +38,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.forceRerenderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_ad = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
             this.flp_main = new System.Windows.Forms.FlowLayoutPanel();
             this.pl_controlbar.SuspendLayout();
             this.pl_ad.SuspendLayout();
@@ -145,9 +146,20 @@
             // 
             // ts_ad
             // 
+            this.ts_ad.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripTextBox1});
             this.ts_ad.Name = "ts_ad";
             this.ts_ad.Size = new System.Drawing.Size(79, 20);
             this.ts_ad.Text = "Aerodrome";
+            // 
+            // toolStripTextBox1
+            // 
+            this.toolStripTextBox1.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.toolStripTextBox1.MaxLength = 4;
+            this.toolStripTextBox1.Name = "toolStripTextBox1";
+            this.toolStripTextBox1.Size = new System.Drawing.Size(100, 23);
+            this.toolStripTextBox1.ToolTipText = "Aerodrome";
+            this.toolStripTextBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.toolStripTextBox1_KeyPress);
             // 
             // flp_main
             // 
@@ -201,6 +213,7 @@
         private System.Windows.Forms.ToolStripMenuItem ts_ad;
         private System.Windows.Forms.Panel pl_ad;
         private System.Windows.Forms.Label lb_ad;
+        private System.Windows.Forms.ToolStripTextBox toolStripTextBox1;
     }
 }
 
