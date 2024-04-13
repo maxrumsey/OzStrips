@@ -61,4 +61,10 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Users\exiflame\Documents\ozstrips_clientside\OzStrips\.editorconfig" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\exiflame\Documents\ozstrips_clientside\OzStrips\.editorconfig" />
+  </ItemGroup>
 </Project>
