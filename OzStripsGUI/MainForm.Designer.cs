@@ -40,6 +40,7 @@
             this.ts_ad = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
             this.flp_main = new System.Windows.Forms.FlowLayoutPanel();
+            this.bt_inhibit = new System.Windows.Forms.Button();
             this.pl_controlbar.SuspendLayout();
             this.pl_ad.SuspendLayout();
             this.pl_stat.SuspendLayout();
@@ -50,6 +51,7 @@
             // 
             this.pl_controlbar.BackColor = System.Drawing.Color.Gainsboro;
             this.pl_controlbar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pl_controlbar.Controls.Add(this.bt_inhibit);
             this.pl_controlbar.Controls.Add(this.pl_ad);
             this.pl_controlbar.Controls.Add(this.pl_stat);
             this.pl_controlbar.Controls.Add(this.tb_Time);
@@ -172,6 +174,17 @@
             this.flp_main.TabIndex = 2;
             this.flp_main.WrapContents = false;
             // 
+            // bt_inhibit
+            // 
+            this.bt_inhibit.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bt_inhibit.Location = new System.Drawing.Point(347, 3);
+            this.bt_inhibit.Name = "bt_inhibit";
+            this.bt_inhibit.Size = new System.Drawing.Size(96, 37);
+            this.bt_inhibit.TabIndex = 3;
+            this.bt_inhibit.Text = "Inhibit";
+            this.bt_inhibit.UseVisualStyleBackColor = true;
+            this.bt_inhibit.Click += new System.EventHandler(this.bt_inhibit_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -214,6 +227,7 @@
         private System.Windows.Forms.Panel pl_ad;
         private System.Windows.Forms.Label lb_ad;
         private System.Windows.Forms.ToolStripTextBox toolStripTextBox1;
+        private System.Windows.Forms.Button bt_inhibit;
     }
 }
 

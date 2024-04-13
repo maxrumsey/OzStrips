@@ -154,6 +154,11 @@ namespace maxrumsey.ozstrips.gui
             }
         }
 
+        private void bt_inhibit_Click(object sender, EventArgs e)
+        {
+            bayManager.Inhibit();
+        }
+
         /*public void FDRDownlink(List<FDP2.FDR> fdrs)
 {
 flp_bay.Controls.Clear();

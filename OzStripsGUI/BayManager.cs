@@ -51,6 +51,17 @@ namespace maxrumsey.ozstrips.gui
 
         }
 
+        public void Inhibit()
+        {
+            if (Picked != null)
+            {
+                Picked.currentBay = StripBay.BAY_DEAD;
+                Picked.SyncStrip();
+                UpdateBay(Picked);
+                SetPicked();
+            }
+        }
+
         public void DropStrip(Bay bay)
         {
             if (Picked != null)

@@ -15,6 +15,4 @@
 * add inhib button
 * add crossing highlight
 * make clx/bay menu into textboxes?
-* allow enter in modal
-* open modal @ cursor pos ???
 * add takeoff timer
