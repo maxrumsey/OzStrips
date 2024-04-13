@@ -40,7 +40,25 @@ namespace maxrumsey.ozstrips.gui
             this.Close();
         }
 
-       
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            Button btn = this.ActiveControl as Button;
+            if (btn != null)
+            {
+                if (keyData == Keys.Enter)
+                {
+                    ReturnEvent(this, new ModalReturnArgs(this.child));
+                    this.Close();
+                    return true; // suppress default handling of space
+                } else if (keyData == Keys.Escape)
+                {
+                    this.Close();
+                    return true; // suppress default handling of space
+                }
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
     }
     public class ModalReturnArgs : EventArgs
     {

@@ -17,5 +17,4 @@
 * make clx/bay menu into textboxes?
 * allow enter in modal
 * open modal @ cursor pos ???
-* prevent OBS from touching things
 * add takeoff timer
