@@ -17,6 +17,7 @@ namespace maxrumsey.ozstrips.gui
         public event ReturnEventHandler ReturnEvent;
         public BaseModal(Control child, String text)
         {
+            StartPosition = FormStartPosition.CenterScreen;
             InitializeComponent();
             this.child = child;
 
