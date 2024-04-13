@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.lb_bay_name = new System.Windows.Forms.Label();
-            this.bt_div = new System.Windows.Forms.Button();
             this.flp_stripbay = new maxrumsey.ozstrips.gui.CustomFLP();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.bt_queue = new System.Windows.Forms.Button();
+            this.bt_div = new System.Windows.Forms.Button();
+            this.lb_bay_name = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -49,6 +49,18 @@
             this.panel1.Size = new System.Drawing.Size(481, 322);
             this.panel1.TabIndex = 0;
             // 
+            // flp_stripbay
+            // 
+            this.flp_stripbay.AutoScroll = true;
+            this.flp_stripbay.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flp_stripbay.FlowDirection = System.Windows.Forms.FlowDirection.BottomUp;
+            this.flp_stripbay.Location = new System.Drawing.Point(0, 42);
+            this.flp_stripbay.Name = "flp_stripbay";
+            this.flp_stripbay.Size = new System.Drawing.Size(481, 280);
+            this.flp_stripbay.TabIndex = 1;
+            this.flp_stripbay.WrapContents = false;
+            this.flp_stripbay.Click += new System.EventHandler(this.lb_bay_name_Click);
+            // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
@@ -60,6 +72,30 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(481, 42);
             this.panel2.TabIndex = 0;
+            // 
+            // bt_queue
+            // 
+            this.bt_queue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.bt_queue.Location = new System.Drawing.Point(264, 4);
+            this.bt_queue.Name = "bt_queue";
+            this.bt_queue.Size = new System.Drawing.Size(172, 32);
+            this.bt_queue.TabIndex = 2;
+            this.bt_queue.TabStop = false;
+            this.bt_queue.Text = "Queue";
+            this.bt_queue.UseVisualStyleBackColor = true;
+            this.bt_queue.Click += new System.EventHandler(this.bt_queue_Click);
+            // 
+            // bt_div
+            // 
+            this.bt_div.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.bt_div.Location = new System.Drawing.Point(442, 4);
+            this.bt_div.Name = "bt_div";
+            this.bt_div.Size = new System.Drawing.Size(36, 32);
+            this.bt_div.TabIndex = 1;
+            this.bt_div.TabStop = false;
+            this.bt_div.Text = "Div";
+            this.bt_div.UseVisualStyleBackColor = true;
+            this.bt_div.Click += new System.EventHandler(this.button1_Click);
             // 
             // lb_bay_name
             // 
@@ -73,40 +109,6 @@
             this.lb_bay_name.Text = "Bay Name";
             this.lb_bay_name.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lb_bay_name.Click += new System.EventHandler(this.lb_bay_name_Click);
-            // 
-            // bt_div
-            // 
-            this.bt_div.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bt_div.Location = new System.Drawing.Point(442, 4);
-            this.bt_div.Name = "bt_div";
-            this.bt_div.Size = new System.Drawing.Size(36, 32);
-            this.bt_div.TabIndex = 1;
-            this.bt_div.Text = "Div";
-            this.bt_div.UseVisualStyleBackColor = true;
-            this.bt_div.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // flp_stripbay
-            // 
-            this.flp_stripbay.AutoScroll = true;
-            this.flp_stripbay.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flp_stripbay.FlowDirection = System.Windows.Forms.FlowDirection.BottomUp;
-            this.flp_stripbay.Location = new System.Drawing.Point(0, 42);
-            this.flp_stripbay.Name = "flp_stripbay";
-            this.flp_stripbay.Size = new System.Drawing.Size(481, 280);
-            this.flp_stripbay.TabIndex = 1;
-            this.flp_stripbay.WrapContents = false;
-            this.flp_stripbay.Click += new System.EventHandler(this.lb_bay_name_Click);
-            // 
-            // bt_queue
-            // 
-            this.bt_queue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bt_queue.Location = new System.Drawing.Point(264, 4);
-            this.bt_queue.Name = "bt_queue";
-            this.bt_queue.Size = new System.Drawing.Size(172, 32);
-            this.bt_queue.TabIndex = 2;
-            this.bt_queue.Text = "Queue";
-            this.bt_queue.UseVisualStyleBackColor = true;
-            this.bt_queue.Click += new System.EventHandler(this.bt_queue_Click);
             // 
             // BayControl
             // 
