@@ -16,7 +16,6 @@
 * add crossing highlight
 * make clx/bay menu into textboxes?
 * allow enter in modal
-* add conn to server
 * open modal @ cursor pos ???
 * prevent OBS from touching things
 * add takeoff timer

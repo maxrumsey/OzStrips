@@ -206,7 +206,7 @@ namespace maxrumsey.ozstrips.gui
         {
             get => this.fdr.CFLString; set
             {
-                FDP2.SetCFL(fdr, value);
+                if (Network.Me.IsRealATC) FDP2.SetCFL(fdr, value);
             }
         }
 
@@ -217,7 +217,7 @@ namespace maxrumsey.ozstrips.gui
         {
             set
             {
-                FDP2.SetGlobalOps(fdr, "H" + value);
+                if (Network.Me.IsRealATC) FDP2.SetGlobalOps(fdr, "H" + value);
             }
             get
             {
@@ -258,7 +258,7 @@ namespace maxrumsey.ozstrips.gui
                     {
                         if (runway.Name == value)
                         {
-                            FDP2.SetDepartureRunway(fdr, runway);
+                            if (Network.Me.IsRealATC) FDP2.SetDepartureRunway(fdr, runway);
                         }
                     }
                 }
@@ -280,7 +280,7 @@ namespace maxrumsey.ozstrips.gui
                 {
                     if (possibleSID.sidStar.Name == value)
                     {
-                        FDP2.SetSID(fdr, possibleSID.sidStar);
+                        if (Network.Me.IsRealATC) FDP2.SetSID(fdr, possibleSID.sidStar);
                         found = true;
                     }
                 }
