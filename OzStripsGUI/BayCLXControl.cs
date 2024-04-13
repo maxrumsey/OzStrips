@@ -23,11 +23,11 @@ namespace maxrumsey.ozstrips.gui
             InitializeComponent();
 
             tb_clx.Text = controller.CLX;
-            tb_bay.Text = controller.BAY;
+            tb_bay.Text = controller.GATE;
         }
 
         public string CLX { get { return tb_clx.Text; } }
-        public string BAY { get { return tb_bay.Text; } }
+        public string GATE { get { return tb_bay.Text; } }
 
 
 

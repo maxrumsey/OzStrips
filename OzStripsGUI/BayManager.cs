@@ -18,6 +18,7 @@ namespace maxrumsey.ozstrips.gui
         public List<FlowLayoutPanel> flp_vert_boards = new List<FlowLayoutPanel>();
         public StripController Picked;
         public String AerodromeName = "YMML";
+        public SocketConn socketConn;
         public BayManager(FlowLayoutPanel main) {
             Bays = new List<Bay>();
             this.flp_main = main;
@@ -28,6 +29,7 @@ namespace maxrumsey.ozstrips.gui
             if (Picked != null)
             {
                 Picked.currentBay = bay.BayTypes.FirstOrDefault();
+                Picked.SyncStrip();
                 UpdateBay(Picked);
                 SetPicked();
             }
@@ -42,6 +44,7 @@ namespace maxrumsey.ozstrips.gui
         public void SetAerodrome(String name)
         {
             AerodromeName = name;
+            socketConn.SetAerodrome();
             WipeStrips();
             StripController.stripControllers = new List<StripController>();
 

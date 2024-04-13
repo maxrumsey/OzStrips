@@ -66,8 +66,8 @@ namespace maxrumsey.ozstrips.gui
             {
                 control.BackColor = color;
             }
-            
 
+            stripController.SyncStrip();
         }
 
         public void UpdateStrip()
@@ -90,7 +90,7 @@ namespace maxrumsey.ozstrips.gui
             if (lb_alt != null) lb_alt.Text = stripController.CFL;
             if (lb_hdg != null) lb_hdg.Text = stripController.HDG;
             if (lb_clx != null) lb_clx.Text = stripController.CLX;
-            if (lb_std != null) lb_std.Text = stripController.BAY;
+            if (lb_std != null) lb_std.Text = stripController.GATE;
             lb_rwy.Text = stripController.RWY;
             lb_wtc.Text = fdr.AircraftWake;
             ResumeLayout();
@@ -133,13 +133,16 @@ namespace maxrumsey.ozstrips.gui
             if (control.SID != "") {
                 stripController.SID = control.SID;
             }
+
+            stripController.SyncStrip();
         }
         public void CLXBayReturned(object source, ModalReturnArgs args)
         {
             BayCLXControl control = (BayCLXControl) args.child;
             if (control.CLX != "") stripController.CLX = control.CLX;
-            if (control.BAY != "") stripController.BAY = control.BAY;
-           
+            if (control.GATE != "") stripController.GATE = control.GATE;
+
+            stripController.SyncStrip();
         }
 
         public void SetModalCoord(BaseModal bm)

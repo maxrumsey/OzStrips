@@ -19,7 +19,6 @@ namespace maxrumsey.ozstrips
         private CustomToolStripMenuItem ozStripsOpener;
         private NetworkATC vatsysConn;
         private bool isObs = false;
-        private Socket socketClient;
         private MainForm GUI;
 
         public OzStrips()
@@ -34,16 +33,6 @@ namespace maxrumsey.ozstrips
         {
             vatsysConn = Network.Me;
             isObs = !vatsysConn.IsRealATC;
-            
-           try
-            {
-                socketClient = new Socket(vatsysConn);
-            }
-            catch (Exception er)
-            {
-                Errors.Add(er, "OzStrips");
-            }
-
         }
 
 
@@ -54,10 +43,10 @@ namespace maxrumsey.ozstrips
         {
             //Errors.Add(new Exception("mew"));
             //System.Diagnostics.Process.Start("http://google.com");
-            socketClient.SendFDR(updated);
             if (GUI != null && GUI.IsHandleCreated) GUI.Invoke((System.Windows.Forms.MethodInvoker)delegate () { GUI.UpdateFDR(updated); });
+
         }
-        
+
         /// Not needed for this plugin. But you could for instance, use the new position of the radar track or its change in state (cancelled, etc.) to do some processing. 
         public void OnRadarTrackUpdate(RDP.RadarTrack updated)
         {
@@ -80,12 +69,14 @@ namespace maxrumsey.ozstrips
             {
                 List<FDP2.FDR> fdrs = FDP2.GetFDRs;
 
-                GUI = new MainForm(socketClient, fdrs);
+                GUI = new MainForm(fdrs);
 
             }
             else if (GUI.Visible) return;
 
             GUI.Show();
+
+           
         }
     }
 }

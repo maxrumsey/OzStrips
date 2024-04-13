@@ -98,11 +98,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lb_stat.AutoSize = true;
             this.lb_stat.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_stat.Location = new System.Drawing.Point(28, 11);
+            this.lb_stat.Location = new System.Drawing.Point(7, 11);
             this.lb_stat.Name = "lb_stat";
-            this.lb_stat.Size = new System.Drawing.Size(39, 16);
+            this.lb_stat.Size = new System.Drawing.Size(79, 16);
             this.lb_stat.TabIndex = 0;
-            this.lb_stat.Text = "DISC";
+            this.lb_stat.Text = "CONN STAT";
             // 
             // tb_Time
             // 

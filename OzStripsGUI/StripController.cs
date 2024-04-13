@@ -1,4 +1,5 @@
-﻿using System;
+﻿using maxrumsey.ozstrips.gui.DTO;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -66,7 +67,6 @@ namespace maxrumsey.ozstrips.gui
             if (stripHolderControl != null && stripControl != null)
             {
                 stripHolderControl.Controls.Clear();
-
             }
         }
 
@@ -106,6 +106,24 @@ namespace maxrumsey.ozstrips.gui
             }
         }
 
+        public static void UpdateFDR(StripControllerDTO scDTO, BayManager bayManager)
+        {
+            bool found = false;
+            foreach (StripController controller in stripControllers)
+            {
+                if (controller.fdr.Callsign == scDTO.ACID)
+                {
+                    found = true;
+                    controller.CLX = scDTO.CLX;
+                    controller.GATE = scDTO.GATE;
+                    controller.currentBay = scDTO.bay;
+                    bayManager.UpdateBay(controller);
+
+                    return;
+                }
+            }
+        }
+
         public void SIDTrigger()
         {
             Dictionary<StripBay, StripBay> stripBayResultDict;
@@ -126,6 +144,7 @@ namespace maxrumsey.ozstrips.gui
             {
                 currentBay = nextBay;
                 BayManager.UpdateBay(this);
+                SyncStrip();
             }
         }
 
@@ -191,7 +210,7 @@ namespace maxrumsey.ozstrips.gui
         }
 
         public String CLX = "";
-        public String BAY = "";
+        public String GATE = "";
 
         public String HDG
         {
@@ -310,6 +329,14 @@ namespace maxrumsey.ozstrips.gui
             { StripBay.BAY_TAXI, StripBay.BAY_DEAD },
             { StripBay.BAY_RUNWAY, StripBay.BAY_TAXI }
         };
+
+        public void SyncStrip()
+        {
+            if (BayManager.socketConn != null)
+            {
+                BayManager.socketConn.SyncSC(this);
+            }
+        }
     }
 
     public enum StripBay

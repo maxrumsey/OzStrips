@@ -20,10 +20,9 @@ namespace maxrumsey.ozstrips.gui
         Timer timer;
         Socket socket;
         BayManager bayManager;
-        
-        public MainForm(Socket _socket, List<FDP2.FDR> fdrs)
+        SocketConn socketConn;
+        public MainForm(List<FDP2.FDR> fdrs)
         {
-            socket = _socket;
             InitializeComponent();
             timer = new Timer();
             timer.Interval = 100;
@@ -41,6 +40,8 @@ namespace maxrumsey.ozstrips.gui
             AddVerticalStripBoard();
             AddVerticalStripBoard();
             AddVerticalStripBoard();
+
+            socketConn = new SocketConn(bayManager, this);
 
             Bay bay_pr = new Bay(new List<StripBay>() { StripBay.BAY_PREA },bayManager, "Preactive", 0);
             Bay bay_cl = new Bay(new List<StripBay>() { StripBay.BAY_CLEARED }, bayManager, "Cleared", 0);
@@ -61,7 +62,16 @@ namespace maxrumsey.ozstrips.gui
             }*/
         }
 
-
+        public void SetConnStatus(bool conn)
+        {
+            if (conn)
+            {
+                pl_stat.BackColor = Color.Green;
+            } else
+            {
+                pl_stat.BackColor = Color.OrangeRed;
+            }
+        }
 
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
         {
