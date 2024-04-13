@@ -69,6 +69,7 @@ namespace maxrumsey.ozstrips.gui
 
             Strips = new List<StripListItem>();
             orderStrips();
+
         }
 
         //todo: check for dupes
@@ -80,6 +81,7 @@ namespace maxrumsey.ozstrips.gui
 
             Strips.Add(strip); // todo: add control action
             orderStrips();
+
         }
         public void ForceRerender()
         {
@@ -92,7 +94,7 @@ namespace maxrumsey.ozstrips.gui
 
             }
         }
-        private void orderStrips()
+        public void orderStrips()
         {
             ChildPanel.ChildPanel.SuspendLayout();
             ChildPanel.ChildPanel.Controls.Clear();
@@ -119,6 +121,8 @@ namespace maxrumsey.ozstrips.gui
             Strips.RemoveAt(originalPosition);
             Strips.Insert(newPosition, stripItem);
             orderStrips();
+            if (Manager.socketConn != null) Manager.socketConn.SyncBay(this);
+
         }
         public void ChangeStripPositionAbs(StripListItem item, int abspos)
         {
@@ -128,8 +132,10 @@ namespace maxrumsey.ozstrips.gui
             Strips.Remove(item);
             Strips.Insert(abspos, item);
             orderStrips();
+            if (Manager.socketConn != null) Manager.socketConn.SyncBay(this);
+
         }
-        public void AddDivider(bool? force)
+        public void AddDivider(bool? force, bool sync = true)
         {
             bool containsDiv = false;
             StripListItem currentItem = null;
@@ -152,7 +158,7 @@ namespace maxrumsey.ozstrips.gui
                 Strips.Remove(currentItem);
             }
             orderStrips();
-
+            if (Manager.socketConn != null && sync) Manager.socketConn.SyncBay(this);
         }
 
         public void QueueUp()
@@ -160,10 +166,12 @@ namespace maxrumsey.ozstrips.gui
 
             if (Manager.Picked != null && OwnsStrip(Manager.Picked))
             {
-                AddDivider(true);
+                AddDivider(true, false);
                 StripListItem item = Strips.Find(a => a?.StripController == Manager.Picked);
                 ChangeStripPositionAbs(item, DivPosition);
                 Manager.SetPicked();
+                if (Manager.socketConn != null) Manager.socketConn.SyncBay(this);
+
             }
         }
 
@@ -178,6 +186,18 @@ namespace maxrumsey.ozstrips.gui
                 }
                 return val;
             }
+        }
+
+        public StripListItem GetListItemByStr(string code)
+        {
+            StripListItem returnedItem = null;
+            foreach (StripListItem stripListItem in Strips)
+            {
+                if (code == "\a" && stripListItem.Type == StripItemType.QUEUEBAR) returnedItem = stripListItem;
+                else if (stripListItem.Type == StripItemType.STRIP && stripListItem.StripController.fdr.Callsign == code) returnedItem = stripListItem;
+            }
+
+            return returnedItem;
         }
     }
 

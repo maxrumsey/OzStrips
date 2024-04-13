@@ -127,6 +127,7 @@
     <Compile Include="DividerBarControl.Designer.cs">
       <DependentUpon>DividerBarControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="DTO\BayDTO.cs" />
     <Compile Include="DTO\StripControllerDTO.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

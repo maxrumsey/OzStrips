@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static vatsys.FDP2;
 using vatsys;
+using maxrumsey.ozstrips.gui.DTO;
 
 // todo: separate GUI components into separate class
 namespace maxrumsey.ozstrips.gui
@@ -22,6 +23,32 @@ namespace maxrumsey.ozstrips.gui
         public BayManager(FlowLayoutPanel main) {
             Bays = new List<Bay>();
             this.flp_main = main;
+        }
+
+        public void UpdateOrder(BayDTO bayDTO)
+        {
+            Bay bay = null;
+            foreach (Bay b in Bays)
+            {
+                if (b.BayTypes.Contains(bayDTO.bay)) bay = b;
+            }
+            if (bay == null) return;
+            List<StripListItem> list = new List<StripListItem>();
+            
+            foreach (string dtoItem in bayDTO.list)
+            {
+                StripListItem listItem = bay.GetListItemByStr(dtoItem);
+                if (listItem != null) list.Add(listItem);
+            }
+
+            foreach (StripListItem oldListItem in bay.Strips) // incase of dodgy timing
+            {
+                if (!list.Contains(oldListItem) && oldListItem.Type == StripItemType.STRIP) list.Add(oldListItem);
+            }
+
+            bay.Strips = list;
+            bay.orderStrips();
+
         }
 
         public void DropStrip(Bay bay)
