@@ -34,7 +34,7 @@ namespace maxrumsey.ozstrips.gui
 
         public void SyncSC(StripController sc)
         {
-            StripControllerDTO scDTO = new StripControllerDTO { ACID = sc.fdr.Callsign, bay = sc.currentBay, CLX = sc.CLX, GATE = sc.GATE, StripCockLevel = 0 };
+            StripControllerDTO scDTO = new StripControllerDTO { ACID = sc.fdr.Callsign, bay = sc.currentBay, CLX = sc.CLX, GATE = sc.GATE, StripCockLevel = sc.cockLevel };
             io.EmitAsync("client:sc_change", scDTO);
         }
 

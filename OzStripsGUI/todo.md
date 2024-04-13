@@ -21,4 +21,3 @@
 * open modal @ cursor pos ???
 * prevent OBS from touching things
 * add takeoff timer
-* cock items to sync across server

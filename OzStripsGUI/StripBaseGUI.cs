@@ -15,7 +15,6 @@ namespace maxrumsey.ozstrips.gui
 {
     public partial class StripBaseGUI : UserControl
     {
-        public int cockLevel = 0;
         public FDP2.FDR fdr;
         public Color defColor = Color.WhiteSmoke;
         public Panel[] cockColourControls;
@@ -44,20 +43,20 @@ namespace maxrumsey.ozstrips.gui
 
 
 
-        public void Cock(int _cockLevel)
+        public void Cock(int _cockLevel, bool sync = true)
         {
             if (_cockLevel == -1)
             {
-                _cockLevel = this.cockLevel + 1;
+                _cockLevel = stripController.cockLevel + 1;
                 if (_cockLevel >= 3) _cockLevel = 0;
             }
-            this.cockLevel = _cockLevel;
+            stripController.cockLevel = _cockLevel;
             Color color = defColor;
-            if (this.cockLevel == 1)
+            if (stripController.cockLevel == 1)
             {
                 color = Color.Aquamarine;
             }
-            else if (this.cockLevel == 2)
+            else if (stripController.cockLevel == 2)
             {
                 color = Color.Pink;
             }
@@ -67,7 +66,7 @@ namespace maxrumsey.ozstrips.gui
                 control.BackColor = color;
             }
 
-            stripController.SyncStrip();
+            if (sync) stripController.SyncStrip();
         }
 
         public void UpdateStrip()

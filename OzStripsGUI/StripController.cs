@@ -117,6 +117,7 @@ namespace maxrumsey.ozstrips.gui
                     controller.CLX = scDTO.CLX;
                     controller.GATE = scDTO.GATE;
                     controller.currentBay = scDTO.bay;
+                    controller.stripControl.Cock(scDTO.StripCockLevel, false);
                     bayManager.UpdateBay(controller);
 
                     return;
