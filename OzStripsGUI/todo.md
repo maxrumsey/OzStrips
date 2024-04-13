@@ -12,7 +12,5 @@
 # release items
 
 * add child controller modes (smc, adc, acd)
-* add inhib button
 * add crossing highlight
-* make clx/bay menu into textboxes?
 * add takeoff timer

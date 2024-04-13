@@ -58,7 +58,7 @@ namespace maxrumsey.ozstrips.gui
         public void SyncSC(StripController sc)
         {
             StripControllerDTO scDTO = new StripControllerDTO { ACID = sc.fdr.Callsign, bay = sc.currentBay, CLX = sc.CLX, GATE = sc.GATE, StripCockLevel = sc.cockLevel };
-            io.EmitAsync("client:sc_change", scDTO);
+            if (io.Connected) io.EmitAsync("client:sc_change", scDTO);
         }
         public void SyncBay(Bay bay)
         {
@@ -70,11 +70,11 @@ namespace maxrumsey.ozstrips.gui
                 else if (item.Type == StripItemType.QUEUEBAR) childList.Add("\a"); // indicates q-bar
             }
             bayDTO.list = childList;
-            io.EmitAsync("client:order_change", bayDTO);
+            if (io.Connected) io.EmitAsync("client:order_change", bayDTO);
         }
         public void SetAerodrome()
         {
-            io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName);
+            if (io.Connected) io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName);
         }
     }
 }
