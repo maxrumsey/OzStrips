@@ -2,11 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using vatsys;
 
@@ -25,11 +21,12 @@ namespace maxrumsey.ozstrips.gui
 
         public static List<StripController> stripControllers = new List<StripController>();
 
-        public StripController(FDP2.FDR fdr, BayManager bm) {
+        public StripController(FDP2.FDR fdr, BayManager bm)
+        {
             this.fdr = fdr;
             this.BayManager = bm;
             this.currentBay = StripBay.BAY_PREA;
-            if (ArrDepType == StripArrDepType.ARRIVAL ) this.currentBay = StripBay.BAY_ARRIVAL;
+            if (ArrDepType == StripArrDepType.ARRIVAL) this.currentBay = StripBay.BAY_ARRIVAL;
             CreateStripObj();
         }
 
@@ -56,7 +53,7 @@ namespace maxrumsey.ozstrips.gui
             else stripControl = new Strip_SMC_Dep(this);
 
             stripControl.Initialise();
-            stripHolderControl.Size = new Size(stripControl.Size.Width, stripControl.Size.Height+6);
+            stripHolderControl.Size = new Size(stripControl.Size.Width, stripControl.Size.Height + 6);
             stripHolderControl.Controls.Add(stripControl);
 
             //stripHolderControl = new 
@@ -131,7 +128,8 @@ namespace maxrumsey.ozstrips.gui
             if (ArrDepType == StripArrDepType.ARRIVAL)
             {
                 stripBayResultDict = NextBayArr;
-            } else if (ArrDepType == StripArrDepType.DEPARTURE)
+            }
+            else if (ArrDepType == StripArrDepType.DEPARTURE)
             {
                 stripBayResultDict = NextBayDep;
 
@@ -154,7 +152,8 @@ namespace maxrumsey.ozstrips.gui
             if (BayManager.Picked == this)
             {
                 BayManager.SetPicked();
-            } else
+            }
+            else
             {
                 BayManager.SetPicked(this);
             }
@@ -171,15 +170,19 @@ namespace maxrumsey.ozstrips.gui
 
         public StripArrDepType ArrDepType
         {
-            get {
+            get
+            {
                 if (BayManager == null) return StripArrDepType.UNKNOWN;
 
-                if (fdr.DesAirport == BayManager.AerodromeName) {
+                if (fdr.DesAirport == BayManager.AerodromeName)
+                {
                     return StripArrDepType.ARRIVAL;
-                } else if (fdr.DepAirport == BayManager.AerodromeName)
+                }
+                else if (fdr.DepAirport == BayManager.AerodromeName)
                 {
                     return StripArrDepType.DEPARTURE;
-                } else
+                }
+                else
                 {
                     return StripArrDepType.UNKNOWN;
                 }
@@ -189,12 +192,15 @@ namespace maxrumsey.ozstrips.gui
         public double GetDistToAerodrome(String aerodrome)
         {
             Coordinate coord = Airspace2.GetAirport(aerodrome)?.LatLong;
-            try {
-                if (coord != null) {
+            try
+            {
+                if (coord != null)
+                {
                     double distance = Conversions.CalculateDistance(coord, fdr.PredictedPosition.Location);
                     return distance;
                 }
-            } catch
+            }
+            catch
             {
 
             }
@@ -352,7 +358,8 @@ namespace maxrumsey.ozstrips.gui
         BAY_OUT,
         BAY_ARRIVAL
     }
-    public enum StripLayoutTypes {
+    public enum StripLayoutTypes
+    {
         STRIP_ACD,
         STRIP_DEP_SMC,
         STRIP_DEP_ADC,

@@ -1,14 +1,10 @@
-﻿using System;
+﻿using maxrumsey.ozstrips.gui;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.ComponentModel.Composition;
-using System.Text.RegularExpressions;
-using vatsys.Plugin;
-using System.Collections.Concurrent;
-using vatsys;
-using maxrumsey.ozstrips.gui;
 using System.Windows.Forms;
+using vatsys;
+using vatsys.Plugin;
 
 namespace maxrumsey.ozstrips
 {
@@ -76,7 +72,7 @@ namespace maxrumsey.ozstrips
 
             GUI.Show();
 
-           
+
         }
     }
 }

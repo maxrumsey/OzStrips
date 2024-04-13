@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using vatsys;
-using SocketIOClient;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace maxrumsey.ozstrips
 {
@@ -18,7 +11,7 @@ namespace maxrumsey.ozstrips
         public string AircraftType { get; set; }
 
         [JsonPropertyName("frul")]
-        public string FRUL {  get; set; }
+        public string FRUL { get; set; }
 
         [JsonPropertyName("adep")]
         public string Adep { get; set; }
@@ -36,7 +29,7 @@ namespace maxrumsey.ozstrips
         public string FDRState { get; set; }
 
         [JsonPropertyName("hasDeparted")]
-        public string HasDeparted { get; set;}
+        public string HasDeparted { get; set; }
 
         [JsonPropertyName("sid")]
         public string SID { get; set; }

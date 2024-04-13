@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace maxrumsey.ozstrips.gui
@@ -24,7 +18,7 @@ namespace maxrumsey.ozstrips.gui
             gb_cont.Controls.Add(child);
             child.Anchor = AnchorStyles.Top;
             child.Location = new Point(6, 16);
-            
+
             this.Text = text;
         }
 
@@ -52,7 +46,8 @@ namespace maxrumsey.ozstrips.gui
                     ReturnEvent(this, new ModalReturnArgs(this.child));
                     this.Close();
                     return true; // suppress default handling of space
-                } else if (keyData == Keys.Escape)
+                }
+                else if (keyData == Keys.Escape)
                 {
                     this.Close();
                     return true; // suppress default handling of space
@@ -66,7 +61,7 @@ namespace maxrumsey.ozstrips.gui
         public Control child;
         public ModalReturnArgs(Object child)
         {
-            this.child = (Control) child;
+            this.child = (Control)child;
         }
     }
     public delegate void ReturnEventHandler(object source, ModalReturnArgs e);

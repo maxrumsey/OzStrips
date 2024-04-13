@@ -1,10 +1,6 @@
-﻿using System;
+﻿using SocketIOClient;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SocketIOClient;
-using SocketIO;
 using vatsys;
 
 namespace maxrumsey.ozstrips
@@ -15,7 +11,8 @@ namespace maxrumsey.ozstrips
         private NetworkATC vatsysConn;
         public bool connected = false;
         private string authCode;
-        public Socket(NetworkATC vatsysConna) {
+        public Socket(NetworkATC vatsysConna)
+        {
             vatsysConn = vatsysConna;
             client = new SocketIOClient.SocketIO("http://localhost:8069/");
             client.OnConnected += connectionEstablished;
@@ -68,7 +65,8 @@ namespace maxrumsey.ozstrips
                 {
                     return;
                 }
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Errors.Add(e, "OzStrips");
             }

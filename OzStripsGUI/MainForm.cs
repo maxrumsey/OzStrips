@@ -1,17 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using vatsys;
-using maxrumsey.ozstrips;
-using System.Net.Sockets;
-using System.Net.Http.Headers;
-using System.Xml.Linq;
 
 namespace maxrumsey.ozstrips.gui
 {
@@ -35,7 +26,7 @@ namespace maxrumsey.ozstrips.gui
 
 
 
-            bayManager = new BayManager(flp_main) ;
+            bayManager = new BayManager(flp_main);
 
             AddVerticalStripBoard();
             AddVerticalStripBoard();
@@ -43,7 +34,7 @@ namespace maxrumsey.ozstrips.gui
 
             socketConn = new SocketConn(bayManager, this);
 
-            Bay bay_pr = new Bay(new List<StripBay>() { StripBay.BAY_PREA },bayManager, "Preactive", 0);
+            Bay bay_pr = new Bay(new List<StripBay>() { StripBay.BAY_PREA }, bayManager, "Preactive", 0);
             Bay bay_cl = new Bay(new List<StripBay>() { StripBay.BAY_CLEARED }, bayManager, "Cleared", 0);
             Bay bay_pb = new Bay(new List<StripBay>() { StripBay.BAY_PUSHED }, bayManager, "Pushback", 1);
             Bay bay_tx = new Bay(new List<StripBay>() { StripBay.BAY_TAXI }, bayManager, "Taxi", 1);
@@ -53,7 +44,7 @@ namespace maxrumsey.ozstrips.gui
             Bay bay_arr = new Bay(new List<StripBay>() { StripBay.BAY_ARRIVAL }, bayManager, "Arrivals", 2);
 
             bayManager.Resize();
-            
+
             /*flp_bay.Controls.Clear();
             foreach (StripController controller in StripController.stripControllers)
             {
@@ -67,7 +58,8 @@ namespace maxrumsey.ozstrips.gui
             if (conn)
             {
                 pl_stat.BackColor = Color.Green;
-            } else
+            }
+            else
             {
                 pl_stat.BackColor = Color.OrangeRed;
             }
@@ -112,7 +104,8 @@ namespace maxrumsey.ozstrips.gui
         }
         private void AddAerodrome(String name)
         {
-            ToolStripMenuItem toolStripMenuItem = new ToolStripMenuItem {
+            ToolStripMenuItem toolStripMenuItem = new ToolStripMenuItem
+            {
                 Text = name
             };
             toolStripMenuItem.Click += (Object sender, EventArgs e) =>
@@ -135,11 +128,12 @@ namespace maxrumsey.ozstrips.gui
             if (keyData == Keys.Up)
             {
                 bayManager.PositionKey(1);
-            } else if (keyData == Keys.Down)
+            }
+            else if (keyData == Keys.Down)
             {
                 bayManager.PositionKey(-1);
             }
-            
+
             return base.ProcessCmdKey(ref msg, keyData);
         }
 

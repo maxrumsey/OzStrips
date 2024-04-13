@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using vatsys;
 
@@ -79,7 +72,7 @@ namespace maxrumsey.ozstrips.gui
             lb_type.Text = fdr.AircraftType;
             lb_frul.Text = fdr.FlightRules;
 
-            String rteItem =  fdr.Route.Split(' ').ToList().Find(x => !x.Contains("/"));
+            String rteItem = fdr.Route.Split(' ').ToList().Find(x => !x.Contains("/"));
             if (rteItem == null) rteItem = fdr.Route;
 
             if (lb_route != null) lb_route.Text = rteItem;
@@ -125,11 +118,12 @@ namespace maxrumsey.ozstrips.gui
          */
         public void HeadingAltReturned(object source, ModalReturnArgs args)
         {
-            AltHdgControl control = (AltHdgControl) args.child;
+            AltHdgControl control = (AltHdgControl)args.child;
             if (control.Alt != "") stripController.CFL = control.Alt;
             if (control.Hdg != "") stripController.HDG = control.Hdg;
             if (control.Runway != "") stripController.RWY = control.Runway;
-            if (control.SID != "") {
+            if (control.SID != "")
+            {
                 stripController.SID = control.SID;
             }
 
@@ -137,7 +131,7 @@ namespace maxrumsey.ozstrips.gui
         }
         public void CLXBayReturned(object source, ModalReturnArgs args)
         {
-            BayCLXControl control = (BayCLXControl) args.child;
+            BayCLXControl control = (BayCLXControl)args.child;
             if (control.CLX != "") stripController.CLX = control.CLX;
             if (control.GATE != "") stripController.GATE = control.GATE;
 
@@ -179,5 +173,5 @@ namespace maxrumsey.ozstrips.gui
             FDP2.SetASSR(stripController.fdr);
         }
     }
-    
+
 }

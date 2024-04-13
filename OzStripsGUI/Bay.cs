@@ -1,11 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using vatsys;
 
 namespace maxrumsey.ozstrips.gui
 {
@@ -141,7 +135,8 @@ namespace maxrumsey.ozstrips.gui
             StripListItem currentItem = null;
             foreach (StripListItem item in Strips)
             {
-                if (item.Type == StripItemType.QUEUEBAR) { 
+                if (item.Type == StripItemType.QUEUEBAR)
+                {
                     containsDiv = true;
                     currentItem = item;
                 }
@@ -153,7 +148,8 @@ namespace maxrumsey.ozstrips.gui
                 newItem.Type = StripItemType.QUEUEBAR;
                 newItem.DividerBarControl = new DividerBarControl();
                 Strips.Insert(0, newItem);
-            } else if (force == null || force == false)
+            }
+            else if (force == null || force == false)
             {
                 Strips.Remove(currentItem);
             }

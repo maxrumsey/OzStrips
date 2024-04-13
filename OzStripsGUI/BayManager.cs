@@ -1,13 +1,9 @@
-﻿using System;
+﻿using maxrumsey.ozstrips.gui.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Configuration;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static vatsys.FDP2;
 using vatsys;
-using maxrumsey.ozstrips.gui.DTO;
 
 // todo: separate GUI components into separate class
 namespace maxrumsey.ozstrips.gui
@@ -20,7 +16,8 @@ namespace maxrumsey.ozstrips.gui
         public StripController Picked;
         public String AerodromeName = "YMML";
         public SocketConn socketConn;
-        public BayManager(FlowLayoutPanel main) {
+        public BayManager(FlowLayoutPanel main)
+        {
             Bays = new List<Bay>();
             this.flp_main = main;
         }
@@ -34,7 +31,7 @@ namespace maxrumsey.ozstrips.gui
             }
             if (bay == null) return;
             List<StripListItem> list = new List<StripListItem>();
-            
+
             foreach (string dtoItem in bayDTO.list)
             {
                 StripListItem listItem = bay.GetListItemByStr(dtoItem);
@@ -136,7 +133,8 @@ namespace maxrumsey.ozstrips.gui
             StripController.stripControllers.Add(stripController);
         }
 
-        public Bay FindBay(StripController stripController) {
+        public Bay FindBay(StripController stripController)
+        {
             foreach (Bay bay in Bays)
             {
                 if (bay.OwnsStrip(stripController))
@@ -195,7 +193,7 @@ namespace maxrumsey.ozstrips.gui
             foreach (Bay bay in Bays)
             {
                 int childnum = flp_vert_boards[bay.VerticalBoardNumber].Controls.Count;
-                bay.ChildPanel.Size = new System.Drawing.Size(x_each-4, (y_main-4) / childnum);
+                bay.ChildPanel.Size = new System.Drawing.Size(x_each - 4, (y_main - 4) / childnum);
             }
         }
 

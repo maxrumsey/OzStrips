@@ -1,15 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using vatsys;
-using static vatsys.FDP2;
-using static vatsys.SectorsVolumes;
 
 namespace maxrumsey.ozstrips.gui
 {
@@ -66,7 +58,7 @@ namespace maxrumsey.ozstrips.gui
             {
                 tb_hdg.Text += amount;
             }
-        
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -141,7 +133,7 @@ namespace maxrumsey.ozstrips.gui
                     {
                         cb_sid.Items.Add(sid.sidStar.Name);
                     }
-            
+
                 }
             }
 
