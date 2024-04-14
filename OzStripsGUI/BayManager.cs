@@ -74,6 +74,15 @@ namespace maxrumsey.ozstrips.gui
             }
         }
 
+        public void CrossStrip()
+        {
+            if (Picked != null)
+            {
+                Picked.Crossing = !Picked.Crossing;
+                SetPicked();
+            }
+        }
+
         public void DropStrip(Bay bay)
         {
             if (Picked != null)

@@ -50,6 +50,7 @@
             this.aDCSMCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.allToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flp_main = new System.Windows.Forms.FlowLayoutPanel();
+            this.bt_cross = new System.Windows.Forms.Button();
             this.pl_controlbar.SuspendLayout();
             this.pl_ad.SuspendLayout();
             this.pl_stat.SuspendLayout();
@@ -60,6 +61,7 @@
             // 
             this.pl_controlbar.BackColor = System.Drawing.Color.Gainsboro;
             this.pl_controlbar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pl_controlbar.Controls.Add(this.bt_cross);
             this.pl_controlbar.Controls.Add(this.bt_force);
             this.pl_controlbar.Controls.Add(this.bt_inhibit);
             this.pl_controlbar.Controls.Add(this.pl_ad);
@@ -262,6 +264,20 @@
             this.flp_main.TabIndex = 2;
             this.flp_main.WrapContents = false;
             // 
+            // bt_cross
+            // 
+            this.bt_cross.BackColor = System.Drawing.Color.RosyBrown;
+            this.bt_cross.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bt_cross.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bt_cross.Location = new System.Drawing.Point(543, 3);
+            this.bt_cross.Name = "bt_cross";
+            this.bt_cross.Size = new System.Drawing.Size(142, 37);
+            this.bt_cross.TabIndex = 5;
+            this.bt_cross.TabStop = false;
+            this.bt_cross.Text = "XX CROSS XX";
+            this.bt_cross.UseVisualStyleBackColor = false;
+            this.bt_cross.Click += new System.EventHandler(this.bt_cross_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -313,6 +329,7 @@
         private System.Windows.Forms.ToolStripMenuItem aDCToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem allToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aDCSMCToolStripMenuItem;
+        private System.Windows.Forms.Button bt_cross;
     }
 }
 

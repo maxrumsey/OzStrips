@@ -11,6 +11,8 @@ namespace maxrumsey.ozstrips.gui
         public FDP2.FDR fdr;
         public Color defColor = Color.WhiteSmoke;
         public Panel[] cockColourControls;
+        public Panel[] crossColourControls = new Panel[] { };
+
         public StripController stripController;
         public Panel pickToggleControl;
 
@@ -37,14 +39,14 @@ namespace maxrumsey.ozstrips.gui
 
 
 
-        public void Cock(int _cockLevel, bool sync = true)
+        public void Cock(int _cockLevel, bool sync = true, bool update = true)
         {
             if (_cockLevel == -1)
             {
                 _cockLevel = stripController.cockLevel + 1;
                 if (_cockLevel >= 3) _cockLevel = 0;
             }
-            stripController.cockLevel = _cockLevel;
+            if (update) stripController.cockLevel = _cockLevel;
             Color color = defColor;
             if (stripController.cockLevel == 1)
             {
@@ -56,6 +58,22 @@ namespace maxrumsey.ozstrips.gui
             }
 
             foreach (Control control in cockColourControls)
+            {
+                control.BackColor = color;
+            }
+
+            if (sync) stripController.SyncStrip();
+        }
+
+        public void SetCross(bool sync = true)
+        {
+            Color color = defColor;
+            if (stripController.Crossing == true)
+            {
+                color = Color.Salmon;
+            }
+
+            foreach (Control control in crossColourControls)
             {
                 control.BackColor = color;
             }
@@ -90,7 +108,8 @@ namespace maxrumsey.ozstrips.gui
                 lb_tot.Text = diff.ToString(@"mm\:ss");
                 lb_tot.ForeColor = Color.Green;
             }
-
+            SetCross(false);
+            Cock(0, false, false);
             lb_rwy.Text = stripController.RWY;
             lb_wtc.Text = fdr.AircraftWake;
             ResumeLayout();

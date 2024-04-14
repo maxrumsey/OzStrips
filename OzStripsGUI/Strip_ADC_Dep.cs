@@ -32,6 +32,13 @@ namespace maxrumsey.ozstrips.gui
                 this.pl_multi2
                 };
 
+            base.crossColourControls = new Panel[]
+            {
+                pl_clx,
+                pl_multi3,
+                pl_rwy
+            };
+
             this.stripController = controller;
             UpdateStrip();
 

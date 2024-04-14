@@ -128,6 +128,7 @@
       <DependentUpon>DividerBarControl.cs</DependentUpon>
     </Compile>
     <Compile Include="DTO\BayDTO.cs" />
+    <Compile Include="DTO\CacheDTO.cs" />
     <Compile Include="DTO\StripControllerDTO.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -199,6 +200,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="StripBaseGUI.resx">
+      <DependentUpon>StripBaseGUI.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Strip_Arr.resx">
       <DependentUpon>Strip_Arr.cs</DependentUpon>
       <SubType>Designer</SubType>

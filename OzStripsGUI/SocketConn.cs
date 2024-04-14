@@ -11,6 +11,7 @@ namespace maxrumsey.ozstrips.gui
     {
         SocketIOClient.SocketIO io;
         private BayManager bayManager;
+        private bool isDebug =  !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
         public SocketConn(BayManager bayManager, MainForm mf)
         {
             this.bayManager = bayManager;
@@ -46,7 +47,6 @@ namespace maxrumsey.ozstrips.gui
             {
                 BayDTO bayDTO = bdto.GetValue<BayDTO>();
                 mf.Invoke((System.Windows.Forms.MethodInvoker)delegate () { bayManager.UpdateOrder(bayDTO); });
-
             });
 
             io.ConnectAsync();
@@ -56,17 +56,20 @@ namespace maxrumsey.ozstrips.gui
 
         public void SyncSC(StripController sc)
         {
-            StripControllerDTO scDTO = new StripControllerDTO { ACID = sc.fdr.Callsign, bay = sc.currentBay, CLX = sc.CLX, GATE = sc.GATE, StripCockLevel = sc.cockLevel };
-            if (sc.TakeOffTime != DateTime.MaxValue)
-            {
-                scDTO.TOT = sc.TakeOffTime.ToString(CultureInfo.InvariantCulture);
-            } else
-            {
-                scDTO.TOT = "\0";
-            }
-            if (io.Connected && Network.Me.IsRealATC) io.EmitAsync("client:sc_change", scDTO);
+            StripControllerDTO scDTO = CreateStripDTO(sc);
+            if (io.Connected && (Network.Me.IsRealATC || isDebug)) io.EmitAsync("client:sc_change", scDTO);
         }
         public void SyncBay(Bay bay)
+        {
+            BayDTO bayDTO = CreateBayDTO(bay);
+            if (io.Connected && (Network.Me.IsRealATC || isDebug)) io.EmitAsync("client:order_change", bayDTO);
+        }
+        public void SetAerodrome()
+        {
+            if (io.Connected) io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName);
+        }
+
+        public BayDTO CreateBayDTO(Bay bay)
         {
             BayDTO bayDTO = new BayDTO { bay = bay.BayTypes.First() };
             List<string> childList = new List<string>();
@@ -76,11 +79,42 @@ namespace maxrumsey.ozstrips.gui
                 else if (item.Type == StripItemType.QUEUEBAR) childList.Add("\a"); // indicates q-bar
             }
             bayDTO.list = childList;
-            if (io.Connected && Network.Me.IsRealATC) io.EmitAsync("client:order_change", bayDTO);
+            return bayDTO;
         }
-        public void SetAerodrome()
+        public StripControllerDTO CreateStripDTO(StripController sc)
         {
-            if (io.Connected) io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName);
+            StripControllerDTO scDTO = new StripControllerDTO { ACID = sc.fdr.Callsign, bay = sc.currentBay, CLX = sc.CLX, GATE = sc.GATE, StripCockLevel = sc.cockLevel, Crossing = sc.Crossing };
+            if (sc.TakeOffTime != DateTime.MaxValue)
+            {
+                scDTO.TOT = sc.TakeOffTime.ToString(CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                scDTO.TOT = "\0";
+            }
+            return scDTO;
+        }
+        public CacheDTO CreateCachePacket()
+        {
+            List<BayDTO> bays = new List<BayDTO> ();
+            List<StripControllerDTO> strips = new List<StripControllerDTO>();
+
+            foreach (Bay bay in bayManager.Bays)
+            {
+                bays.Add(CreateBayDTO(bay));
+            }
+            foreach (StripController strip in StripController.stripControllers)
+            {
+                strips.Add(CreateStripDTO(strip));
+            }
+
+            return new CacheDTO() { bays = bays, strips = strips };
+        }
+
+        public async void SendCache()
+        {
+            CacheDTO cacheDTO = CreateCachePacket();
+            if (io.Connected && (Network.Me.IsRealATC || isDebug)) await io.EmitAsync("client:send_cache", cacheDTO);
         }
     }
 }

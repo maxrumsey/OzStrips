@@ -19,7 +19,7 @@ namespace maxrumsey.ozstrips.gui
         public BayManager BayManager;
         public StripLayoutTypes StripType;
         public DateTime TakeOffTime = DateTime.MaxValue;
-
+        private bool crossing = false;
         public static List<StripController> stripControllers = new List<StripController>();
         public StripController(FDP2.FDR fdr, BayManager bm)
         {
@@ -28,6 +28,17 @@ namespace maxrumsey.ozstrips.gui
             this.currentBay = StripBay.BAY_PREA;
             if (ArrDepType == StripArrDepType.ARRIVAL) this.currentBay = StripBay.BAY_ARRIVAL;
             CreateStripObj();
+        }
+
+        public bool Crossing { get
+            {
+                return crossing;
+            }
+            set
+            {
+                crossing = value;
+                stripControl.SetCross();
+            } 
         }
 
         public void HMI_SetPicked(bool picked)
@@ -114,12 +125,10 @@ namespace maxrumsey.ozstrips.gui
 
         public static void UpdateFDR(StripControllerDTO scDTO, BayManager bayManager)
         {
-            bool found = false;
             foreach (StripController controller in stripControllers)
             {
                 if (controller.fdr.Callsign == scDTO.ACID)
                 {
-                    found = true;
                     bool changeBay = false;
                     controller.CLX = scDTO.CLX;
                     controller.GATE = scDTO.GATE;
@@ -128,7 +137,10 @@ namespace maxrumsey.ozstrips.gui
                     controller.stripControl.Cock(scDTO.StripCockLevel, false);
                     if (scDTO.TOT == "\0") controller.TakeOffTime = DateTime.MaxValue;
                     else controller.TakeOffTime = DateTime.Parse(scDTO.TOT);
-                    
+
+                    controller.crossing = scDTO.Crossing;
+                    controller.stripControl.SetCross(false);
+
                     if (changeBay) bayManager.UpdateBay(controller); // prevent unessesscary reshufles
 
                     return;

@@ -249,5 +249,10 @@ namespace maxrumsey.ozstrips.gui
             bayManager.Resize();
             bayManager.ReloadStrips();
         }
+
+        private void bt_cross_Click(object sender, EventArgs e)
+        {
+            bayManager.CrossStrip();
+        }
     }
 }

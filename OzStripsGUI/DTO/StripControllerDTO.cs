@@ -22,5 +22,8 @@ namespace maxrumsey.ozstrips.gui.DTO
         [JsonPropertyName("TOT")]
         public string TOT { get; set; }
 
+        [JsonPropertyName("crossing")]
+        public bool Crossing { get; set; }
+
     }
 }

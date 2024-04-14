@@ -9,6 +9,6 @@
 # release items
 
 * add crossing highlight
-* icon
 * download strips on new conn
 * handle out of date api / version
+* add debug menu + logger
