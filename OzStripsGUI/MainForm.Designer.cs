@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.pl_controlbar = new System.Windows.Forms.Panel();
+            this.bt_force = new System.Windows.Forms.Button();
             this.bt_inhibit = new System.Windows.Forms.Button();
             this.pl_ad = new System.Windows.Forms.Panel();
             this.lb_ad = new System.Windows.Forms.Label();
@@ -41,7 +42,12 @@
             this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.flp_main = new System.Windows.Forms.FlowLayoutPanel();
-            this.bt_force = new System.Windows.Forms.Button();
+            this.ts_mode = new System.Windows.Forms.ToolStripMenuItem();
+            this.aCDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sMCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sMCACDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aDCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.allToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pl_controlbar.SuspendLayout();
             this.pl_ad.SuspendLayout();
             this.pl_stat.SuspendLayout();
@@ -63,6 +69,18 @@
             this.pl_controlbar.Name = "pl_controlbar";
             this.pl_controlbar.Size = new System.Drawing.Size(1784, 45);
             this.pl_controlbar.TabIndex = 0;
+            // 
+            // bt_force
+            // 
+            this.bt_force.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bt_force.Location = new System.Drawing.Point(445, 3);
+            this.bt_force.Name = "bt_force";
+            this.bt_force.Size = new System.Drawing.Size(96, 37);
+            this.bt_force.TabIndex = 4;
+            this.bt_force.TabStop = false;
+            this.bt_force.Text = "FOR STP";
+            this.bt_force.UseVisualStyleBackColor = true;
+            this.bt_force.Click += new System.EventHandler(this.bt_force_Click);
             // 
             // bt_inhibit
             // 
@@ -138,7 +156,8 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.forceRerenderToolStripMenuItem,
-            this.ts_ad});
+            this.ts_ad,
+            this.ts_mode});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1784, 24);
@@ -173,7 +192,7 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(157, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // flp_main
             // 
@@ -186,17 +205,52 @@
             this.flp_main.TabIndex = 2;
             this.flp_main.WrapContents = false;
             // 
-            // bt_force
+            // ts_mode
             // 
-            this.bt_force.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bt_force.Location = new System.Drawing.Point(445, 3);
-            this.bt_force.Name = "bt_force";
-            this.bt_force.Size = new System.Drawing.Size(96, 37);
-            this.bt_force.TabIndex = 4;
-            this.bt_force.TabStop = false;
-            this.bt_force.Text = "FOR STP";
-            this.bt_force.UseVisualStyleBackColor = true;
-            this.bt_force.Click += new System.EventHandler(this.bt_force_Click);
+            this.ts_mode.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aCDToolStripMenuItem,
+            this.sMCToolStripMenuItem,
+            this.sMCACDToolStripMenuItem,
+            this.aDCToolStripMenuItem,
+            this.allToolStripMenuItem});
+            this.ts_mode.Name = "ts_mode";
+            this.ts_mode.Size = new System.Drawing.Size(78, 20);
+            this.ts_mode.Text = "View Mode";
+            // 
+            // aCDToolStripMenuItem
+            // 
+            this.aCDToolStripMenuItem.Name = "aCDToolStripMenuItem";
+            this.aCDToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aCDToolStripMenuItem.Text = "ACD";
+            this.aCDToolStripMenuItem.Click += new System.EventHandler(this.aCDToolStripMenuItem_Click);
+            // 
+            // sMCToolStripMenuItem
+            // 
+            this.sMCToolStripMenuItem.Name = "sMCToolStripMenuItem";
+            this.sMCToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sMCToolStripMenuItem.Text = "SMC";
+            this.sMCToolStripMenuItem.Click += new System.EventHandler(this.sMCToolStripMenuItem_Click);
+            // 
+            // sMCACDToolStripMenuItem
+            // 
+            this.sMCACDToolStripMenuItem.Name = "sMCACDToolStripMenuItem";
+            this.sMCACDToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sMCACDToolStripMenuItem.Text = "SMC+ACD";
+            this.sMCACDToolStripMenuItem.Click += new System.EventHandler(this.sMCACDToolStripMenuItem_Click);
+            // 
+            // aDCToolStripMenuItem
+            // 
+            this.aDCToolStripMenuItem.Name = "aDCToolStripMenuItem";
+            this.aDCToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aDCToolStripMenuItem.Text = "ADC";
+            this.aDCToolStripMenuItem.Click += new System.EventHandler(this.aDCToolStripMenuItem_Click);
+            // 
+            // allToolStripMenuItem
+            // 
+            this.allToolStripMenuItem.Name = "allToolStripMenuItem";
+            this.allToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.allToolStripMenuItem.Text = "All";
+            this.allToolStripMenuItem.Click += new System.EventHandler(this.allToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -242,6 +296,12 @@
         private System.Windows.Forms.Button bt_inhibit;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.Button bt_force;
+        private System.Windows.Forms.ToolStripMenuItem ts_mode;
+        private System.Windows.Forms.ToolStripMenuItem aCDToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sMCToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sMCACDToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aDCToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem allToolStripMenuItem;
     }
 }
 

@@ -131,7 +131,7 @@ namespace maxrumsey.ozstrips.gui
             }
         }
 
-        public void AddStrip(StripController stripController)
+        public void AddStrip(StripController stripController, bool save = true)
         {
             stripController.BayManager = this;
             double distance = stripController.GetDistToAerodrome(AerodromeName);
@@ -147,7 +147,7 @@ namespace maxrumsey.ozstrips.gui
                 }
             }
 
-            StripController.stripControllers.Add(stripController);
+            if (save) StripController.stripControllers.Add(stripController);
         }
 
         public Bay FindBay(StripController stripController)
@@ -185,6 +185,33 @@ namespace maxrumsey.ozstrips.gui
             //flp_main.PerformLayout();
         }
 
+        public void WipeBays()
+        {
+            Bays.Clear();
+            foreach (var flp_vert_board in flp_vert_boards)
+            {
+                flp_vert_board.SuspendLayout();
+                flp_vert_board.Controls.Clear();
+            }
+        }
+
+        public void ReloadStrips()
+        {
+            foreach (var Strip in StripController.stripControllers)
+            {
+                foreach (Bay bay in Bays)
+                {
+                    if (bay.OwnsStrip(Strip))
+                    {
+                        bay.RemoveStrip(Strip);
+                    }
+                }
+                Strip.ClearStripControl();
+                Strip.CreateStripObj();
+                AddStrip(Strip, false);
+            }
+        }
+
         public void ForceRerender()
         {
             foreach (Bay bay in Bays)
@@ -205,7 +232,7 @@ namespace maxrumsey.ozstrips.gui
                 panel.Size = new System.Drawing.Size(x_each, y_main);
                 panel.Margin = new System.Windows.Forms.Padding();
                 panel.Padding = new System.Windows.Forms.Padding(2);
-
+                panel.ResumeLayout();
             }
             foreach (Bay bay in Bays)
             {

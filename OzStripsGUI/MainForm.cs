@@ -157,5 +157,77 @@ namespace maxrumsey.ozstrips.gui
         {
             bayManager.ForceStrip();
         }
+
+        private void aCDToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            bayManager.WipeBays();
+            Bay bay_pr = new Bay(new List<StripBay>() { StripBay.BAY_PREA }, bayManager, "Preactive", 0);
+            Bay bay_cl = new Bay(new List<StripBay>() { StripBay.BAY_CLEARED }, bayManager, "Cleared", 1);
+            Bay bay_pb = new Bay(new List<StripBay>() { StripBay.BAY_PUSHED }, bayManager, "Pushback", 2);
+            bayManager.Resize();
+            bayManager.ReloadStrips();
+        }
+
+        private void sMCToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            bayManager.WipeBays();
+            Bay bay_cl = new Bay(new List<StripBay>() { StripBay.BAY_CLEARED }, bayManager, "Cleared", 0);
+            Bay bay_pb = new Bay(new List<StripBay>() { StripBay.BAY_PUSHED }, bayManager, "Pushback", 0);
+            Bay bay_tx = new Bay(new List<StripBay>() { StripBay.BAY_TAXI }, bayManager, "Taxi", 1);
+            Bay bay_hp = new Bay(new List<StripBay>() { StripBay.BAY_HOLDSHORT }, bayManager, "Holding Point", 2);
+            Bay bay_rw = new Bay(new List<StripBay>() { StripBay.BAY_RUNWAY }, bayManager, "Runway", 2);
+            bayManager.Resize();
+            bayManager.ReloadStrips();
+
+        }
+
+        private void sMCACDToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            bayManager.WipeBays();
+            Bay bay_pr = new Bay(new List<StripBay>() { StripBay.BAY_PREA }, bayManager, "Preactive", 0);
+            Bay bay_cl = new Bay(new List<StripBay>() { StripBay.BAY_CLEARED }, bayManager, "Cleared", 0);
+            Bay bay_pb = new Bay(new List<StripBay>() { StripBay.BAY_PUSHED }, bayManager, "Pushback", 0);
+            Bay bay_tx = new Bay(new List<StripBay>() { StripBay.BAY_TAXI }, bayManager, "Taxi", 1);
+            Bay bay_hp = new Bay(new List<StripBay>() { StripBay.BAY_HOLDSHORT }, bayManager, "Holding Point", 2);
+            Bay bay_rw = new Bay(new List<StripBay>() { StripBay.BAY_RUNWAY }, bayManager, "Runway", 2);
+            bayManager.Resize();
+            bayManager.ReloadStrips();
+        }
+
+        private void aDCToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            bayManager.WipeBays();
+            Bay bay_hp = new Bay(new List<StripBay>() { StripBay.BAY_HOLDSHORT }, bayManager, "Holding Point", 0);
+            Bay bay_rw = new Bay(new List<StripBay>() { StripBay.BAY_RUNWAY }, bayManager, "Runway", 1);
+            Bay bay_out = new Bay(new List<StripBay>() { StripBay.BAY_OUT }, bayManager, "Departed", 2);
+            Bay bay_arr = new Bay(new List<StripBay>() { StripBay.BAY_ARRIVAL }, bayManager, "Arrivals", 2);
+            bayManager.Resize();
+            bayManager.ReloadStrips();
+        }
+
+        private void allToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            bayManager.WipeBays();
+            Bay bay_pr = new Bay(new List<StripBay>() { StripBay.BAY_PREA }, bayManager, "Preactive", 0);
+            Bay bay_cl = new Bay(new List<StripBay>() { StripBay.BAY_CLEARED }, bayManager, "Cleared", 0);
+            Bay bay_pb = new Bay(new List<StripBay>() { StripBay.BAY_PUSHED }, bayManager, "Pushback", 1);
+            Bay bay_tx = new Bay(new List<StripBay>() { StripBay.BAY_TAXI }, bayManager, "Taxi", 1);
+            Bay bay_hp = new Bay(new List<StripBay>() { StripBay.BAY_HOLDSHORT }, bayManager, "Holding Point", 1);
+            Bay bay_rw = new Bay(new List<StripBay>() { StripBay.BAY_RUNWAY }, bayManager, "Runway", 2);
+            Bay bay_out = new Bay(new List<StripBay>() { StripBay.BAY_OUT }, bayManager, "Departed", 2);
+            Bay bay_arr = new Bay(new List<StripBay>() { StripBay.BAY_ARRIVAL }, bayManager, "Arrivals", 2);
+            bayManager.Resize();
+            bayManager.ReloadStrips();
+        }
+
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle |= 0x02000000;  // Turn on WS_EX_COMPOSITED
+                return cp;
+            }
+        }
     }
 }
