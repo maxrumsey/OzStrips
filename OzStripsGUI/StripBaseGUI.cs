@@ -180,7 +180,7 @@ namespace maxrumsey.ozstrips.gui
 
         public void AssignSSR()
         {
-            FDP2.SetASSR(stripController.fdr);
+            if (fdr.AssignedSSRCode == -1) FDP2.SetASSR(stripController.fdr);
         }
     }
 
