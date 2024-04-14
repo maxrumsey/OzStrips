@@ -17,6 +17,8 @@ namespace maxrumsey.ozstrips.gui
 
             tb_clx.Text = controller.CLX;
             tb_bay.Text = controller.GATE;
+
+
         }
 
         public string CLX { get { return tb_clx.Text; } }
@@ -26,7 +28,8 @@ namespace maxrumsey.ozstrips.gui
 
         private void AltHdgControl_Load(object sender, EventArgs e)
         {
-
+            if (tb_bay.Text.Length == 0) bm.ActiveControl = tb_bay;
+            else bm.ActiveControl = tb_clx;
         }
 
         private void button12_Click(object sender, EventArgs e)

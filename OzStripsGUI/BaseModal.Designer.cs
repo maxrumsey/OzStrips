@@ -42,6 +42,7 @@
             this.bt_canc.Name = "bt_canc";
             this.bt_canc.Size = new System.Drawing.Size(75, 23);
             this.bt_canc.TabIndex = 0;
+            this.bt_canc.TabStop = false;
             this.bt_canc.Text = "Cancel";
             this.bt_canc.UseVisualStyleBackColor = false;
             this.bt_canc.Click += new System.EventHandler(this.bt_canc_Click);
@@ -55,6 +56,7 @@
             this.bt_acp.Name = "bt_acp";
             this.bt_acp.Size = new System.Drawing.Size(75, 23);
             this.bt_acp.TabIndex = 1;
+            this.bt_acp.TabStop = false;
             this.bt_acp.Text = "Accept";
             this.bt_acp.UseVisualStyleBackColor = false;
             this.bt_acp.Click += new System.EventHandler(this.bt_acp_Click);

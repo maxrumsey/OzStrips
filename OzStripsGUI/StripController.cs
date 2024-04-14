@@ -118,13 +118,16 @@ namespace maxrumsey.ozstrips.gui
                 if (controller.fdr.Callsign == scDTO.ACID)
                 {
                     found = true;
+                    bool changeBay = false;
                     controller.CLX = scDTO.CLX;
                     controller.GATE = scDTO.GATE;
+                    if (controller.currentBay != scDTO.bay) changeBay = true;
                     controller.currentBay = scDTO.bay;
                     controller.stripControl.Cock(scDTO.StripCockLevel, false);
                     if (scDTO.TOT == "\0") controller.TakeOffTime = DateTime.MaxValue;
                     else controller.TakeOffTime = DateTime.Parse(scDTO.TOT);
-                    bayManager.UpdateBay(controller);
+                    
+                    if (changeBay) bayManager.UpdateBay(controller); // prevent unessesscary reshufles
 
                     return;
                 }

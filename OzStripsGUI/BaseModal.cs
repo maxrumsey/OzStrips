@@ -19,6 +19,7 @@ namespace maxrumsey.ozstrips.gui
             child.Location = new Point(6, 16);
 
             this.Text = text;
+
         }
 
         private void bt_canc_Click(object sender, EventArgs e)

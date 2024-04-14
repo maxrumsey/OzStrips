@@ -63,7 +63,9 @@ namespace maxrumsey.ozstrips.gui
         {
             if (Picked != null)
             {
-                Picked.currentBay = bay.BayTypes.FirstOrDefault();
+                StripBay newBay = bay.BayTypes.FirstOrDefault();
+                if (newBay == Picked.currentBay) return;
+                Picked.currentBay = newBay;
                 Picked.SyncStrip();
                 UpdateBay(Picked);
                 SetPicked();

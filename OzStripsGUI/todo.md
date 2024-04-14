@@ -13,3 +13,4 @@
 
 * add child controller modes (smc, adc, acd)
 * add crossing highlight
+* add force strip button
