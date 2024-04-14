@@ -18,9 +18,9 @@ namespace maxrumsey.ozstrips.gui
         public Control stripHolderControl;
         public BayManager BayManager;
         public StripLayoutTypes StripType;
+        public DateTime TakeOffTime = DateTime.MaxValue;
 
         public static List<StripController> stripControllers = new List<StripController>();
-
         public StripController(FDP2.FDR fdr, BayManager bm)
         {
             this.fdr = fdr;
@@ -33,6 +33,11 @@ namespace maxrumsey.ozstrips.gui
         public void HMI_SetPicked(bool picked)
         {
             stripControl.HMI_TogglePick(picked);
+        }
+
+        public void TakeOff()
+        {
+            TakeOffTime = DateTime.UtcNow;
         }
 
         public void CreateStripObj()
@@ -50,6 +55,7 @@ namespace maxrumsey.ozstrips.gui
             if (ArrDepType == StripArrDepType.ARRIVAL) stripControl = new Strip_Arr(this);
             else if (ArrDepType == StripArrDepType.DEPARTURE && (currentBay == StripBay.BAY_PREA || currentBay == StripBay.BAY_CLEARED)) stripControl = new Strip_ACD(this);
             else if (ArrDepType == StripArrDepType.DEPARTURE && (currentBay < StripBay.BAY_RUNWAY)) stripControl = new Strip_SMC_Dep(this);
+            else if (ArrDepType == StripArrDepType.DEPARTURE && (currentBay >= StripBay.BAY_RUNWAY)) stripControl = new Strip_ADC_Dep(this);
             else stripControl = new Strip_SMC_Dep(this);
 
             stripControl.Initialise();

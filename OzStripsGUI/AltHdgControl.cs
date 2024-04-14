@@ -9,6 +9,7 @@ namespace maxrumsey.ozstrips.gui
     {
         private List<Airspace2.SystemRunway> runways;
         private StripController stripController;
+        public BaseModal bm;
         public AltHdgControl(StripController controller)
         {
             stripController = controller;
@@ -137,6 +138,19 @@ namespace maxrumsey.ozstrips.gui
                 }
             }
 
+        }
+
+        private void tb_alt_KeyDown(object sender, KeyEventArgs e)
+        {
+
+            if (e.KeyData == Keys.Enter)
+            {
+                bm.ExitModal(true);
+            }
+            else if (e.KeyData == Keys.Escape)
+            {
+                bm.ExitModal();
+            }
         }
     }
 }

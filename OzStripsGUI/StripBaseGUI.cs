@@ -28,6 +28,7 @@ namespace maxrumsey.ozstrips.gui
         public Label lb_wtc;
         public Label lb_std;
         public Label lb_clx;
+        public Label lb_tot;
 
         public StripBaseGUI()
         {
@@ -83,6 +84,13 @@ namespace maxrumsey.ozstrips.gui
             if (lb_hdg != null) lb_hdg.Text = stripController.HDG;
             if (lb_clx != null) lb_clx.Text = stripController.CLX;
             if (lb_std != null) lb_std.Text = stripController.GATE;
+            if (lb_tot != null && stripController.TakeOffTime != DateTime.MaxValue)
+            {
+                TimeSpan diff = DateTime.UtcNow - stripController.TakeOffTime;
+                lb_tot.Text = diff.ToString(@"mm\:ss");
+                lb_tot.ForeColor = Color.Green;
+            }
+
             lb_rwy.Text = stripController.RWY;
             lb_wtc.Text = fdr.AircraftWake;
             ResumeLayout();
@@ -93,6 +101,7 @@ namespace maxrumsey.ozstrips.gui
         {
             AltHdgControl modalChild = new AltHdgControl(stripController);
             BaseModal bm = new BaseModal(modalChild, "ACD Menu");
+            modalChild.bm = bm;
             bm.ReturnEvent += new ReturnEventHandler(HeadingAltReturned);
             bm.ShowDialog();
             SetModalCoord(bm);
@@ -102,6 +111,7 @@ namespace maxrumsey.ozstrips.gui
         {
             BayCLXControl modalChild = new BayCLXControl(stripController);
             BaseModal bm = new BaseModal(modalChild, "SMC Menu");
+            modalChild.bm = bm;
             bm.ReturnEvent += new ReturnEventHandler(CLXBayReturned);
             bm.ShowDialog();
             SetModalCoord(bm);

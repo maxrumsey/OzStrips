@@ -13,4 +13,4 @@
 
 * add child controller modes (smc, adc, acd)
 * add crossing highlight
-* add takeoff timer
+* add takeoff timerw

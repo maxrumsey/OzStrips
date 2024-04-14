@@ -9,6 +9,7 @@ namespace maxrumsey.ozstrips.gui
     {
         private List<Airspace2.SystemRunway> runways;
         private StripController stripController;
+        public BaseModal bm;
         public BayCLXControl(StripController controller)
         {
             stripController = controller;
@@ -36,6 +37,18 @@ namespace maxrumsey.ozstrips.gui
         private void button1_Click(object sender, EventArgs e)
         {
             tb_bay.Text = "";
+        }
+
+        private void tb_clx_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                bm.ExitModal(true);
+            }
+            else if (e.KeyData == Keys.Escape)
+            {
+                bm.ExitModal();
+            }
         }
     }
 }

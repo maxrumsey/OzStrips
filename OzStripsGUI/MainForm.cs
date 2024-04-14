@@ -152,15 +152,5 @@ namespace maxrumsey.ozstrips.gui
         {
             bayManager.Inhibit();
         }
-
-        /*public void FDRDownlink(List<FDP2.FDR> fdrs)
-{
-flp_bay.Controls.Clear();
-foreach (FDP2.FDR fdr in fdrs)
-{
-flp_bay.Controls.Add(new Strip(fdr));
-}
-}*/
-
     }
 }

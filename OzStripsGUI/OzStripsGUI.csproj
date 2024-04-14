@@ -151,6 +151,12 @@
     <Compile Include="Strip_Arr.Designer.cs">
       <DependentUpon>Strip_Arr.cs</DependentUpon>
     </Compile>
+    <Compile Include="Strip_ADC_Dep.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Strip_ADC_Dep.Designer.cs">
+      <DependentUpon>Strip_ADC_Dep.cs</DependentUpon>
+    </Compile>
     <Compile Include="Strip_SMC_Dep.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -195,6 +201,10 @@
     </Compile>
     <EmbeddedResource Include="Strip_Arr.resx">
       <DependentUpon>Strip_Arr.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Strip_ADC_Dep.resx">
+      <DependentUpon>Strip_ADC_Dep.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Strip_SMC_Dep.resx">

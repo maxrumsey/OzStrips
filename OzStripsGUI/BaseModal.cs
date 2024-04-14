@@ -14,7 +14,6 @@ namespace maxrumsey.ozstrips.gui
             StartPosition = FormStartPosition.CenterScreen;
             InitializeComponent();
             this.child = child;
-
             gb_cont.Controls.Add(child);
             child.Anchor = AnchorStyles.Top;
             child.Location = new Point(6, 16);
@@ -43,17 +42,22 @@ namespace maxrumsey.ozstrips.gui
             {
                 if (keyData == Keys.Enter)
                 {
-                    ReturnEvent(this, new ModalReturnArgs(this.child));
-                    this.Close();
+                    ExitModal(true);
                     return true; // suppress default handling of space
                 }
                 else if (keyData == Keys.Escape)
                 {
-                    this.Close();
+                    ExitModal();
                     return true; // suppress default handling of space
                 }
             }
             return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        public void ExitModal(bool senddata = false)
+        {
+            if (senddata) ReturnEvent(this, new ModalReturnArgs(this.child));
+            this.Close();
         }
     }
     public class ModalReturnArgs : EventArgs

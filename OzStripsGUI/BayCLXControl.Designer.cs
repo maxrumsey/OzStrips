@@ -46,6 +46,7 @@
             this.tb_clx.Name = "tb_clx";
             this.tb_clx.Size = new System.Drawing.Size(75, 26);
             this.tb_clx.TabIndex = 2;
+            this.tb_clx.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tb_clx_KeyDown);
             // 
             // button12
             // 
@@ -97,6 +98,7 @@
             this.tb_bay.Name = "tb_bay";
             this.tb_bay.Size = new System.Drawing.Size(75, 26);
             this.tb_bay.TabIndex = 2;
+            this.tb_bay.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tb_clx_KeyDown);
             // 
             // BayCLXControl
             // 
