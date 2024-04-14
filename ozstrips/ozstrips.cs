@@ -20,6 +20,7 @@ namespace maxrumsey.ozstrips
         public OzStrips()
         {
             Network.Connected += Connected;
+            Network.Disconnected += Disconnected;
             ozStripsOpener = new CustomToolStripMenuItem(CustomToolStripMenuItemWindowType.Main, CustomToolStripMenuItemCategory.Windows, new ToolStripMenuItem("OzStrips"));
             ozStripsOpener.Item.Click += OpenGUI;
             MMI.AddCustomMenuItem(ozStripsOpener);
@@ -29,6 +30,10 @@ namespace maxrumsey.ozstrips
         {
             vatsysConn = Network.Me;
             isObs = !vatsysConn.IsRealATC;
+        }
+        private void Disconnected(object sender, EventArgs e)
+        {
+            if (GUI != null && GUI.IsHandleCreated) GUI.Invoke((System.Windows.Forms.MethodInvoker)delegate () { GUI.DisconnectVATSIM(); });
         }
 
 

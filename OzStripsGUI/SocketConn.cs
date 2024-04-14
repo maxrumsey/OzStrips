@@ -64,7 +64,7 @@ namespace maxrumsey.ozstrips.gui
             {
                 scDTO.TOT = "\0";
             }
-            if (io.Connected) io.EmitAsync("client:sc_change", scDTO);
+            if (io.Connected && Network.Me.IsRealATC) io.EmitAsync("client:sc_change", scDTO);
         }
         public void SyncBay(Bay bay)
         {
@@ -76,7 +76,7 @@ namespace maxrumsey.ozstrips.gui
                 else if (item.Type == StripItemType.QUEUEBAR) childList.Add("\a"); // indicates q-bar
             }
             bayDTO.list = childList;
-            if (io.Connected) io.EmitAsync("client:order_change", bayDTO);
+            if (io.Connected && Network.Me.IsRealATC) io.EmitAsync("client:order_change", bayDTO);
         }
         public void SetAerodrome()
         {

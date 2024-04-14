@@ -65,6 +65,12 @@ namespace maxrumsey.ozstrips.gui
             }
         }
 
+        public void DisconnectVATSIM()
+        {
+            bayManager.WipeStrips();
+            StripController.stripControllers.Clear();
+        }
+
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
