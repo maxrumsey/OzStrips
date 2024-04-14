@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.Json;
 using vatsys;
 
 namespace maxrumsey.ozstrips.gui
@@ -12,6 +13,7 @@ namespace maxrumsey.ozstrips.gui
         SocketIOClient.SocketIO io;
         private BayManager bayManager;
         private bool isDebug =  !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
+        public List<string> Messages = new List<string>();
         public SocketConn(BayManager bayManager, MainForm mf)
         {
             this.bayManager = bayManager;
@@ -40,12 +42,16 @@ namespace maxrumsey.ozstrips.gui
             io.On("server:sc_change", sc =>
             {
                 StripControllerDTO scDTO = sc.GetValue<StripControllerDTO>();
+                Messages.Add("s:sc_change: " + JsonSerializer.Serialize(scDTO));
+
                 mf.Invoke((System.Windows.Forms.MethodInvoker)delegate () { StripController.UpdateFDR(scDTO, bayManager); });
 
             });
             io.On("server:order_change", bdto =>
             {
                 BayDTO bayDTO = bdto.GetValue<BayDTO>();
+                Messages.Add("s:order_change: " + JsonSerializer.Serialize(bayDTO));
+
                 mf.Invoke((System.Windows.Forms.MethodInvoker)delegate () { bayManager.UpdateOrder(bayDTO); });
             });
 
@@ -57,11 +63,16 @@ namespace maxrumsey.ozstrips.gui
         public void SyncSC(StripController sc)
         {
             StripControllerDTO scDTO = CreateStripDTO(sc);
+            Messages.Add("c:sc_change: " + JsonSerializer.Serialize(scDTO));
+
             if (io.Connected && (Network.Me.IsRealATC || isDebug)) io.EmitAsync("client:sc_change", scDTO);
+
         }
         public void SyncBay(Bay bay)
         {
             BayDTO bayDTO = CreateBayDTO(bay);
+            Messages.Add("c:order_change: " + JsonSerializer.Serialize(bayDTO));
+
             if (io.Connected && (Network.Me.IsRealATC || isDebug)) io.EmitAsync("client:order_change", bayDTO);
         }
         public void SetAerodrome()

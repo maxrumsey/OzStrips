@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using vatsys;
 
 namespace maxrumsey.ozstrips.gui
@@ -12,6 +13,8 @@ namespace maxrumsey.ozstrips.gui
         Socket socket;
         BayManager bayManager;
         SocketConn socketConn;
+        private bool isDebug = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
+
         public MainForm(List<FDP2.FDR> fdrs)
         {
             InitializeComponent();
@@ -51,6 +54,24 @@ namespace maxrumsey.ozstrips.gui
                 flp_bay.Controls.Add(controller.stripControl);
 
             }*/
+
+            if (isDebug)
+            {
+                ToolStripMenuItem toolStripMenuItem = new ToolStripMenuItem
+                {
+                    Text = "Manual Comm"
+                };
+                toolStripMenuItem.Click += (Object sender, EventArgs e) =>
+                {
+                    OpenManDebug();
+                };
+                debugToolStripMenuItem.DropDownItems.Add(toolStripMenuItem);
+            }
+        }
+
+        public void OpenManDebug()
+        {
+
         }
 
         public void SetConnStatus(bool conn)
@@ -253,6 +274,14 @@ namespace maxrumsey.ozstrips.gui
         private void bt_cross_Click(object sender, EventArgs e)
         {
             bayManager.CrossStrip();
+        }
+
+        // socket.io log
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            MsgListDebug modalChild = new MsgListDebug(socketConn);
+            BaseModal bm = new BaseModal(modalChild, "Msg List");
+            bm.ShowDialog();
         }
     }
 }
