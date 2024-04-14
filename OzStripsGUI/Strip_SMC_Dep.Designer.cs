@@ -122,6 +122,7 @@
             this.lb_acid.Text = "acid";
             this.lb_acid.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lb_acid.Click += new System.EventHandler(this.lb_acid_Click);
+            this.lb_acid.DoubleClick += new System.EventHandler(this.lb_acid_Click);
             // 
             // pl_multi
             // 
