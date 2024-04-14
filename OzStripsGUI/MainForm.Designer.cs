@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.pl_controlbar = new System.Windows.Forms.Panel();
             this.bt_force = new System.Windows.Forms.Button();
             this.bt_inhibit = new System.Windows.Forms.Button();
@@ -41,14 +42,14 @@
             this.ts_ad = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.flp_main = new System.Windows.Forms.FlowLayoutPanel();
             this.ts_mode = new System.Windows.Forms.ToolStripMenuItem();
             this.aCDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sMCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sMCACDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aDCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.allToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aDCSMCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.allToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.flp_main = new System.Windows.Forms.FlowLayoutPanel();
             this.pl_controlbar.SuspendLayout();
             this.pl_ad.SuspendLayout();
             this.pl_stat.SuspendLayout();
@@ -193,18 +194,7 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
-            // 
-            // flp_main
-            // 
-            this.flp_main.AutoScroll = true;
-            this.flp_main.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flp_main.Location = new System.Drawing.Point(0, 24);
-            this.flp_main.Margin = new System.Windows.Forms.Padding(0);
-            this.flp_main.Name = "flp_main";
-            this.flp_main.Size = new System.Drawing.Size(1784, 892);
-            this.flp_main.TabIndex = 2;
-            this.flp_main.WrapContents = false;
+            this.toolStripSeparator1.Size = new System.Drawing.Size(157, 6);
             // 
             // ts_mode
             // 
@@ -222,44 +212,55 @@
             // aCDToolStripMenuItem
             // 
             this.aCDToolStripMenuItem.Name = "aCDToolStripMenuItem";
-            this.aCDToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aCDToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.aCDToolStripMenuItem.Text = "ACD";
             this.aCDToolStripMenuItem.Click += new System.EventHandler(this.aCDToolStripMenuItem_Click);
             // 
             // sMCToolStripMenuItem
             // 
             this.sMCToolStripMenuItem.Name = "sMCToolStripMenuItem";
-            this.sMCToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sMCToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.sMCToolStripMenuItem.Text = "SMC";
             this.sMCToolStripMenuItem.Click += new System.EventHandler(this.sMCToolStripMenuItem_Click);
             // 
             // sMCACDToolStripMenuItem
             // 
             this.sMCACDToolStripMenuItem.Name = "sMCACDToolStripMenuItem";
-            this.sMCACDToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sMCACDToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.sMCACDToolStripMenuItem.Text = "SMC+ACD";
             this.sMCACDToolStripMenuItem.Click += new System.EventHandler(this.sMCACDToolStripMenuItem_Click);
             // 
             // aDCToolStripMenuItem
             // 
             this.aDCToolStripMenuItem.Name = "aDCToolStripMenuItem";
-            this.aDCToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aDCToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.aDCToolStripMenuItem.Text = "ADC";
             this.aDCToolStripMenuItem.Click += new System.EventHandler(this.aDCToolStripMenuItem_Click);
-            // 
-            // allToolStripMenuItem
-            // 
-            this.allToolStripMenuItem.Name = "allToolStripMenuItem";
-            this.allToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.allToolStripMenuItem.Text = "All";
-            this.allToolStripMenuItem.Click += new System.EventHandler(this.allToolStripMenuItem_Click);
             // 
             // aDCSMCToolStripMenuItem
             // 
             this.aDCSMCToolStripMenuItem.Name = "aDCSMCToolStripMenuItem";
-            this.aDCSMCToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aDCSMCToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.aDCSMCToolStripMenuItem.Text = "ADC+SMC";
             this.aDCSMCToolStripMenuItem.Click += new System.EventHandler(this.aDCSMCToolStripMenuItem_Click);
+            // 
+            // allToolStripMenuItem
+            // 
+            this.allToolStripMenuItem.Name = "allToolStripMenuItem";
+            this.allToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.allToolStripMenuItem.Text = "All";
+            this.allToolStripMenuItem.Click += new System.EventHandler(this.allToolStripMenuItem_Click);
+            // 
+            // flp_main
+            // 
+            this.flp_main.AutoScroll = true;
+            this.flp_main.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flp_main.Location = new System.Drawing.Point(0, 24);
+            this.flp_main.Margin = new System.Windows.Forms.Padding(0);
+            this.flp_main.Name = "flp_main";
+            this.flp_main.Size = new System.Drawing.Size(1784, 892);
+            this.flp_main.TabIndex = 2;
+            this.flp_main.WrapContents = false;
             // 
             // MainForm
             // 
@@ -271,9 +272,9 @@
             this.Controls.Add(this.pl_controlbar);
             this.Controls.Add(this.menuStrip1);
             this.DoubleBuffered = true;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
-            this.ShowIcon = false;
             this.Text = "OzStrips";
             this.SizeChanged += new System.EventHandler(this.MainForm_SizeChanged);
             this.pl_controlbar.ResumeLayout(false);
