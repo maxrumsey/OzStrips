@@ -80,7 +80,7 @@ namespace maxrumsey.ozstrips.gui
 
             double distance = GetDistToAerodrome(BayManager.AerodromeName);
 
-            if (distance == -1 || distance > 50)
+            if ((distance == -1 || distance > 50) && ArrDepType == StripArrDepType.DEPARTURE)
             {
                 BayManager.DeleteStrip(this);
             }

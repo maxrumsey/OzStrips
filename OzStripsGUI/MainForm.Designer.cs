@@ -48,6 +48,7 @@
             this.sMCACDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aDCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.allToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aDCSMCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pl_controlbar.SuspendLayout();
             this.pl_ad.SuspendLayout();
             this.pl_stat.SuspendLayout();
@@ -212,6 +213,7 @@
             this.sMCToolStripMenuItem,
             this.sMCACDToolStripMenuItem,
             this.aDCToolStripMenuItem,
+            this.aDCSMCToolStripMenuItem,
             this.allToolStripMenuItem});
             this.ts_mode.Name = "ts_mode";
             this.ts_mode.Size = new System.Drawing.Size(78, 20);
@@ -251,6 +253,13 @@
             this.allToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.allToolStripMenuItem.Text = "All";
             this.allToolStripMenuItem.Click += new System.EventHandler(this.allToolStripMenuItem_Click);
+            // 
+            // aDCSMCToolStripMenuItem
+            // 
+            this.aDCSMCToolStripMenuItem.Name = "aDCSMCToolStripMenuItem";
+            this.aDCSMCToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aDCSMCToolStripMenuItem.Text = "ADC+SMC";
+            this.aDCSMCToolStripMenuItem.Click += new System.EventHandler(this.aDCSMCToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -302,6 +311,7 @@
         private System.Windows.Forms.ToolStripMenuItem sMCACDToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aDCToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem allToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aDCSMCToolStripMenuItem;
     }
 }
 

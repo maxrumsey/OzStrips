@@ -89,7 +89,7 @@ namespace maxrumsey.ozstrips.gui
 
         public void DeleteStrip(StripController strip)
         {
-            FindBay(strip).RemoveStrip(strip, true);
+            FindBay(strip)?.RemoveStrip(strip, true);
             StripController.stripControllers.Remove(strip);
         }
 
@@ -137,7 +137,7 @@ namespace maxrumsey.ozstrips.gui
             double distance = stripController.GetDistToAerodrome(AerodromeName);
 
             if (stripController.ApplicableToAerodrome(AerodromeName) == false) return;
-            if (distance > 50 || distance == -1) return;
+            if ((distance > 50 || distance == -1) && stripController.ArrDepType == StripArrDepType.DEPARTURE) return; // prevent arr strips disappearing on gnd
 
             foreach (Bay bay in Bays)
             {
