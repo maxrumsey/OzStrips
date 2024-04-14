@@ -48,6 +48,21 @@ namespace maxrumsey.ozstrips.gui
 
         }
 
+        public void ForceStrip()
+        {
+            if (MMI.SelectedTrack != null)
+            {
+                FDP2.FDR fdr = MMI.SelectedTrack.GetFDR();
+                StripController controller = StripController.UpdateFDR(fdr, this);
+
+                if (controller != null && Bays.First() != null)
+                {
+                    controller.currentBay = Bays.First().BayTypes.First();
+                    controller.SyncStrip();
+                    UpdateBay(controller);
+                }
+            }
+        }
         public void Inhibit()
         {
             if (Picked != null)

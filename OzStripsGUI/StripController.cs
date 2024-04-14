@@ -85,7 +85,7 @@ namespace maxrumsey.ozstrips.gui
                 BayManager.DeleteStrip(this);
             }
         }
-        public static void UpdateFDR(FDP2.FDR fdr, BayManager bayManager)
+        public static StripController UpdateFDR(FDP2.FDR fdr, BayManager bayManager)
         {
             bool found = false;
             foreach (StripController controller in stripControllers)
@@ -99,7 +99,7 @@ namespace maxrumsey.ozstrips.gui
                         bayManager.DeleteStrip(controller);
                     }
                     controller.UpdateFDR();
-                    return;
+                    return controller;
                 }
             }
             if (!found)
@@ -107,7 +107,9 @@ namespace maxrumsey.ozstrips.gui
                 // todo: add this logic into separate static function
                 StripController stripController = new StripController(fdr, bayManager);
                 bayManager.AddStrip(stripController);
+                return stripController;
             }
+            return null;
         }
 
         public static void UpdateFDR(StripControllerDTO scDTO, BayManager bayManager)

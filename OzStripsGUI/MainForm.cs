@@ -152,5 +152,10 @@ namespace maxrumsey.ozstrips.gui
         {
             bayManager.Inhibit();
         }
+
+        private void bt_force_Click(object sender, EventArgs e)
+        {
+            bayManager.ForceStrip();
+        }
     }
 }

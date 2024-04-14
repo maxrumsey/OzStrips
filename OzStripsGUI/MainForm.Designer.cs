@@ -35,13 +35,13 @@
             this.pl_stat = new System.Windows.Forms.Panel();
             this.lb_stat = new System.Windows.Forms.Label();
             this.tb_Time = new System.Windows.Forms.TextBox();
-            this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.forceRerenderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_ad = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
-            this.flp_main = new System.Windows.Forms.FlowLayoutPanel();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.flp_main = new System.Windows.Forms.FlowLayoutPanel();
+            this.bt_force = new System.Windows.Forms.Button();
             this.pl_controlbar.SuspendLayout();
             this.pl_ad.SuspendLayout();
             this.pl_stat.SuspendLayout();
@@ -52,6 +52,7 @@
             // 
             this.pl_controlbar.BackColor = System.Drawing.Color.Gainsboro;
             this.pl_controlbar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pl_controlbar.Controls.Add(this.bt_force);
             this.pl_controlbar.Controls.Add(this.bt_inhibit);
             this.pl_controlbar.Controls.Add(this.pl_ad);
             this.pl_controlbar.Controls.Add(this.pl_stat);
@@ -71,7 +72,7 @@
             this.bt_inhibit.Size = new System.Drawing.Size(96, 37);
             this.bt_inhibit.TabIndex = 3;
             this.bt_inhibit.TabStop = false;
-            this.bt_inhibit.Text = "Inhibit";
+            this.bt_inhibit.Text = "INHIBIT";
             this.bt_inhibit.UseVisualStyleBackColor = true;
             this.bt_inhibit.Click += new System.EventHandler(this.bt_inhibit_Click);
             // 
@@ -95,7 +96,7 @@
             this.lb_ad.Name = "lb_ad";
             this.lb_ad.Size = new System.Drawing.Size(39, 16);
             this.lb_ad.TabIndex = 0;
-            this.lb_ad.Text = "????";
+            this.lb_ad.Text = "YMML";
             // 
             // pl_stat
             // 
@@ -133,17 +134,9 @@
             this.tb_Time.TabIndex = 0;
             this.tb_Time.Text = "Time";
             // 
-            // closeToolStripMenuItem
-            // 
-            this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
-            this.closeToolStripMenuItem.Text = "Close";
-            this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
-            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.closeToolStripMenuItem,
             this.forceRerenderToolStripMenuItem,
             this.ts_ad});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -177,6 +170,11 @@
             this.toolStripTextBox1.ToolTipText = "Aerodrome";
             this.toolStripTextBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.toolStripTextBox1_KeyPress);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(157, 6);
+            // 
             // flp_main
             // 
             this.flp_main.AutoScroll = true;
@@ -188,10 +186,17 @@
             this.flp_main.TabIndex = 2;
             this.flp_main.WrapContents = false;
             // 
-            // toolStripSeparator1
+            // bt_force
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.bt_force.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bt_force.Location = new System.Drawing.Point(445, 3);
+            this.bt_force.Name = "bt_force";
+            this.bt_force.Size = new System.Drawing.Size(96, 37);
+            this.bt_force.TabIndex = 4;
+            this.bt_force.TabStop = false;
+            this.bt_force.Text = "FOR STP";
+            this.bt_force.UseVisualStyleBackColor = true;
+            this.bt_force.Click += new System.EventHandler(this.bt_force_Click);
             // 
             // MainForm
             // 
@@ -227,7 +232,6 @@
         private System.Windows.Forms.TextBox tb_Time;
         private System.Windows.Forms.Panel pl_stat;
         private System.Windows.Forms.Label lb_stat;
-        private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem forceRerenderToolStripMenuItem;
         private System.Windows.Forms.FlowLayoutPanel flp_main;
@@ -237,6 +241,7 @@
         private System.Windows.Forms.ToolStripTextBox toolStripTextBox1;
         private System.Windows.Forms.Button bt_inhibit;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.Button bt_force;
     }
 }
 
