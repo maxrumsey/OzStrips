@@ -38,6 +38,7 @@ namespace maxrumsey.ozstrips.gui
         public void TakeOff()
         {
             TakeOffTime = DateTime.UtcNow;
+            SyncStrip();
         }
 
         public void CreateStripObj()
@@ -121,6 +122,8 @@ namespace maxrumsey.ozstrips.gui
                     controller.GATE = scDTO.GATE;
                     controller.currentBay = scDTO.bay;
                     controller.stripControl.Cock(scDTO.StripCockLevel, false);
+                    if (scDTO.TOT == "\0") controller.TakeOffTime = DateTime.MaxValue;
+                    else controller.TakeOffTime = DateTime.Parse(scDTO.TOT);
                     bayManager.UpdateBay(controller);
 
                     return;

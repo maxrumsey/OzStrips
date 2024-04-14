@@ -1,6 +1,7 @@
 ﻿using maxrumsey.ozstrips.gui.DTO;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using vatsys;
 
@@ -56,6 +57,13 @@ namespace maxrumsey.ozstrips.gui
         public void SyncSC(StripController sc)
         {
             StripControllerDTO scDTO = new StripControllerDTO { ACID = sc.fdr.Callsign, bay = sc.currentBay, CLX = sc.CLX, GATE = sc.GATE, StripCockLevel = sc.cockLevel };
+            if (sc.TakeOffTime != DateTime.MaxValue)
+            {
+                scDTO.TOT = sc.TakeOffTime.ToString(CultureInfo.InvariantCulture);
+            } else
+            {
+                scDTO.TOT = "\0";
+            }
             if (io.Connected) io.EmitAsync("client:sc_change", scDTO);
         }
         public void SyncBay(Bay bay)

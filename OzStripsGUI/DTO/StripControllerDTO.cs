@@ -19,5 +19,8 @@ namespace maxrumsey.ozstrips.gui.DTO
         [JsonPropertyName("GATE")]
         public string GATE { get; set; }
 
+        [JsonPropertyName("TOT")]
+        public string TOT { get; set; }
+
     }
 }
