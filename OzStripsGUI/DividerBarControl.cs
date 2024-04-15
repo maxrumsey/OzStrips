@@ -8,5 +8,10 @@ namespace maxrumsey.ozstrips.gui
         {
             InitializeComponent();
         }
+
+        public void SetVal(int num)
+        {
+            label1.Text = "(" + num + ") Queue";
+        }
     }
 }

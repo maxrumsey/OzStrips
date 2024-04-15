@@ -23,6 +23,22 @@ namespace maxrumsey.ozstrips.gui
 
         }
 
+        public int CountQueued()
+        {
+            int count = 0;
+
+            foreach (StripListItem item in Strips)
+            {
+                if (item.Type == StripItemType.QUEUEBAR)
+                {
+                    return count;
+                } else if (item.Type == StripItemType.STRIP)
+                {
+                    count++;
+                }
+            }
+            return -1;
+        }
         public bool ResponsibleFor(StripBay bay)
         {
             if (BayTypes.Contains(bay))
@@ -92,12 +108,14 @@ namespace maxrumsey.ozstrips.gui
         {
             ChildPanel.ChildPanel.SuspendLayout();
             ChildPanel.ChildPanel.Controls.Clear();
+            int queueLen = CountQueued();
             for (int i = 0; i < Strips.Count; i++)
             {
                 if (Strips[i].Type == StripItemType.STRIP) ChildPanel.ChildPanel.Controls.Add(Strips[i].StripController.stripHolderControl);
                 if (Strips[i].Type == StripItemType.QUEUEBAR)
                 {
                     ChildPanel.ChildPanel.Controls.Add(Strips[i].DividerBarControl);
+                    Strips[i].DividerBarControl.SetVal(queueLen);
                 }
             }
             ChildPanel.ChildPanel.ResumeLayout();
