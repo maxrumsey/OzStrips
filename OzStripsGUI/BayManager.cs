@@ -16,10 +16,12 @@ namespace maxrumsey.ozstrips.gui
         public StripController Picked;
         public String AerodromeName = "YMML";
         public SocketConn socketConn;
+        public static BayManager bayManager;
         public BayManager(FlowLayoutPanel main)
         {
             Bays = new List<Bay>();
             this.flp_main = main;
+            bayManager = this;
         }
 
         public void UpdateOrder(BayDTO bayDTO)

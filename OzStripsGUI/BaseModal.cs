@@ -24,15 +24,14 @@ namespace maxrumsey.ozstrips.gui
 
         private void bt_canc_Click(object sender, EventArgs e)
         {
-            this.Close();
+            ExitModal();
         }
 
         private void bt_acp_Click(object sender, EventArgs e)
         {
             // to add
             // child.confirm();
-            ReturnEvent(this, new ModalReturnArgs(this.child));
-            this.Close();
+            ExitModal(true);
         }
 
 
@@ -57,7 +56,7 @@ namespace maxrumsey.ozstrips.gui
 
         public void ExitModal(bool senddata = false)
         {
-            if (senddata) ReturnEvent(this, new ModalReturnArgs(this.child));
+            if (senddata && ReturnEvent != null) ReturnEvent(this, new ModalReturnArgs(this.child));
             this.Close();
         }
     }

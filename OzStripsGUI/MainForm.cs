@@ -71,7 +71,9 @@ namespace maxrumsey.ozstrips.gui
 
         public void OpenManDebug()
         {
-
+            ManualMsgDebug modalChild = new ManualMsgDebug();
+            BaseModal bm = new BaseModal(modalChild, "Manual Message Editor");
+            bm.ShowDialog();
         }
 
         public void SetConnStatus(bool conn)
