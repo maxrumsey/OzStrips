@@ -14,10 +14,29 @@ namespace maxrumsey.ozstrips.gui
         private BayManager bayManager;
         private bool isDebug =  !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
         public List<string> Messages = new List<string>();
+        private bool versionShown = false;
         public SocketConn(BayManager bayManager, MainForm mf)
         {
             this.bayManager = bayManager;
-            io = new SocketIOClient.SocketIO("http://localhost:8069");
+            io = new SocketIOClient.SocketIO(Config.socketioaddr);
+            io.OnAny((sender, e) =>
+            {
+                MetadataDTO metaDTO = e.GetValue<MetadataDTO>(1);
+                if (metaDTO.version != Config.version && !versionShown)
+                {
+                    Util.ShowErrorBox("New Update Available: " + metaDTO.version);
+                    versionShown = true;
+                }
+                if (metaDTO.apiversion != Config.apiversion) {
+                    Util.ShowErrorBox("OzStrips incompatible with current API version!");
+                    mf.Invoke((System.Windows.Forms.MethodInvoker)delegate ()
+                    {
+                        mf.Close();
+                        mf.Dispose();
+                    });
+                }
+            });
+
             io.OnConnected += async (sender, e) =>
             {
                 await io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName);

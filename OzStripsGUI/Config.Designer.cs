@@ -61,6 +61,15 @@ namespace maxrumsey.ozstrips.gui {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 1.
+        /// </summary>
+        internal static string apiversion {
+            get {
+                return ResourceManager.GetString("apiversion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to http://localhost:8069/.
         /// </summary>
         internal static string socketioaddr {

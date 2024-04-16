@@ -145,6 +145,7 @@
     </Compile>
     <Compile Include="DTO\BayDTO.cs" />
     <Compile Include="DTO\CacheDTO.cs" />
+    <Compile Include="DTO\MetadataDTO.cs" />
     <Compile Include="DTO\StripControllerDTO.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -203,6 +204,7 @@
     <Compile Include="Controls\Strip_ACD.Designer.cs">
       <DependentUpon>Strip_ACD.cs</DependentUpon>
     </Compile>
+    <Compile Include="Util.cs" />
     <EmbeddedResource Include="Controls\BayCLXControl.resx">
       <DependentUpon>BayCLXControl.cs</DependentUpon>
     </EmbeddedResource>
