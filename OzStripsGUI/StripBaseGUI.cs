@@ -122,8 +122,7 @@ namespace maxrumsey.ozstrips.gui
             BaseModal bm = new BaseModal(modalChild, "ACD Menu");
             modalChild.bm = bm;
             bm.ReturnEvent += new ReturnEventHandler(HeadingAltReturned);
-            bm.ShowDialog();
-            SetModalCoord(bm);
+            bm.Show(MainForm.mainForm);
 
         }
         public void OpenCLXBayModal()
@@ -132,9 +131,7 @@ namespace maxrumsey.ozstrips.gui
             BaseModal bm = new BaseModal(modalChild, "SMC Menu");
             modalChild.bm = bm;
             bm.ReturnEvent += new ReturnEventHandler(CLXBayReturned);
-            bm.ShowDialog();
-            SetModalCoord(bm);
-
+            bm.Show(MainForm.mainForm);
         }
         public void OpenVatsysFDRModMenu()
         {
@@ -166,13 +163,6 @@ namespace maxrumsey.ozstrips.gui
 
             stripController.SyncStrip();
         }
-
-        public void SetModalCoord(BaseModal bm)
-        {
-            int screenCount = Screen.AllScreens.Count();
-            bm.Location = new Point(Cursor.Position.X, Cursor.Position.Y);
-        }
-
         public void TogglePick()
         {
             if (stripController != null)

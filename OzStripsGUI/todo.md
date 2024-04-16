@@ -10,4 +10,9 @@
 
 * download strips on new conn
 * handle out of date api / version
-* show queue length
+
+
+# release check
+- api version
+- socket addr
+- debug menu not vis in release

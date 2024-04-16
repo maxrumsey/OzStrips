@@ -13,8 +13,6 @@ namespace maxrumsey.ozstrips
     public class OzStrips : IPlugin
     {
         private CustomToolStripMenuItem ozStripsOpener;
-        private NetworkATC vatsysConn;
-        private bool isObs = false;
         private MainForm GUI;
 
         public OzStrips()
@@ -28,8 +26,6 @@ namespace maxrumsey.ozstrips
 
         private void Connected(object sender, EventArgs e)
         {
-            vatsysConn = Network.Me;
-            isObs = !vatsysConn.IsRealATC;
         }
         private void Disconnected(object sender, EventArgs e)
         {
@@ -64,13 +60,13 @@ namespace maxrumsey.ozstrips
         {
             OpenGUI();
         }
+
+        [STAThread]
         private void OpenGUI()
         {
             if (GUI == null || GUI.IsDisposed)
             {
-                List<FDP2.FDR> fdrs = FDP2.GetFDRs;
-
-                GUI = new MainForm(fdrs);
+                GUI = new MainForm();
 
             }
             else if (GUI.Visible) return;

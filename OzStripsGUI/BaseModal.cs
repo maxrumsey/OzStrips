@@ -18,8 +18,8 @@ namespace maxrumsey.ozstrips.gui
             child.Anchor = AnchorStyles.Top;
             child.Location = new Point(6, 16);
 
-            this.Text = text;
-
+            Text = text;
+            BringToFront();
         }
 
         private void bt_canc_Click(object sender, EventArgs e)

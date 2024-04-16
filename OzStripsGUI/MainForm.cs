@@ -14,20 +14,24 @@ namespace maxrumsey.ozstrips.gui
         BayManager bayManager;
         SocketConn socketConn;
         private bool isDebug = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
+        public static MainForm mainForm;
 
-        public MainForm(List<FDP2.FDR> fdrs)
+        public MainForm()
         {
+            mainForm = this;
             InitializeComponent();
             timer = new Timer();
             timer.Interval = 100;
             timer.Tick += updateTimer;
             timer.Start();
 
-            AddAerodrome("YMML"); //todo: add more ads
-            AddAerodrome("YSSY");
             AddAerodrome("YBBN");
-
-
+            AddAerodrome("YBCGH");
+            AddAerodrome("YBSU");
+            AddAerodrome("YMML"); //todo: add more ads
+            AddAerodrome("YPDN");
+            AddAerodrome("YPPH");
+            AddAerodrome("YSSY");
 
             bayManager = new BayManager(flp_main);
 
@@ -73,7 +77,7 @@ namespace maxrumsey.ozstrips.gui
         {
             ManualMsgDebug modalChild = new ManualMsgDebug();
             BaseModal bm = new BaseModal(modalChild, "Manual Message Editor");
-            bm.ShowDialog();
+            bm.Show(this);
         }
 
         public void SetConnStatus(bool conn)
@@ -283,7 +287,7 @@ namespace maxrumsey.ozstrips.gui
         {
             MsgListDebug modalChild = new MsgListDebug(socketConn);
             BaseModal bm = new BaseModal(modalChild, "Msg List");
-            bm.ShowDialog();
+            bm.Show(this);
         }
     }
 }
