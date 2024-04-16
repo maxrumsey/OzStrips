@@ -146,8 +146,8 @@ namespace maxrumsey.ozstrips.controls
         public void HeadingAltReturned(object source, ModalReturnArgs args)
         {
             AltHdgControl control = (AltHdgControl)args.child;
-            if (control.Alt != "") stripController.CFL = control.Alt;
-            if (control.Hdg != "") stripController.HDG = control.Hdg;
+            stripController.CFL = control.Alt;
+            stripController.HDG = control.Hdg;
             if (control.Runway != "") stripController.RWY = control.Runway;
             if (control.SID != "")
             {
@@ -159,8 +159,8 @@ namespace maxrumsey.ozstrips.controls
         public void CLXBayReturned(object source, ModalReturnArgs args)
         {
             BayCLXControl control = (BayCLXControl)args.child;
-            if (control.CLX != "") stripController.CLX = control.CLX;
-            if (control.GATE != "") stripController.GATE = control.GATE;
+            stripController.CLX = control.CLX;
+            stripController.GATE = control.GATE;
 
             stripController.SyncStrip();
         }

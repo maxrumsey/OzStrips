@@ -46,10 +46,8 @@
             this.button6 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.button13 = new System.Windows.Forms.Button();
             this.cb_runway = new System.Windows.Forms.ComboBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.button14 = new System.Windows.Forms.Button();
             this.cb_sid = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -258,24 +256,13 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.button13);
             this.groupBox3.Controls.Add(this.cb_runway);
             this.groupBox3.Location = new System.Drawing.Point(4, 172);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(88, 162);
+            this.groupBox3.Size = new System.Drawing.Size(88, 67);
             this.groupBox3.TabIndex = 17;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Runway";
-            // 
-            // button13
-            // 
-            this.button13.Location = new System.Drawing.Point(6, 134);
-            this.button13.Name = "button13";
-            this.button13.Size = new System.Drawing.Size(75, 23);
-            this.button13.TabIndex = 16;
-            this.button13.TabStop = false;
-            this.button13.Text = "Clear";
-            this.button13.UseVisualStyleBackColor = true;
             // 
             // cb_runway
             // 
@@ -289,24 +276,13 @@
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.button14);
             this.groupBox4.Controls.Add(this.cb_sid);
             this.groupBox4.Location = new System.Drawing.Point(99, 172);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(105, 162);
+            this.groupBox4.Size = new System.Drawing.Size(105, 67);
             this.groupBox4.TabIndex = 18;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "SID";
-            // 
-            // button14
-            // 
-            this.button14.Location = new System.Drawing.Point(6, 134);
-            this.button14.Name = "button14";
-            this.button14.Size = new System.Drawing.Size(75, 23);
-            this.button14.TabIndex = 16;
-            this.button14.TabStop = false;
-            this.button14.Text = "Clear";
-            this.button14.UseVisualStyleBackColor = true;
             // 
             // cb_sid
             // 
@@ -326,7 +302,7 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Name = "AltHdgControl";
-            this.Size = new System.Drawing.Size(213, 338);
+            this.Size = new System.Drawing.Size(213, 244);
             this.Load += new System.EventHandler(this.AltHdgControl_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -357,10 +333,8 @@
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Button button13;
         private System.Windows.Forms.ComboBox cb_runway;
         private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.Button button14;
         private System.Windows.Forms.ComboBox cb_sid;
     }
 }
