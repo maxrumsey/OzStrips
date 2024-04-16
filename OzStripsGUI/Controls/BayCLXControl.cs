@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using vatsys;
+using maxrumsey.ozstrips.gui;
 
-namespace maxrumsey.ozstrips.gui
+namespace maxrumsey.ozstrips.controls
 {
     public partial class BayCLXControl : UserControl
     {

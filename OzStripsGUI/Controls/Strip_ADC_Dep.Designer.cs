@@ -1,4 +1,4 @@
-﻿namespace maxrumsey.ozstrips.gui
+﻿namespace maxrumsey.ozstrips.controls
 {
     partial class Strip_ADC_Dep
     {

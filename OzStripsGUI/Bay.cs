@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using maxrumsey.ozstrips.controls;
 
 namespace maxrumsey.ozstrips.gui
 {

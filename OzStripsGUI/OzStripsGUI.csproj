@@ -92,16 +92,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BayCLXControl.cs">
+    <Compile Include="Controls\BayCLXControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="BayCLXControl.Designer.cs">
+    <Compile Include="Controls\BayCLXControl.Designer.cs">
       <DependentUpon>BayCLXControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="AltHdgControl.cs">
+    <Compile Include="Controls\AltHdgControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="AltHdgControl.Designer.cs">
+    <Compile Include="Controls\AltHdgControl.Designer.cs">
       <DependentUpon>AltHdgControl.cs</DependentUpon>
     </Compile>
     <Compile Include="BaseModal.cs">
@@ -111,20 +111,20 @@
       <DependentUpon>BaseModal.cs</DependentUpon>
     </Compile>
     <Compile Include="Bay.cs" />
-    <Compile Include="BayControl.cs">
+    <Compile Include="Controls\BayControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="BayControl.Designer.cs">
+    <Compile Include="Controls\BayControl.Designer.cs">
       <DependentUpon>BayControl.cs</DependentUpon>
     </Compile>
     <Compile Include="BayManager.cs" />
-    <Compile Include="CustomFLP.cs">
+    <Compile Include="Controls\CustomFLP.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DividerBarControl.cs">
+    <Compile Include="Controls\DividerBarControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="DividerBarControl.Designer.cs">
+    <Compile Include="Controls\DividerBarControl.Designer.cs">
       <DependentUpon>DividerBarControl.cs</DependentUpon>
     </Compile>
     <Compile Include="DTO\BayDTO.cs" />
@@ -136,76 +136,73 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ManualMsgDebug.cs">
+    <Compile Include="Controls\ManualMsgDebug.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ManualMsgDebug.Designer.cs">
+    <Compile Include="Controls\ManualMsgDebug.Designer.cs">
       <DependentUpon>ManualMsgDebug.cs</DependentUpon>
     </Compile>
-    <Compile Include="MsgListDebug.cs">
+    <Compile Include="Controls\MsgListDebug.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MsgListDebug.Designer.cs">
+    <Compile Include="Controls\MsgListDebug.Designer.cs">
       <DependentUpon>MsgListDebug.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Socket.cs" />
     <Compile Include="SocketConn.cs" />
-    <Compile Include="StripBaseGUI.cs">
+    <Compile Include="Controls\StripBaseGUI.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="StripBaseGUI.Designer.cs">
+    <Compile Include="Controls\StripBaseGUI.Designer.cs">
       <DependentUpon>StripBaseGUI.cs</DependentUpon>
     </Compile>
     <Compile Include="StripController.cs" />
-    <Compile Include="Strip_Arr.cs">
+    <Compile Include="Controls\Strip_Arr.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Strip_Arr.Designer.cs">
+    <Compile Include="Controls\Strip_Arr.Designer.cs">
       <DependentUpon>Strip_Arr.cs</DependentUpon>
     </Compile>
-    <Compile Include="Strip_ADC_Dep.cs">
+    <Compile Include="Controls\Strip_ADC_Dep.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Strip_ADC_Dep.Designer.cs">
+    <Compile Include="Controls\Strip_ADC_Dep.Designer.cs">
       <DependentUpon>Strip_ADC_Dep.cs</DependentUpon>
     </Compile>
-    <Compile Include="Strip_SMC_Dep.cs">
+    <Compile Include="Controls\Strip_SMC_Dep.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Strip_SMC_Dep.Designer.cs">
+    <Compile Include="Controls\Strip_SMC_Dep.Designer.cs">
       <DependentUpon>Strip_SMC_Dep.cs</DependentUpon>
     </Compile>
-    <Compile Include="UpdatePacket.cs" />
-    <Compile Include="UpdatePacketFactory.cs" />
-    <Compile Include="Strip_ACD.cs">
+    <Compile Include="Controls\Strip_ACD.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Strip_ACD.Designer.cs">
+    <Compile Include="Controls\Strip_ACD.Designer.cs">
       <DependentUpon>Strip_ACD.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="BayCLXControl.resx">
+    <EmbeddedResource Include="Controls\BayCLXControl.resx">
       <DependentUpon>BayCLXControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AltHdgControl.resx">
+    <EmbeddedResource Include="Controls\AltHdgControl.resx">
       <DependentUpon>AltHdgControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BaseModal.resx">
       <DependentUpon>BaseModal.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BayControl.resx">
+    <EmbeddedResource Include="Controls\BayControl.resx">
       <DependentUpon>BayControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DividerBarControl.resx">
+    <EmbeddedResource Include="Controls\DividerBarControl.resx">
       <DependentUpon>DividerBarControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ManualMsgDebug.resx">
+    <EmbeddedResource Include="Controls\ManualMsgDebug.resx">
       <DependentUpon>ManualMsgDebug.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MsgListDebug.resx">
+    <EmbeddedResource Include="Controls\MsgListDebug.resx">
       <DependentUpon>MsgListDebug.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -218,22 +215,22 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="StripBaseGUI.resx">
+    <EmbeddedResource Include="Controls\StripBaseGUI.resx">
       <DependentUpon>StripBaseGUI.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Strip_Arr.resx">
+    <EmbeddedResource Include="Controls\Strip_Arr.resx">
       <DependentUpon>Strip_Arr.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Strip_ADC_Dep.resx">
+    <EmbeddedResource Include="Controls\Strip_ADC_Dep.resx">
       <DependentUpon>Strip_ADC_Dep.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Strip_SMC_Dep.resx">
+    <EmbeddedResource Include="Controls\Strip_SMC_Dep.resx">
       <DependentUpon>Strip_SMC_Dep.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Strip_ACD.resx">
+    <EmbeddedResource Include="Controls\Strip_ACD.resx">
       <DependentUpon>Strip_ACD.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -247,17 +244,16 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="terminus.fon" />
-    <None Include="TerminusTTF-Bold_B.ttf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="terminus.fon" />
+    <None Include="TerminusTTF-Bold_B.ttf" />
     <None Include="todo.md" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Icon1.ico" />
     <Content Include="ozstrips.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

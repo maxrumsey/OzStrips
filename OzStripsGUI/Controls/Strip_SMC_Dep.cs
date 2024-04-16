@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
+using maxrumsey.ozstrips.gui;
 
-namespace maxrumsey.ozstrips.gui
+namespace maxrumsey.ozstrips.controls
 {
-    public partial class Strip_Arr : StripBaseGUI
+    public partial class Strip_SMC_Dep : StripBaseGUI
     {
-        public Strip_Arr(StripController controller)
+        public Strip_SMC_Dep(StripController controller)
         {
             this.fdr = controller.fdr;
             InitializeComponent();
@@ -18,6 +19,7 @@ namespace maxrumsey.ozstrips.gui
             base.lb_type = lb_type;
             base.lb_frul = lb_frul;
             base.lb_route = lb_route;
+            base.lb_sid = lb_sid;
             base.lb_ades = lb_ades;
             base.lb_alt = lb_alt;
             base.lb_hdg = lb_hdg;
@@ -27,14 +29,16 @@ namespace maxrumsey.ozstrips.gui
             base.lb_clx = lb_clx;
             this.cockColourControls = new Panel[] {
                 this.pl_eobt,
-                this.pl_multi
+                this.pl_multi,
+                this.pl_multi2
                 };
 
             base.crossColourControls = new Panel[]
             {
                 pl_clx,
                 pl_std,
-                pl_rwy
+                pl_rwy,
+                pl_multi3
             };
 
             this.stripController = controller;
@@ -104,7 +108,6 @@ namespace maxrumsey.ozstrips.gui
         private void lb_ssr_Click(object sender, EventArgs e)
         {
             AssignSSR();
-
         }
     }
 }

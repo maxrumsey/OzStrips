@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace maxrumsey.ozstrips.gui
+namespace maxrumsey.ozstrips.controls
 {
     public partial class DividerBarControl : UserControl
     {

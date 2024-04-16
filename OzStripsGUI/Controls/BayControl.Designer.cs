@@ -1,4 +1,5 @@
-﻿namespace maxrumsey.ozstrips.gui
+﻿
+namespace maxrumsey.ozstrips.controls
 {
     partial class BayControl
     {
@@ -29,7 +30,7 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.flp_stripbay = new maxrumsey.ozstrips.gui.CustomFLP();
+            this.flp_stripbay = new maxrumsey.ozstrips.controls.CustomFLP();
             this.panel2 = new System.Windows.Forms.Panel();
             this.bt_queue = new System.Windows.Forms.Button();
             this.bt_div = new System.Windows.Forms.Button();

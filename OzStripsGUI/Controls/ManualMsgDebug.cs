@@ -11,8 +11,9 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using vatsys;
+using maxrumsey.ozstrips.gui;
 
-namespace maxrumsey.ozstrips.gui
+namespace maxrumsey.ozstrips.controls
 {
     public partial class ManualMsgDebug : UserControl
     {

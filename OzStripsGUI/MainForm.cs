@@ -4,13 +4,13 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using vatsys;
+using maxrumsey.ozstrips.controls;
 
 namespace maxrumsey.ozstrips.gui
 {
     public partial class MainForm : Form
     {
         Timer timer;
-        Socket socket;
         BayManager bayManager;
         SocketConn socketConn;
         private bool isDebug = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
@@ -26,7 +26,7 @@ namespace maxrumsey.ozstrips.gui
             timer.Start();
 
             AddAerodrome("YBBN");
-            AddAerodrome("YBCGH");
+            AddAerodrome("YBCG");
             AddAerodrome("YBSU");
             AddAerodrome("YMML"); //todo: add more ads
             AddAerodrome("YPDN");
@@ -51,13 +51,6 @@ namespace maxrumsey.ozstrips.gui
             Bay bay_arr = new Bay(new List<StripBay>() { StripBay.BAY_ARRIVAL }, bayManager, "Arrivals", 2);
 
             bayManager.Resize();
-
-            /*flp_bay.Controls.Clear();
-            foreach (StripController controller in StripController.stripControllers)
-            {
-                flp_bay.Controls.Add(controller.stripControl);
-
-            }*/
 
             if (isDebug)
             {

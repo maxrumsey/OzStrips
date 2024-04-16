@@ -1,9 +1,10 @@
-﻿using System;
+﻿using maxrumsey.ozstrips.gui;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using vatsys;
 
-namespace maxrumsey.ozstrips.gui
+namespace maxrumsey.ozstrips.controls
 {
     public partial class AltHdgControl : UserControl
     {

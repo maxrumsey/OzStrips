@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using vatsys;
+using maxrumsey.ozstrips.controls;
 
 namespace maxrumsey.ozstrips.gui
 {
