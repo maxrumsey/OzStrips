@@ -15,7 +15,6 @@ namespace maxrumsey.ozstrips.gui
         SocketConn socketConn;
         private bool isDebug = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
         public static MainForm mainForm;
-
         public MainForm()
         {
             mainForm = this;
@@ -280,6 +279,13 @@ namespace maxrumsey.ozstrips.gui
         {
             MsgListDebug modalChild = new MsgListDebug(socketConn);
             BaseModal bm = new BaseModal(modalChild, "Msg List");
+            bm.Show(this);
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            About modalChild = new About();
+            BaseModal bm = new BaseModal(modalChild, "About OzStrips");
             bm.Show(this);
         }
     }

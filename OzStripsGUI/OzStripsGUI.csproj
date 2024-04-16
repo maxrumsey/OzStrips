@@ -137,6 +137,12 @@
     <Compile Include="Controls\DividerBarControl.Designer.cs">
       <DependentUpon>DividerBarControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\About.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\About.Designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
+    </Compile>
     <Compile Include="DTO\BayDTO.cs" />
     <Compile Include="DTO\CacheDTO.cs" />
     <Compile Include="DTO\StripControllerDTO.cs" />
@@ -159,6 +165,12 @@
       <DependentUpon>MsgListDebug.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Config.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Config.resx</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="SocketConn.cs" />
     <Compile Include="Controls\StripBaseGUI.cs">
       <SubType>UserControl</SubType>
@@ -206,6 +218,9 @@
     <EmbeddedResource Include="Controls\DividerBarControl.resx">
       <DependentUpon>DividerBarControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\About.resx">
+      <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -243,6 +258,11 @@
     <EmbeddedResource Include="Controls\Strip_ACD.resx">
       <DependentUpon>Strip_ACD.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Config.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Config.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

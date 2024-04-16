@@ -49,9 +49,10 @@
             this.aDCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aDCSMCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.allToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.flp_main = new System.Windows.Forms.FlowLayoutPanel();
             this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.flp_main = new System.Windows.Forms.FlowLayoutPanel();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pl_controlbar.SuspendLayout();
             this.pl_ad.SuspendLayout();
             this.pl_stat.SuspendLayout();
@@ -176,7 +177,8 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ts_ad,
             this.ts_mode,
-            this.debugToolStripMenuItem});
+            this.debugToolStripMenuItem,
+            this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1784, 24);
@@ -204,7 +206,7 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(157, 6);
             // 
             // ts_mode
             // 
@@ -261,17 +263,6 @@
             this.allToolStripMenuItem.Text = "All";
             this.allToolStripMenuItem.Click += new System.EventHandler(this.allToolStripMenuItem_Click);
             // 
-            // flp_main
-            // 
-            this.flp_main.AutoScroll = true;
-            this.flp_main.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flp_main.Location = new System.Drawing.Point(0, 24);
-            this.flp_main.Margin = new System.Windows.Forms.Padding(0);
-            this.flp_main.Name = "flp_main";
-            this.flp_main.Size = new System.Drawing.Size(1784, 892);
-            this.flp_main.TabIndex = 2;
-            this.flp_main.WrapContents = false;
-            // 
             // debugToolStripMenuItem
             // 
             this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -283,9 +274,27 @@
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(144, 22);
             this.toolStripMenuItem1.Text = "SocketIO Log";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            // 
+            // flp_main
+            // 
+            this.flp_main.AutoScroll = true;
+            this.flp_main.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flp_main.Location = new System.Drawing.Point(0, 24);
+            this.flp_main.Margin = new System.Windows.Forms.Padding(0);
+            this.flp_main.Name = "flp_main";
+            this.flp_main.Size = new System.Drawing.Size(1784, 892);
+            this.flp_main.TabIndex = 2;
+            this.flp_main.WrapContents = false;
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -340,6 +349,7 @@
         private System.Windows.Forms.Button bt_cross;
         private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
     }
 }
 
