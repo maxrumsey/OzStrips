@@ -120,7 +120,7 @@ namespace maxrumsey.ozstrips.controls
         public void OpenHdgAltModal()
         {
             AltHdgControl modalChild = new AltHdgControl(stripController);
-            BaseModal bm = new BaseModal(modalChild, "ACD Menu");
+            BaseModal bm = new BaseModal(modalChild, "ACD Menu :: " + stripController.fdr.Callsign);
             modalChild.bm = bm;
             bm.ReturnEvent += new ReturnEventHandler(HeadingAltReturned);
             bm.Show(MainForm.mainForm);
@@ -129,7 +129,7 @@ namespace maxrumsey.ozstrips.controls
         public void OpenCLXBayModal()
         {
             BayCLXControl modalChild = new BayCLXControl(stripController);
-            BaseModal bm = new BaseModal(modalChild, "SMC Menu");
+            BaseModal bm = new BaseModal(modalChild, "SMC Menu :: " + stripController.fdr.Callsign);
             modalChild.bm = bm;
             bm.ReturnEvent += new ReturnEventHandler(CLXBayReturned);
             bm.Show(MainForm.mainForm);
