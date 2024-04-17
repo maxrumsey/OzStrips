@@ -53,6 +53,7 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flp_main = new System.Windows.Forms.FlowLayoutPanel();
+            this.bt_pdc = new System.Windows.Forms.Button();
             this.pl_controlbar.SuspendLayout();
             this.pl_ad.SuspendLayout();
             this.pl_stat.SuspendLayout();
@@ -63,6 +64,7 @@
             // 
             this.pl_controlbar.BackColor = System.Drawing.Color.Gainsboro;
             this.pl_controlbar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pl_controlbar.Controls.Add(this.bt_pdc);
             this.pl_controlbar.Controls.Add(this.bt_cross);
             this.pl_controlbar.Controls.Add(this.bt_force);
             this.pl_controlbar.Controls.Add(this.bt_inhibit);
@@ -296,6 +298,18 @@
             this.flp_main.TabIndex = 2;
             this.flp_main.WrapContents = false;
             // 
+            // bt_pdc
+            // 
+            this.bt_pdc.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bt_pdc.Location = new System.Drawing.Point(687, 3);
+            this.bt_pdc.Name = "bt_pdc";
+            this.bt_pdc.Size = new System.Drawing.Size(96, 37);
+            this.bt_pdc.TabIndex = 6;
+            this.bt_pdc.TabStop = false;
+            this.bt_pdc.Text = "PDC";
+            this.bt_pdc.UseVisualStyleBackColor = true;
+            this.bt_pdc.Click += new System.EventHandler(this.bt_pdc_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -351,6 +365,7 @@
         private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.Button bt_pdc;
     }
 }
 

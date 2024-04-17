@@ -297,5 +297,10 @@ namespace maxrumsey.ozstrips.gui
         {
             socketConn.Close();
         }
+
+        private void bt_pdc_Click(object sender, EventArgs e)
+        {
+            bayManager.SendPDC();
+        }
     }
 }

@@ -76,6 +76,15 @@ namespace maxrumsey.ozstrips.gui
             }
         }
 
+        public void SendPDC()
+        {
+            if (Picked != null)
+            {
+                MMI.OpenCPDLCWindow(Picked.fdr, null, CPDLC.MessageCategories.FirstOrDefault((CPDLC.MessageCategory m) => m.Name == "PDC"));
+                SetPicked();
+            }
+        }
+
         public void CrossStrip()
         {
             if (Picked != null)
