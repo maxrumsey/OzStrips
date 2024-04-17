@@ -25,5 +25,8 @@ namespace maxrumsey.ozstrips.gui.DTO
         [JsonPropertyName("crossing")]
         public bool Crossing { get; set; }
 
+        [JsonPropertyName("subbay")]
+        public string subbay { get; set; }
+
     }
 }
