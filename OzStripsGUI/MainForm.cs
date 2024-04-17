@@ -1,10 +1,9 @@
-﻿using System;
+﻿using maxrumsey.ozstrips.controls;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Xml.Linq;
 using vatsys;
-using maxrumsey.ozstrips.controls;
 
 namespace maxrumsey.ozstrips.gui
 {
@@ -63,7 +62,6 @@ namespace maxrumsey.ozstrips.gui
                 debugToolStripMenuItem.DropDownItems.Add(toolStripMenuItem);
             }
             socketConn = new SocketConn(bayManager, this);
-
         }
 
         public void OpenManDebug()

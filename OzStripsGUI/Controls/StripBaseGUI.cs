@@ -1,9 +1,9 @@
-﻿using System;
+﻿using maxrumsey.ozstrips.gui;
+using System;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using vatsys;
-using maxrumsey.ozstrips.gui;
 
 namespace maxrumsey.ozstrips.controls
 {

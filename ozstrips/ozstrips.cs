@@ -1,6 +1,5 @@
 ﻿using maxrumsey.ozstrips.gui;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Windows.Forms;
 using vatsys;

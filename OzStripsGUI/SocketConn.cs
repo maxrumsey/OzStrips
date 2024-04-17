@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.Json;
-using System.Threading;
 using System.Timers;
 using vatsys;
 
@@ -14,7 +13,7 @@ namespace maxrumsey.ozstrips.gui
     {
         SocketIOClient.SocketIO io;
         private BayManager bayManager;
-        private bool isDebug =  !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
+        private bool isDebug = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
         public List<string> Messages = new List<string>();
         private bool versionShown = false;
         private bool freshClient = false;
@@ -33,7 +32,8 @@ namespace maxrumsey.ozstrips.gui
                     Util.ShowErrorBox("New Update Available: " + metaDTO.version);
                     versionShown = true;
                 }
-                if (metaDTO.apiversion != Config.apiversion) {
+                if (metaDTO.apiversion != Config.apiversion)
+                {
                     Util.ShowErrorBox("OzStrips incompatible with current API version!");
                     mf.Invoke((System.Windows.Forms.MethodInvoker)delegate ()
                     {
@@ -150,7 +150,7 @@ namespace maxrumsey.ozstrips.gui
                 strips.Add(CreateStripDTO(strip));
             }
 
-            return new CacheDTO() {strips = strips };
+            return new CacheDTO() { strips = strips };
         }
 
         public async void SendCache()

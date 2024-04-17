@@ -1,11 +1,11 @@
-﻿using maxrumsey.ozstrips.gui.DTO;
+﻿using maxrumsey.ozstrips.controls;
+using maxrumsey.ozstrips.gui.DTO;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using vatsys;
-using maxrumsey.ozstrips.controls;
 
 namespace maxrumsey.ozstrips.gui
 {
@@ -31,7 +31,9 @@ namespace maxrumsey.ozstrips.gui
             CreateStripObj();
         }
 
-        public bool Crossing { get
+        public bool Crossing
+        {
+            get
             {
                 return crossing;
             }
@@ -39,7 +41,7 @@ namespace maxrumsey.ozstrips.gui
             {
                 crossing = value;
                 stripControl.SetCross();
-            } 
+            }
         }
         public static void LoadCache(CacheDTO cDTO)
         {

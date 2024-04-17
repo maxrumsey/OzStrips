@@ -1,6 +1,6 @@
-﻿using System;
+﻿using maxrumsey.ozstrips.controls;
+using System;
 using System.Collections.Generic;
-using maxrumsey.ozstrips.controls;
 
 namespace maxrumsey.ozstrips.gui
 {
@@ -33,7 +33,8 @@ namespace maxrumsey.ozstrips.gui
                 if (item.Type == StripItemType.QUEUEBAR)
                 {
                     return count;
-                } else if (item.Type == StripItemType.STRIP)
+                }
+                else if (item.Type == StripItemType.STRIP)
                 {
                     count++;
                 }

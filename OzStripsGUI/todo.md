@@ -8,7 +8,7 @@
 
 # release items
 
-- fix some gui stuff
+= squawk goes black on correct code
 
 # release check
 - api version
