@@ -59,6 +59,8 @@
             this.lb_rwy = new System.Windows.Forms.Label();
             this.pl_clx = new System.Windows.Forms.Panel();
             this.lb_clx = new System.Windows.Forms.Label();
+            this.pl_remark = new System.Windows.Forms.Panel();
+            this.lb_remark = new System.Windows.Forms.Label();
             this.pl_eobt.SuspendLayout();
             this.pl_acid.SuspendLayout();
             this.pl_multi.SuspendLayout();
@@ -76,6 +78,7 @@
             this.pl_alt.SuspendLayout();
             this.pl_rwy.SuspendLayout();
             this.pl_clx.SuspendLayout();
+            this.pl_remark.SuspendLayout();
             this.SuspendLayout();
             // 
             // pl_eobt
@@ -292,7 +295,7 @@
             this.pl_std.Location = new System.Drawing.Point(277, 0);
             this.pl_std.Margin = new System.Windows.Forms.Padding(0);
             this.pl_std.Name = "pl_std";
-            this.pl_std.Size = new System.Drawing.Size(44, 52);
+            this.pl_std.Size = new System.Drawing.Size(44, 30);
             this.pl_std.TabIndex = 2;
             // 
             // lb_std
@@ -302,7 +305,7 @@
             this.lb_std.Location = new System.Drawing.Point(0, 0);
             this.lb_std.Margin = new System.Windows.Forms.Padding(3);
             this.lb_std.Name = "lb_std";
-            this.lb_std.Size = new System.Drawing.Size(42, 50);
+            this.lb_std.Size = new System.Drawing.Size(42, 28);
             this.lb_std.TabIndex = 0;
             this.lb_std.Text = "std";
             this.lb_std.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -388,7 +391,7 @@
             this.pl_clx.Location = new System.Drawing.Point(321, 0);
             this.pl_clx.Margin = new System.Windows.Forms.Padding(0);
             this.pl_clx.Name = "pl_clx";
-            this.pl_clx.Size = new System.Drawing.Size(44, 52);
+            this.pl_clx.Size = new System.Drawing.Size(44, 30);
             this.pl_clx.TabIndex = 3;
             // 
             // lb_clx
@@ -398,11 +401,34 @@
             this.lb_clx.Location = new System.Drawing.Point(0, 0);
             this.lb_clx.Margin = new System.Windows.Forms.Padding(3);
             this.lb_clx.Name = "lb_clx";
-            this.lb_clx.Size = new System.Drawing.Size(42, 50);
+            this.lb_clx.Size = new System.Drawing.Size(42, 28);
             this.lb_clx.TabIndex = 0;
             this.lb_clx.Text = "std";
             this.lb_clx.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lb_clx.Click += new System.EventHandler(this.lb_std_Click);
+            // 
+            // pl_remark
+            // 
+            this.pl_remark.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pl_remark.Controls.Add(this.lb_remark);
+            this.pl_remark.Location = new System.Drawing.Point(277, 30);
+            this.pl_remark.Margin = new System.Windows.Forms.Padding(0);
+            this.pl_remark.Name = "pl_remark";
+            this.pl_remark.Size = new System.Drawing.Size(88, 20);
+            this.pl_remark.TabIndex = 3;
+            // 
+            // lb_remark
+            // 
+            this.lb_remark.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lb_remark.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_remark.Location = new System.Drawing.Point(0, 0);
+            this.lb_remark.Margin = new System.Windows.Forms.Padding(3);
+            this.lb_remark.Name = "lb_remark";
+            this.lb_remark.Size = new System.Drawing.Size(86, 18);
+            this.lb_remark.TabIndex = 0;
+            this.lb_remark.Text = "std";
+            this.lb_remark.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lb_remark.Click += new System.EventHandler(this.lb_remark_Click);
             // 
             // Strip_SMC_Dep
             // 
@@ -410,6 +436,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.pl_remark);
             this.Controls.Add(this.pl_clx);
             this.Controls.Add(this.pl_rwy);
             this.Controls.Add(this.pl_multi3);
@@ -439,6 +466,7 @@
             this.pl_alt.ResumeLayout(false);
             this.pl_rwy.ResumeLayout(false);
             this.pl_clx.ResumeLayout(false);
+            this.pl_remark.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -476,5 +504,7 @@
         private System.Windows.Forms.Label lb_wtc;
         private System.Windows.Forms.Panel pl_clx;
         private System.Windows.Forms.Label lb_clx;
+        private System.Windows.Forms.Panel pl_remark;
+        private System.Windows.Forms.Label lb_remark;
     }
 }

@@ -28,5 +28,8 @@ namespace maxrumsey.ozstrips.gui.DTO
         [JsonPropertyName("subbay")]
         public string subbay { get; set; }
 
+        [JsonPropertyName("remark")]
+        public string remark { get; set; }
+
     }
 }

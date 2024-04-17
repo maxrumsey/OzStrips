@@ -32,6 +32,7 @@ namespace maxrumsey.ozstrips.controls
         public Label lb_std;
         public Label lb_clx;
         public Label lb_tot;
+        public Label lb_remark;
 
         public StripBaseGUI()
         {
@@ -103,6 +104,7 @@ namespace maxrumsey.ozstrips.controls
             if (lb_hdg != null) lb_hdg.Text = stripController.HDG;
             if (lb_clx != null) lb_clx.Text = stripController.CLX;
             if (lb_std != null) lb_std.Text = stripController.GATE;
+            if (lb_remark != null) lb_remark.Text = stripController.Remark;
             if (lb_tot != null && stripController.TakeOffTime != DateTime.MaxValue)
             {
                 TimeSpan diff = DateTime.UtcNow - stripController.TakeOffTime;
@@ -161,7 +163,7 @@ namespace maxrumsey.ozstrips.controls
             BayCLXControl control = (BayCLXControl)args.child;
             stripController.CLX = control.CLX;
             stripController.GATE = control.GATE;
-
+            stripController.Remark = control.Remark;
             stripController.SyncStrip();
         }
         public void TogglePick()

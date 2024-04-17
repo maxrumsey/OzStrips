@@ -8,8 +8,7 @@
 
 # release items
 
-* download strips on new conn
-
+- fix some gui stuff
 
 # release check
 - api version

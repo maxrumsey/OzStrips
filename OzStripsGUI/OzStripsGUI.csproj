@@ -198,12 +198,6 @@
     <Compile Include="Controls\Strip_SMC_Dep.Designer.cs">
       <DependentUpon>Strip_SMC_Dep.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Strip_ACD.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\Strip_ACD.Designer.cs">
-      <DependentUpon>Strip_ACD.cs</DependentUpon>
-    </Compile>
     <Compile Include="Util.cs" />
     <EmbeddedResource Include="Controls\BayCLXControl.resx">
       <DependentUpon>BayCLXControl.cs</DependentUpon>
@@ -255,10 +249,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Strip_SMC_Dep.resx">
       <DependentUpon>Strip_SMC_Dep.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Strip_ACD.resx">
-      <DependentUpon>Strip_ACD.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Config.resx">

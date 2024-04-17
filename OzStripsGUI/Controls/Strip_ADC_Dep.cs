@@ -27,6 +27,8 @@ namespace maxrumsey.ozstrips.controls
             base.lb_wtc = lb_wtc;
             base.lb_tot = lb_tot;
             base.lb_clx = lb_clx;
+            base.lb_remark = lb_remark;
+
             this.cockColourControls = new Panel[] {
                 this.pl_eobt,
                 this.pl_multi,
@@ -110,6 +112,11 @@ namespace maxrumsey.ozstrips.controls
         }
 
         private void lb_clx_Click(object sender, EventArgs e)
+        {
+            OpenCLXBayModal();
+        }
+
+        private void lb_remark_Click(object sender, EventArgs e)
         {
             OpenCLXBayModal();
         }

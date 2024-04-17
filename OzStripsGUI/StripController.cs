@@ -72,7 +72,7 @@ namespace maxrumsey.ozstrips.gui
             stripHolderControl.Size = new Size(100, 100);
 
             if (ArrDepType == StripArrDepType.ARRIVAL) stripControl = new Strip_Arr(this);
-            else if (ArrDepType == StripArrDepType.DEPARTURE && (currentBay == StripBay.BAY_PREA || currentBay == StripBay.BAY_CLEARED)) stripControl = new Strip_ACD(this);
+            else if (ArrDepType == StripArrDepType.DEPARTURE && (currentBay == StripBay.BAY_PREA || currentBay == StripBay.BAY_CLEARED)) stripControl = new Strip_SMC_Dep(this);
             else if (ArrDepType == StripArrDepType.DEPARTURE && (currentBay < StripBay.BAY_RUNWAY)) stripControl = new Strip_SMC_Dep(this);
             else if (ArrDepType == StripArrDepType.DEPARTURE && (currentBay >= StripBay.BAY_RUNWAY)) stripControl = new Strip_ADC_Dep(this);
             else stripControl = new Strip_SMC_Dep(this);
@@ -144,7 +144,7 @@ namespace maxrumsey.ozstrips.gui
                     controller.stripControl.Cock(scDTO.StripCockLevel, false);
                     if (scDTO.TOT == "\0") controller.TakeOffTime = DateTime.MaxValue;
                     else controller.TakeOffTime = DateTime.Parse(scDTO.TOT);
-
+                    controller.Remark = scDTO.remark;
                     controller.crossing = scDTO.Crossing;
                     controller.stripControl.SetCross(false);
 
@@ -250,6 +250,7 @@ namespace maxrumsey.ozstrips.gui
         }
 
         public String CLX = "";
+        public String Remark = "";
         public String GATE = "";
 
         public String HDG

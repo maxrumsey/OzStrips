@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security;
 using System.Windows.Forms;
 using maxrumsey.ozstrips.gui;
 
@@ -26,6 +27,7 @@ namespace maxrumsey.ozstrips.controls
             base.lb_wtc = lb_wtc;
             base.lb_std = lb_std;
             base.lb_clx = lb_clx;
+            base.lb_remark = lb_remark;
             this.cockColourControls = new Panel[] {
                 this.pl_eobt,
                 this.pl_multi
@@ -105,6 +107,12 @@ namespace maxrumsey.ozstrips.controls
         private void lb_ssr_Click(object sender, EventArgs e)
         {
             AssignSSR();
+
+        }
+
+        private void lb_remark_Click(object sender, EventArgs e)
+        {
+            OpenCLXBayModal();
 
         }
     }
