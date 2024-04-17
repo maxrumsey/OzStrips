@@ -40,7 +40,8 @@ namespace maxrumsey.ozstrips.controls
                 pl_clx,
                 pl_multi3,
                 pl_rwy,
-                pl_remark
+                pl_remark,
+                pl_tot
             };
 
             this.stripController = controller;
