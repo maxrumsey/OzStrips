@@ -211,7 +211,11 @@ namespace maxrumsey.ozstrips.gui
                 if (code == "\a" && stripListItem.Type == StripItemType.QUEUEBAR) returnedItem = stripListItem;
                 else if (stripListItem.Type == StripItemType.STRIP && stripListItem.StripController.fdr.Callsign == code) returnedItem = stripListItem;
             }
-
+            if (code == "\a" && returnedItem == null)
+            {
+                AddDivider(true, false);
+                return GetListItemByStr(code);
+            }
             return returnedItem;
         }
     }

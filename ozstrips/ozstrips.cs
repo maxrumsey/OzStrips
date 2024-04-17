@@ -26,6 +26,7 @@ namespace maxrumsey.ozstrips
 
         private void Connected(object sender, EventArgs e)
         {
+            if (GUI != null && GUI.IsHandleCreated) GUI.Invoke((System.Windows.Forms.MethodInvoker)delegate () { GUI.ConnectVATSIM(); });
         }
         private void Disconnected(object sender, EventArgs e)
         {

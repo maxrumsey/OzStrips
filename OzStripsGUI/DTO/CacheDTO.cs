@@ -7,8 +7,5 @@ namespace maxrumsey.ozstrips.gui.DTO
     {
         [JsonPropertyName("strips")]
         public List<StripControllerDTO> strips { get; set; }
-
-        [JsonPropertyName("bays")]
-        public List<BayDTO> bays { get; set; }
     }
 }

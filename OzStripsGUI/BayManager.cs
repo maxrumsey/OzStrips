@@ -107,7 +107,7 @@ namespace maxrumsey.ozstrips.gui
         public void SetAerodrome(String name)
         {
             AerodromeName = name;
-            socketConn.SetAerodrome();
+            if (socketConn != null) socketConn.SetAerodrome();
             WipeStrips();
             StripController.stripControllers = new List<StripController>();
 

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.Json;
+using System.Threading;
+using System.Timers;
 using vatsys;
 
 namespace maxrumsey.ozstrips.gui
@@ -15,8 +17,12 @@ namespace maxrumsey.ozstrips.gui
         private bool isDebug =  !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
         public List<string> Messages = new List<string>();
         private bool versionShown = false;
+        private bool freshClient = false;
+        private System.Timers.Timer fifteensecTimer;
+        private MainForm mainForm;
         public SocketConn(BayManager bayManager, MainForm mf)
         {
+            mainForm = mf;
             this.bayManager = bayManager;
             io = new SocketIOClient.SocketIO(Config.socketioaddr);
             io.OnAny((sender, e) =>
@@ -66,6 +72,14 @@ namespace maxrumsey.ozstrips.gui
                 mf.Invoke((System.Windows.Forms.MethodInvoker)delegate () { StripController.UpdateFDR(scDTO, bayManager); });
 
             });
+            io.On("server:sc_cache", sc =>
+            {
+                CacheDTO scDTO = sc.GetValue<CacheDTO>();
+                Messages.Add("s:sc_cache: " + JsonSerializer.Serialize(scDTO));
+
+                mf.Invoke((System.Windows.Forms.MethodInvoker)delegate () { StripController.LoadCache(scDTO); });
+
+            });
             io.On("server:order_change", bdto =>
             {
                 BayDTO bayDTO = bdto.GetValue<BayDTO>();
@@ -73,9 +87,12 @@ namespace maxrumsey.ozstrips.gui
 
                 mf.Invoke((System.Windows.Forms.MethodInvoker)delegate () { bayManager.UpdateOrder(bayDTO); });
             });
-
-            io.ConnectAsync();
-
+            io.On("server:update_cache", (args) =>
+            {
+                Messages.Add("s:update_cache: ");
+                SendCache();
+            });
+            if (Network.IsConnected) Connect();
             bayManager.socketConn = this;
         }
 
@@ -126,25 +143,41 @@ namespace maxrumsey.ozstrips.gui
         }
         public CacheDTO CreateCachePacket()
         {
-            List<BayDTO> bays = new List<BayDTO> ();
             List<StripControllerDTO> strips = new List<StripControllerDTO>();
 
-            foreach (Bay bay in bayManager.Bays)
-            {
-                bays.Add(CreateBayDTO(bay));
-            }
             foreach (StripController strip in StripController.stripControllers)
             {
                 strips.Add(CreateStripDTO(strip));
             }
 
-            return new CacheDTO() { bays = bays, strips = strips };
+            return new CacheDTO() {strips = strips };
         }
 
         public async void SendCache()
         {
             CacheDTO cacheDTO = CreateCachePacket();
-            if (io.Connected && (Network.Me.IsRealATC || isDebug)) await io.EmitAsync("client:send_cache", cacheDTO);
+            if (io.Connected && (Network.Me.IsRealATC || isDebug)) await io.EmitAsync("client:sc_cache", cacheDTO);
+        }
+
+        public void Close()
+        {
+            io.DisconnectAsync();
+            io.Dispose();
+        }
+
+        public void Connect()
+        {
+            fifteensecTimer = new System.Timers.Timer();
+            fifteensecTimer.AutoReset = false;
+            fifteensecTimer.Interval = 15000;
+            fifteensecTimer.Elapsed += ConnectIO;
+            fifteensecTimer.Start();
+            mainForm.SetAerodrome(bayManager.AerodromeName);
+        }
+
+        private void ConnectIO(object sender, ElapsedEventArgs e)
+        {
+            io.ConnectAsync();
         }
     }
 }

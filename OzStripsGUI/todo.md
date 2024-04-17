@@ -9,7 +9,6 @@
 # release items
 
 * download strips on new conn
-* handle out of date api / version
 
 
 # release check

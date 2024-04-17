@@ -41,7 +41,13 @@ namespace maxrumsey.ozstrips.gui
                 stripControl.SetCross();
             } 
         }
-
+        public static void LoadCache(CacheDTO cDTO)
+        {
+            foreach (StripControllerDTO stripDTO in cDTO.strips)
+            {
+                UpdateFDR(stripDTO, BayManager.bayManager);
+            }
+        }
         public void HMI_SetPicked(bool picked)
         {
             stripControl.HMI_TogglePick(picked);

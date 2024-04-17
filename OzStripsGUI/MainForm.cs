@@ -38,7 +38,6 @@ namespace maxrumsey.ozstrips.gui
             AddVerticalStripBoard();
             AddVerticalStripBoard();
 
-            socketConn = new SocketConn(bayManager, this);
 
             Bay bay_pr = new Bay(new List<StripBay>() { StripBay.BAY_PREA }, bayManager, "Preactive", 0);
             Bay bay_cl = new Bay(new List<StripBay>() { StripBay.BAY_CLEARED }, bayManager, "Cleared", 0);
@@ -63,6 +62,8 @@ namespace maxrumsey.ozstrips.gui
                 };
                 debugToolStripMenuItem.DropDownItems.Add(toolStripMenuItem);
             }
+            socketConn = new SocketConn(bayManager, this);
+
         }
 
         public void OpenManDebug()
@@ -89,7 +90,10 @@ namespace maxrumsey.ozstrips.gui
             bayManager.WipeStrips();
             StripController.stripControllers.Clear();
         }
-
+        public void ConnectVATSIM()
+        {
+            socketConn.Connect();
+        }
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -139,7 +143,7 @@ namespace maxrumsey.ozstrips.gui
             };
             ts_ad.DropDownItems.Add(toolStripMenuItem);
         }
-        private void SetAerodrome(String name)
+        public void SetAerodrome(String name)
         {
             if (bayManager != null)
             {
@@ -287,6 +291,11 @@ namespace maxrumsey.ozstrips.gui
             About modalChild = new About();
             BaseModal bm = new BaseModal(modalChild, "About OzStrips");
             bm.Show(this);
+        }
+
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            socketConn.Close();
         }
     }
 }
