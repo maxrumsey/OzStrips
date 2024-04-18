@@ -45,7 +45,7 @@ namespace maxrumsey.ozstrips.gui
 
             io.OnConnected += async (sender, e) =>
             {
-                await io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName);
+                await io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName, Network.Me.RealName);
                 mf.SetConnStatus(true);
             };
             io.OnDisconnected += (sender, e) =>
