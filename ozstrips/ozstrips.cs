@@ -58,10 +58,9 @@ namespace maxrumsey.ozstrips
 
         private void OpenGUI(object sender, EventArgs e)
         {
-            OpenGUI();
+            MMI.InvokeOnGUI(delegate () { OpenGUI(); });
         }
 
-        [STAThread]
         private void OpenGUI()
         {
             if (GUI == null || GUI.IsDisposed)

@@ -121,7 +121,7 @@
     <value>1</value>
   </data>
   <data name="socketioaddr" xml:space="preserve">
-    <value>http://localhost:8069/</value>
+    <value>http://dev1.maxrumsey.xyz</value>
   </data>
   <data name="version" xml:space="preserve">
     <value>0.0.1</value>

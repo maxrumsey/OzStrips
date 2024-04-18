@@ -272,8 +272,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="terminus.fon" />
-    <None Include="TerminusTTF-Bold_B.ttf" />
+    <Content Include="terminus.fon" />
+    <Content Include="TerminusTTF-Bold_B.ttf" />
     <None Include="todo.md" />
   </ItemGroup>
   <ItemGroup>

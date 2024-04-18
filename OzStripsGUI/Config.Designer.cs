@@ -70,7 +70,7 @@ namespace maxrumsey.ozstrips.gui {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://localhost:8069/.
+        ///   Looks up a localized string similar to http://dev1.maxrumsey.xyz.
         /// </summary>
         internal static string socketioaddr {
             get {
