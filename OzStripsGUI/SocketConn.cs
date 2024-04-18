@@ -29,7 +29,7 @@ namespace maxrumsey.ozstrips.gui
                 MetadataDTO metaDTO = e.GetValue<MetadataDTO>(1);
                 if (metaDTO.version != Config.version && !versionShown)
                 {
-                    Util.ShowErrorBox("New Update Available: " + metaDTO.version);
+                    Util.ShowInfoBox("New Update Available: " + metaDTO.version);
                     versionShown = true;
                 }
                 if (metaDTO.apiversion != Config.apiversion)
@@ -101,7 +101,7 @@ namespace maxrumsey.ozstrips.gui
             StripControllerDTO scDTO = CreateStripDTO(sc);
             Messages.Add("c:sc_change: " + JsonSerializer.Serialize(scDTO));
 
-            if (io.Connected && (Network.Me.IsRealATC || isDebug)) io.EmitAsync("client:sc_change", scDTO);
+            if (CanSendDTO) io.EmitAsync("client:sc_change", scDTO);
 
         }
         public void SyncBay(Bay bay)
@@ -109,7 +109,7 @@ namespace maxrumsey.ozstrips.gui
             BayDTO bayDTO = CreateBayDTO(bay);
             Messages.Add("c:order_change: " + JsonSerializer.Serialize(bayDTO));
 
-            if (io.Connected && (Network.Me.IsRealATC || isDebug)) io.EmitAsync("client:order_change", bayDTO);
+            if (CanSendDTO) io.EmitAsync("client:order_change", bayDTO);
         }
         public void SetAerodrome()
         {
@@ -156,7 +156,7 @@ namespace maxrumsey.ozstrips.gui
         public async void SendCache()
         {
             CacheDTO cacheDTO = CreateCachePacket();
-            if (io.Connected && (Network.Me.IsRealATC || isDebug)) await io.EmitAsync("client:sc_cache", cacheDTO);
+            if (CanSendDTO) await io.EmitAsync("client:sc_cache", cacheDTO);
         }
 
         public void Close()
@@ -164,10 +164,15 @@ namespace maxrumsey.ozstrips.gui
             io.DisconnectAsync();
             io.Dispose();
         }
+        
+        private bool CanSendDTO
+        {
+            get { return io.Connected && (Network.Me.IsRealATC || isDebug); }
+        }
 
         public void Connect()
         {
-            fifteensecTimer = new System.Timers.Timer();
+            fifteensecTimer = new Timer();
             fifteensecTimer.AutoReset = false;
             fifteensecTimer.Interval = 15000;
             fifteensecTimer.Elapsed += ConnectIO;

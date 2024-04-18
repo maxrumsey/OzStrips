@@ -139,14 +139,14 @@ namespace maxrumsey.ozstrips.gui
                 if (controller.fdr.Callsign == scDTO.ACID)
                 {
                     bool changeBay = false;
-                    controller.CLX = scDTO.CLX;
-                    controller.GATE = scDTO.GATE;
+                    controller.CLX = scDTO.CLX != null ? scDTO.CLX : "";
+                    controller.GATE = scDTO.GATE != null ? scDTO.GATE : "";
                     if (controller.currentBay != scDTO.bay) changeBay = true;
                     controller.currentBay = scDTO.bay;
                     controller.stripControl.Cock(scDTO.StripCockLevel, false);
                     if (scDTO.TOT == "\0") controller.TakeOffTime = DateTime.MaxValue;
                     else controller.TakeOffTime = DateTime.Parse(scDTO.TOT);
-                    controller.Remark = scDTO.remark;
+                    controller.Remark = scDTO.remark != null ? scDTO.remark : "";
                     controller.crossing = scDTO.Crossing;
                     controller.stripControl.SetCross(false);
 
