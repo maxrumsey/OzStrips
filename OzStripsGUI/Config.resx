@@ -124,6 +124,6 @@
     <value>http://localhost:8069/</value>
   </data>
   <data name="version" xml:space="preserve">
-    <value>1.0.0</value>
+    <value>0.0.1</value>
   </data>
 </root>

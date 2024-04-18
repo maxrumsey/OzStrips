@@ -29,8 +29,8 @@ namespace maxrumsey.ozstrips.gui
                 MetadataDTO metaDTO = e.GetValue<MetadataDTO>(1);
                 if (metaDTO.version != Config.version && !versionShown)
                 {
-                    Util.ShowInfoBox("New Update Available: " + metaDTO.version);
                     versionShown = true;
+                    Util.ShowInfoBox("New Update Available: " + metaDTO.version);
                 }
                 if (metaDTO.apiversion != Config.apiversion)
                 {
@@ -141,7 +141,7 @@ namespace maxrumsey.ozstrips.gui
             }
             return scDTO;
         }
-        public CacheDTO CreateCachePacket()
+        public CacheDTO CreateCacheDTO()
         {
             List<StripControllerDTO> strips = new List<StripControllerDTO>();
 
@@ -155,7 +155,7 @@ namespace maxrumsey.ozstrips.gui
 
         public async void SendCache()
         {
-            CacheDTO cacheDTO = CreateCachePacket();
+            CacheDTO cacheDTO = CreateCacheDTO();
             if (CanSendDTO) await io.EmitAsync("client:sc_cache", cacheDTO);
         }
 
@@ -165,11 +165,19 @@ namespace maxrumsey.ozstrips.gui
             io.Dispose();
         }
         
+        /// <summary>
+        /// Whether the user has permission to send data to server
+        /// </summary>
         private bool CanSendDTO
         {
-            get { return io.Connected && (Network.Me.IsRealATC || isDebug); }
+            get {
+                return io.Connected && (Network.Me.IsRealATC || isDebug); 
+            }
         }
 
+        /// <summary>
+        /// Starts a fifteen second timer, ensures FDRs have loaded in before requesting SCs from server.
+        /// </summary>
         public void Connect()
         {
             fifteensecTimer = new Timer();
@@ -183,6 +191,11 @@ namespace maxrumsey.ozstrips.gui
         private void ConnectIO(object sender, ElapsedEventArgs e)
         {
             io.ConnectAsync();
+        }
+
+        public void Disconnect()
+        {
+            io.DisconnectAsync();
         }
     }
 }

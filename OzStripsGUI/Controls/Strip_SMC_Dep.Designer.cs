@@ -403,7 +403,7 @@
             this.lb_clx.Name = "lb_clx";
             this.lb_clx.Size = new System.Drawing.Size(42, 28);
             this.lb_clx.TabIndex = 0;
-            this.lb_clx.Text = "std";
+            this.lb_clx.Text = "clx";
             this.lb_clx.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lb_clx.Click += new System.EventHandler(this.lb_std_Click);
             // 
@@ -426,7 +426,7 @@
             this.lb_remark.Name = "lb_remark";
             this.lb_remark.Size = new System.Drawing.Size(86, 18);
             this.lb_remark.TabIndex = 0;
-            this.lb_remark.Text = "std";
+            this.lb_remark.Text = "remark";
             this.lb_remark.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lb_remark.Click += new System.EventHandler(this.lb_remark_Click);
             // 

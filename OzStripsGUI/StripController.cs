@@ -9,11 +9,17 @@ using vatsys;
 
 namespace maxrumsey.ozstrips.gui
 {
-
+    /// <summary>
+    /// Responsible for strip logic, represents a Vatsys FDR.
+    /// </summary>
     public class StripController
     {
         public FDP2.FDR fdr;
         public StripBay currentBay;
+
+        /// <summary>
+        /// Value from 0-2, represents colour of cock elements
+        /// </summary>
         public int cockLevel = 0;
         public StripBaseGUI stripControl;
         public Control stripHolderControl;
@@ -22,15 +28,18 @@ namespace maxrumsey.ozstrips.gui
         public DateTime TakeOffTime = DateTime.MaxValue;
         private bool crossing = false;
         public static List<StripController> stripControllers = new List<StripController>();
-        public StripController(FDP2.FDR fdr, BayManager bm)
+        public StripController(FDP2.FDR fdr)
         {
             this.fdr = fdr;
-            this.BayManager = bm;
+            this.BayManager = BayManager.bayManager;
             this.currentBay = StripBay.BAY_PREA;
             if (ArrDepType == StripArrDepType.ARRIVAL) this.currentBay = StripBay.BAY_ARRIVAL;
             CreateStripObj();
         }
 
+        /// <summary>
+        /// Whether or not the strip is in crossing mode
+        /// </summary>
         public bool Crossing
         {
             get
@@ -43,6 +52,11 @@ namespace maxrumsey.ozstrips.gui
                 stripControl.SetCross();
             }
         }
+
+        /// <summary>
+        /// Loads in a cacheDTO object received from server, sets SCs accordingly
+        /// </summary>
+        /// <param name="cDTO"></param>
         public static void LoadCache(CacheDTO cDTO)
         {
             foreach (StripControllerDTO stripDTO in cDTO.strips)
@@ -50,6 +64,7 @@ namespace maxrumsey.ozstrips.gui
                 UpdateFDR(stripDTO, BayManager.bayManager);
             }
         }
+        
         public void HMI_SetPicked(bool picked)
         {
             stripControl.HMI_TogglePick(picked);
@@ -61,6 +76,9 @@ namespace maxrumsey.ozstrips.gui
             SyncStrip();
         }
 
+        /// <summary>
+        /// Creates control for strip
+        /// </summary>
         public void CreateStripObj()
         {
             stripHolderControl = new Panel();
@@ -86,6 +104,9 @@ namespace maxrumsey.ozstrips.gui
             //stripHolderControl = new 
         }
 
+        /// <summary>
+        /// Removes items from the strip holder control
+        /// </summary>
         public void ClearStripControl()
         {
             if (stripHolderControl != null && stripControl != null)
@@ -94,6 +115,9 @@ namespace maxrumsey.ozstrips.gui
             }
         }
 
+        /// <summary>
+        /// Refreshes strip properties, determines if strip should be removed.
+        /// </summary>
         public void UpdateFDR()
         {
             stripControl.UpdateStrip();
@@ -105,6 +129,13 @@ namespace maxrumsey.ozstrips.gui
                 BayManager.DeleteStrip(this);
             }
         }
+
+        /// <summary>
+        /// Receives a fdr, updates according SC.
+        /// </summary>
+        /// <param name="fdr"></param>
+        /// <param name="bayManager"></param>
+        /// <returns></returns>
         public static StripController UpdateFDR(FDP2.FDR fdr, BayManager bayManager)
         {
             bool found = false;
@@ -125,13 +156,18 @@ namespace maxrumsey.ozstrips.gui
             if (!found)
             {
                 // todo: add this logic into separate static function
-                StripController stripController = new StripController(fdr, bayManager);
+                StripController stripController = new StripController(fdr);
                 bayManager.AddStrip(stripController);
                 return stripController;
             }
             return null;
         }
 
+        /// <summary>
+        /// Receives a SC DTO object, updates relevant SC.
+        /// </summary>
+        /// <param name="scDTO"></param>
+        /// <param name="bayManager"></param>
         public static void UpdateFDR(StripControllerDTO scDTO, BayManager bayManager)
         {
             foreach (StripController controller in stripControllers)
@@ -157,6 +193,9 @@ namespace maxrumsey.ozstrips.gui
             }
         }
 
+        /// <summary>
+        /// Determines which bay to move strip to.
+        /// </summary>
         public void SIDTrigger()
         {
             Dictionary<StripBay, StripBay> stripBayResultDict;

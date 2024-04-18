@@ -87,6 +87,7 @@ namespace maxrumsey.ozstrips.gui
         {
             bayManager.WipeStrips();
             StripController.stripControllers.Clear();
+            socketConn.Disconnect();
         }
         public void ConnectVATSIM()
         {
@@ -97,6 +98,10 @@ namespace maxrumsey.ozstrips.gui
             this.Close();
         }
 
+        /// <summary>
+        /// Triggered from Connector plugin
+        /// </summary>
+        /// <param name="fdr"></param>
         public void UpdateFDR(FDP2.FDR fdr)
         {
             StripController.UpdateFDR(fdr, bayManager);

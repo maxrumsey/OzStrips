@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.pl_controlbar = new System.Windows.Forms.Panel();
+            this.bt_pdc = new System.Windows.Forms.Button();
             this.bt_cross = new System.Windows.Forms.Button();
             this.bt_force = new System.Windows.Forms.Button();
             this.bt_inhibit = new System.Windows.Forms.Button();
@@ -53,7 +54,6 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flp_main = new System.Windows.Forms.FlowLayoutPanel();
-            this.bt_pdc = new System.Windows.Forms.Button();
             this.pl_controlbar.SuspendLayout();
             this.pl_ad.SuspendLayout();
             this.pl_stat.SuspendLayout();
@@ -77,6 +77,18 @@
             this.pl_controlbar.Name = "pl_controlbar";
             this.pl_controlbar.Size = new System.Drawing.Size(1784, 45);
             this.pl_controlbar.TabIndex = 0;
+            // 
+            // bt_pdc
+            // 
+            this.bt_pdc.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bt_pdc.Location = new System.Drawing.Point(687, 3);
+            this.bt_pdc.Name = "bt_pdc";
+            this.bt_pdc.Size = new System.Drawing.Size(96, 37);
+            this.bt_pdc.TabIndex = 6;
+            this.bt_pdc.TabStop = false;
+            this.bt_pdc.Text = "PDC";
+            this.bt_pdc.UseVisualStyleBackColor = true;
+            this.bt_pdc.Click += new System.EventHandler(this.bt_pdc_Click);
             // 
             // bt_cross
             // 
@@ -136,7 +148,7 @@
             this.lb_ad.Name = "lb_ad";
             this.lb_ad.Size = new System.Drawing.Size(39, 16);
             this.lb_ad.TabIndex = 0;
-            this.lb_ad.Text = "YMML";
+            this.lb_ad.Text = "????";
             // 
             // pl_stat
             // 
@@ -297,18 +309,6 @@
             this.flp_main.Size = new System.Drawing.Size(1784, 892);
             this.flp_main.TabIndex = 2;
             this.flp_main.WrapContents = false;
-            // 
-            // bt_pdc
-            // 
-            this.bt_pdc.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bt_pdc.Location = new System.Drawing.Point(687, 3);
-            this.bt_pdc.Name = "bt_pdc";
-            this.bt_pdc.Size = new System.Drawing.Size(96, 37);
-            this.bt_pdc.TabIndex = 6;
-            this.bt_pdc.TabStop = false;
-            this.bt_pdc.Text = "PDC";
-            this.bt_pdc.UseVisualStyleBackColor = true;
-            this.bt_pdc.Click += new System.EventHandler(this.bt_pdc_Click);
             // 
             // MainForm
             // 

@@ -14,7 +14,7 @@ namespace maxrumsey.ozstrips.gui
         public FlowLayoutPanel flp_main;
         public List<FlowLayoutPanel> flp_vert_boards = new List<FlowLayoutPanel>();
         public StripController Picked;
-        public String AerodromeName = "YMML";
+        public String AerodromeName = "????";
         public SocketConn socketConn;
         public static BayManager bayManager;
         public BayManager(FlowLayoutPanel main)
