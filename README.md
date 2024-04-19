@@ -1,2 +1,2 @@
 # OzStrips
-(Docs)[https://maxrumsey.xyz/OzStrips/]
+[Docs](https://maxrumsey.xyz/OzStrips/)
