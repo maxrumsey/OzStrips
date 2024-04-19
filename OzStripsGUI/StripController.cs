@@ -299,7 +299,7 @@ namespace maxrumsey.ozstrips.gui
         {
             set
             {
-                if (Network.Me.IsRealATC || MainForm.isDebug) FDP2.SetGlobalOps(fdr, "H" + value);
+                if ((Network.Me.IsRealATC || MainForm.isDebug) && value != "") FDP2.SetGlobalOps(fdr, "H" + value);
             }
             get
             {

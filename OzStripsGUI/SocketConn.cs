@@ -45,11 +45,13 @@ namespace maxrumsey.ozstrips.gui
 
             io.OnConnected += async (sender, e) =>
             {
+                Messages.Add("c: conn established");
                 await io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName, Network.Me.RealName);
                 mf.SetConnStatus(true);
             };
             io.OnDisconnected += (sender, e) =>
             {
+                Messages.Add("c: conn lost");
                 mf.SetConnStatus(false);
             };
 
@@ -171,6 +173,7 @@ namespace maxrumsey.ozstrips.gui
         private bool CanSendDTO
         {
             get {
+                if (!(Network.Me.IsRealATC || isDebug)) Messages.Add("c: DTO Rejected!");
                 return io.Connected && (Network.Me.IsRealATC || isDebug); 
             }
         }
@@ -190,6 +193,7 @@ namespace maxrumsey.ozstrips.gui
 
         private void ConnectIO(object sender, ElapsedEventArgs e)
         {
+            Messages.Add("c: Attempting connection");
             io.ConnectAsync();
         }
 
