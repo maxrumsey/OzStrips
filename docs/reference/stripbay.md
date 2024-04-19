@@ -1,0 +1,19 @@
+# Strip Bay
+![Strip Bay](../images/stripbay.png)
+
+## Buttons
+### Queue Button
+Pick a strip, and press "Queue" to add a queue bar if it is not present, and place the strip below the bar. The number of aircraft below the bar ("queued up") will be displayed in parentheses.
+### Div Button
+This button toggles the presence of the queue bar.
+
+## Moving Strips 
+### Vertically
+To move strips vertically, pick a strip, (left click on the Callsign), and press your arrow keys.
+### Between Bays
+To move a strip between bays, you can either ["SID trigger" the strip](strips.md), or pick the strip and drop it into another bay by left clicking on the dark background of the strip.
+
+It is recommended to move strips using the SID trigger, rather than picking and dropping, as this can lead to strips going into bays they really shouldn't be going into.   
+
+![That's not where that goes!](../images/weird.png)
+

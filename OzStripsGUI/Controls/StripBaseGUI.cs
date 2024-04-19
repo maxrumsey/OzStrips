@@ -147,16 +147,19 @@ namespace maxrumsey.ozstrips.controls
          */
         public void HeadingAltReturned(object source, ModalReturnArgs args)
         {
-            AltHdgControl control = (AltHdgControl)args.child;
-            stripController.CFL = control.Alt;
-            stripController.HDG = control.Hdg;
-            if (control.Runway != "") stripController.RWY = control.Runway;
-            if (control.SID != "")
+            try
             {
-                stripController.SID = control.SID;
-            }
+                AltHdgControl control = (AltHdgControl)args.child;
+                if (control.Alt != "") stripController.CFL = control.Alt;
+                stripController.HDG = control.Hdg;
+                if (control.Runway != "") stripController.RWY = control.Runway;
+                if (control.SID != "")
+                {
+                    stripController.SID = control.SID;
+                }
 
-            stripController.SyncStrip();
+                stripController.SyncStrip();
+            } catch (Exception ex) { }
         }
         public void CLXBayReturned(object source, ModalReturnArgs args)
         {

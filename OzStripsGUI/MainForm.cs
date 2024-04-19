@@ -12,7 +12,7 @@ namespace maxrumsey.ozstrips.gui
         Timer timer;
         BayManager bayManager;
         SocketConn socketConn;
-        private bool isDebug = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
+        public static bool isDebug = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
         public static MainForm mainForm;
         public MainForm()
         {

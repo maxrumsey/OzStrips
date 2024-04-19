@@ -73,6 +73,7 @@ namespace maxrumsey.ozstrips.gui
         public void TakeOff()
         {
             TakeOffTime = DateTime.UtcNow;
+            if (fdr.State == FDP2.FDR.FDRStates.STATE_PREACTIVE && (Network.Me.IsRealATC || MainForm.isDebug)) FDP2.EstFDR(fdr);
             SyncStrip();
         }
 
@@ -286,7 +287,7 @@ namespace maxrumsey.ozstrips.gui
         {
             get => this.fdr.CFLString; set
             {
-                if (Network.Me.IsRealATC) FDP2.SetCFL(fdr, value);
+                if (Network.Me.IsRealATC || MainForm.isDebug) FDP2.SetCFL(fdr, value);
             }
         }
 
@@ -298,7 +299,7 @@ namespace maxrumsey.ozstrips.gui
         {
             set
             {
-                if (Network.Me.IsRealATC) FDP2.SetGlobalOps(fdr, "H" + value);
+                if (Network.Me.IsRealATC || MainForm.isDebug) FDP2.SetGlobalOps(fdr, "H" + value);
             }
             get
             {
@@ -306,7 +307,7 @@ namespace maxrumsey.ozstrips.gui
                 Match hdgMatch = r.Match(fdr.GlobalOpData);
                 if (hdgMatch.Success)
                 {
-                    return hdgMatch.Value;
+                    return "H" + hdgMatch.Value;
                 }
                 else return "";
             }
@@ -339,7 +340,7 @@ namespace maxrumsey.ozstrips.gui
                     {
                         if (runway.Name == value)
                         {
-                            if (Network.Me.IsRealATC) FDP2.SetDepartureRunway(fdr, runway);
+                            if (Network.Me.IsRealATC || MainForm.isDebug) FDP2.SetDepartureRunway(fdr, runway);
                         }
                     }
                 }
@@ -361,7 +362,7 @@ namespace maxrumsey.ozstrips.gui
                 {
                     if (possibleSID.sidStar.Name == value)
                     {
-                        if (Network.Me.IsRealATC) FDP2.SetSID(fdr, possibleSID.sidStar);
+                        if (Network.Me.IsRealATC || MainForm.isDebug) FDP2.SetSID(fdr, possibleSID.sidStar);
                         found = true;
                     }
                 }

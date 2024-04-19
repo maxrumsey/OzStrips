@@ -22,7 +22,7 @@ namespace maxrumsey.ozstrips.controls
             }
             tb_alt.Text = controller.CFL;
             if (controller.CFL != "") cb_alt.Text = controller.CFL;
-            //tb_hdg.Text = controller.HDG; // todo: add some sort of parsing for this
+            tb_hdg.Text = controller.HDG; // todo: add some sort of parsing for this
             cb_runway.Text = controller.RWY;
             cb_sid.Text = controller.SID;
         }
