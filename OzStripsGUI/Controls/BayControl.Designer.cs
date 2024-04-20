@@ -103,11 +103,10 @@ namespace maxrumsey.ozstrips.controls
             // lb_bay_name
             // 
             this.lb_bay_name.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lb_bay_name.Font = new System.Drawing.Font("Segoe UI Black", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_bay_name.Font = new System.Drawing.Font("Segoe UI Black", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lb_bay_name.ForeColor = System.Drawing.Color.White;
             this.lb_bay_name.Location = new System.Drawing.Point(0, 0);
             this.lb_bay_name.Name = "lb_bay_name";
-            this.lb_bay_name.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
             this.lb_bay_name.Size = new System.Drawing.Size(481, 42);
             this.lb_bay_name.TabIndex = 0;
             this.lb_bay_name.Text = "Bay Name";

@@ -101,9 +101,9 @@
             this.pl_eobt.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pl_eobt.Controls.Add(this.lb_eobt);
             this.pl_eobt.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pl_eobt.Location = new System.Drawing.Point(578, 40);
+            this.pl_eobt.Location = new System.Drawing.Point(578, 50);
             this.pl_eobt.Name = "pl_eobt";
-            this.pl_eobt.Size = new System.Drawing.Size(120, 20);
+            this.pl_eobt.Size = new System.Drawing.Size(120, 30);
             this.pl_eobt.TabIndex = 0;
             // 
             // lb_eobt
@@ -112,7 +112,7 @@
             this.lb_eobt.Location = new System.Drawing.Point(0, 0);
             this.lb_eobt.Margin = new System.Windows.Forms.Padding(0);
             this.lb_eobt.Name = "lb_eobt";
-            this.lb_eobt.Size = new System.Drawing.Size(118, 18);
+            this.lb_eobt.Size = new System.Drawing.Size(118, 28);
             this.lb_eobt.TabIndex = 0;
             this.lb_eobt.Text = "eobt";
             this.lb_eobt.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -415,7 +415,7 @@
             this.pl_remark.Location = new System.Drawing.Point(-2, 60);
             this.pl_remark.Margin = new System.Windows.Forms.Padding(0);
             this.pl_remark.Name = "pl_remark";
-            this.pl_remark.Size = new System.Drawing.Size(700, 20);
+            this.pl_remark.Size = new System.Drawing.Size(580, 20);
             this.pl_remark.TabIndex = 3;
             // 
             // lb_remark
@@ -426,7 +426,7 @@
             this.lb_remark.Location = new System.Drawing.Point(0, 0);
             this.lb_remark.Margin = new System.Windows.Forms.Padding(3);
             this.lb_remark.Name = "lb_remark";
-            this.lb_remark.Size = new System.Drawing.Size(698, 18);
+            this.lb_remark.Size = new System.Drawing.Size(578, 18);
             this.lb_remark.TabIndex = 0;
             this.lb_remark.Text = "remark";
             this.lb_remark.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -536,7 +536,7 @@
             this.panel6.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel6.Location = new System.Drawing.Point(578, 20);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(120, 20);
+            this.panel6.Size = new System.Drawing.Size(120, 30);
             this.panel6.TabIndex = 7;
             // 
             // label9
@@ -545,7 +545,7 @@
             this.label9.Location = new System.Drawing.Point(0, 0);
             this.label9.Margin = new System.Windows.Forms.Padding(0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(118, 18);
+            this.label9.Size = new System.Drawing.Size(118, 28);
             this.label9.TabIndex = 1;
             this.label9.Text = "CURRENT FREQ";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
