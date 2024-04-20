@@ -54,7 +54,7 @@ namespace maxrumsey.ozstrips.gui
             io.OnDisconnected += (sender, e) =>
             {
                 AddMessage("c: conn lost");
-                mf.Invoke((MethodInvoker)delegate () { mf.SetConnStatus(false); });
+                mf.SetConnStatus(false);
             };
             io.OnError += (sender, e) =>
             {
