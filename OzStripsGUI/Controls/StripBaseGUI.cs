@@ -159,7 +159,8 @@ namespace maxrumsey.ozstrips.controls
                 }
 
                 stripController.SyncStrip();
-            } catch (Exception ex) { }
+            }
+            catch (Exception ex) { }
         }
         public void CLXBayReturned(object source, ModalReturnArgs args)
         {
