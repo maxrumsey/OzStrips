@@ -492,7 +492,7 @@
             // 
             lb_req.Dock = System.Windows.Forms.DockStyle.Fill;
             lb_req.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
-            lb_req.ForeColor = System.Drawing.Color.DarkGray;
+            lb_req.ForeColor = System.Drawing.Color.Gray;
             lb_req.Location = new System.Drawing.Point(0, 0);
             lb_req.Name = "lb_req";
             lb_req.Size = new System.Drawing.Size(48, 28);
