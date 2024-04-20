@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.Json;
 using System.Timers;
+using System.Windows.Forms;
 using vatsys;
 
 namespace maxrumsey.ozstrips.gui
@@ -35,7 +36,7 @@ namespace maxrumsey.ozstrips.gui
                 if (metaDTO.apiversion != Config.apiversion)
                 {
                     Util.ShowErrorBox("OzStrips incompatible with current API version!");
-                    mf.Invoke((System.Windows.Forms.MethodInvoker)delegate ()
+                    mf.Invoke((MethodInvoker)delegate ()
                     {
                         mf.Close();
                         mf.Dispose();
@@ -47,18 +48,19 @@ namespace maxrumsey.ozstrips.gui
             {
                 AddMessage("c: conn established");
                 await io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName, Network.Me.RealName);
-                mf.SetConnStatus(true);
+                mf.Invoke((MethodInvoker)delegate () { mf.SetConnStatus(true); });
+                
             };
             io.OnDisconnected += (sender, e) =>
             {
                 AddMessage("c: conn lost");
-                mf.SetConnStatus(false);
+                mf.Invoke((MethodInvoker)delegate () { mf.SetConnStatus(false); });
             };
             io.OnError += (sender, e) =>
             {
-                AddMessage("Error?");
+                AddMessage("c: error" + e);
                 mf.SetConnStatus(false);
-                Errors.Add(new Exception(e), "OzStrips");
+                MMI.InvokeOnGUI(delegate () { Errors.Add(new Exception(e), "OzStrips"); });
             };
             io.OnReconnected += (sender, e) =>
             {
@@ -74,7 +76,7 @@ namespace maxrumsey.ozstrips.gui
                 StripControllerDTO scDTO = sc.GetValue<StripControllerDTO>();
                 AddMessage("s:sc_change: " + JsonSerializer.Serialize(scDTO));
 
-                mf.Invoke((System.Windows.Forms.MethodInvoker)delegate () { StripController.UpdateFDR(scDTO, bayManager); });
+                mf.Invoke((MethodInvoker)delegate () { StripController.UpdateFDR(scDTO, bayManager); });
 
             });
             io.On("server:sc_cache", sc =>
@@ -82,7 +84,7 @@ namespace maxrumsey.ozstrips.gui
                 CacheDTO scDTO = sc.GetValue<CacheDTO>();
                 AddMessage("s:sc_cache: " + JsonSerializer.Serialize(scDTO));
 
-                mf.Invoke((System.Windows.Forms.MethodInvoker)delegate () { StripController.LoadCache(scDTO); });
+                mf.Invoke((MethodInvoker)delegate () { StripController.LoadCache(scDTO); });
 
             });
             io.On("server:order_change", bdto =>
@@ -90,7 +92,7 @@ namespace maxrumsey.ozstrips.gui
                 BayDTO bayDTO = bdto.GetValue<BayDTO>();
                 AddMessage("s:order_change: " + JsonSerializer.Serialize(bayDTO));
 
-                mf.Invoke((System.Windows.Forms.MethodInvoker)delegate () { bayManager.UpdateOrder(bayDTO); });
+                mf.Invoke((MethodInvoker)delegate () { bayManager.UpdateOrder(bayDTO); });
             });
             io.On("server:metar", metarRaw =>
             {
@@ -195,7 +197,7 @@ namespace maxrumsey.ozstrips.gui
         /// </summary>
         public void Connect()
         {
-            fifteensecTimer = new Timer();
+            fifteensecTimer = new System.Timers.Timer();
             fifteensecTimer.AutoReset = false;
             fifteensecTimer.Interval = 15000;
             fifteensecTimer.Elapsed += ConnectIO;
