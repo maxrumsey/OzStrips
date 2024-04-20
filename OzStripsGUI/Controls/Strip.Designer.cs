@@ -380,10 +380,10 @@
             // 
             pl_remark.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             pl_remark.Controls.Add(lb_remark);
-            pl_remark.Location = new System.Drawing.Point(-2, 58);
+            pl_remark.Location = new System.Drawing.Point(-2, 59);
             pl_remark.Margin = new System.Windows.Forms.Padding(0);
             pl_remark.Name = "pl_remark";
-            pl_remark.Size = new System.Drawing.Size(581, 24);
+            pl_remark.Size = new System.Drawing.Size(581, 31);
             pl_remark.TabIndex = 3;
             // 
             // lb_remark
@@ -394,7 +394,7 @@
             lb_remark.Location = new System.Drawing.Point(0, 0);
             lb_remark.Margin = new System.Windows.Forms.Padding(3);
             lb_remark.Name = "lb_remark";
-            lb_remark.Size = new System.Drawing.Size(579, 22);
+            lb_remark.Size = new System.Drawing.Size(579, 29);
             lb_remark.TabIndex = 0;
             lb_remark.Text = "remark";
             lb_remark.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -489,6 +489,7 @@
             // 
             lb_req.Dock = System.Windows.Forms.DockStyle.Fill;
             lb_req.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_req.ForeColor = System.Drawing.Color.DarkGray;
             lb_req.Location = new System.Drawing.Point(0, 0);
             lb_req.Name = "lb_req";
             lb_req.Size = new System.Drawing.Size(48, 28);
@@ -523,7 +524,7 @@
             Controls.Add(pl_sid);
             Controls.Add(pl_acid);
             Name = "Strip";
-            Size = new System.Drawing.Size(577, 80);
+            Size = new System.Drawing.Size(577, 89);
             Load += Strip_Load_1;
             pl_acid.ResumeLayout(false);
             pl_wtc.ResumeLayout(false);
