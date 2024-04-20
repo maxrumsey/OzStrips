@@ -19,7 +19,7 @@ namespace maxrumsey.ozstrips.controls
             tb_clx.Text = controller.CLX;
             tb_bay.Text = controller.GATE;
             tb_remark.Text = controller.Remark;
-
+            tb_glop.Text = controller.fdr.GlobalOpData;
         }
 
         public string CLX { get { return tb_clx.Text; } }

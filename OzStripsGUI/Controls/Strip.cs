@@ -118,5 +118,10 @@ namespace maxrumsey.ozstrips.controls
         {
 
         }
+
+        private void lb_glop_Click(object sender, EventArgs e)
+        {
+            OpenCLXBayModal();
+        }
     }
 }

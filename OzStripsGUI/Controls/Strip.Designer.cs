@@ -523,6 +523,7 @@
             lb_glop.TabIndex = 0;
             lb_glop.Text = "GLOBAL REMARK";
             lb_glop.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            lb_glop.Click += lb_glop_Click;
             // 
             // Strip
             // 
