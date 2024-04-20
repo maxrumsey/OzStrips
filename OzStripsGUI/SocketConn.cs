@@ -17,7 +17,7 @@ namespace maxrumsey.ozstrips.gui
         private bool isDebug = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
         public List<string> Messages = new List<string>();
         private bool versionShown = false;
-        private bool freshClient = false;
+        private bool freshClient = true;
         private System.Timers.Timer fifteensecTimer;
         private MainForm mainForm;
         public SocketConn(BayManager bayManager, MainForm mf)
@@ -84,8 +84,11 @@ namespace maxrumsey.ozstrips.gui
                 CacheDTO scDTO = sc.GetValue<CacheDTO>();
                 AddMessage("s:sc_cache: " + JsonSerializer.Serialize(scDTO));
 
-                if (mf.Visible) mf.Invoke((MethodInvoker)delegate () { StripController.LoadCache(scDTO); });
-
+                if (mf.Visible && freshClient)
+                {
+                    freshClient = false;
+                    mf.Invoke((MethodInvoker)delegate () { StripController.LoadCache(scDTO); });
+                }
             });
             io.On("server:order_change", bdto =>
             {
@@ -104,7 +107,7 @@ namespace maxrumsey.ozstrips.gui
             {
                 AddMessage("s:update_cache: ");
                 if (io.Connected) io.EmitAsync("client:request_metar");
-                SendCache();
+                if (!freshClient) SendCache();
             });
             if (Network.IsConnected) Connect();
             bayManager.socketConn = this;
@@ -114,9 +117,8 @@ namespace maxrumsey.ozstrips.gui
         {
             StripControllerDTO scDTO = CreateStripDTO(sc);
             AddMessage("c:sc_change: " + JsonSerializer.Serialize(scDTO));
-
+            if (scDTO.ACID == "") return; // prevent bug
             if (CanSendDTO) io.EmitAsync("client:sc_change", scDTO);
-
         }
         public void SyncBay(Bay bay)
         {
