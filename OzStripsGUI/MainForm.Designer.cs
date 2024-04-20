@@ -156,6 +156,7 @@
             // 
             this.pl_stat.BackColor = System.Drawing.Color.OrangeRed;
             this.pl_stat.Controls.Add(this.lb_stat);
+            this.pl_stat.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pl_stat.Location = new System.Drawing.Point(4, 3);
             this.pl_stat.Name = "pl_stat";
             this.pl_stat.Size = new System.Drawing.Size(96, 37);
@@ -167,10 +168,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lb_stat.AutoSize = true;
-            this.lb_stat.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_stat.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lb_stat.Location = new System.Drawing.Point(7, 11);
             this.lb_stat.Name = "lb_stat";
-            this.lb_stat.Size = new System.Drawing.Size(79, 16);
+            this.lb_stat.Size = new System.Drawing.Size(80, 17);
             this.lb_stat.TabIndex = 0;
             this.lb_stat.Text = "CONN STAT";
             // 
@@ -191,6 +192,7 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ts_ad,
             this.ts_mode,
@@ -198,22 +200,27 @@
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1784, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1784, 25);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
+            this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
             // 
             // ts_ad
             // 
             this.ts_ad.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripTextBox1,
             this.toolStripSeparator1});
+            this.ts_ad.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ts_ad.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.ts_ad.Name = "ts_ad";
-            this.ts_ad.Size = new System.Drawing.Size(79, 20);
+            this.ts_ad.Size = new System.Drawing.Size(92, 21);
             this.ts_ad.Text = "Aerodrome";
+            this.ts_ad.Click += new System.EventHandler(this.ts_ad_Click);
             // 
             // toolStripTextBox1
             // 
             this.toolStripTextBox1.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.toolStripTextBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.toolStripTextBox1.MaxLength = 4;
             this.toolStripTextBox1.Name = "toolStripTextBox1";
             this.toolStripTextBox1.Size = new System.Drawing.Size(100, 23);
@@ -223,7 +230,7 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(157, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // ts_mode
             // 
@@ -234,49 +241,57 @@
             this.aDCToolStripMenuItem,
             this.aDCSMCToolStripMenuItem,
             this.allToolStripMenuItem});
+            this.ts_mode.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ts_mode.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.ts_mode.Name = "ts_mode";
-            this.ts_mode.Size = new System.Drawing.Size(78, 20);
+            this.ts_mode.Size = new System.Drawing.Size(92, 21);
             this.ts_mode.Text = "View Mode";
             // 
             // aCDToolStripMenuItem
             // 
+            this.aCDToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.aCDToolStripMenuItem.Name = "aCDToolStripMenuItem";
-            this.aCDToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.aCDToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.aCDToolStripMenuItem.Text = "ACD";
             this.aCDToolStripMenuItem.Click += new System.EventHandler(this.aCDToolStripMenuItem_Click);
             // 
             // sMCToolStripMenuItem
             // 
+            this.sMCToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.sMCToolStripMenuItem.Name = "sMCToolStripMenuItem";
-            this.sMCToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.sMCToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.sMCToolStripMenuItem.Text = "SMC";
             this.sMCToolStripMenuItem.Click += new System.EventHandler(this.sMCToolStripMenuItem_Click);
             // 
             // sMCACDToolStripMenuItem
             // 
+            this.sMCACDToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.sMCACDToolStripMenuItem.Name = "sMCACDToolStripMenuItem";
-            this.sMCACDToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.sMCACDToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.sMCACDToolStripMenuItem.Text = "SMC+ACD";
             this.sMCACDToolStripMenuItem.Click += new System.EventHandler(this.sMCACDToolStripMenuItem_Click);
             // 
             // aDCToolStripMenuItem
             // 
+            this.aDCToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.aDCToolStripMenuItem.Name = "aDCToolStripMenuItem";
-            this.aDCToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.aDCToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.aDCToolStripMenuItem.Text = "ADC";
             this.aDCToolStripMenuItem.Click += new System.EventHandler(this.aDCToolStripMenuItem_Click);
             // 
             // aDCSMCToolStripMenuItem
             // 
+            this.aDCSMCToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.aDCSMCToolStripMenuItem.Name = "aDCSMCToolStripMenuItem";
-            this.aDCSMCToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.aDCSMCToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.aDCSMCToolStripMenuItem.Text = "ADC+SMC";
             this.aDCSMCToolStripMenuItem.Click += new System.EventHandler(this.aDCSMCToolStripMenuItem_Click);
             // 
             // allToolStripMenuItem
             // 
+            this.allToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.allToolStripMenuItem.Name = "allToolStripMenuItem";
-            this.allToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.allToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.allToolStripMenuItem.Text = "All";
             this.allToolStripMenuItem.Click += new System.EventHandler(this.allToolStripMenuItem_Click);
             // 
@@ -284,32 +299,38 @@
             // 
             this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem1});
+            this.debugToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.debugToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
-            this.debugToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
+            this.debugToolStripMenuItem.Size = new System.Drawing.Size(60, 21);
             this.debugToolStripMenuItem.Text = "Debug";
             // 
             // toolStripMenuItem1
             // 
+            this.toolStripMenuItem1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(144, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItem1.Text = "SocketIO Log";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
             // aboutToolStripMenuItem
             // 
+            this.aboutToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.aboutToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(60, 21);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // flp_main
             // 
             this.flp_main.AutoScroll = true;
+            this.flp_main.BackColor = System.Drawing.Color.White;
             this.flp_main.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flp_main.Location = new System.Drawing.Point(0, 24);
+            this.flp_main.Location = new System.Drawing.Point(0, 25);
             this.flp_main.Margin = new System.Windows.Forms.Padding(0);
             this.flp_main.Name = "flp_main";
-            this.flp_main.Size = new System.Drawing.Size(1784, 892);
+            this.flp_main.Size = new System.Drawing.Size(1784, 891);
             this.flp_main.TabIndex = 2;
             this.flp_main.WrapContents = false;
             // 
@@ -321,7 +342,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
+            this.BackColor = System.Drawing.Color.Gray;
             this.ClientSize = new System.Drawing.Size(1784, 961);
             this.Controls.Add(this.flp_main);
             this.Controls.Add(this.pl_controlbar);

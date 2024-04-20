@@ -63,6 +63,7 @@
             this.richTextBox1.Size = new System.Drawing.Size(256, 197);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "OzStrips\n\nA stripboard extension for VATSYS.\n\n© Max Rumsey";
+            this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
             // 
             // About
             // 
