@@ -270,10 +270,10 @@
             // 
             pl_std.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             pl_std.Controls.Add(lb_std);
-            pl_std.Location = new System.Drawing.Point(0, 0);
+            pl_std.Location = new System.Drawing.Point(-1, -1);
             pl_std.Margin = new System.Windows.Forms.Padding(0);
             pl_std.Name = "pl_std";
-            pl_std.Size = new System.Drawing.Size(68, 30);
+            pl_std.Size = new System.Drawing.Size(70, 32);
             pl_std.TabIndex = 2;
             // 
             // lb_std
@@ -284,7 +284,7 @@
             lb_std.Location = new System.Drawing.Point(0, 0);
             lb_std.Margin = new System.Windows.Forms.Padding(3);
             lb_std.Name = "lb_std";
-            lb_std.Size = new System.Drawing.Size(66, 28);
+            lb_std.Size = new System.Drawing.Size(68, 30);
             lb_std.TabIndex = 0;
             lb_std.Text = "GATE";
             lb_std.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
