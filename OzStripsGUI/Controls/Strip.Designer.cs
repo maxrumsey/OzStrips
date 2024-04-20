@@ -340,7 +340,7 @@
             pl_rwy.Location = new System.Drawing.Point(328, 0);
             pl_rwy.Margin = new System.Windows.Forms.Padding(0);
             pl_rwy.Name = "pl_rwy";
-            pl_rwy.Size = new System.Drawing.Size(60, 60);
+            pl_rwy.Size = new System.Drawing.Size(60, 61);
             pl_rwy.TabIndex = 3;
             // 
             // lb_rwy
@@ -349,7 +349,7 @@
             lb_rwy.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_rwy.Location = new System.Drawing.Point(0, 0);
             lb_rwy.Name = "lb_rwy";
-            lb_rwy.Size = new System.Drawing.Size(58, 58);
+            lb_rwy.Size = new System.Drawing.Size(58, 59);
             lb_rwy.TabIndex = 0;
             lb_rwy.Text = "rwy";
             lb_rwy.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -505,10 +505,10 @@
             // 
             pl_glop.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             pl_glop.Controls.Add(lb_glop);
-            pl_glop.Location = new System.Drawing.Point(0, 59);
+            pl_glop.Location = new System.Drawing.Point(-1, 59);
             pl_glop.Margin = new System.Windows.Forms.Padding(0);
             pl_glop.Name = "pl_glop";
-            pl_glop.Size = new System.Drawing.Size(281, 31);
+            pl_glop.Size = new System.Drawing.Size(282, 31);
             pl_glop.TabIndex = 4;
             // 
             // lb_glop
@@ -519,7 +519,7 @@
             lb_glop.Location = new System.Drawing.Point(0, 0);
             lb_glop.Margin = new System.Windows.Forms.Padding(3);
             lb_glop.Name = "lb_glop";
-            lb_glop.Size = new System.Drawing.Size(279, 29);
+            lb_glop.Size = new System.Drawing.Size(280, 29);
             lb_glop.TabIndex = 0;
             lb_glop.Text = "GLOBAL REMARK";
             lb_glop.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
