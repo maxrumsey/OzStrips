@@ -287,7 +287,7 @@
             lb_sid.BackColor = System.Drawing.Color.FromArgb(2, 177, 19);
             lb_sid.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_sid.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            lb_sid.Location = new System.Drawing.Point(0, 0);
+            lb_sid.Location = new System.Drawing.Point(0, -2);
             lb_sid.Name = "lb_sid";
             lb_sid.Size = new System.Drawing.Size(80, 20);
             lb_sid.TabIndex = 0;
