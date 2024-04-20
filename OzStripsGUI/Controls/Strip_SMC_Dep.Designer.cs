@@ -28,8 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            pl_eobt = new System.Windows.Forms.Panel();
-            lb_eobt = new System.Windows.Forms.Label();
             pl_acid = new System.Windows.Forms.Panel();
             lb_acid = new System.Windows.Forms.Label();
             pl_wtc = new System.Windows.Forms.Panel();
@@ -68,11 +66,6 @@
             label4 = new System.Windows.Forms.Label();
             panel5 = new System.Windows.Forms.Panel();
             label6 = new System.Windows.Forms.Label();
-            panel6 = new System.Windows.Forms.Panel();
-            label9 = new System.Windows.Forms.Label();
-            panel7 = new System.Windows.Forms.Panel();
-            label11 = new System.Windows.Forms.Label();
-            pl_eobt.SuspendLayout();
             pl_acid.SuspendLayout();
             pl_wtc.SuspendLayout();
             pl_frul.SuspendLayout();
@@ -92,32 +85,7 @@
             panel3.SuspendLayout();
             panel4.SuspendLayout();
             panel5.SuspendLayout();
-            panel6.SuspendLayout();
-            panel7.SuspendLayout();
             SuspendLayout();
-            // 
-            // pl_eobt
-            // 
-            pl_eobt.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            pl_eobt.Controls.Add(lb_eobt);
-            pl_eobt.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
-            pl_eobt.Location = new System.Drawing.Point(578, 50);
-            pl_eobt.Name = "pl_eobt";
-            pl_eobt.Size = new System.Drawing.Size(120, 30);
-            pl_eobt.TabIndex = 0;
-            // 
-            // lb_eobt
-            // 
-            lb_eobt.Dock = System.Windows.Forms.DockStyle.Fill;
-            lb_eobt.Location = new System.Drawing.Point(0, 0);
-            lb_eobt.Margin = new System.Windows.Forms.Padding(0);
-            lb_eobt.Name = "lb_eobt";
-            lb_eobt.Size = new System.Drawing.Size(118, 28);
-            lb_eobt.TabIndex = 0;
-            lb_eobt.Text = "eobt";
-            lb_eobt.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            lb_eobt.Click += lb_eobt_Click;
-            lb_eobt.DoubleClick += lb_eobt_DoubleClick;
             // 
             // pl_acid
             // 
@@ -529,56 +497,12 @@
             label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             label6.Click += label6_Click;
             // 
-            // panel6
-            // 
-            panel6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            panel6.Controls.Add(label9);
-            panel6.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
-            panel6.Location = new System.Drawing.Point(578, 27);
-            panel6.Name = "panel6";
-            panel6.Size = new System.Drawing.Size(120, 23);
-            panel6.TabIndex = 7;
-            // 
-            // label9
-            // 
-            label9.Dock = System.Windows.Forms.DockStyle.Fill;
-            label9.Location = new System.Drawing.Point(0, 0);
-            label9.Margin = new System.Windows.Forms.Padding(0);
-            label9.Name = "label9";
-            label9.Size = new System.Drawing.Size(118, 21);
-            label9.TabIndex = 1;
-            label9.Text = "CURRENT FREQ";
-            label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // panel7
-            // 
-            panel7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            panel7.Controls.Add(label11);
-            panel7.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
-            panel7.Location = new System.Drawing.Point(578, 0);
-            panel7.Name = "panel7";
-            panel7.Size = new System.Drawing.Size(120, 27);
-            panel7.TabIndex = 8;
-            // 
-            // label11
-            // 
-            label11.Dock = System.Windows.Forms.DockStyle.Fill;
-            label11.Location = new System.Drawing.Point(0, 0);
-            label11.Margin = new System.Windows.Forms.Padding(0);
-            label11.Name = "label11";
-            label11.Size = new System.Drawing.Size(118, 25);
-            label11.TabIndex = 1;
-            label11.Text = "READY";
-            label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // Strip_SMC_Dep
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.Color.Transparent;
             BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            Controls.Add(panel7);
-            Controls.Add(panel6);
             Controls.Add(panel5);
             Controls.Add(panel4);
             Controls.Add(pl_hdg);
@@ -598,11 +522,9 @@
             Controls.Add(pl_std);
             Controls.Add(pl_sid);
             Controls.Add(pl_acid);
-            Controls.Add(pl_eobt);
             Name = "Strip_SMC_Dep";
-            Size = new System.Drawing.Size(700, 80);
+            Size = new System.Drawing.Size(577, 80);
             Load += Strip_Load_1;
-            pl_eobt.ResumeLayout(false);
             pl_acid.ResumeLayout(false);
             pl_wtc.ResumeLayout(false);
             pl_frul.ResumeLayout(false);
@@ -622,15 +544,10 @@
             panel3.ResumeLayout(false);
             panel4.ResumeLayout(false);
             panel5.ResumeLayout(false);
-            panel6.ResumeLayout(false);
-            panel7.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
-
-        private System.Windows.Forms.Panel pl_eobt;
-        private System.Windows.Forms.Label lb_eobt;
         private System.Windows.Forms.Panel pl_acid;
         private System.Windows.Forms.Label lb_acid;
         private System.Windows.Forms.Panel pl_frul;
@@ -669,9 +586,5 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Panel panel6;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Panel panel7;
-        private System.Windows.Forms.Label label11;
     }
 }
