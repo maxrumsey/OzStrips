@@ -45,13 +45,13 @@ namespace maxrumsey.ozstrips.gui
 
             io.OnConnected += async (sender, e) =>
             {
-                Messages.Add("c: conn established");
+                AddMessage("c: conn established");
                 await io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName, Network.Me.RealName);
                 mf.SetConnStatus(true);
             };
             io.OnDisconnected += (sender, e) =>
             {
-                Messages.Add("c: conn lost");
+                AddMessage("c: conn lost");
                 mf.SetConnStatus(false);
             };
 
@@ -69,7 +69,7 @@ namespace maxrumsey.ozstrips.gui
             io.On("server:sc_change", sc =>
             {
                 StripControllerDTO scDTO = sc.GetValue<StripControllerDTO>();
-                Messages.Add("s:sc_change: " + JsonSerializer.Serialize(scDTO));
+                AddMessage("s:sc_change: " + JsonSerializer.Serialize(scDTO));
 
                 mf.Invoke((System.Windows.Forms.MethodInvoker)delegate () { StripController.UpdateFDR(scDTO, bayManager); });
 
@@ -77,7 +77,7 @@ namespace maxrumsey.ozstrips.gui
             io.On("server:sc_cache", sc =>
             {
                 CacheDTO scDTO = sc.GetValue<CacheDTO>();
-                Messages.Add("s:sc_cache: " + JsonSerializer.Serialize(scDTO));
+                AddMessage("s:sc_cache: " + JsonSerializer.Serialize(scDTO));
 
                 mf.Invoke((System.Windows.Forms.MethodInvoker)delegate () { StripController.LoadCache(scDTO); });
 
@@ -85,13 +85,13 @@ namespace maxrumsey.ozstrips.gui
             io.On("server:order_change", bdto =>
             {
                 BayDTO bayDTO = bdto.GetValue<BayDTO>();
-                Messages.Add("s:order_change: " + JsonSerializer.Serialize(bayDTO));
+                AddMessage("s:order_change: " + JsonSerializer.Serialize(bayDTO));
 
                 mf.Invoke((System.Windows.Forms.MethodInvoker)delegate () { bayManager.UpdateOrder(bayDTO); });
             });
             io.On("server:update_cache", (args) =>
             {
-                Messages.Add("s:update_cache: ");
+                AddMessage("s:update_cache: ");
                 SendCache();
             });
             if (Network.IsConnected) Connect();
@@ -101,7 +101,7 @@ namespace maxrumsey.ozstrips.gui
         public void SyncSC(StripController sc)
         {
             StripControllerDTO scDTO = CreateStripDTO(sc);
-            Messages.Add("c:sc_change: " + JsonSerializer.Serialize(scDTO));
+            AddMessage("c:sc_change: " + JsonSerializer.Serialize(scDTO));
 
             if (CanSendDTO) io.EmitAsync("client:sc_change", scDTO);
 
@@ -109,7 +109,7 @@ namespace maxrumsey.ozstrips.gui
         public void SyncBay(Bay bay)
         {
             BayDTO bayDTO = CreateBayDTO(bay);
-            Messages.Add("c:order_change: " + JsonSerializer.Serialize(bayDTO));
+            AddMessage("c:order_change: " + JsonSerializer.Serialize(bayDTO));
 
             if (CanSendDTO) io.EmitAsync("client:order_change", bayDTO);
         }
@@ -158,6 +158,7 @@ namespace maxrumsey.ozstrips.gui
         public async void SendCache()
         {
             CacheDTO cacheDTO = CreateCacheDTO();
+            AddMessage("c:sc_cache: " + JsonSerializer.Serialize(cacheDTO));
             if (CanSendDTO) await io.EmitAsync("client:sc_cache", cacheDTO);
         }
 
@@ -173,7 +174,7 @@ namespace maxrumsey.ozstrips.gui
         private bool CanSendDTO
         {
             get {
-                if (!(Network.Me.IsRealATC || isDebug)) Messages.Add("c: DTO Rejected!");
+                if (!(Network.Me.IsRealATC || isDebug)) AddMessage("c: DTO Rejected!");
                 return io.Connected && (Network.Me.IsRealATC || isDebug); 
             }
         }
@@ -193,13 +194,21 @@ namespace maxrumsey.ozstrips.gui
 
         private void ConnectIO(object sender, ElapsedEventArgs e)
         {
-            Messages.Add("c: Attempting connection");
+            AddMessage("c: Attempting connection");
             io.ConnectAsync();
         }
 
         public void Disconnect()
         {
             io.DisconnectAsync();
+        }
+
+        private void AddMessage(string message)
+        {
+            lock (Messages)
+            {
+                Messages.Add(message);
+            }
         }
     }
 }
