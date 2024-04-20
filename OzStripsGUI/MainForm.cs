@@ -14,6 +14,7 @@ namespace maxrumsey.ozstrips.gui
         SocketConn socketConn;
         public static bool isDebug = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
         public static MainForm mainForm;
+        private string metar = "";
         public MainForm()
         {
             mainForm = this;
@@ -62,6 +63,16 @@ namespace maxrumsey.ozstrips.gui
                 debugToolStripMenuItem.DropDownItems.Add(toolStripMenuItem);
             }
             socketConn = new SocketConn(bayManager, this);
+        }
+
+        public void SetMetar(string metar)
+        {
+            if (metar != this.metar)
+            {
+                this.metar = metar;
+                tt_metar.RemoveAll();
+                tt_metar.SetToolTip(pl_ad, metar);
+            }
         }
 
         public void OpenManDebug()
