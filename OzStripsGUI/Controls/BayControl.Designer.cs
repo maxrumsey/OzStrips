@@ -78,7 +78,7 @@ namespace maxrumsey.ozstrips.controls
             // bt_div
             // 
             bt_div.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-            bt_div.BackColor = System.Drawing.Color.Gray;
+            bt_div.BackColor = System.Drawing.Color.FromArgb(140, 150, 150);
             bt_div.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             bt_div.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             bt_div.ForeColor = System.Drawing.Color.FromArgb(0, 0, 96);
@@ -94,7 +94,7 @@ namespace maxrumsey.ozstrips.controls
             // bt_queue
             // 
             bt_queue.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-            bt_queue.BackColor = System.Drawing.Color.Gray;
+            bt_queue.BackColor = System.Drawing.Color.FromArgb(140, 150, 150);
             bt_queue.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             bt_queue.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             bt_queue.ForeColor = System.Drawing.Color.FromArgb(0, 0, 96);

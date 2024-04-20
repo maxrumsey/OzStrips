@@ -81,9 +81,10 @@
             // 
             // bt_pdc
             // 
-            bt_pdc.BackColor = System.Drawing.Color.Gray;
+            bt_pdc.BackColor = System.Drawing.Color.FromArgb(140, 150, 150);
             bt_pdc.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             bt_pdc.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            bt_pdc.ForeColor = System.Drawing.Color.FromArgb(0, 0, 96);
             bt_pdc.Location = new System.Drawing.Point(687, 3);
             bt_pdc.Name = "bt_pdc";
             bt_pdc.Size = new System.Drawing.Size(96, 37);
@@ -98,6 +99,7 @@
             bt_cross.BackColor = System.Drawing.Color.RosyBrown;
             bt_cross.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             bt_cross.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            bt_cross.ForeColor = System.Drawing.Color.FromArgb(0, 0, 96);
             bt_cross.Location = new System.Drawing.Point(543, 3);
             bt_cross.Name = "bt_cross";
             bt_cross.Size = new System.Drawing.Size(142, 37);
@@ -109,9 +111,10 @@
             // 
             // bt_force
             // 
-            bt_force.BackColor = System.Drawing.Color.Gray;
+            bt_force.BackColor = System.Drawing.Color.FromArgb(140, 150, 150);
             bt_force.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             bt_force.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            bt_force.ForeColor = System.Drawing.Color.FromArgb(0, 0, 96);
             bt_force.Location = new System.Drawing.Point(445, 3);
             bt_force.Name = "bt_force";
             bt_force.Size = new System.Drawing.Size(96, 37);
@@ -123,9 +126,10 @@
             // 
             // bt_inhibit
             // 
-            bt_inhibit.BackColor = System.Drawing.Color.Gray;
+            bt_inhibit.BackColor = System.Drawing.Color.FromArgb(140, 150, 150);
             bt_inhibit.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             bt_inhibit.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            bt_inhibit.ForeColor = System.Drawing.Color.FromArgb(0, 0, 96);
             bt_inhibit.Location = new System.Drawing.Point(347, 3);
             bt_inhibit.Name = "bt_inhibit";
             bt_inhibit.Size = new System.Drawing.Size(96, 37);
@@ -149,6 +153,7 @@
             lb_ad.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             lb_ad.AutoSize = true;
             lb_ad.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_ad.ForeColor = System.Drawing.Color.FromArgb(0, 0, 96);
             lb_ad.Location = new System.Drawing.Point(28, 11);
             lb_ad.Name = "lb_ad";
             lb_ad.Size = new System.Drawing.Size(40, 16);
@@ -170,6 +175,7 @@
             lb_stat.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             lb_stat.AutoSize = true;
             lb_stat.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_stat.ForeColor = System.Drawing.Color.FromArgb(0, 0, 96);
             lb_stat.Location = new System.Drawing.Point(7, 11);
             lb_stat.Name = "lb_stat";
             lb_stat.Size = new System.Drawing.Size(80, 17);
@@ -182,6 +188,7 @@
             tb_Time.BackColor = System.Drawing.SystemColors.Info;
             tb_Time.Enabled = false;
             tb_Time.Font = new System.Drawing.Font("Terminus (TTF)", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            tb_Time.ForeColor = System.Drawing.Color.FromArgb(0, 0, 96);
             tb_Time.Location = new System.Drawing.Point(106, 3);
             tb_Time.Name = "tb_Time";
             tb_Time.ReadOnly = true;
