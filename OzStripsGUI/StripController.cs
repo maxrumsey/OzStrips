@@ -93,8 +93,7 @@ namespace maxrumsey.ozstrips.gui
             //stripHolderControl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             stripHolderControl.Size = new Size(100, 100);
 
-            if (ArrDepType == StripArrDepType.ARRIVAL) stripControl = new Strip_Arr(this);
-            else stripControl = new Strip_SMC_Dep(this);
+            stripControl = new Strip(this);
 
             stripControl.Initialise();
             stripHolderControl.Size = new Size(stripControl.Size.Width, stripControl.Size.Height + 6);
