@@ -38,6 +38,7 @@ namespace maxrumsey.ozstrips.controls
             };
 
             this.stripController = controller;
+            this.cockColourControls = new Panel[] { };
             UpdateStrip();
 
         }

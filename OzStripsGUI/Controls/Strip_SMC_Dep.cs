@@ -36,7 +36,7 @@ namespace maxrumsey.ozstrips.controls
                 pl_rwy,
                 pl_remark
             };
-
+            base.cockColourControls = new Panel[] { };
             this.stripController = controller;
             UpdateStrip();
 

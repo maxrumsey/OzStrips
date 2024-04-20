@@ -87,7 +87,7 @@ namespace maxrumsey.ozstrips.controls
         {
             SuspendLayout();
             if (fdr == null) return;
-            lb_eobt.Text = stripController.Time;
+            if (lb_eobt != null) lb_eobt.Text = stripController.Time;
             lb_acid.Text = fdr.Callsign;
             lb_ssr.Text = (fdr.AssignedSSRCode == -1) ? "XXXX" : Convert.ToString(fdr.AssignedSSRCode, 8).PadLeft(4, '0');
             lb_type.Text = fdr.AircraftType;
