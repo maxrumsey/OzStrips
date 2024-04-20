@@ -255,7 +255,7 @@
             // lb_sid
             // 
             lb_sid.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            lb_sid.BackColor = System.Drawing.Color.FromArgb(2, 177, 19);
+            lb_sid.BackColor = System.Drawing.Color.Lime;
             lb_sid.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_sid.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             lb_sid.Location = new System.Drawing.Point(0, -2);
@@ -270,10 +270,10 @@
             // 
             pl_std.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             pl_std.Controls.Add(lb_std);
-            pl_std.Location = new System.Drawing.Point(0, 0);
+            pl_std.Location = new System.Drawing.Point(-1, -1);
             pl_std.Margin = new System.Windows.Forms.Padding(0);
             pl_std.Name = "pl_std";
-            pl_std.Size = new System.Drawing.Size(68, 30);
+            pl_std.Size = new System.Drawing.Size(70, 32);
             pl_std.TabIndex = 2;
             // 
             // lb_std
@@ -284,7 +284,7 @@
             lb_std.Location = new System.Drawing.Point(0, 0);
             lb_std.Margin = new System.Windows.Forms.Padding(3);
             lb_std.Name = "lb_std";
-            lb_std.Size = new System.Drawing.Size(66, 28);
+            lb_std.Size = new System.Drawing.Size(68, 30);
             lb_std.TabIndex = 0;
             lb_std.Text = "GATE";
             lb_std.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -492,7 +492,7 @@
             // 
             lb_req.Dock = System.Windows.Forms.DockStyle.Fill;
             lb_req.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
-            lb_req.ForeColor = System.Drawing.Color.DarkGray;
+            lb_req.ForeColor = System.Drawing.Color.Gray;
             lb_req.Location = new System.Drawing.Point(0, 0);
             lb_req.Name = "lb_req";
             lb_req.Size = new System.Drawing.Size(48, 28);
