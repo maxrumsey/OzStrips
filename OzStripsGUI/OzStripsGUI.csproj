@@ -22,4 +22,7 @@
 	<ItemGroup>
 		<Reference Include="$(VatSysDir)\bin\vatSys.exe" />
 	</ItemGroup>
+	<ItemGroup>
+		<Content Include="ozstrips.ico" />
+	</ItemGroup>
 </Project>
