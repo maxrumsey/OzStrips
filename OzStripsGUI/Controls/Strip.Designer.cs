@@ -64,8 +64,8 @@
             label3 = new System.Windows.Forms.Label();
             panel4 = new System.Windows.Forms.Panel();
             label4 = new System.Windows.Forms.Label();
-            panel5 = new System.Windows.Forms.Panel();
-            label6 = new System.Windows.Forms.Label();
+            pl_req = new System.Windows.Forms.Panel();
+            lb_req = new System.Windows.Forms.Label();
             pl_acid.SuspendLayout();
             pl_wtc.SuspendLayout();
             pl_frul.SuspendLayout();
@@ -84,7 +84,7 @@
             panel2.SuspendLayout();
             panel3.SuspendLayout();
             panel4.SuspendLayout();
-            panel5.SuspendLayout();
+            pl_req.SuspendLayout();
             SuspendLayout();
             // 
             // pl_acid
@@ -476,34 +476,34 @@
             label4.TabIndex = 0;
             label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // panel5
+            // pl_req
             // 
-            panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            panel5.Controls.Add(label6);
-            panel5.Location = new System.Drawing.Point(528, 0);
-            panel5.Name = "panel5";
-            panel5.Size = new System.Drawing.Size(50, 30);
-            panel5.TabIndex = 2;
+            pl_req.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            pl_req.Controls.Add(lb_req);
+            pl_req.Location = new System.Drawing.Point(528, 0);
+            pl_req.Name = "pl_req";
+            pl_req.Size = new System.Drawing.Size(50, 30);
+            pl_req.TabIndex = 2;
             // 
-            // label6
+            // lb_req
             // 
-            label6.Dock = System.Windows.Forms.DockStyle.Fill;
-            label6.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
-            label6.Location = new System.Drawing.Point(0, 0);
-            label6.Name = "label6";
-            label6.Size = new System.Drawing.Size(48, 28);
-            label6.TabIndex = 1;
-            label6.Text = "REQ LVL";
-            label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            label6.Click += label6_Click;
+            lb_req.Dock = System.Windows.Forms.DockStyle.Fill;
+            lb_req.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_req.Location = new System.Drawing.Point(0, 0);
+            lb_req.Name = "lb_req";
+            lb_req.Size = new System.Drawing.Size(48, 28);
+            lb_req.TabIndex = 1;
+            lb_req.Text = "REQ LVL";
+            lb_req.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            lb_req.Click += label6_Click;
             // 
-            // Strip_SMC_Dep
+            // Strip
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.Color.Transparent;
             BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            Controls.Add(panel5);
+            Controls.Add(pl_req);
             Controls.Add(panel4);
             Controls.Add(pl_hdg);
             Controls.Add(panel3);
@@ -522,7 +522,7 @@
             Controls.Add(pl_std);
             Controls.Add(pl_sid);
             Controls.Add(pl_acid);
-            Name = "Strip_SMC_Dep";
+            Name = "Strip";
             Size = new System.Drawing.Size(577, 80);
             Load += Strip_Load_1;
             pl_acid.ResumeLayout(false);
@@ -543,7 +543,7 @@
             panel2.ResumeLayout(false);
             panel3.ResumeLayout(false);
             panel4.ResumeLayout(false);
-            panel5.ResumeLayout(false);
+            pl_req.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -584,7 +584,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Panel panel5;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Panel pl_req;
+        private System.Windows.Forms.Label lb_req;
     }
 }

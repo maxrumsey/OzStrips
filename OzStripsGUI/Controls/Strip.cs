@@ -28,6 +28,7 @@ namespace maxrumsey.ozstrips.controls
             base.lb_std = lb_std;
             base.lb_clx = lb_clx;
             base.lb_remark = lb_remark;
+            base.lb_req = lb_req;
 
             base.crossColourControls = new Panel[]
             {
