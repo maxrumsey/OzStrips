@@ -10,7 +10,7 @@ namespace maxrumsey.ozstrips.controls
     public partial class StripBaseGUI : UserControl
     {
         public FDP2.FDR fdr;
-        public Color defColor = Color.WhiteSmoke;
+        public Color defColor = Color.Empty;
         public Panel[] cockColourControls;
         public Panel[] crossColourControls = new Panel[] { };
 
@@ -182,7 +182,7 @@ namespace maxrumsey.ozstrips.controls
         {
             if (pickToggleControl != null)
             {
-                Color color = Color.Gainsboro;
+                Color color = Color.Empty;
                 if (picked) color = Color.Silver;
 
                 pickToggleControl.BackColor = color;
