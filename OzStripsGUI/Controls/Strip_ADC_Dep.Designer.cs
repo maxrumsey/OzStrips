@@ -209,7 +209,7 @@
             // 
             lb_route.Anchor = System.Windows.Forms.AnchorStyles.Top;
             lb_route.AutoEllipsis = true;
-            lb_route.Location = new System.Drawing.Point(0, 0);
+            lb_route.Location = new System.Drawing.Point(0, -3);
             lb_route.Margin = new System.Windows.Forms.Padding(0);
             lb_route.Name = "lb_route";
             lb_route.Size = new System.Drawing.Size(80, 20);
@@ -256,7 +256,7 @@
             lb_sid.BackColor = System.Drawing.Color.FromArgb(2, 177, 19);
             lb_sid.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_sid.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            lb_sid.Location = new System.Drawing.Point(0, 0);
+            lb_sid.Location = new System.Drawing.Point(0, -2);
             lb_sid.Name = "lb_sid";
             lb_sid.Size = new System.Drawing.Size(80, 20);
             lb_sid.TabIndex = 0;
