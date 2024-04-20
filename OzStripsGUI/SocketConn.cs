@@ -56,19 +56,21 @@ namespace maxrumsey.ozstrips.gui
                 AddMessage("c: conn lost");
                 mf.Invoke((MethodInvoker)delegate () { mf.SetConnStatus(false); });
             };
-
             io.OnError += (sender, e) =>
             {
                 AddMessage("c: error" + e);
                 mf.SetConnStatus(false);
                 MMI.InvokeOnGUI(delegate () { Errors.Add(new Exception(e), "OzStrips"); });
             };
-            io.OnReconnected += async (sender, e) =>
+            io.OnReconnected += (sender, e) =>
             {
-                await io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName);
+                if (io.Connected) io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName);
                 mf.SetConnStatus(true);
             };
-
+            io.OnReconnectError += (sender, e) =>
+            {
+                AddMessage("recon error");
+            };
             io.On("server:sc_change", sc =>
             {
                 StripControllerDTO scDTO = sc.GetValue<StripControllerDTO>();
@@ -92,9 +94,16 @@ namespace maxrumsey.ozstrips.gui
 
                 mf.Invoke((MethodInvoker)delegate () { bayManager.UpdateOrder(bayDTO); });
             });
+            io.On("server:metar", metarRaw =>
+            {
+                String metar = metarRaw.GetValue<string>();
+
+                mf.Invoke((System.Windows.Forms.MethodInvoker)delegate () { mainForm.SetMetar(metar); });
+            });
             io.On("server:update_cache", (args) =>
             {
                 AddMessage("s:update_cache: ");
+                if (io.Connected) io.EmitAsync("client:request_metar");
                 SendCache();
             });
             if (Network.IsConnected) Connect();
@@ -170,15 +179,16 @@ namespace maxrumsey.ozstrips.gui
             io.DisconnectAsync();
             io.Dispose();
         }
-        
+
         /// <summary>
         /// Whether the user has permission to send data to server
         /// </summary>
         private bool CanSendDTO
         {
-            get {
+            get
+            {
                 if (!(Network.Me.IsRealATC || isDebug)) AddMessage("c: DTO Rejected!");
-                return io.Connected && (Network.Me.IsRealATC || isDebug); 
+                return io.Connected && (Network.Me.IsRealATC || isDebug);
             }
         }
 
@@ -195,10 +205,16 @@ namespace maxrumsey.ozstrips.gui
             mainForm.SetAerodrome(bayManager.AerodromeName);
         }
 
-        private void ConnectIO(object sender, ElapsedEventArgs e)
+        private async void ConnectIO(object sender, ElapsedEventArgs e)
         {
-            AddMessage("c: Attempting connection");
-            io.ConnectAsync();
+            try
+            {
+                AddMessage("c: Attempting connection " + Config.socketioaddr);
+                await io.ConnectAsync();
+            } catch (Exception ex)
+            {
+                Errors.Add(ex, "OzStrips");
+            }
         }
 
         public void Disconnect()
