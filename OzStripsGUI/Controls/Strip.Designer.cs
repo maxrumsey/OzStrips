@@ -66,6 +66,8 @@
             label4 = new System.Windows.Forms.Label();
             pl_req = new System.Windows.Forms.Panel();
             lb_req = new System.Windows.Forms.Label();
+            panel5 = new System.Windows.Forms.Panel();
+            label5 = new System.Windows.Forms.Label();
             pl_acid.SuspendLayout();
             pl_wtc.SuspendLayout();
             pl_frul.SuspendLayout();
@@ -85,6 +87,7 @@
             panel3.SuspendLayout();
             panel4.SuspendLayout();
             pl_req.SuspendLayout();
+            panel5.SuspendLayout();
             SuspendLayout();
             // 
             // pl_acid
@@ -292,7 +295,7 @@
             pl_hdg.Controls.Add(lb_hdg);
             pl_hdg.Location = new System.Drawing.Point(448, 39);
             pl_hdg.Name = "pl_hdg";
-            pl_hdg.Size = new System.Drawing.Size(80, 20);
+            pl_hdg.Size = new System.Drawing.Size(80, 21);
             pl_hdg.TabIndex = 1;
             // 
             // lb_hdg
@@ -303,7 +306,7 @@
             lb_hdg.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_hdg.Location = new System.Drawing.Point(0, 0);
             lb_hdg.Name = "lb_hdg";
-            lb_hdg.Size = new System.Drawing.Size(80, 20);
+            lb_hdg.Size = new System.Drawing.Size(80, 21);
             lb_hdg.TabIndex = 0;
             lb_hdg.Text = "Hdg";
             lb_hdg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -380,10 +383,10 @@
             // 
             pl_remark.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             pl_remark.Controls.Add(lb_remark);
-            pl_remark.Location = new System.Drawing.Point(-2, 59);
+            pl_remark.Location = new System.Drawing.Point(280, 59);
             pl_remark.Margin = new System.Windows.Forms.Padding(0);
             pl_remark.Name = "pl_remark";
-            pl_remark.Size = new System.Drawing.Size(581, 31);
+            pl_remark.Size = new System.Drawing.Size(299, 31);
             pl_remark.TabIndex = 3;
             // 
             // lb_remark
@@ -394,9 +397,9 @@
             lb_remark.Location = new System.Drawing.Point(0, 0);
             lb_remark.Margin = new System.Windows.Forms.Padding(3);
             lb_remark.Name = "lb_remark";
-            lb_remark.Size = new System.Drawing.Size(579, 29);
+            lb_remark.Size = new System.Drawing.Size(297, 29);
             lb_remark.TabIndex = 0;
-            lb_remark.Text = "remark";
+            lb_remark.Text = "LOCAL REMARK";
             lb_remark.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             lb_remark.Click += lb_remark_Click;
             // 
@@ -498,12 +501,37 @@
             lb_req.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             lb_req.Click += label6_Click;
             // 
+            // panel5
+            // 
+            panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            panel5.Controls.Add(label5);
+            panel5.Location = new System.Drawing.Point(0, 59);
+            panel5.Margin = new System.Windows.Forms.Padding(0);
+            panel5.Name = "panel5";
+            panel5.Size = new System.Drawing.Size(281, 31);
+            panel5.TabIndex = 4;
+            // 
+            // label5
+            // 
+            label5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            label5.Dock = System.Windows.Forms.DockStyle.Fill;
+            label5.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            label5.Location = new System.Drawing.Point(0, 0);
+            label5.Margin = new System.Windows.Forms.Padding(3);
+            label5.Name = "label5";
+            label5.Size = new System.Drawing.Size(279, 29);
+            label5.TabIndex = 0;
+            label5.Text = "GLOBAL REMARK";
+            label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            label5.Click += this.label5_Click;
+            // 
             // Strip
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.Color.Transparent;
             BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            Controls.Add(panel5);
             Controls.Add(pl_req);
             Controls.Add(panel4);
             Controls.Add(pl_hdg);
@@ -545,6 +573,7 @@
             panel3.ResumeLayout(false);
             panel4.ResumeLayout(false);
             pl_req.ResumeLayout(false);
+            panel5.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -587,5 +616,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Panel pl_req;
         private System.Windows.Forms.Label lb_req;
+        private System.Windows.Forms.Panel panel5;
+        private System.Windows.Forms.Label label5;
     }
 }
