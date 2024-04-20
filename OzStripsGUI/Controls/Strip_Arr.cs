@@ -19,6 +19,7 @@ namespace maxrumsey.ozstrips.controls
             base.lb_type = lb_type;
             base.lb_frul = lb_frul;
             base.lb_route = lb_route;
+            base.lb_sid = lb_sid;
             base.lb_ades = lb_ades;
             base.lb_alt = lb_alt;
             base.lb_hdg = lb_hdg;
@@ -29,7 +30,6 @@ namespace maxrumsey.ozstrips.controls
             base.lb_remark = lb_remark;
             this.cockColourControls = new Panel[] {
                 this.pl_eobt,
-                this.pl_multi
                 };
 
             base.crossColourControls = new Panel[]
@@ -107,12 +107,16 @@ namespace maxrumsey.ozstrips.controls
         private void lb_ssr_Click(object sender, EventArgs e)
         {
             AssignSSR();
-
         }
 
         private void lb_remark_Click(object sender, EventArgs e)
         {
             OpenCLXBayModal();
+
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
 
         }
     }

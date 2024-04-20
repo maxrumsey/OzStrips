@@ -30,8 +30,6 @@ namespace maxrumsey.ozstrips.controls
             base.lb_remark = lb_remark;
             this.cockColourControls = new Panel[] {
                 this.pl_eobt,
-                this.pl_multi,
-                this.pl_multi2
                 };
 
             base.crossColourControls = new Panel[]
@@ -39,7 +37,6 @@ namespace maxrumsey.ozstrips.controls
                 pl_clx,
                 pl_std,
                 pl_rwy,
-                pl_multi3,
                 pl_remark
             };
 
@@ -115,6 +112,11 @@ namespace maxrumsey.ozstrips.controls
         private void lb_remark_Click(object sender, EventArgs e)
         {
             OpenCLXBayModal();
+
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
 
         }
     }
