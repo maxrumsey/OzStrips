@@ -28,133 +28,133 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tb_clx = new System.Windows.Forms.TextBox();
-            this.button12 = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.tb_bay = new System.Windows.Forms.TextBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.button2 = new System.Windows.Forms.Button();
-            this.tb_remark = new System.Windows.Forms.TextBox();
-            this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.SuspendLayout();
+            tb_clx = new System.Windows.Forms.TextBox();
+            button12 = new System.Windows.Forms.Button();
+            groupBox1 = new System.Windows.Forms.GroupBox();
+            groupBox2 = new System.Windows.Forms.GroupBox();
+            button1 = new System.Windows.Forms.Button();
+            tb_bay = new System.Windows.Forms.TextBox();
+            groupBox3 = new System.Windows.Forms.GroupBox();
+            button2 = new System.Windows.Forms.Button();
+            tb_remark = new System.Windows.Forms.TextBox();
+            groupBox1.SuspendLayout();
+            groupBox2.SuspendLayout();
+            groupBox3.SuspendLayout();
+            SuspendLayout();
             // 
             // tb_clx
             // 
-            this.tb_clx.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tb_clx.Location = new System.Drawing.Point(7, 19);
-            this.tb_clx.MaxLength = 3;
-            this.tb_clx.Name = "tb_clx";
-            this.tb_clx.Size = new System.Drawing.Size(75, 26);
-            this.tb_clx.TabIndex = 2;
-            this.tb_clx.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tb_clx_KeyDown);
+            tb_clx.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            tb_clx.Location = new System.Drawing.Point(7, 19);
+            tb_clx.MaxLength = 3;
+            tb_clx.Name = "tb_clx";
+            tb_clx.Size = new System.Drawing.Size(75, 26);
+            tb_clx.TabIndex = 2;
+            tb_clx.KeyDown += tb_clx_KeyDown;
             // 
             // button12
             // 
-            this.button12.Location = new System.Drawing.Point(6, 134);
-            this.button12.Name = "button12";
-            this.button12.Size = new System.Drawing.Size(75, 23);
-            this.button12.TabIndex = 16;
-            this.button12.TabStop = false;
-            this.button12.Text = "Clear";
-            this.button12.UseVisualStyleBackColor = true;
-            this.button12.Click += new System.EventHandler(this.button12_Click);
+            button12.Location = new System.Drawing.Point(6, 134);
+            button12.Name = "button12";
+            button12.Size = new System.Drawing.Size(75, 23);
+            button12.TabIndex = 16;
+            button12.TabStop = false;
+            button12.Text = "Clear";
+            button12.UseVisualStyleBackColor = true;
+            button12.Click += button12_Click;
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.button12);
-            this.groupBox1.Controls.Add(this.tb_clx);
-            this.groupBox1.Location = new System.Drawing.Point(4, 4);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(88, 162);
-            this.groupBox1.TabIndex = 4;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "CLX";
+            groupBox1.Controls.Add(button12);
+            groupBox1.Controls.Add(tb_clx);
+            groupBox1.Location = new System.Drawing.Point(4, 4);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new System.Drawing.Size(88, 162);
+            groupBox1.TabIndex = 4;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "HOLD POINT";
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.button1);
-            this.groupBox2.Controls.Add(this.tb_bay);
-            this.groupBox2.Location = new System.Drawing.Point(98, 4);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(88, 162);
-            this.groupBox2.TabIndex = 17;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Bay";
+            groupBox2.Controls.Add(button1);
+            groupBox2.Controls.Add(tb_bay);
+            groupBox2.Location = new System.Drawing.Point(98, 4);
+            groupBox2.Name = "groupBox2";
+            groupBox2.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            groupBox2.Size = new System.Drawing.Size(88, 162);
+            groupBox2.TabIndex = 17;
+            groupBox2.TabStop = false;
+            groupBox2.Text = "BAY NO.";
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(6, 134);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 16;
-            this.button1.TabStop = false;
-            this.button1.Text = "Clear";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            button1.Location = new System.Drawing.Point(6, 134);
+            button1.Name = "button1";
+            button1.Size = new System.Drawing.Size(75, 23);
+            button1.TabIndex = 16;
+            button1.TabStop = false;
+            button1.Text = "Clear";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // tb_bay
             // 
-            this.tb_bay.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tb_bay.Location = new System.Drawing.Point(7, 19);
-            this.tb_bay.MaxLength = 3;
-            this.tb_bay.Name = "tb_bay";
-            this.tb_bay.Size = new System.Drawing.Size(75, 26);
-            this.tb_bay.TabIndex = 2;
-            this.tb_bay.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tb_clx_KeyDown);
+            tb_bay.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            tb_bay.Location = new System.Drawing.Point(7, 19);
+            tb_bay.MaxLength = 3;
+            tb_bay.Name = "tb_bay";
+            tb_bay.Size = new System.Drawing.Size(75, 26);
+            tb_bay.TabIndex = 2;
+            tb_bay.KeyDown += tb_clx_KeyDown;
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.button2);
-            this.groupBox3.Controls.Add(this.tb_remark);
-            this.groupBox3.Location = new System.Drawing.Point(4, 172);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(182, 83);
-            this.groupBox3.TabIndex = 17;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Remark";
+            groupBox3.Controls.Add(button2);
+            groupBox3.Controls.Add(tb_remark);
+            groupBox3.Location = new System.Drawing.Point(4, 172);
+            groupBox3.Name = "groupBox3";
+            groupBox3.Size = new System.Drawing.Size(182, 83);
+            groupBox3.TabIndex = 17;
+            groupBox3.TabStop = false;
+            groupBox3.Text = "REMARK";
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(6, 51);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(169, 23);
-            this.button2.TabIndex = 16;
-            this.button2.TabStop = false;
-            this.button2.Text = "Clear";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            button2.Location = new System.Drawing.Point(6, 51);
+            button2.Name = "button2";
+            button2.Size = new System.Drawing.Size(169, 23);
+            button2.TabIndex = 16;
+            button2.TabStop = false;
+            button2.Text = "Clear";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
             // 
             // tb_remark
             // 
-            this.tb_remark.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tb_remark.Location = new System.Drawing.Point(7, 19);
-            this.tb_remark.MaxLength = 20;
-            this.tb_remark.Name = "tb_remark";
-            this.tb_remark.Size = new System.Drawing.Size(168, 26);
-            this.tb_remark.TabIndex = 2;
+            tb_remark.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            tb_remark.Location = new System.Drawing.Point(7, 19);
+            tb_remark.MaxLength = 20;
+            tb_remark.Name = "tb_remark";
+            tb_remark.Size = new System.Drawing.Size(168, 26);
+            tb_remark.TabIndex = 2;
             // 
             // BayCLXControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox1);
-            this.Name = "BayCLXControl";
-            this.Size = new System.Drawing.Size(192, 259);
-            this.Load += new System.EventHandler(this.AltHdgControl_Load);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            Controls.Add(groupBox3);
+            Controls.Add(groupBox2);
+            Controls.Add(groupBox1);
+            Name = "BayCLXControl";
+            Size = new System.Drawing.Size(192, 259);
+            Load += AltHdgControl_Load;
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
+            groupBox2.ResumeLayout(false);
+            groupBox2.PerformLayout();
+            groupBox3.ResumeLayout(false);
+            groupBox3.PerformLayout();
+            ResumeLayout(false);
         }
 
         #endregion
