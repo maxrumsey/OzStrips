@@ -37,9 +37,13 @@
             groupBox3 = new System.Windows.Forms.GroupBox();
             button2 = new System.Windows.Forms.Button();
             tb_remark = new System.Windows.Forms.TextBox();
+            groupBox4 = new System.Windows.Forms.GroupBox();
+            button3 = new System.Windows.Forms.Button();
+            textBox1 = new System.Windows.Forms.TextBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
+            groupBox4.SuspendLayout();
             SuspendLayout();
             // 
             // tb_clx
@@ -67,9 +71,9 @@
             // 
             groupBox1.Controls.Add(button12);
             groupBox1.Controls.Add(tb_clx);
-            groupBox1.Location = new System.Drawing.Point(4, 4);
+            groupBox1.Location = new System.Drawing.Point(7, 6);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new System.Drawing.Size(88, 162);
+            groupBox1.Size = new System.Drawing.Size(178, 162);
             groupBox1.TabIndex = 4;
             groupBox1.TabStop = false;
             groupBox1.Text = "HOLD POINT";
@@ -78,10 +82,10 @@
             // 
             groupBox2.Controls.Add(button1);
             groupBox2.Controls.Add(tb_bay);
-            groupBox2.Location = new System.Drawing.Point(98, 4);
+            groupBox2.Location = new System.Drawing.Point(200, 7);
             groupBox2.Name = "groupBox2";
             groupBox2.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            groupBox2.Size = new System.Drawing.Size(88, 162);
+            groupBox2.Size = new System.Drawing.Size(182, 162);
             groupBox2.TabIndex = 17;
             groupBox2.TabStop = false;
             groupBox2.Text = "BAY NO.";
@@ -111,12 +115,12 @@
             // 
             groupBox3.Controls.Add(button2);
             groupBox3.Controls.Add(tb_remark);
-            groupBox3.Location = new System.Drawing.Point(4, 172);
+            groupBox3.Location = new System.Drawing.Point(200, 175);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new System.Drawing.Size(182, 83);
             groupBox3.TabIndex = 17;
             groupBox3.TabStop = false;
-            groupBox3.Text = "REMARK";
+            groupBox3.Text = "LOCAL REMARK";
             // 
             // button2
             // 
@@ -138,15 +142,46 @@
             tb_remark.Size = new System.Drawing.Size(168, 26);
             tb_remark.TabIndex = 2;
             // 
+            // groupBox4
+            // 
+            groupBox4.Controls.Add(button3);
+            groupBox4.Controls.Add(textBox1);
+            groupBox4.Location = new System.Drawing.Point(4, 175);
+            groupBox4.Name = "groupBox4";
+            groupBox4.Size = new System.Drawing.Size(182, 83);
+            groupBox4.TabIndex = 18;
+            groupBox4.TabStop = false;
+            groupBox4.Text = "GLOBAL REMARK";
+            // 
+            // button3
+            // 
+            button3.Location = new System.Drawing.Point(6, 51);
+            button3.Name = "button3";
+            button3.Size = new System.Drawing.Size(169, 23);
+            button3.TabIndex = 16;
+            button3.TabStop = false;
+            button3.Text = "Clear";
+            button3.UseVisualStyleBackColor = true;
+            // 
+            // textBox1
+            // 
+            textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            textBox1.Location = new System.Drawing.Point(7, 19);
+            textBox1.MaxLength = 20;
+            textBox1.Name = "textBox1";
+            textBox1.Size = new System.Drawing.Size(168, 26);
+            textBox1.TabIndex = 2;
+            // 
             // BayCLXControl
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            Controls.Add(groupBox4);
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             Name = "BayCLXControl";
-            Size = new System.Drawing.Size(192, 259);
+            Size = new System.Drawing.Size(389, 259);
             Load += AltHdgControl_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
@@ -154,6 +189,8 @@
             groupBox2.PerformLayout();
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
+            groupBox4.ResumeLayout(false);
+            groupBox4.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -167,5 +204,8 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.TextBox tb_remark;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
