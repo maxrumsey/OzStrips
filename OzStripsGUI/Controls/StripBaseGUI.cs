@@ -112,7 +112,7 @@ namespace maxrumsey.ozstrips.controls
                 lb_tot.Text = diff.ToString(@"mm\:ss");
                 lb_tot.ForeColor = Color.Green;
             }
-            if (lb_req != null) lb_req.Text = "R" + stripController.fdr.RFL.ToString();
+            if (lb_req != null) lb_req.Text = stripController.fdr.RFL.ToString();
             SetCross(false);
             Cock(0, false, false);
             lb_rwy.Text = stripController.RWY;
