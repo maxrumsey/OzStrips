@@ -25,23 +25,19 @@ namespace maxrumsey.ozstrips.controls
             base.lb_hdg = lb_hdg;
             base.lb_rwy = lb_rwy;
             base.lb_wtc = lb_wtc;
-            base.lb_tot = lb_tot;
+            base.lb_std = lb_std;
             base.lb_clx = lb_clx;
             base.lb_remark = lb_remark;
-
             this.cockColourControls = new Panel[] {
                 this.pl_eobt,
-                this.pl_multi,
-                this.pl_multi2
                 };
 
             base.crossColourControls = new Panel[]
             {
                 pl_clx,
-                pl_multi3,
+                pl_std,
                 pl_rwy,
-                pl_remark,
-                pl_tot
+                pl_remark
             };
 
             this.stripController = controller;
@@ -67,7 +63,7 @@ namespace maxrumsey.ozstrips.controls
 
         private void lb_std_Click(object sender, EventArgs e)
         {
-            stripController.TakeOff();
+            OpenCLXBayModal();
         }
 
 
@@ -113,14 +109,15 @@ namespace maxrumsey.ozstrips.controls
             AssignSSR();
         }
 
-        private void lb_clx_Click(object sender, EventArgs e)
-        {
-            OpenCLXBayModal();
-        }
-
         private void lb_remark_Click(object sender, EventArgs e)
         {
             OpenCLXBayModal();
+
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

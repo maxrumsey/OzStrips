@@ -84,8 +84,8 @@ namespace maxrumsey.ozstrips.gui
         public void CreateStripObj()
         {
             stripHolderControl = new Panel();
-            stripHolderControl.BackColor = Color.Blue;
-            if (ArrDepType == StripArrDepType.ARRIVAL) stripHolderControl.BackColor = Color.Yellow;
+            stripHolderControl.BackColor = Color.FromArgb(200, 243, 249);
+            if (ArrDepType == StripArrDepType.ARRIVAL) stripHolderControl.BackColor = Color.FromArgb(171, 149, 132);
 
             stripHolderControl.Padding = new Padding(3);
             stripHolderControl.Margin = new Padding(0);
