@@ -94,9 +94,6 @@ namespace maxrumsey.ozstrips.gui
             stripHolderControl.Size = new Size(100, 100);
 
             if (ArrDepType == StripArrDepType.ARRIVAL) stripControl = new Strip_Arr(this);
-            else if (ArrDepType == StripArrDepType.DEPARTURE && (currentBay == StripBay.BAY_PREA || currentBay == StripBay.BAY_CLEARED)) stripControl = new Strip_SMC_Dep(this);
-            else if (ArrDepType == StripArrDepType.DEPARTURE && (currentBay < StripBay.BAY_RUNWAY)) stripControl = new Strip_SMC_Dep(this);
-            else if (ArrDepType == StripArrDepType.DEPARTURE && (currentBay >= StripBay.BAY_RUNWAY)) stripControl = new Strip_ADC_Dep(this);
             else stripControl = new Strip_SMC_Dep(this);
 
             stripControl.Initialise();
