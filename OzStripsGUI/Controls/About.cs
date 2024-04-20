@@ -12,5 +12,9 @@ namespace maxrumsey.ozstrips.controls
 
         }
 
+        private void richTextBox1_TextChanged(object sender, System.EventArgs e)
+        {
+
+        }
     }
 }

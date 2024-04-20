@@ -319,5 +319,15 @@ namespace maxrumsey.ozstrips.gui
         {
             bayManager.SendPDC();
         }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void ts_ad_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

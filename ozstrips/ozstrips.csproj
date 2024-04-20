@@ -11,12 +11,12 @@
     <OutputPath>..\..\vatSys Files\Profiles\Australia\Plugins\</OutputPath>
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
     <GenerateDocumentationFile>False</GenerateDocumentationFile>
-    <BaseOutputPath>C:\Program Files (x86)\vatSys\bin\Plugins</BaseOutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <OutputType>Library</OutputType>
     <StartupObject></StartupObject>
     <SignAssembly>False</SignAssembly>
     <Configurations>Debug;Release;Test</Configurations>
+    <BaseOutputPath>C:\Program Files (x86)\vatSys\bin\Plugins\OzStrips</BaseOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
