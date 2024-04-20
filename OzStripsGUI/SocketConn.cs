@@ -117,7 +117,7 @@ namespace maxrumsey.ozstrips.gui
         {
             StripControllerDTO scDTO = CreateStripDTO(sc);
             AddMessage("c:sc_change: " + JsonSerializer.Serialize(scDTO));
-            if (scDTO.ACID == "") return; // prevent bug
+            if (scDTO.acid == "") return; // prevent bug
             if (CanSendDTO) io.EmitAsync("client:sc_change", scDTO);
         }
         public void SyncBay(Bay bay)
@@ -146,7 +146,7 @@ namespace maxrumsey.ozstrips.gui
         }
         public StripControllerDTO CreateStripDTO(StripController sc)
         {
-            StripControllerDTO scDTO = new StripControllerDTO { ACID = sc.fdr.Callsign, bay = sc.currentBay, CLX = sc.CLX, GATE = sc.GATE, StripCockLevel = sc.cockLevel, Crossing = sc.Crossing, remark = sc.Remark };
+            StripControllerDTO scDTO = new StripControllerDTO { acid = sc.fdr.Callsign, bay = sc.currentBay, CLX = sc.CLX, GATE = sc.GATE, cockLevel = sc.cockLevel, crossing = sc.Crossing, remark = sc.Remark };
             if (sc.TakeOffTime != DateTime.MaxValue)
             {
                 scDTO.TOT = sc.TakeOffTime.ToString(CultureInfo.InvariantCulture);

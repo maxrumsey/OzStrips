@@ -5,13 +5,13 @@ namespace maxrumsey.ozstrips.gui.DTO
     public class StripControllerDTO
     {
         [JsonPropertyName("acid")]
-        public string ACID { get; set; } = "";
+        public string acid { get; set; } = "";
 
         [JsonPropertyName("bay")]
         public StripBay bay { get; set; } = 0;
 
         [JsonPropertyName("cockLevel")]
-        public int StripCockLevel { get; set; } = 0;
+        public int cockLevel { get; set; } = 0;
 
         [JsonPropertyName("CLX")]
         public string CLX { get; set; } = "";
@@ -23,7 +23,7 @@ namespace maxrumsey.ozstrips.gui.DTO
         public string TOT { get; set; } = "\0";
 
         [JsonPropertyName("crossing")]
-        public bool Crossing { get; set; } = false;
+        public bool crossing { get; set; } = false;
 
         [JsonPropertyName("subbay")]
         public string subbay { get; set; } = "";
