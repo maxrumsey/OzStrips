@@ -20,6 +20,6 @@
 		</None>
 	</ItemGroup>
 	<ItemGroup>
-		<Reference Include="$(VatSysDir)\bin\vatSys.exe " />
+		<Reference Include="$(VatSysDir)\bin\vatSys.exe" />
 	</ItemGroup>
 </Project>
