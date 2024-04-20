@@ -1,0 +1,5 @@
+<Project>
+    <PropertyGroup>
+        <VatSysDir>$(MSBuildProgramFiles32)\vatSys</VatSysDir>
+    </PropertyGroup>
+</Project>
