@@ -30,11 +30,11 @@ namespace maxrumsey.ozstrips.controls
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.flp_stripbay = new maxrumsey.ozstrips.controls.CustomFLP();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.bt_div = new System.Windows.Forms.Button();
             this.bt_queue = new System.Windows.Forms.Button();
             this.lb_bay_name = new System.Windows.Forms.Label();
-            this.bt_div = new System.Windows.Forms.Button();
-            this.flp_stripbay = new maxrumsey.ozstrips.controls.CustomFLP();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -50,6 +50,19 @@ namespace maxrumsey.ozstrips.controls
             this.panel1.Size = new System.Drawing.Size(481, 322);
             this.panel1.TabIndex = 0;
             // 
+            // flp_stripbay
+            // 
+            this.flp_stripbay.AutoScroll = true;
+            this.flp_stripbay.BackColor = System.Drawing.Color.Gray;
+            this.flp_stripbay.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flp_stripbay.FlowDirection = System.Windows.Forms.FlowDirection.BottomUp;
+            this.flp_stripbay.Location = new System.Drawing.Point(0, 42);
+            this.flp_stripbay.Name = "flp_stripbay";
+            this.flp_stripbay.Size = new System.Drawing.Size(481, 280);
+            this.flp_stripbay.TabIndex = 1;
+            this.flp_stripbay.WrapContents = false;
+            this.flp_stripbay.Click += new System.EventHandler(this.lb_bay_name_Click);
+            // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.Black;
@@ -61,6 +74,18 @@ namespace maxrumsey.ozstrips.controls
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(481, 42);
             this.panel2.TabIndex = 0;
+            // 
+            // bt_div
+            // 
+            this.bt_div.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.bt_div.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bt_div.Location = new System.Drawing.Point(359, 5);
+            this.bt_div.Name = "bt_div";
+            this.bt_div.Size = new System.Drawing.Size(116, 32);
+            this.bt_div.TabIndex = 3;
+            this.bt_div.TabStop = false;
+            this.bt_div.Text = "Stop Queue";
+            this.bt_div.UseVisualStyleBackColor = true;
             // 
             // bt_queue
             // 
@@ -88,31 +113,6 @@ namespace maxrumsey.ozstrips.controls
             this.lb_bay_name.Text = "Bay Name";
             this.lb_bay_name.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lb_bay_name.Click += new System.EventHandler(this.lb_bay_name_Click);
-            // 
-            // bt_div
-            // 
-            this.bt_div.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bt_div.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bt_div.Location = new System.Drawing.Point(359, 5);
-            this.bt_div.Name = "bt_div";
-            this.bt_div.Size = new System.Drawing.Size(116, 32);
-            this.bt_div.TabIndex = 3;
-            this.bt_div.TabStop = false;
-            this.bt_div.Text = "Stop Queue";
-            this.bt_div.UseVisualStyleBackColor = true;
-            // 
-            // flp_stripbay
-            // 
-            this.flp_stripbay.AutoScroll = true;
-            this.flp_stripbay.BackColor = System.Drawing.Color.Gray;
-            this.flp_stripbay.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flp_stripbay.FlowDirection = System.Windows.Forms.FlowDirection.BottomUp;
-            this.flp_stripbay.Location = new System.Drawing.Point(0, 42);
-            this.flp_stripbay.Name = "flp_stripbay";
-            this.flp_stripbay.Size = new System.Drawing.Size(481, 280);
-            this.flp_stripbay.TabIndex = 1;
-            this.flp_stripbay.WrapContents = false;
-            this.flp_stripbay.Click += new System.EventHandler(this.lb_bay_name_Click);
             // 
             // BayControl
             // 
