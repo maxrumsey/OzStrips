@@ -551,7 +551,7 @@
             Controls.Add(pl_sid);
             Controls.Add(pl_acid);
             Name = "Strip";
-            Size = new System.Drawing.Size(577, 89);
+            Size = new System.Drawing.Size(580, 89);
             Load += Strip_Load_1;
             pl_acid.ResumeLayout(false);
             pl_wtc.ResumeLayout(false);
