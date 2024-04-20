@@ -71,7 +71,7 @@ namespace maxrumsey.ozstrips.gui
             {
                 this.metar = metar;
                 tt_metar.RemoveAll();
-                tt_metar.SetToolTip(pl_ad, metar);
+                tt_metar.SetToolTip(lb_ad, metar);
             }
         }
 

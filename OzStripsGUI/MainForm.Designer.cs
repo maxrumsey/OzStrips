@@ -150,15 +150,15 @@
             // 
             // lb_ad
             // 
-            lb_ad.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-            lb_ad.AutoSize = true;
+            lb_ad.Dock = System.Windows.Forms.DockStyle.Fill;
             lb_ad.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_ad.ForeColor = System.Drawing.Color.FromArgb(0, 0, 96);
-            lb_ad.Location = new System.Drawing.Point(28, 11);
+            lb_ad.Location = new System.Drawing.Point(0, 0);
             lb_ad.Name = "lb_ad";
-            lb_ad.Size = new System.Drawing.Size(40, 16);
+            lb_ad.Size = new System.Drawing.Size(96, 37);
             lb_ad.TabIndex = 0;
             lb_ad.Text = "????";
+            lb_ad.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // pl_stat
             // 
@@ -350,7 +350,6 @@
             pl_controlbar.ResumeLayout(false);
             pl_controlbar.PerformLayout();
             pl_ad.ResumeLayout(false);
-            pl_ad.PerformLayout();
             pl_stat.ResumeLayout(false);
             pl_stat.PerformLayout();
             menuStrip1.ResumeLayout(false);
