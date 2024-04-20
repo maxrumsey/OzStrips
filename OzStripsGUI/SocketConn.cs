@@ -36,7 +36,7 @@ namespace maxrumsey.ozstrips.gui
                 if (metaDTO.apiversion != Config.apiversion)
                 {
                     Util.ShowErrorBox("OzStrips incompatible with current API version!");
-                    mf.Invoke((MethodInvoker)delegate ()
+                    if (mf.Visible) mf.Invoke((MethodInvoker)delegate ()
                     {
                         mf.Close();
                         mf.Dispose();
@@ -48,7 +48,7 @@ namespace maxrumsey.ozstrips.gui
             {
                 AddMessage("c: conn established");
                 await io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName, Network.Me.RealName);
-                mf.Invoke((MethodInvoker)delegate () { mf.SetConnStatus(true); });
+                if (mf.Visible) mf.Invoke((MethodInvoker)delegate () { mf.SetConnStatus(true); });
                 
             };
             io.OnDisconnected += (sender, e) =>
@@ -76,7 +76,7 @@ namespace maxrumsey.ozstrips.gui
                 StripControllerDTO scDTO = sc.GetValue<StripControllerDTO>();
                 AddMessage("s:sc_change: " + JsonSerializer.Serialize(scDTO));
 
-                mf.Invoke((MethodInvoker)delegate () { StripController.UpdateFDR(scDTO, bayManager); });
+                if (mf.Visible) mf.Invoke((MethodInvoker)delegate () { StripController.UpdateFDR(scDTO, bayManager); });
 
             });
             io.On("server:sc_cache", sc =>
@@ -84,7 +84,7 @@ namespace maxrumsey.ozstrips.gui
                 CacheDTO scDTO = sc.GetValue<CacheDTO>();
                 AddMessage("s:sc_cache: " + JsonSerializer.Serialize(scDTO));
 
-                mf.Invoke((MethodInvoker)delegate () { StripController.LoadCache(scDTO); });
+                if (mf.Visible) mf.Invoke((MethodInvoker)delegate () { StripController.LoadCache(scDTO); });
 
             });
             io.On("server:order_change", bdto =>
@@ -92,13 +92,13 @@ namespace maxrumsey.ozstrips.gui
                 BayDTO bayDTO = bdto.GetValue<BayDTO>();
                 AddMessage("s:order_change: " + JsonSerializer.Serialize(bayDTO));
 
-                mf.Invoke((MethodInvoker)delegate () { bayManager.UpdateOrder(bayDTO); });
+                if (mf.Visible) mf.Invoke((MethodInvoker)delegate () { bayManager.UpdateOrder(bayDTO); });
             });
             io.On("server:metar", metarRaw =>
             {
                 String metar = metarRaw.GetValue<string>();
 
-                mf.Invoke((System.Windows.Forms.MethodInvoker)delegate () { mainForm.SetMetar(metar); });
+                if (mf.Visible) mf.Invoke((System.Windows.Forms.MethodInvoker)delegate () { mainForm.SetMetar(metar); });
             });
             io.On("server:update_cache", (args) =>
             {
