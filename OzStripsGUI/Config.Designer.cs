@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace maxrumsey.ozstrips.gui {
+namespace OzStripsGUI {
     using System;
     
     
@@ -79,7 +79,7 @@ namespace maxrumsey.ozstrips.gui {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 0.2.0.
+        ///   Looks up a localized string similar to 0.3.0.
         /// </summary>
         internal static string version {
             get {
