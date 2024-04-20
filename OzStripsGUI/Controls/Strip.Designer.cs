@@ -255,7 +255,7 @@
             // lb_sid
             // 
             lb_sid.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            lb_sid.BackColor = System.Drawing.Color.FromArgb(2, 177, 19);
+            lb_sid.BackColor = System.Drawing.Color.Lime;
             lb_sid.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_sid.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             lb_sid.Location = new System.Drawing.Point(0, -2);
@@ -505,10 +505,10 @@
             // 
             panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             panel5.Controls.Add(label5);
-            panel5.Location = new System.Drawing.Point(0, 59);
+            panel5.Location = new System.Drawing.Point(-1, 59);
             panel5.Margin = new System.Windows.Forms.Padding(0);
             panel5.Name = "panel5";
-            panel5.Size = new System.Drawing.Size(281, 31);
+            panel5.Size = new System.Drawing.Size(283, 31);
             panel5.TabIndex = 4;
             // 
             // label5
@@ -519,7 +519,7 @@
             label5.Location = new System.Drawing.Point(0, 0);
             label5.Margin = new System.Windows.Forms.Padding(3);
             label5.Name = "label5";
-            label5.Size = new System.Drawing.Size(279, 29);
+            label5.Size = new System.Drawing.Size(281, 29);
             label5.TabIndex = 0;
             label5.Text = "GLOBAL REMARK";
             label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
