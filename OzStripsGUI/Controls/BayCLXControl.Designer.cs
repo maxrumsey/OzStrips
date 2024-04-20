@@ -39,7 +39,7 @@
             tb_remark = new System.Windows.Forms.TextBox();
             groupBox4 = new System.Windows.Forms.GroupBox();
             button3 = new System.Windows.Forms.Button();
-            textBox1 = new System.Windows.Forms.TextBox();
+            tb_glop = new System.Windows.Forms.TextBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -145,7 +145,7 @@
             // groupBox4
             // 
             groupBox4.Controls.Add(button3);
-            groupBox4.Controls.Add(textBox1);
+            groupBox4.Controls.Add(tb_glop);
             groupBox4.Location = new System.Drawing.Point(4, 175);
             groupBox4.Name = "groupBox4";
             groupBox4.Size = new System.Drawing.Size(182, 83);
@@ -162,15 +162,16 @@
             button3.TabStop = false;
             button3.Text = "Clear";
             button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
             // 
-            // textBox1
+            // tb_glop
             // 
-            textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            textBox1.Location = new System.Drawing.Point(7, 19);
-            textBox1.MaxLength = 20;
-            textBox1.Name = "textBox1";
-            textBox1.Size = new System.Drawing.Size(168, 26);
-            textBox1.TabIndex = 2;
+            tb_glop.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            tb_glop.Location = new System.Drawing.Point(7, 19);
+            tb_glop.MaxLength = 20;
+            tb_glop.Name = "tb_glop";
+            tb_glop.Size = new System.Drawing.Size(168, 26);
+            tb_glop.TabIndex = 2;
             // 
             // BayCLXControl
             // 
@@ -206,6 +207,6 @@
         private System.Windows.Forms.TextBox tb_remark;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox tb_glop;
     }
 }

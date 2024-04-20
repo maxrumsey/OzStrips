@@ -172,6 +172,7 @@ namespace maxrumsey.ozstrips.controls
             stripController.CLX = control.CLX;
             stripController.GATE = control.GATE;
             stripController.Remark = control.Remark;
+            FDP2.SetGlobalOps(stripController.fdr, control.glop);
             stripController.SyncStrip();
         }
         public void TogglePick()
