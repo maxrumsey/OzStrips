@@ -3,6 +3,7 @@ using maxrumsey.ozstrips.gui.DTO;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using vatsys;
@@ -266,12 +267,24 @@ namespace maxrumsey.ozstrips.gui
 
         public double GetDistToAerodrome(String aerodrome)
         {
-            Coordinate coord = Airspace2.GetAirport(aerodrome)?.LatLong;
             try
             {
-                if (coord != null)
+                Coordinate adCoord = Airspace2.GetAirport(aerodrome)?.LatLong;
+                Coordinate planeCoord = fdr.PredictedPosition.Location;
+                List<RDP.RadarTrack> RadarTracks = (from radarTrack in RDP.RadarTracks
+                                                   where radarTrack.ActualAircraft.Callsign == fdr.Callsign
+                                                   select radarTrack).ToList();
+
+                if (RadarTracks.Count > 0)
                 {
-                    double distance = Conversions.CalculateDistance(coord, fdr.PredictedPosition.Location);
+                    foreach (RDP.RadarTrack rTrack in RadarTracks)
+                    {
+                        planeCoord = rTrack.ActualAircraft.Position;
+                    }
+                }
+                if (adCoord != null)
+                {
+                    double distance = Conversions.CalculateDistance(adCoord, planeCoord);
                     return distance;
                 }
             }

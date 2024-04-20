@@ -52,8 +52,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="vatSys">
-      <HintPath>..\..\..\..\Program Files (x86)\vatSys\bin\vatSys.exe</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\..\..\..\Program Files (x86)\vatSys\bin\vatSys.exe</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
