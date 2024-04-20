@@ -74,7 +74,7 @@ namespace maxrumsey.ozstrips.gui
         public void TakeOff()
         {
             TakeOffTime = DateTime.UtcNow;
-            if (fdr.State == FDP2.FDR.FDRStates.STATE_PREACTIVE && (Network.Me.IsRealATC || MainForm.isDebug)) FDP2.EstFDR(fdr, true);
+            if (fdr.State == FDP2.FDR.FDRStates.STATE_PREACTIVE && (Network.Me.IsRealATC || MainForm.isDebug)) FDP2.EstFDR(fdr);
             SyncStrip();
         }
 
@@ -93,11 +93,11 @@ namespace maxrumsey.ozstrips.gui
             //stripHolderControl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             stripHolderControl.Size = new Size(100, 100);
 
-            if (ArrDepType == StripArrDepType.ARRIVAL) stripControl = new Strip_Arr(this);
-            else if (ArrDepType == StripArrDepType.DEPARTURE && (currentBay == StripBay.BAY_PREA || currentBay == StripBay.BAY_CLEARED)) stripControl = new Strip_SMC_Dep(this);
-            else if (ArrDepType == StripArrDepType.DEPARTURE && (currentBay < StripBay.BAY_RUNWAY)) stripControl = new Strip_SMC_Dep(this);
-            else if (ArrDepType == StripArrDepType.DEPARTURE && (currentBay >= StripBay.BAY_RUNWAY)) stripControl = new Strip_ADC_Dep(this);
-            else stripControl = new Strip_SMC_Dep(this);
+            if (ArrDepType == StripArrDepType.ARRIVAL) stripControl = new Strip(this);
+            else if (ArrDepType == StripArrDepType.DEPARTURE && (currentBay == StripBay.BAY_PREA || currentBay == StripBay.BAY_CLEARED)) stripControl = new Strip(this);
+            else if (ArrDepType == StripArrDepType.DEPARTURE && (currentBay < StripBay.BAY_RUNWAY)) stripControl = new Strip(this);
+            else if (ArrDepType == StripArrDepType.DEPARTURE && (currentBay >= StripBay.BAY_RUNWAY)) stripControl = new Strip(this);
+            else stripControl = new Strip(this);
 
             stripControl.Initialise();
             stripHolderControl.Size = new Size(stripControl.Size.Width, stripControl.Size.Height + 6);

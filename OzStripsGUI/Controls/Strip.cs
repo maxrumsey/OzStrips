@@ -4,9 +4,9 @@ using System.Windows.Forms;
 
 namespace maxrumsey.ozstrips.controls
 {
-    public partial class Strip_ADC_Dep : StripBaseGUI
+    public partial class Strip : StripBaseGUI
     {
-        public Strip_ADC_Dep(StripController controller)
+        public Strip(StripController controller)
         {
             this.fdr = controller.fdr;
             InitializeComponent();
@@ -36,7 +36,7 @@ namespace maxrumsey.ozstrips.controls
                 pl_rwy,
                 pl_remark
             };
-
+            base.cockColourControls = new Panel[] { };
             this.stripController = controller;
             UpdateStrip();
 
