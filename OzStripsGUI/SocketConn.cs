@@ -158,6 +158,7 @@ namespace maxrumsey.ozstrips.gui
         public async void SendCache()
         {
             CacheDTO cacheDTO = CreateCacheDTO();
+            Messages.Add("c:sc_cache: " + JsonSerializer.Serialize(cacheDTO));
             if (CanSendDTO) await io.EmitAsync("client:sc_cache", cacheDTO);
         }
 
