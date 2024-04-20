@@ -523,7 +523,6 @@
             label5.TabIndex = 0;
             label5.Text = "GLOBAL REMARK";
             label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            label5.Click += this.label5_Click;
             // 
             // Strip
             // 

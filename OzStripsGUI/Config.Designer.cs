@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace OzStripsGUI {
+namespace maxrumsey.ozstrips.gui {
     using System;
     
     
