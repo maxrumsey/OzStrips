@@ -66,8 +66,8 @@
             label4 = new System.Windows.Forms.Label();
             pl_req = new System.Windows.Forms.Panel();
             lb_req = new System.Windows.Forms.Label();
-            panel5 = new System.Windows.Forms.Panel();
-            label5 = new System.Windows.Forms.Label();
+            pl_glop = new System.Windows.Forms.Panel();
+            lb_glop = new System.Windows.Forms.Label();
             pl_acid.SuspendLayout();
             pl_wtc.SuspendLayout();
             pl_frul.SuspendLayout();
@@ -87,7 +87,7 @@
             panel3.SuspendLayout();
             panel4.SuspendLayout();
             pl_req.SuspendLayout();
-            panel5.SuspendLayout();
+            pl_glop.SuspendLayout();
             SuspendLayout();
             // 
             // pl_acid
@@ -501,28 +501,28 @@
             lb_req.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             lb_req.Click += label6_Click;
             // 
-            // panel5
+            // pl_glop
             // 
-            panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            panel5.Controls.Add(label5);
-            panel5.Location = new System.Drawing.Point(0, 59);
-            panel5.Margin = new System.Windows.Forms.Padding(0);
-            panel5.Name = "panel5";
-            panel5.Size = new System.Drawing.Size(281, 31);
-            panel5.TabIndex = 4;
+            pl_glop.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            pl_glop.Controls.Add(lb_glop);
+            pl_glop.Location = new System.Drawing.Point(0, 59);
+            pl_glop.Margin = new System.Windows.Forms.Padding(0);
+            pl_glop.Name = "pl_glop";
+            pl_glop.Size = new System.Drawing.Size(281, 31);
+            pl_glop.TabIndex = 4;
             // 
-            // label5
+            // lb_glop
             // 
-            label5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            label5.Dock = System.Windows.Forms.DockStyle.Fill;
-            label5.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
-            label5.Location = new System.Drawing.Point(0, 0);
-            label5.Margin = new System.Windows.Forms.Padding(3);
-            label5.Name = "label5";
-            label5.Size = new System.Drawing.Size(279, 29);
-            label5.TabIndex = 0;
-            label5.Text = "GLOBAL REMARK";
-            label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            lb_glop.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            lb_glop.Dock = System.Windows.Forms.DockStyle.Fill;
+            lb_glop.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_glop.Location = new System.Drawing.Point(0, 0);
+            lb_glop.Margin = new System.Windows.Forms.Padding(3);
+            lb_glop.Name = "lb_glop";
+            lb_glop.Size = new System.Drawing.Size(279, 29);
+            lb_glop.TabIndex = 0;
+            lb_glop.Text = "GLOBAL REMARK";
+            lb_glop.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Strip
             // 
@@ -530,7 +530,7 @@
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.Color.Transparent;
             BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            Controls.Add(panel5);
+            Controls.Add(pl_glop);
             Controls.Add(pl_req);
             Controls.Add(panel4);
             Controls.Add(pl_hdg);
@@ -572,7 +572,7 @@
             panel3.ResumeLayout(false);
             panel4.ResumeLayout(false);
             pl_req.ResumeLayout(false);
-            panel5.ResumeLayout(false);
+            pl_glop.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -615,7 +615,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Panel pl_req;
         private System.Windows.Forms.Label lb_req;
-        private System.Windows.Forms.Panel panel5;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Panel pl_glop;
+        private System.Windows.Forms.Label lb_glop;
     }
 }

@@ -34,6 +34,7 @@ namespace maxrumsey.ozstrips.controls
         public Label lb_tot;
         public Label lb_remark;
         public Label lb_req;
+        public Label lb_glop;
 
         public StripBaseGUI()
         {
@@ -113,6 +114,7 @@ namespace maxrumsey.ozstrips.controls
                 lb_tot.ForeColor = Color.Green;
             }
             if (lb_req != null) lb_req.Text = (stripController.fdr.RFL/100).ToString();
+            if (lb_glop != null) lb_glop.Text = stripController.fdr.GlobalOpData;
             SetCross(false);
             Cock(0, false, false);
             lb_rwy.Text = stripController.RWY;
