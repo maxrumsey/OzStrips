@@ -1,6 +1,6 @@
 ﻿namespace maxrumsey.ozstrips.controls
 {
-    partial class Strip_Arr
+    partial class Strip
     {
         /// <summary> 
         /// Required designer variable.
@@ -66,7 +66,6 @@
             label4 = new System.Windows.Forms.Label();
             panel5 = new System.Windows.Forms.Panel();
             label6 = new System.Windows.Forms.Label();
-            label7 = new System.Windows.Forms.Label();
             pl_acid.SuspendLayout();
             pl_wtc.SuspendLayout();
             pl_frul.SuspendLayout();
@@ -209,10 +208,10 @@
             // 
             lb_route.Anchor = System.Windows.Forms.AnchorStyles.Top;
             lb_route.AutoEllipsis = true;
-            lb_route.Location = new System.Drawing.Point(0, -3);
+            lb_route.Location = new System.Drawing.Point(0, -2);
             lb_route.Margin = new System.Windows.Forms.Padding(0);
             lb_route.Name = "lb_route";
-            lb_route.Size = new System.Drawing.Size(80, 20);
+            lb_route.Size = new System.Drawing.Size(80, 21);
             lb_route.TabIndex = 0;
             lb_route.Text = "rte";
             lb_route.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -291,7 +290,7 @@
             // pl_hdg
             // 
             pl_hdg.Controls.Add(lb_hdg);
-            pl_hdg.Location = new System.Drawing.Point(448, 40);
+            pl_hdg.Location = new System.Drawing.Point(448, 39);
             pl_hdg.Name = "pl_hdg";
             pl_hdg.Size = new System.Drawing.Size(80, 20);
             pl_hdg.TabIndex = 1;
@@ -381,10 +380,10 @@
             // 
             pl_remark.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             pl_remark.Controls.Add(lb_remark);
-            pl_remark.Location = new System.Drawing.Point(-2, 60);
+            pl_remark.Location = new System.Drawing.Point(-2, 58);
             pl_remark.Margin = new System.Windows.Forms.Padding(0);
             pl_remark.Name = "pl_remark";
-            pl_remark.Size = new System.Drawing.Size(700, 20);
+            pl_remark.Size = new System.Drawing.Size(581, 24);
             pl_remark.TabIndex = 3;
             // 
             // lb_remark
@@ -395,7 +394,7 @@
             lb_remark.Location = new System.Drawing.Point(0, 0);
             lb_remark.Margin = new System.Windows.Forms.Padding(3);
             lb_remark.Name = "lb_remark";
-            lb_remark.Size = new System.Drawing.Size(698, 18);
+            lb_remark.Size = new System.Drawing.Size(579, 22);
             lb_remark.TabIndex = 0;
             lb_remark.Text = "remark";
             lb_remark.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -481,7 +480,6 @@
             // 
             panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             panel5.Controls.Add(label6);
-            panel5.Controls.Add(label7);
             panel5.Location = new System.Drawing.Point(528, 0);
             panel5.Name = "panel5";
             panel5.Size = new System.Drawing.Size(50, 30);
@@ -499,17 +497,7 @@
             label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             label6.Click += label6_Click;
             // 
-            // label7
-            // 
-            label7.Dock = System.Windows.Forms.DockStyle.Fill;
-            label7.Location = new System.Drawing.Point(0, 0);
-            label7.Name = "label7";
-            label7.Size = new System.Drawing.Size(48, 28);
-            label7.TabIndex = 0;
-            label7.Text = "Alt";
-            label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // Strip_Arr
+            // Strip_SMC_Dep
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -534,7 +522,7 @@
             Controls.Add(pl_std);
             Controls.Add(pl_sid);
             Controls.Add(pl_acid);
-            Name = "Strip_Arr";
+            Name = "Strip_SMC_Dep";
             Size = new System.Drawing.Size(577, 80);
             Load += Strip_Load_1;
             pl_acid.ResumeLayout(false);
@@ -598,6 +586,5 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label7;
     }
 }
