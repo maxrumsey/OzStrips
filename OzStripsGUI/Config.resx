@@ -121,9 +121,9 @@
     <value>1</value>
   </data>
   <data name="socketioaddr" xml:space="preserve">
-    <value>http://dev1.maxrumsey.xyz</value>
+    <value>http://dev1.maxrumsey.xyz:80</value>
   </data>
   <data name="version" xml:space="preserve">
-    <value>0.0.1</value>
+    <value>plane alex</value>
   </data>
 </root>

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.pl_controlbar = new System.Windows.Forms.Panel();
             this.bt_pdc = new System.Windows.Forms.Button();
@@ -54,6 +55,7 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flp_main = new System.Windows.Forms.FlowLayoutPanel();
+            this.tt_metar = new System.Windows.Forms.ToolTip(this.components);
             this.pl_controlbar.SuspendLayout();
             this.pl_ad.SuspendLayout();
             this.pl_stat.SuspendLayout();
@@ -185,6 +187,7 @@
             this.tb_Time.Size = new System.Drawing.Size(137, 37);
             this.tb_Time.TabIndex = 0;
             this.tb_Time.Text = "Time";
+            this.tb_Time.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // menuStrip1
             // 
@@ -310,6 +313,10 @@
             this.flp_main.TabIndex = 2;
             this.flp_main.WrapContents = false;
             // 
+            // tt_metar
+            // 
+            this.tt_metar.ToolTipTitle = "METAR";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -366,6 +373,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.Button bt_pdc;
+        private System.Windows.Forms.ToolTip tt_metar;
     }
 }
 
