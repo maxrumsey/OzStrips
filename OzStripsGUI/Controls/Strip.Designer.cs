@@ -68,6 +68,8 @@
             lb_req = new System.Windows.Forms.Label();
             pl_glop = new System.Windows.Forms.Panel();
             lb_glop = new System.Windows.Forms.Label();
+            pl_tot = new System.Windows.Forms.Panel();
+            lb_tot = new System.Windows.Forms.Label();
             pl_acid.SuspendLayout();
             pl_wtc.SuspendLayout();
             pl_frul.SuspendLayout();
@@ -88,6 +90,7 @@
             panel4.SuspendLayout();
             pl_req.SuspendLayout();
             pl_glop.SuspendLayout();
+            pl_tot.SuspendLayout();
             SuspendLayout();
             // 
             // pl_acid
@@ -386,7 +389,7 @@
             pl_remark.Location = new System.Drawing.Point(280, 59);
             pl_remark.Margin = new System.Windows.Forms.Padding(0);
             pl_remark.Name = "pl_remark";
-            pl_remark.Size = new System.Drawing.Size(299, 31);
+            pl_remark.Size = new System.Drawing.Size(249, 31);
             pl_remark.TabIndex = 3;
             // 
             // lb_remark
@@ -397,7 +400,7 @@
             lb_remark.Location = new System.Drawing.Point(0, 0);
             lb_remark.Margin = new System.Windows.Forms.Padding(3);
             lb_remark.Name = "lb_remark";
-            lb_remark.Size = new System.Drawing.Size(297, 29);
+            lb_remark.Size = new System.Drawing.Size(247, 29);
             lb_remark.TabIndex = 0;
             lb_remark.Text = "LOCAL REMARK";
             lb_remark.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -525,12 +528,34 @@
             lb_glop.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             lb_glop.Click += lb_glop_Click;
             // 
+            // pl_tot
+            // 
+            pl_tot.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            pl_tot.Controls.Add(lb_tot);
+            pl_tot.Location = new System.Drawing.Point(528, 59);
+            pl_tot.Name = "pl_tot";
+            pl_tot.Size = new System.Drawing.Size(50, 30);
+            pl_tot.TabIndex = 1;
+            // 
+            // lb_tot
+            // 
+            lb_tot.Dock = System.Windows.Forms.DockStyle.Fill;
+            lb_tot.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_tot.Location = new System.Drawing.Point(0, 0);
+            lb_tot.Name = "lb_tot";
+            lb_tot.Size = new System.Drawing.Size(48, 28);
+            lb_tot.TabIndex = 0;
+            lb_tot.Text = "00:00";
+            lb_tot.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            lb_tot.Click += lb_tot_Click;
+            // 
             // Strip
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.Color.Transparent;
             BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            Controls.Add(pl_tot);
             Controls.Add(pl_glop);
             Controls.Add(pl_req);
             Controls.Add(panel4);
@@ -574,6 +599,7 @@
             panel4.ResumeLayout(false);
             pl_req.ResumeLayout(false);
             pl_glop.ResumeLayout(false);
+            pl_tot.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -618,5 +644,7 @@
         private System.Windows.Forms.Label lb_req;
         private System.Windows.Forms.Panel pl_glop;
         private System.Windows.Forms.Label lb_glop;
+        private System.Windows.Forms.Panel pl_tot;
+        private System.Windows.Forms.Label lb_tot;
     }
 }

@@ -73,7 +73,9 @@ namespace maxrumsey.ozstrips.gui
 
         public void TakeOff()
         {
-            TakeOffTime = DateTime.UtcNow;
+            if (TakeOffTime == DateTime.MaxValue) TakeOffTime = DateTime.UtcNow;
+            else TakeOffTime = DateTime.MaxValue;
+
             if (fdr.State == FDP2.FDR.FDRStates.STATE_PREACTIVE && (Network.Me.IsRealATC || MainForm.isDebug)) FDP2.EstFDR(fdr, true);
             SyncStrip();
         }

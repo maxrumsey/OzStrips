@@ -30,13 +30,17 @@ namespace maxrumsey.ozstrips.controls
             base.lb_remark = lb_remark;
             base.lb_req = lb_req;
             base.lb_glop = lb_glop;
+            base.lb_tot = lb_tot;
 
             base.crossColourControls = new Panel[]
             {
                 pl_clx,
-                pl_std,
                 pl_rwy,
-                pl_remark
+                pl_route,
+                pl_hdg,
+                pl_alt,
+                pl_req
+
             };
             base.cockColourControls = new Panel[] { };
             this.stripController = controller;
@@ -122,6 +126,11 @@ namespace maxrumsey.ozstrips.controls
         private void lb_glop_Click(object sender, EventArgs e)
         {
             OpenCLXBayModal();
+        }
+
+        private void lb_tot_Click(object sender, EventArgs e)
+        {
+            stripController.TakeOff();
         }
     }
 }
