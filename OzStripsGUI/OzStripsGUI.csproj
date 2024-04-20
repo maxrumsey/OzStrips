@@ -12,17 +12,24 @@
 		<PackageReference Include="SocketIO.Serializer.SystemTextJson" Version="3.1.1" />
 		<PackageReference Include="SocketIOClient" Version="3.1.1" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<None Include="Properties\Settings.settings">
-			<Generator>SettingsSingleFileGenerator</Generator>
-			<LastGenOutput>Settings.Designer.cs</LastGenOutput>
-		</None>
-	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="$(VatSysDir)\bin\vatSys.exe" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include="ozstrips.ico" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Compile Update="Config.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Config.resx</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+	<ItemGroup>
+	  <EmbeddedResource Update="Config.resx">
+	    <Generator>PublicResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Config.Designer.cs</LastGenOutput>
+	    <CustomToolNamespace>maxrumsey.ozstrips.gui</CustomToolNamespace>
+	  </EmbeddedResource>
 	</ItemGroup>
 </Project>
