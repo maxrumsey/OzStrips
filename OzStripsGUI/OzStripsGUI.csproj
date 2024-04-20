@@ -61,8 +61,8 @@
     <Reference Include="SocketIO.Serializer.SystemTextJson, Version=3.1.1.0, Culture=neutral, PublicKeyToken=c9a3629195a82104, processorArchitecture=MSIL">
       <HintPath>..\ozstrips\packages\SocketIO.Serializer.SystemTextJson.3.1.1\lib\netstandard2.0\SocketIO.Serializer.SystemTextJson.dll</HintPath>
     </Reference>
-    <Reference Include="SocketIOClient, Version=3.1.0.0, Culture=neutral, PublicKeyToken=c9a3629195a82104, processorArchitecture=MSIL">
-      <HintPath>..\ozstrips\packages\SocketIOClient.3.1.0\lib\net462\SocketIOClient.dll</HintPath>
+    <Reference Include="SocketIOClient, Version=3.1.1.0, Culture=neutral, PublicKeyToken=c9a3629195a82104, processorArchitecture=MSIL">
+      <HintPath>..\packages\SocketIOClient.3.1.1\lib\net462\SocketIOClient.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
