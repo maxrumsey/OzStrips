@@ -48,12 +48,13 @@
             // 
             // tb_clx
             // 
+            tb_clx.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             tb_clx.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             tb_clx.Location = new System.Drawing.Point(7, 19);
             tb_clx.MaxLength = 3;
             tb_clx.Name = "tb_clx";
             tb_clx.Size = new System.Drawing.Size(75, 26);
-            tb_clx.TabIndex = 2;
+            tb_clx.TabIndex = 1;
             tb_clx.KeyDown += tb_clx_KeyDown;
             // 
             // button12
@@ -103,9 +104,10 @@
             // 
             // tb_bay
             // 
+            tb_bay.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             tb_bay.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             tb_bay.Location = new System.Drawing.Point(7, 19);
-            tb_bay.MaxLength = 3;
+            tb_bay.MaxLength = 4;
             tb_bay.Name = "tb_bay";
             tb_bay.Size = new System.Drawing.Size(75, 26);
             tb_bay.TabIndex = 2;
@@ -140,7 +142,7 @@
             tb_remark.MaxLength = 20;
             tb_remark.Name = "tb_remark";
             tb_remark.Size = new System.Drawing.Size(168, 26);
-            tb_remark.TabIndex = 2;
+            tb_remark.TabIndex = 3;
             // 
             // groupBox4
             // 
@@ -171,7 +173,7 @@
             tb_glop.MaxLength = 20;
             tb_glop.Name = "tb_glop";
             tb_glop.Size = new System.Drawing.Size(168, 26);
-            tb_glop.TabIndex = 2;
+            tb_glop.TabIndex = 4;
             // 
             // BayCLXControl
             // 
