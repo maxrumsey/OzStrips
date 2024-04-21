@@ -70,7 +70,7 @@ namespace maxrumsey.ozstrips.gui {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://dev1.maxrumsey.xyz:80.
+        ///   Looks up a localized string similar to http://dev1.maxrumsey.xyz:80/.
         /// </summary>
         public static string socketioaddr {
             get {
@@ -79,7 +79,7 @@ namespace maxrumsey.ozstrips.gui {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to plane alex.
+        ///   Looks up a localized string similar to 0.3.1.
         /// </summary>
         public static string version {
             get {

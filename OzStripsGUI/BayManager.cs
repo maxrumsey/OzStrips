@@ -196,6 +196,7 @@ namespace maxrumsey.ozstrips.gui
             stripController.CreateStripObj();
             AddStrip(stripController);
 
+            if (stripController.currentBay >= StripBay.BAY_PUSHED) stripController.CoordinateStrip();
         }
 
         public void AddBay(Bay bay, int vertboardnum)

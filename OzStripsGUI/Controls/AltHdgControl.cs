@@ -11,6 +11,7 @@ namespace maxrumsey.ozstrips.controls
         private List<Airspace2.SystemRunway> runways;
         private StripController stripController;
         public BaseModal bm;
+        private System.Timers.Timer sidTimer;
         public AltHdgControl(StripController controller)
         {
             stripController = controller;
@@ -31,12 +32,6 @@ namespace maxrumsey.ozstrips.controls
         public string Alt { get { return tb_alt.Text; } }
         public string Runway { get { return cb_runway.Text; } }
         public string SID { get { return cb_sid.Text; } }
-
-
-        private void AltHdgControl_Load(object sender, EventArgs e)
-        {
-
-        }
 
         private void cb_alt_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -115,30 +110,40 @@ namespace maxrumsey.ozstrips.controls
 
         private void cb_runway_SelectedIndexChanged(object sender, EventArgs e)
         {
-            updateSIDS();
+            stripController.RWY = cb_runway.Text;
+
+            // timer allows vatsys to determine which sid to give, then load this in accordingly.
+            sidTimer = new System.Timers.Timer();
+            sidTimer.Interval = 1000;
+            sidTimer.AutoReset = false;
+            sidTimer.Elapsed += updateSIDS;
+            sidTimer.Start();
 
         }
-        private void updateSIDS()
+        private void updateSIDS(object e, EventArgs args)
         {
-            String aerodrome = stripController.fdr.DepAirport;
-
-            cb_sid.Items.Clear();
-
-            List<Airspace2.SystemRunway> runways = Airspace2.GetRunways(aerodrome);
-            Airspace2.SystemRunway sysRunway;
-            foreach (Airspace2.SystemRunway runway in runways)
+            if (bm != null && bm.Visible) MainForm.mainForm.Invoke((MethodInvoker)delegate ()
             {
-                if (runway.Name == Runway)
+                String aerodrome = stripController.fdr.DepAirport;
+
+                cb_sid.Items.Clear();
+
+                List<Airspace2.SystemRunway> runways = Airspace2.GetRunways(aerodrome);
+                Airspace2.SystemRunway sysRunway;
+                foreach (Airspace2.SystemRunway runway in runways)
                 {
-                    sysRunway = runway;
-                    foreach (Airspace2.SystemRunway.SIDSTARKey sid in sysRunway.SIDs)
+                    if (runway.Name == Runway)
                     {
-                        cb_sid.Items.Add(sid.sidStar.Name);
+                        sysRunway = runway;
+                        foreach (Airspace2.SystemRunway.SIDSTARKey sid in sysRunway.SIDs)
+                        {
+                            cb_sid.Items.Add(sid.sidStar.Name);
+                        }
+
                     }
-
                 }
-            }
-
+                cb_sid.Text = stripController.SID;
+            });
         }
 
         private void tb_alt_KeyDown(object sender, KeyEventArgs e)

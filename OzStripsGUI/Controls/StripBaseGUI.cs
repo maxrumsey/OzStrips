@@ -10,9 +10,9 @@ namespace maxrumsey.ozstrips.controls
     public partial class StripBaseGUI : UserControl
     {
         public FDP2.FDR fdr;
-        public Color defColor = Color.WhiteSmoke;
-        public Panel[] cockColourControls;
+        public Color defColor = Color.Empty;
         public Panel[] crossColourControls = new Panel[] { };
+        public Panel[] cockColourControls = new Panel[] { };
 
         public StripController stripController;
         public Panel pickToggleControl;
@@ -33,6 +33,9 @@ namespace maxrumsey.ozstrips.controls
         public Label lb_clx;
         public Label lb_tot;
         public Label lb_remark;
+        public Label lb_req;
+        public Label lb_glop;
+        public Label lb_ssricon;
 
         public StripBaseGUI()
         {
@@ -46,27 +49,24 @@ namespace maxrumsey.ozstrips.controls
             if (_cockLevel == -1)
             {
                 _cockLevel = stripController.cockLevel + 1;
-                if (_cockLevel >= 3) _cockLevel = 0;
+                if (_cockLevel >= 2) _cockLevel = 0;
             }
             if (update) stripController.cockLevel = _cockLevel;
-            Color color = defColor;
+            int marginLeft = 0;
+            Color color = Color.Empty;
             if (stripController.cockLevel == 1)
             {
-                color = Color.Aquamarine;
+                marginLeft = 30;
+                color = Color.Cyan;
             }
-            else if (stripController.cockLevel == 2)
+            foreach (Panel pl in cockColourControls)
             {
-                color = Color.Pink;
+                pl.BackColor = color;
             }
-
-            foreach (Control control in cockColourControls)
-            {
-                control.BackColor = color;
-            }
-
+            stripController.stripHolderControl.Margin = new Padding(marginLeft,0,0,0);
             if (sync) stripController.SyncStrip();
         }
-
+        
         public void SetCross(bool sync = true)
         {
             Color color = defColor;
@@ -87,7 +87,7 @@ namespace maxrumsey.ozstrips.controls
         {
             SuspendLayout();
             if (fdr == null) return;
-            lb_eobt.Text = stripController.Time;
+            if (lb_eobt != null) lb_eobt.Text = stripController.Time;
             lb_acid.Text = fdr.Callsign;
             lb_ssr.Text = (fdr.AssignedSSRCode == -1) ? "XXXX" : Convert.ToString(fdr.AssignedSSRCode, 8).PadLeft(4, '0');
             lb_type.Text = fdr.AircraftType;
@@ -101,7 +101,7 @@ namespace maxrumsey.ozstrips.controls
             if (lb_sid != null) lb_sid.Text = stripController.SID;
             if (lb_ades != null) lb_ades.Text = fdr.DesAirport;
             if (lb_alt != null) lb_alt.Text = stripController.CFL;
-            if (lb_hdg != null) lb_hdg.Text = stripController.HDG;
+            if (lb_hdg != null) lb_hdg.Text = stripController.HDG == "" ? "" : "H" + stripController.HDG;
             if (lb_clx != null) lb_clx.Text = stripController.CLX;
             if (lb_std != null) lb_std.Text = stripController.GATE;
             if (lb_remark != null) lb_remark.Text = stripController.Remark;
@@ -111,6 +111,15 @@ namespace maxrumsey.ozstrips.controls
                 lb_tot.Text = diff.ToString(@"mm\:ss");
                 lb_tot.ForeColor = Color.Green;
             }
+            else if (lb_tot != null)
+            {
+                lb_tot.Text = "00:00";
+                lb_tot.ForeColor = Color.Black;
+            }
+            if (lb_req != null) lb_req.Text = (stripController.fdr.RFL / 100).ToString();
+            if (lb_glop != null) lb_glop.Text = stripController.fdr.GlobalOpData;
+            if (lb_ssricon != null && stripController.SquawkCorrect) lb_ssricon.Text = "*";
+            else if (lb_ssricon != null) lb_ssricon.Text = "";
             SetCross(false);
             Cock(0, false, false);
             lb_rwy.Text = stripController.RWY;
@@ -168,6 +177,7 @@ namespace maxrumsey.ozstrips.controls
             stripController.CLX = control.CLX;
             stripController.GATE = control.GATE;
             stripController.Remark = control.Remark;
+            FDP2.SetGlobalOps(stripController.fdr, control.glop);
             stripController.SyncStrip();
         }
         public void TogglePick()
@@ -182,7 +192,7 @@ namespace maxrumsey.ozstrips.controls
         {
             if (pickToggleControl != null)
             {
-                Color color = Color.Gainsboro;
+                Color color = Color.Empty;
                 if (picked) color = Color.Silver;
 
                 pickToggleControl.BackColor = color;

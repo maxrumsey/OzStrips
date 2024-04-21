@@ -4,16 +4,16 @@ using System.Windows.Forms;
 
 namespace maxrumsey.ozstrips.controls
 {
-    public partial class Strip_SMC_Dep : StripBaseGUI
+    public partial class Strip : StripBaseGUI
     {
-        public Strip_SMC_Dep(StripController controller)
+        public Strip(StripController controller)
         {
             this.fdr = controller.fdr;
             InitializeComponent();
 
             pickToggleControl = pl_acid;
 
-            base.lb_eobt = lb_eobt;
+            base.lb_eobt = base.lb_eobt;
             base.lb_acid = lb_acid;
             base.lb_ssr = lb_ssr;
             base.lb_type = lb_type;
@@ -28,16 +28,33 @@ namespace maxrumsey.ozstrips.controls
             base.lb_std = lb_std;
             base.lb_clx = lb_clx;
             base.lb_remark = lb_remark;
-            this.cockColourControls = new Panel[] {
-                this.pl_eobt,
-                };
+            base.lb_req = lb_req;
+            base.lb_glop = lb_glop;
+            base.lb_tot = lb_tot;
+            base.lb_eobt = lb_eobt;
+            base.lb_ssricon = lb_ssricon;
 
             base.crossColourControls = new Panel[]
             {
                 pl_clx,
-                pl_std,
                 pl_rwy,
-                pl_remark
+                pl_route,
+                pl_hdg,
+                pl_alt,
+                pl_req
+
+            };
+            base.cockColourControls = new Panel[]
+            {
+                pl_std,
+                pl_ades,
+                pl_eobt,
+                pl_wtc,
+                panel3,
+                pl_frul,
+                pl_ssricon,
+                pl_type,
+                pl_ssr
             };
 
             this.stripController = controller;
@@ -50,53 +67,14 @@ namespace maxrumsey.ozstrips.controls
             stripController.SIDTrigger();
         }
 
-        private void lb_eobt_Click(object sender, EventArgs e)
-        {
-            Cock(-1);
-        }
-
-
-        private void lb_eobt_DoubleClick(object sender, EventArgs e)
-        {
-            Cock(-1);
-        }
-
-        private void lb_std_Click(object sender, EventArgs e)
-        {
-            OpenCLXBayModal();
-        }
-
-
-        // open hdg-alt box
-        private void pl_multi3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lb_hdg_Click(object sender, EventArgs e)
+        private void OpenHdgAlt(object sender, EventArgs e)
         {
             OpenHdgAltModal();
         }
 
-        private void lb_alt_Click(object sender, EventArgs e)
-        {
-            OpenHdgAltModal();
-
-        }
-
-        private void lb_route_Click(object sender, EventArgs e)
+        private void OpenFDR(object sender, EventArgs e)
         {
             OpenVatsysFDRModMenu();
-        }
-
-        private void lb_ades_Click(object sender, EventArgs e)
-        {
-            OpenVatsysFDRModMenu();
-        }
-
-        private void Strip_Load_1(object sender, EventArgs e)
-        {
-
         }
 
         private void lb_acid_Click(object sender, EventArgs e)
@@ -109,15 +87,20 @@ namespace maxrumsey.ozstrips.controls
             AssignSSR();
         }
 
-        private void lb_remark_Click(object sender, EventArgs e)
+        private void OpenCLXBay(object sender, EventArgs e)
         {
             OpenCLXBayModal();
 
         }
 
-        private void label6_Click(object sender, EventArgs e)
+        private void lb_tot_Click(object sender, EventArgs e)
         {
+            stripController.TakeOff();
+        }
 
+        private void lb_eobt_Click(object sender, EventArgs e)
+        {
+            Cock(-1);
         }
     }
 }

@@ -65,7 +65,7 @@ namespace maxrumsey.ozstrips.gui
                 UpdateFDR(stripDTO, BayManager.bayManager);
             }
         }
-        
+
         public void HMI_SetPicked(bool picked)
         {
             stripControl.HMI_TogglePick(picked);
@@ -73,9 +73,20 @@ namespace maxrumsey.ozstrips.gui
 
         public void TakeOff()
         {
-            TakeOffTime = DateTime.UtcNow;
-            if (fdr.State == FDP2.FDR.FDRStates.STATE_PREACTIVE && (Network.Me.IsRealATC || MainForm.isDebug)) FDP2.EstFDR(fdr, true);
+            if (TakeOffTime == DateTime.MaxValue)
+            {
+                TakeOffTime = DateTime.UtcNow;
+                CoordinateStrip();
+            }
+            else TakeOffTime = DateTime.MaxValue;
+
             SyncStrip();
+        }
+
+        public void CoordinateStrip()
+        {
+            if (fdr.State == FDP2.FDR.FDRStates.STATE_PREACTIVE && (Network.Me.IsRealATC || MainForm.isDebug)) MMI.EstFDR(fdr);
+            if (currentBay == StripBay.BAY_PREA) Util.ShowWarnBox("You have coordinated this strip while it is in your Preactive Bay.\nYou will no longer be able make changes to the flight plan!\nOpen the vatSys Flight Plan window and deactivate the strip if you still need to make changes to SID, RWY or Altitude."); 
         }
 
         /// <summary>
@@ -84,8 +95,8 @@ namespace maxrumsey.ozstrips.gui
         public void CreateStripObj()
         {
             stripHolderControl = new Panel();
-            stripHolderControl.BackColor = Color.FromArgb(200, 243, 249);
-            if (ArrDepType == StripArrDepType.ARRIVAL) stripHolderControl.BackColor = Color.FromArgb(171, 149, 132);
+            stripHolderControl.BackColor = Color.FromArgb(193, 230, 242);
+            if (ArrDepType == StripArrDepType.ARRIVAL) stripHolderControl.BackColor = Color.FromArgb(255, 255, 160);
 
             stripHolderControl.Padding = new Padding(3);
             stripHolderControl.Margin = new Padding(0);
@@ -93,11 +104,7 @@ namespace maxrumsey.ozstrips.gui
             //stripHolderControl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             stripHolderControl.Size = new Size(100, 100);
 
-            if (ArrDepType == StripArrDepType.ARRIVAL) stripControl = new Strip_Arr(this);
-            else if (ArrDepType == StripArrDepType.DEPARTURE && (currentBay == StripBay.BAY_PREA || currentBay == StripBay.BAY_CLEARED)) stripControl = new Strip_SMC_Dep(this);
-            else if (ArrDepType == StripArrDepType.DEPARTURE && (currentBay < StripBay.BAY_RUNWAY)) stripControl = new Strip_SMC_Dep(this);
-            else if (ArrDepType == StripArrDepType.DEPARTURE && (currentBay >= StripBay.BAY_RUNWAY)) stripControl = new Strip_ADC_Dep(this);
-            else stripControl = new Strip_SMC_Dep(this);
+            stripControl = new Strip(this);
 
             stripControl.Initialise();
             stripHolderControl.Size = new Size(stripControl.Size.Width, stripControl.Size.Height + 6);
@@ -143,7 +150,7 @@ namespace maxrumsey.ozstrips.gui
             bool found = false;
             foreach (StripController controller in stripControllers)
             {
-                if (controller.fdr == fdr)
+                if (controller.fdr.Callsign == fdr.Callsign)
                 {
                     found = true;
 
@@ -174,18 +181,18 @@ namespace maxrumsey.ozstrips.gui
         {
             foreach (StripController controller in stripControllers)
             {
-                if (controller.fdr.Callsign == scDTO.ACID)
+                if (controller.fdr.Callsign == scDTO.acid)
                 {
                     bool changeBay = false;
                     controller.CLX = scDTO.CLX != null ? scDTO.CLX : "";
                     controller.GATE = scDTO.GATE != null ? scDTO.GATE : "";
                     if (controller.currentBay != scDTO.bay) changeBay = true;
                     controller.currentBay = scDTO.bay;
-                    controller.stripControl.Cock(scDTO.StripCockLevel, false);
+                    controller.stripControl.Cock(scDTO.cockLevel, false);
                     if (scDTO.TOT == "\0") controller.TakeOffTime = DateTime.MaxValue;
                     else controller.TakeOffTime = DateTime.Parse(scDTO.TOT);
                     controller.Remark = scDTO.remark != null ? scDTO.remark : "";
-                    controller.crossing = scDTO.Crossing;
+                    controller.crossing = scDTO.crossing;
                     controller.stripControl.SetCross(false);
 
                     if (changeBay) bayManager.UpdateBay(controller); // prevent unessesscary reshufles
@@ -272,8 +279,8 @@ namespace maxrumsey.ozstrips.gui
                 Coordinate adCoord = Airspace2.GetAirport(aerodrome)?.LatLong;
                 Coordinate planeCoord = fdr.PredictedPosition.Location;
                 List<RDP.RadarTrack> RadarTracks = (from radarTrack in RDP.RadarTracks
-                                                   where radarTrack.ActualAircraft.Callsign == fdr.Callsign
-                                                   select radarTrack).ToList();
+                                                    where radarTrack.ActualAircraft.Callsign == fdr.Callsign
+                                                    select radarTrack).ToList();
 
                 if (RadarTracks.Count > 0)
                 {
@@ -294,6 +301,20 @@ namespace maxrumsey.ozstrips.gui
             }
             return -1;
 
+        }
+
+        public RDP.RadarTrack GetRadarTrack()
+        {
+            List<RDP.RadarTrack> RadarTracks = (from radarTrack in RDP.RadarTracks
+                                                where radarTrack.ActualAircraft.Callsign == fdr.Callsign
+                                                select radarTrack).ToList();
+            if (RadarTracks.Count > 0)
+            {
+                return RadarTracks.First();
+            } else
+            {
+                return null;
+            }
         }
 
         public String CFL
@@ -320,7 +341,7 @@ namespace maxrumsey.ozstrips.gui
                 Match hdgMatch = r.Match(fdr.GlobalOpData);
                 if (hdgMatch.Success)
                 {
-                    return hdgMatch.Value;
+                    return hdgMatch.Value.Replace("H", "");
                 }
                 else return "";
             }
@@ -375,6 +396,7 @@ namespace maxrumsey.ozstrips.gui
                 {
                     if (possibleSID.sidStar.Name == value)
                     {
+                        if (value == fdr.SIDSTARString) return; // dont needlessly set sid
                         if (Network.Me.IsRealATC || MainForm.isDebug) FDP2.SetSID(fdr, possibleSID.sidStar);
                         found = true;
                     }
@@ -393,6 +415,16 @@ namespace maxrumsey.ozstrips.gui
             {
                 String aerodrome = fdr.DepAirport;
                 return Airspace2.GetRunways(aerodrome);
+            }
+        }
+
+        public bool SquawkCorrect
+        {
+            get
+            {
+                RDP.RadarTrack rtrack = GetRadarTrack();
+                if (rtrack != null && rtrack.ActualAircraft.TransponderModeC && (rtrack.ActualAircraft.TransponderCode == fdr.AssignedSSRCode)) return true;
+                return false;
             }
         }
 

@@ -6,9 +6,9 @@ namespace maxrumsey.ozstrips.controls
     {
         public CustomFLP() : base()
         {
-            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            this.UpdateStyles();
+            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            UpdateStyles();
         }
     }
 }

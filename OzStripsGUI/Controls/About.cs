@@ -11,6 +11,5 @@ namespace maxrumsey.ozstrips.controls
             lb_version.Text = "Version: " + Config.version;
 
         }
-
     }
 }

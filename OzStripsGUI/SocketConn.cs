@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.Json;
 using System.Timers;
+using System.Windows.Forms;
 using vatsys;
 
 namespace maxrumsey.ozstrips.gui
@@ -16,7 +17,7 @@ namespace maxrumsey.ozstrips.gui
         private bool isDebug = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
         public List<string> Messages = new List<string>();
         private bool versionShown = false;
-        private bool freshClient = false;
+        private bool freshClient = true;
         private System.Timers.Timer fifteensecTimer;
         private MainForm mainForm;
         public SocketConn(BayManager bayManager, MainForm mf)
@@ -30,13 +31,17 @@ namespace maxrumsey.ozstrips.gui
                 if (metaDTO.version != Config.version && !versionShown)
                 {
                     versionShown = true;
-                    Util.ShowInfoBox("New Update Available: " + metaDTO.version);
+                    if (mf.Visible) mf.Invoke((MethodInvoker)delegate ()
+                    {
+                        Util.ShowInfoBox("New Update Available: " + metaDTO.version);
+                    });
+                
                 }
                 if (metaDTO.apiversion != Config.apiversion)
                 {
-                    Util.ShowErrorBox("OzStrips incompatible with current API version!");
-                    mf.Invoke((System.Windows.Forms.MethodInvoker)delegate ()
+                    if (mf.Visible) mf.Invoke((MethodInvoker)delegate ()
                     {
+                        Util.ShowErrorBox("OzStrips incompatible with current API version!");
                         mf.Close();
                         mf.Dispose();
                     });
@@ -47,7 +52,8 @@ namespace maxrumsey.ozstrips.gui
             {
                 AddMessage("c: conn established");
                 await io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName, Network.Me.RealName);
-                mf.SetConnStatus(true);
+                if (mf.Visible) mf.Invoke((MethodInvoker)delegate () { mf.SetConnStatus(true); });
+
             };
             io.OnDisconnected += (sender, e) =>
             {
@@ -56,9 +62,9 @@ namespace maxrumsey.ozstrips.gui
             };
             io.OnError += (sender, e) =>
             {
-                AddMessage("Error?");
+                AddMessage("c: error" + e);
                 mf.SetConnStatus(false);
-                Errors.Add(new Exception(e), "OzStrips");
+                MMI.InvokeOnGUI(delegate () { Errors.Add(new Exception(e), "OzStrips"); });
             };
             io.OnReconnected += (sender, e) =>
             {
@@ -74,7 +80,7 @@ namespace maxrumsey.ozstrips.gui
                 StripControllerDTO scDTO = sc.GetValue<StripControllerDTO>();
                 AddMessage("s:sc_change: " + JsonSerializer.Serialize(scDTO));
 
-                mf.Invoke((System.Windows.Forms.MethodInvoker)delegate () { StripController.UpdateFDR(scDTO, bayManager); });
+                if (mf.Visible) mf.Invoke((MethodInvoker)delegate () { StripController.UpdateFDR(scDTO, bayManager); });
 
             });
             io.On("server:sc_cache", sc =>
@@ -82,27 +88,36 @@ namespace maxrumsey.ozstrips.gui
                 CacheDTO scDTO = sc.GetValue<CacheDTO>();
                 AddMessage("s:sc_cache: " + JsonSerializer.Serialize(scDTO));
 
-                mf.Invoke((System.Windows.Forms.MethodInvoker)delegate () { StripController.LoadCache(scDTO); });
-
+                if (mf.Visible && freshClient)
+                {
+                    freshClient = false;
+                    mf.Invoke((MethodInvoker)delegate () { StripController.LoadCache(scDTO); });
+                }
             });
             io.On("server:order_change", bdto =>
             {
                 BayDTO bayDTO = bdto.GetValue<BayDTO>();
                 AddMessage("s:order_change: " + JsonSerializer.Serialize(bayDTO));
 
-                mf.Invoke((System.Windows.Forms.MethodInvoker)delegate () { bayManager.UpdateOrder(bayDTO); });
+                if (mf.Visible) mf.Invoke((MethodInvoker)delegate () { bayManager.UpdateOrder(bayDTO); });
             });
             io.On("server:metar", metarRaw =>
             {
                 String metar = metarRaw.GetValue<string>();
 
-                mf.Invoke((System.Windows.Forms.MethodInvoker)delegate () { mainForm.SetMetar(metar); });
+                if (mf.Visible) mf.Invoke((System.Windows.Forms.MethodInvoker)delegate () { mainForm.SetMetar(metar); });
+            });
+            io.On("server:atis", codeRaw =>
+            {
+                String code = codeRaw.GetValue<string>();
+
+                if (mf.Visible) mf.Invoke((System.Windows.Forms.MethodInvoker)delegate () { mainForm.SetATISCode(code); });
             });
             io.On("server:update_cache", (args) =>
             {
                 AddMessage("s:update_cache: ");
                 if (io.Connected) io.EmitAsync("client:request_metar");
-                SendCache();
+                if (!freshClient) SendCache();
             });
             if (Network.IsConnected) Connect();
             bayManager.socketConn = this;
@@ -112,9 +127,8 @@ namespace maxrumsey.ozstrips.gui
         {
             StripControllerDTO scDTO = CreateStripDTO(sc);
             AddMessage("c:sc_change: " + JsonSerializer.Serialize(scDTO));
-
+            if (scDTO.acid == "") return; // prevent bug
             if (CanSendDTO) io.EmitAsync("client:sc_change", scDTO);
-
         }
         public void SyncBay(Bay bay)
         {
@@ -142,7 +156,7 @@ namespace maxrumsey.ozstrips.gui
         }
         public StripControllerDTO CreateStripDTO(StripController sc)
         {
-            StripControllerDTO scDTO = new StripControllerDTO { ACID = sc.fdr.Callsign, bay = sc.currentBay, CLX = sc.CLX, GATE = sc.GATE, StripCockLevel = sc.cockLevel, Crossing = sc.Crossing, remark = sc.Remark };
+            StripControllerDTO scDTO = new StripControllerDTO { acid = sc.fdr.Callsign, bay = sc.currentBay, CLX = sc.CLX, GATE = sc.GATE, cockLevel = sc.cockLevel, crossing = sc.Crossing, remark = sc.Remark };
             if (sc.TakeOffTime != DateTime.MaxValue)
             {
                 scDTO.TOT = sc.TakeOffTime.ToString(CultureInfo.InvariantCulture);
@@ -195,7 +209,7 @@ namespace maxrumsey.ozstrips.gui
         /// </summary>
         public void Connect()
         {
-            fifteensecTimer = new Timer();
+            fifteensecTimer = new System.Timers.Timer();
             fifteensecTimer.AutoReset = false;
             fifteensecTimer.Interval = 15000;
             fifteensecTimer.Elapsed += ConnectIO;
@@ -209,7 +223,8 @@ namespace maxrumsey.ozstrips.gui
             {
                 AddMessage("c: Attempting connection " + Config.socketioaddr);
                 await io.ConnectAsync();
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Errors.Add(ex, "OzStrips");
             }

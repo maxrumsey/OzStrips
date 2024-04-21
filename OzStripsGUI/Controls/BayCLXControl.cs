@@ -19,13 +19,14 @@ namespace maxrumsey.ozstrips.controls
             tb_clx.Text = controller.CLX;
             tb_bay.Text = controller.GATE;
             tb_remark.Text = controller.Remark;
-
+            tb_glop.Text = controller.fdr.GlobalOpData;
         }
 
         public string CLX { get { return tb_clx.Text; } }
         public string GATE { get { return tb_bay.Text; } }
         public string Remark { get { return tb_remark.Text; } }
 
+        public string glop { get { return tb_glop.Text; } }
 
         private void AltHdgControl_Load(object sender, EventArgs e)
         {
@@ -58,6 +59,11 @@ namespace maxrumsey.ozstrips.controls
         private void button2_Click(object sender, EventArgs e)
         {
             tb_remark.Text = "";
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            tb_glop.Text = "";
         }
     }
 }

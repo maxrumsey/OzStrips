@@ -14,7 +14,7 @@ namespace maxrumsey.ozstrips.controls
 
         private void button1_Click(object sender, EventArgs e)
         {
-            StripControllerDTO scDTO = new StripControllerDTO() { ACID = tb_acid.Text, bay = (StripBay)Int32.Parse(tb_baynum.Text), CLX = tb_clx.Text, GATE = tb_bay.Text, Crossing = cb_crossing.Checked, StripCockLevel = Int32.Parse(tb_cocklevel.Text), TOT = "\0" };
+            StripControllerDTO scDTO = new StripControllerDTO() { acid = tb_acid.Text, bay = (StripBay)Int32.Parse(tb_baynum.Text), CLX = tb_clx.Text, GATE = tb_bay.Text, crossing = cb_crossing.Checked, cockLevel = Int32.Parse(tb_cocklevel.Text), TOT = "\0" };
 
             StripController.UpdateFDR(scDTO, BayManager.bayManager);
         }

@@ -71,8 +71,13 @@ namespace maxrumsey.ozstrips.gui
             {
                 this.metar = metar;
                 tt_metar.RemoveAll();
-                tt_metar.SetToolTip(pl_ad, metar);
+                tt_metar.SetToolTip(lb_ad, metar);
             }
+        }
+
+        public void SetATISCode(string code)
+        {
+            lb_atis.Text = code;
         }
 
         public void OpenManDebug()
@@ -120,8 +125,12 @@ namespace maxrumsey.ozstrips.gui
 
         private void updateTimer(object sender, EventArgs e)
         {
-            tb_Time.Text = DateTime.UtcNow.ToString("HH:mm:ss");
-            bayManager.ForceRerender();
+            if (Visible) this.Invoke((MethodInvoker)delegate ()
+            {
+                tb_Time.Text = DateTime.UtcNow.ToString("HH:mm:ss");
+                bayManager.ForceRerender();
+            });
+
         }
 
         private void forceRerenderToolStripMenuItem_Click(object sender, EventArgs e)
@@ -131,7 +140,7 @@ namespace maxrumsey.ozstrips.gui
 
         private void MainForm_SizeChanged(object sender, EventArgs e)
         {
-            bayManager.Resize();
+            if (bayManager != null) bayManager.Resize();
         }
 
         private void AddVerticalStripBoard()
@@ -315,6 +324,27 @@ namespace maxrumsey.ozstrips.gui
         private void bt_pdc_Click(object sender, EventArgs e)
         {
             bayManager.SendPDC();
+        }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void ts_ad_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void gitHubToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/maxrumsey/OzStrips/");
+
+        }
+
+        private void documentationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://maxrumsey.xyz/OzStrips/");
         }
     }
 }
