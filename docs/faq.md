@@ -29,3 +29,6 @@ When you activate the Take Off Timer, or move the strip into the Pushback bay.
 
 ## How do I open the vatSYS Flight Plan Window?
 Click on the aircraft's destination.
+
+## What should I do with aircraft doing circuits?
+If they haven't created a flight plan, create a flight plan for them, so that they will have a squawk code. They should appear in your Arrivals or Preactive bay, but if they don't, click on their **vatSys strip** and press "FOR STP" in OzStrips. If they still don't appear, check to make sure that either the ADES or ADEP airport is your selected airport.
