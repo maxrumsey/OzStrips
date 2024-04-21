@@ -22,7 +22,7 @@ namespace maxrumsey.ozstrips.gui {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Config {
+    public class Config {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,10 +36,10 @@ namespace maxrumsey.ozstrips.gui {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("maxrumsey.ozstrips.gui.Config", typeof(Config).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("OzStripsGUI.Config", typeof(Config).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace maxrumsey.ozstrips.gui {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace maxrumsey.ozstrips.gui {
         /// <summary>
         ///   Looks up a localized string similar to 1.
         /// </summary>
-        internal static string apiversion {
+        public static string apiversion {
             get {
                 return ResourceManager.GetString("apiversion", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace maxrumsey.ozstrips.gui {
         /// <summary>
         ///   Looks up a localized string similar to http://dev1.maxrumsey.xyz:80/.
         /// </summary>
-        internal static string socketioaddr {
+        public static string socketioaddr {
             get {
                 return ResourceManager.GetString("socketioaddr", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace maxrumsey.ozstrips.gui {
         /// <summary>
         ///   Looks up a localized string similar to 0.3.1.
         /// </summary>
-        internal static string version {
+        public static string version {
             get {
                 return ResourceManager.GetString("version", resourceCulture);
             }

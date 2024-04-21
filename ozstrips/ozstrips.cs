@@ -1,6 +1,9 @@
 ﻿using maxrumsey.ozstrips.gui;
+using Newtonsoft.Json;
 using System;
 using System.ComponentModel.Composition;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using vatsys;
 using vatsys.Plugin;
@@ -14,6 +17,10 @@ namespace maxrumsey.ozstrips
         private CustomToolStripMenuItem ozStripsOpener;
         private MainForm GUI;
 
+        public static HttpClient _httpClient = new HttpClient();
+        private static readonly Version _version = new Version(1, 0);
+        private static readonly string _versionUrl = "https://raw.githubusercontent.com/maxrumsey/OzStrips/master/Version.json";
+
         public OzStrips()
         {
             Network.Connected += Connected;
@@ -21,6 +28,8 @@ namespace maxrumsey.ozstrips
             ozStripsOpener = new CustomToolStripMenuItem(CustomToolStripMenuItemWindowType.Main, CustomToolStripMenuItemCategory.Windows, new ToolStripMenuItem("OzStrips"));
             ozStripsOpener.Item.Click += OpenGUI;
             MMI.AddCustomMenuItem(ozStripsOpener);
+
+            _ = CheckVersion();
         }
 
         private void Connected(object sender, EventArgs e)
@@ -32,6 +41,20 @@ namespace maxrumsey.ozstrips
             if (GUI != null && GUI.IsHandleCreated) GUI.Invoke((System.Windows.Forms.MethodInvoker)delegate () { GUI.DisconnectVATSIM(); });
         }
 
+        private static async Task CheckVersion()
+        {
+            try
+            {
+                var response = await _httpClient.GetStringAsync(_versionUrl);
+
+                var version = JsonConvert.DeserializeObject<Version>(response);
+
+                if (version.Major == _version.Major && version.Minor == _version.Minor) return;
+
+                Errors.Add(new Exception("A new version of the plugin is available."), "OzStrips Connector");
+            }
+            catch { }
+        }
 
         /// Plugin Name
         public string Name { get => "OzStrips Connector"; }
@@ -49,13 +72,6 @@ namespace maxrumsey.ozstrips
         {
 
         }
-
-
-        public void Test()
-        {
-            throw new NotImplementedException();
-        }
-
         private void OpenGUI(object sender, EventArgs e)
         {
             MMI.InvokeOnGUI(delegate () { OpenGUI(); });

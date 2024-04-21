@@ -3,7 +3,7 @@ OzStrips is a plugin for vatSys, that emulates a tower's electronic strips syste
 At its core, it provides an easy to use and intuitive user interface; supporting controlling a single aerodrome position, to providing top-down control to all positions.   
 
 ---
-![Example Usage](images/ozstrips_main.png)
+![Example Usage](images/fullwindow.png)
 
 ## Features
 ### Shared state
