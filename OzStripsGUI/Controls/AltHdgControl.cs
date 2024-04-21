@@ -1,7 +1,6 @@
 ﻿using maxrumsey.ozstrips.gui;
 using System;
 using System.Collections.Generic;
-using System.Timers;
 using System.Windows.Forms;
 using vatsys;
 
@@ -123,7 +122,8 @@ namespace maxrumsey.ozstrips.controls
         }
         private void updateSIDS(object e, EventArgs args)
         {
-            if (bm != null && bm.Visible) MainForm.mainForm.Invoke((MethodInvoker) delegate () { 
+            if (bm != null && bm.Visible) MainForm.mainForm.Invoke((MethodInvoker)delegate ()
+            {
                 String aerodrome = stripController.fdr.DepAirport;
 
                 cb_sid.Items.Clear();

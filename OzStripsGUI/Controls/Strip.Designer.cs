@@ -137,6 +137,7 @@
             lb_wtc.TabIndex = 0;
             lb_wtc.Text = "L";
             lb_wtc.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            lb_wtc.Click += OpenFDR;
             // 
             // pl_frul
             // 
@@ -199,6 +200,7 @@
             lb_type.TabIndex = 0;
             lb_type.Text = "AC TYPE";
             lb_type.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            lb_type.Click += OpenFDR;
             // 
             // pl_route
             // 
@@ -221,7 +223,7 @@
             lb_route.TabIndex = 0;
             lb_route.Text = "rte";
             lb_route.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            lb_route.Click += lb_route_Click;
+            lb_route.Click += OpenFDR;
             // 
             // pl_ades
             // 
@@ -242,7 +244,7 @@
             lb_ades.TabIndex = 0;
             lb_ades.Text = "DEST";
             lb_ades.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            lb_ades.Click += lb_ades_Click;
+            lb_ades.Click += OpenFDR;
             // 
             // pl_sid
             // 
@@ -291,7 +293,7 @@
             lb_std.TabIndex = 0;
             lb_std.Text = "GATE";
             lb_std.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            lb_std.Click += lb_std_Click;
+            lb_std.Click += OpenCLXBay;
             // 
             // pl_hdg
             // 
@@ -313,7 +315,7 @@
             lb_hdg.TabIndex = 0;
             lb_hdg.Text = "Hdg";
             lb_hdg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            lb_hdg.Click += lb_hdg_Click;
+            lb_hdg.Click += OpenHdgAlt;
             // 
             // pl_alt
             // 
@@ -334,7 +336,7 @@
             lb_alt.TabIndex = 0;
             lb_alt.Text = "Alt";
             lb_alt.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            lb_alt.Click += lb_alt_Click;
+            lb_alt.Click += OpenHdgAlt;
             // 
             // pl_rwy
             // 
@@ -356,7 +358,7 @@
             lb_rwy.TabIndex = 0;
             lb_rwy.Text = "rwy";
             lb_rwy.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            lb_rwy.Click += lb_hdg_Click;
+            lb_rwy.Click += OpenHdgAlt;
             // 
             // pl_clx
             // 
@@ -380,7 +382,7 @@
             lb_clx.TabIndex = 0;
             lb_clx.Text = "clx";
             lb_clx.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            lb_clx.Click += lb_std_Click;
+            lb_clx.Click += OpenCLXBay;
             // 
             // pl_remark
             // 
@@ -404,7 +406,7 @@
             lb_remark.TabIndex = 0;
             lb_remark.Text = "LOCAL REMARK";
             lb_remark.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            lb_remark.Click += lb_remark_Click;
+            lb_remark.Click += OpenCLXBay;
             // 
             // panel1
             // 
@@ -502,7 +504,7 @@
             lb_req.TabIndex = 1;
             lb_req.Text = "REQ LVL";
             lb_req.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            lb_req.Click += label6_Click;
+            lb_req.Click += OpenFDR;
             // 
             // pl_glop
             // 
@@ -526,7 +528,7 @@
             lb_glop.TabIndex = 0;
             lb_glop.Text = "GLOBAL REMARK";
             lb_glop.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            lb_glop.Click += lb_glop_Click;
+            lb_glop.Click += OpenCLXBay;
             // 
             // pl_tot
             // 
@@ -578,7 +580,6 @@
             Controls.Add(pl_acid);
             Name = "Strip";
             Size = new System.Drawing.Size(580, 89);
-            Load += Strip_Load_1;
             pl_acid.ResumeLayout(false);
             pl_wtc.ResumeLayout(false);
             pl_frul.ResumeLayout(false);

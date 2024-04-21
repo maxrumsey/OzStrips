@@ -49,7 +49,7 @@ namespace maxrumsey.ozstrips.gui
                 AddMessage("c: conn established");
                 await io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName, Network.Me.RealName);
                 if (mf.Visible) mf.Invoke((MethodInvoker)delegate () { mf.SetConnStatus(true); });
-                
+
             };
             io.OnDisconnected += (sender, e) =>
             {
@@ -213,7 +213,8 @@ namespace maxrumsey.ozstrips.gui
             {
                 AddMessage("c: Attempting connection " + Config.socketioaddr);
                 await io.ConnectAsync();
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Errors.Add(ex, "OzStrips");
             }

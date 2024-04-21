@@ -120,11 +120,12 @@ namespace maxrumsey.ozstrips.gui
 
         private void updateTimer(object sender, EventArgs e)
         {
-            if (Visible) this.Invoke((MethodInvoker) delegate () { 
+            if (Visible) this.Invoke((MethodInvoker)delegate ()
+            {
                 tb_Time.Text = DateTime.UtcNow.ToString("HH:mm:ss");
                 bayManager.ForceRerender();
             });
-            
+
         }
 
         private void forceRerenderToolStripMenuItem_Click(object sender, EventArgs e)

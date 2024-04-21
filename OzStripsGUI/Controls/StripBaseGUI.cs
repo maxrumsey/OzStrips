@@ -118,7 +118,7 @@ namespace maxrumsey.ozstrips.controls
                 lb_tot.Text = "00:00";
                 lb_tot.ForeColor = Color.Black;
             }
-            if (lb_req != null) lb_req.Text = (stripController.fdr.RFL/100).ToString();
+            if (lb_req != null) lb_req.Text = (stripController.fdr.RFL / 100).ToString();
             if (lb_glop != null) lb_glop.Text = stripController.fdr.GlobalOpData;
             SetCross(false);
             Cock(0, false, false);

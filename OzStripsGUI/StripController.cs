@@ -65,7 +65,7 @@ namespace maxrumsey.ozstrips.gui
                 UpdateFDR(stripDTO, BayManager.bayManager);
             }
         }
-        
+
         public void HMI_SetPicked(bool picked)
         {
             stripControl.HMI_TogglePick(picked);
@@ -270,8 +270,8 @@ namespace maxrumsey.ozstrips.gui
                 Coordinate adCoord = Airspace2.GetAirport(aerodrome)?.LatLong;
                 Coordinate planeCoord = fdr.PredictedPosition.Location;
                 List<RDP.RadarTrack> RadarTracks = (from radarTrack in RDP.RadarTracks
-                                                   where radarTrack.ActualAircraft.Callsign == fdr.Callsign
-                                                   select radarTrack).ToList();
+                                                    where radarTrack.ActualAircraft.Callsign == fdr.Callsign
+                                                    select radarTrack).ToList();
 
                 if (RadarTracks.Count > 0)
                 {
