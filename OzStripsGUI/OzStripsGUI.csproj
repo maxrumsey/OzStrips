@@ -4,6 +4,7 @@
 		<UseWindowsForms>true</UseWindowsForms>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<PlatformTarget>x86</PlatformTarget>
+		<ApplicationIcon>ozstrips.ico</ApplicationIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -12,6 +13,23 @@
 		<PackageReference Include="SocketIOClient" Version="3.1.1" />
 	</ItemGroup>
 	<ItemGroup>
-		<Reference Include="$(MSBuildProgramFiles32)\vatSys\bin\vatSys.exe" />
+		<Reference Include="$(VatSysDir)\bin\vatSys.exe" />
+	</ItemGroup>
+	<ItemGroup>
+		<Content Include="ozstrips.ico" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Compile Update="Config.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Config.resx</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+	<ItemGroup>
+	  <EmbeddedResource Update="Config.resx">
+	    <Generator>PublicResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Config.Designer.cs</LastGenOutput>
+	    <CustomToolNamespace>maxrumsey.ozstrips.gui</CustomToolNamespace>
+	  </EmbeddedResource>
 	</ItemGroup>
 </Project>

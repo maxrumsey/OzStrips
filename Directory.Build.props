@@ -1,0 +1,6 @@
+<Project>
+    <PropertyGroup>
+        <VatSysDir>$(MSBuildProgramFiles32)\vatSys</VatSysDir>
+        <EmbeddedResourceUseDependentUponConvention>true</EmbeddedResourceUseDependentUponConvention>
+    </PropertyGroup>
+</Project>
