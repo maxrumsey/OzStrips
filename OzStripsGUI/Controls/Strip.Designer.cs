@@ -56,10 +56,8 @@
             lb_clx = new System.Windows.Forms.Label();
             pl_remark = new System.Windows.Forms.Panel();
             lb_remark = new System.Windows.Forms.Label();
-            panel1 = new System.Windows.Forms.Panel();
-            label1 = new System.Windows.Forms.Label();
-            panel2 = new System.Windows.Forms.Panel();
-            label2 = new System.Windows.Forms.Label();
+            pl_eobt = new System.Windows.Forms.Panel();
+            lb_eobt = new System.Windows.Forms.Label();
             panel3 = new System.Windows.Forms.Panel();
             label3 = new System.Windows.Forms.Label();
             panel4 = new System.Windows.Forms.Panel();
@@ -84,8 +82,7 @@
             pl_rwy.SuspendLayout();
             pl_clx.SuspendLayout();
             pl_remark.SuspendLayout();
-            panel1.SuspendLayout();
-            panel2.SuspendLayout();
+            pl_eobt.SuspendLayout();
             panel3.SuspendLayout();
             panel4.SuspendLayout();
             pl_req.SuspendLayout();
@@ -408,43 +405,26 @@
             lb_remark.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             lb_remark.Click += OpenCLXBay;
             // 
-            // panel1
+            // pl_eobt
             // 
-            panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            panel1.Controls.Add(label1);
-            panel1.Location = new System.Drawing.Point(68, 0);
-            panel1.Name = "panel1";
-            panel1.Size = new System.Drawing.Size(30, 30);
-            panel1.TabIndex = 4;
+            pl_eobt.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            pl_eobt.Controls.Add(lb_eobt);
+            pl_eobt.Location = new System.Drawing.Point(68, 0);
+            pl_eobt.Name = "pl_eobt";
+            pl_eobt.Size = new System.Drawing.Size(60, 30);
+            pl_eobt.TabIndex = 4;
             // 
-            // label1
+            // lb_eobt
             // 
-            label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            label1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
-            label1.Location = new System.Drawing.Point(0, 0);
-            label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(28, 28);
-            label1.TabIndex = 0;
-            label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // panel2
-            // 
-            panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            panel2.Controls.Add(label2);
-            panel2.Location = new System.Drawing.Point(98, 0);
-            panel2.Name = "panel2";
-            panel2.Size = new System.Drawing.Size(30, 30);
-            panel2.TabIndex = 5;
-            // 
-            // label2
-            // 
-            label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            label2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
-            label2.Location = new System.Drawing.Point(0, 0);
-            label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(28, 28);
-            label2.TabIndex = 0;
-            label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            lb_eobt.Dock = System.Windows.Forms.DockStyle.Fill;
+            lb_eobt.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_eobt.Location = new System.Drawing.Point(0, 0);
+            lb_eobt.Name = "lb_eobt";
+            lb_eobt.Size = new System.Drawing.Size(58, 28);
+            lb_eobt.TabIndex = 0;
+            lb_eobt.Text = "0000";
+            lb_eobt.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            lb_eobt.Click += lb_eobt_Click;
             // 
             // panel3
             // 
@@ -564,8 +544,7 @@
             Controls.Add(pl_hdg);
             Controls.Add(panel3);
             Controls.Add(pl_alt);
-            Controls.Add(panel2);
-            Controls.Add(panel1);
+            Controls.Add(pl_eobt);
             Controls.Add(pl_route);
             Controls.Add(pl_frul);
             Controls.Add(pl_ades);
@@ -594,8 +573,7 @@
             pl_rwy.ResumeLayout(false);
             pl_clx.ResumeLayout(false);
             pl_remark.ResumeLayout(false);
-            panel1.ResumeLayout(false);
-            panel2.ResumeLayout(false);
+            pl_eobt.ResumeLayout(false);
             panel3.ResumeLayout(false);
             panel4.ResumeLayout(false);
             pl_req.ResumeLayout(false);
@@ -633,10 +611,8 @@
         private System.Windows.Forms.Label lb_clx;
         private System.Windows.Forms.Panel pl_remark;
         private System.Windows.Forms.Label lb_remark;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Panel pl_eobt;
+        private System.Windows.Forms.Label lb_eobt;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Panel panel4;

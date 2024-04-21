@@ -13,7 +13,7 @@ namespace maxrumsey.ozstrips.controls
 
             pickToggleControl = pl_acid;
 
-            base.lb_eobt = lb_eobt;
+            base.lb_eobt = base.lb_eobt;
             base.lb_acid = lb_acid;
             base.lb_ssr = lb_ssr;
             base.lb_type = lb_type;
@@ -31,6 +31,7 @@ namespace maxrumsey.ozstrips.controls
             base.lb_req = lb_req;
             base.lb_glop = lb_glop;
             base.lb_tot = lb_tot;
+            base.lb_eobt = lb_eobt;
 
             base.crossColourControls = new Panel[]
             {
@@ -42,7 +43,6 @@ namespace maxrumsey.ozstrips.controls
                 pl_req
 
             };
-            base.cockColourControls = new Panel[] { };
             this.stripController = controller;
             UpdateStrip();
 
@@ -82,6 +82,11 @@ namespace maxrumsey.ozstrips.controls
         private void lb_tot_Click(object sender, EventArgs e)
         {
             stripController.TakeOff();
+        }
+
+        private void lb_eobt_Click(object sender, EventArgs e)
+        {
+            Cock(-1);
         }
     }
 }
