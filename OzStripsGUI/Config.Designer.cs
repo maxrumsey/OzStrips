@@ -39,7 +39,7 @@ namespace maxrumsey.ozstrips.gui {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("OzStripsGUI.Config", typeof(Config).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("maxrumsey.ozstrips.gui.Config", typeof(Config).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -79,7 +79,7 @@ namespace maxrumsey.ozstrips.gui {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 0.3.1.
+        ///   Looks up a localized string similar to 0.3.2.
         /// </summary>
         public static string version {
             get {

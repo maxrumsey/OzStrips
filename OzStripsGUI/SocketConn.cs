@@ -19,6 +19,7 @@ namespace maxrumsey.ozstrips.gui
         private bool versionShown = false;
         private bool freshClient = true;
         private System.Timers.Timer fifteensecTimer;
+        private System.Timers.Timer oneMinTimer;
         private MainForm mainForm;
         public SocketConn(BayManager bayManager, MainForm mf)
         {
@@ -51,9 +52,14 @@ namespace maxrumsey.ozstrips.gui
             io.OnConnected += async (sender, e) =>
             {
                 AddMessage("c: conn established");
+                freshClient = true;
                 await io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName, Network.Me.RealName);
                 if (mf.Visible) mf.Invoke((MethodInvoker)delegate () { mf.SetConnStatus(true); });
-
+                oneMinTimer = new System.Timers.Timer();
+                oneMinTimer.AutoReset = false;
+                oneMinTimer.Interval = 60000;
+                oneMinTimer.Elapsed += ToggleFresh;
+                oneMinTimer.Start();
             };
             io.OnDisconnected += (sender, e) =>
             {
@@ -90,7 +96,6 @@ namespace maxrumsey.ozstrips.gui
 
                 if (mf.Visible && freshClient)
                 {
-                    freshClient = false;
                     mf.Invoke((MethodInvoker)delegate () { StripController.LoadCache(scDTO); });
                 }
             });
@@ -139,6 +144,12 @@ namespace maxrumsey.ozstrips.gui
         }
         public void SetAerodrome()
         {
+            freshClient = true;
+            oneMinTimer = new System.Timers.Timer();
+            oneMinTimer.AutoReset = false;
+            oneMinTimer.Interval = 60000;
+            oneMinTimer.Elapsed += ToggleFresh;
+            oneMinTimer.Start();
             if (io.Connected) io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName);
         }
 
@@ -227,6 +238,18 @@ namespace maxrumsey.ozstrips.gui
             catch (Exception ex)
             {
                 Errors.Add(ex, "OzStrips");
+            }
+        }
+
+        private void ToggleFresh(object sender, ElapsedEventArgs e)
+        {
+            try
+            {
+                freshClient = false;
+            }
+            catch (Exception ex)
+            {
+                
             }
         }
 
