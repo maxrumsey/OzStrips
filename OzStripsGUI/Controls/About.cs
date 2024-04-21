@@ -11,10 +11,5 @@ namespace maxrumsey.ozstrips.controls
             lb_version.Text = "Version: " + Config.version;
 
         }
-
-        private void richTextBox1_TextChanged(object sender, System.EventArgs e)
-        {
-
-        }
     }
 }
