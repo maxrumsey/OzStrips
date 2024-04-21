@@ -5,6 +5,8 @@ This is due to a bug associated with downloading Nav Data from Navigraph in vatS
   ![Unlink Navigraph](images/unlink_navigraph.png)
 </figure>
 
+As a VATPAC member, there is no requirement to retrieve Nav Data from Navigraph, as this is handled by the ATS team.
+
 If this still doesn't work, make sure you have selected your aerodrome in OzStrips.
 <figure markdown="span">
   ![Select Aerodrome](images/sel_ad.png)
