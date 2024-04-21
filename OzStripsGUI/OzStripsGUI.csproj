@@ -5,6 +5,7 @@
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   		<EmbeddedResourceUseDependentUponConvention>true</EmbeddedResourceUseDependentUponConvention>
 		<PlatformTarget>x86</PlatformTarget>
+		<RootNamespace>maxrumsey.ozstrips.gui</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
