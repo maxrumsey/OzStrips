@@ -373,6 +373,7 @@ namespace maxrumsey.ozstrips.gui
                 {
                     if (possibleSID.sidStar.Name == value)
                     {
+                        if (value == fdr.SIDSTARString) return; // dont needlessly set sid
                         if (Network.Me.IsRealATC || MainForm.isDebug) FDP2.SetSID(fdr, possibleSID.sidStar);
                         found = true;
                     }
