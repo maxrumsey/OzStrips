@@ -1,4 +1,5 @@
 ﻿using maxrumsey.ozstrips.gui;
+using Newtonsoft.Json;
 using System;
 using System.ComponentModel.Composition;
 using System.Net.Http;
