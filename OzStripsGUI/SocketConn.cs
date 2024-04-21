@@ -31,13 +31,17 @@ namespace maxrumsey.ozstrips.gui
                 if (metaDTO.version != Config.version && !versionShown)
                 {
                     versionShown = true;
-                    Util.ShowInfoBox("New Update Available: " + metaDTO.version);
+                    if (mf.Visible) mf.Invoke((MethodInvoker)delegate ()
+                    {
+                        Util.ShowInfoBox("New Update Available: " + metaDTO.version);
+                    });
+                
                 }
                 if (metaDTO.apiversion != Config.apiversion)
                 {
-                    Util.ShowErrorBox("OzStrips incompatible with current API version!");
                     if (mf.Visible) mf.Invoke((MethodInvoker)delegate ()
                     {
+                        Util.ShowErrorBox("OzStrips incompatible with current API version!");
                         mf.Close();
                         mf.Dispose();
                     });

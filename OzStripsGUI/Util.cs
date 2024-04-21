@@ -6,15 +6,15 @@ namespace maxrumsey.ozstrips.gui
     {
         public static void ShowErrorBox(string message)
         {
-            MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(Form.ActiveForm, message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         public static void ShowInfoBox(string message)
         {
-            MessageBox.Show(message, "OzStrips", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(Form.ActiveForm, message, "OzStrips", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         public static void ShowWarnBox(string message)
         {
-            MessageBox.Show(message, "OzStrips", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(Form.ActiveForm, message, "OzStrips", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
     }
 }
