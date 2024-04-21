@@ -54,6 +54,9 @@
             debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            gitHubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            documentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             flp_main = new System.Windows.Forms.FlowLayoutPanel();
             tt_metar = new System.Windows.Forms.ToolTip(components);
             pl_controlbar.SuspendLayout();
@@ -200,7 +203,7 @@
             // menuStrip1
             // 
             menuStrip1.BackColor = System.Drawing.Color.FromArgb(160, 170, 170);
-            menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { ts_ad, ts_mode, debugToolStripMenuItem, aboutToolStripMenuItem });
+            menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { ts_ad, ts_mode, debugToolStripMenuItem, aboutToolStripMenuItem, helpToolStripMenuItem });
             menuStrip1.Location = new System.Drawing.Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new System.Drawing.Size(1784, 25);
@@ -315,6 +318,29 @@
             aboutToolStripMenuItem.Text = "About";
             aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
             // 
+            // helpToolStripMenuItem
+            // 
+            helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { gitHubToolStripMenuItem, documentationToolStripMenuItem });
+            helpToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            helpToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(0, 0, 96);
+            helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            helpToolStripMenuItem.Size = new System.Drawing.Size(52, 21);
+            helpToolStripMenuItem.Text = "Help";
+            // 
+            // gitHubToolStripMenuItem
+            // 
+            gitHubToolStripMenuItem.Name = "gitHubToolStripMenuItem";
+            gitHubToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            gitHubToolStripMenuItem.Text = "GitHub";
+            gitHubToolStripMenuItem.Click += gitHubToolStripMenuItem_Click;
+            // 
+            // documentationToolStripMenuItem
+            // 
+            documentationToolStripMenuItem.Name = "documentationToolStripMenuItem";
+            documentationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            documentationToolStripMenuItem.Text = "Documentation";
+            documentationToolStripMenuItem.Click += documentationToolStripMenuItem_Click;
+            // 
             // flp_main
             // 
             flp_main.AutoScroll = true;
@@ -386,6 +412,9 @@
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.Button bt_pdc;
         private System.Windows.Forms.ToolTip tt_metar;
+        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem gitHubToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem documentationToolStripMenuItem;
     }
 }
 

@@ -330,5 +330,16 @@ namespace maxrumsey.ozstrips.gui
         {
 
         }
+
+        private void gitHubToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/maxrumsey/OzStrips/");
+
+        }
+
+        private void documentationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://maxrumsey.xyz/OzStrips/");
+        }
     }
 }
