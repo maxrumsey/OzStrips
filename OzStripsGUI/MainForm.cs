@@ -75,6 +75,11 @@ namespace maxrumsey.ozstrips.gui
             }
         }
 
+        public void SetATISCode(string code)
+        {
+            lb_atis.Text = code;
+        }
+
         public void OpenManDebug()
         {
             ManualMsgDebug modalChild = new ManualMsgDebug();

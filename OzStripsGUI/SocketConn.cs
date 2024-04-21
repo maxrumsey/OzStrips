@@ -107,6 +107,12 @@ namespace maxrumsey.ozstrips.gui
 
                 if (mf.Visible) mf.Invoke((System.Windows.Forms.MethodInvoker)delegate () { mainForm.SetMetar(metar); });
             });
+            io.On("server:atis", codeRaw =>
+            {
+                String code = codeRaw.GetValue<string>();
+
+                if (mf.Visible) mf.Invoke((System.Windows.Forms.MethodInvoker)delegate () { mainForm.SetATISCode(code); });
+            });
             io.On("server:update_cache", (args) =>
             {
                 AddMessage("s:update_cache: ");

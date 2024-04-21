@@ -31,6 +31,8 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             pl_controlbar = new System.Windows.Forms.Panel();
+            pl_atis = new System.Windows.Forms.Panel();
+            lb_atis = new System.Windows.Forms.Label();
             bt_pdc = new System.Windows.Forms.Button();
             bt_cross = new System.Windows.Forms.Button();
             bt_force = new System.Windows.Forms.Button();
@@ -60,6 +62,7 @@
             flp_main = new System.Windows.Forms.FlowLayoutPanel();
             tt_metar = new System.Windows.Forms.ToolTip(components);
             pl_controlbar.SuspendLayout();
+            pl_atis.SuspendLayout();
             pl_ad.SuspendLayout();
             pl_stat.SuspendLayout();
             menuStrip1.SuspendLayout();
@@ -69,6 +72,7 @@
             // 
             pl_controlbar.BackColor = System.Drawing.Color.FromArgb(160, 170, 170);
             pl_controlbar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            pl_controlbar.Controls.Add(pl_atis);
             pl_controlbar.Controls.Add(bt_pdc);
             pl_controlbar.Controls.Add(bt_cross);
             pl_controlbar.Controls.Add(bt_force);
@@ -82,13 +86,35 @@
             pl_controlbar.Size = new System.Drawing.Size(1784, 45);
             pl_controlbar.TabIndex = 0;
             // 
+            // pl_atis
+            // 
+            pl_atis.BackColor = System.Drawing.Color.DarkGray;
+            pl_atis.Controls.Add(lb_atis);
+            pl_atis.Location = new System.Drawing.Point(349, 3);
+            pl_atis.Name = "pl_atis";
+            pl_atis.Size = new System.Drawing.Size(42, 37);
+            pl_atis.TabIndex = 3;
+            // 
+            // lb_atis
+            // 
+            lb_atis.BackColor = System.Drawing.Color.Silver;
+            lb_atis.Dock = System.Windows.Forms.DockStyle.Fill;
+            lb_atis.Font = new System.Drawing.Font("Terminus (TTF)", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_atis.ForeColor = System.Drawing.Color.FromArgb(0, 0, 96);
+            lb_atis.Location = new System.Drawing.Point(0, 0);
+            lb_atis.Name = "lb_atis";
+            lb_atis.Size = new System.Drawing.Size(42, 37);
+            lb_atis.TabIndex = 0;
+            lb_atis.Text = "Z";
+            lb_atis.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // bt_pdc
             // 
             bt_pdc.BackColor = System.Drawing.Color.FromArgb(140, 150, 150);
             bt_pdc.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             bt_pdc.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             bt_pdc.ForeColor = System.Drawing.Color.FromArgb(0, 0, 96);
-            bt_pdc.Location = new System.Drawing.Point(687, 3);
+            bt_pdc.Location = new System.Drawing.Point(736, 3);
             bt_pdc.Name = "bt_pdc";
             bt_pdc.Size = new System.Drawing.Size(96, 37);
             bt_pdc.TabIndex = 6;
@@ -103,7 +129,7 @@
             bt_cross.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             bt_cross.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             bt_cross.ForeColor = System.Drawing.Color.FromArgb(0, 0, 96);
-            bt_cross.Location = new System.Drawing.Point(543, 3);
+            bt_cross.Location = new System.Drawing.Point(592, 3);
             bt_cross.Name = "bt_cross";
             bt_cross.Size = new System.Drawing.Size(142, 37);
             bt_cross.TabIndex = 5;
@@ -118,7 +144,7 @@
             bt_force.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             bt_force.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             bt_force.ForeColor = System.Drawing.Color.FromArgb(0, 0, 96);
-            bt_force.Location = new System.Drawing.Point(445, 3);
+            bt_force.Location = new System.Drawing.Point(494, 3);
             bt_force.Name = "bt_force";
             bt_force.Size = new System.Drawing.Size(96, 37);
             bt_force.TabIndex = 4;
@@ -133,7 +159,7 @@
             bt_inhibit.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             bt_inhibit.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             bt_inhibit.ForeColor = System.Drawing.Color.FromArgb(0, 0, 96);
-            bt_inhibit.Location = new System.Drawing.Point(347, 3);
+            bt_inhibit.Location = new System.Drawing.Point(396, 3);
             bt_inhibit.Name = "bt_inhibit";
             bt_inhibit.Size = new System.Drawing.Size(96, 37);
             bt_inhibit.TabIndex = 3;
@@ -153,6 +179,7 @@
             // 
             // lb_ad
             // 
+            lb_ad.BackColor = System.Drawing.Color.Silver;
             lb_ad.Dock = System.Windows.Forms.DockStyle.Fill;
             lb_ad.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_ad.ForeColor = System.Drawing.Color.FromArgb(0, 0, 96);
@@ -375,6 +402,7 @@
             SizeChanged += MainForm_SizeChanged;
             pl_controlbar.ResumeLayout(false);
             pl_controlbar.PerformLayout();
+            pl_atis.ResumeLayout(false);
             pl_ad.ResumeLayout(false);
             pl_stat.ResumeLayout(false);
             pl_stat.PerformLayout();
@@ -415,6 +443,8 @@
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gitHubToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem documentationToolStripMenuItem;
+        private System.Windows.Forms.Panel pl_atis;
+        private System.Windows.Forms.Label lb_atis;
     }
 }
 
