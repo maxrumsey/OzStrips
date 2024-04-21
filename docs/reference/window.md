@@ -1,5 +1,5 @@
 # Window
-![Window](../images/ozstrips_main.png)
+![Window](../images/fullwindow.png)
 
 ## Menu Bar
 ### Aerodrome
@@ -24,12 +24,13 @@ The "CONN STAT" box will change colour depending on connection status to the OzS
 Displays the time in UTC / Zulu time.
 ### Aerodrome Name
 Displays the aerodrome name.
+
+Hover over this to see the aerodrome metar.
 ### Inhibit Button
 With a strip picked, select this button to remove the strip from your stripboard.
 ### Force Strip Button
 Select a track on your Air ASD in vatSys, or with a strip selected in your vatSYS strip list, and press "FOR STP" to place it into your top-left strip bay.
 ### Cross Button
 Pick a strip and press this button to add crossing highlights for situational awareness.
-![Crossing Strip](../images/strip_crossing.png)
 ### PDC Button
 Pick a strip and press this button to open the vatSYS PDC Window.
