@@ -17,12 +17,16 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="$(VatSysDir)\bin\vatSys.exe " />
+		<Reference Include="System.Net.Http" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<None Update="bin\Properties\Settings.settings">
 			<Generator>SettingsSingleFileGenerator</Generator>
 			<LastGenOutput>Settings.Designer.cs</LastGenOutput>
+		</None>
+		<None Update="Version.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
 	<ItemGroup>
