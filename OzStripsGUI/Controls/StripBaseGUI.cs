@@ -12,6 +12,7 @@ namespace maxrumsey.ozstrips.controls
         public FDP2.FDR fdr;
         public Color defColor = Color.Empty;
         public Panel[] crossColourControls = new Panel[] { };
+        public Panel[] cockColourControls = new Panel[] { };
 
         public StripController stripController;
         public Panel pickToggleControl;
@@ -51,9 +52,15 @@ namespace maxrumsey.ozstrips.controls
             }
             if (update) stripController.cockLevel = _cockLevel;
             int marginLeft = 0;
+            Color color = Color.Empty;
             if (stripController.cockLevel == 1)
             {
                 marginLeft = 30;
+                color = Color.Cyan;
+            }
+            foreach (Panel pl in cockColourControls)
+            {
+                pl.BackColor = color;
             }
             stripController.stripHolderControl.Margin = new Padding(marginLeft,0,0,0);
             if (sync) stripController.SyncStrip();

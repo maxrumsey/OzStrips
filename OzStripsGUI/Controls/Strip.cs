@@ -43,6 +43,19 @@ namespace maxrumsey.ozstrips.controls
                 pl_req
 
             };
+            base.cockColourControls = new Panel[]
+            {
+                pl_std,
+                pl_ades,
+                pl_eobt,
+                pl_wtc,
+                panel3,
+                pl_frul,
+                panel4,
+                pl_type,
+                pl_ssr
+            };
+
             this.stripController = controller;
             UpdateStrip();
 
