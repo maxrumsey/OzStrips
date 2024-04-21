@@ -103,7 +103,7 @@ namespace maxrumsey.ozstrips.controls
             if (lb_sid != null) lb_sid.Text = stripController.SID;
             if (lb_ades != null) lb_ades.Text = fdr.DesAirport;
             if (lb_alt != null) lb_alt.Text = stripController.CFL;
-            if (lb_hdg != null) lb_hdg.Text = stripController.HDG;
+            if (lb_hdg != null) lb_hdg.Text = "H" + stripController.HDG;
             if (lb_clx != null) lb_clx.Text = stripController.CLX;
             if (lb_std != null) lb_std.Text = stripController.GATE;
             if (lb_remark != null) lb_remark.Text = stripController.Remark;

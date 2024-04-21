@@ -318,7 +318,7 @@ namespace maxrumsey.ozstrips.gui
                 Match hdgMatch = r.Match(fdr.GlobalOpData);
                 if (hdgMatch.Success)
                 {
-                    return hdgMatch.Value;
+                    return hdgMatch.Value.Replace("H", "");
                 }
                 else return "";
             }
