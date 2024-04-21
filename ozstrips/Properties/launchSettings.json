@@ -1,8 +1,5 @@
 {
   "profiles": {
-    "ozstrips": {
-      "commandName": "Project"
-    },
     "ozstrips on vatsys": {
       "commandName": "Executable",
       "executablePath": "C:\\Program Files (x86)\\vatSys\\bin\\vatSys.exe",
