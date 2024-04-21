@@ -12,5 +12,9 @@ namespace maxrumsey.ozstrips.gui
         {
             MessageBox.Show(message, "OzStrips", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+        public static void ShowWarnBox(string message)
+        {
+            MessageBox.Show(message, "OzStrips", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
     }
 }
