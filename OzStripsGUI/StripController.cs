@@ -85,7 +85,7 @@ namespace maxrumsey.ozstrips.gui
 
         public void CoordinateStrip()
         {
-            if (fdr.State == FDP2.FDR.FDRStates.STATE_PREACTIVE && (Network.Me.IsRealATC || MainForm.isDebug)) FDP2.EstFDR(fdr, true);
+            if (fdr.State == FDP2.FDR.FDRStates.STATE_PREACTIVE && (Network.Me.IsRealATC || MainForm.isDebug)) MMI.EstFDR(fdr);
             if (currentBay == StripBay.BAY_PREA) Util.ShowWarnBox("You have coordinated this strip while it is in your Preactive Bay.\nYou will no longer be able make changes to the flight plan!\nOpen the vatSys Flight Plan window and deactivate the strip if you still need to make changes to SID, RWY or Altitude."); 
         }
 

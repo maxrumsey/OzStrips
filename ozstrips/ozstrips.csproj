@@ -4,7 +4,7 @@
     <ProjectGuid>{BF935CA5-9313-4585-A51F-601C9A923446}</ProjectGuid>
     <RootNamespace>maxrumsey.ozstrips</RootNamespace>
     <AssemblyName>ozstrips</AssemblyName>
-    <TargetFramework>net481</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
     <AssemblyTitle>maxrumsey.ozstrips</AssemblyTitle>
     <Product>maxrumsey.ozvectors</Product>
     <NeutralLanguage>en-AU</NeutralLanguage>
