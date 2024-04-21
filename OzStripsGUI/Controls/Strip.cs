@@ -32,6 +32,7 @@ namespace maxrumsey.ozstrips.controls
             base.lb_glop = lb_glop;
             base.lb_tot = lb_tot;
             base.lb_eobt = lb_eobt;
+            base.lb_ssricon = lb_ssricon;
 
             base.crossColourControls = new Panel[]
             {
@@ -51,7 +52,7 @@ namespace maxrumsey.ozstrips.controls
                 pl_wtc,
                 panel3,
                 pl_frul,
-                panel4,
+                pl_ssricon,
                 pl_type,
                 pl_ssr
             };

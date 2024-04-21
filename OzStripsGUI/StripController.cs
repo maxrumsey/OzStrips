@@ -303,6 +303,20 @@ namespace maxrumsey.ozstrips.gui
 
         }
 
+        public RDP.RadarTrack GetRadarTrack()
+        {
+            List<RDP.RadarTrack> RadarTracks = (from radarTrack in RDP.RadarTracks
+                                                where radarTrack.ActualAircraft.Callsign == fdr.Callsign
+                                                select radarTrack).ToList();
+            if (RadarTracks.Count > 0)
+            {
+                return RadarTracks.First();
+            } else
+            {
+                return null;
+            }
+        }
+
         public String CFL
         {
             get => this.fdr.CFLString; set
@@ -401,6 +415,16 @@ namespace maxrumsey.ozstrips.gui
             {
                 String aerodrome = fdr.DepAirport;
                 return Airspace2.GetRunways(aerodrome);
+            }
+        }
+
+        public bool SquawkCorrect
+        {
+            get
+            {
+                RDP.RadarTrack rtrack = GetRadarTrack();
+                if (rtrack != null && rtrack.ActualAircraft.TransponderModeC && (rtrack.ActualAircraft.TransponderCode == fdr.AssignedSSRCode)) return true;
+                return false;
             }
         }
 

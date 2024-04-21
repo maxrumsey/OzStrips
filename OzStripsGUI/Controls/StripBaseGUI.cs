@@ -35,6 +35,7 @@ namespace maxrumsey.ozstrips.controls
         public Label lb_remark;
         public Label lb_req;
         public Label lb_glop;
+        public Label lb_ssricon;
 
         public StripBaseGUI()
         {
@@ -117,6 +118,8 @@ namespace maxrumsey.ozstrips.controls
             }
             if (lb_req != null) lb_req.Text = (stripController.fdr.RFL / 100).ToString();
             if (lb_glop != null) lb_glop.Text = stripController.fdr.GlobalOpData;
+            if (lb_ssricon != null && stripController.SquawkCorrect) lb_ssricon.Text = "*";
+            else if (lb_ssricon != null) lb_ssricon.Text = "";
             SetCross(false);
             Cock(0, false, false);
             lb_rwy.Text = stripController.RWY;
