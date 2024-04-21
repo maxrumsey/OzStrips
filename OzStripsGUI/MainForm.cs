@@ -135,7 +135,7 @@ namespace maxrumsey.ozstrips.gui
 
         private void MainForm_SizeChanged(object sender, EventArgs e)
         {
-            bayManager.Resize();
+            if (bayManager != null) bayManager.Resize();
         }
 
         private void AddVerticalStripBoard()

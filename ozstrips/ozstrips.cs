@@ -70,7 +70,7 @@ namespace maxrumsey.ozstrips
             }
             else if (GUI.Visible) return;
 
-            GUI.Show();
+            GUI.Show(Form.ActiveForm);
 
 
         }
