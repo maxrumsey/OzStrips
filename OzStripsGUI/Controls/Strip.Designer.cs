@@ -1,4 +1,4 @@
-﻿namespace maxrumsey.ozstrips.controls
+﻿namespace MaxRumsey.OzStripsPlugin.Gui.Controls
 {
     partial class Strip
     {
@@ -112,8 +112,8 @@
             lb_acid.TabIndex = 0;
             lb_acid.Text = "CALLSIGN";
             lb_acid.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            lb_acid.Click += lb_acid_Click;
-            lb_acid.DoubleClick += lb_acid_Click;
+            lb_acid.Click += AcidClicked;
+            lb_acid.DoubleClick += AcidClicked;
             // 
             // pl_wtc
             // 
@@ -176,7 +176,7 @@
             lb_ssr.TabIndex = 0;
             lb_ssr.Text = "ssr";
             lb_ssr.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            lb_ssr.Click += lb_ssr_Click;
+            lb_ssr.Click += SSRClicked;
             // 
             // pl_type
             // 
@@ -266,7 +266,7 @@
             lb_sid.TabIndex = 0;
             lb_sid.Text = "SID";
             lb_sid.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            lb_sid.Click += lb_sid_Click;
+            lb_sid.Click += SidClicked;
             // 
             // pl_std
             // 
@@ -424,7 +424,7 @@
             lb_eobt.TabIndex = 0;
             lb_eobt.Text = "0000";
             lb_eobt.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            lb_eobt.Click += lb_eobt_Click;
+            lb_eobt.Click += EOBTClicked;
             // 
             // panel3
             // 
@@ -529,7 +529,7 @@
             lb_tot.TabIndex = 0;
             lb_tot.Text = "00:00";
             lb_tot.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            lb_tot.Click += lb_tot_Click;
+            lb_tot.Click += TOTClicked;
             // 
             // Strip
             // 

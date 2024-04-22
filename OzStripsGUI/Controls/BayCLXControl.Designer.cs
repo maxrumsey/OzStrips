@@ -1,4 +1,4 @@
-﻿namespace maxrumsey.ozstrips.controls
+﻿namespace MaxRumsey.OzStripsPlugin.Gui.Controls
 {
     partial class BayCLXControl
     {
@@ -55,7 +55,7 @@
             tb_clx.Name = "tb_clx";
             tb_clx.Size = new System.Drawing.Size(75, 26);
             tb_clx.TabIndex = 1;
-            tb_clx.KeyDown += tb_clx_KeyDown;
+            tb_clx.KeyDown += AcceptKeyDown;
             // 
             // button12
             // 
@@ -66,7 +66,7 @@
             button12.TabStop = false;
             button12.Text = "Clear";
             button12.UseVisualStyleBackColor = true;
-            button12.Click += button12_Click;
+            button12.Click += ClearButtonTextCleared;
             // 
             // groupBox1
             // 
@@ -100,7 +100,7 @@
             button1.TabStop = false;
             button1.Text = "Clear";
             button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            button1.Click += BayButtonClearTextClicked;
             // 
             // tb_bay
             // 
@@ -111,7 +111,7 @@
             tb_bay.Name = "tb_bay";
             tb_bay.Size = new System.Drawing.Size(75, 26);
             tb_bay.TabIndex = 2;
-            tb_bay.KeyDown += tb_clx_KeyDown;
+            tb_bay.KeyDown += AcceptKeyDown;
             // 
             // groupBox3
             // 
@@ -133,7 +133,7 @@
             button2.TabStop = false;
             button2.Text = "Clear";
             button2.UseVisualStyleBackColor = true;
-            button2.Click += button2_Click;
+            button2.Click += RemarkButtonClearClicked;
             // 
             // tb_remark
             // 
@@ -164,7 +164,7 @@
             button3.TabStop = false;
             button3.Text = "Clear";
             button3.UseVisualStyleBackColor = true;
-            button3.Click += button3_Click;
+            button3.Click += GlopButtonClearClicked;
             // 
             // tb_glop
             // 

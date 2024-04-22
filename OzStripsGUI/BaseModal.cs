@@ -2,71 +2,82 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace maxrumsey.ozstrips.gui
+namespace MaxRumsey.OzStripsPlugin.Gui;
+
+/// <summary>
+/// A base modal form.
+/// </summary>
+public partial class BaseModal : Form
 {
+    private readonly Control _child;
 
-    public partial class BaseModal : Form
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BaseModal"/> class.
+    /// </summary>
+    /// <param name="child">The child.</param>
+    /// <param name="text">The text.</param>
+    public BaseModal(Control child, string text)
     {
-        Control child;
-        public event ReturnEventHandler ReturnEvent;
-        public BaseModal(Control child, String text)
-        {
-            StartPosition = FormStartPosition.CenterScreen;
-            InitializeComponent();
-            this.child = child;
-            gb_cont.Controls.Add(child);
-            child.Anchor = AnchorStyles.Top;
-            child.Location = new Point(6, 16);
+        StartPosition = FormStartPosition.CenterScreen;
+        InitializeComponent();
+        _child = child;
+        gb_cont.Controls.Add(child);
+        child.Anchor = AnchorStyles.Top;
+        child.Location = new Point(6, 16);
 
-            Text = text;
-            BringToFront();
+        Text = text;
+        BringToFront();
+    }
+
+    /// <summary>
+    /// A event when the modal is returned.
+    /// </summary>
+    public event EventHandler<ModalReturnArgs>? ReturnEvent;
+
+    /// <summary>
+    /// Exits the model.
+    /// </summary>
+    /// <param name="senddata">If the return event should be fired or not.</param>
+    public void ExitModal(bool senddata = false)
+    {
+        if (senddata && ReturnEvent != null)
+        {
+            ReturnEvent(this, new ModalReturnArgs(_child));
         }
 
-        private void bt_canc_Click(object sender, EventArgs e)
-        {
-            ExitModal();
-        }
+        Close();
+    }
 
-        private void bt_acp_Click(object sender, EventArgs e)
+    /// <inheritdoc/>
+    protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+    {
+        var btn = ActiveControl as Button;
+        if (btn != null)
         {
-            // to add
-            // child.confirm();
-            ExitModal(true);
-        }
-
-
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-        {
-            Button btn = this.ActiveControl as Button;
-            if (btn != null)
+            if (keyData == Keys.Enter)
             {
-                if (keyData == Keys.Enter)
-                {
-                    ExitModal(true);
-                    return true; // suppress default handling of space
-                }
-                else if (keyData == Keys.Escape)
-                {
-                    ExitModal();
-                    return true; // suppress default handling of space
-                }
+                ExitModal(true);
+                return true; // suppress default handling of space
             }
-            return base.ProcessCmdKey(ref msg, keyData);
+            else if (keyData == Keys.Escape)
+            {
+                ExitModal();
+                return true; // suppress default handling of space
+            }
         }
 
-        public void ExitModal(bool senddata = false)
-        {
-            if (senddata && ReturnEvent != null) ReturnEvent(this, new ModalReturnArgs(this.child));
-            this.Close();
-        }
+        return base.ProcessCmdKey(ref msg, keyData);
     }
-    public class ModalReturnArgs : EventArgs
+
+    private void ButtonCancelClicked(object sender, EventArgs e)
     {
-        public Control child;
-        public ModalReturnArgs(Object child)
-        {
-            this.child = (Control)child;
-        }
+        ExitModal();
     }
-    public delegate void ReturnEventHandler(object source, ModalReturnArgs e);
+
+    private void ButtonAcceptedClicked(object sender, EventArgs e)
+    {
+        // to add
+        // child.confirm();
+        ExitModal(true);
+    }
 }

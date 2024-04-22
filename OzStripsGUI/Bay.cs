@@ -1,242 +1,377 @@
-﻿using maxrumsey.ozstrips.controls;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 
-namespace maxrumsey.ozstrips.gui
+using MaxRumsey.OzStripsPlugin.Gui.Controls;
+using MaxRumsey.OzStripsPlugin.Gui.DTO;
+
+namespace MaxRumsey.OzStripsPlugin.Gui;
+
+/// <summary>
+/// A bay.
+/// </summary>
+public class Bay
 {
-    public class Bay
+    private readonly BayManager _bayManager;
+    private readonly SocketConn _socketConnection;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Bay"/> class.
+    /// </summary>
+    /// <param name="bays">The list of bays.</param>
+    /// <param name="bayManager">The bay manager.</param>
+    /// <param name="socketConn">The socket connection.</param>
+    /// <param name="name">The name of the bay.</param>
+    /// <param name="vertBoardNum">The vertical board number.</param>
+    public Bay(List<StripBay> bays, BayManager bayManager, SocketConn socketConn, string name, int vertBoardNum)
     {
-        public List<StripBay> BayTypes;
-        public BayManager Manager;
-        public String Name;
-        public List<StripListItem> Strips = new List<StripListItem>();
-        public BayControl ChildPanel;
-        public int VerticalBoardNumber;
-        public Bay(List<StripBay> bays, BayManager bm, String name, int vertboardnum)
+        BayTypes = bays;
+        _bayManager = bayManager;
+        _socketConnection = socketConn;
+        Name = name;
+        VerticalBoardNumber = vertBoardNum;
+        ChildPanel = new BayControl(bayManager, name, this);
+
+        bayManager.AddBay(this, vertBoardNum);
+    }
+
+    /// <summary>
+    /// Gets the vertical board number.
+    /// </summary>
+    public int VerticalBoardNumber { get; }
+
+    /// <summary>
+    /// Gets the bay child panel.
+    /// </summary>
+    public BayControl ChildPanel { get; }
+
+    /// <summary>
+    /// Gets the name.
+    /// </summary>
+    public string Name { get; }
+
+    /// <summary>
+    /// Gets a list of strips.
+    /// </summary>
+    public List<StripListItem> Strips { get; } = [];
+
+    /// <summary>
+    /// Gets a list of bay types.
+    /// </summary>
+    public List<StripBay> BayTypes { get; }
+
+    /// <summary>
+    /// Gets the div position.
+    /// </summary>
+    public int DivPosition
+    {
+        get
         {
-            BayTypes = bays;
-            Manager = bm;
-            Name = name;
-            VerticalBoardNumber = vertboardnum;
-            this.ChildPanel = new BayControl(bm, name, this);
-
-            bm.AddBay(this, vertboardnum);
-
-        }
-
-        public int CountQueued()
-        {
-            int count = 0;
-
-            foreach (StripListItem item in Strips)
+            var val = 0;
+            for (var i = 0; i < Strips.Count; i++)
             {
-                if (item.Type == StripItemType.QUEUEBAR)
-                {
-                    return count;
-                }
-                else if (item.Type == StripItemType.STRIP)
-                {
-                    count++;
-                }
-            }
-            return -1;
-        }
-        public bool ResponsibleFor(StripBay bay)
-        {
-            if (BayTypes.Contains(bay))
-            {
-                return true;
-            }
-            else return false;
-        }
-
-        public bool OwnsStrip(StripController controller)
-        {
-            bool found = false;
-            foreach (StripListItem item in Strips)
-            {
-                if (item.StripController == controller) found = true;
-            }
-
-            return found;
-        }
-
-        public void RemoveStrip(StripController controller, bool remove)
-        {
-            if (remove) Strips.RemoveAll(item => item.StripController == controller);
-            orderStrips();
-
-        }
-        public void RemoveStrip(StripController controller)
-        {
-            RemoveStrip(controller, true);
-
-        }
-        public void WipeStrips()
-        {
-            foreach (StripListItem strip in Strips)
-            {
-                RemoveStrip(strip.StripController, false);
-            }
-
-            Strips = new List<StripListItem>();
-            orderStrips();
-
-        }
-
-        //todo: check for dupes
-        public void AddStrip(StripController stripController)
-        {
-            StripListItem strip = new StripListItem();
-            strip.StripController = stripController;
-            strip.Type = StripItemType.STRIP;
-
-            Strips.Add(strip); // todo: add control action
-            orderStrips();
-
-        }
-        public void ForceRerender()
-        {
-            StripListItem[] stripList = new StripListItem[Strips.Count];
-            Strips.CopyTo(stripList);
-
-            foreach (StripListItem s in stripList)
-            {
-                if (s.Type == StripItemType.STRIP) s.StripController.UpdateFDR();
-
-            }
-        }
-        public void orderStrips()
-        {
-            ChildPanel.ChildPanel.SuspendLayout();
-            ChildPanel.ChildPanel.Controls.Clear();
-            int queueLen = CountQueued();
-            for (int i = 0; i < Strips.Count; i++)
-            {
-                if (Strips[i].Type == StripItemType.STRIP) ChildPanel.ChildPanel.Controls.Add(Strips[i].StripController.stripHolderControl);
                 if (Strips[i].Type == StripItemType.QUEUEBAR)
                 {
-                    ChildPanel.ChildPanel.Controls.Add(Strips[i].DividerBarControl);
-                    Strips[i].DividerBarControl.SetVal(queueLen);
-                }
-            }
-            ChildPanel.ChildPanel.ResumeLayout();
-
-        }
-
-        public void ChangeStripPosition(StripController sc, int relpos)
-        {
-            int originalPosition = Strips.FindIndex(a => a.StripController == sc);
-            StripListItem stripItem = Strips[originalPosition];
-            int newPosition = originalPosition + relpos;
-
-            if (newPosition < 0 || newPosition > (Strips.Count - 1)) return;
-
-            Strips.RemoveAt(originalPosition);
-            Strips.Insert(newPosition, stripItem);
-            orderStrips();
-            if (Manager.socketConn != null) Manager.socketConn.SyncBay(this);
-
-        }
-        public void ChangeStripPositionAbs(StripListItem item, int abspos)
-        {
-
-            if (abspos < 0 || abspos > (Strips.Count - 1)) return;
-
-            Strips.Remove(item);
-            Strips.Insert(abspos, item);
-            orderStrips();
-            if (Manager.socketConn != null) Manager.socketConn.SyncBay(this);
-
-        }
-        public void AddDivider(bool? force, bool sync = true)
-        {
-            bool containsDiv = false;
-            StripListItem currentItem = null;
-            foreach (StripListItem item in Strips)
-            {
-                if (item.Type == StripItemType.QUEUEBAR)
-                {
-                    containsDiv = true;
-                    currentItem = item;
+                    val = i;
                 }
             }
 
-            if (!containsDiv)
-            {
-                StripListItem newItem = new StripListItem();
-                newItem.Type = StripItemType.QUEUEBAR;
-                newItem.DividerBarControl = new DividerBarControl();
-                Strips.Insert(0, newItem);
-            }
-            else if (force == null || force == false)
-            {
-                Strips.Remove(currentItem);
-            }
-            orderStrips();
-            if (Manager.socketConn != null && sync) Manager.socketConn.SyncBay(this);
-        }
-
-        public void QueueUp()
-        {
-
-            if (Manager.Picked != null && OwnsStrip(Manager.Picked))
-            {
-                AddDivider(true, false);
-                StripListItem item = Strips.Find(a => a?.StripController == Manager.Picked);
-                ChangeStripPositionAbs(item, DivPosition);
-                Manager.SetPicked();
-                if (Manager.socketConn != null) Manager.socketConn.SyncBay(this);
-
-            }
-        }
-
-        public int DivPosition
-        {
-            get
-            {
-                int val = 0;
-                for (int i = 0; i < Strips.Count; i++)
-                {
-                    if (Strips[i].Type == StripItemType.QUEUEBAR) val = i;
-                }
-                return val;
-            }
-        }
-
-        public StripListItem GetListItemByStr(string code)
-        {
-            StripListItem returnedItem = null;
-            foreach (StripListItem stripListItem in Strips)
-            {
-                if (code == "\a" && stripListItem.Type == StripItemType.QUEUEBAR) returnedItem = stripListItem;
-                else if (stripListItem.Type == StripItemType.STRIP && stripListItem.StripController.fdr.Callsign == code) returnedItem = stripListItem;
-            }
-            if (code == "\a" && returnedItem == null)
-            {
-                AddDivider(true, false);
-                return GetListItemByStr(code);
-            }
-            return returnedItem;
+            return val;
         }
     }
 
-    public class StripListItem
+    /// <summary>
+    /// Converts the Bay into a Bay Transfer object.
+    /// </summary>
+    /// <param name="bay">The bay to convert.</param>
+    public static implicit operator BayDTO(Bay bay)
     {
-        public StripController StripController;
-        public StripItemType Type;
-        public DividerBarControl DividerBarControl;
+        var bayDTO = new BayDTO { Bay = bay.BayTypes[0] };
+        var childList = new List<string>();
+        foreach (var item in bay.Strips)
+        {
+            if (item.Type == StripItemType.STRIP && item.StripController is not null)
+            {
+                childList.Add(item.StripController.FDR.Callsign);
+            }
+            else if (item.Type == StripItemType.QUEUEBAR)
+            {
+                childList.Add("\a"); // indicates q-bar
+            }
+        }
 
-
-
+        bayDTO.List = childList;
+        return bayDTO;
     }
 
-    public enum StripItemType
+    /// <summary>
+    /// The number of queues items.
+    /// </summary>
+    /// <returns>The number.</returns>
+    public int CountQueued()
     {
-        STRIP,
-        QUEUEBAR,
-        BLOCKED
+        var count = 0;
+
+        foreach (var item in Strips)
+        {
+            if (item.Type == StripItemType.QUEUEBAR)
+            {
+                return count;
+            }
+            else if (item.Type == StripItemType.STRIP)
+            {
+                count++;
+            }
+        }
+
+        return -1;
+    }
+
+    /// <summary>
+    /// Gets if this bay is responsible for the bay strip.
+    /// </summary>
+    /// <param name="bay">The bay.</param>
+    /// <returns>True of it is responsible, false otherwise.</returns>
+    public bool ResponsibleFor(StripBay bay)
+    {
+        return BayTypes.Contains(bay);
+    }
+
+    /// <summary>
+    /// Gets if this bay owns the strip.
+    /// </summary>
+    /// <param name="controller">The controller.</param>
+    /// <returns>True if it owns the strip, false otherwise.</returns>
+    public bool OwnsStrip(StripController controller)
+    {
+        var found = false;
+        foreach (var item in Strips)
+        {
+            if (item.StripController == controller)
+            {
+                found = true;
+            }
+        }
+
+        return found;
+    }
+
+    /// <summary>
+    /// Remove the strip if indicated, otherwise orders the strips.
+    /// </summary>
+    /// <param name="controller">The controller to remove.</param>
+    /// <param name="remove">If the controller should be removed or not.</param>
+    public void RemoveStrip(StripController controller, bool remove)
+    {
+        if (remove)
+        {
+            Strips.RemoveAll(item => item.StripController == controller);
+        }
+
+        Orderstrips();
+    }
+
+    /// <summary>
+    /// Removes the specified strip.
+    /// </summary>
+    /// <param name="controller">The controller.</param>
+    public void RemoveStrip(StripController controller)
+    {
+        RemoveStrip(controller, true);
+    }
+
+    /// <summary>
+    /// Wipes the strips.
+    /// </summary>
+    public void WipeStrips()
+    {
+        foreach (var strip in Strips.Where(x => x.StripController is not null))
+        {
+            RemoveStrip(strip.StripController!, false);
+        }
+
+        Strips.Clear();
+        Orderstrips();
+    }
+
+    /// <summary>
+    /// Adds the strip to the bay.
+    /// </summary>
+    /// <param name="stripController">The strip.</param>
+    /// <remarks>todo: check for dupes.</remarks>
+    public void AddStrip(StripController stripController)
+    {
+        var strip = new StripListItem
+        {
+            StripController = stripController,
+            Type = StripItemType.STRIP,
+        };
+
+        Strips.Add(strip); // todo: add control action
+        Orderstrips();
+    }
+
+    /// <summary>
+    /// Forces a rerender of all the strips.
+    /// </summary>
+    public void ForceRerender()
+    {
+        var stripList = new StripListItem[Strips.Count];
+        Strips.CopyTo(stripList);
+
+        foreach (var s in stripList)
+        {
+            if (s.Type == StripItemType.STRIP)
+            {
+                s.StripController?.UpdateFDR();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Orders the strips.
+    /// </summary>
+    public void Orderstrips()
+    {
+        ChildPanel.ChildPanel.SuspendLayout();
+        ChildPanel.ChildPanel.Controls.Clear();
+        var queueLen = CountQueued();
+        for (var i = 0; i < Strips.Count; i++)
+        {
+            if (Strips[i].Type == StripItemType.STRIP && Strips[i].StripController?.StripHolderControl != null)
+            {
+                ChildPanel.ChildPanel.Controls.Add(Strips[i].StripController!.StripHolderControl);
+            }
+
+            if (Strips[i].Type == StripItemType.QUEUEBAR)
+            {
+                ChildPanel.ChildPanel.Controls.Add(Strips[i].DividerBarControl);
+                Strips[i].DividerBarControl?.SetVal(queueLen);
+            }
+        }
+
+        ChildPanel.ChildPanel.ResumeLayout();
+    }
+
+    /// <summary>
+    /// Changes a strip position.
+    /// </summary>
+    /// <param name="stripController">The strip controller.</param>
+    /// <param name="relativePosition">The relative position.</param>
+    public void ChangeStripPosition(StripController stripController, int relativePosition)
+    {
+        var originalPosition = Strips.FindIndex(a => a.StripController == stripController);
+        var stripItem = Strips[originalPosition];
+        var newPosition = originalPosition + relativePosition;
+
+        if (newPosition < 0 || newPosition > Strips.Count - 1)
+        {
+            return;
+        }
+
+        Strips.RemoveAt(originalPosition);
+        Strips.Insert(newPosition, stripItem);
+        Orderstrips();
+        _socketConnection.SyncBay(this);
+    }
+
+    /// <summary>
+    /// Changes the strip position.
+    /// </summary>
+    /// <param name="item">The strip item to change.</param>
+    /// <param name="abspos">The new position.</param>
+    public void ChangeStripPositionAbs(StripListItem item, int abspos)
+    {
+        if (abspos < 0 || abspos > Strips.Count - 1)
+        {
+            return;
+        }
+
+        Strips.Remove(item);
+        Strips.Insert(abspos, item);
+        Orderstrips();
+        _socketConnection.SyncBay(this);
+    }
+
+    /// <summary>
+    /// Adds a new divider.
+    /// </summary>
+    /// <param name="force">If the division should be forced.</param>
+    /// <param name="sync">If to sync the changes to the server.</param>
+    public void AddDivider(bool? force, bool sync = true)
+    {
+        var containsDiv = false;
+        StripListItem? currentItem = null;
+        foreach (var item in Strips)
+        {
+            if (item.Type == StripItemType.QUEUEBAR)
+            {
+                containsDiv = true;
+                currentItem = item;
+            }
+        }
+
+        if (!containsDiv)
+        {
+            var newItem = new StripListItem
+            {
+                Type = StripItemType.QUEUEBAR,
+                DividerBarControl = new DividerBarControl(),
+            };
+            Strips.Insert(0, newItem);
+        }
+        else if (currentItem is not null && (force == null || force == false))
+        {
+            Strips.Remove(currentItem);
+        }
+
+        Orderstrips();
+        if (sync)
+        {
+            _socketConnection.SyncBay(this);
+        }
+    }
+
+    /// <summary>
+    /// Queue the current item up.
+    /// </summary>
+    public void QueueUp()
+    {
+        if (_bayManager.PickedController != null && OwnsStrip(_bayManager.PickedController))
+        {
+            AddDivider(true, false);
+            var item = Strips.Find(a => a?.StripController == _bayManager.PickedController);
+            ChangeStripPositionAbs(item, DivPosition);
+            _bayManager.SetPicked();
+            _socketConnection.SyncBay(this);
+        }
+    }
+
+    /// <summary>
+    /// Gets if available a list item by strip name.
+    /// </summary>
+    /// <param name="code">The code of the item.</param>
+    /// <returns>The list item if there is a match, otherwise null.</returns>
+    public StripListItem? GetListItemByStr(string code)
+    {
+        StripListItem? returnedItem = null;
+        foreach (var stripListItem in Strips)
+        {
+            if (code == "\a" && stripListItem.Type == StripItemType.QUEUEBAR)
+            {
+                returnedItem = stripListItem;
+            }
+            else if (stripListItem.Type == StripItemType.STRIP && stripListItem.StripController?.FDR.Callsign == code)
+            {
+                returnedItem = stripListItem;
+            }
+        }
+
+        if (code == "\a" && returnedItem == null)
+        {
+            AddDivider(true, false);
+            return GetListItemByStr(code);
+        }
+
+        return returnedItem;
     }
 }
-
-

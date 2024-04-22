@@ -1,39 +1,50 @@
-﻿using maxrumsey.ozstrips.gui;
-using System;
+﻿using System;
 using System.Windows.Forms;
 
-namespace maxrumsey.ozstrips.controls
+namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
+
+/// <summary>
+/// A control representing a bay.
+/// </summary>
+public partial class BayControl : UserControl
 {
-    public partial class BayControl : UserControl
+    private readonly Bay _ownerBay;
+    private readonly BayManager _bayManager;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BayControl"/> class.
+    /// </summary>
+    /// <param name="bm">The bay manager.</param>
+    /// <param name="name">The bay name.</param>
+    /// <param name="bay">The bay.</param>
+    public BayControl(BayManager bm, string name, Bay bay)
     {
-        public FlowLayoutPanel ChildPanel;
-        private Bay OwnerBay;
-        private BayManager BayManager;
-        public BayControl(BayManager bm, String name, Bay bay)
-        {
-            InitializeComponent();
-            lb_bay_name.Text = name;
-            ChildPanel = (FlowLayoutPanel)flp_stripbay;
-            flp_stripbay.VerticalScroll.Visible = true;
+        InitializeComponent();
+        lb_bay_name.Text = name;
+        ChildPanel = (FlowLayoutPanel)flp_stripbay;
+        flp_stripbay.VerticalScroll.Visible = true;
 
-            this.BayManager = bm;
-            OwnerBay = bay;
-        }
+        _bayManager = bm;
+        _ownerBay = bay;
+    }
 
-        private void lb_bay_name_Click(object sender, EventArgs e)
-        {
-            BayManager.DropStrip(OwnerBay);
-        }
+    /// <summary>
+    /// Gets the child panel.
+    /// </summary>
+    public FlowLayoutPanel ChildPanel { get; }
 
-        private void bt_queue_Click(object sender, EventArgs e)
-        {
-            OwnerBay.QueueUp();
-        }
+    private void LabelBayNameClicked(object sender, EventArgs e)
+    {
+        _bayManager.DropStrip(_ownerBay);
+    }
 
-        private void bt_div_Click(object sender, EventArgs e)
-        {
-            OwnerBay.AddDivider(false);
-        }
+    private void ButtonQueueClicked(object sender, EventArgs e)
+    {
+        _ownerBay.QueueUp();
+    }
+
+    private void ButtonDivClicked(object sender, EventArgs e)
+    {
+        _ownerBay.AddDivider(false);
     }
 }

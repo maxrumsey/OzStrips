@@ -1,15 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace maxrumsey.ozstrips.gui.DTO
+namespace MaxRumsey.OzStripsPlugin.Gui.DTO;
+
+/// <summary>
+/// Represents the bay configuration with a list of strips.
+/// </summary>
+public class BayDTO
 {
-    public class BayDTO
-    {
-        [JsonPropertyName("bay")]
-        public StripBay bay { get; set; }
+    /// <summary>
+    /// Gets or sets the bay information.
+    /// </summary>
+    [JsonPropertyName("bay")]
+    public StripBay Bay { get; set; }
 
-        [JsonPropertyName("list")]
-        public List<string> list { get; set; }
-
-    }
+    /// <summary>
+    /// Gets or sets the list of items or strips in the bay.
+    /// </summary>
+    [JsonPropertyName("list")]
+    public List<string> List { get; set; } = [];
 }

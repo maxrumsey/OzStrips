@@ -1,52 +1,51 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFrameworks>net472</TargetFrameworks>
-		<UseWindowsForms>true</UseWindowsForms>
-		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-  		<EmbeddedResourceUseDependentUponConvention>true</EmbeddedResourceUseDependentUponConvention>
-		<PlatformTarget>x86</PlatformTarget>
+    <PropertyGroup>
+        <TargetFrameworks>net472</TargetFrameworks>
+        <UseWindowsForms>true</UseWindowsForms>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+        <EmbeddedResourceUseDependentUponConvention>true</EmbeddedResourceUseDependentUponConvention>
+        <PlatformTarget>x86</PlatformTarget>
+        <RootNamespace>MaxRumsey.OzStripsPlugin.Gui</RootNamespace>
+        <ApplicationIcon>ozstrips.ico</ApplicationIcon>
+    </PropertyGroup>
 
-		<RootNamespace>maxrumsey.ozstrips.gui</RootNamespace>
-   	<ApplicationIcon>ozstrips.ico</ApplicationIcon>
-	</PropertyGroup>
-
-	<ItemGroup>
-		<PackageReference Include="System.Text.Json" Version="8.0.3" />
-		<PackageReference Include="SocketIO.Serializer.SystemTextJson" Version="3.1.1" />
-		<PackageReference Include="SocketIOClient" Version="3.1.1" />
-	</ItemGroup>
-	<ItemGroup>
-    		<Reference Include="$(MSBuildProgramFiles32)\vatSys\bin\vatSys.exe " />
-	</ItemGroup>
-  <ItemGroup>
-	  <Compile Update="Config.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>Config.resx</DependentUpon>
-	  </Compile>
-	</ItemGroup>
-	<ItemGroup>
-	  <EmbeddedResource Update="Config.resx">
-	    <Generator>ResXFileCodeGenerator</Generator>
-	    <LastGenOutput>Config.Designer.cs</LastGenOutput>
-	  </EmbeddedResource>
-		<Reference Include="$(VatSysDir)\bin\vatSys.exe" />
-	</ItemGroup>
-	<ItemGroup>
-		<Content Include="ozstrips.ico" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Compile Update="Config.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>Config.resx</DependentUpon>
-	  </Compile>
-	</ItemGroup>
-	<ItemGroup>
-	  <EmbeddedResource Update="Config.resx">
-	    <Generator>PublicResXFileCodeGenerator</Generator>
-	    <LastGenOutput>Config.Designer.cs</LastGenOutput>
-	    <CustomToolNamespace>maxrumsey.ozstrips.gui</CustomToolNamespace>
-	  </EmbeddedResource>
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="System.Text.Json" Version="8.0.3" />
+        <PackageReference Include="SocketIO.Serializer.SystemTextJson" Version="3.1.1" />
+        <PackageReference Include="SocketIOClient" Version="3.1.1" />
+    </ItemGroup>
+    <ItemGroup>
+        <Reference Include="$(MSBuildProgramFiles32)\vatSys\bin\vatSys.exe " />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Update="Config.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Config.resx</DependentUpon>
+        </Compile>
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Update="Config.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Config.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <Reference Include="$(VatSysDir)\bin\vatSys.exe" />
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="ozstrips.ico" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Update="Config.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Config.resx</DependentUpon>
+        </Compile>
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Update="Config.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Config.Designer.cs</LastGenOutput>
+            <CustomToolNamespace>maxrumsey.ozstrips.gui</CustomToolNamespace>
+        </EmbeddedResource>
+    </ItemGroup>
 </Project>

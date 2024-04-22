@@ -1,275 +1,418 @@
-﻿using maxrumsey.ozstrips.gui.DTO;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+
+using MaxRumsey.OzStripsPlugin.Gui.DTO;
+
 using vatsys;
 
 // todo: separate GUI components into separate class
-namespace maxrumsey.ozstrips.gui
+namespace MaxRumsey.OzStripsPlugin.Gui;
+
+/// <summary>
+/// Handles the bays.
+/// </summary>
+public class BayManager
 {
-    public class BayManager
+    private readonly FlowLayoutPanel _flowLayoutPanel;
+    private readonly List<FlowLayoutPanel> _flpVerticalBoards = [];
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BayManager"/> class.
+    /// </summary>
+    /// <param name="main">The flow layout for the bay.</param>
+    public BayManager(FlowLayoutPanel main)
     {
-        public List<Bay> Bays;
-        public FlowLayoutPanel flp_main;
-        public List<FlowLayoutPanel> flp_vert_boards = new List<FlowLayoutPanel>();
-        public StripController Picked;
-        public String AerodromeName = "????";
-        public SocketConn socketConn;
-        public static BayManager bayManager;
-        public BayManager(FlowLayoutPanel main)
+        _flowLayoutPanel = main;
+    }
+
+    /// <summary>
+    /// Gets or sets the picked controller.
+    /// </summary>
+    public StripController? PickedController { get; set; }
+
+    /// <summary>
+    /// Gets or sets the aerodrome name.
+    /// </summary>
+    public string AerodromeName { get; set; } = "???";
+
+    /// <summary>
+    /// Gets the list of bays.
+    /// </summary>
+    public List<Bay> Bays { get; } = [];
+
+    /// <summary>
+    /// Updates the bay based on the bay data.
+    /// </summary>
+    /// <param name="bayDTO">The bay data.</param>
+    public void UpdateOrder(BayDTO bayDTO)
+    {
+        Bay? bay = null;
+        foreach (var currentBay in Bays)
         {
-            Bays = new List<Bay>();
-            this.flp_main = main;
-            bayManager = this;
+            if (currentBay.BayTypes.Contains(bayDTO.Bay))
+            {
+                bay = currentBay;
+            }
         }
 
-        public void UpdateOrder(BayDTO bayDTO)
+        if (bay == null)
         {
-            Bay bay = null;
-            foreach (Bay b in Bays)
-            {
-                if (b.BayTypes.Contains(bayDTO.bay)) bay = b;
-            }
-            if (bay == null) return;
-            List<StripListItem> list = new List<StripListItem>();
-
-            foreach (string dtoItem in bayDTO.list)
-            {
-                StripListItem listItem = bay.GetListItemByStr(dtoItem);
-                if (listItem != null) list.Add(listItem);
-            }
-
-            foreach (StripListItem oldListItem in bay.Strips) // incase of dodgy timing
-            {
-                if (!list.Contains(oldListItem) && oldListItem.Type == StripItemType.STRIP) list.Add(oldListItem);
-            }
-
-            bay.Strips = list;
-            bay.orderStrips();
-
+            return;
         }
 
-        public void ForceStrip()
-        {
-            if (MMI.SelectedTrack != null)
-            {
-                FDP2.FDR fdr = MMI.SelectedTrack.GetFDR();
-                StripController controller = StripController.UpdateFDR(fdr, this);
+        var list = new List<StripListItem>();
 
-                if (controller != null && Bays.First() != null)
+        foreach (var dtoItem in bayDTO.List)
+        {
+            var listItem = bay.GetListItemByStr(dtoItem);
+            if (listItem != null)
+            {
+                list.Add(listItem);
+            }
+        }
+
+        // incase of dodgy timing
+        foreach (var oldListItem in bay.Strips)
+        {
+            if (!list.Contains(oldListItem) && oldListItem.Type == StripItemType.STRIP)
+            {
+                list.Add(oldListItem);
+            }
+        }
+
+        bay.Strips.Clear();
+        bay.Strips.AddRange(list);
+        bay.Orderstrips();
+    }
+
+    /// <summary>
+    /// Force update the strip.
+    /// </summary>
+    /// <param name="socketConn">The socket connection.</param>
+    public void ForceStrip(SocketConn socketConn)
+    {
+        if (MMI.SelectedTrack != null)
+        {
+            var fdr = MMI.SelectedTrack.GetFDR();
+            if (fdr is null)
+            {
+                return;
+            }
+
+            var controller = StripController.UpdateFDR(fdr, this, socketConn);
+
+            if (controller != null && Bays[0] != null)
+            {
+                controller.CurrentBay = Bays[0].BayTypes[0];
+                controller.SyncStrip();
+                UpdateBay(controller);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Inhibit the strip.
+    /// </summary>
+    public void Inhibit()
+    {
+        if (PickedController != null)
+        {
+            PickedController.CurrentBay = StripBay.BAY_DEAD;
+            PickedController.SyncStrip();
+            UpdateBay(PickedController);
+            SetPicked();
+        }
+    }
+
+    /// <summary>
+    /// Send the PDC.
+    /// </summary>
+    public void SendPDC()
+    {
+        if (PickedController != null)
+        {
+            MMI.OpenCPDLCWindow(PickedController.FDR, null, CPDLC.MessageCategories.FirstOrDefault((m) => m.Name == "PDC"));
+            SetPicked();
+        }
+    }
+
+    /// <summary>
+    /// Allow the strip to cross and toggles the crossing.
+    /// </summary>
+    public void CrossStrip()
+    {
+        if (PickedController != null)
+        {
+            PickedController.Crossing = !PickedController.Crossing;
+            SetPicked();
+        }
+    }
+
+    /// <summary>
+    /// Drop the strip to the specified bay.
+    /// </summary>
+    /// <param name="bay">The bay.</param>
+    public void DropStrip(Bay bay)
+    {
+        if (PickedController != null)
+        {
+            var newBay = bay.BayTypes.FirstOrDefault();
+            if (newBay == PickedController.CurrentBay)
+            {
+                return;
+            }
+
+            PickedController.CurrentBay = newBay;
+            PickedController.SyncStrip();
+            UpdateBay(PickedController);
+            SetPicked();
+        }
+    }
+
+    /// <summary>
+    /// Deletes the specified strip.
+    /// </summary>
+    /// <param name="strip">The strip to delete.</param>
+    public void DeleteStrip(StripController strip)
+    {
+        FindBay(strip)?.RemoveStrip(strip, true);
+        StripController.StripControllers.Remove(strip);
+    }
+
+    /// <summary>
+    /// Sets the aerodrome.
+    /// </summary>
+    /// <param name="name">The name of the aerodrome.</param>
+    /// <param name="socketConn">The socket connection.</param>
+    public void SetAerodrome(string name, SocketConn socketConn)
+    {
+        AerodromeName = name;
+        WipeStrips();
+        StripController.StripControllers.Clear();
+
+        foreach (var fdr in FDP2.GetFDRs)
+        {
+            StripController.UpdateFDR(fdr, this, socketConn);
+        }
+    }
+
+    /// <summary>
+    /// Adds a vertical board.
+    /// </summary>
+    /// <param name="flpVertical">The vertical board.</param>
+    public void AddVertBoard(FlowLayoutPanel flpVertical)
+    {
+        _flpVerticalBoards.Add(flpVertical);
+    }
+
+    /// <summary>
+    /// Sets a controller to be picked.
+    /// </summary>
+    /// <param name="controller">The controller.</param>
+    public void SetPicked(StripController controller)
+    {
+        PickedController?.SetHMIPicked(false);
+        PickedController = controller;
+        controller.SetHMIPicked(true);
+    }
+
+    /// <summary>
+    /// Sets the picked controller to be empty.
+    /// </summary>
+    public void SetPicked()
+    {
+        PickedController?.SetHMIPicked(false);
+        PickedController = null;
+    }
+
+    /// <summary>
+    /// Wipe the strips.
+    /// </summary>
+    public void WipeStrips()
+    {
+        foreach (var bay in Bays)
+        {
+            bay.WipeStrips();
+        }
+    }
+
+    /// <summary>
+    /// Adds a strip.
+    /// </summary>
+    /// <param name="stripController">The strip controller to add.</param>
+    /// <param name="save">If the strip controller should be saved.</param>
+    public void AddStrip(StripController stripController, bool save = true)
+    {
+        var distance = stripController.GetDistToAerodrome(AerodromeName);
+
+        if (stripController.ApplicableToAerodrome(AerodromeName) == false)
+        {
+            return;
+        }
+
+        if ((distance > 50 || distance == -1) && stripController.ArrDepType == StripArrDepType.DEPARTURE)
+        {
+            return; // prevent arr strips disappearing on gnd
+        }
+
+        foreach (var bay in Bays)
+        {
+            if (bay.ResponsibleFor(stripController.CurrentBay))
+            {
+                bay.AddStrip(stripController);
+            }
+        }
+
+        if (save)
+        {
+            StripController.StripControllers.Add(stripController);
+        }
+    }
+
+    /// <summary>
+    /// Finds the specified bay.
+    /// </summary>
+    /// <param name="stripController">The strip.</param>
+    /// <returns>The bay if the name matches.</returns>
+    public Bay? FindBay(StripController stripController)
+    {
+        foreach (var bay in Bays)
+        {
+            if (bay.OwnsStrip(stripController))
+            {
+                return bay;
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Updates the bay from the controller.
+    /// </summary>
+    /// <param name="stripController">The strip controller.</param>
+    public void UpdateBay(StripController stripController)
+    {
+        foreach (var bay in Bays)
+        {
+            if (bay.OwnsStrip(stripController))
+            {
+                bay.RemoveStrip(stripController);
+            }
+        }
+
+        stripController.ClearStripControl();
+        stripController.CreateStripObj();
+        AddStrip(stripController);
+
+        if (stripController.CurrentBay >= StripBay.BAY_PUSHED)
+        {
+            stripController.CoordinateStrip();
+        }
+    }
+
+    /// <summary>
+    /// Adds the bay to the vertical board.
+    /// </summary>
+    /// <param name="bay">The bay.</param>
+    /// <param name="verticalBoardNumber">The vertical board number.</param>
+    public void AddBay(Bay bay, int verticalBoardNumber)
+    {
+        if (_flpVerticalBoards.Count >= verticalBoardNumber)
+        {
+            throw new InvalidOperationException("The vertical board number " + verticalBoardNumber + " is outside range and not valid");
+        }
+
+        Bays.Add(bay);
+        _flpVerticalBoards[verticalBoardNumber].Controls.Add(bay.ChildPanel);
+    }
+
+    /// <summary>
+    /// Wipes the bays.
+    /// </summary>
+    public void WipeBays()
+    {
+        Bays.Clear();
+        foreach (var flpVerticalBoard in _flpVerticalBoards)
+        {
+            flpVerticalBoard.SuspendLayout();
+            flpVerticalBoard.Controls.Clear();
+        }
+    }
+
+    /// <summary>
+    /// Reloads the strips.
+    /// </summary>
+    public void ReloadStrips()
+    {
+        foreach (var strip in StripController.StripControllers)
+        {
+            foreach (var bay in Bays)
+            {
+                if (bay.OwnsStrip(strip))
                 {
-                    controller.currentBay = Bays.First().BayTypes.First();
-                    controller.SyncStrip();
-                    UpdateBay(controller);
+                    bay.RemoveStrip(strip);
                 }
             }
+
+            strip.ClearStripControl();
+            strip.CreateStripObj();
+            AddStrip(strip, false);
         }
-        public void Inhibit()
+    }
+
+    /// <summary>
+    /// Forces a rerender.
+    /// </summary>
+    public void ForceRerender()
+    {
+        foreach (var bay in Bays)
         {
-            if (Picked != null)
-            {
-                Picked.currentBay = StripBay.BAY_DEAD;
-                Picked.SyncStrip();
-                UpdateBay(Picked);
-                SetPicked();
-            }
+            bay.ForceRerender();
         }
+    }
 
-        public void SendPDC()
+    /// <summary>
+    /// Resizes the control.
+    /// </summary>
+    public void Resize()
+    {
+        if (_flowLayoutPanel == null)
         {
-            if (Picked != null)
-            {
-                MMI.OpenCPDLCWindow(Picked.fdr, null, CPDLC.MessageCategories.FirstOrDefault((CPDLC.MessageCategory m) => m.Name == "PDC"));
-                SetPicked();
-            }
+            return;
         }
 
-        public void CrossStrip()
+        var x_main = _flowLayoutPanel.Size.Width;
+        var y_main = _flowLayoutPanel.Size.Height;
+
+        var x_each = _flowLayoutPanel.Size.Width / 3;
+
+        foreach (var panel in _flpVerticalBoards)
         {
-            if (Picked != null)
-            {
-                Picked.Crossing = !Picked.Crossing;
-                SetPicked();
-            }
+            panel.Size = new System.Drawing.Size(x_each, y_main);
+            panel.Margin = default;
+            panel.Padding = new Padding(2);
+            panel.ResumeLayout();
         }
 
-        public void DropStrip(Bay bay)
+        foreach (var bay in Bays)
         {
-            if (Picked != null)
-            {
-                StripBay newBay = bay.BayTypes.FirstOrDefault();
-                if (newBay == Picked.currentBay) return;
-                Picked.currentBay = newBay;
-                Picked.SyncStrip();
-                UpdateBay(Picked);
-                SetPicked();
-            }
+            var childnum = _flpVerticalBoards[bay.VerticalBoardNumber].Controls.Count;
+            bay.ChildPanel.Size = new System.Drawing.Size(x_each - 4, (y_main - 4) / childnum);
         }
+    }
 
-        public void DeleteStrip(StripController strip)
+    /// <summary>
+    /// Positions the key.
+    /// </summary>
+    /// <param name="relPos">The relative position.</param>
+    public void PositionKey(int relPos)
+    {
+        if (PickedController != null)
         {
-            FindBay(strip)?.RemoveStrip(strip, true);
-            StripController.stripControllers.Remove(strip);
+            FindBay(PickedController)?.ChangeStripPosition(PickedController, relPos);
         }
-
-        public void SetAerodrome(String name)
-        {
-            AerodromeName = name;
-            if (socketConn != null) socketConn.SetAerodrome();
-            WipeStrips();
-            StripController.stripControllers = new List<StripController>();
-
-            foreach (FDP2.FDR fdr in FDP2.GetFDRs)
-            {
-                StripController.UpdateFDR(fdr, this);
-            }
-        }
-
-        public void AddVertBoard(FlowLayoutPanel flp_vert)
-        {
-            flp_vert_boards.Add(flp_vert);
-        }
-
-        public void SetPicked(StripController controller)
-        {
-            if (Picked != null) Picked.HMI_SetPicked(false);
-            Picked = controller;
-            controller.HMI_SetPicked(true);
-        }
-        public void SetPicked()
-        {
-            Picked.HMI_SetPicked(false);
-            Picked = null;
-        }
-
-        public void WipeStrips()
-        {
-            foreach (Bay bay in Bays)
-            {
-                bay.WipeStrips();
-            }
-        }
-
-        public void AddStrip(StripController stripController, bool save = true)
-        {
-            stripController.BayManager = this;
-            double distance = stripController.GetDistToAerodrome(AerodromeName);
-
-            if (stripController.ApplicableToAerodrome(AerodromeName) == false) return;
-            if ((distance > 50 || distance == -1) && stripController.ArrDepType == StripArrDepType.DEPARTURE) return; // prevent arr strips disappearing on gnd
-
-            foreach (Bay bay in Bays)
-            {
-                if (bay.ResponsibleFor(stripController.currentBay))
-                {
-                    bay.AddStrip(stripController);
-                }
-            }
-
-            if (save) StripController.stripControllers.Add(stripController);
-        }
-
-        public Bay FindBay(StripController stripController)
-        {
-            foreach (Bay bay in Bays)
-            {
-                if (bay.OwnsStrip(stripController))
-                {
-                    return bay;
-                }
-            }
-            return null;
-
-        }
-
-        public void UpdateBay(StripController stripController)
-        {
-            foreach (Bay bay in Bays)
-            {
-                if (bay.OwnsStrip(stripController))
-                {
-                    bay.RemoveStrip(stripController);
-                }
-            }
-            stripController.ClearStripControl();
-            stripController.CreateStripObj();
-            AddStrip(stripController);
-
-            if (stripController.currentBay >= StripBay.BAY_PUSHED) stripController.CoordinateStrip();
-        }
-
-        public void AddBay(Bay bay, int vertboardnum)
-        {
-            Bays.Add(bay);
-            flp_vert_boards[vertboardnum].Controls.Add(bay.ChildPanel);
-            //flp_main.PerformLayout();
-        }
-
-        public void WipeBays()
-        {
-            Bays.Clear();
-            foreach (var flp_vert_board in flp_vert_boards)
-            {
-                flp_vert_board.SuspendLayout();
-                flp_vert_board.Controls.Clear();
-            }
-        }
-
-        public void ReloadStrips()
-        {
-            foreach (var Strip in StripController.stripControllers)
-            {
-                foreach (Bay bay in Bays)
-                {
-                    if (bay.OwnsStrip(Strip))
-                    {
-                        bay.RemoveStrip(Strip);
-                    }
-                }
-                Strip.ClearStripControl();
-                Strip.CreateStripObj();
-                AddStrip(Strip, false);
-            }
-        }
-
-        public void ForceRerender()
-        {
-            foreach (Bay bay in Bays)
-            {
-                bay.ForceRerender();
-            }
-        }
-        public void Resize()
-        {
-            if (flp_main == null) return;
-            int x_main = flp_main.Size.Width;
-            int y_main = flp_main.Size.Height;
-
-            int x_each = flp_main.Size.Width / 3;
-
-            foreach (FlowLayoutPanel panel in flp_vert_boards)
-            {
-                panel.Size = new System.Drawing.Size(x_each, y_main);
-                panel.Margin = new System.Windows.Forms.Padding();
-                panel.Padding = new System.Windows.Forms.Padding(2);
-                panel.ResumeLayout();
-            }
-            foreach (Bay bay in Bays)
-            {
-                int childnum = flp_vert_boards[bay.VerticalBoardNumber].Controls.Count;
-                bay.ChildPanel.Size = new System.Drawing.Size(x_each - 4, (y_main - 4) / childnum);
-            }
-        }
-
-        public void PositionKey(int relPos)
-        {
-            if (Picked != null)
-            {
-                FindBay(Picked)?.ChangeStripPosition(Picked, relPos);
-
-            }
-        }
-
     }
 }

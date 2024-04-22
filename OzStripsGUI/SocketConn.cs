@@ -1,269 +1,343 @@
-﻿using maxrumsey.ozstrips.gui.DTO;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Text.Json;
 using System.Timers;
-using System.Windows.Forms;
+
+using MaxRumsey.OzStripsPlugin.Gui.DTO;
+
 using vatsys;
 
-namespace maxrumsey.ozstrips.gui
+namespace MaxRumsey.OzStripsPlugin.Gui;
+
+/// <summary>
+/// Handles communications by the sockets.
+/// </summary>
+public sealed class SocketConn : IDisposable
 {
-    public class SocketConn
+    private readonly SocketIOClient.SocketIO _io;
+    private readonly BayManager _bayManager;
+    private readonly bool _isDebug = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
+    private readonly MainForm _mainForm;
+    private bool _versionShown;
+    private bool _freshClient = true;
+    private System.Timers.Timer? _fifteensecTimer;
+    private System.Timers.Timer? _oneMinTimer;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SocketConn"/> class.
+    /// </summary>
+    /// <param name="bayManager">The bay manager.</param>
+    /// <param name="mainForm">The main form instance.</param>
+    public SocketConn(BayManager bayManager, MainForm mainForm)
     {
-        SocketIOClient.SocketIO io;
-        private BayManager bayManager;
-        private bool isDebug = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
-        public List<string> Messages = new List<string>();
-        private bool versionShown = false;
-        private bool freshClient = true;
-        private System.Timers.Timer fifteensecTimer;
-        private System.Timers.Timer oneMinTimer;
-        private MainForm mainForm;
-        public SocketConn(BayManager bayManager, MainForm mf)
+        _mainForm = mainForm;
+        _bayManager = bayManager;
+        _io = new SocketIOClient.SocketIO(Config.socketioaddr);
+        _io.OnAny((_, e) =>
         {
-            mainForm = mf;
-            this.bayManager = bayManager;
-            io = new SocketIOClient.SocketIO(Config.socketioaddr);
-            io.OnAny((sender, e) =>
+            var metaDTO = e.GetValue<MetadataDTO>(1);
+            if (metaDTO.Version != Config.version && !_versionShown)
             {
-                MetadataDTO metaDTO = e.GetValue<MetadataDTO>(1);
-                if (metaDTO.version != Config.version && !versionShown)
+                _versionShown = true;
+                if (mainForm.Visible)
                 {
-                    versionShown = true;
-                    if (mf.Visible) mf.Invoke((MethodInvoker)delegate ()
-                    {
-                        Util.ShowInfoBox("New Update Available: " + metaDTO.version);
-                    });
-                
+                    mainForm.Invoke(() => Util.ShowInfoBox("New Update Available: " + metaDTO.Version));
                 }
-                if (metaDTO.apiversion != Config.apiversion)
+            }
+
+            if (metaDTO.ApiVersion != Config.apiversion && mainForm.Visible)
+            {
+                mainForm.Invoke(() =>
                 {
-                    if (mf.Visible) mf.Invoke((MethodInvoker)delegate ()
-                    {
-                        Util.ShowErrorBox("OzStrips incompatible with current API version!");
-                        mf.Close();
-                        mf.Dispose();
-                    });
-                }
-            });
+                    Util.ShowErrorBox("OzStrips incompatible with current API version!");
+                    mainForm.Close();
+                    mainForm.Dispose();
+                });
+            }
+        });
 
-            io.OnConnected += async (sender, e) =>
+        _io.OnConnected += async (sender, e) =>
+        {
+            AddMessage("c: conn established");
+            _freshClient = true;
+            await _io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName, Network.Me.RealName);
+            if (mainForm.Visible)
             {
-                AddMessage("c: conn established");
-                freshClient = true;
-                await io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName, Network.Me.RealName);
-                if (mf.Visible) mf.Invoke((MethodInvoker)delegate () { mf.SetConnStatus(true); });
-                oneMinTimer = new System.Timers.Timer();
-                oneMinTimer.AutoReset = false;
-                oneMinTimer.Interval = 60000;
-                oneMinTimer.Elapsed += ToggleFresh;
-                oneMinTimer.Start();
+                mainForm.Invoke(() => mainForm.SetConnStatus(true));
+            }
+
+            _oneMinTimer = new System.Timers.Timer
+            {
+                AutoReset = false,
+                Interval = 60000,
             };
-            io.OnDisconnected += (sender, e) =>
-            {
-                AddMessage("c: conn lost");
-                mf.SetConnStatus(false);
-            };
-            io.OnError += (sender, e) =>
-            {
-                AddMessage("c: error" + e);
-                mf.SetConnStatus(false);
-                MMI.InvokeOnGUI(delegate () { Errors.Add(new Exception(e), "OzStrips"); });
-            };
-            io.OnReconnected += (sender, e) =>
-            {
-                if (io.Connected) io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName);
-                mf.SetConnStatus(true);
-            };
-            io.OnReconnectError += (sender, e) =>
-            {
-                AddMessage("recon error");
-            };
-            io.On("server:sc_change", sc =>
-            {
-                StripControllerDTO scDTO = sc.GetValue<StripControllerDTO>();
-                AddMessage("s:sc_change: " + JsonSerializer.Serialize(scDTO));
+            _oneMinTimer.Elapsed += ToggleFresh;
+            _oneMinTimer.Start();
+        };
 
-                if (mf.Visible) mf.Invoke((MethodInvoker)delegate () { StripController.UpdateFDR(scDTO, bayManager); });
-
-            });
-            io.On("server:sc_cache", sc =>
-            {
-                CacheDTO scDTO = sc.GetValue<CacheDTO>();
-                AddMessage("s:sc_cache: " + JsonSerializer.Serialize(scDTO));
-
-                if (mf.Visible && freshClient)
-                {
-                    mf.Invoke((MethodInvoker)delegate () { StripController.LoadCache(scDTO); });
-                }
-            });
-            io.On("server:order_change", bdto =>
-            {
-                BayDTO bayDTO = bdto.GetValue<BayDTO>();
-                AddMessage("s:order_change: " + JsonSerializer.Serialize(bayDTO));
-
-                if (mf.Visible) mf.Invoke((MethodInvoker)delegate () { bayManager.UpdateOrder(bayDTO); });
-            });
-            io.On("server:metar", metarRaw =>
-            {
-                String metar = metarRaw.GetValue<string>();
-
-                if (mf.Visible) mf.Invoke((System.Windows.Forms.MethodInvoker)delegate () { mainForm.SetMetar(metar); });
-            });
-            io.On("server:atis", codeRaw =>
-            {
-                String code = codeRaw.GetValue<string>();
-
-                if (mf.Visible) mf.Invoke((System.Windows.Forms.MethodInvoker)delegate () { mainForm.SetATISCode(code); });
-            });
-            io.On("server:update_cache", (args) =>
-            {
-                AddMessage("s:update_cache: ");
-                if (io.Connected) io.EmitAsync("client:request_metar");
-                if (!freshClient) SendCache();
-            });
-            if (Network.IsConnected) Connect();
-            bayManager.socketConn = this;
-        }
-
-        public void SyncSC(StripController sc)
+        _io.OnDisconnected += (_, _) =>
         {
-            StripControllerDTO scDTO = CreateStripDTO(sc);
-            AddMessage("c:sc_change: " + JsonSerializer.Serialize(scDTO));
-            if (scDTO.acid == "") return; // prevent bug
-            if (CanSendDTO) io.EmitAsync("client:sc_change", scDTO);
-        }
-        public void SyncBay(Bay bay)
-        {
-            BayDTO bayDTO = CreateBayDTO(bay);
-            AddMessage("c:order_change: " + JsonSerializer.Serialize(bayDTO));
+            AddMessage("c: conn lost");
+            mainForm.SetConnStatus(false);
+        };
 
-            if (CanSendDTO) io.EmitAsync("client:order_change", bayDTO);
-        }
-        public void SetAerodrome()
+        _io.OnError += (_, e) =>
         {
-            freshClient = true;
-            oneMinTimer = new System.Timers.Timer();
-            oneMinTimer.AutoReset = false;
-            oneMinTimer.Interval = 60000;
-            oneMinTimer.Elapsed += ToggleFresh;
-            oneMinTimer.Start();
-            if (io.Connected) io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName);
-        }
+            AddMessage("c: error" + e);
+            mainForm.SetConnStatus(false);
+            MMI.InvokeOnGUI(() => Errors.Add(new Exception(e), "OzStrips"));
+        };
 
-        public BayDTO CreateBayDTO(Bay bay)
+        _io.OnReconnected += (_, _) =>
         {
-            BayDTO bayDTO = new BayDTO { bay = bay.BayTypes.First() };
-            List<string> childList = new List<string>();
-            foreach (StripListItem item in bay.Strips)
+            if (_io.Connected)
             {
-                if (item.Type == StripItemType.STRIP) childList.Add(item.StripController.fdr.Callsign);
-                else if (item.Type == StripItemType.QUEUEBAR) childList.Add("\a"); // indicates q-bar
-            }
-            bayDTO.list = childList;
-            return bayDTO;
-        }
-        public StripControllerDTO CreateStripDTO(StripController sc)
-        {
-            StripControllerDTO scDTO = new StripControllerDTO { acid = sc.fdr.Callsign, bay = sc.currentBay, CLX = sc.CLX, GATE = sc.GATE, cockLevel = sc.cockLevel, crossing = sc.Crossing, remark = sc.Remark };
-            if (sc.TakeOffTime != DateTime.MaxValue)
-            {
-                scDTO.TOT = sc.TakeOffTime.ToString(CultureInfo.InvariantCulture);
-            }
-            else
-            {
-                scDTO.TOT = "\0";
-            }
-            return scDTO;
-        }
-        public CacheDTO CreateCacheDTO()
-        {
-            List<StripControllerDTO> strips = new List<StripControllerDTO>();
-
-            foreach (StripController strip in StripController.stripControllers)
-            {
-                strips.Add(CreateStripDTO(strip));
+                _io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName);
             }
 
-            return new CacheDTO() { strips = strips };
-        }
+            mainForm.SetConnStatus(true);
+        };
 
-        public async void SendCache()
-        {
-            CacheDTO cacheDTO = CreateCacheDTO();
-            AddMessage("c:sc_cache: " + JsonSerializer.Serialize(cacheDTO));
-            if (CanSendDTO) await io.EmitAsync("client:sc_cache", cacheDTO);
-        }
+        _io.OnReconnectError += (_, _) => AddMessage("recon error");
 
-        public void Close()
+        _io.On("server:sc_change", sc =>
         {
-            io.DisconnectAsync();
-            io.Dispose();
-        }
+            var scDTO = sc.GetValue<StripControllerDTO>();
+            AddMessage("s:sc_change: " + JsonSerializer.Serialize(scDTO));
 
-        /// <summary>
-        /// Whether the user has permission to send data to server
-        /// </summary>
-        private bool CanSendDTO
-        {
-            get
+            if (mainForm.Visible)
             {
-                if (!(Network.Me.IsRealATC || isDebug)) AddMessage("c: DTO Rejected!");
-                return io.Connected && (Network.Me.IsRealATC || isDebug);
+                mainForm.Invoke(() => StripController.UpdateFDR(scDTO, bayManager));
             }
+        });
+
+        _io.On("server:sc_cache", sc =>
+        {
+            var scDTO = sc.GetValue<CacheDTO>();
+            AddMessage("s:sc_cache: " + JsonSerializer.Serialize(scDTO));
+
+            if (mainForm.Visible && _freshClient)
+            {
+                mainForm.Invoke(() => StripController.LoadCache(scDTO, bayManager));
+            }
+        });
+
+        _io.On("server:order_change", bdto =>
+        {
+            var bayDTO = bdto.GetValue<BayDTO>();
+            AddMessage("s:order_change: " + JsonSerializer.Serialize(bayDTO));
+
+            if (mainForm.Visible)
+            {
+                mainForm.Invoke(() => bayManager.UpdateOrder(bayDTO));
+            }
+        });
+
+        _io.On("server:metar", metarRaw =>
+        {
+            var metar = metarRaw.GetValue<string>();
+
+            if (mainForm.Visible)
+            {
+                mainForm.Invoke(() => _mainForm.SetMetar(metar));
+            }
+        });
+
+        _io.On("server:atis", codeRaw =>
+        {
+            var code = codeRaw.GetValue<string>();
+
+            if (mainForm.Visible)
+            {
+                mainForm.Invoke(() => _mainForm.SetATISCode(code));
+            }
+        });
+
+        _io.On("server:update_cache", (args) =>
+        {
+            AddMessage("s:update_cache: ");
+            if (_io.Connected)
+            {
+                _io.EmitAsync("client:request_metar");
+            }
+
+            if (!_freshClient)
+            {
+                SendCache();
+            }
+        });
+        if (Network.IsConnected)
+        {
+            Connect();
+        }
+    }
+
+    /// <summary>
+    /// Gets the messages, used for debugging.
+    /// </summary>
+    public List<string> Messages { get; } = [];
+
+    /// <summary>
+    /// Gets a value indicating whether the user has permission to send data to server.
+    /// </summary>
+    private bool CanSendDTO
+    {
+        get
+        {
+            if (!(Network.Me.IsRealATC || _isDebug))
+            {
+                AddMessage("c: DTO Rejected!");
+            }
+
+            return _io.Connected && (Network.Me.IsRealATC || _isDebug);
+        }
+    }
+
+    /// <summary>
+    /// Syncs the strip controller.
+    /// </summary>
+    /// <param name="sc">The strip controller.</param>
+    public void SyncSC(StripController sc)
+    {
+        StripControllerDTO scDTO = sc;
+        AddMessage("c:sc_change: " + JsonSerializer.Serialize(scDTO));
+        if (string.IsNullOrEmpty(scDTO.Acid))
+        {
+            return; // prevent bug
         }
 
-        /// <summary>
-        /// Starts a fifteen second timer, ensures FDRs have loaded in before requesting SCs from server.
-        /// </summary>
-        public void Connect()
+        if (CanSendDTO)
         {
-            fifteensecTimer = new System.Timers.Timer();
-            fifteensecTimer.AutoReset = false;
-            fifteensecTimer.Interval = 15000;
-            fifteensecTimer.Elapsed += ConnectIO;
-            fifteensecTimer.Start();
-            mainForm.SetAerodrome(bayManager.AerodromeName);
+            _io.EmitAsync("client:sc_change", scDTO);
         }
+    }
 
-        private async void ConnectIO(object sender, ElapsedEventArgs e)
+    /// <summary>
+    /// Sync the bay to the socket.
+    /// </summary>
+    /// <param name="bay">The bay to sync.</param>
+    public void SyncBay(Bay bay)
+    {
+        BayDTO bayDTO = bay;
+        AddMessage("c:order_change: " + JsonSerializer.Serialize(bayDTO));
+
+        if (CanSendDTO)
         {
-            try
-            {
-                AddMessage("c: Attempting connection " + Config.socketioaddr);
-                await io.ConnectAsync();
-            }
-            catch (Exception ex)
-            {
-                Errors.Add(ex, "OzStrips");
-            }
+            _io.EmitAsync("client:order_change", bayDTO);
         }
+    }
 
-        private void ToggleFresh(object sender, ElapsedEventArgs e)
+    /// <summary>
+    /// Sets the aerodrome based on the bay manager.
+    /// </summary>
+    public void SetAerodrome()
+    {
+        _freshClient = true;
+        _oneMinTimer = new System.Timers.Timer
         {
-            try
-            {
-                freshClient = false;
-            }
-            catch (Exception ex)
-            {
-                
-            }
+            AutoReset = false,
+            Interval = 60000,
+        };
+        _oneMinTimer.Elapsed += ToggleFresh;
+        _oneMinTimer.Start();
+        if (_io.Connected)
+        {
+            _io.EmitAsync("client:aerodrome_subscribe", _bayManager.AerodromeName);
         }
+    }
 
-        public void Disconnect()
+    /// <summary>
+    /// Sends the cache to the server.
+    /// </summary>
+    public async void SendCache()
+    {
+        var cacheDTO = CreateCacheDTO();
+        AddMessage("c:sc_cache: " + JsonSerializer.Serialize(cacheDTO));
+        if (CanSendDTO)
         {
-            io.DisconnectAsync();
+            await _io.EmitAsync("client:sc_cache", cacheDTO);
         }
+    }
 
-        private void AddMessage(string message)
+    /// <summary>
+    /// Disconnects from the server.
+    /// </summary>
+    public void Close()
+    {
+        _io.DisconnectAsync();
+        _io.Dispose();
+    }
+
+    /// <summary>
+    /// Starts a fifteen second timer, ensures FDRs have loaded in before requesting SCs from server.
+    /// </summary>
+    public void Connect()
+    {
+        _fifteensecTimer = new System.Timers.Timer
         {
-            lock (Messages)
-            {
-                Messages.Add(message);
-            }
+            AutoReset = false,
+            Interval = 15000,
+        };
+
+        _fifteensecTimer.Elapsed += ConnectIO;
+        _fifteensecTimer.Start();
+        _mainForm.SetAerodrome(_bayManager.AerodromeName);
+    }
+
+    /// <summary>
+    /// Disconnects the io.
+    /// </summary>
+    public void Disconnect()
+    {
+        _io.DisconnectAsync();
+    }
+
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        _fifteensecTimer?.Dispose();
+        _oneMinTimer?.Dispose();
+        _io?.Dispose();
+    }
+
+    /// <summary>
+    /// Creates the cache data transfer object.
+    /// </summary>
+    /// <returns>The cache data transfer object.</returns>
+    private static CacheDTO CreateCacheDTO()
+    {
+        return new CacheDTO() { Strips = StripController.StripControllers.ConvertAll(x => (StripControllerDTO)x), };
+    }
+
+    private async void ConnectIO(object sender, ElapsedEventArgs e)
+    {
+        try
+        {
+            AddMessage("c: Attempting connection " + Config.socketioaddr);
+            await _io.ConnectAsync();
+        }
+        catch (Exception ex)
+        {
+            Errors.Add(ex, "OzStrips");
+        }
+    }
+
+    private void ToggleFresh(object sender, ElapsedEventArgs e)
+    {
+        try
+        {
+            _freshClient = false;
+        }
+        catch (Exception)
+        {
+        }
+    }
+
+    private void AddMessage(string message)
+    {
+        lock (Messages)
+        {
+            Messages.Add(message);
         }
     }
 }

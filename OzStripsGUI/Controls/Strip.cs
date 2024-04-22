@@ -1,106 +1,194 @@
-﻿using maxrumsey.ozstrips.gui;
-using System;
-using System.Windows.Forms;
+﻿using System;
+using System.Drawing;
+using System.Globalization;
+using System.Linq;
 
-namespace maxrumsey.ozstrips.controls
+using static vatsys.FDP2;
+
+namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
+
+/// <summary>
+/// A UI for the strips.
+/// </summary>
+public partial class Strip : StripBaseGUI
 {
-    public partial class Strip : StripBaseGUI
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Strip"/> class.
+    /// </summary>
+    /// <param name="controller">The strip controller.</param>
+    public Strip(StripController controller)
+        : base(controller)
     {
-        public Strip(StripController controller)
+        InitializeComponent();
+
+        PickToggleControl = pl_acid;
+
+        CrossColourControls =
+        [
+            pl_clx,
+            pl_rwy,
+            pl_route,
+            pl_hdg,
+            pl_alt,
+            pl_req,
+        ];
+
+        CockColourControls =
+        [
+            pl_std,
+            pl_ades,
+            pl_eobt,
+            pl_wtc,
+            panel3,
+            pl_frul,
+            pl_ssricon,
+            pl_type,
+            pl_ssr,
+        ];
+
+        UpdateStrip();
+    }
+
+    /// <inheritdoc/>
+    public override void UpdateStrip()
+    {
+        SuspendLayout();
+        if (FDR == null)
         {
-            this.fdr = controller.fdr;
-            InitializeComponent();
-
-            pickToggleControl = pl_acid;
-
-            base.lb_eobt = base.lb_eobt;
-            base.lb_acid = lb_acid;
-            base.lb_ssr = lb_ssr;
-            base.lb_type = lb_type;
-            base.lb_frul = lb_frul;
-            base.lb_route = lb_route;
-            base.lb_sid = lb_sid;
-            base.lb_ades = lb_ades;
-            base.lb_alt = lb_alt;
-            base.lb_hdg = lb_hdg;
-            base.lb_rwy = lb_rwy;
-            base.lb_wtc = lb_wtc;
-            base.lb_std = lb_std;
-            base.lb_clx = lb_clx;
-            base.lb_remark = lb_remark;
-            base.lb_req = lb_req;
-            base.lb_glop = lb_glop;
-            base.lb_tot = lb_tot;
-            base.lb_eobt = lb_eobt;
-            base.lb_ssricon = lb_ssricon;
-
-            base.crossColourControls = new Panel[]
-            {
-                pl_clx,
-                pl_rwy,
-                pl_route,
-                pl_hdg,
-                pl_alt,
-                pl_req
-
-            };
-            base.cockColourControls = new Panel[]
-            {
-                pl_std,
-                pl_ades,
-                pl_eobt,
-                pl_wtc,
-                panel3,
-                pl_frul,
-                pl_ssricon,
-                pl_type,
-                pl_ssr
-            };
-
-            this.stripController = controller;
-            UpdateStrip();
-
+            return;
         }
 
-        private void lb_sid_Click(object sender, EventArgs e)
+        if (lb_eobt != null)
         {
-            stripController.SIDTrigger();
+            lb_eobt.Text = StripController.Time;
         }
 
-        private void OpenHdgAlt(object sender, EventArgs e)
+        lb_acid.Text = FDR.Callsign;
+        lb_ssr.Text = (FDR.AssignedSSRCode == -1) ? "XXXX" : Convert.ToString(FDR.AssignedSSRCode, 8).PadLeft(4, '0');
+        lb_type.Text = FDR.AircraftType;
+        lb_frul.Text = FDR.FlightRules;
+
+        var rteItem = FDR.Route.Split(' ').ToList().Find(x => !x.Contains("/"));
+        if (rteItem == null)
         {
-            OpenHdgAltModal();
+            rteItem = FDR.Route;
         }
 
-        private void OpenFDR(object sender, EventArgs e)
+        if (lb_route != null)
         {
-            OpenVatsysFDRModMenu();
+            lb_route.Text = rteItem;
         }
 
-        private void lb_acid_Click(object sender, EventArgs e)
+        if (lb_sid != null)
         {
-            TogglePick();
+            lb_sid.Text = StripController.SID;
         }
 
-        private void lb_ssr_Click(object sender, EventArgs e)
+        if (lb_ades != null)
         {
-            AssignSSR();
+            lb_ades.Text = FDR.DesAirport;
         }
 
-        private void OpenCLXBay(object sender, EventArgs e)
+        if (lb_alt != null)
         {
-            OpenCLXBayModal();
-
+            lb_alt.Text = StripController.CFL;
         }
 
-        private void lb_tot_Click(object sender, EventArgs e)
+        if (lb_hdg != null)
         {
-            stripController.TakeOff();
+            lb_hdg.Text = string.IsNullOrEmpty(StripController.HDG) ? string.Empty : "H" + StripController.HDG;
         }
 
-        private void lb_eobt_Click(object sender, EventArgs e)
+        if (lb_clx != null)
         {
-            Cock(-1);
+            lb_clx.Text = StripController.CLX;
         }
+
+        if (lb_std != null)
+        {
+            lb_std.Text = StripController.Gate;
+        }
+
+        if (lb_remark != null)
+        {
+            lb_remark.Text = StripController.Remark;
+        }
+
+        if (lb_tot != null && StripController.TakeOffTime != null)
+        {
+            var diff = DateTime.UtcNow - StripController.TakeOffTime;
+            lb_tot.Text = diff.ToString();
+            lb_tot.ForeColor = Color.Green;
+        }
+        else if (lb_tot != null)
+        {
+            lb_tot.Text = "00:00";
+            lb_tot.ForeColor = Color.Black;
+        }
+
+        if (lb_req != null)
+        {
+            lb_req.Text = (FDR.RFL / 100).ToString(CultureInfo.InvariantCulture);
+        }
+
+        if (lb_glop != null)
+        {
+            lb_glop.Text = FDR.GlobalOpData;
+        }
+
+        if (lb_ssricon != null && StripController.SquawkCorrect)
+        {
+            lb_ssricon.Text = "*";
+        }
+        else if (lb_ssricon != null)
+        {
+            lb_ssricon.Text = string.Empty;
+        }
+
+        SetCross(false);
+        Cock(0, false, false);
+        lb_rwy.Text = StripController.RWY;
+        lb_wtc.Text = FDR.AircraftWake;
+        ResumeLayout();
+    }
+
+    private void SidClicked(object sender, EventArgs e)
+    {
+        StripController.SIDTrigger();
+    }
+
+    private void OpenHdgAlt(object sender, EventArgs e)
+    {
+        OpenHdgAltModal();
+    }
+
+    private void OpenFDR(object sender, EventArgs e)
+    {
+        OpenVatsysFDRModMenu();
+    }
+
+    private void AcidClicked(object sender, EventArgs e)
+    {
+        TogglePick();
+    }
+
+    private void SSRClicked(object sender, EventArgs e)
+    {
+        AssignSSR();
+    }
+
+    private void OpenCLXBay(object sender, EventArgs e)
+    {
+        OpenCLXBayModal();
+    }
+
+    private void TOTClicked(object sender, EventArgs e)
+    {
+        StripController.TakeOff();
+    }
+
+    private void EOBTClicked(object sender, EventArgs e)
+    {
+        Cock(-1);
     }
 }

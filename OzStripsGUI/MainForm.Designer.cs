@@ -1,4 +1,4 @@
-﻿namespace maxrumsey.ozstrips.gui
+﻿namespace MaxRumsey.OzStripsPlugin.Gui
 {
     partial class MainForm
     {
@@ -121,7 +121,7 @@
             bt_pdc.TabStop = false;
             bt_pdc.Text = "PDC";
             bt_pdc.UseVisualStyleBackColor = false;
-            bt_pdc.Click += bt_pdc_Click;
+            bt_pdc.Click += Bt_pdc_Click;
             // 
             // bt_cross
             // 
@@ -136,7 +136,7 @@
             bt_cross.TabStop = false;
             bt_cross.Text = "XX CROSS XX";
             bt_cross.UseVisualStyleBackColor = false;
-            bt_cross.Click += bt_cross_Click;
+            bt_cross.Click += Bt_cross_Click;
             // 
             // bt_force
             // 
@@ -151,7 +151,7 @@
             bt_force.TabStop = false;
             bt_force.Text = "FOR STP";
             bt_force.UseVisualStyleBackColor = false;
-            bt_force.Click += bt_force_Click;
+            bt_force.Click += Bt_force_Click;
             // 
             // bt_inhibit
             // 
@@ -166,7 +166,7 @@
             bt_inhibit.TabStop = false;
             bt_inhibit.Text = "INHIBIT";
             bt_inhibit.UseVisualStyleBackColor = false;
-            bt_inhibit.Click += bt_inhibit_Click;
+            bt_inhibit.Click += Bt_inhibit_Click;
             // 
             // pl_ad
             // 
@@ -236,7 +236,7 @@
             menuStrip1.Size = new System.Drawing.Size(1784, 25);
             menuStrip1.TabIndex = 1;
             menuStrip1.Text = "menuStrip1";
-            menuStrip1.ItemClicked += menuStrip1_ItemClicked;
+            menuStrip1.ItemClicked += MenuStrip1_ItemClicked;
             // 
             // ts_ad
             // 
@@ -246,7 +246,7 @@
             ts_ad.Name = "ts_ad";
             ts_ad.Size = new System.Drawing.Size(92, 21);
             ts_ad.Text = "Aerodrome";
-            ts_ad.Click += ts_ad_Click;
+            ts_ad.Click += Ts_ad_Click;
             // 
             // toolStripTextBox1
             // 
@@ -255,7 +255,7 @@
             toolStripTextBox1.Name = "toolStripTextBox1";
             toolStripTextBox1.Size = new System.Drawing.Size(100, 23);
             toolStripTextBox1.ToolTipText = "Aerodrome";
-            toolStripTextBox1.KeyPress += toolStripTextBox1_KeyPress;
+            toolStripTextBox1.KeyPress += ToolStripTextBox1_KeyPress;
             // 
             // toolStripSeparator1
             // 
@@ -277,7 +277,7 @@
             aCDToolStripMenuItem.Name = "aCDToolStripMenuItem";
             aCDToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             aCDToolStripMenuItem.Text = "ACD";
-            aCDToolStripMenuItem.Click += aCDToolStripMenuItem_Click;
+            aCDToolStripMenuItem.Click += ACDToolStripMenuItem_Click;
             // 
             // sMCToolStripMenuItem
             // 
@@ -285,7 +285,7 @@
             sMCToolStripMenuItem.Name = "sMCToolStripMenuItem";
             sMCToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             sMCToolStripMenuItem.Text = "SMC";
-            sMCToolStripMenuItem.Click += sMCToolStripMenuItem_Click;
+            sMCToolStripMenuItem.Click += SMCToolStripMenuItem_Click;
             // 
             // sMCACDToolStripMenuItem
             // 
@@ -293,7 +293,7 @@
             sMCACDToolStripMenuItem.Name = "sMCACDToolStripMenuItem";
             sMCACDToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             sMCACDToolStripMenuItem.Text = "SMC+ACD";
-            sMCACDToolStripMenuItem.Click += sMCACDToolStripMenuItem_Click;
+            sMCACDToolStripMenuItem.Click += SMCACDToolStripMenuItem_Click;
             // 
             // aDCToolStripMenuItem
             // 
@@ -301,7 +301,7 @@
             aDCToolStripMenuItem.Name = "aDCToolStripMenuItem";
             aDCToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             aDCToolStripMenuItem.Text = "ADC";
-            aDCToolStripMenuItem.Click += aDCToolStripMenuItem_Click;
+            aDCToolStripMenuItem.Click += ADCToolStripMenuItem_Click;
             // 
             // aDCSMCToolStripMenuItem
             // 
@@ -309,7 +309,7 @@
             aDCSMCToolStripMenuItem.Name = "aDCSMCToolStripMenuItem";
             aDCSMCToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             aDCSMCToolStripMenuItem.Text = "ADC+SMC";
-            aDCSMCToolStripMenuItem.Click += aDCSMCToolStripMenuItem_Click;
+            aDCSMCToolStripMenuItem.Click += ADCSMCToolStripMenuItem_Click;
             // 
             // allToolStripMenuItem
             // 
@@ -317,7 +317,7 @@
             allToolStripMenuItem.Name = "allToolStripMenuItem";
             allToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             allToolStripMenuItem.Text = "All";
-            allToolStripMenuItem.Click += allToolStripMenuItem_Click;
+            allToolStripMenuItem.Click += AllToolStripMenuItem_Click;
             // 
             // debugToolStripMenuItem
             // 
@@ -334,7 +334,7 @@
             toolStripMenuItem1.Name = "toolStripMenuItem1";
             toolStripMenuItem1.Size = new System.Drawing.Size(172, 22);
             toolStripMenuItem1.Text = "SocketIO Log";
-            toolStripMenuItem1.Click += toolStripMenuItem1_Click;
+            toolStripMenuItem1.Click += ToolStripMenuItem1_Click;
             // 
             // aboutToolStripMenuItem
             // 
@@ -343,7 +343,7 @@
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             aboutToolStripMenuItem.Size = new System.Drawing.Size(60, 21);
             aboutToolStripMenuItem.Text = "About";
-            aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
+            aboutToolStripMenuItem.Click += AboutToolStripMenuItem_Click;
             // 
             // helpToolStripMenuItem
             // 
@@ -359,14 +359,14 @@
             gitHubToolStripMenuItem.Name = "gitHubToolStripMenuItem";
             gitHubToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             gitHubToolStripMenuItem.Text = "GitHub";
-            gitHubToolStripMenuItem.Click += gitHubToolStripMenuItem_Click;
+            gitHubToolStripMenuItem.Click += GitHubToolStripMenuItem_Click;
             // 
             // documentationToolStripMenuItem
             // 
             documentationToolStripMenuItem.Name = "documentationToolStripMenuItem";
             documentationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             documentationToolStripMenuItem.Text = "Documentation";
-            documentationToolStripMenuItem.Click += documentationToolStripMenuItem_Click;
+            documentationToolStripMenuItem.Click += DocumentationToolStripMenuItem_Click;
             // 
             // flp_main
             // 
@@ -399,7 +399,7 @@
             Name = "MainForm";
             Text = "OzStrips";
             FormClosed += MainForm_FormClosed;
-            SizeChanged += MainForm_SizeChanged;
+            SizeChanged += MainFormSizeChanged;
             pl_controlbar.ResumeLayout(false);
             pl_controlbar.PerformLayout();
             pl_atis.ResumeLayout(false);
@@ -447,4 +447,3 @@
         private System.Windows.Forms.Label lb_atis;
     }
 }
-

@@ -1,17 +1,26 @@
 ﻿using System.Windows.Forms;
 
-namespace maxrumsey.ozstrips.controls
-{
-    public partial class DividerBarControl : UserControl
-    {
-        public DividerBarControl()
-        {
-            InitializeComponent();
-        }
+namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
 
-        public void SetVal(int num)
-        {
-            label1.Text = "(" + num + ") Queue";
-        }
+/// <summary>
+/// A divider control bar.
+/// </summary>
+public partial class DividerBarControl : UserControl
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DividerBarControl"/> class.
+    /// </summary>
+    public DividerBarControl()
+    {
+        InitializeComponent();
+    }
+
+    /// <summary>
+    /// Sets the queue number.
+    /// </summary>
+    /// <param name="num">The number.</param>
+    public void SetVal(int num)
+    {
+        label1.Text = "(" + num + ") Queue";
     }
 }

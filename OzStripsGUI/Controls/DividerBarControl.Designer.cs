@@ -1,4 +1,4 @@
-﻿namespace maxrumsey.ozstrips.controls
+﻿namespace MaxRumsey.OzStripsPlugin.Gui.Controls
 {
     partial class DividerBarControl
     {

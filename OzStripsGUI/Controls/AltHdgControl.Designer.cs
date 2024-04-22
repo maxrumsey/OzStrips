@@ -1,4 +1,4 @@
-﻿namespace maxrumsey.ozstrips.controls
+﻿namespace MaxRumsey.OzStripsPlugin.Gui.Controls
 {
     partial class AltHdgControl
     {
@@ -28,284 +28,285 @@
         /// </summary>
         private void InitializeComponent()
         {
-            cb_alt = new System.Windows.Forms.ComboBox();
-            tb_alt = new System.Windows.Forms.TextBox();
-            button12 = new System.Windows.Forms.Button();
-            groupBox1 = new System.Windows.Forms.GroupBox();
-            groupBox2 = new System.Windows.Forms.GroupBox();
-            button11 = new System.Windows.Forms.Button();
-            tb_hdg = new System.Windows.Forms.TextBox();
-            button10 = new System.Windows.Forms.Button();
-            button1 = new System.Windows.Forms.Button();
-            button9 = new System.Windows.Forms.Button();
-            button2 = new System.Windows.Forms.Button();
-            button8 = new System.Windows.Forms.Button();
-            button3 = new System.Windows.Forms.Button();
-            button7 = new System.Windows.Forms.Button();
-            button4 = new System.Windows.Forms.Button();
-            button6 = new System.Windows.Forms.Button();
-            button5 = new System.Windows.Forms.Button();
-            groupBox3 = new System.Windows.Forms.GroupBox();
-            cb_runway = new System.Windows.Forms.ComboBox();
-            groupBox4 = new System.Windows.Forms.GroupBox();
-            cb_sid = new System.Windows.Forms.ComboBox();
-            groupBox1.SuspendLayout();
-            groupBox2.SuspendLayout();
-            groupBox3.SuspendLayout();
-            groupBox4.SuspendLayout();
-            SuspendLayout();
+            this.cb_alt = new System.Windows.Forms.ComboBox();
+            this.tb_alt = new System.Windows.Forms.TextBox();
+            this.button12 = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.button11 = new System.Windows.Forms.Button();
+            this.tb_hdg = new System.Windows.Forms.TextBox();
+            this.button10 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button9 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button8 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.cb_runway = new System.Windows.Forms.ComboBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.cb_sid = new System.Windows.Forms.ComboBox();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            this.SuspendLayout();
             // 
             // cb_alt
             // 
-            cb_alt.FormattingEnabled = true;
-            cb_alt.Items.AddRange(new object[] { "030", "040", "050" });
-            cb_alt.Location = new System.Drawing.Point(6, 19);
-            cb_alt.Name = "cb_alt";
-            cb_alt.Size = new System.Drawing.Size(75, 21);
-            cb_alt.TabIndex = 1;
-            cb_alt.TabStop = false;
-            cb_alt.SelectedIndexChanged += cb_alt_SelectedIndexChanged;
-            cb_alt.KeyDown += tb_alt_KeyDown;
+            this.cb_alt.FormattingEnabled = true;
+            this.cb_alt.Items.AddRange(new object[] {
+            "030",
+            "040",
+            "050"});
+            this.cb_alt.Location = new System.Drawing.Point(6, 19);
+            this.cb_alt.Name = "cb_alt";
+            this.cb_alt.Size = new System.Drawing.Size(75, 21);
+            this.cb_alt.TabIndex = 1;
+            this.cb_alt.TabStop = false;
+            this.cb_alt.SelectedIndexChanged += new System.EventHandler(this.AltitudeComboSelectedChanged);
             // 
             // tb_alt
             // 
-            tb_alt.Location = new System.Drawing.Point(6, 108);
-            tb_alt.MaxLength = 3;
-            tb_alt.Name = "tb_alt";
-            tb_alt.Size = new System.Drawing.Size(75, 20);
-            tb_alt.TabIndex = 2;
-            tb_alt.KeyDown += tb_alt_KeyDown;
+            this.tb_alt.Location = new System.Drawing.Point(6, 108);
+            this.tb_alt.MaxLength = 3;
+            this.tb_alt.Name = "tb_alt";
+            this.tb_alt.Size = new System.Drawing.Size(75, 20);
+            this.tb_alt.TabIndex = 2;
             // 
             // button12
             // 
-            button12.Location = new System.Drawing.Point(6, 134);
-            button12.Name = "button12";
-            button12.Size = new System.Drawing.Size(75, 23);
-            button12.TabIndex = 16;
-            button12.TabStop = false;
-            button12.Text = "Clear";
-            button12.UseVisualStyleBackColor = true;
-            button12.Click += button12_Click;
+            this.button12.Location = new System.Drawing.Point(6, 134);
+            this.button12.Name = "button12";
+            this.button12.Size = new System.Drawing.Size(75, 23);
+            this.button12.TabIndex = 16;
+            this.button12.TabStop = false;
+            this.button12.Text = "Clear";
+            this.button12.UseVisualStyleBackColor = true;
+            this.button12.Click += new System.EventHandler(this.ClearAltitudeButtonClicked);
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(button12);
-            groupBox1.Controls.Add(cb_alt);
-            groupBox1.Controls.Add(tb_alt);
-            groupBox1.Location = new System.Drawing.Point(4, 4);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Size = new System.Drawing.Size(88, 162);
-            groupBox1.TabIndex = 4;
-            groupBox1.TabStop = false;
-            groupBox1.Text = "Altitude";
+            this.groupBox1.Controls.Add(this.button12);
+            this.groupBox1.Controls.Add(this.cb_alt);
+            this.groupBox1.Controls.Add(this.tb_alt);
+            this.groupBox1.Location = new System.Drawing.Point(4, 4);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(88, 162);
+            this.groupBox1.TabIndex = 4;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Altitude";
             // 
             // groupBox2
             // 
-            groupBox2.Controls.Add(button11);
-            groupBox2.Controls.Add(tb_hdg);
-            groupBox2.Controls.Add(button10);
-            groupBox2.Controls.Add(button1);
-            groupBox2.Controls.Add(button9);
-            groupBox2.Controls.Add(button2);
-            groupBox2.Controls.Add(button8);
-            groupBox2.Controls.Add(button3);
-            groupBox2.Controls.Add(button7);
-            groupBox2.Controls.Add(button4);
-            groupBox2.Controls.Add(button6);
-            groupBox2.Controls.Add(button5);
-            groupBox2.Location = new System.Drawing.Point(99, 4);
-            groupBox2.Name = "groupBox2";
-            groupBox2.Size = new System.Drawing.Size(105, 162);
-            groupBox2.TabIndex = 5;
-            groupBox2.TabStop = false;
-            groupBox2.Text = "Heading";
+            this.groupBox2.Controls.Add(this.button11);
+            this.groupBox2.Controls.Add(this.tb_hdg);
+            this.groupBox2.Controls.Add(this.button10);
+            this.groupBox2.Controls.Add(this.button1);
+            this.groupBox2.Controls.Add(this.button9);
+            this.groupBox2.Controls.Add(this.button2);
+            this.groupBox2.Controls.Add(this.button8);
+            this.groupBox2.Controls.Add(this.button3);
+            this.groupBox2.Controls.Add(this.button7);
+            this.groupBox2.Controls.Add(this.button4);
+            this.groupBox2.Controls.Add(this.button6);
+            this.groupBox2.Controls.Add(this.button5);
+            this.groupBox2.Location = new System.Drawing.Point(99, 4);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(105, 162);
+            this.groupBox2.TabIndex = 5;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Heading";
             // 
             // button11
             // 
-            button11.Location = new System.Drawing.Point(34, 133);
-            button11.Name = "button11";
-            button11.Size = new System.Drawing.Size(50, 23);
-            button11.TabIndex = 15;
-            button11.TabStop = false;
-            button11.Text = "Clear";
-            button11.UseVisualStyleBackColor = true;
-            button11.Click += button11_Click;
+            this.button11.Location = new System.Drawing.Point(34, 133);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(50, 23);
+            this.button11.TabIndex = 15;
+            this.button11.TabStop = false;
+            this.button11.Text = "Clear";
+            this.button11.UseVisualStyleBackColor = true;
+            this.button11.Click += new System.EventHandler(this.ClearHeadingButtonClicked);
             // 
             // tb_hdg
             // 
-            tb_hdg.Location = new System.Drawing.Point(6, 20);
-            tb_hdg.MaxLength = 3;
-            tb_hdg.Name = "tb_hdg";
-            tb_hdg.Size = new System.Drawing.Size(89, 20);
-            tb_hdg.TabIndex = 4;
-            tb_hdg.KeyDown += tb_alt_KeyDown;
+            this.tb_hdg.Location = new System.Drawing.Point(6, 20);
+            this.tb_hdg.MaxLength = 3;
+            this.tb_hdg.Name = "tb_hdg";
+            this.tb_hdg.Size = new System.Drawing.Size(89, 20);
+            this.tb_hdg.TabIndex = 4;
+            this.tb_hdg.KeyDown += new System.Windows.Forms.KeyEventHandler(this.AltKeyDownChanged);
             // 
             // button10
             // 
-            button10.Location = new System.Drawing.Point(6, 133);
-            button10.Name = "button10";
-            button10.Size = new System.Drawing.Size(22, 23);
-            button10.TabIndex = 14;
-            button10.TabStop = false;
-            button10.Text = "0";
-            button10.UseVisualStyleBackColor = true;
-            button10.Click += button10_Click;
+            this.button10.Location = new System.Drawing.Point(6, 133);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(22, 23);
+            this.button10.TabIndex = 14;
+            this.button10.TabStop = false;
+            this.button10.Text = "0";
+            this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.ButtonZeroClicked);
             // 
             // button1
             // 
-            button1.Location = new System.Drawing.Point(6, 47);
-            button1.Name = "button1";
-            button1.Size = new System.Drawing.Size(22, 23);
-            button1.TabIndex = 5;
-            button1.TabStop = false;
-            button1.Text = "7";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            this.button1.Location = new System.Drawing.Point(6, 47);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(22, 23);
+            this.button1.TabIndex = 5;
+            this.button1.TabStop = false;
+            this.button1.Text = "7";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.Button7Clicked);
             // 
             // button9
             // 
-            button9.Location = new System.Drawing.Point(62, 105);
-            button9.Name = "button9";
-            button9.Size = new System.Drawing.Size(22, 23);
-            button9.TabIndex = 13;
-            button9.TabStop = false;
-            button9.Text = "3";
-            button9.UseVisualStyleBackColor = true;
-            button9.Click += button9_Click;
+            this.button9.Location = new System.Drawing.Point(62, 105);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(22, 23);
+            this.button9.TabIndex = 13;
+            this.button9.TabStop = false;
+            this.button9.Text = "3";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.Button3Clicked);
             // 
             // button2
             // 
-            button2.Location = new System.Drawing.Point(34, 47);
-            button2.Name = "button2";
-            button2.Size = new System.Drawing.Size(22, 23);
-            button2.TabIndex = 6;
-            button2.TabStop = false;
-            button2.Text = "8";
-            button2.UseVisualStyleBackColor = true;
-            button2.Click += button2_Click;
+            this.button2.Location = new System.Drawing.Point(34, 47);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(22, 23);
+            this.button2.TabIndex = 6;
+            this.button2.TabStop = false;
+            this.button2.Text = "8";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.Button8Clicked);
             // 
             // button8
             // 
-            button8.Location = new System.Drawing.Point(34, 105);
-            button8.Name = "button8";
-            button8.Size = new System.Drawing.Size(22, 23);
-            button8.TabIndex = 12;
-            button8.TabStop = false;
-            button8.Text = "2";
-            button8.UseVisualStyleBackColor = true;
-            button8.Click += button8_Click;
+            this.button8.Location = new System.Drawing.Point(34, 105);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(22, 23);
+            this.button8.TabIndex = 12;
+            this.button8.TabStop = false;
+            this.button8.Text = "2";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.Button2Clicked);
             // 
             // button3
             // 
-            button3.Location = new System.Drawing.Point(62, 47);
-            button3.Name = "button3";
-            button3.Size = new System.Drawing.Size(22, 23);
-            button3.TabIndex = 7;
-            button3.TabStop = false;
-            button3.Text = "9";
-            button3.UseVisualStyleBackColor = true;
-            button3.Click += button3_Click;
+            this.button3.Location = new System.Drawing.Point(62, 47);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(22, 23);
+            this.button3.TabIndex = 7;
+            this.button3.TabStop = false;
+            this.button3.Text = "9";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.Button9Clicked);
             // 
             // button7
             // 
-            button7.Location = new System.Drawing.Point(6, 105);
-            button7.Name = "button7";
-            button7.Size = new System.Drawing.Size(22, 23);
-            button7.TabIndex = 11;
-            button7.TabStop = false;
-            button7.Text = "1";
-            button7.UseVisualStyleBackColor = true;
-            button7.Click += button7_Click;
+            this.button7.Location = new System.Drawing.Point(6, 105);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(22, 23);
+            this.button7.TabIndex = 11;
+            this.button7.TabStop = false;
+            this.button7.Text = "1";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.Button1Clicked);
             // 
             // button4
             // 
-            button4.Location = new System.Drawing.Point(6, 76);
-            button4.Name = "button4";
-            button4.Size = new System.Drawing.Size(22, 23);
-            button4.TabIndex = 8;
-            button4.TabStop = false;
-            button4.Text = "4";
-            button4.UseVisualStyleBackColor = true;
-            button4.Click += button4_Click;
+            this.button4.Location = new System.Drawing.Point(6, 76);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(22, 23);
+            this.button4.TabIndex = 8;
+            this.button4.TabStop = false;
+            this.button4.Text = "4";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.Button4Clicked);
             // 
             // button6
             // 
-            button6.Location = new System.Drawing.Point(62, 76);
-            button6.Name = "button6";
-            button6.Size = new System.Drawing.Size(22, 23);
-            button6.TabIndex = 10;
-            button6.TabStop = false;
-            button6.Text = "6";
-            button6.UseVisualStyleBackColor = true;
-            button6.Click += button6_Click;
+            this.button6.Location = new System.Drawing.Point(62, 76);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(22, 23);
+            this.button6.TabIndex = 10;
+            this.button6.TabStop = false;
+            this.button6.Text = "6";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.Button6Clicked);
             // 
             // button5
             // 
-            button5.Location = new System.Drawing.Point(34, 76);
-            button5.Name = "button5";
-            button5.Size = new System.Drawing.Size(22, 23);
-            button5.TabIndex = 9;
-            button5.TabStop = false;
-            button5.Text = "5";
-            button5.UseVisualStyleBackColor = true;
-            button5.Click += button5_Click;
+            this.button5.Location = new System.Drawing.Point(34, 76);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(22, 23);
+            this.button5.TabIndex = 9;
+            this.button5.TabStop = false;
+            this.button5.Text = "5";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.Button5Clicked);
             // 
             // groupBox3
             // 
-            groupBox3.Controls.Add(cb_runway);
-            groupBox3.Location = new System.Drawing.Point(4, 172);
-            groupBox3.Name = "groupBox3";
-            groupBox3.Size = new System.Drawing.Size(88, 67);
-            groupBox3.TabIndex = 17;
-            groupBox3.TabStop = false;
-            groupBox3.Text = "Runway";
+            this.groupBox3.Controls.Add(this.cb_runway);
+            this.groupBox3.Location = new System.Drawing.Point(4, 172);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(88, 67);
+            this.groupBox3.TabIndex = 17;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Runway";
             // 
             // cb_runway
             // 
-            cb_runway.FormattingEnabled = true;
-            cb_runway.Location = new System.Drawing.Point(6, 19);
-            cb_runway.Name = "cb_runway";
-            cb_runway.Size = new System.Drawing.Size(75, 21);
-            cb_runway.TabIndex = 1;
-            cb_runway.SelectedIndexChanged += cb_runway_SelectedIndexChanged;
-            cb_runway.KeyDown += tb_alt_KeyDown;
+            this.cb_runway.FormattingEnabled = true;
+            this.cb_runway.Location = new System.Drawing.Point(6, 19);
+            this.cb_runway.Name = "cb_runway";
+            this.cb_runway.Size = new System.Drawing.Size(75, 21);
+            this.cb_runway.TabIndex = 1;
+            this.cb_runway.SelectedIndexChanged += new System.EventHandler(this.ComboRwySelectedChanged);
             // 
             // groupBox4
             // 
-            groupBox4.Controls.Add(cb_sid);
-            groupBox4.Location = new System.Drawing.Point(99, 172);
-            groupBox4.Name = "groupBox4";
-            groupBox4.Size = new System.Drawing.Size(105, 67);
-            groupBox4.TabIndex = 18;
-            groupBox4.TabStop = false;
-            groupBox4.Text = "SID";
+            this.groupBox4.Controls.Add(this.cb_sid);
+            this.groupBox4.Location = new System.Drawing.Point(99, 172);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(105, 67);
+            this.groupBox4.TabIndex = 18;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "SID";
             // 
             // cb_sid
             // 
-            cb_sid.FormattingEnabled = true;
-            cb_sid.Location = new System.Drawing.Point(6, 19);
-            cb_sid.Name = "cb_sid";
-            cb_sid.Size = new System.Drawing.Size(75, 21);
-            cb_sid.TabIndex = 1;
-            cb_sid.KeyDown += tb_alt_KeyDown;
+            this.cb_sid.FormattingEnabled = true;
+            this.cb_sid.Location = new System.Drawing.Point(6, 19);
+            this.cb_sid.Name = "cb_sid";
+            this.cb_sid.Size = new System.Drawing.Size(75, 21);
+            this.cb_sid.TabIndex = 1;
+            this.cb_sid.KeyDown += new System.Windows.Forms.KeyEventHandler(this.AltKeyDownChanged);
             // 
             // AltHdgControl
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            Controls.Add(groupBox4);
-            Controls.Add(groupBox3);
-            Controls.Add(groupBox2);
-            Controls.Add(groupBox1);
-            Name = "AltHdgControl";
-            Size = new System.Drawing.Size(213, 244);
-            groupBox1.ResumeLayout(false);
-            groupBox1.PerformLayout();
-            groupBox2.ResumeLayout(false);
-            groupBox2.PerformLayout();
-            groupBox3.ResumeLayout(false);
-            groupBox4.ResumeLayout(false);
-            ResumeLayout(false);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.groupBox4);
+            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.groupBox1);
+            this.Name = "AltHdgControl";
+            this.Size = new System.Drawing.Size(213, 244);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
+            this.ResumeLayout(false);
+
         }
 
         #endregion

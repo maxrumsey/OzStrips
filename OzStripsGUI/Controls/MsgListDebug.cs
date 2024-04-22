@@ -1,23 +1,28 @@
-﻿using maxrumsey.ozstrips.gui;
-using System;
+﻿using System;
 using System.Windows.Forms;
 
-namespace maxrumsey.ozstrips.controls
-{
-    public partial class MsgListDebug : UserControl
-    {
-        public MsgListDebug(SocketConn socketConn)
-        {
-            InitializeComponent();
-            foreach (var str in socketConn.Messages)
-            {
-                lb_menu.Items.Add(str);
-            }
-        }
+namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
 
-        private void lb_menu_Click(object sender, EventArgs e)
+/// <summary>
+/// A msg list debugger control.
+/// </summary>
+public partial class MsgListDebug : UserControl
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MsgListDebug"/> class.
+    /// </summary>
+    /// <param name="socketConn">The socket connection.</param>
+    public MsgListDebug(SocketConn socketConn)
+    {
+        InitializeComponent();
+        foreach (var str in socketConn.Messages)
         {
-            rtb_text.Text = lb_menu.Text;
+            lb_menu.Items.Add(str);
         }
+    }
+
+    private void MenuClicked(object sender, EventArgs e)
+    {
+        rtb_text.Text = lb_menu.Text;
     }
 }
