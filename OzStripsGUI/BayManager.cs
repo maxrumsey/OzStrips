@@ -60,6 +60,7 @@ namespace maxrumsey.ozstrips.gui
                 if (controller != null && Bays.First() != null)
                 {
                     controller.currentBay = Bays.First().BayTypes.First();
+                    controller.fdr = fdr;
                     controller.SyncStrip();
                     UpdateBay(controller);
                 }

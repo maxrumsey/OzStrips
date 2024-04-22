@@ -79,7 +79,7 @@ namespace maxrumsey.ozstrips.gui {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 0.3.2.
+        ///   Looks up a localized string similar to 0.3.3.
         /// </summary>
         public static string version {
             get {

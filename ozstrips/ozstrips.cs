@@ -18,7 +18,7 @@ namespace maxrumsey.ozstrips
         private MainForm GUI;
 
         public static HttpClient _httpClient = new HttpClient();
-        private static readonly Version _version = new Version(1, 0);
+        private static readonly Version _version = new Version(Config.version);
         private static readonly string _versionUrl = "https://raw.githubusercontent.com/maxrumsey/OzStrips/master/Version.json";
 
         public OzStrips()
@@ -45,11 +45,11 @@ namespace maxrumsey.ozstrips
         {
             try
             {
-                var response = await _httpClient.GetStringAsync(_versionUrl);
+                string response = await _httpClient.GetStringAsync(_versionUrl);
 
-                var version = JsonConvert.DeserializeObject<Version>(response);
+                Version version = JsonConvert.DeserializeObject<Version>(response);
 
-                if (version.Major == _version.Major && version.Minor == _version.Minor) return;
+                if (version.Major == _version.Major && version.Minor == _version.Minor && version.Build == _version.Build) return;
 
                 Errors.Add(new Exception("A new version of the plugin is available."), "OzStrips Connector");
             }
