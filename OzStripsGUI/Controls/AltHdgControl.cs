@@ -147,7 +147,7 @@ public partial class AltHdgControl : UserControl
         // timer allows vatsys to determine which sid to give, then load this in accordingly.
         await Task.Delay(1000);
 
-        if (BaseModal == null || !BaseModal.Visible)
+        if (BaseModal?.Visible != true)
         {
             return;
         }
@@ -157,13 +157,11 @@ public partial class AltHdgControl : UserControl
         cb_sid.Items.Clear();
 
         var runways = Airspace2.GetRunways(aerodrome);
-        Airspace2.SystemRunway sysRunway;
         foreach (var runway in runways)
         {
             if (runway.Name == Runway)
             {
-                sysRunway = runway;
-                foreach (var sid in sysRunway.SIDs)
+                foreach (var sid in runway.SIDs)
                 {
                     cb_sid.Items.Add(sid.sidStar.Name);
                 }
@@ -175,13 +173,14 @@ public partial class AltHdgControl : UserControl
 
     private void AltKeyDownChanged(object sender, KeyEventArgs e)
     {
-        if (e.KeyData == Keys.Enter)
+        switch (e.KeyData)
         {
-            BaseModal?.ExitModal(true);
-        }
-        else if (e.KeyData == Keys.Escape)
-        {
-            BaseModal?.ExitModal();
+            case Keys.Enter:
+                BaseModal?.ExitModal(true);
+                break;
+            case Keys.Escape:
+                BaseModal?.ExitModal();
+                break;
         }
     }
 }

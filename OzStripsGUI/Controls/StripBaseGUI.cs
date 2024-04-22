@@ -9,27 +9,21 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
 /// <summary>
 /// The strip base.
 /// </summary>
-public abstract class StripBaseGUI : UserControl
+/// <remarks>
+/// Initializes a new instance of the <see cref="StripBaseGUI"/> class.
+/// </remarks>
+/// <param name="stripController">The strip controller.</param>
+public abstract class StripBaseGUI(StripController stripController) : UserControl
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="StripBaseGUI"/> class.
-    /// </summary>
-    /// <param name="stripController">The strip controller.</param>
-    protected StripBaseGUI(StripController stripController)
-    {
-        FDR = stripController.FDR;
-        StripController = stripController;
-    }
-
     /// <summary>
     /// Gets the strip controller.
     /// </summary>
-    public StripController StripController { get; }
+    protected StripController StripController { get; } = stripController;
 
     /// <summary>
     /// Gets the flight data record.
     /// </summary>
-    public FDP2.FDR FDR { get; }
+    protected FDP2.FDR FDR { get; } = stripController.FDR;
 
     /// <summary>
     /// Gets or sets the pick toggle control.
@@ -88,7 +82,7 @@ public abstract class StripBaseGUI : UserControl
 
         if (StripController.StripHolderControl is not null)
         {
-            StripController.StripHolderControl.Margin = new Padding(marginLeft, 0, 0, 0);
+            StripController.StripHolderControl.Margin = new(marginLeft, 0, 0, 0);
         }
 
         if (sync)
@@ -121,67 +115,11 @@ public abstract class StripBaseGUI : UserControl
     }
 
     /// <summary>
-    /// Opens the heading/altitude modal dialog.
-    /// </summary>
-    public void OpenHdgAltModal()
-    {
-        var modalChild = new AltHdgControl(StripController);
-        var bm = new BaseModal(modalChild, "ACD Menu :: " + StripController.FDR.Callsign);
-        bm.ReturnEvent += HeadingAltReturned;
-        bm.Show(MainForm.MainFormInstance);
-    }
-
-    /// <summary>
-    /// Opens the Clearance bya modal.
-    /// </summary>
-    public void OpenCLXBayModal()
-    {
-        var modalChild = new BayCLXControl(StripController);
-        var bm = new BaseModal(modalChild, "SMC Menu :: " + StripController.FDR.Callsign);
-        modalChild.BaseModal = bm;
-        bm.ReturnEvent += CLXBayReturned;
-        bm.Show(MainForm.MainFormInstance);
-    }
-
-    /// <summary>
-    /// Updates the strip.
-    /// </summary>
-    public abstract void UpdateStrip();
-
-    /// <summary>
-    /// Opens that VATSYS flight data record mod menu.
-    /// </summary>
-    public void OpenVatsysFDRModMenu()
-    {
-        ////MMI.OpenFPWindow(stripController.fdr);
-        StripController.OpenVatsysFDR();
-    }
-
-    /// <summary>
-    /// Toggles the pick.
-    /// </summary>
-    public void TogglePick()
-    {
-        StripController?.TogglePick();
-    }
-
-    /// <summary>
     /// Initialises the form.
     /// </summary>
     public void Initialise()
     {
         Dock = DockStyle.Fill;
-    }
-
-    /// <summary>
-    /// Assigns a squawk.
-    /// </summary>
-    public void AssignSSR()
-    {
-        if (FDR.AssignedSSRCode == -1)
-        {
-            FDP2.SetASSR(StripController.FDR);
-        }
     }
 
     /// <summary>
@@ -199,6 +137,63 @@ public abstract class StripBaseGUI : UserControl
             }
 
             PickToggleControl.BackColor = color;
+        }
+    }
+
+    /// <summary>
+    /// Updates the strip.
+    /// </summary>
+    public abstract void UpdateStrip();
+
+    /// <summary>
+    /// Opens the heading/altitude modal dialog.
+    /// </summary>
+    protected void OpenHdgAltModal()
+    {
+        var modalChild = new AltHdgControl(StripController);
+        var bm = new BaseModal(modalChild, "ACD Menu :: " + StripController.FDR.Callsign);
+        modalChild.BaseModal = bm;
+        bm.ReturnEvent += HeadingAltReturned;
+        bm.Show(MainForm.MainFormInstance);
+    }
+
+    /// <summary>
+    /// Opens the Clearance bya modal.
+    /// </summary>
+    protected void OpenCLXBayModal()
+    {
+        var modalChild = new BayCLXControl(StripController);
+        var bm = new BaseModal(modalChild, "SMC Menu :: " + StripController.FDR.Callsign);
+        modalChild.BaseModal = bm;
+        bm.ReturnEvent += CLXBayReturned;
+        bm.Show(MainForm.MainFormInstance);
+    }
+
+    /// <summary>
+    /// Opens that VATSYS flight data record mod menu.
+    /// </summary>
+    protected void OpenVatsysFDRModMenu()
+    {
+        ////MMI.OpenFPWindow(stripController.fdr);
+        StripController.OpenVatsysFDR();
+    }
+
+    /// <summary>
+    /// Toggles the pick.
+    /// </summary>
+    protected void TogglePick()
+    {
+        StripController.TogglePick();
+    }
+
+    /// <summary>
+    /// Assigns a squawk.
+    /// </summary>
+    protected void AssignSSR()
+    {
+        if (FDR.AssignedSSRCode == -1)
+        {
+            FDP2.SetASSR(StripController.FDR);
         }
     }
 

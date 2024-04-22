@@ -30,7 +30,7 @@ public sealed class OzStrips : IPlugin, IDisposable
     {
         Network.Connected += Connected;
         Network.Disconnected += Disconnected;
-        _ozStripsOpener = new CustomToolStripMenuItem(CustomToolStripMenuItemWindowType.Main, CustomToolStripMenuItemCategory.Windows, new ToolStripMenuItem("OzStrips"));
+        _ozStripsOpener = new(CustomToolStripMenuItemWindowType.Main, CustomToolStripMenuItemCategory.Windows, new ToolStripMenuItem("OzStrips"));
         _ozStripsOpener.Item.Click += OpenGUI;
         MMI.AddCustomMenuItem(_ozStripsOpener);
 
@@ -71,7 +71,7 @@ public sealed class OzStrips : IPlugin, IDisposable
     /// <inheritdoc/>
     public void Dispose()
     {
-        _httpClient?.Dispose();
+        _httpClient.Dispose();
         _gui?.Dispose();
     }
 
@@ -89,7 +89,7 @@ public sealed class OzStrips : IPlugin, IDisposable
 
             if (string.IsNullOrWhiteSpace(response))
             {
-                Errors.Add(new Exception("Could not get the version information from the OzStrips server. Cannot validate if latest version."), "OzStrips Connector");
+                Errors.Add(new("Could not get the version information from the OzStrips server. Cannot validate if latest version."), "OzStrips Connector");
                 return;
             }
 
@@ -97,7 +97,7 @@ public sealed class OzStrips : IPlugin, IDisposable
 
             if (version is null)
             {
-                Errors.Add(new Exception("Could not load the version information for OzStrips."), "OzStrips Connector");
+                Errors.Add(new("Could not load the version information for OzStrips."), "OzStrips Connector");
                 return;
             }
 
@@ -106,7 +106,7 @@ public sealed class OzStrips : IPlugin, IDisposable
                 return;
             }
 
-            Errors.Add(new Exception("A new version of the plugin is available."), "OzStrips Connector");
+            Errors.Add(new("A new version of the plugin is available."), "OzStrips Connector");
         }
         catch
         {
@@ -141,14 +141,14 @@ public sealed class OzStrips : IPlugin, IDisposable
 
     private void OpenGUI(object sender, EventArgs e)
     {
-        MMI.InvokeOnGUI(() => OpenGUI());
+        MMI.InvokeOnGUI(OpenGUI);
     }
 
     private void OpenGUI()
     {
         if (_gui?.IsDisposed != false)
         {
-            _gui = new MainForm();
+            _gui = new();
         }
         else if (_gui.Visible)
         {

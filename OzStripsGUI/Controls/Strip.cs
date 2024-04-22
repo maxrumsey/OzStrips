@@ -3,8 +3,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 
-using static vatsys.FDP2;
-
 namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
 
 /// <summary>
@@ -68,11 +66,7 @@ public partial class Strip : StripBaseGUI
         lb_type.Text = FDR.AircraftType;
         lb_frul.Text = FDR.FlightRules;
 
-        var rteItem = FDR.Route.Split(' ').ToList().Find(x => !x.Contains("/"));
-        if (rteItem == null)
-        {
-            rteItem = FDR.Route;
-        }
+        var rteItem = FDR.Route.Split(' ').ToList().Find(x => !x.Contains("/")) ?? FDR.Route;
 
         if (lb_route != null)
         {

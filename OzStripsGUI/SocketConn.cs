@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Threading.Tasks;
 using System.Timers;
 
 using MaxRumsey.OzStripsPlugin.Gui.DTO;
@@ -20,8 +21,8 @@ public sealed class SocketConn : IDisposable
     private readonly MainForm _mainForm;
     private bool _versionShown;
     private bool _freshClient = true;
-    private System.Timers.Timer? _fifteensecTimer;
-    private System.Timers.Timer? _oneMinTimer;
+    private Timer? _fifteensecTimer;
+    private Timer? _oneMinTimer;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SocketConn"/> class.
@@ -32,7 +33,7 @@ public sealed class SocketConn : IDisposable
     {
         _mainForm = mainForm;
         _bayManager = bayManager;
-        _io = new SocketIOClient.SocketIO(Config.socketioaddr);
+        _io = new(Config.socketioaddr);
         _io.OnAny((_, e) =>
         {
             var metaDTO = e.GetValue<MetadataDTO>(1);
@@ -56,7 +57,7 @@ public sealed class SocketConn : IDisposable
             }
         });
 
-        _io.OnConnected += async (sender, e) =>
+        _io.OnConnected += async (_, _) =>
         {
             AddMessage("c: conn established");
             _freshClient = true;
@@ -66,13 +67,8 @@ public sealed class SocketConn : IDisposable
                 mainForm.Invoke(() => mainForm.SetConnStatus(true));
             }
 
-            _oneMinTimer = new System.Timers.Timer
-            {
-                AutoReset = false,
-                Interval = 60000,
-            };
-            _oneMinTimer.Elapsed += ToggleFresh;
-            _oneMinTimer.Start();
+            await Task.Delay(TimeSpan.FromSeconds(1));
+            _freshClient = false;
         };
 
         _io.OnDisconnected += (_, _) =>
@@ -85,7 +81,7 @@ public sealed class SocketConn : IDisposable
         {
             AddMessage("c: error" + e);
             mainForm.SetConnStatus(false);
-            MMI.InvokeOnGUI(() => Errors.Add(new Exception(e), "OzStrips"));
+            MMI.InvokeOnGUI(() => Errors.Add(new(e), "OzStrips"));
         };
 
         _io.OnReconnected += (_, _) =>
@@ -153,7 +149,7 @@ public sealed class SocketConn : IDisposable
             }
         });
 
-        _io.On("server:update_cache", (args) =>
+        _io.On("server:update_cache", _ =>
         {
             AddMessage("s:update_cache: ");
             if (_io.Connected)
@@ -233,7 +229,7 @@ public sealed class SocketConn : IDisposable
     public void SetAerodrome()
     {
         _freshClient = true;
-        _oneMinTimer = new System.Timers.Timer
+        _oneMinTimer = new()
         {
             AutoReset = false,
             Interval = 60000,
@@ -273,7 +269,7 @@ public sealed class SocketConn : IDisposable
     /// </summary>
     public void Connect()
     {
-        _fifteensecTimer = new System.Timers.Timer
+        _fifteensecTimer = new()
         {
             AutoReset = false,
             Interval = 15000,
@@ -297,7 +293,7 @@ public sealed class SocketConn : IDisposable
     {
         _fifteensecTimer?.Dispose();
         _oneMinTimer?.Dispose();
-        _io?.Dispose();
+        _io.Dispose();
     }
 
     /// <summary>
@@ -306,7 +302,7 @@ public sealed class SocketConn : IDisposable
     /// <returns>The cache data transfer object.</returns>
     private static CacheDTO CreateCacheDTO()
     {
-        return new CacheDTO() { Strips = StripController.StripControllers.ConvertAll(x => (StripControllerDTO)x), };
+        return new() { Strips = StripController.StripControllers.ConvertAll(x => (StripControllerDTO)x), };
     }
 
     private async void ConnectIO(object sender, ElapsedEventArgs e)

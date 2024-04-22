@@ -21,7 +21,7 @@ public partial class BayControl : UserControl
     {
         InitializeComponent();
         lb_bay_name.Text = name;
-        ChildPanel = (FlowLayoutPanel)flp_stripbay;
+        ChildPanel = flp_stripbay;
         flp_stripbay.VerticalScroll.Visible = true;
 
         _bayManager = bm;

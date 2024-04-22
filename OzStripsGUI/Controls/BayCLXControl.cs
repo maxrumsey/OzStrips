@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
-
-using vatsys;
 
 namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
 
@@ -57,14 +54,7 @@ public partial class BayCLXControl : UserControl
             return;
         }
 
-        if (tb_bay.Text.Length == 0)
-        {
-            BaseModal.ActiveControl = tb_bay;
-        }
-        else
-        {
-            BaseModal.ActiveControl = tb_clx;
-        }
+        BaseModal.ActiveControl = tb_bay.Text.Length == 0 ? tb_bay : tb_clx;
     }
 
     private void ClearButtonTextCleared(object sender, EventArgs e)
@@ -79,13 +69,14 @@ public partial class BayCLXControl : UserControl
 
     private void AcceptKeyDown(object sender, KeyEventArgs e)
     {
-        if (e.KeyData == Keys.Enter)
+        switch (e.KeyData)
         {
-            BaseModal?.ExitModal(true);
-        }
-        else if (e.KeyData == Keys.Escape)
-        {
-            BaseModal?.ExitModal();
+            case Keys.Enter:
+                BaseModal?.ExitModal(true);
+                break;
+            case Keys.Escape:
+                BaseModal?.ExitModal();
+                break;
         }
     }
 

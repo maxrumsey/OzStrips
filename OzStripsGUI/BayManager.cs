@@ -13,19 +13,13 @@ namespace MaxRumsey.OzStripsPlugin.Gui;
 /// <summary>
 /// Handles the bays.
 /// </summary>
-public class BayManager
+/// <remarks>
+/// Initializes a new instance of the <see cref="BayManager"/> class.
+/// </remarks>
+/// <param name="main">The flow layout for the bay.</param>
+public class BayManager(FlowLayoutPanel main)
 {
-    private readonly FlowLayoutPanel _flowLayoutPanel;
     private readonly List<FlowLayoutPanel> _flpVerticalBoards = [];
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="BayManager"/> class.
-    /// </summary>
-    /// <param name="main">The flow layout for the bay.</param>
-    public BayManager(FlowLayoutPanel main)
-    {
-        _flowLayoutPanel = main;
-    }
 
     /// <summary>
     /// Gets or sets the picked controller.
@@ -133,7 +127,7 @@ public class BayManager
     {
         if (PickedController != null)
         {
-            MMI.OpenCPDLCWindow(PickedController.FDR, null, CPDLC.MessageCategories.FirstOrDefault((m) => m.Name == "PDC"));
+            MMI.OpenCPDLCWindow(PickedController.FDR, null, CPDLC.MessageCategories.FirstOrDefault(m => m.Name == "PDC"));
             SetPicked();
         }
     }
@@ -247,12 +241,12 @@ public class BayManager
     {
         var distance = stripController.GetDistToAerodrome(AerodromeName);
 
-        if (stripController.ApplicableToAerodrome(AerodromeName) == false)
+        if (!stripController.ApplicableToAerodrome(AerodromeName))
         {
             return;
         }
 
-        if ((distance > 50 || distance == -1) && stripController.ArrDepType == StripArrDepType.DEPARTURE)
+        if (distance is > 50 or -1 && stripController.ArrDepType == StripArrDepType.DEPARTURE)
         {
             return; // prevent arr strips disappearing on gnd
         }
@@ -320,9 +314,10 @@ public class BayManager
     /// <param name="verticalBoardNumber">The vertical board number.</param>
     public void AddBay(Bay bay, int verticalBoardNumber)
     {
-        if (_flpVerticalBoards.Count >= verticalBoardNumber)
+        if (verticalBoardNumber >= _flpVerticalBoards.Count)
         {
-            throw new InvalidOperationException("The vertical board number " + verticalBoardNumber + " is outside range and not valid");
+            Errors.Add(new InvalidOperationException("The vertical board number " + verticalBoardNumber + " is outside range and not valid"), "OzStrips");
+            return;
         }
 
         Bays.Add(bay);
@@ -379,28 +374,27 @@ public class BayManager
     /// </summary>
     public void Resize()
     {
-        if (_flowLayoutPanel == null)
+        if (main == null)
         {
             return;
         }
 
-        var x_main = _flowLayoutPanel.Size.Width;
-        var y_main = _flowLayoutPanel.Size.Height;
+        var y_main = main.Size.Height;
 
-        var x_each = _flowLayoutPanel.Size.Width / 3;
+        var x_each = main.Size.Width / 3;
 
         foreach (var panel in _flpVerticalBoards)
         {
-            panel.Size = new System.Drawing.Size(x_each, y_main);
+            panel.Size = new(x_each, y_main);
             panel.Margin = default;
-            panel.Padding = new Padding(2);
+            panel.Padding = new(2);
             panel.ResumeLayout();
         }
 
         foreach (var bay in Bays)
         {
             var childnum = _flpVerticalBoards[bay.VerticalBoardNumber].Controls.Count;
-            bay.ChildPanel.Size = new System.Drawing.Size(x_each - 4, (y_main - 4) / childnum);
+            bay.ChildPanel.Size = new(x_each - 4, (y_main - 4) / childnum);
         }
     }
 

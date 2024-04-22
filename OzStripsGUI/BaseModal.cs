@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace MaxRumsey.OzStripsPlugin.Gui;
@@ -23,7 +22,7 @@ public partial class BaseModal : Form
         _child = child;
         gb_cont.Controls.Add(child);
         child.Anchor = AnchorStyles.Top;
-        child.Location = new Point(6, 16);
+        child.Location = new(6, 16);
 
         Text = text;
         BringToFront();
@@ -42,7 +41,7 @@ public partial class BaseModal : Form
     {
         if (senddata && ReturnEvent != null)
         {
-            ReturnEvent(this, new ModalReturnArgs(_child));
+            ReturnEvent(this, new(_child));
         }
 
         Close();
@@ -51,19 +50,19 @@ public partial class BaseModal : Form
     /// <inheritdoc/>
     protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
     {
-        var btn = ActiveControl as Button;
-        if (btn != null)
+        if (ActiveControl is not Button)
         {
-            if (keyData == Keys.Enter)
-            {
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        switch (keyData)
+        {
+            case Keys.Enter:
                 ExitModal(true);
                 return true; // suppress default handling of space
-            }
-            else if (keyData == Keys.Escape)
-            {
+            case Keys.Escape:
                 ExitModal();
                 return true; // suppress default handling of space
-            }
         }
 
         return base.ProcessCmdKey(ref msg, keyData);

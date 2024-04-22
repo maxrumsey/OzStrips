@@ -36,7 +36,7 @@ public sealed class StripController : IDisposable
     /// <param name="fdr">The flight data record.</param>
     /// <param name="bayManager">Gets or sets the bay manager.</param>
     /// <param name="socketConn">The socket connection.</param>
-    public StripController(FDP2.FDR fdr, BayManager bayManager, SocketConn socketConn)
+    public StripController(FDR fdr, BayManager bayManager, SocketConn socketConn)
     {
         FDR = fdr;
         _bayManager = bayManager;
@@ -56,28 +56,6 @@ public sealed class StripController : IDisposable
     public static List<StripController> StripControllers { get; } = [];
 
     /// <summary>
-    /// Gets a dictionary which contains the departure next state for a given state.
-    /// </summary>
-    public static Dictionary<StripBay, StripBay> NextBayDep { get; } = new()
-    {
-        { StripBay.BAY_PREA, StripBay.BAY_CLEARED },
-        { StripBay.BAY_CLEARED, StripBay.BAY_PUSHED },
-        { StripBay.BAY_PUSHED, StripBay.BAY_TAXI },
-        { StripBay.BAY_TAXI, StripBay.BAY_HOLDSHORT },
-        { StripBay.BAY_RUNWAY, StripBay.BAY_OUT },
-        { StripBay.BAY_OUT, StripBay.BAY_DEAD },
-    };
-
-    /// <summary>
-    /// Gets a dictionary which contains the arrival next state for a given state.
-    /// </summary>
-    public static Dictionary<StripBay, StripBay> NextBayArr { get; } = new()
-    {
-        { StripBay.BAY_TAXI, StripBay.BAY_DEAD },
-        { StripBay.BAY_RUNWAY, StripBay.BAY_TAXI },
-    };
-
-    /// <summary>
     /// Gets or sets the strip holder control.
     /// </summary>
     public Control? StripHolderControl { get; set; }
@@ -90,7 +68,7 @@ public sealed class StripController : IDisposable
     /// <summary>
     /// Gets the flight data record.
     /// </summary>
-    public FDP2.FDR FDR { get; }
+    public FDR FDR { get; }
 
     /// <summary>
     /// Gets or sets the current strip bay.
@@ -131,12 +109,10 @@ public sealed class StripController : IDisposable
             {
                 return StripArrDepType.ARRIVAL;
             }
-            else
-            {
-                return FDR.DepAirport.Equals(_bayManager.AerodromeName, StringComparison.CurrentCultureIgnoreCase) ?
-                    StripArrDepType.DEPARTURE :
-                    StripArrDepType.UNKNOWN;
-            }
+
+            return FDR.DepAirport.Equals(_bayManager.AerodromeName, StringComparison.CurrentCultureIgnoreCase) ?
+                StripArrDepType.DEPARTURE :
+                StripArrDepType.UNKNOWN;
         }
     }
 
@@ -202,12 +178,10 @@ public sealed class StripController : IDisposable
             {
                 return FDR.ETD.ToString("HHmm", CultureInfo.InvariantCulture);
             }
-            else
-            {
-                return ArrDepType == StripArrDepType.DEPARTURE ?
-                    FDR.ATD.ToString("HHmm", CultureInfo.InvariantCulture) :
-                    string.Empty;
-            }
+
+            return ArrDepType == StripArrDepType.DEPARTURE ?
+                FDR.ATD.ToString("HHmm", CultureInfo.InvariantCulture) :
+                string.Empty;
         }
     }
 
@@ -222,10 +196,8 @@ public sealed class StripController : IDisposable
             {
                 return FDR.DepartureRunway.Name;
             }
-            else
-            {
-                return ArrDepType == StripArrDepType.ARRIVAL && FDR.ArrivalRunway != null ? FDR.ArrivalRunway.Name : string.Empty;
-            }
+
+            return ArrDepType == StripArrDepType.ARRIVAL && FDR.ArrivalRunway != null ? FDR.ArrivalRunway.Name : string.Empty;
         }
 
         set
@@ -311,20 +283,44 @@ public sealed class StripController : IDisposable
     }
 
     /// <summary>
+    /// Gets a dictionary which contains the departure next state for a given state.
+    /// </summary>
+    private static Dictionary<StripBay, StripBay> NextBayDep { get; } = new()
+    {
+        { StripBay.BAY_PREA, StripBay.BAY_CLEARED },
+        { StripBay.BAY_CLEARED, StripBay.BAY_PUSHED },
+        { StripBay.BAY_PUSHED, StripBay.BAY_TAXI },
+        { StripBay.BAY_TAXI, StripBay.BAY_HOLDSHORT },
+        { StripBay.BAY_RUNWAY, StripBay.BAY_OUT },
+        { StripBay.BAY_OUT, StripBay.BAY_DEAD },
+    };
+
+    /// <summary>
+    /// Gets a dictionary which contains the arrival next state for a given state.
+    /// </summary>
+    private static Dictionary<StripBay, StripBay> NextBayArr { get; } = new()
+    {
+        { StripBay.BAY_TAXI, StripBay.BAY_DEAD },
+        { StripBay.BAY_RUNWAY, StripBay.BAY_TAXI },
+    };
+
+    /// <summary>
     /// Converts a strip controller to the data object.
     /// </summary>
     /// <param name="sc">The strip controller.</param>
     public static implicit operator StripControllerDTO(StripController sc)
     {
-        var scDTO = new StripControllerDTO { Acid = sc.FDR.Callsign, Bay = sc.CurrentBay, CLX = sc.CLX, Gate = sc.Gate, CockLevel = sc.CockLevel, Crossing = sc.Crossing, Remark = sc.Remark };
-        if (sc.TakeOffTime is not null)
+        var scDTO = new StripControllerDTO
         {
-            scDTO.TOT = sc.TakeOffTime!.ToString();
-        }
-        else
-        {
-            scDTO.TOT = "\0";
-        }
+            Acid = sc.FDR.Callsign,
+            Bay = sc.CurrentBay,
+            CLX = sc.CLX,
+            Gate = sc.Gate,
+            CockLevel = sc.CockLevel,
+            Crossing = sc.Crossing,
+            Remark = sc.Remark,
+            TOT = sc.TakeOffTime is not null ? sc.TakeOffTime!.ToString() : "\0",
+        };
 
         return scDTO;
     }
@@ -354,15 +350,12 @@ public sealed class StripController : IDisposable
     /// <param name="bayManager">The bay manager.</param>
     /// <param name="socketConn">The socket connection.</param>
     /// <returns>The appropriate strip controller for the FDR.</returns>
-    public static StripController? UpdateFDR(FDP2.FDR fdr, BayManager bayManager, SocketConn socketConn)
+    public static StripController UpdateFDR(FDR fdr, BayManager bayManager, SocketConn socketConn)
     {
-        var found = false;
         foreach (var controller in StripControllers)
         {
             if (controller.FDR.Callsign == fdr.Callsign)
             {
-                found = true;
-
                 if (GetFDRIndex(fdr.Callsign) == -1)
                 {
                     bayManager.DeleteStrip(controller);
@@ -373,15 +366,10 @@ public sealed class StripController : IDisposable
             }
         }
 
-        if (!found)
-        {
-            // todo: add this logic into separate static function
-            var stripController = new StripController(fdr, bayManager, socketConn);
-            bayManager.AddStrip(stripController);
-            return stripController;
-        }
-
-        return null;
+        // todo: add this logic into separate static function
+        var stripController = new StripController(fdr, bayManager, socketConn);
+        bayManager.AddStrip(stripController);
+        return stripController;
     }
 
     /// <summary>
@@ -409,7 +397,7 @@ public sealed class StripController : IDisposable
             if (controller.FDR.Callsign == stripControllerData.Acid)
             {
                 var changeBay = false;
-                controller.CLX = stripControllerData.CLX != null ? stripControllerData.CLX : string.Empty;
+                controller.CLX = !string.IsNullOrWhiteSpace(stripControllerData.CLX) ? stripControllerData.CLX : string.Empty;
                 controller.Gate = stripControllerData.Gate ?? string.Empty;
                 if (controller.CurrentBay != stripControllerData.Bay)
                 {
@@ -418,16 +406,11 @@ public sealed class StripController : IDisposable
 
                 controller.CurrentBay = stripControllerData.Bay;
                 controller._stripControl?.Cock(stripControllerData.CockLevel, false);
-                if (stripControllerData.TOT == "\0")
-                {
-                    controller.TakeOffTime = DateTime.MaxValue;
-                }
-                else
-                {
-                    controller.TakeOffTime = DateTime.Parse(stripControllerData.TOT, CultureInfo.InvariantCulture);
-                }
+                controller.TakeOffTime = stripControllerData.TOT == "\0" ?
+                    DateTime.MaxValue :
+                    DateTime.Parse(stripControllerData.TOT, CultureInfo.InvariantCulture);
 
-                controller.Remark = stripControllerData.Remark != null ? stripControllerData.Remark : string.Empty;
+                controller.Remark = !string.IsNullOrWhiteSpace(stripControllerData.Remark) ? stripControllerData.Remark : string.Empty;
                 controller._crossing = stripControllerData.Crossing;
                 controller._stripControl?.SetCross(false);
 
@@ -506,16 +489,17 @@ public sealed class StripController : IDisposable
             StripHolderControl.BackColor = Color.FromArgb(255, 255, 160);
         }
 
-        StripHolderControl.Padding = new Padding(3);
-        StripHolderControl.Margin = new Padding(0);
+        StripHolderControl.Padding = new(3);
+        StripHolderControl.Margin = new(0);
 
         ////stripHolderControl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-        StripHolderControl.Size = new Size(100, 100);
+        StripHolderControl.Size = new(100, 100);
 
         _stripControl = new Strip(this);
-
         _stripControl.Initialise();
-        StripHolderControl.Size = new Size(_stripControl.Size.Width, _stripControl.Size.Height + 6);
+        _stripControl.UpdateStrip();
+
+        StripHolderControl.Size = _stripControl.Size with { Height = _stripControl.Size.Height + 6 };
         StripHolderControl.Controls.Add(_stripControl);
     }
 
@@ -536,7 +520,7 @@ public sealed class StripController : IDisposable
 
         var distance = GetDistToAerodrome(_bayManager.AerodromeName);
 
-        if ((distance == -1 || distance > 50) && ArrDepType == StripArrDepType.DEPARTURE)
+        if (distance is -1 or > 50 && ArrDepType == StripArrDepType.DEPARTURE)
         {
             _bayManager.DeleteStrip(this);
         }
@@ -548,17 +532,16 @@ public sealed class StripController : IDisposable
     public void SIDTrigger()
     {
         Dictionary<StripBay, StripBay> stripBayResultDict;
-        if (ArrDepType == StripArrDepType.ARRIVAL)
+        switch (ArrDepType)
         {
-            stripBayResultDict = NextBayArr;
-        }
-        else if (ArrDepType == StripArrDepType.DEPARTURE)
-        {
-            stripBayResultDict = NextBayDep;
-        }
-        else
-        {
-            return;
+            case StripArrDepType.ARRIVAL:
+                stripBayResultDict = NextBayArr;
+                break;
+            case StripArrDepType.DEPARTURE:
+                stripBayResultDict = NextBayDep;
+                break;
+            default:
+                return;
         }
 
         if (stripBayResultDict.TryGetValue(CurrentBay, out var nextBay))

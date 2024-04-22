@@ -25,7 +25,7 @@ public partial class ManualMsgDebug : UserControl
 
     private void SendButton(object sender, EventArgs e)
     {
-        var scDTO = new StripControllerDTO()
+        var scDTO = new StripControllerDTO
         {
             Acid = tb_acid.Text,
             Bay = (StripBay)int.Parse(tb_baynum.Text, CultureInfo.InvariantCulture),

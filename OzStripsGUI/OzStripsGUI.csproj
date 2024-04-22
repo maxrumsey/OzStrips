@@ -45,7 +45,7 @@
         <EmbeddedResource Update="Config.resx">
             <Generator>PublicResXFileCodeGenerator</Generator>
             <LastGenOutput>Config.Designer.cs</LastGenOutput>
-            <CustomToolNamespace>maxrumsey.ozstrips.gui</CustomToolNamespace>
+            <CustomToolNamespace>MaxRumsey.OzStripsPlugin.Gui</CustomToolNamespace>
         </EmbeddedResource>
     </ItemGroup>
 </Project>

@@ -29,7 +29,7 @@ public class Bay
         _socketConnection = socketConn;
         Name = name;
         VerticalBoardNumber = vertBoardNum;
-        ChildPanel = new BayControl(bayManager, name, this);
+        ChildPanel = new(bayManager, name, this);
 
         bayManager.AddBay(this, vertBoardNum);
     }
@@ -89,13 +89,14 @@ public class Bay
         var childList = new List<string>();
         foreach (var item in bay.Strips)
         {
-            if (item.Type == StripItemType.STRIP && item.StripController is not null)
+            switch (item.Type)
             {
-                childList.Add(item.StripController.FDR.Callsign);
-            }
-            else if (item.Type == StripItemType.QUEUEBAR)
-            {
-                childList.Add("\a"); // indicates q-bar
+                case StripItemType.STRIP when item.StripController is not null:
+                    childList.Add(item.StripController.FDR.Callsign);
+                    break;
+                case StripItemType.QUEUEBAR:
+                    childList.Add("\a"); // indicates q-bar
+                    break;
             }
         }
 
@@ -113,13 +114,13 @@ public class Bay
 
         foreach (var item in Strips)
         {
-            if (item.Type == StripItemType.QUEUEBAR)
+            switch (item.Type)
             {
-                return count;
-            }
-            else if (item.Type == StripItemType.STRIP)
-            {
-                count++;
+                case StripItemType.QUEUEBAR:
+                    return count;
+                case StripItemType.STRIP:
+                    count++;
+                    break;
             }
         }
 
@@ -235,17 +236,17 @@ public class Bay
         ChildPanel.ChildPanel.SuspendLayout();
         ChildPanel.ChildPanel.Controls.Clear();
         var queueLen = CountQueued();
-        for (var i = 0; i < Strips.Count; i++)
+        foreach (var strip in Strips)
         {
-            if (Strips[i].Type == StripItemType.STRIP && Strips[i].StripController?.StripHolderControl != null)
+            switch (strip.Type)
             {
-                ChildPanel.ChildPanel.Controls.Add(Strips[i].StripController!.StripHolderControl);
-            }
-
-            if (Strips[i].Type == StripItemType.QUEUEBAR)
-            {
-                ChildPanel.ChildPanel.Controls.Add(Strips[i].DividerBarControl);
-                Strips[i].DividerBarControl?.SetVal(queueLen);
+                case StripItemType.STRIP when strip.StripController?.StripHolderControl != null:
+                    ChildPanel.ChildPanel.Controls.Add(strip.StripController!.StripHolderControl);
+                    break;
+                case StripItemType.QUEUEBAR when strip.DividerBarControl is not null:
+                    ChildPanel.ChildPanel.Controls.Add(strip.DividerBarControl);
+                    strip.DividerBarControl?.SetVal(queueLen);
+                    break;
             }
         }
 
@@ -315,11 +316,11 @@ public class Bay
             var newItem = new StripListItem
             {
                 Type = StripItemType.QUEUEBAR,
-                DividerBarControl = new DividerBarControl(),
+                DividerBarControl = new(),
             };
             Strips.Insert(0, newItem);
         }
-        else if (currentItem is not null && (force == null || force == false))
+        else if (currentItem is not null && force is null or false)
         {
             Strips.Remove(currentItem);
         }

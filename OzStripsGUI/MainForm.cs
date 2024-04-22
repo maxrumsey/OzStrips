@@ -27,7 +27,7 @@ public partial class MainForm : Form
         MainFormInstance = this;
 
         InitializeComponent();
-        _timer = new Timer
+        _timer = new()
         {
             Interval = 100,
         };
@@ -43,21 +43,21 @@ public partial class MainForm : Form
         AddAerodrome("YPPH");
         AddAerodrome("YSSY");
 
-        _bayManager = new BayManager(flp_main);
-        _socketConn = new SocketConn(_bayManager, this);
+        _bayManager = new(flp_main);
+        _socketConn = new(_bayManager, this);
 
         AddVerticalStripBoard();
         AddVerticalStripBoard();
         AddVerticalStripBoard();
 
-        var bay_pr = new Bay([StripBay.BAY_PREA], _bayManager, _socketConn, "Preactive", 0);
-        var bay_cl = new Bay([StripBay.BAY_CLEARED], _bayManager, _socketConn, "Cleared", 0);
-        var bay_pb = new Bay([StripBay.BAY_PUSHED], _bayManager, _socketConn, "Pushback", 1);
-        var bay_tx = new Bay([StripBay.BAY_TAXI], _bayManager, _socketConn, "Taxi", 1);
-        var bay_hp = new Bay([StripBay.BAY_HOLDSHORT], _bayManager, _socketConn, "Holding Point", 1);
-        var bay_rw = new Bay([StripBay.BAY_RUNWAY], _bayManager, _socketConn, "Runway", 2);
-        var bay_out = new Bay([StripBay.BAY_OUT], _bayManager, _socketConn, "Departed", 2);
-        var bay_arr = new Bay([StripBay.BAY_ARRIVAL], _bayManager, _socketConn, "Arrivals", 2);
+        _ = new Bay([StripBay.BAY_PREA], _bayManager, _socketConn, "Preactive", 0);
+        _ = new Bay([StripBay.BAY_CLEARED], _bayManager, _socketConn, "Cleared", 0);
+        _ = new Bay([StripBay.BAY_PUSHED], _bayManager, _socketConn, "Pushback", 1);
+        _ = new Bay([StripBay.BAY_TAXI], _bayManager, _socketConn, "Taxi", 1);
+        _ = new Bay([StripBay.BAY_HOLDSHORT], _bayManager, _socketConn, "Holding Point", 1);
+        _ = new Bay([StripBay.BAY_RUNWAY], _bayManager, _socketConn, "Runway", 2);
+        _ = new Bay([StripBay.BAY_OUT], _bayManager, _socketConn, "Departed", 2);
+        _ = new Bay([StripBay.BAY_ARRIVAL], _bayManager, _socketConn, "Arrivals", 2);
 
         _bayManager.Resize();
 
@@ -67,7 +67,7 @@ public partial class MainForm : Form
             {
                 Text = "Manual Comm",
             };
-            toolStripMenuItem.Click += (object sender, EventArgs e) => OpenManDebug();
+            toolStripMenuItem.Click += (_, _) => OpenManDebug();
             debugToolStripMenuItem.DropDownItems.Add(toolStripMenuItem);
         }
     }
@@ -147,14 +147,7 @@ public partial class MainForm : Form
     /// <param name="conn">If connected or not.</param>
     public void SetConnStatus(bool conn)
     {
-        if (conn)
-        {
-            pl_stat.BackColor = Color.Green;
-        }
-        else
-        {
-            pl_stat.BackColor = Color.OrangeRed;
-        }
+        pl_stat.BackColor = conn ? Color.Green : Color.OrangeRed;
     }
 
     /// <summary>
@@ -188,13 +181,14 @@ public partial class MainForm : Form
     /// <inheritdoc/>
     protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
     {
-        if (keyData == Keys.Up)
+        switch (keyData)
         {
-            _bayManager.PositionKey(1);
-        }
-        else if (keyData == Keys.Down)
-        {
-            _bayManager.PositionKey(-1);
+            case Keys.Up:
+                _bayManager.PositionKey(1);
+                break;
+            case Keys.Down:
+                _bayManager.PositionKey(-1);
+                break;
         }
 
         return base.ProcessCmdKey(ref msg, keyData);
@@ -226,7 +220,7 @@ public partial class MainForm : Form
 
     private void MainFormSizeChanged(object sender, EventArgs e)
     {
-        _bayManager?.Resize();
+        _bayManager.Resize();
     }
 
     private void AddVerticalStripBoard()
@@ -234,10 +228,10 @@ public partial class MainForm : Form
         var flp = new FlowLayoutPanel
         {
             AutoScroll = true,
-            Margin = new Padding(0),
-            Padding = new Padding(0),
-            Size = new Size(100, 100),
-            Location = new Point(0, 0),
+            Margin = new(0),
+            Padding = new(0),
+            Size = new(100, 100),
+            Location = new(0, 0),
         };
 
         flp_main.Controls.Add(flp);
