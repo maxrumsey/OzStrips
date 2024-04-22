@@ -5,7 +5,17 @@ VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ozstrips", "ozstrips\ozstrips.csproj", "{BF935CA5-9313-4585-A51F-601C9A923446}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OzStripsGUI", "OzStripsGUI\OzStripsGUI.csproj", "{93CE671F-FF82-4149-BD52-32BC15120384}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OzStripsGUI", "OzStripsGUI\OzStripsGUI.csproj", "{93CE671F-FF82-4149-BD52-32BC15120384}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E3D84B8D-AB71-434C-8E78-40E88695008C}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+		README.md = README.md
+		Version.json = Version.json
+	EndProjectSection
+	ProjectSection(FolderGlobals) = preProject
+		C_5_4Users_4exiflame_4Documents_4ozstrips_3clientside_4Version_1json__JsonSchema = 
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
