@@ -158,6 +158,7 @@ namespace maxrumsey.ozstrips.gui
                     {
                         bayManager.DeleteStrip(controller);
                     }
+                    controller.fdr = fdr;
                     controller.UpdateFDR();
                     return controller;
                 }
