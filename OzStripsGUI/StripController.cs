@@ -68,7 +68,7 @@ public sealed class StripController : IDisposable
     /// <summary>
     /// Gets the flight data record.
     /// </summary>
-    public FDR FDR { get; }
+    public FDR FDR { get; internal set; }
 
     /// <summary>
     /// Gets or sets the current strip bay.
@@ -361,6 +361,7 @@ public sealed class StripController : IDisposable
                     bayManager.DeleteStrip(controller);
                 }
 
+                controller.FDR = fdr;
                 controller.UpdateFDR();
                 return controller;
             }

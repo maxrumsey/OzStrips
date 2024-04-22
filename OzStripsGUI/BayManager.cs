@@ -101,6 +101,7 @@ public class BayManager(FlowLayoutPanel main)
             {
                 controller.CurrentBay = Bays[0].BayTypes[0];
                 controller.SyncStrip();
+                controller.FDR = fdr;
                 UpdateBay(controller);
             }
         }

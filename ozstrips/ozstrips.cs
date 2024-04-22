@@ -18,7 +18,7 @@ public sealed class OzStrips : IPlugin, IDisposable
 {
     private const string _versionUrl = "https://raw.githubusercontent.com/maxrumsey/OzStrips/master/Version.json";
     private static readonly HttpClient _httpClient = new();
-    private static readonly Version _version = new(1, 0);
+    private static readonly Version _version = new(Config.version);
 
     private readonly CustomToolStripMenuItem _ozStripsOpener;
     private MainForm? _gui;
@@ -101,7 +101,7 @@ public sealed class OzStrips : IPlugin, IDisposable
                 return;
             }
 
-            if (version.Major == _version.Major && version.Minor == _version.Minor)
+            if (version.Major == _version.Major && version.Minor == _version.Minor && version.Build == _version.Build)
             {
                 return;
             }
