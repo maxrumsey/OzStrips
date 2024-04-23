@@ -60,15 +60,23 @@ public sealed class SocketConn : IDisposable
         _io.OnConnected += async (_, _) =>
         {
             AddMessage("c: conn established");
-            _freshClient = true;
-            await _io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName, Network.Me.RealName);
-            if (mainForm.Visible)
+            if (Network.IsConnected)
             {
-                mainForm.Invoke(() => mainForm.SetConnStatus(true));
-            }
+                _freshClient = true;
+                await _io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName, Network.Me.RealName);
+                if (mainForm.Visible)
+                {
+                    mainForm.Invoke(() => mainForm.SetConnStatus(true));
+                }
 
-            await Task.Delay(TimeSpan.FromSeconds(60));
-            _freshClient = false;
+                await Task.Delay(TimeSpan.FromSeconds(60));
+                _freshClient = false;
+            }
+            else
+            {
+                AddMessage("c: disconnecting as vatsys connection was lost");
+                await _io.DisconnectAsync();
+            }
         };
 
         _io.OnDisconnected += (_, _) =>
@@ -162,10 +170,6 @@ public sealed class SocketConn : IDisposable
                 SendCache();
             }
         });
-        if (Network.IsConnected)
-        {
-            Connect();
-        }
     }
 
     /// <summary>

@@ -46,6 +46,11 @@ public partial class MainForm : Form
         _bayManager = new(flp_main);
         _socketConn = new(_bayManager, this);
 
+        if (Network.IsConnected)
+        {
+            _socketConn.Connect();
+        }
+
         AddVerticalStripBoard();
         AddVerticalStripBoard();
         AddVerticalStripBoard();
