@@ -110,8 +110,8 @@ public partial class Strip : StripBaseGUI
 
         if (lb_tot != null && StripController.TakeOffTime != null)
         {
-            var diff = DateTime.UtcNow - StripController.TakeOffTime;
-            lb_tot.Text = diff.ToString();
+            var diff = (TimeSpan)(DateTime.UtcNow - StripController.TakeOffTime);
+            lb_tot.Text = diff.ToString(@"mm\:ss", CultureInfo.InvariantCulture);
             lb_tot.ForeColor = Color.Green;
         }
         else if (lb_tot != null)

@@ -408,7 +408,7 @@ public sealed class StripController : IDisposable
                 controller.CurrentBay = stripControllerData.Bay;
                 controller._stripControl?.Cock(stripControllerData.CockLevel, false);
                 controller.TakeOffTime = stripControllerData.TOT == "\0" ?
-                    DateTime.MaxValue :
+                    null :
                     DateTime.Parse(stripControllerData.TOT, CultureInfo.InvariantCulture);
 
                 controller.Remark = !string.IsNullOrWhiteSpace(stripControllerData.Remark) ? stripControllerData.Remark : string.Empty;
@@ -447,14 +447,14 @@ public sealed class StripController : IDisposable
     /// </summary>
     public void TakeOff()
     {
-        if (TakeOffTime == DateTime.MaxValue)
+        if (TakeOffTime is null)
         {
             TakeOffTime = DateTime.UtcNow;
             CoordinateStrip();
         }
         else
         {
-            TakeOffTime = DateTime.MaxValue;
+            TakeOffTime = null;
         }
 
         SyncStrip();
