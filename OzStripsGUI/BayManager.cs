@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.Gui.DTO;
 
 using vatsys;
+using static vatsys.FDP2;
 
 // todo: separate GUI components into separate class
 namespace MaxRumsey.OzStripsPlugin.Gui;
@@ -20,6 +21,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui;
 public class BayManager(FlowLayoutPanel main)
 {
     private readonly List<FlowLayoutPanel> _flpVerticalBoards = [];
+    private FDR? _selectedFDR;
 
     /// <summary>
     /// Gets or sets the picked controller.
@@ -29,12 +31,29 @@ public class BayManager(FlowLayoutPanel main)
     /// <summary>
     /// Gets or sets the aerodrome name.
     /// </summary>
-    public string AerodromeName { get; set; } = "???";
+    public string AerodromeName { get; set; } = "????";
 
     /// <summary>
     /// Gets the list of bays.
     /// </summary>
     public List<Bay> Bays { get; } = [];
+
+    /// <summary>
+    /// Gets or sets the last selected track's FDR in vatSys.
+    /// </summary>
+    public FDR? SelectedFDR
+    {
+        get
+        {
+            return _selectedFDR;
+        }
+
+        set
+        {
+            _selectedFDR = value;
+            SetPicked(_selectedFDR);
+        }
+    }
 
     /// <summary>
     /// Updates the bay based on the bay data.
@@ -211,6 +230,34 @@ public class BayManager(FlowLayoutPanel main)
         PickedController?.SetHMIPicked(false);
         PickedController = controller;
         controller.SetHMIPicked(true);
+    }
+
+    /// <summary>
+    /// Sets a controller to be picked, from an FDR.
+    /// </summary>
+    /// <param name="fdr">The fdr.</param>
+    public void SetPicked(FDR? fdr)
+    {
+        if (fdr is not null)
+        {
+            StripController? foundSC = null;
+            foreach (var controller in StripController.StripControllers)
+            {
+                if (controller.FDR.Callsign == fdr.Callsign)
+                {
+                    foundSC = controller;
+                }
+            }
+
+            if (foundSC is not null)
+            {
+                SetPicked(foundSC);
+            }
+        }
+        else
+        {
+            SetPicked();
+        }
     }
 
     /// <summary>

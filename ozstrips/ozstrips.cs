@@ -33,7 +33,8 @@ public sealed class OzStrips : IPlugin, IDisposable
         _ozStripsOpener = new(CustomToolStripMenuItemWindowType.Main, CustomToolStripMenuItemCategory.Windows, new ToolStripMenuItem("OzStrips"));
         _ozStripsOpener.Item.Click += OpenGUI;
         MMI.AddCustomMenuItem(_ozStripsOpener);
-
+        MMI.SelectedTrackChanged += SelectedAirTrackChanged;
+        MMI.SelectedGroundTrackChanged += SelectedGroundTrackChanged;
         _ = CheckVersion();
     }
 
@@ -156,5 +157,39 @@ public sealed class OzStrips : IPlugin, IDisposable
         }
 
         _gui.Show(Form.ActiveForm);
+    }
+
+    /// <summary>
+    /// Fired on the last selected air track being sent.
+    /// </summary>
+    /// <param name="obj">Event obj.</param>
+    /// <param name="args">Event Args.</param>
+    private void SelectedAirTrackChanged(object obj, EventArgs args)
+    {
+        if (_gui?.IsDisposed == false && MMI.SelectedTrack is not null)
+        {
+            _gui.SetSelectedTrack(MMI.SelectedTrack.GetFDR());
+        }
+        else if (_gui?.IsDisposed == false)
+        {
+            _gui.SetSelectedTrack(null);
+        }
+    }
+
+    /// <summary>
+    /// Fired on the last selected air track being sent.
+    /// </summary>
+    /// <param name="obj">Event obj.</param>
+    /// <param name="args">Event Args.</param>
+    private void SelectedGroundTrackChanged(object obj, EventArgs args)
+    {
+        if (_gui?.IsDisposed == false && MMI.SelectedGroundTrack is not null)
+        {
+            _gui.SetSelectedTrack(MMI.SelectedGroundTrack.GetFDR());
+        }
+        else if (_gui?.IsDisposed == false)
+        {
+            _gui.SetSelectedTrack(null);
+        }
     }
 }

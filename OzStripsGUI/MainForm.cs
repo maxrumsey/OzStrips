@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.Gui.Controls;
 
 using vatsys;
+using static vatsys.FDP2;
 
 namespace MaxRumsey.OzStripsPlugin.Gui;
 
@@ -153,6 +154,15 @@ public partial class MainForm : Form
     public void SetConnStatus(bool conn)
     {
         pl_stat.BackColor = conn ? Color.Green : Color.OrangeRed;
+    }
+
+    /// <summary>
+    /// Sets the selected track from vatSys.
+    /// </summary>
+    /// <param name="fdr">Selected FDR.</param>
+    public void SetSelectedTrack(FDR? fdr)
+    {
+        _bayManager.SelectedFDR = fdr;
     }
 
     /// <summary>
