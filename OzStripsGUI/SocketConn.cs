@@ -67,7 +67,7 @@ public sealed class SocketConn : IDisposable
                 mainForm.Invoke(() => mainForm.SetConnStatus(true));
             }
 
-            await Task.Delay(TimeSpan.FromSeconds(1));
+            await Task.Delay(TimeSpan.FromSeconds(60));
             _freshClient = false;
         };
 
