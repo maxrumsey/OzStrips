@@ -21,6 +21,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui;
 public sealed class StripController : IDisposable
 {
     private static readonly Regex _headingRegex = new(@"H(\d{3})");
+    private static readonly Regex _routeRegex = new(@"^[^\d/]+$");
 
     private readonly BayManager _bayManager;
     private readonly SocketConn _socketConn;
@@ -217,6 +218,17 @@ public sealed class StripController : IDisposable
                     }
                 }
             }
+        }
+    }
+
+    /// <summary>
+    /// Gets the first element in the route.
+    /// </summary>
+    public string Route
+    {
+        get
+        {
+            return FDR.Route.Split(' ').ToList().Find(x => _routeRegex.Match(x).Success) ?? FDR.Route;
         }
     }
 

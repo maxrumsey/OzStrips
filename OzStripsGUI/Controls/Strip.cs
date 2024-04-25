@@ -66,11 +66,9 @@ public partial class Strip : StripBaseGUI
         lb_type.Text = FDR.AircraftType;
         lb_frul.Text = FDR.FlightRules;
 
-        var rteItem = FDR.Route.Split(' ').ToList().Find(x => !x.Contains("/")) ?? FDR.Route;
-
         if (lb_route != null)
         {
-            lb_route.Text = rteItem;
+            lb_route.Text = StripController.Route;
         }
 
         if (lb_sid != null)
