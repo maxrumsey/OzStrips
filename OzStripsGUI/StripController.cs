@@ -239,7 +239,18 @@ public sealed class StripController : IDisposable
     {
         get
         {
-            return FDR.SIDSTARString;
+            if (ArrDepType == StripArrDepType.DEPARTURE && FDR.SID is not null)
+            {
+                return FDR.SID.Name;
+            }
+            else if (ArrDepType == StripArrDepType.DEPARTURE)
+            {
+                return string.Empty;
+            }
+            else
+            {
+                return ">";
+            }
         }
 
         set
