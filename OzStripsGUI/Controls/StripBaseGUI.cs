@@ -213,12 +213,12 @@ public abstract class StripBaseGUI(StripController stripController) : UserContro
             }
 
             StripController.HDG = control.Hdg;
-            if (!string.IsNullOrEmpty(control.Runway))
+            if (!string.IsNullOrEmpty(control.Runway) && StripController.RWY != control.Runway)
             {
                 StripController.RWY = control.Runway;
             }
 
-            if (!string.IsNullOrEmpty(control.SID))
+            if (!string.IsNullOrEmpty(control.SID) && StripController.SID != control.SID)
             {
                 StripController.SID = control.SID;
             }

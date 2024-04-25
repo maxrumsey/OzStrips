@@ -15,6 +15,7 @@ public partial class AltHdgControl : UserControl
 {
     private readonly List<Airspace2.SystemRunway> _runways;
     private readonly StripController _stripController;
+    private readonly bool _fullyLoaded;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AltHdgControl"/> class.
@@ -25,6 +26,7 @@ public partial class AltHdgControl : UserControl
         _stripController = controller;
         _runways = controller.PossibleDepRunways;
         InitializeComponent();
+        SuspendLayout();
         foreach (var runway in _runways)
         {
             cb_runway.Items.Add(runway.Name);
@@ -37,8 +39,10 @@ public partial class AltHdgControl : UserControl
         }
 
         tb_hdg.Text = controller.HDG; // todo: add some sort of parsing for this
+        _fullyLoaded = true;
         cb_runway.Text = controller.RWY;
         cb_sid.Text = controller.SID;
+        ResumeLayout();
     }
 
     /// <summary>
@@ -142,7 +146,10 @@ public partial class AltHdgControl : UserControl
 
     private async void ComboRwySelectedChanged(object sender, EventArgs e)
     {
-        _stripController.RWY = cb_runway.Text;
+        if (_fullyLoaded && _stripController.RWY != cb_runway.Text)
+        {
+            _stripController.RWY = cb_runway.Text;
+        }
 
         // timer allows vatsys to determine which sid to give, then load this in accordingly.
         await Task.Delay(1000);
