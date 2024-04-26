@@ -169,7 +169,7 @@ public sealed class StripController : IDisposable
     }
 
     /// <summary>
-    /// Gets the current time.
+    /// Gets the current eobt time.
     /// </summary>
     public string Time
     {
