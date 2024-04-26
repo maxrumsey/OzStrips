@@ -21,7 +21,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui;
 public class BayManager(FlowLayoutPanel main)
 {
     private readonly List<FlowLayoutPanel> _flpVerticalBoards = [];
-    private FDR? _selectedFDR;
 
     /// <summary>
     /// Gets or sets the picked controller.
@@ -39,19 +38,21 @@ public class BayManager(FlowLayoutPanel main)
     public List<Bay> Bays { get; } = [];
 
     /// <summary>
-    /// Gets or sets the last selected track's FDR in vatSys.
+    /// Sets the last selected track's FDR in vatSys.
     /// </summary>
-    public FDR? SelectedFDR
+    public string? Callsign
     {
-        get
-        {
-            return _selectedFDR;
-        }
-
         set
         {
-            _selectedFDR = value;
-            SetPicked(_selectedFDR);
+            if (value is not null)
+            {
+                var fdr = StripController.GetController(value);
+                SetPicked(fdr);
+            }
+            else
+            {
+                SetPicked();
+            }
         }
     }
 

@@ -160,9 +160,9 @@ public partial class MainForm : Form
     /// Sets the selected track from vatSys.
     /// </summary>
     /// <param name="fdr">Selected FDR.</param>
-    public void SetSelectedTrack(FDR? fdr)
+    public void SetSelectedTrack(string? fdr)
     {
-        _bayManager.SelectedFDR = fdr;
+        _bayManager.Callsign = fdr;
     }
 
     /// <summary>

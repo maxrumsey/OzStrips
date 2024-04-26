@@ -349,6 +349,24 @@ public sealed class StripController : IDisposable
     }
 
     /// <summary>
+    /// Looks up controller by name.
+    /// </summary>
+    /// <param name="name">The aircraft callsign.</param>
+    /// <returns>The aircraft's FDR.</returns>
+    public static FDR? GetController(string name)
+    {
+        foreach (var controller in StripControllers)
+        {
+            if (controller.FDR.Callsign == name)
+            {
+                return controller.FDR;
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
     /// Adds a error string to the VATSYS error system.
     /// </summary>
     /// <param name="error">The error.</param>
