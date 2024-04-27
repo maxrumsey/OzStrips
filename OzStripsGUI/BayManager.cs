@@ -226,7 +226,7 @@ public class BayManager(FlowLayoutPanel main)
     /// Sets a controller to be picked.
     /// </summary>
     /// <param name="controller">The controller.</param>
-    public void SetPicked(StripController controller)
+    public void SetPicked(StripController controller) // no way to select track in ground view, if strip selected in ozstrips, thanks vatsys :)
     {
         PickedController?.SetHMIPicked(false);
         PickedController = controller;
