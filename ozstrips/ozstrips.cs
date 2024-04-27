@@ -153,6 +153,11 @@ public sealed class OzStrips : IPlugin, IDisposable
         }
         else if (_gui.Visible)
         {
+            if (_gui.WindowState == FormWindowState.Minimized)
+            {
+                _gui.WindowState = FormWindowState.Normal;
+            }
+
             return;
         }
 
