@@ -166,8 +166,13 @@ public sealed class OzStrips : IPlugin, IDisposable
     /// <param name="args">Event Args.</param>
     private void SelectedAirTrackChanged(object obj, EventArgs args)
     {
-        var fdr = MMI.SelectedTrack.GetFDR();
-        if (_gui?.IsDisposed == false && MMI.SelectedTrack is not null && fdr is not null)
+        FDP2.FDR? fdr = null;
+        if (MMI.SelectedTrack is not null)
+        {
+            fdr = MMI.SelectedTrack.GetFDR();
+        }
+
+        if (_gui?.IsDisposed == false && fdr is not null)
         {
             _gui.SetSelectedTrack(fdr.Callsign);
         }
