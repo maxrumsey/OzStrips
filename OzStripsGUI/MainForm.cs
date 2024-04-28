@@ -405,4 +405,9 @@ public partial class MainForm : Form
     {
         System.Diagnostics.Process.Start("https://maxrumsey.xyz/OzStrips/");
     }
+
+    private void ChangelogToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        System.Diagnostics.Process.Start("https://maxrumsey.xyz/OzStrips/changelog/");
+    }
 }
