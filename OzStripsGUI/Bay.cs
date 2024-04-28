@@ -342,7 +342,7 @@ public class Bay
             AddDivider(true, false);
             var item = Strips.Find(a => a?.StripController == _bayManager.PickedController);
             ChangeStripPositionAbs(item, DivPosition);
-            _bayManager.SetPicked();
+            _bayManager.SetPicked(true);
             _socketConnection.SyncBay(this);
         }
     }

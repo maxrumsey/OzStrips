@@ -137,7 +137,7 @@ public class BayManager(FlowLayoutPanel main)
             PickedController.CurrentBay = StripBay.BAY_DEAD;
             PickedController.SyncStrip();
             UpdateBay(PickedController);
-            SetPicked();
+            SetPicked(true);
         }
     }
 
@@ -149,7 +149,7 @@ public class BayManager(FlowLayoutPanel main)
         if (PickedController != null)
         {
             MMI.OpenCPDLCWindow(PickedController.FDR, null, CPDLC.MessageCategories.FirstOrDefault(m => m.Name == "PDC"));
-            SetPicked();
+            SetPicked(true);
         }
     }
 
@@ -161,7 +161,7 @@ public class BayManager(FlowLayoutPanel main)
         if (PickedController != null)
         {
             PickedController.Crossing = !PickedController.Crossing;
-            SetPicked();
+            SetPicked(true);
         }
     }
 
@@ -182,7 +182,7 @@ public class BayManager(FlowLayoutPanel main)
             PickedController.CurrentBay = newBay;
             PickedController.SyncStrip();
             UpdateBay(PickedController);
-            SetPicked();
+            SetPicked(true);
         }
     }
 

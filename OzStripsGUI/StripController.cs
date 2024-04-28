@@ -540,6 +540,7 @@ public sealed class StripController : IDisposable
         _stripControl = new Strip(this);
         _stripControl.Initialise();
         _stripControl.UpdateStrip();
+        _stripControl.HMI_TogglePick(_bayManager.PickedController == this);
 
         StripHolderControl.Size = _stripControl.Size with { Height = _stripControl.Size.Height + 6 };
         StripHolderControl.Controls.Add(_stripControl);
