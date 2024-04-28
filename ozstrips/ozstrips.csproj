@@ -12,7 +12,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net472|AnyCPU'">
-    <Optimize>False</Optimize>
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net472|AnyCPU'">
+    <Optimize>True</Optimize>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\OzStripsGUI\OzStripsGUI.csproj" />
