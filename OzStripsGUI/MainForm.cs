@@ -209,11 +209,6 @@ public partial class MainForm : Form
         return base.ProcessCmdKey(ref msg, keyData);
     }
 
-    private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-        Close();
-    }
-
     private void UpdateTimer(object sender, EventArgs e)
     {
         if (!Visible)
@@ -226,11 +221,6 @@ public partial class MainForm : Form
             tb_Time.Text = DateTime.UtcNow.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
             _bayManager.ForceRerender();
         });
-    }
-
-    private void ForceRenderClicked(object sender, EventArgs e)
-    {
-        _bayManager.ForceRerender();
     }
 
     private void MainFormSizeChanged(object sender, EventArgs e)
@@ -386,14 +376,6 @@ public partial class MainForm : Form
     private void Bt_pdc_Click(object sender, EventArgs e)
     {
         _bayManager.SendPDC();
-    }
-
-    private void MenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-    {
-    }
-
-    private void Ts_ad_Click(object sender, EventArgs e)
-    {
     }
 
     private void GitHubToolStripMenuItem_Click(object sender, EventArgs e)
