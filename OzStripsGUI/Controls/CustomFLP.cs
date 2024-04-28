@@ -1,14 +1,19 @@
 ﻿using System.Windows.Forms;
 
-namespace maxrumsey.ozstrips.controls
+namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
+
+/// <summary>
+/// A custom flow layout panel.
+/// </summary>
+public class CustomFLP : FlowLayoutPanel
 {
-    public class CustomFLP : FlowLayoutPanel
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CustomFLP"/> class.
+    /// </summary>
+    public CustomFLP()
     {
-        public CustomFLP() : base()
-        {
-            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            UpdateStyles();
-        }
+        SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+        SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+        UpdateStyles();
     }
 }

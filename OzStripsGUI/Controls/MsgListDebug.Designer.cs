@@ -1,4 +1,4 @@
-﻿namespace maxrumsey.ozstrips.controls
+﻿namespace MaxRumsey.OzStripsPlugin.Gui.Controls
 {
     partial class MsgListDebug
     {
@@ -60,8 +60,8 @@
             this.lb_menu.Name = "lb_menu";
             this.lb_menu.Size = new System.Drawing.Size(215, 329);
             this.lb_menu.TabIndex = 0;
-            this.lb_menu.Click += new System.EventHandler(this.lb_menu_Click);
-            this.lb_menu.SelectedIndexChanged += new System.EventHandler(this.lb_menu_Click);
+            this.lb_menu.Click += new System.EventHandler(this.MenuClicked);
+            this.lb_menu.SelectedIndexChanged += new System.EventHandler(this.MenuClicked);
             // 
             // MsgListDebug
             // 

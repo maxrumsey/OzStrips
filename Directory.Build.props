@@ -1,6 +1,22 @@
 <Project>
-    <PropertyGroup>
-        <VatSysDir>$(MSBuildProgramFiles32)\vatSys</VatSysDir>
-        <EmbeddedResourceUseDependentUponConvention>true</EmbeddedResourceUseDependentUponConvention>
-    </PropertyGroup>
+  <PropertyGroup>
+    <VatSysDir>$(MSBuildProgramFiles32)\vatSys</VatSysDir>
+    <EmbeddedResourceUseDependentUponConvention>true</EmbeddedResourceUseDependentUponConvention>
+    <Nullable>enable</Nullable>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <LangVersion>Latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StyleCop.Analyzers" PrivateAssets="all" Version="1.2.0-beta.556" />
+    <PackageReference Include="Roslynator.Analyzers" PrivateAssets="all" Version="4.12.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" Link="stylecop.json" />
+  </ItemGroup>
+
 </Project>

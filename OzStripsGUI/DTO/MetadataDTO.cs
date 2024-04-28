@@ -1,14 +1,21 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace maxrumsey.ozstrips.gui.DTO
+namespace MaxRumsey.OzStripsPlugin.Gui.DTO;
+
+/// <summary>
+/// Represents the metadata for an API, including versions.
+/// </summary>
+public class MetadataDTO
 {
-    public class MetadataDTO
-    {
-        [JsonPropertyName("version")]
-        public string version { get; set; }
+    /// <summary>
+    /// Gets or sets the version of the data.
+    /// </summary>
+    [JsonPropertyName("version")]
+    public string Version { get; set; } = string.Empty;
 
-        [JsonPropertyName("apiversion")]
-        public string apiversion { get; set; }
-
-    }
+    /// <summary>
+    /// Gets or sets the API version.
+    /// </summary>
+    [JsonPropertyName("apiversion")]
+    public string ApiVersion { get; set; } = string.Empty;
 }

@@ -1,4 +1,4 @@
-﻿namespace maxrumsey.ozstrips.gui
+﻿namespace MaxRumsey.OzStripsPlugin.Gui
 {
     partial class BaseModal
     {
@@ -47,7 +47,7 @@
             this.bt_canc.TabStop = false;
             this.bt_canc.Text = "Cancel";
             this.bt_canc.UseVisualStyleBackColor = false;
-            this.bt_canc.Click += new System.EventHandler(this.bt_canc_Click);
+            this.bt_canc.Click += new System.EventHandler(this.ButtonCancelClicked);
             // 
             // bt_acp
             // 
@@ -61,7 +61,7 @@
             this.bt_acp.TabStop = false;
             this.bt_acp.Text = "Accept";
             this.bt_acp.UseVisualStyleBackColor = false;
-            this.bt_acp.Click += new System.EventHandler(this.bt_acp_Click);
+            this.bt_acp.Click += new System.EventHandler(this.ButtonAcceptedClicked);
             // 
             // gb_cont
             // 

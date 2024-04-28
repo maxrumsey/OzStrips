@@ -1,5 +1,7 @@
 ﻿
-namespace maxrumsey.ozstrips.controls
+using MaxRumsey.OzStripsPlugin.Gui.Controls;
+
+namespace MaxRumsey.OzStripsPlugin.Gui.Controls
 {
     partial class BayControl
     {
@@ -61,7 +63,7 @@ namespace maxrumsey.ozstrips.controls
             flp_stripbay.Size = new System.Drawing.Size(481, 280);
             flp_stripbay.TabIndex = 1;
             flp_stripbay.WrapContents = false;
-            flp_stripbay.Click += lb_bay_name_Click;
+            flp_stripbay.Click += LabelBayNameClicked;
             // 
             // panel2
             // 
@@ -89,7 +91,7 @@ namespace maxrumsey.ozstrips.controls
             bt_div.TabStop = false;
             bt_div.Text = "Stop Queue";
             bt_div.UseVisualStyleBackColor = false;
-            bt_div.Click += bt_div_Click;
+            bt_div.Click += ButtonDivClicked;
             // 
             // bt_queue
             // 
@@ -105,7 +107,7 @@ namespace maxrumsey.ozstrips.controls
             bt_queue.TabStop = false;
             bt_queue.Text = "Start Queue";
             bt_queue.UseVisualStyleBackColor = false;
-            bt_queue.Click += bt_queue_Click;
+            bt_queue.Click += ButtonQueueClicked;
             // 
             // lb_bay_name
             // 
@@ -118,7 +120,7 @@ namespace maxrumsey.ozstrips.controls
             lb_bay_name.TabIndex = 0;
             lb_bay_name.Text = "Bay Name";
             lb_bay_name.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            lb_bay_name.Click += lb_bay_name_Click;
+            lb_bay_name.Click += LabelBayNameClicked;
             // 
             // BayControl
             // 

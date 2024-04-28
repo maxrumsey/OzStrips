@@ -1,11 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace maxrumsey.ozstrips.gui.DTO
+namespace MaxRumsey.OzStripsPlugin.Gui.DTO;
+
+/// <summary>
+/// Represents a collection of strip controller data objects.
+/// </summary>
+public class CacheDTO
 {
-    public class CacheDTO
-    {
-        [JsonPropertyName("strips")]
-        public List<StripControllerDTO> strips { get; set; }
-    }
+    /// <summary>
+    /// Gets or sets the list of strip controllers.
+    /// </summary>
+    [JsonPropertyName("strips")]
+    public List<StripControllerDTO> Strips { get; set; } = [];
 }
