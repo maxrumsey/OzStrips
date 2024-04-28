@@ -21,6 +21,7 @@ public sealed class SocketConn : IDisposable
     private readonly MainForm _mainForm;
     private bool _versionShown;
     private bool _freshClient = true;
+    private bool _connectionMade;
     private Timer? _fifteensecTimer;
     private Timer? _oneMinTimer;
 
@@ -63,6 +64,7 @@ public sealed class SocketConn : IDisposable
             if (Network.IsConnected)
             {
                 _freshClient = true;
+                _connectionMade = true;
                 await _io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName, Network.Me.RealName);
                 if (mainForm.Visible)
                 {
@@ -314,7 +316,16 @@ public sealed class SocketConn : IDisposable
         try
         {
             AddMessage("c: Attempting connection " + Config.socketioaddr);
-            await _io.ConnectAsync();
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            _io.ConnectAsync().ConfigureAwait(false);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            await Task.Delay(TimeSpan.FromSeconds(60));
+            if (!_connectionMade)
+            {
+                Util.ShowErrorBox("Connection Failed.\n" +
+                    "This may be an issue with an outstanding Navigraph connection within vatSys.\n" +
+                    "Go to Help -> Documentation -> FAQ for more information.");
+            }
         }
         catch (Exception ex)
         {
