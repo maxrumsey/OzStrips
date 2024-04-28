@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Timers;
 
 using MaxRumsey.OzStripsPlugin.Gui.DTO;
-
+using SocketIO.Serializer.SystemTextJson;
 using vatsys;
 
 namespace MaxRumsey.OzStripsPlugin.Gui;
@@ -35,6 +35,10 @@ public sealed class SocketConn : IDisposable
         _mainForm = mainForm;
         _bayManager = bayManager;
         _io = new(OzStripsConfig.socketioaddr);
+        _io.Serializer = new SystemTextJsonSerializer(new JsonSerializerOptions
+         {
+             PropertyNameCaseInsensitive = true,
+         });
         _io.OnAny((_, e) =>
         {
             var metaDTO = e.GetValue<MetadataDTO>(1);
