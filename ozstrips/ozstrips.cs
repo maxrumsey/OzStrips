@@ -18,7 +18,7 @@ public sealed class OzStrips : IPlugin, IDisposable
 {
     private const string _versionUrl = "https://raw.githubusercontent.com/maxrumsey/OzStrips/master/Version.json";
     private static readonly HttpClient _httpClient = new();
-    private static readonly Version _version = new(Config.version);
+    private static readonly Version _version = new(OzStripsConfig.version);
 
     private readonly CustomToolStripMenuItem _ozStripsOpener;
     private MainForm? _gui;

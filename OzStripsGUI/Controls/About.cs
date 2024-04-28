@@ -13,6 +13,6 @@ public partial class About : UserControl
     public About()
     {
         InitializeComponent();
-        lb_version.Text = "Version: " + Config.version;
+        lb_version.Text = "Version: " + OzStripsConfig.version;
     }
 }

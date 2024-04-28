@@ -34,11 +34,11 @@ public sealed class SocketConn : IDisposable
     {
         _mainForm = mainForm;
         _bayManager = bayManager;
-        _io = new(Config.socketioaddr);
+        _io = new(OzStripsConfig.socketioaddr);
         _io.OnAny((_, e) =>
         {
             var metaDTO = e.GetValue<MetadataDTO>(1);
-            if (metaDTO.Version != Config.version && !_versionShown)
+            if (!string.IsNullOrEmpty(metaDTO.ApiVersion) && metaDTO.Version != OzStripsConfig.version && !_versionShown)
             {
                 _versionShown = true;
                 if (mainForm.Visible)
@@ -47,11 +47,11 @@ public sealed class SocketConn : IDisposable
                 }
             }
 
-            if (metaDTO.ApiVersion != Config.apiversion && mainForm.Visible)
+            if (!string.IsNullOrEmpty(metaDTO.ApiVersion) && metaDTO.ApiVersion != OzStripsConfig.apiversion && mainForm.Visible)
             {
                 mainForm.Invoke(() =>
                 {
-                    Util.ShowErrorBox("OzStrips incompatible with current API version!");
+                    Util.ShowErrorBox("OzStrips incompatible with current API version! " + metaDTO.ApiVersion + " " + OzStripsConfig.apiversion);
                     mainForm.Close();
                     mainForm.Dispose();
                 });
@@ -315,7 +315,7 @@ public sealed class SocketConn : IDisposable
     {
         try
         {
-            AddMessage("c: Attempting connection " + Config.socketioaddr);
+            AddMessage("c: Attempting connection " + OzStripsConfig.socketioaddr);
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             _io.ConnectAsync().ConfigureAwait(false);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
