@@ -1,10 +1,10 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.Net.Http;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.Gui;
+using Newtonsoft.Json;
 using vatsys;
 using vatsys.Plugin;
 
@@ -94,7 +94,7 @@ public sealed class OzStrips : IPlugin, IDisposable
                 return;
             }
 
-            var version = JsonSerializer.Deserialize<Version>(response);
+            var version = JsonConvert.DeserializeObject<Version>(response);
 
             if (version is null)
             {
