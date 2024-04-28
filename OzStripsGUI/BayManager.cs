@@ -226,11 +226,22 @@ public class BayManager(FlowLayoutPanel main)
     /// Sets a controller to be picked.
     /// </summary>
     /// <param name="controller">The controller.</param>
-    public void SetPicked(StripController controller) // no way to select track in ground view, if strip selected in ozstrips, thanks vatsys :)
+    /// <param name="sendToVatsys">Selects relevant track in vatSys.</param>
+    public void SetPicked(StripController controller, bool sendToVatsys = false)
     {
         PickedController?.SetHMIPicked(false);
         PickedController = controller;
         controller.SetHMIPicked(true);
+
+        if (sendToVatsys)
+        {
+            var rTrack = RDP.RadarTracks.First(x => x.ActualAircraft.Callsign == controller.FDR.Callsign);
+            var track = MMI.FindTrack(rTrack);
+            if (track is not null)
+            {
+                MMI.SelectOrDeselectGroundTrack(track);
+            }
+        }
     }
 
     /// <summary>
@@ -264,10 +275,16 @@ public class BayManager(FlowLayoutPanel main)
     /// <summary>
     /// Sets the picked controller to be empty.
     /// </summary>
-    public void SetPicked()
+    /// <param name="sendToVatsys">Deselect ground track in vatSys.</param>
+    public void SetPicked(bool sendToVatsys = false)
     {
         PickedController?.SetHMIPicked(false);
         PickedController = null;
+
+        if (sendToVatsys)
+        {
+            MMI.SelectOrDeselectGroundTrack(MMI.SelectedGroundTrack);
+        }
     }
 
     /// <summary>

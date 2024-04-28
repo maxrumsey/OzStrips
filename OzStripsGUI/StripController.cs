@@ -601,11 +601,11 @@ public sealed class StripController : IDisposable
     {
         if (_bayManager.PickedController == this)
         {
-            _bayManager.SetPicked();
+            _bayManager.SetPicked(true);
         }
         else
         {
-            _bayManager.SetPicked(this);
+            _bayManager.SetPicked(this, true);
         }
     }
 
