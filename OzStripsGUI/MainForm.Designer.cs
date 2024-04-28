@@ -61,6 +61,7 @@
             this.documentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flp_main = new System.Windows.Forms.FlowLayoutPanel();
             this.tt_metar = new System.Windows.Forms.ToolTip(this.components);
+            this.changelogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pl_controlbar.SuspendLayout();
             this.pl_atis.SuspendLayout();
             this.pl_ad.SuspendLayout();
@@ -269,7 +270,7 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(157, 6);
             // 
             // ts_mode
             // 
@@ -290,7 +291,7 @@
             // 
             this.aCDToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.aCDToolStripMenuItem.Name = "aCDToolStripMenuItem";
-            this.aCDToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aCDToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.aCDToolStripMenuItem.Text = "ACD";
             this.aCDToolStripMenuItem.Click += new System.EventHandler(this.ACDToolStripMenuItem_Click);
             // 
@@ -298,7 +299,7 @@
             // 
             this.sMCToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.sMCToolStripMenuItem.Name = "sMCToolStripMenuItem";
-            this.sMCToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sMCToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.sMCToolStripMenuItem.Text = "SMC";
             this.sMCToolStripMenuItem.Click += new System.EventHandler(this.SMCToolStripMenuItem_Click);
             // 
@@ -306,7 +307,7 @@
             // 
             this.sMCACDToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.sMCACDToolStripMenuItem.Name = "sMCACDToolStripMenuItem";
-            this.sMCACDToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sMCACDToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.sMCACDToolStripMenuItem.Text = "SMC+ACD";
             this.sMCACDToolStripMenuItem.Click += new System.EventHandler(this.SMCACDToolStripMenuItem_Click);
             // 
@@ -314,7 +315,7 @@
             // 
             this.aDCToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.aDCToolStripMenuItem.Name = "aDCToolStripMenuItem";
-            this.aDCToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aDCToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.aDCToolStripMenuItem.Text = "ADC";
             this.aDCToolStripMenuItem.Click += new System.EventHandler(this.ADCToolStripMenuItem_Click);
             // 
@@ -322,7 +323,7 @@
             // 
             this.aDCSMCToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.aDCSMCToolStripMenuItem.Name = "aDCSMCToolStripMenuItem";
-            this.aDCSMCToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aDCSMCToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.aDCSMCToolStripMenuItem.Text = "ADC+SMC";
             this.aDCSMCToolStripMenuItem.Click += new System.EventHandler(this.ADCSMCToolStripMenuItem_Click);
             // 
@@ -330,7 +331,7 @@
             // 
             this.allToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.allToolStripMenuItem.Name = "allToolStripMenuItem";
-            this.allToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.allToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.allToolStripMenuItem.Text = "All";
             this.allToolStripMenuItem.Click += new System.EventHandler(this.AllToolStripMenuItem_Click);
             // 
@@ -348,7 +349,7 @@
             // 
             this.toolStripMenuItem1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(172, 22);
             this.toolStripMenuItem1.Text = "SocketIO Log";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.ToolStripMenuItem1_Click);
             // 
@@ -365,7 +366,8 @@
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.gitHubToolStripMenuItem,
-            this.documentationToolStripMenuItem});
+            this.documentationToolStripMenuItem,
+            this.changelogToolStripMenuItem});
             this.helpToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.helpToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
@@ -401,6 +403,13 @@
             // tt_metar
             // 
             this.tt_metar.ToolTipTitle = "METAR";
+            // 
+            // changelogToolStripMenuItem
+            // 
+            this.changelogToolStripMenuItem.Name = "changelogToolStripMenuItem";
+            this.changelogToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.changelogToolStripMenuItem.Text = "Changelog";
+            this.changelogToolStripMenuItem.Click += new System.EventHandler(this.ChangelogToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -464,5 +473,6 @@
         private System.Windows.Forms.ToolStripMenuItem documentationToolStripMenuItem;
         private System.Windows.Forms.Panel pl_atis;
         private System.Windows.Forms.Label lb_atis;
+        private System.Windows.Forms.ToolStripMenuItem changelogToolStripMenuItem;
     }
 }
