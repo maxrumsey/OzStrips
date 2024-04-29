@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace MaxRumsey.OzStripsPlugin.Gui.DTO;
 
@@ -11,6 +11,6 @@ public class CacheDTO
     /// <summary>
     /// Gets or sets the list of strip controllers.
     /// </summary>
-    [JsonPropertyName("strips")]
+    [JsonProperty("strips")]
     public List<StripControllerDTO> Strips { get; set; } = [];
 }

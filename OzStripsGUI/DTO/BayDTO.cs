@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace MaxRumsey.OzStripsPlugin.Gui.DTO;
 
@@ -11,12 +11,12 @@ public class BayDTO
     /// <summary>
     /// Gets or sets the bay information.
     /// </summary>
-    [JsonPropertyName("bay")]
+    [JsonProperty("bay")]
     public StripBay Bay { get; set; }
 
     /// <summary>
     /// Gets or sets the list of items or strips in the bay.
     /// </summary>
-    [JsonPropertyName("list")]
+    [JsonProperty("list")]
     public List<string> List { get; set; } = [];
 }

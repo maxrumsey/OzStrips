@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace MaxRumsey.OzStripsPlugin.Gui.DTO;
 
@@ -10,12 +10,12 @@ public class MetadataDTO
     /// <summary>
     /// Gets or sets the version of the data.
     /// </summary>
-    [JsonPropertyName("version")]
+    [JsonProperty("version")]
     public string Version { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the API version.
     /// </summary>
-    [JsonPropertyName("apiversion")]
+    [JsonProperty("apiversion")]
     public string ApiVersion { get; set; } = string.Empty;
 }

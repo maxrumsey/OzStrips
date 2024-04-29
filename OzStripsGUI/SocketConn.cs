@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Timers;
-
 using MaxRumsey.OzStripsPlugin.Gui.DTO;
-using SocketIO.Serializer.SystemTextJson;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using SocketIO.Serializer.NewtonsoftJson;
 using vatsys;
 
 namespace MaxRumsey.OzStripsPlugin.Gui;
@@ -35,10 +36,10 @@ public sealed class SocketConn : IDisposable
         _mainForm = mainForm;
         _bayManager = bayManager;
         _io = new(OzStripsConfig.socketioaddr);
-        _io.Serializer = new SystemTextJsonSerializer(new JsonSerializerOptions
-         {
-             PropertyNameCaseInsensitive = true,
-         });
+        _io.Serializer = new SocketIO.Serializer.NewtonsoftJson.NewtonsoftJsonSerializer(new JsonSerializerSettings
+        {
+            ContractResolver = new DefaultContractResolver(),
+        });
         _io.OnAny((_, e) =>
         {
             var metaDTO = e.GetValue<MetadataDTO>(1);
@@ -113,7 +114,7 @@ public sealed class SocketConn : IDisposable
         _io.On("server:sc_change", sc =>
         {
             var scDTO = sc.GetValue<StripControllerDTO>();
-            AddMessage("s:sc_change: " + JsonSerializer.Serialize(scDTO));
+            AddMessage("s:sc_change: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
 
             if (mainForm.Visible)
             {
@@ -124,7 +125,7 @@ public sealed class SocketConn : IDisposable
         _io.On("server:sc_cache", sc =>
         {
             var scDTO = sc.GetValue<CacheDTO>();
-            AddMessage("s:sc_cache: " + JsonSerializer.Serialize(scDTO));
+            AddMessage("s:sc_cache: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
 
             if (mainForm.Visible && _freshClient)
             {
@@ -135,7 +136,7 @@ public sealed class SocketConn : IDisposable
         _io.On("server:order_change", bdto =>
         {
             var bayDTO = bdto.GetValue<BayDTO>();
-            AddMessage("s:order_change: " + JsonSerializer.Serialize(bayDTO));
+            AddMessage("s:order_change: " + System.Text.Json.JsonSerializer.Serialize(bayDTO));
 
             if (mainForm.Visible)
             {
@@ -206,7 +207,7 @@ public sealed class SocketConn : IDisposable
     public void SyncSC(StripController sc)
     {
         StripControllerDTO scDTO = sc;
-        AddMessage("c:sc_change: " + JsonSerializer.Serialize(scDTO));
+        AddMessage("c:sc_change: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
         if (string.IsNullOrEmpty(scDTO.Acid))
         {
             return; // prevent bug
@@ -225,7 +226,7 @@ public sealed class SocketConn : IDisposable
     public void SyncBay(Bay bay)
     {
         BayDTO bayDTO = bay;
-        AddMessage("c:order_change: " + JsonSerializer.Serialize(bayDTO));
+        AddMessage("c:order_change: " + System.Text.Json.JsonSerializer.Serialize(bayDTO));
 
         if (CanSendDTO)
         {
@@ -258,7 +259,7 @@ public sealed class SocketConn : IDisposable
     public async void SendCache()
     {
         var cacheDTO = CreateCacheDTO();
-        AddMessage("c:sc_cache: " + JsonSerializer.Serialize(cacheDTO));
+        AddMessage("c:sc_cache: " + System.Text.Json.JsonSerializer.Serialize(cacheDTO));
         if (CanSendDTO)
         {
             await _io.EmitAsync("client:sc_cache", cacheDTO);
