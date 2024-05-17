@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace MaxRumsey.OzStripsPlugin.Gui.DTO;
 
@@ -30,7 +30,7 @@ public class StripControllerDTO
     /// <summary>
     /// Gets or sets the clearance.
     /// </summary>
-    [JsonProperty(nameof(CLX))]
+    [JsonPropertyName(nameof(CLX))]
     public string CLX { get; set; } = string.Empty;
 
     /// <summary>
@@ -42,7 +42,7 @@ public class StripControllerDTO
     /// <summary>
     /// Gets or sets the time of takeoff.
     /// </summary>
-    [JsonProperty(nameof(TOT))]
+    [JsonPropertyName(nameof(TOT))]
     public string TOT { get; set; } = "\0";
 
     /// <summary>

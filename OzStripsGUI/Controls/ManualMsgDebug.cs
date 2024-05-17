@@ -32,7 +32,7 @@ public partial class ManualMsgDebug : UserControl
             CLX = tb_clx.Text,
             GATE = tb_bay.Text,
             crossing = cb_crossing.Checked,
-            cocklevel = int.Parse(tb_cocklevel.Text, CultureInfo.InvariantCulture),
+            cockLevel = int.Parse(tb_cocklevel.Text, CultureInfo.InvariantCulture),
             TOT = "\0",
         };
 

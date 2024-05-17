@@ -339,7 +339,7 @@ public sealed class StripController : IDisposable
             bay = sc.CurrentBay,
             CLX = sc.CLX,
             GATE = sc.Gate,
-            cocklevel = sc.CockLevel,
+            cockLevel = sc.CockLevel,
             crossing = sc.Crossing,
             remark = sc.Remark,
             TOT = sc.TakeOffTime is not null ? sc.TakeOffTime!.ToString() : "\0",
@@ -447,7 +447,7 @@ public sealed class StripController : IDisposable
                 }
 
                 controller.CurrentBay = stripControllerData.bay;
-                controller._stripControl?.Cock(stripControllerData.cocklevel, false);
+                controller._stripControl?.Cock(stripControllerData.cockLevel, false);
                 controller.TakeOffTime = stripControllerData.TOT == "\0" ?
                     null :
                     DateTime.Parse(stripControllerData.TOT, CultureInfo.InvariantCulture);

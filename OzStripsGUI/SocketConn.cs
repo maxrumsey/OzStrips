@@ -203,8 +203,8 @@ public sealed class SocketConn : IDisposable
     public void SyncSC(StripController sc)
     {
         StripControllerDTO scDTO = sc;
-        AddMessage("c:sc_change: " + JsonSerializer.Serialize(scDTO));
-        if (string.IsNullOrEmpty(scDTO.Acid))
+        AddMessage("c:sc_change: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
+        if (string.IsNullOrEmpty(scDTO.acid))
         {
             return; // prevent bug
         }
