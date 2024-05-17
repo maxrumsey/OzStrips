@@ -7,23 +7,25 @@ namespace MaxRumsey.OzStripsPlugin.Gui.DTO;
 /// </summary>
 public class StripControllerDTO
 {
+#pragma warning disable SA1300 // Element should begin with upper-case letter
+
     /// <summary>
     /// Gets or sets the aircraft identifier.
     /// </summary>
-    [JsonProperty("acid")]
-    public string Acid { get; set; } = string.Empty;
+    [JsonPropertyName("acid")]
+    public string acid { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the bay information for the strip.
     /// </summary>
-    [JsonProperty("bay")]
-    public StripBay Bay { get; set; }
+    [JsonPropertyName("bay")]
+    public StripBay bay { get; set; }
 
     /// <summary>
     /// Gets or sets the cock level.
     /// </summary>
-    [JsonProperty("cockLevel")]
-    public int CockLevel { get; set; }
+    [JsonPropertyName("cockLevel")]
+    public int cockLevel { get; set; }
 
     /// <summary>
     /// Gets or sets the clearance.
@@ -34,8 +36,8 @@ public class StripControllerDTO
     /// <summary>
     /// Gets or sets the gate information.
     /// </summary>
-    [JsonProperty("GATE")]
-    public string Gate { get; set; } = string.Empty;
+    [JsonPropertyName("GATE")]
+    public string GATE { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the time of takeoff.
@@ -46,18 +48,18 @@ public class StripControllerDTO
     /// <summary>
     /// Gets or sets a value indicating whether the aircraft is crossing.
     /// </summary>
-    [JsonProperty("crossing")]
-    public bool Crossing { get; set; }
+    [JsonPropertyName("crossing")]
+    public bool crossing { get; set; }
 
     /// <summary>
     /// Gets or sets the subbay information.
     /// </summary>
-    [JsonProperty("subbay")]
-    public string SubBay { get; set; } = string.Empty;
+    [JsonPropertyName("subbay")]
+    public string subbay { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets any remarks associated with the strip.
     /// </summary>
-    [JsonProperty("remark")]
-    public string Remark { get; set; } = string.Empty;
+    [JsonPropertyName("remark")]
+    public string remark { get; set; } = string.Empty;
 }

@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace MaxRumsey.OzStripsPlugin.Gui.DTO;
 
@@ -7,15 +7,17 @@ namespace MaxRumsey.OzStripsPlugin.Gui.DTO;
 /// </summary>
 public class MetadataDTO
 {
+#pragma warning disable SA1300 // Element should begin with upper-case letter
+
     /// <summary>
     /// Gets or sets the version of the data.
     /// </summary>
-    [JsonProperty("version")]
-    public string Version { get; set; } = string.Empty;
+    [JsonPropertyName("version")]
+    public string version { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the API version.
     /// </summary>
-    [JsonProperty("apiversion")]
-    public string ApiVersion { get; set; } = string.Empty;
+    [JsonPropertyName("apiversion")]
+    public string apiversion { get; set; } = string.Empty;
 }

@@ -7,8 +7,8 @@
         <PlatformTarget>x86</PlatformTarget>
         <RootNamespace>MaxRumsey.OzStripsPlugin.Gui</RootNamespace>
         <ApplicationIcon>ozstrips.ico</ApplicationIcon>
-        <Platforms>AnyCPU;x86</Platforms>
-
+        <CefSharpBuildAction>Content</CefSharpBuildAction>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net472|AnyCPU'">
       <Optimize>False</Optimize>
