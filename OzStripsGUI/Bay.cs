@@ -85,7 +85,7 @@ public class Bay
     /// <param name="bay">The bay to convert.</param>
     public static implicit operator BayDTO(Bay bay)
     {
-        var bayDTO = new BayDTO { Bay = bay.BayTypes[0] };
+        var bayDTO = new BayDTO { bay = bay.BayTypes[0] };
         var childList = new List<string>();
         foreach (var item in bay.Strips)
         {
@@ -100,7 +100,7 @@ public class Bay
             }
         }
 
-        bayDTO.List = childList;
+        bayDTO.list = childList;
         return bayDTO;
     }
 

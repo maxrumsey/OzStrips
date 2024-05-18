@@ -8,9 +8,11 @@ namespace MaxRumsey.OzStripsPlugin.Gui.DTO;
 /// </summary>
 public class CacheDTO
 {
+#pragma warning disable SA1300 // Element should begin with upper-case letter
+
     /// <summary>
     /// Gets or sets the list of strip controllers.
     /// </summary>
     [JsonPropertyName("strips")]
-    public List<StripControllerDTO> Strips { get; set; } = [];
+    public List<StripControllerDTO> strips { get; set; } = [];
 }

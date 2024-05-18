@@ -65,7 +65,7 @@ public class BayManager(FlowLayoutPanel main)
         Bay? bay = null;
         foreach (var currentBay in Bays)
         {
-            if (currentBay.BayTypes.Contains(bayDTO.Bay))
+            if (currentBay.BayTypes.Contains(bayDTO.bay))
             {
                 bay = currentBay;
             }
@@ -78,7 +78,7 @@ public class BayManager(FlowLayoutPanel main)
 
         var list = new List<StripListItem>();
 
-        foreach (var dtoItem in bayDTO.List)
+        foreach (var dtoItem in bayDTO.list)
         {
             var listItem = bay.GetListItemByStr(dtoItem);
             if (listItem != null)

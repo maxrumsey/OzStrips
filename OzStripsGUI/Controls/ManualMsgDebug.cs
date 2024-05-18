@@ -27,12 +27,12 @@ public partial class ManualMsgDebug : UserControl
     {
         var scDTO = new StripControllerDTO
         {
-            Acid = tb_acid.Text,
-            Bay = (StripBay)int.Parse(tb_baynum.Text, CultureInfo.InvariantCulture),
+            acid = tb_acid.Text,
+            bay = (StripBay)int.Parse(tb_baynum.Text, CultureInfo.InvariantCulture),
             CLX = tb_clx.Text,
-            Gate = tb_bay.Text,
-            Crossing = cb_crossing.Checked,
-            CockLevel = int.Parse(tb_cocklevel.Text, CultureInfo.InvariantCulture),
+            GATE = tb_bay.Text,
+            crossing = cb_crossing.Checked,
+            cockLevel = int.Parse(tb_cocklevel.Text, CultureInfo.InvariantCulture),
             TOT = "\0",
         };
 

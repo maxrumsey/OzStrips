@@ -5,18 +5,27 @@
     <UseWindowsForms>true</UseWindowsForms>
     <BaseOutputPath>$(MSBuildProgramFiles32)\vatSys\bin\Plugins</BaseOutputPath>
     <OutputPath>..\..\vatSys Files\Profiles\Australia\Plugins\</OutputPath>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <RootNamespace>MaxRumsey.OzStripsPlugin</RootNamespace>
     <CefSharpBuildAction>Content</CefSharpBuildAction>
+    <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net472|AnyCPU'">
-    <Optimize>True</Optimize>
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net472|x86'">
+    <Optimize>False</Optimize>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net472|AnyCPU'">
-    <Optimize>True</Optimize>
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net472|x86'">
+    <Optimize>False</Optimize>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\OzStripsGUI\OzStripsGUI.csproj" />

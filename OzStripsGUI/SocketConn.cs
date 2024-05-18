@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Timers;
-
 using MaxRumsey.OzStripsPlugin.Gui.DTO;
-
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using SocketIO.Serializer.NewtonsoftJson;
 using vatsys;
 
 namespace MaxRumsey.OzStripsPlugin.Gui;
@@ -38,20 +39,20 @@ public sealed class SocketConn : IDisposable
         _io.OnAny((_, e) =>
         {
             var metaDTO = e.GetValue<MetadataDTO>(1);
-            if (!string.IsNullOrEmpty(metaDTO.ApiVersion) && metaDTO.Version != OzStripsConfig.version && !_versionShown)
+            if (!string.IsNullOrEmpty(metaDTO.apiversion) && metaDTO.version != OzStripsConfig.version && !_versionShown)
             {
                 _versionShown = true;
                 if (mainForm.Visible)
                 {
-                    mainForm.Invoke(() => Util.ShowInfoBox("New Update Available: " + metaDTO.Version));
+                    mainForm.Invoke(() => Util.ShowInfoBox("New Update Available: " + metaDTO.version));
                 }
             }
 
-            if (!string.IsNullOrEmpty(metaDTO.ApiVersion) && metaDTO.ApiVersion != OzStripsConfig.apiversion && mainForm.Visible)
+            if (!string.IsNullOrEmpty(metaDTO.apiversion) && metaDTO.apiversion != OzStripsConfig.apiversion && mainForm.Visible)
             {
                 mainForm.Invoke(() =>
                 {
-                    Util.ShowErrorBox("OzStrips incompatible with current API version! " + metaDTO.ApiVersion + " " + OzStripsConfig.apiversion);
+                    Util.ShowErrorBox("OzStrips incompatible with current API version! " + metaDTO.apiversion + " " + OzStripsConfig.apiversion);
                     mainForm.Close();
                     mainForm.Dispose();
                 });
@@ -109,7 +110,7 @@ public sealed class SocketConn : IDisposable
         _io.On("server:sc_change", sc =>
         {
             var scDTO = sc.GetValue<StripControllerDTO>();
-            AddMessage("s:sc_change: " + JsonSerializer.Serialize(scDTO));
+            AddMessage("s:sc_change: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
 
             if (mainForm.Visible)
             {
@@ -120,7 +121,7 @@ public sealed class SocketConn : IDisposable
         _io.On("server:sc_cache", sc =>
         {
             var scDTO = sc.GetValue<CacheDTO>();
-            AddMessage("s:sc_cache: " + JsonSerializer.Serialize(scDTO));
+            AddMessage("s:sc_cache: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
 
             if (mainForm.Visible && _freshClient)
             {
@@ -131,7 +132,7 @@ public sealed class SocketConn : IDisposable
         _io.On("server:order_change", bdto =>
         {
             var bayDTO = bdto.GetValue<BayDTO>();
-            AddMessage("s:order_change: " + JsonSerializer.Serialize(bayDTO));
+            AddMessage("s:order_change: " + System.Text.Json.JsonSerializer.Serialize(bayDTO));
 
             if (mainForm.Visible)
             {
@@ -202,8 +203,8 @@ public sealed class SocketConn : IDisposable
     public void SyncSC(StripController sc)
     {
         StripControllerDTO scDTO = sc;
-        AddMessage("c:sc_change: " + JsonSerializer.Serialize(scDTO));
-        if (string.IsNullOrEmpty(scDTO.Acid))
+        AddMessage("c:sc_change: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
+        if (string.IsNullOrEmpty(scDTO.acid))
         {
             return; // prevent bug
         }
@@ -221,7 +222,7 @@ public sealed class SocketConn : IDisposable
     public void SyncBay(Bay bay)
     {
         BayDTO bayDTO = bay;
-        AddMessage("c:order_change: " + JsonSerializer.Serialize(bayDTO));
+        AddMessage("c:order_change: " + System.Text.Json.JsonSerializer.Serialize(bayDTO));
 
         if (CanSendDTO)
         {
@@ -254,7 +255,7 @@ public sealed class SocketConn : IDisposable
     public async void SendCache()
     {
         var cacheDTO = CreateCacheDTO();
-        AddMessage("c:sc_cache: " + JsonSerializer.Serialize(cacheDTO));
+        AddMessage("c:sc_cache: " + System.Text.Json.JsonSerializer.Serialize(cacheDTO));
         if (CanSendDTO)
         {
             await _io.EmitAsync("client:sc_cache", cacheDTO);
@@ -308,7 +309,7 @@ public sealed class SocketConn : IDisposable
     /// <returns>The cache data transfer object.</returns>
     private static CacheDTO CreateCacheDTO()
     {
-        return new() { Strips = StripController.StripControllers.ConvertAll(x => (StripControllerDTO)x), };
+        return new() { strips = StripController.StripControllers.ConvertAll(x => (StripControllerDTO)x), };
     }
 
     private async void ConnectIO(object sender, ElapsedEventArgs e)

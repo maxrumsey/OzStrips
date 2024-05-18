@@ -335,13 +335,13 @@ public sealed class StripController : IDisposable
     {
         var scDTO = new StripControllerDTO
         {
-            Acid = sc.FDR.Callsign,
-            Bay = sc.CurrentBay,
+            acid = sc.FDR.Callsign,
+            bay = sc.CurrentBay,
             CLX = sc.CLX,
-            Gate = sc.Gate,
-            CockLevel = sc.CockLevel,
-            Crossing = sc.Crossing,
-            Remark = sc.Remark,
+            GATE = sc.Gate,
+            cockLevel = sc.CockLevel,
+            crossing = sc.Crossing,
+            remark = sc.Remark,
             TOT = sc.TakeOffTime is not null ? sc.TakeOffTime!.ToString() : "\0",
         };
 
@@ -421,7 +421,7 @@ public sealed class StripController : IDisposable
     /// <param name="bayManager">The bay manager.</param>
     public static void LoadCache(CacheDTO cacheData, BayManager bayManager)
     {
-        foreach (var stripDTO in cacheData.Strips)
+        foreach (var stripDTO in cacheData.strips)
         {
             UpdateFDR(stripDTO, bayManager);
         }
@@ -436,24 +436,24 @@ public sealed class StripController : IDisposable
     {
         foreach (var controller in StripControllers)
         {
-            if (controller.FDR.Callsign == stripControllerData.Acid)
+            if (controller.FDR.Callsign == stripControllerData.acid)
             {
                 var changeBay = false;
                 controller.CLX = !string.IsNullOrWhiteSpace(stripControllerData.CLX) ? stripControllerData.CLX : string.Empty;
-                controller.Gate = stripControllerData.Gate ?? string.Empty;
-                if (controller.CurrentBay != stripControllerData.Bay)
+                controller.Gate = stripControllerData.GATE ?? string.Empty;
+                if (controller.CurrentBay != stripControllerData.bay)
                 {
                     changeBay = true;
                 }
 
-                controller.CurrentBay = stripControllerData.Bay;
-                controller._stripControl?.Cock(stripControllerData.CockLevel, false);
+                controller.CurrentBay = stripControllerData.bay;
+                controller._stripControl?.Cock(stripControllerData.cockLevel, false);
                 controller.TakeOffTime = stripControllerData.TOT == "\0" ?
                     null :
                     DateTime.Parse(stripControllerData.TOT, CultureInfo.InvariantCulture);
 
-                controller.Remark = !string.IsNullOrWhiteSpace(stripControllerData.Remark) ? stripControllerData.Remark : string.Empty;
-                controller._crossing = stripControllerData.Crossing;
+                controller.Remark = !string.IsNullOrWhiteSpace(stripControllerData.remark) ? stripControllerData.remark : string.Empty;
+                controller._crossing = stripControllerData.crossing;
                 controller._stripControl?.SetCross(false);
 
                 if (changeBay)
