@@ -6,3 +6,5 @@ markdown_extensions:
   - md_in_html
 plugins:
   - glightbox
+repo_url: https://github.com/maxrumsey/OzStrips
+repo_name: "OzStrips"
