@@ -235,7 +235,7 @@ public class BayManager(FlowLayoutPanel main)
 
         if (sendToVatsys)
         {
-            var rTrack = RDP.RadarTracks.First(x => x.ActualAircraft.Callsign == controller.FDR.Callsign);
+            var rTrack = RDP.RadarTracks.FirstOrDefault(x => x.ActualAircraft.Callsign == controller.FDR.Callsign);
             var track = MMI.FindTrack(rTrack);
             if (track is not null)
             {
