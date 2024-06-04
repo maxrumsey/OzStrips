@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3.6
+### Bugfixes
+- Fixed bug where selecting the strip of a disconnected aircraft would cause a CTD.
+
 ## v0.3.4
 ### Features
 - Left click on vatSys air/ground track will select relevant strip (and vice versa).
