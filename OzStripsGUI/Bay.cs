@@ -246,6 +246,7 @@ public class Bay
                 case StripItemType.QUEUEBAR when strip.DividerBarControl is not null:
                     ChildPanel.ChildPanel.Controls.Add(strip.DividerBarControl);
                     strip.DividerBarControl?.SetVal(queueLen);
+                    strip.DividerBarControl?.ReloadSize();
                     break;
             }
         }

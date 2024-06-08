@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-
 using MaxRumsey.OzStripsPlugin.Gui.DTO;
 
 using vatsys;
@@ -430,6 +429,11 @@ public class BayManager(FlowLayoutPanel main)
             strip.ClearStripControl();
             strip.CreateStripObj();
             AddStrip(strip, false);
+        }
+
+        foreach (var bay in Bays)
+        {
+            bay.Orderstrips();
         }
     }
 
