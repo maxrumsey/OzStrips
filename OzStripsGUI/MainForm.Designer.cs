@@ -60,12 +60,12 @@
             this.gitHubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.documentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changelogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.flp_main = new System.Windows.Forms.FlowLayoutPanel();
-            this.tt_metar = new System.Windows.Forms.ToolTip(this.components);
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stripToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.normalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.smallToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.flp_main = new System.Windows.Forms.FlowLayoutPanel();
+            this.tt_metar = new System.Windows.Forms.ToolTip(this.components);
             this.pl_controlbar.SuspendLayout();
             this.pl_atis.SuspendLayout();
             this.pl_ad.SuspendLayout();
@@ -400,22 +400,6 @@
             this.changelogToolStripMenuItem.Text = "Changelog";
             this.changelogToolStripMenuItem.Click += new System.EventHandler(this.ChangelogToolStripMenuItem_Click);
             // 
-            // flp_main
-            // 
-            this.flp_main.AutoScroll = true;
-            this.flp_main.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
-            this.flp_main.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flp_main.Location = new System.Drawing.Point(0, 25);
-            this.flp_main.Margin = new System.Windows.Forms.Padding(0);
-            this.flp_main.Name = "flp_main";
-            this.flp_main.Size = new System.Drawing.Size(1784, 891);
-            this.flp_main.TabIndex = 2;
-            this.flp_main.WrapContents = false;
-            // 
-            // tt_metar
-            // 
-            this.tt_metar.ToolTipTitle = "METAR";
-            // 
             // viewToolStripMenuItem
             // 
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -436,6 +420,8 @@
             // 
             // normalToolStripMenuItem
             // 
+            this.normalToolStripMenuItem.Checked = true;
+            this.normalToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.normalToolStripMenuItem.Name = "normalToolStripMenuItem";
             this.normalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.normalToolStripMenuItem.Text = "Normal";
@@ -447,6 +433,22 @@
             this.smallToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.smallToolStripMenuItem.Text = "Small";
             this.smallToolStripMenuItem.Click += new System.EventHandler(this.SmallToolStripMenuItem_Click);
+            // 
+            // flp_main
+            // 
+            this.flp_main.AutoScroll = true;
+            this.flp_main.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
+            this.flp_main.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flp_main.Location = new System.Drawing.Point(0, 25);
+            this.flp_main.Margin = new System.Windows.Forms.Padding(0);
+            this.flp_main.Name = "flp_main";
+            this.flp_main.Size = new System.Drawing.Size(1784, 891);
+            this.flp_main.TabIndex = 2;
+            this.flp_main.WrapContents = false;
+            // 
+            // tt_metar
+            // 
+            this.tt_metar.ToolTipTitle = "METAR";
             // 
             // MainForm
             // 

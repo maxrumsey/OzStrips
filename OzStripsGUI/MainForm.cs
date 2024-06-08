@@ -2,11 +2,8 @@
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
-
 using MaxRumsey.OzStripsPlugin.Gui.Controls;
-
 using vatsys;
-using static vatsys.FDP2;
 
 namespace MaxRumsey.OzStripsPlugin.Gui;
 
@@ -76,6 +73,8 @@ public partial class MainForm : Form
             toolStripMenuItem.Click += (_, _) => OpenManDebug();
             debugToolStripMenuItem.DropDownItems.Add(toolStripMenuItem);
         }
+
+        SetStripSizeCheckBox();
     }
 
     /// <summary>
@@ -398,6 +397,7 @@ public partial class MainForm : Form
         Properties.OzStripsSettings.Default.UseBigStrips = true;
         Properties.OzStripsSettings.Default.Save();
         _bayManager.ReloadStrips();
+        SetStripSizeCheckBox();
     }
 
     private void SmallToolStripMenuItem_Click(object sender, EventArgs e)
@@ -405,5 +405,20 @@ public partial class MainForm : Form
         Properties.OzStripsSettings.Default.UseBigStrips = false;
         Properties.OzStripsSettings.Default.Save();
         _bayManager.ReloadStrips();
+        SetStripSizeCheckBox();
+    }
+
+    private void SetStripSizeCheckBox()
+    {
+        if (Properties.OzStripsSettings.Default.UseBigStrips)
+        {
+            normalToolStripMenuItem.Checked = true;
+            smallToolStripMenuItem.Checked = false;
+        }
+        else
+        {
+            normalToolStripMenuItem.Checked = false;
+            smallToolStripMenuItem.Checked = true;
+        }
     }
 }
