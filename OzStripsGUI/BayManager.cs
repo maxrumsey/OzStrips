@@ -239,8 +239,15 @@ public class BayManager(FlowLayoutPanel main)
             var track = MMI.FindTrack(rTrack);
             if (track is not null)
             {
-                MMI.SelectOrDeselectGroundTrack(track);
-                MMI.SelectOrDeselectTrack(track);
+                if (MMI.SelectedTrack != track)
+                {
+                    MMI.SelectOrDeselectTrack(track);
+                }
+
+                if (MMI.SelectedGroundTrack != track)
+                {
+                    MMI.SelectOrDeselectGroundTrack(track);
+                }
             }
         }
     }
@@ -285,6 +292,7 @@ public class BayManager(FlowLayoutPanel main)
         if (sendToVatsys)
         {
             MMI.SelectOrDeselectGroundTrack(MMI.SelectedGroundTrack);
+            MMI.SelectOrDeselectTrack(MMI.SelectedTrack);
         }
     }
 
