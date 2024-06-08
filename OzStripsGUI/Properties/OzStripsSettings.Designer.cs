@@ -34,5 +34,17 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Properties {
                 this["UseBigStrips"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseVatSysPopup {
+            get {
+                return ((bool)(this["UseVatSysPopup"]));
+            }
+            set {
+                this["UseVatSysPopup"] = value;
+            }
+        }
     }
 }

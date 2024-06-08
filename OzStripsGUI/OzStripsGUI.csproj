@@ -31,6 +31,9 @@
         <PackageReference Include="SocketIOClient" Version="3.1.1" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Update="Controls\SettingsWindowControl.cs">
+          <SubType>UserControl</SubType>
+        </Compile>
         <Compile Update="Controls\LittleStrip.cs">
           <SubType>UserControl</SubType>
         </Compile>

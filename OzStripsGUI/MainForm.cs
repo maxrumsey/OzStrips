@@ -421,4 +421,12 @@ public partial class MainForm : Form
             smallToolStripMenuItem.Checked = true;
         }
     }
+
+    private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        var modalChild = new SettingsWindowControl();
+        var bm = new BaseModal(modalChild, "OzStrips Settings");
+        bm.ReturnEvent += modalChild.ModalReturned;
+        bm.Show(MainForm.MainFormInstance);
+    }
 }

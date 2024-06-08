@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 
 namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
 
@@ -74,16 +75,6 @@ public partial class Strip : StripBaseGUI
         InitializeComponent();
     }
 
-    private void SidClicked(object sender, EventArgs e)
-    {
-        StripController.SIDTrigger();
-    }
-
-    private void OpenHdgAlt(object sender, EventArgs e)
-    {
-        OpenHdgAltModal();
-    }
-
     private void OpenFDR(object sender, EventArgs e)
     {
         OpenVatsysFDRModMenu();
@@ -117,5 +108,33 @@ public partial class Strip : StripBaseGUI
     private void RouteClicked(object sender, EventArgs e)
     {
         ToggleRoute();
+    }
+
+    private void LBAltClicked(object sender, EventArgs e)
+    {
+        OpenCFLWindow();
+    }
+
+    private void LBHdgClicked(object sender, EventArgs e)
+    {
+        OpenHDGWindow();
+    }
+
+    private void LBRwyClicked(object sender, EventArgs e)
+    {
+        OpenRWYWindow();
+    }
+
+    private void SidClicked(object sender, EventArgs e)
+    {
+        var me = (MouseEventArgs)e;
+        if (me.Button == MouseButtons.Right)
+        {
+            OpenSIDWindow();
+        }
+        else
+        {
+            StripController.SIDTrigger();
+        }
     }
 }

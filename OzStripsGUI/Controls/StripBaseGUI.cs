@@ -169,6 +169,59 @@ public class StripBaseGUI : UserControl
     }
 
     /// <summary>
+    /// Opens the CFL window.
+    /// </summary>
+    public void OpenCFLWindow()
+    {
+        if (Properties.OzStripsSettings.Default.UseVatSysPopup)
+        {
+            MMI.OpenCFLMenu(MMI.FindTrack(FDR), Cursor.Position);
+        }
+        else
+        {
+            OpenHdgAltModal();
+        }
+    }
+
+    /// <summary>
+    /// Opens the HDG window.
+    /// </summary>
+    public void OpenHDGWindow()
+    {
+        OpenHdgAltModal();
+    }
+
+    /// <summary>
+    /// Opens the RWY window.
+    /// </summary>
+    public void OpenRWYWindow()
+    {
+        if (Properties.OzStripsSettings.Default.UseVatSysPopup)
+        {
+            MMI.OpenRWYMenu(FDR, Cursor.Position);
+        }
+        else
+        {
+            OpenHdgAltModal();
+        }
+    }
+
+    /// <summary>
+    /// Opens the SID window.
+    /// </summary>
+    public void OpenSIDWindow()
+    {
+        if (Properties.OzStripsSettings.Default.UseVatSysPopup)
+        {
+            MMI.OpenSIDSTARMenu(FDR, Cursor.Position);
+        }
+        else
+        {
+            OpenHdgAltModal();
+        }
+    }
+
+    /// <summary>
     /// Updates the strip.
     /// </summary>
     public void UpdateStrip()

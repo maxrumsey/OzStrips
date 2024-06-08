@@ -312,7 +312,7 @@
             lb_hdg.TabIndex = 0;
             lb_hdg.Text = "Hdg";
             lb_hdg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            lb_hdg.Click += OpenHdgAlt;
+            lb_hdg.Click += LBHdgClicked;
             // 
             // pl_alt
             // 
@@ -333,7 +333,7 @@
             lb_alt.TabIndex = 0;
             lb_alt.Text = "Alt";
             lb_alt.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            lb_alt.Click += OpenHdgAlt;
+            lb_alt.Click += LBAltClicked;
             // 
             // pl_rwy
             // 
@@ -355,7 +355,7 @@
             lb_rwy.TabIndex = 0;
             lb_rwy.Text = "rwy";
             lb_rwy.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            lb_rwy.Click += OpenHdgAlt;
+            lb_rwy.Click += LBRwyClicked;
             // 
             // pl_clx
             // 
