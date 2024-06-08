@@ -9,6 +9,7 @@
         <ApplicationIcon>ozstrips.ico</ApplicationIcon>
         <CefSharpBuildAction>Content</CefSharpBuildAction>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net472|AnyCPU'">
       <Optimize>False</Optimize>
@@ -30,9 +31,6 @@
         <PackageReference Include="SocketIOClient" Version="3.1.1" />
     </ItemGroup>
     <ItemGroup>
-        <Reference Include="$(MSBuildProgramFiles32)\vatSys\bin\vatSys.exe " />
-    </ItemGroup>
-    <ItemGroup>
         <Compile Update="OzStripsConfig.Designer.cs">
             <DesignTime>True</DesignTime>
             <AutoGen>True</AutoGen>
@@ -44,12 +42,14 @@
             <Generator>ResXFileCodeGenerator</Generator>
             <LastGenOutput>Config.Designer.cs</LastGenOutput>
         </EmbeddedResource>
-        <Reference Include="$(VatSysDir)\bin\vatSys.exe">
-          <Private>False</Private>
-        </Reference>
     </ItemGroup>
     <ItemGroup>
         <Content Include="ozstrips.ico" />
+    </ItemGroup>
+    <ItemGroup>
+      <Reference Include="vatSys">
+        <HintPath>..\..\..\..\..\Program Files (x86)\vatSys\bin\vatSys.exe</HintPath>
+      </Reference>
     </ItemGroup>
     <ItemGroup>
         <Compile Update="OzStripsConfig.Designer.cs">

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Drawing;
-using System.Globalization;
-using System.Linq;
 
 namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
 
@@ -44,104 +41,37 @@ public partial class Strip : StripBaseGUI
             pl_ssr,
         ];
 
+        // Ugly, but moves strip display logic into the base gui.
+        StripElements.Add("eobt", lb_eobt);
+        StripElements.Add("acid", lb_acid);
+        StripElements.Add("ssr", lb_ssr);
+        StripElements.Add("type", lb_type);
+        StripElements.Add("frul", lb_frul);
+        StripElements.Add("route", lb_route);
+        StripElements.Add("sid", lb_sid);
+        StripElements.Add("ades", lb_ades);
+        StripElements.Add("CFL", lb_alt);
+        StripElements.Add("HDG", lb_hdg);
+        StripElements.Add("CLX", lb_clx);
+        StripElements.Add("stand", lb_std);
+        StripElements.Add("remark", lb_remark);
+        StripElements.Add("tot", lb_tot);
+        StripElements.Add("rfl", lb_req);
+        StripElements.Add("glop", lb_glop);
+        StripElements.Add("ssrsymbol", lb_ssricon);
+        StripElements.Add("rwy", lb_rwy);
+        StripElements.Add("wtc", lb_wtc);
+
         UpdateStrip();
     }
 
-    /// <inheritdoc/>
-    public override void UpdateStrip()
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Strip"/> class.
+    /// This function is used exclusively in design-time.
+    /// </summary>
+    public Strip()
     {
-        SuspendLayout();
-        if (FDR == null)
-        {
-            return;
-        }
-
-        if (lb_eobt != null)
-        {
-            lb_eobt.Text = StripController.Time;
-        }
-
-        lb_acid.Text = FDR.Callsign;
-        lb_ssr.Text = (FDR.AssignedSSRCode == -1) ? "XXXX" : Convert.ToString(FDR.AssignedSSRCode, 8).PadLeft(4, '0');
-        lb_type.Text = FDR.AircraftType;
-        lb_frul.Text = FDR.FlightRules;
-
-        if (lb_route != null)
-        {
-            lb_route.Text = StripController.Route;
-        }
-
-        if (lb_sid != null)
-        {
-            lb_sid.Text = StripController.SID;
-        }
-
-        if (lb_ades != null)
-        {
-            lb_ades.Text = FDR.DesAirport;
-        }
-
-        if (lb_alt != null)
-        {
-            lb_alt.Text = StripController.CFL;
-        }
-
-        if (lb_hdg != null)
-        {
-            lb_hdg.Text = string.IsNullOrEmpty(StripController.HDG) ? string.Empty : "H" + StripController.HDG;
-        }
-
-        if (lb_clx != null)
-        {
-            lb_clx.Text = StripController.CLX;
-        }
-
-        if (lb_std != null)
-        {
-            lb_std.Text = StripController.Gate;
-        }
-
-        if (lb_remark != null)
-        {
-            lb_remark.Text = StripController.Remark;
-        }
-
-        if (lb_tot != null && StripController.TakeOffTime != null)
-        {
-            var diff = (TimeSpan)(DateTime.UtcNow - StripController.TakeOffTime);
-            lb_tot.Text = diff.ToString(@"mm\:ss", CultureInfo.InvariantCulture);
-            lb_tot.ForeColor = Color.Green;
-        }
-        else if (lb_tot != null)
-        {
-            lb_tot.Text = "00:00";
-            lb_tot.ForeColor = Color.Black;
-        }
-
-        if (lb_req != null)
-        {
-            lb_req.Text = (FDR.RFL / 100).ToString(CultureInfo.InvariantCulture);
-        }
-
-        if (lb_glop != null)
-        {
-            lb_glop.Text = FDR.GlobalOpData;
-        }
-
-        if (lb_ssricon != null && StripController.SquawkCorrect)
-        {
-            lb_ssricon.Text = "*";
-        }
-        else if (lb_ssricon != null)
-        {
-            lb_ssricon.Text = string.Empty;
-        }
-
-        SetCross(false);
-        Cock(0, false, false);
-        lb_rwy.Text = StripController.RWY;
-        lb_wtc.Text = FDR.AircraftWake;
-        ResumeLayout();
+        InitializeComponent();
     }
 
     private void SidClicked(object sender, EventArgs e)

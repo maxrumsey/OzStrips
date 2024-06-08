@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 
 using vatsys;
+using static vatsys.FDP2;
 
 namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
 
@@ -12,18 +16,37 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
 /// <remarks>
 /// Initializes a new instance of the <see cref="StripBaseGUI"/> class.
 /// </remarks>
-/// <param name="stripController">The strip controller.</param>
-public abstract class StripBaseGUI(StripController stripController) : UserControl
+public class StripBaseGUI : UserControl
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="StripBaseGUI"/> class.
+    /// </summary>
+    /// <param name="stripController">The Strip Controller.</param>
+    public StripBaseGUI(StripController stripController)
+    {
+        StripController = stripController;
+        FDR = stripController.FDR;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="StripBaseGUI"/> class.
+    /// Used exclusively in Design-Time.
+    /// </summary>
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    public StripBaseGUI()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    {
+    }
+
     /// <summary>
     /// Gets the strip controller.
     /// </summary>
-    protected StripController StripController { get; } = stripController;
+    protected StripController StripController { get; }
 
     /// <summary>
     /// Gets the flight data record.
     /// </summary>
-    protected FDP2.FDR FDR { get; } = stripController.FDR;
+    protected FDP2.FDR FDR { get; }
 
     /// <summary>
     /// Gets or sets the pick toggle control.
@@ -44,6 +67,11 @@ public abstract class StripBaseGUI(StripController stripController) : UserContro
     /// Gets or sets the default color.
     /// </summary>
     protected Color DefColor { get; set; } = Color.Empty;
+
+    /// <summary>
+    /// Gets or sets a dictionary containg strip controls.
+    /// </summary>
+    protected Dictionary<string, Control> StripElements { get; set; } = new Dictionary<string, Control>();
 
     /// <summary>
     /// Changes the cock level.
@@ -143,7 +171,101 @@ public abstract class StripBaseGUI(StripController stripController) : UserContro
     /// <summary>
     /// Updates the strip.
     /// </summary>
-    public abstract void UpdateStrip();
+    public void UpdateStrip()
+    {
+        SuspendLayout();
+        if (FDR == null)
+        {
+            return;
+        }
+
+        if (StripElements.ContainsKey("eobt"))
+        {
+            StripElements["eobt"].Text = StripController.Time;
+        }
+
+        StripElements["acid"].Text = FDR.Callsign;
+        StripElements["ssr"].Text = (FDR.AssignedSSRCode == -1) ? "XXXX" : Convert.ToString(FDR.AssignedSSRCode, 8).PadLeft(4, '0');
+        StripElements["type"].Text = FDR.AircraftType;
+        StripElements["frul"].Text = FDR.FlightRules;
+
+        if (StripElements.ContainsKey("route"))
+        {
+            StripElements["route"].Text = StripController.Route;
+        }
+
+        if (StripElements.ContainsKey("sid"))
+        {
+            StripElements["sid"].Text = StripController.SID;
+        }
+
+        if (StripElements.ContainsKey("ades"))
+        {
+            StripElements["ades"].Text = FDR.DesAirport;
+        }
+
+        if (StripElements.ContainsKey("CFL"))
+        {
+            StripElements["CFL"].Text = StripController.CFL;
+        }
+
+        if (StripElements.ContainsKey("HDG"))
+        {
+            StripElements["HDG"].Text = string.IsNullOrEmpty(StripController.HDG) ? string.Empty : "H" + StripController.HDG;
+        }
+
+        if (StripElements.ContainsKey("CLX"))
+        {
+            StripElements["CLX"].Text = StripController.CLX;
+        }
+
+        if (StripElements.ContainsKey("stand"))
+        {
+            StripElements["stand"].Text = StripController.Gate;
+        }
+
+        if (StripElements.ContainsKey("remark"))
+        {
+            StripElements["remark"].Text = StripController.Remark;
+        }
+
+        if (StripElements.ContainsKey("tot") && StripController.TakeOffTime != null)
+        {
+            var diff = (TimeSpan)(DateTime.UtcNow - StripController.TakeOffTime);
+            StripElements["tot"].Text = diff.ToString(@"mm\:ss", CultureInfo.InvariantCulture);
+            StripElements["tot"].ForeColor = Color.Green;
+        }
+        else if (StripElements.ContainsKey("tot"))
+        {
+            StripElements["tot"].Text = "00:00";
+            StripElements["tot"].ForeColor = Color.Black;
+        }
+
+        if (StripElements.ContainsKey("rfl"))
+        {
+            StripElements["rfl"].Text = (FDR.RFL / 100).ToString(CultureInfo.InvariantCulture);
+        }
+
+        if (StripElements.ContainsKey("glop"))
+        {
+            StripElements["glop"].Text = FDR.GlobalOpData;
+        }
+
+        if (StripElements.ContainsKey("ssrsymbol") && StripController.SquawkCorrect)
+        {
+            StripElements["ssrsymbol"].Text = "*";
+        }
+        else if (StripElements.ContainsKey("ssrsymbol"))
+        {
+            StripElements["ssrsymbol"].Text = string.Empty;
+        }
+
+        SetCross(false);
+        Cock(0, false, false);
+        StripElements["rwy"].Text = StripController.RWY;
+        StripElements["wtc"].Text = FDR.AircraftWake;
+        ResumeLayout();
+    }
 
     /// <summary>
     /// Opens the heading/altitude modal dialog.
