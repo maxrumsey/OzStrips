@@ -392,4 +392,18 @@ public partial class MainForm : Form
     {
         System.Diagnostics.Process.Start("https://maxrumsey.xyz/OzStrips/changelog");
     }
+
+    private void NormalToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        Properties.OzStripsSettings.Default.UseBigStrips = true;
+        Properties.OzStripsSettings.Default.Save();
+        _bayManager.ReloadStrips();
+    }
+
+    private void SmallToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        Properties.OzStripsSettings.Default.UseBigStrips = false;
+        Properties.OzStripsSettings.Default.Save();
+        _bayManager.ReloadStrips();
+    }
 }

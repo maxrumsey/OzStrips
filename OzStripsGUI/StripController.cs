@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 using MaxRumsey.OzStripsPlugin.Gui.Controls;
 using MaxRumsey.OzStripsPlugin.Gui.DTO;
-
+using MaxRumsey.OzStripsPlugin.Gui.Properties;
 using vatsys;
 
 using static vatsys.FDP2;
@@ -536,8 +536,15 @@ public sealed class StripController : IDisposable
 
         ////stripHolderControl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         StripHolderControl.Size = new(100, 100);
+        if (OzStripsSettings.Default.UseBigStrips)
+        {
+            _stripControl = new Strip(this);
+        }
+        else
+        {
+            _stripControl = new LittleStrip(this);
+        }
 
-        _stripControl = new Strip(this);
         _stripControl.Initialise();
         _stripControl.UpdateStrip();
         _stripControl.HMI_TogglePick(_bayManager.PickedController == this);

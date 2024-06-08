@@ -31,10 +31,18 @@
         <PackageReference Include="SocketIOClient" Version="3.1.1" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Update="Controls\LittleStrip.cs">
+          <SubType>UserControl</SubType>
+        </Compile>
         <Compile Update="OzStripsConfig.Designer.cs">
             <DesignTime>True</DesignTime>
             <AutoGen>True</AutoGen>
             <DependentUpon>Config.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Properties\OzStripsSettings.Designer.cs">
+          <DesignTimeSharedInput>True</DesignTimeSharedInput>
+          <AutoGen>True</AutoGen>
+          <DependentUpon>OzStripsSettings.settings</DependentUpon>
         </Compile>
     </ItemGroup>
     <ItemGroup>
@@ -64,5 +72,11 @@
             <LastGenOutput>OzStripsConfig.Designer.cs</LastGenOutput>
             <CustomToolNamespace>MaxRumsey.OzStripsPlugin.Gui</CustomToolNamespace>
         </EmbeddedResource>
+    </ItemGroup>
+    <ItemGroup>
+      <None Update="Properties\OzStripsSettings.settings">
+        <Generator>SettingsSingleFileGenerator</Generator>
+        <LastGenOutput>OzStripsSettings.Designer.cs</LastGenOutput>
+      </None>
     </ItemGroup>
 </Project>
