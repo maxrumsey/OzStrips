@@ -668,10 +668,18 @@ public sealed class StripController : IDisposable
     /// <returns>The tradar track or null if none available.</returns>
     public RDP.RadarTrack? GetRadarTrack()
     {
-        var radarTracks = RDP.RadarTracks
-            .Where(radarTrack => radarTrack.ActualAircraft.Callsign.Equals(FDR.Callsign))
-            .ToList();
-        return radarTracks.Count > 0 ? radarTracks[0] : null;
+        try
+        {
+            var radarTracks = RDP.RadarTracks
+                .Where(radarTrack => radarTrack.ActualAircraft.Callsign.Equals(FDR.Callsign))
+                .ToList();
+            return radarTracks.Count > 0 ? radarTracks[0] : null;
+        }
+        catch (Exception e)
+        {
+            Errors.Add(e, "OzStrips");
+            return null;
+        }
     }
 
     /// <summary>
