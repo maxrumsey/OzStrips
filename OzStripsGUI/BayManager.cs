@@ -240,6 +240,7 @@ public class BayManager(FlowLayoutPanel main)
             if (track is not null)
             {
                 MMI.SelectOrDeselectGroundTrack(track);
+                MMI.SelectOrDeselectTrack(track);
             }
         }
     }
