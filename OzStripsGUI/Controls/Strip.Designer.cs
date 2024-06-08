@@ -58,8 +58,8 @@
             lb_remark = new System.Windows.Forms.Label();
             pl_eobt = new System.Windows.Forms.Panel();
             lb_eobt = new System.Windows.Forms.Label();
-            panel3 = new System.Windows.Forms.Panel();
-            label3 = new System.Windows.Forms.Label();
+            pl_rte = new System.Windows.Forms.Panel();
+            lb_rte = new System.Windows.Forms.Label();
             pl_ssricon = new System.Windows.Forms.Panel();
             lb_ssricon = new System.Windows.Forms.Label();
             pl_req = new System.Windows.Forms.Panel();
@@ -83,7 +83,7 @@
             pl_clx.SuspendLayout();
             pl_remark.SuspendLayout();
             pl_eobt.SuspendLayout();
-            panel3.SuspendLayout();
+            pl_rte.SuspendLayout();
             pl_ssricon.SuspendLayout();
             pl_req.SuspendLayout();
             pl_glop.SuspendLayout();
@@ -426,24 +426,27 @@
             lb_eobt.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             lb_eobt.Click += EOBTClicked;
             // 
-            // panel3
+            // pl_rte
             // 
-            panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            panel3.Controls.Add(label3);
-            panel3.Location = new System.Drawing.Point(68, 30);
-            panel3.Name = "panel3";
-            panel3.Size = new System.Drawing.Size(30, 30);
-            panel3.TabIndex = 6;
+            pl_rte.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            pl_rte.Controls.Add(lb_rte);
+            pl_rte.Location = new System.Drawing.Point(68, 30);
+            pl_rte.Name = "pl_rte";
+            pl_rte.Size = new System.Drawing.Size(30, 30);
+            pl_rte.TabIndex = 6;
             // 
-            // label3
+            // lb_rte
             // 
-            label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            label3.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
-            label3.Location = new System.Drawing.Point(0, 0);
-            label3.Name = "label3";
-            label3.Size = new System.Drawing.Size(28, 28);
-            label3.TabIndex = 0;
-            label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            lb_rte.Dock = System.Windows.Forms.DockStyle.Fill;
+            lb_rte.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_rte.Location = new System.Drawing.Point(0, 0);
+            lb_rte.Name = "lb_rte";
+            lb_rte.Size = new System.Drawing.Size(28, 28);
+            lb_rte.TabIndex = 0;
+            lb_rte.Text = "R";
+            lb_rte.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            lb_rte.Click += RouteClicked;
+            lb_rte.DoubleClick += RouteClicked;
             // 
             // pl_ssricon
             // 
@@ -542,7 +545,7 @@
             Controls.Add(pl_req);
             Controls.Add(pl_ssricon);
             Controls.Add(pl_hdg);
-            Controls.Add(panel3);
+            Controls.Add(pl_rte);
             Controls.Add(pl_alt);
             Controls.Add(pl_eobt);
             Controls.Add(pl_route);
@@ -574,7 +577,7 @@
             pl_clx.ResumeLayout(false);
             pl_remark.ResumeLayout(false);
             pl_eobt.ResumeLayout(false);
-            panel3.ResumeLayout(false);
+            pl_rte.ResumeLayout(false);
             pl_ssricon.ResumeLayout(false);
             pl_req.ResumeLayout(false);
             pl_glop.ResumeLayout(false);
@@ -613,8 +616,8 @@
         private System.Windows.Forms.Label lb_remark;
         private System.Windows.Forms.Panel pl_eobt;
         private System.Windows.Forms.Label lb_eobt;
-        private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Panel pl_rte;
+        private System.Windows.Forms.Label lb_rte;
         private System.Windows.Forms.Panel pl_ssricon;
         private System.Windows.Forms.Label lb_ssricon;
         private System.Windows.Forms.Panel pl_req;

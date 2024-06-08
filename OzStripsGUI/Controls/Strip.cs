@@ -34,7 +34,7 @@ public partial class Strip : StripBaseGUI
             pl_ades,
             pl_eobt,
             pl_wtc,
-            panel3,
+            pl_rte,
             pl_frul,
             pl_ssricon,
             pl_type,
@@ -112,5 +112,10 @@ public partial class Strip : StripBaseGUI
     private void EOBTClicked(object sender, EventArgs e)
     {
         Cock(-1);
+    }
+
+    private void RouteClicked(object sender, EventArgs e)
+    {
+        ToggleRoute();
     }
 }

@@ -268,6 +268,25 @@ public class StripBaseGUI : UserControl
     }
 
     /// <summary>
+    /// Toggles display of the route for the strip.
+    /// </summary>
+    protected void ToggleRoute()
+    {
+        var track = MMI.FindTrack(FDR);
+        if (track is not null)
+        {
+            if (track.GraphicRTE)
+            {
+                MMI.HideGraphicRoute(track);
+            }
+            else
+            {
+                MMI.ShowGraphicRoute(track);
+            }
+        }
+    }
+
+    /// <summary>
     /// Opens the heading/altitude modal dialog.
     /// </summary>
     protected void OpenHdgAltModal()
