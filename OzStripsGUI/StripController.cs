@@ -144,6 +144,17 @@ public sealed class StripController : IDisposable
     public string Remark { get; set; } = string.Empty;
 
     /// <summary>
+    /// Gets he requested flight level.
+    /// </summary>
+    public string RFL
+    {
+        get
+        {
+            return (FDR.RFL / 100).ToString(CultureInfo.InvariantCulture).PadLeft(3, '0');
+        }
+    }
+
+    /// <summary>
     /// Gets or sets the gate.
     /// </summary>
     public string Gate { get; set; } = string.Empty;

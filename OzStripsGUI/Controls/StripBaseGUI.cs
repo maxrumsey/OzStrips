@@ -296,7 +296,7 @@ public class StripBaseGUI : UserControl
 
         if (StripElements.ContainsKey("rfl"))
         {
-            StripElements["rfl"].Text = (FDR.RFL / 100).ToString(CultureInfo.InvariantCulture);
+            StripElements["rfl"].Text = StripController.RFL;
         }
 
         if (StripElements.ContainsKey("glop"))
