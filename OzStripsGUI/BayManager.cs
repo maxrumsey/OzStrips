@@ -45,7 +45,7 @@ public class BayManager(FlowLayoutPanel main)
         {
             if (value is not null)
             {
-                var fdr = StripController.GetController(value);
+                var fdr = StripController.GetFDR(value);
                 SetPicked(fdr);
             }
             else

@@ -192,6 +192,24 @@ public partial class MainForm : Form
         StripController.UpdateFDR(fdr, _bayManager, _socketConn);
     }
 
+    /// <summary>
+    /// Handles a pilot disconnecting from vatSys.
+    /// </summary>
+    /// <param name="args">Event arguments.</param>
+    public void HandleDisconnect(Network.PilotUpdateEventArgs args)
+    {
+        if (!args.Removed)
+        {
+            return;
+        }
+
+        var strip = StripController.GetController(args.UpdatedPilot.Callsign);
+        if (strip is not null)
+        {
+            _bayManager.DeleteStrip(strip);
+        }
+    }
+
     /// <inheritdoc/>
     protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
     {

@@ -35,6 +35,7 @@ public sealed class OzStrips : IPlugin, IDisposable
         MMI.AddCustomMenuItem(_ozStripsOpener);
         MMI.SelectedTrackChanged += SelectedAirTrackChanged;
         MMI.SelectedGroundTrackChanged += SelectedGroundTrackChanged;
+        Network.OnlinePilotsChanged += Network_OnlinePilotsChanged;
         _ = CheckVersion();
     }
 
@@ -111,6 +112,14 @@ public sealed class OzStrips : IPlugin, IDisposable
         }
         catch
         {
+        }
+    }
+
+    private void Network_OnlinePilotsChanged(object sender, Network.PilotUpdateEventArgs e)
+    {
+        if (e.Removed && _gui?.IsDisposed == false)
+        {
+            _gui.HandleDisconnect(e);
         }
     }
 

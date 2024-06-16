@@ -216,6 +216,25 @@ public sealed class SocketConn : IDisposable
     }
 
     /// <summary>
+    /// Syncs the deletion of a controller.
+    /// </summary>
+    /// <param name="sc">The strip controller.</param>
+    public void SyncDeletion(StripController sc)
+    {
+        SCDeletionDTO scDTO = sc;
+        AddMessage("c:sc_delete: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
+        if (string.IsNullOrEmpty(scDTO.acid))
+        {
+            return; // prevent bug
+        }
+
+        if (CanSendDTO)
+        {
+            _io.EmitAsync("client:sc_delete", scDTO);
+        }
+    }
+
+    /// <summary>
     /// Sync the bay to the socket.
     /// </summary>
     /// <param name="bay">The bay to sync.</param>
