@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-
 using MaxRumsey.OzStripsPlugin.Gui.DTO;
 
 using vatsys;
@@ -46,7 +45,7 @@ public class BayManager(FlowLayoutPanel main)
         {
             if (value is not null)
             {
-                var fdr = StripController.GetController(value);
+                var fdr = StripController.GetFDR(value);
                 SetPicked(fdr);
             }
             else
@@ -192,6 +191,7 @@ public class BayManager(FlowLayoutPanel main)
     /// <param name="strip">The strip to delete.</param>
     public void DeleteStrip(StripController strip)
     {
+        strip.SendDeleteMessage();
         FindBay(strip)?.RemoveStrip(strip, true);
         StripController.StripControllers.Remove(strip);
     }
@@ -239,7 +239,15 @@ public class BayManager(FlowLayoutPanel main)
             var track = MMI.FindTrack(rTrack);
             if (track is not null)
             {
-                MMI.SelectOrDeselectGroundTrack(track);
+                if (MMI.SelectedTrack != track)
+                {
+                    MMI.SelectOrDeselectTrack(track);
+                }
+
+                if (MMI.SelectedGroundTrack != track)
+                {
+                    MMI.SelectOrDeselectGroundTrack(track);
+                }
             }
         }
     }
@@ -284,6 +292,7 @@ public class BayManager(FlowLayoutPanel main)
         if (sendToVatsys)
         {
             MMI.SelectOrDeselectGroundTrack(MMI.SelectedGroundTrack);
+            MMI.SelectOrDeselectTrack(MMI.SelectedTrack);
         }
     }
 
@@ -421,6 +430,11 @@ public class BayManager(FlowLayoutPanel main)
             strip.ClearStripControl();
             strip.CreateStripObj();
             AddStrip(strip, false);
+        }
+
+        foreach (var bay in Bays)
+        {
+            bay.Orderstrips();
         }
     }
 

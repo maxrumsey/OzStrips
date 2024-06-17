@@ -1,4 +1,12 @@
 # Changelog
+## v0.3.7
+### Bugfixes
+- Fix crashing issues.
+- Fix strips of deleted aircraft from hanging around.
+
+### Features
+- Adds small strips.
+- Add ability to use vatSys CFL/Strip/Runway dropdowns.
 
 ## v0.3.6
 ### Bugfixes

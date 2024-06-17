@@ -6,13 +6,13 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
 /// <summary>
 /// A UI for the strips.
 /// </summary>
-public partial class Strip : StripBaseGUI
+public partial class LittleStrip : StripBaseGUI
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="Strip"/> class.
+    /// Initializes a new instance of the <see cref="LittleStrip"/> class.
     /// </summary>
     /// <param name="controller">The strip controller.</param>
-    public Strip(StripController controller)
+    public LittleStrip(StripController controller)
         : base(controller)
     {
         InitializeComponent();
@@ -67,10 +67,10 @@ public partial class Strip : StripBaseGUI
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Strip"/> class.
+    /// Initializes a new instance of the <see cref="LittleStrip"/> class.
     /// This function is used exclusively in design-time.
     /// </summary>
-    public Strip()
+    public LittleStrip()
     {
         InitializeComponent();
     }

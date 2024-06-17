@@ -84,12 +84,12 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Controls
             bt_div.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             bt_div.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             bt_div.ForeColor = System.Drawing.Color.FromArgb(0, 0, 96);
-            bt_div.Location = new System.Drawing.Point(359, 5);
+            bt_div.Location = new System.Drawing.Point(330, 5);
             bt_div.Name = "bt_div";
-            bt_div.Size = new System.Drawing.Size(116, 32);
+            bt_div.Size = new System.Drawing.Size(145, 32);
             bt_div.TabIndex = 3;
             bt_div.TabStop = false;
-            bt_div.Text = "Stop Queue";
+            bt_div.Text = "Toggle Queue Bar";
             bt_div.UseVisualStyleBackColor = false;
             bt_div.Click += ButtonDivClicked;
             // 
@@ -100,12 +100,12 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Controls
             bt_queue.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             bt_queue.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             bt_queue.ForeColor = System.Drawing.Color.FromArgb(0, 0, 96);
-            bt_queue.Location = new System.Drawing.Point(239, 5);
+            bt_queue.Location = new System.Drawing.Point(208, 5);
             bt_queue.Name = "bt_queue";
             bt_queue.Size = new System.Drawing.Size(116, 32);
             bt_queue.TabIndex = 2;
             bt_queue.TabStop = false;
-            bt_queue.Text = "Start Queue";
+            bt_queue.Text = "Add to Queue";
             bt_queue.UseVisualStyleBackColor = false;
             bt_queue.Click += ButtonQueueClicked;
             // 

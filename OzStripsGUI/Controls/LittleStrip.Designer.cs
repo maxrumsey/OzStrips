@@ -1,6 +1,6 @@
 ﻿namespace MaxRumsey.OzStripsPlugin.Gui.Controls
 {
-    partial class Strip
+    partial class LittleStrip
     {
         /// <summary> 
         /// Required designer variable.
@@ -98,17 +98,17 @@
             pl_acid.Location = new System.Drawing.Point(228, 0);
             pl_acid.Margin = new System.Windows.Forms.Padding(0);
             pl_acid.Name = "pl_acid";
-            pl_acid.Size = new System.Drawing.Size(100, 60);
+            pl_acid.Size = new System.Drawing.Size(100, 38);
             pl_acid.TabIndex = 1;
             // 
             // lb_acid
             // 
             lb_acid.BackColor = System.Drawing.Color.Transparent;
             lb_acid.Dock = System.Windows.Forms.DockStyle.Fill;
-            lb_acid.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_acid.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_acid.Location = new System.Drawing.Point(0, 0);
             lb_acid.Name = "lb_acid";
-            lb_acid.Size = new System.Drawing.Size(98, 58);
+            lb_acid.Size = new System.Drawing.Size(98, 36);
             lb_acid.TabIndex = 0;
             lb_acid.Text = "CALLSIGN";
             lb_acid.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -121,16 +121,16 @@
             pl_wtc.Controls.Add(lb_wtc);
             pl_wtc.Location = new System.Drawing.Point(198, 0);
             pl_wtc.Name = "pl_wtc";
-            pl_wtc.Size = new System.Drawing.Size(30, 30);
+            pl_wtc.Size = new System.Drawing.Size(30, 19);
             pl_wtc.TabIndex = 3;
             // 
             // lb_wtc
             // 
             lb_wtc.Dock = System.Windows.Forms.DockStyle.Fill;
-            lb_wtc.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_wtc.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_wtc.Location = new System.Drawing.Point(0, 0);
             lb_wtc.Name = "lb_wtc";
-            lb_wtc.Size = new System.Drawing.Size(28, 28);
+            lb_wtc.Size = new System.Drawing.Size(28, 17);
             lb_wtc.TabIndex = 0;
             lb_wtc.Text = "L";
             lb_wtc.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -140,18 +140,18 @@
             // 
             pl_frul.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             pl_frul.Controls.Add(lb_frul);
-            pl_frul.Location = new System.Drawing.Point(98, 30);
+            pl_frul.Location = new System.Drawing.Point(98, 19);
             pl_frul.Name = "pl_frul";
-            pl_frul.Size = new System.Drawing.Size(30, 30);
+            pl_frul.Size = new System.Drawing.Size(30, 19);
             pl_frul.TabIndex = 2;
             // 
             // lb_frul
             // 
             lb_frul.Dock = System.Windows.Forms.DockStyle.Fill;
-            lb_frul.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_frul.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_frul.Location = new System.Drawing.Point(0, 0);
             lb_frul.Name = "lb_frul";
-            lb_frul.Size = new System.Drawing.Size(28, 28);
+            lb_frul.Size = new System.Drawing.Size(28, 17);
             lb_frul.TabIndex = 0;
             lb_frul.Text = "L";
             lb_frul.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -160,19 +160,19 @@
             // 
             pl_ssr.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             pl_ssr.Controls.Add(lb_ssr);
-            pl_ssr.Location = new System.Drawing.Point(158, 30);
+            pl_ssr.Location = new System.Drawing.Point(158, 19);
             pl_ssr.Name = "pl_ssr";
-            pl_ssr.Size = new System.Drawing.Size(70, 30);
+            pl_ssr.Size = new System.Drawing.Size(70, 19);
             pl_ssr.TabIndex = 1;
             // 
             // lb_ssr
             // 
             lb_ssr.Dock = System.Windows.Forms.DockStyle.Fill;
-            lb_ssr.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_ssr.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_ssr.ForeColor = System.Drawing.Color.Black;
             lb_ssr.Location = new System.Drawing.Point(0, 0);
             lb_ssr.Name = "lb_ssr";
-            lb_ssr.Size = new System.Drawing.Size(68, 28);
+            lb_ssr.Size = new System.Drawing.Size(68, 17);
             lb_ssr.TabIndex = 0;
             lb_ssr.Text = "ssr";
             lb_ssr.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -184,16 +184,16 @@
             pl_type.Controls.Add(lb_type);
             pl_type.Location = new System.Drawing.Point(128, 0);
             pl_type.Name = "pl_type";
-            pl_type.Size = new System.Drawing.Size(70, 30);
+            pl_type.Size = new System.Drawing.Size(70, 19);
             pl_type.TabIndex = 0;
             // 
             // lb_type
             // 
             lb_type.Dock = System.Windows.Forms.DockStyle.Fill;
-            lb_type.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_type.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_type.Location = new System.Drawing.Point(0, 0);
             lb_type.Name = "lb_type";
-            lb_type.Size = new System.Drawing.Size(68, 28);
+            lb_type.Size = new System.Drawing.Size(68, 17);
             lb_type.TabIndex = 0;
             lb_type.Text = "AC TYPE";
             lb_type.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -203,17 +203,17 @@
             // 
             pl_route.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             pl_route.Controls.Add(lb_route);
-            pl_route.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
-            pl_route.Location = new System.Drawing.Point(448, 20);
+            pl_route.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            pl_route.Location = new System.Drawing.Point(448, 19);
             pl_route.Name = "pl_route";
-            pl_route.Size = new System.Drawing.Size(80, 20);
+            pl_route.Size = new System.Drawing.Size(80, 19);
             pl_route.TabIndex = 1;
             // 
             // lb_route
             // 
             lb_route.Anchor = System.Windows.Forms.AnchorStyles.Top;
             lb_route.AutoEllipsis = true;
-            lb_route.Location = new System.Drawing.Point(0, -2);
+            lb_route.Location = new System.Drawing.Point(0, -3);
             lb_route.Margin = new System.Windows.Forms.Padding(0);
             lb_route.Name = "lb_route";
             lb_route.Size = new System.Drawing.Size(80, 21);
@@ -225,19 +225,19 @@
             // pl_ades
             // 
             pl_ades.Controls.Add(lb_ades);
-            pl_ades.Location = new System.Drawing.Point(0, 30);
+            pl_ades.Location = new System.Drawing.Point(0, 19);
             pl_ades.Name = "pl_ades";
-            pl_ades.Size = new System.Drawing.Size(68, 30);
+            pl_ades.Size = new System.Drawing.Size(68, 19);
             pl_ades.TabIndex = 0;
             // 
             // lb_ades
             // 
             lb_ades.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             lb_ades.Dock = System.Windows.Forms.DockStyle.Fill;
-            lb_ades.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_ades.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_ades.Location = new System.Drawing.Point(0, 0);
             lb_ades.Name = "lb_ades";
-            lb_ades.Size = new System.Drawing.Size(68, 30);
+            lb_ades.Size = new System.Drawing.Size(68, 19);
             lb_ades.TabIndex = 0;
             lb_ades.Text = "DEST";
             lb_ades.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -251,14 +251,14 @@
             pl_sid.Location = new System.Drawing.Point(448, 0);
             pl_sid.Margin = new System.Windows.Forms.Padding(0);
             pl_sid.Name = "pl_sid";
-            pl_sid.Size = new System.Drawing.Size(80, 20);
+            pl_sid.Size = new System.Drawing.Size(80, 19);
             pl_sid.TabIndex = 1;
             // 
             // lb_sid
             // 
             lb_sid.Anchor = System.Windows.Forms.AnchorStyles.Top;
             lb_sid.BackColor = System.Drawing.Color.Lime;
-            lb_sid.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_sid.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_sid.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             lb_sid.Location = new System.Drawing.Point(0, -2);
             lb_sid.Name = "lb_sid";
@@ -275,18 +275,18 @@
             pl_std.Location = new System.Drawing.Point(-1, -1);
             pl_std.Margin = new System.Windows.Forms.Padding(0);
             pl_std.Name = "pl_std";
-            pl_std.Size = new System.Drawing.Size(70, 32);
+            pl_std.Size = new System.Drawing.Size(70, 21);
             pl_std.TabIndex = 2;
             // 
             // lb_std
             // 
             lb_std.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             lb_std.Dock = System.Windows.Forms.DockStyle.Fill;
-            lb_std.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_std.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_std.Location = new System.Drawing.Point(0, 0);
             lb_std.Margin = new System.Windows.Forms.Padding(3);
             lb_std.Name = "lb_std";
-            lb_std.Size = new System.Drawing.Size(68, 30);
+            lb_std.Size = new System.Drawing.Size(68, 19);
             lb_std.TabIndex = 0;
             lb_std.Text = "GATE";
             lb_std.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -294,10 +294,11 @@
             // 
             // pl_hdg
             // 
+            pl_hdg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             pl_hdg.Controls.Add(lb_hdg);
-            pl_hdg.Location = new System.Drawing.Point(448, 39);
+            pl_hdg.Location = new System.Drawing.Point(447, 37);
             pl_hdg.Name = "pl_hdg";
-            pl_hdg.Size = new System.Drawing.Size(80, 21);
+            pl_hdg.Size = new System.Drawing.Size(82, 23);
             pl_hdg.TabIndex = 1;
             // 
             // lb_hdg
@@ -305,7 +306,7 @@
             lb_hdg.AutoEllipsis = true;
             lb_hdg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             lb_hdg.Dock = System.Windows.Forms.DockStyle.Fill;
-            lb_hdg.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_hdg.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_hdg.Location = new System.Drawing.Point(0, 0);
             lb_hdg.Name = "lb_hdg";
             lb_hdg.Size = new System.Drawing.Size(80, 21);
@@ -318,18 +319,18 @@
             // 
             pl_alt.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             pl_alt.Controls.Add(lb_alt);
-            pl_alt.Location = new System.Drawing.Point(528, 30);
+            pl_alt.Location = new System.Drawing.Point(528, 19);
             pl_alt.Name = "pl_alt";
-            pl_alt.Size = new System.Drawing.Size(50, 30);
+            pl_alt.Size = new System.Drawing.Size(50, 19);
             pl_alt.TabIndex = 0;
             // 
             // lb_alt
             // 
             lb_alt.Dock = System.Windows.Forms.DockStyle.Fill;
-            lb_alt.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_alt.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_alt.Location = new System.Drawing.Point(0, 0);
             lb_alt.Name = "lb_alt";
-            lb_alt.Size = new System.Drawing.Size(48, 28);
+            lb_alt.Size = new System.Drawing.Size(48, 17);
             lb_alt.TabIndex = 0;
             lb_alt.Text = "Alt";
             lb_alt.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -342,16 +343,16 @@
             pl_rwy.Location = new System.Drawing.Point(328, 0);
             pl_rwy.Margin = new System.Windows.Forms.Padding(0);
             pl_rwy.Name = "pl_rwy";
-            pl_rwy.Size = new System.Drawing.Size(60, 61);
+            pl_rwy.Size = new System.Drawing.Size(60, 38);
             pl_rwy.TabIndex = 3;
             // 
             // lb_rwy
             // 
             lb_rwy.Dock = System.Windows.Forms.DockStyle.Fill;
-            lb_rwy.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_rwy.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_rwy.Location = new System.Drawing.Point(0, 0);
             lb_rwy.Name = "lb_rwy";
-            lb_rwy.Size = new System.Drawing.Size(58, 59);
+            lb_rwy.Size = new System.Drawing.Size(58, 36);
             lb_rwy.TabIndex = 0;
             lb_rwy.Text = "rwy";
             lb_rwy.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -361,21 +362,21 @@
             // 
             pl_clx.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             pl_clx.Controls.Add(lb_clx);
-            pl_clx.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            pl_clx.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             pl_clx.Location = new System.Drawing.Point(388, 0);
             pl_clx.Margin = new System.Windows.Forms.Padding(0);
             pl_clx.Name = "pl_clx";
-            pl_clx.Size = new System.Drawing.Size(60, 60);
+            pl_clx.Size = new System.Drawing.Size(60, 38);
             pl_clx.TabIndex = 3;
             // 
             // lb_clx
             // 
             lb_clx.Dock = System.Windows.Forms.DockStyle.Fill;
-            lb_clx.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_clx.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_clx.Location = new System.Drawing.Point(0, 0);
             lb_clx.Margin = new System.Windows.Forms.Padding(3);
             lb_clx.Name = "lb_clx";
-            lb_clx.Size = new System.Drawing.Size(58, 58);
+            lb_clx.Size = new System.Drawing.Size(58, 36);
             lb_clx.TabIndex = 0;
             lb_clx.Text = "clx";
             lb_clx.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -385,21 +386,21 @@
             // 
             pl_remark.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             pl_remark.Controls.Add(lb_remark);
-            pl_remark.Location = new System.Drawing.Point(280, 59);
+            pl_remark.Location = new System.Drawing.Point(247, 37);
             pl_remark.Margin = new System.Windows.Forms.Padding(0);
             pl_remark.Name = "pl_remark";
-            pl_remark.Size = new System.Drawing.Size(249, 31);
+            pl_remark.Size = new System.Drawing.Size(202, 23);
             pl_remark.TabIndex = 3;
             // 
             // lb_remark
             // 
             lb_remark.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             lb_remark.Dock = System.Windows.Forms.DockStyle.Fill;
-            lb_remark.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_remark.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_remark.Location = new System.Drawing.Point(0, 0);
             lb_remark.Margin = new System.Windows.Forms.Padding(3);
             lb_remark.Name = "lb_remark";
-            lb_remark.Size = new System.Drawing.Size(247, 29);
+            lb_remark.Size = new System.Drawing.Size(200, 21);
             lb_remark.TabIndex = 0;
             lb_remark.Text = "LOCAL REMARK";
             lb_remark.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -411,16 +412,16 @@
             pl_eobt.Controls.Add(lb_eobt);
             pl_eobt.Location = new System.Drawing.Point(68, 0);
             pl_eobt.Name = "pl_eobt";
-            pl_eobt.Size = new System.Drawing.Size(60, 30);
+            pl_eobt.Size = new System.Drawing.Size(60, 20);
             pl_eobt.TabIndex = 4;
             // 
             // lb_eobt
             // 
             lb_eobt.Dock = System.Windows.Forms.DockStyle.Fill;
-            lb_eobt.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_eobt.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_eobt.Location = new System.Drawing.Point(0, 0);
             lb_eobt.Name = "lb_eobt";
-            lb_eobt.Size = new System.Drawing.Size(58, 28);
+            lb_eobt.Size = new System.Drawing.Size(58, 18);
             lb_eobt.TabIndex = 0;
             lb_eobt.Text = "0000";
             lb_eobt.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -430,18 +431,18 @@
             // 
             pl_rte.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             pl_rte.Controls.Add(lb_rte);
-            pl_rte.Location = new System.Drawing.Point(68, 30);
+            pl_rte.Location = new System.Drawing.Point(68, 19);
             pl_rte.Name = "pl_rte";
-            pl_rte.Size = new System.Drawing.Size(30, 30);
+            pl_rte.Size = new System.Drawing.Size(30, 19);
             pl_rte.TabIndex = 6;
             // 
             // lb_rte
             // 
             lb_rte.Dock = System.Windows.Forms.DockStyle.Fill;
-            lb_rte.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_rte.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_rte.Location = new System.Drawing.Point(0, 0);
             lb_rte.Name = "lb_rte";
-            lb_rte.Size = new System.Drawing.Size(28, 28);
+            lb_rte.Size = new System.Drawing.Size(28, 17);
             lb_rte.TabIndex = 0;
             lb_rte.Text = "R";
             lb_rte.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -452,18 +453,18 @@
             // 
             pl_ssricon.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             pl_ssricon.Controls.Add(lb_ssricon);
-            pl_ssricon.Location = new System.Drawing.Point(128, 30);
+            pl_ssricon.Location = new System.Drawing.Point(128, 19);
             pl_ssricon.Name = "pl_ssricon";
-            pl_ssricon.Size = new System.Drawing.Size(30, 30);
+            pl_ssricon.Size = new System.Drawing.Size(30, 19);
             pl_ssricon.TabIndex = 3;
             // 
             // lb_ssricon
             // 
             lb_ssricon.Dock = System.Windows.Forms.DockStyle.Fill;
-            lb_ssricon.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_ssricon.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_ssricon.Location = new System.Drawing.Point(0, 0);
             lb_ssricon.Name = "lb_ssricon";
-            lb_ssricon.Size = new System.Drawing.Size(28, 28);
+            lb_ssricon.Size = new System.Drawing.Size(28, 17);
             lb_ssricon.TabIndex = 0;
             lb_ssricon.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -473,17 +474,17 @@
             pl_req.Controls.Add(lb_req);
             pl_req.Location = new System.Drawing.Point(528, 0);
             pl_req.Name = "pl_req";
-            pl_req.Size = new System.Drawing.Size(50, 30);
+            pl_req.Size = new System.Drawing.Size(50, 19);
             pl_req.TabIndex = 2;
             // 
             // lb_req
             // 
             lb_req.Dock = System.Windows.Forms.DockStyle.Fill;
-            lb_req.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_req.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_req.ForeColor = System.Drawing.Color.Gray;
             lb_req.Location = new System.Drawing.Point(0, 0);
             lb_req.Name = "lb_req";
-            lb_req.Size = new System.Drawing.Size(48, 28);
+            lb_req.Size = new System.Drawing.Size(48, 17);
             lb_req.TabIndex = 1;
             lb_req.Text = "REQ LVL";
             lb_req.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -493,21 +494,21 @@
             // 
             pl_glop.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             pl_glop.Controls.Add(lb_glop);
-            pl_glop.Location = new System.Drawing.Point(-1, 59);
+            pl_glop.Location = new System.Drawing.Point(-1, 37);
             pl_glop.Margin = new System.Windows.Forms.Padding(0);
             pl_glop.Name = "pl_glop";
-            pl_glop.Size = new System.Drawing.Size(282, 31);
+            pl_glop.Size = new System.Drawing.Size(249, 23);
             pl_glop.TabIndex = 4;
             // 
             // lb_glop
             // 
             lb_glop.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             lb_glop.Dock = System.Windows.Forms.DockStyle.Fill;
-            lb_glop.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_glop.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_glop.Location = new System.Drawing.Point(0, 0);
             lb_glop.Margin = new System.Windows.Forms.Padding(3);
             lb_glop.Name = "lb_glop";
-            lb_glop.Size = new System.Drawing.Size(280, 29);
+            lb_glop.Size = new System.Drawing.Size(247, 21);
             lb_glop.TabIndex = 0;
             lb_glop.Text = "GLOBAL REMARK";
             lb_glop.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -517,9 +518,9 @@
             // 
             pl_tot.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             pl_tot.Controls.Add(lb_tot);
-            pl_tot.Location = new System.Drawing.Point(528, 59);
+            pl_tot.Location = new System.Drawing.Point(528, 37);
             pl_tot.Name = "pl_tot";
-            pl_tot.Size = new System.Drawing.Size(50, 30);
+            pl_tot.Size = new System.Drawing.Size(50, 23);
             pl_tot.TabIndex = 1;
             // 
             // lb_tot
@@ -528,13 +529,13 @@
             lb_tot.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_tot.Location = new System.Drawing.Point(0, 0);
             lb_tot.Name = "lb_tot";
-            lb_tot.Size = new System.Drawing.Size(48, 28);
+            lb_tot.Size = new System.Drawing.Size(48, 21);
             lb_tot.TabIndex = 0;
             lb_tot.Text = "00:00";
             lb_tot.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             lb_tot.Click += TOTClicked;
             // 
-            // Strip
+            // LittleStrip
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -560,8 +561,8 @@
             Controls.Add(pl_std);
             Controls.Add(pl_sid);
             Controls.Add(pl_acid);
-            Name = "Strip";
-            Size = new System.Drawing.Size(580, 89);
+            Name = "LittleStrip";
+            Size = new System.Drawing.Size(578, 60);
             pl_acid.ResumeLayout(false);
             pl_wtc.ResumeLayout(false);
             pl_frul.ResumeLayout(false);

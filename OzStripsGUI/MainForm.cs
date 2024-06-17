@@ -2,11 +2,8 @@
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
-
 using MaxRumsey.OzStripsPlugin.Gui.Controls;
-
 using vatsys;
-using static vatsys.FDP2;
 
 namespace MaxRumsey.OzStripsPlugin.Gui;
 
@@ -76,6 +73,8 @@ public partial class MainForm : Form
             toolStripMenuItem.Click += (_, _) => OpenManDebug();
             debugToolStripMenuItem.DropDownItems.Add(toolStripMenuItem);
         }
+
+        SetStripSizeCheckBox();
     }
 
     /// <summary>
@@ -191,6 +190,24 @@ public partial class MainForm : Form
     public void UpdateFDR(FDP2.FDR fdr)
     {
         StripController.UpdateFDR(fdr, _bayManager, _socketConn);
+    }
+
+    /// <summary>
+    /// Handles a pilot disconnecting from vatSys.
+    /// </summary>
+    /// <param name="args">Event arguments.</param>
+    public void HandleDisconnect(Network.PilotUpdateEventArgs args)
+    {
+        if (!args.Removed)
+        {
+            return;
+        }
+
+        var strip = StripController.GetController(args.UpdatedPilot.Callsign);
+        if (strip is not null)
+        {
+            _bayManager.DeleteStrip(strip);
+        }
     }
 
     /// <inheritdoc/>
@@ -391,5 +408,43 @@ public partial class MainForm : Form
     private void ChangelogToolStripMenuItem_Click(object sender, EventArgs e)
     {
         System.Diagnostics.Process.Start("https://maxrumsey.xyz/OzStrips/changelog");
+    }
+
+    private void NormalToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        Properties.OzStripsSettings.Default.UseBigStrips = true;
+        Properties.OzStripsSettings.Default.Save();
+        _bayManager.ReloadStrips();
+        SetStripSizeCheckBox();
+    }
+
+    private void SmallToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        Properties.OzStripsSettings.Default.UseBigStrips = false;
+        Properties.OzStripsSettings.Default.Save();
+        _bayManager.ReloadStrips();
+        SetStripSizeCheckBox();
+    }
+
+    private void SetStripSizeCheckBox()
+    {
+        if (Properties.OzStripsSettings.Default.UseBigStrips)
+        {
+            normalToolStripMenuItem.Checked = true;
+            smallToolStripMenuItem.Checked = false;
+        }
+        else
+        {
+            normalToolStripMenuItem.Checked = false;
+            smallToolStripMenuItem.Checked = true;
+        }
+    }
+
+    private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        var modalChild = new SettingsWindowControl();
+        var bm = new BaseModal(modalChild, "OzStrips Settings");
+        bm.ReturnEvent += modalChild.ModalReturned;
+        bm.Show(MainForm.MainFormInstance);
     }
 }

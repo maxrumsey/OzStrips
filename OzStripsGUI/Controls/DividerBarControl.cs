@@ -13,6 +13,25 @@ public partial class DividerBarControl : UserControl
     public DividerBarControl()
     {
         InitializeComponent();
+
+        ReloadSize();
+    }
+
+    /// <summary>
+    /// Sets the size of the divider bar in accordance with the size of strips.
+    /// </summary>
+    public void ReloadSize()
+    {
+        if (!Properties.OzStripsSettings.Default.UseBigStrips)
+        {
+            Size = new System.Drawing.Size(431, 30);
+            label1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+        }
+        else
+        {
+            Size = new System.Drawing.Size(431, 50);
+            label1.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+        }
     }
 
     /// <summary>

@@ -9,6 +9,7 @@
         <ApplicationIcon>ozstrips.ico</ApplicationIcon>
         <CefSharpBuildAction>Content</CefSharpBuildAction>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net472|AnyCPU'">
       <Optimize>False</Optimize>
@@ -30,13 +31,21 @@
         <PackageReference Include="SocketIOClient" Version="3.1.1" />
     </ItemGroup>
     <ItemGroup>
-        <Reference Include="$(MSBuildProgramFiles32)\vatSys\bin\vatSys.exe " />
-    </ItemGroup>
-    <ItemGroup>
+        <Compile Update="Controls\SettingsWindowControl.cs">
+          <SubType>UserControl</SubType>
+        </Compile>
+        <Compile Update="Controls\LittleStrip.cs">
+          <SubType>UserControl</SubType>
+        </Compile>
         <Compile Update="OzStripsConfig.Designer.cs">
             <DesignTime>True</DesignTime>
             <AutoGen>True</AutoGen>
             <DependentUpon>Config.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Properties\OzStripsSettings.Designer.cs">
+          <DesignTimeSharedInput>True</DesignTimeSharedInput>
+          <AutoGen>True</AutoGen>
+          <DependentUpon>OzStripsSettings.settings</DependentUpon>
         </Compile>
     </ItemGroup>
     <ItemGroup>
@@ -44,12 +53,14 @@
             <Generator>ResXFileCodeGenerator</Generator>
             <LastGenOutput>Config.Designer.cs</LastGenOutput>
         </EmbeddedResource>
-        <Reference Include="$(VatSysDir)\bin\vatSys.exe">
-          <Private>False</Private>
-        </Reference>
     </ItemGroup>
     <ItemGroup>
         <Content Include="ozstrips.ico" />
+    </ItemGroup>
+    <ItemGroup>
+      <Reference Include="vatSys">
+        <HintPath>..\..\..\..\..\Program Files (x86)\vatSys\bin\vatSys.exe</HintPath>
+      </Reference>
     </ItemGroup>
     <ItemGroup>
         <Compile Update="OzStripsConfig.Designer.cs">
@@ -64,5 +75,11 @@
             <LastGenOutput>OzStripsConfig.Designer.cs</LastGenOutput>
             <CustomToolNamespace>MaxRumsey.OzStripsPlugin.Gui</CustomToolNamespace>
         </EmbeddedResource>
+    </ItemGroup>
+    <ItemGroup>
+      <None Update="Properties\OzStripsSettings.settings">
+        <Generator>SettingsSingleFileGenerator</Generator>
+        <LastGenOutput>OzStripsSettings.Designer.cs</LastGenOutput>
+      </None>
     </ItemGroup>
 </Project>

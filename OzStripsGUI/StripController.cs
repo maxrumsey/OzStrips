@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 using MaxRumsey.OzStripsPlugin.Gui.Controls;
 using MaxRumsey.OzStripsPlugin.Gui.DTO;
-
+using MaxRumsey.OzStripsPlugin.Gui.Properties;
 using vatsys;
 
 using static vatsys.FDP2;
@@ -142,6 +142,17 @@ public sealed class StripController : IDisposable
     /// Gets or sets the remarks.
     /// </summary>
     public string Remark { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets he requested flight level.
+    /// </summary>
+    public string RFL
+    {
+        get
+        {
+            return (FDR.RFL / 100).ToString(CultureInfo.InvariantCulture).PadLeft(3, '0');
+        }
+    }
 
     /// <summary>
     /// Gets or sets the gate.
@@ -349,17 +360,49 @@ public sealed class StripController : IDisposable
     }
 
     /// <summary>
-    /// Looks up controller by name.
+    /// Converts a strip controller to the data object.
+    /// </summary>
+    /// <param name="sc">The strip controller.</param>
+    public static implicit operator SCDeletionDTO(StripController sc)
+    {
+        var scDTO = new SCDeletionDTO
+        {
+            acid = sc.FDR.Callsign,
+        };
+
+        return scDTO;
+    }
+
+    /// <summary>
+    /// Looks up fdr by name.
     /// </summary>
     /// <param name="name">The aircraft callsign.</param>
     /// <returns>The aircraft's FDR.</returns>
-    public static FDR? GetController(string name)
+    public static FDR? GetFDR(string name)
     {
         foreach (var controller in StripControllers)
         {
             if (controller.FDR.Callsign == name)
             {
                 return controller.FDR;
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Looks up controller by name.
+    /// </summary>
+    /// <param name="name">The aircraft callsign.</param>
+    /// <returns>The aircraft's FDR.</returns>
+    public static StripController? GetController(string name)
+    {
+        foreach (var controller in StripControllers)
+        {
+            if (controller.FDR.Callsign == name)
+            {
+                return controller;
             }
         }
 
@@ -518,6 +561,14 @@ public sealed class StripController : IDisposable
     }
 
     /// <summary>
+    /// Sends a strip deletion message to the server.
+    /// </summary>
+    public void SendDeleteMessage()
+    {
+        _socketConn.SyncDeletion(this);
+    }
+
+    /// <summary>
     /// Creates control for strip.
     /// </summary>
     public void CreateStripObj()
@@ -536,8 +587,15 @@ public sealed class StripController : IDisposable
 
         ////stripHolderControl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         StripHolderControl.Size = new(100, 100);
+        if (OzStripsSettings.Default.UseBigStrips)
+        {
+            _stripControl = new Strip(this);
+        }
+        else
+        {
+            _stripControl = new LittleStrip(this);
+        }
 
-        _stripControl = new Strip(this);
         _stripControl.Initialise();
         _stripControl.UpdateStrip();
         _stripControl.HMI_TogglePick(_bayManager.PickedController == this);
@@ -661,10 +719,18 @@ public sealed class StripController : IDisposable
     /// <returns>The tradar track or null if none available.</returns>
     public RDP.RadarTrack? GetRadarTrack()
     {
-        var radarTracks = RDP.RadarTracks
-            .Where(radarTrack => radarTrack.ActualAircraft.Callsign.Equals(FDR.Callsign))
-            .ToList();
-        return radarTracks.Count > 0 ? radarTracks[0] : null;
+        try
+        {
+            var radarTracks = RDP.RadarTracks
+                .Where(radarTrack => radarTrack.ActualAircraft.Callsign.Equals(FDR.Callsign))
+                .ToList();
+            return radarTracks.Count > 0 ? radarTracks[0] : null;
+        }
+        catch (Exception e)
+        {
+            Errors.Add(e, "OzStrips");
+            return null;
+        }
     }
 
     /// <summary>

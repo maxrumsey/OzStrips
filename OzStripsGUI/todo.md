@@ -1,14 +1,8 @@
 ﻿# Todo
 
-* add strip board HMI
-* make more error robust
-* add filter to bays
-* metar down bottom
-* add tests
 
 # release items
-fix heading
-= squawk goes black on correct code
+
 
 # release check
 - api version

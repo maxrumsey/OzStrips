@@ -35,6 +35,7 @@ public sealed class OzStrips : IPlugin, IDisposable
         MMI.AddCustomMenuItem(_ozStripsOpener);
         MMI.SelectedTrackChanged += SelectedAirTrackChanged;
         MMI.SelectedGroundTrackChanged += SelectedGroundTrackChanged;
+        Network.OnlinePilotsChanged += Network_OnlinePilotsChanged;
         _ = CheckVersion();
     }
 
@@ -114,6 +115,14 @@ public sealed class OzStrips : IPlugin, IDisposable
         }
     }
 
+    private void Network_OnlinePilotsChanged(object sender, Network.PilotUpdateEventArgs e)
+    {
+        if (e.Removed && _gui?.IsDisposed == false)
+        {
+            MMI.InvokeOnGUI(() => _gui.HandleDisconnect(e));
+        }
+    }
+
     /// <summary>
     /// A callback if a connection is made to VATSIM.
     /// </summary>
@@ -179,11 +188,11 @@ public sealed class OzStrips : IPlugin, IDisposable
 
         if (_gui?.IsDisposed == false && fdr is not null)
         {
-            _gui.SetSelectedTrack(fdr.Callsign);
+            MMI.InvokeOnGUI(() => _gui.SetSelectedTrack(fdr.Callsign));
         }
         else if (_gui?.IsDisposed == false)
         {
-            _gui.SetSelectedTrack(null);
+            MMI.InvokeOnGUI(() => _gui.SetSelectedTrack(null));
         }
     }
 
@@ -196,11 +205,11 @@ public sealed class OzStrips : IPlugin, IDisposable
     {
         if (_gui?.IsDisposed == false && MMI.SelectedGroundTrack is not null)
         {
-            _gui.SetSelectedTrack(MMI.SelectedGroundTrack.GetPilot().Callsign);
+            MMI.InvokeOnGUI(() => _gui.SetSelectedTrack(MMI.SelectedGroundTrack.GetPilot().Callsign));
         }
         else if (_gui?.IsDisposed == false)
         {
-            _gui.SetSelectedTrack(null);
+            MMI.InvokeOnGUI(() => _gui.SetSelectedTrack(null));
         }
     }
 }
