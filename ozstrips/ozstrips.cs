@@ -119,7 +119,7 @@ public sealed class OzStrips : IPlugin, IDisposable
     {
         if (e.Removed && _gui?.IsDisposed == false)
         {
-            _gui.HandleDisconnect(e);
+            MMI.InvokeOnGUI(() => _gui.HandleDisconnect(e));
         }
     }
 
@@ -188,11 +188,11 @@ public sealed class OzStrips : IPlugin, IDisposable
 
         if (_gui?.IsDisposed == false && fdr is not null)
         {
-            _gui.SetSelectedTrack(fdr.Callsign);
+            MMI.InvokeOnGUI(() => _gui.SetSelectedTrack(fdr.Callsign));
         }
         else if (_gui?.IsDisposed == false)
         {
-            _gui.SetSelectedTrack(null);
+            MMI.InvokeOnGUI(() => _gui.SetSelectedTrack(null));
         }
     }
 
@@ -205,11 +205,11 @@ public sealed class OzStrips : IPlugin, IDisposable
     {
         if (_gui?.IsDisposed == false && MMI.SelectedGroundTrack is not null)
         {
-            _gui.SetSelectedTrack(MMI.SelectedGroundTrack.GetPilot().Callsign);
+            MMI.InvokeOnGUI(() => _gui.SetSelectedTrack(MMI.SelectedGroundTrack.GetPilot().Callsign));
         }
         else if (_gui?.IsDisposed == false)
         {
-            _gui.SetSelectedTrack(null);
+            MMI.InvokeOnGUI(() => _gui.SetSelectedTrack(null));
         }
     }
 }

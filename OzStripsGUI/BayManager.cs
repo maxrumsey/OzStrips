@@ -191,6 +191,7 @@ public class BayManager(FlowLayoutPanel main)
     /// <param name="strip">The strip to delete.</param>
     public void DeleteStrip(StripController strip)
     {
+        strip.SendDeleteMessage();
         FindBay(strip)?.RemoveStrip(strip, true);
         StripController.StripControllers.Remove(strip);
     }

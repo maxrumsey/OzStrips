@@ -561,6 +561,14 @@ public sealed class StripController : IDisposable
     }
 
     /// <summary>
+    /// Sends a strip deletion message to the server.
+    /// </summary>
+    public void SendDeleteMessage()
+    {
+        _socketConn.SyncDeletion(this);
+    }
+
+    /// <summary>
     /// Creates control for strip.
     /// </summary>
     public void CreateStripObj()
