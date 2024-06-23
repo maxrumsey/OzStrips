@@ -74,6 +74,11 @@ public class StripBaseGUI : UserControl
     protected Dictionary<string, Control> StripElements { get; set; } = new Dictionary<string, Control>();
 
     /// <summary>
+    /// Gets or sets a dictionary containg strip tooltips.
+    /// </summary>
+    protected Dictionary<string, ToolTip> StripToolTips { get; set; } = new Dictionary<string, ToolTip>();
+
+    /// <summary>
     /// Changes the cock level.
     /// </summary>
     /// <param name="cockLevel">The new cock level.</param>
@@ -244,7 +249,12 @@ public class StripBaseGUI : UserControl
 
         if (StripElements.ContainsKey("route"))
         {
-            StripElements["route"].Text = StripController.Route;
+            StripElements["route"].Text = StripController.FirstWpt;
+        }
+
+        if (StripToolTips.ContainsKey("routetooltip") && StripElements.ContainsKey("route"))
+        {
+            StripToolTips["routetooltip"].SetToolTip(StripElements["route"], StripController.Route);
         }
 
         if (StripElements.ContainsKey("sid"))

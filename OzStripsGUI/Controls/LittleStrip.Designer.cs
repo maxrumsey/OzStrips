@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             pl_acid = new System.Windows.Forms.Panel();
             lb_acid = new System.Windows.Forms.Label();
             pl_wtc = new System.Windows.Forms.Panel();
@@ -68,6 +69,7 @@
             lb_glop = new System.Windows.Forms.Label();
             pl_tot = new System.Windows.Forms.Panel();
             lb_tot = new System.Windows.Forms.Label();
+            ttp_route = new System.Windows.Forms.ToolTip(components);
             pl_acid.SuspendLayout();
             pl_wtc.SuspendLayout();
             pl_frul.SuspendLayout();
@@ -535,6 +537,10 @@
             lb_tot.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             lb_tot.Click += TOTClicked;
             // 
+            // ttp_route
+            // 
+            ttp_route.ShowAlways = true;
+            // 
             // LittleStrip
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -627,5 +633,6 @@
         private System.Windows.Forms.Label lb_glop;
         private System.Windows.Forms.Panel pl_tot;
         private System.Windows.Forms.Label lb_tot;
+        private System.Windows.Forms.ToolTip ttp_route;
     }
 }

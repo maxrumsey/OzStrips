@@ -235,11 +235,22 @@ public sealed class StripController : IDisposable
     /// <summary>
     /// Gets the first element in the route.
     /// </summary>
-    public string Route
+    public string FirstWpt
     {
         get
         {
             return FDR.Route.Split(' ').ToList().Find(x => _routeRegex.Match(x).Success) ?? FDR.Route;
+        }
+    }
+
+    /// <summary>
+    /// Gets the full route text in the route.
+    /// </summary>
+    public string Route
+    {
+        get
+        {
+            return FDR.Route;
         }
     }
 

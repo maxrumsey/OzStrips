@@ -63,6 +63,8 @@ public partial class Strip : StripBaseGUI
         StripElements.Add("rwy", lb_rwy);
         StripElements.Add("wtc", lb_wtc);
 
+        StripToolTips.Add("routetooltip", ttp_rte);
+
         UpdateStrip();
     }
 
