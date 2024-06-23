@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
 
 using vatsys;
@@ -270,6 +271,17 @@ public class StripBaseGUI : UserControl
         if (StripElements.ContainsKey("CFL"))
         {
             StripElements["CFL"].Text = StripController.CFL;
+
+            if (StripElements.ContainsKey("rfl"))
+            {
+                try
+                {
+                    StripElements["CFL"].BackColor = DetermineCFLBackColour();
+                }
+                catch
+                {
+                }
+            }
         }
 
         if (StripElements.ContainsKey("HDG"))
@@ -347,6 +359,49 @@ public class StripBaseGUI : UserControl
                 MMI.ShowGraphicRoute(track);
             }
         }
+    }
+
+    /// <summary>
+    /// Determines the colour of the CFL highlight.
+    /// </summary>
+    /// <returns>Colour.</returns>
+    protected Color DetermineCFLBackColour()
+    {
+        var first = FDR.ParsedRoute.First().Intersection.LatLong;
+        var last = FDR.ParsedRoute.Last().Intersection.LatLong;
+
+        if (first == last)
+        {
+            return Color.Transparent;
+        }
+
+        var track = Conversions.CalculateTrack(first, last);
+        var variation = LogicalPositions.Positions.Where(e => e.Name == StripController.ParentAerodrome).FirstOrDefault().MagneticVariation;
+
+        track += variation;
+
+        var even = true;
+
+        if (track >= 0 && track < 180)
+        {
+            even = false;
+        }
+
+        var digit = int.Parse(StripController.RFL[1].ToString(), CultureInfo.InvariantCulture);
+        var shouldbeeven = digit % 2 == 0;
+
+        var colour = Color.Transparent;
+        if (even != shouldbeeven)
+        {
+            colour = Color.OrangeRed;
+            StripToolTips["cfltooltip"].Active = true;
+        }
+        else
+        {
+            StripToolTips["cfltooltip"].Active = false;
+        }
+
+        return colour;
     }
 
     /// <summary>

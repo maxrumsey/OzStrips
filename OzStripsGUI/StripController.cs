@@ -41,6 +41,7 @@ public sealed class StripController : IDisposable
     {
         FDR = fdr;
         _bayManager = bayManager;
+        ParentAerodrome = bayManager.AerodromeName;
         _socketConn = socketConn;
         CurrentBay = StripBay.BAY_PREA;
         if (ArrDepType == StripArrDepType.ARRIVAL)
@@ -65,6 +66,11 @@ public sealed class StripController : IDisposable
     /// Gets or sets the take off time.
     /// </summary>
     public DateTime? TakeOffTime { get; set; }
+
+    /// <summary>
+    /// Gets the ICAO name of the aerodrome being controlled.
+    /// </summary>
+    public string ParentAerodrome { get; }
 
     /// <summary>
     /// Gets the flight data record.

@@ -70,6 +70,7 @@
             pl_tot = new System.Windows.Forms.Panel();
             lb_tot = new System.Windows.Forms.Label();
             ttp_route = new System.Windows.Forms.ToolTip(components);
+            ttp_cfl = new System.Windows.Forms.ToolTip(components);
             pl_acid.SuspendLayout();
             pl_wtc.SuspendLayout();
             pl_frul.SuspendLayout();
@@ -541,6 +542,10 @@
             // 
             ttp_route.ShowAlways = true;
             // 
+            // ttp_cfl
+            // 
+            ttp_cfl.ShowAlways = true;
+            // 
             // LittleStrip
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -634,5 +639,6 @@
         private System.Windows.Forms.Panel pl_tot;
         private System.Windows.Forms.Label lb_tot;
         private System.Windows.Forms.ToolTip ttp_route;
+        private System.Windows.Forms.ToolTip ttp_cfl;
     }
 }

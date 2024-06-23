@@ -17,6 +17,8 @@ public partial class LittleStrip : StripBaseGUI
     {
         InitializeComponent();
 
+        ttp_cfl.SetToolTip(lb_alt, "Potential non-standard level.");
+
         PickToggleControl = pl_acid;
 
         CrossColourControls =
@@ -64,6 +66,7 @@ public partial class LittleStrip : StripBaseGUI
         StripElements.Add("wtc", lb_wtc);
 
         StripToolTips.Add("routetooltip", ttp_route);
+        StripToolTips.Add("cfltooltip", ttp_cfl);
 
         UpdateStrip();
     }
