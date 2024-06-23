@@ -272,7 +272,7 @@ public class StripBaseGUI : UserControl
         {
             StripElements["CFL"].Text = StripController.CFL;
 
-            if (StripElements.ContainsKey("rfl"))
+            if (StripElements.ContainsKey("rfl") && StripController.ArrDepType == StripArrDepType.DEPARTURE)
             {
                 try
                 {
