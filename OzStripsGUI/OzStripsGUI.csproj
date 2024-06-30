@@ -58,9 +58,7 @@
         <Content Include="ozstrips.ico" />
     </ItemGroup>
     <ItemGroup>
-      <Reference Include="vatSys">
-        <HintPath>..\..\..\..\..\Program Files (x86)\vatSys\bin\vatSys.exe</HintPath>
-      </Reference>
+      <Reference Include="$(VatSysDir)\bin\vatSys.exe" />
     </ItemGroup>
     <ItemGroup>
         <Compile Update="OzStripsConfig.Designer.cs">
