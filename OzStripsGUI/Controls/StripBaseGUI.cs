@@ -230,7 +230,9 @@ public class StripBaseGUI : UserControl
     /// <summary>
     /// Updates the strip.
     /// </summary>
+#pragma warning disable CA1502 // Avoid excessive complexity
     public void UpdateStrip()
+#pragma warning restore CA1502 // Avoid excessive complexity
     {
         SuspendLayout();
         if (FDR == null)
@@ -319,6 +321,20 @@ public class StripBaseGUI : UserControl
         if (StripElements.ContainsKey("rfl"))
         {
             StripElements["rfl"].Text = StripController.RFL;
+        }
+
+        if (StripElements.ContainsKey("ready"))
+        {
+            StripElements["ready"].Text = StripController.Ready ? "RDY" : string.Empty;
+
+            if (!StripController.Ready && (StripController.CurrentBay == StripBay.BAY_HOLDSHORT || StripController.CurrentBay == StripBay.BAY_RUNWAY))
+            {
+                StripElements["ready"].BackColor = Color.Orange;
+            }
+            else
+            {
+                StripElements["ready"].BackColor = Color.Empty;
+            }
         }
 
         if (StripElements.ContainsKey("glop"))
@@ -419,9 +435,10 @@ public class StripBaseGUI : UserControl
     /// <summary>
     /// Opens the Clearance bya modal.
     /// </summary>
-    protected void OpenCLXBayModal()
+    /// <param name="labelName">Label Name.</param>
+    protected void OpenCLXBayModal(string labelName)
     {
-        var modalChild = new BayCLXControl(StripController);
+        var modalChild = new BayCLXControl(StripController, labelName);
         var bm = new BaseModal(modalChild, "SMC Menu :: " + StripController.FDR.Callsign);
         modalChild.BaseModal = bm;
         bm.ReturnEvent += CLXBayReturned;
@@ -446,11 +463,20 @@ public class StripBaseGUI : UserControl
     }
 
     /// <summary>
+    /// Toggles strip ready status.
+    /// </summary>
+    protected void ToggleReady()
+    {
+        StripController.Ready = !StripController.Ready;
+        StripController.SyncStrip();
+    }
+
+    /// <summary>
     /// Assigns a squawk.
     /// </summary>
     protected void AssignSSR()
     {
-        if (FDR.AssignedSSRCode == -1)
+        if (FDR.AssignedSSRCode == -1 && Network.Me.IsRealATC)
         {
             FDP2.SetASSR(StripController.FDR);
         }

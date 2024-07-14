@@ -2,13 +2,14 @@
 
 namespace MaxRumsey.OzStripsPlugin.Gui.DTO;
 
+#pragma warning disable SA1300 // Element should begin with upper-case letter
+#pragma warning disable SA1623 // Property summary documentation should match accessors
+
 /// <summary>
 /// Represents a controller strip with various operational details.
 /// </summary>
 public class StripControllerDTO
 {
-#pragma warning disable SA1300 // Element should begin with upper-case letter
-
     /// <summary>
     /// Gets or sets the aircraft identifier.
     /// </summary>
@@ -62,4 +63,10 @@ public class StripControllerDTO
     /// </summary>
     [JsonPropertyName("remark")]
     public string remark { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets a value indicating the ready status associated with the strip.
+    /// </summary>
+    [JsonPropertyName("ready")]
+    public bool ready { get; set; }
 }

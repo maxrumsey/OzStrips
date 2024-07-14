@@ -71,6 +71,8 @@
             lb_tot = new System.Windows.Forms.Label();
             ttp_route = new System.Windows.Forms.ToolTip(components);
             ttp_cfl = new System.Windows.Forms.ToolTip(components);
+            pl_rdy = new System.Windows.Forms.Panel();
+            lb_rdy = new System.Windows.Forms.Label();
             pl_acid.SuspendLayout();
             pl_wtc.SuspendLayout();
             pl_frul.SuspendLayout();
@@ -91,6 +93,7 @@
             pl_req.SuspendLayout();
             pl_glop.SuspendLayout();
             pl_tot.SuspendLayout();
+            pl_rdy.SuspendLayout();
             SuspendLayout();
             // 
             // pl_acid
@@ -346,7 +349,7 @@
             pl_rwy.Location = new System.Drawing.Point(328, 0);
             pl_rwy.Margin = new System.Windows.Forms.Padding(0);
             pl_rwy.Name = "pl_rwy";
-            pl_rwy.Size = new System.Drawing.Size(60, 38);
+            pl_rwy.Size = new System.Drawing.Size(60, 20);
             pl_rwy.TabIndex = 3;
             // 
             // lb_rwy
@@ -355,7 +358,7 @@
             lb_rwy.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             lb_rwy.Location = new System.Drawing.Point(0, 0);
             lb_rwy.Name = "lb_rwy";
-            lb_rwy.Size = new System.Drawing.Size(58, 36);
+            lb_rwy.Size = new System.Drawing.Size(58, 18);
             lb_rwy.TabIndex = 0;
             lb_rwy.Text = "rwy";
             lb_rwy.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -546,12 +549,35 @@
             // 
             ttp_cfl.ShowAlways = true;
             // 
+            // pl_rdy
+            // 
+            pl_rdy.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            pl_rdy.Controls.Add(lb_rdy);
+            pl_rdy.Location = new System.Drawing.Point(328, 18);
+            pl_rdy.Margin = new System.Windows.Forms.Padding(0);
+            pl_rdy.Name = "pl_rdy";
+            pl_rdy.Size = new System.Drawing.Size(60, 20);
+            pl_rdy.TabIndex = 4;
+            // 
+            // lb_rdy
+            // 
+            lb_rdy.Dock = System.Windows.Forms.DockStyle.Fill;
+            lb_rdy.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lb_rdy.Location = new System.Drawing.Point(0, 0);
+            lb_rdy.Name = "lb_rdy";
+            lb_rdy.Size = new System.Drawing.Size(58, 18);
+            lb_rdy.TabIndex = 0;
+            lb_rdy.Text = "RDY";
+            lb_rdy.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            lb_rdy.Click += RdyClicked;
+            // 
             // LittleStrip
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.Color.Transparent;
             BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            Controls.Add(pl_rdy);
             Controls.Add(pl_tot);
             Controls.Add(pl_glop);
             Controls.Add(pl_req);
@@ -594,6 +620,7 @@
             pl_req.ResumeLayout(false);
             pl_glop.ResumeLayout(false);
             pl_tot.ResumeLayout(false);
+            pl_rdy.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -640,5 +667,7 @@
         private System.Windows.Forms.Label lb_tot;
         private System.Windows.Forms.ToolTip ttp_route;
         private System.Windows.Forms.ToolTip ttp_cfl;
+        private System.Windows.Forms.Panel pl_rdy;
+        private System.Windows.Forms.Label lb_rdy;
     }
 }

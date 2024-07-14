@@ -8,11 +8,14 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
 /// </summary>
 public partial class BayCLXControl : UserControl
 {
+    private readonly string _callingLabel;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="BayCLXControl"/> class.
     /// </summary>
     /// <param name="controller">The strip controller.</param>
-    public BayCLXControl(StripController controller)
+    /// <param name="labelName">The label that opened the control.</param>
+    public BayCLXControl(StripController controller, string labelName)
     {
         InitializeComponent();
 
@@ -20,6 +23,8 @@ public partial class BayCLXControl : UserControl
         tb_bay.Text = controller.Gate;
         tb_remark.Text = controller.Remark;
         tb_glop.Text = controller.FDR.GlobalOpData;
+
+        _callingLabel = labelName;
     }
 
     /// <summary>
@@ -54,7 +59,21 @@ public partial class BayCLXControl : UserControl
             return;
         }
 
-        BaseModal.ActiveControl = tb_bay.Text.Length == 0 ? tb_bay : tb_clx;
+        switch (_callingLabel)
+        {
+            case "lb_remark":
+                ActiveControl = tb_remark;
+                break;
+            case "lb_glop":
+                ActiveControl = tb_glop;
+                break;
+            case "lb_std":
+                ActiveControl = tb_bay;
+                break;
+            case "lb_clx":
+                ActiveControl = tb_clx;
+                break;
+        }
     }
 
     private void ClearButtonTextCleared(object sender, EventArgs e)

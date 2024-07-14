@@ -161,6 +161,11 @@ public sealed class StripController : IDisposable
     }
 
     /// <summary>
+    /// Gets or sets a value indicating whether the strip is ready for departure.
+    /// </summary>
+    public bool Ready { get; set; }
+
+    /// <summary>
     /// Gets or sets the gate.
     /// </summary>
     public string Gate { get; set; } = string.Empty;
@@ -371,6 +376,7 @@ public sealed class StripController : IDisposable
             crossing = sc.Crossing,
             remark = sc.Remark,
             TOT = sc.TakeOffTime is not null ? sc.TakeOffTime!.ToString() : "\0",
+            ready = sc.Ready,
         };
 
         return scDTO;
@@ -518,7 +524,7 @@ public sealed class StripController : IDisposable
                 controller.Remark = !string.IsNullOrWhiteSpace(stripControllerData.remark) ? stripControllerData.remark : string.Empty;
                 controller._crossing = stripControllerData.crossing;
                 controller._stripControl?.SetCross(false);
-
+                controller.Ready = stripControllerData.ready;
                 if (changeBay)
                 {
                     bayManager.UpdateBay(controller); // prevent unessesscary reshufles

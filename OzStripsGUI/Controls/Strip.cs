@@ -64,6 +64,7 @@ public partial class Strip : StripBaseGUI
         StripElements.Add("ssrsymbol", lb_ssricon);
         StripElements.Add("rwy", lb_rwy);
         StripElements.Add("wtc", lb_wtc);
+        StripElements.Add("ready", lb_rdy);
 
         StripToolTips.Add("routetooltip", ttp_rte);
         StripToolTips.Add("cfltooltip", ttp_cfl);
@@ -96,7 +97,7 @@ public partial class Strip : StripBaseGUI
 
     private void OpenCLXBay(object sender, EventArgs e)
     {
-        OpenCLXBayModal();
+        OpenCLXBayModal(((Control)sender).Name);
     }
 
     private void TOTClicked(object sender, EventArgs e)
@@ -140,5 +141,10 @@ public partial class Strip : StripBaseGUI
         {
             StripController.SIDTrigger();
         }
+    }
+
+    private void RdyClicked(object sender, EventArgs e)
+    {
+        ToggleReady();
     }
 }
