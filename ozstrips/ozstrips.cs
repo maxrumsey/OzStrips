@@ -2,6 +2,7 @@
 using System.ComponentModel.Composition;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.Gui;
 using Newtonsoft.Json;
@@ -22,6 +23,9 @@ public sealed class OzStrips : IPlugin, IDisposable
 
     private readonly CustomToolStripMenuItem _ozStripsOpener;
     private MainForm? _gui;
+
+    private System.Timers.Timer? _connectionTimer;
+    private bool _readyForConnection;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OzStrips"/> class.
@@ -130,9 +134,21 @@ public sealed class OzStrips : IPlugin, IDisposable
     /// <param name="e">A empty event arguments.</param>
     private void Connected(object sender, EventArgs e)
     {
+        _connectionTimer = new()
+        {
+            Interval = 10000,
+            AutoReset = false,
+        };
+        _connectionTimer.Elapsed += HandleConnected;
+        _connectionTimer.Start();
+    }
+
+    private void HandleConnected(object sender, ElapsedEventArgs e)
+    {
+        _readyForConnection = true;
         if (_gui?.IsHandleCreated == true)
         {
-            MMI.InvokeOnGUI(() => _gui.ConnectVATSIM());
+            MMI.InvokeOnGUI(() => _gui.MarkConnectionReadiness(_readyForConnection));
         }
     }
 
@@ -143,9 +159,16 @@ public sealed class OzStrips : IPlugin, IDisposable
     /// <param name="e">A empty event arguments.</param>
     private void Disconnected(object sender, EventArgs e)
     {
+        _readyForConnection = false;
+        if (_connectionTimer?.Enabled == true)
+        {
+            _connectionTimer.Stop();
+        }
+
         if (_gui?.IsHandleCreated == true)
         {
             MMI.InvokeOnGUI(() => _gui.DisconnectVATSIM());
+            _gui.MarkConnectionReadiness(_readyForConnection);
         }
     }
 
@@ -158,7 +181,7 @@ public sealed class OzStrips : IPlugin, IDisposable
     {
         if (_gui?.IsDisposed != false)
         {
-            _gui = new();
+            _gui = new(_readyForConnection);
         }
         else if (_gui.Visible)
         {

@@ -17,11 +17,15 @@ public partial class MainForm : Form
     private readonly SocketConn _socketConn;
     private string _metar = string.Empty;
 
+    private bool _readyForConnection;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="MainForm"/> class.
     /// </summary>
-    public MainForm()
+    /// <param name="readyForConnection">Whether the client can establish a server connection.</param>
+    public MainForm(bool readyForConnection)
     {
+        _readyForConnection = readyForConnection;
         MainFormInstance = this;
 
         InitializeComponent();
@@ -44,7 +48,7 @@ public partial class MainForm : Form
         _bayManager = new(flp_main);
         _socketConn = new(_bayManager, this);
 
-        if (Network.IsConnected)
+        if (_readyForConnection)
         {
             _socketConn.Connect();
         }
@@ -96,6 +100,19 @@ public partial class MainForm : Form
             var cp = base.CreateParams;
             cp.ExStyle |= 0x02000000;  // Turn on WS_EX_COMPOSITED
             return cp;
+        }
+    }
+
+    /// <summary>
+    /// Marks whether or not a connection is ready to be established to the server.
+    /// </summary>
+    /// <param name="readyForConnection">Whether or not a connection can be made.</param>
+    public void MarkConnectionReadiness(bool readyForConnection)
+    {
+        _readyForConnection = readyForConnection;
+        if (_readyForConnection)
+        {
+            _socketConn.Connect();
         }
     }
 
@@ -172,14 +189,6 @@ public partial class MainForm : Form
         _bayManager.WipeStrips();
         StripController.StripControllers.Clear();
         _socketConn.Disconnect();
-    }
-
-    /// <summary>
-    /// Connects to VATSIM.
-    /// </summary>
-    public void ConnectVATSIM()
-    {
-        _socketConn.Connect();
     }
 
     /// <summary>

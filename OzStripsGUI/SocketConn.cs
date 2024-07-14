@@ -23,7 +23,6 @@ public sealed class SocketConn : IDisposable
     private bool _versionShown;
     private bool _freshClient = true;
     private bool _connectionMade;
-    private Timer? _fifteensecTimer;
     private Timer? _oneMinTimer;
 
     /// <summary>
@@ -293,46 +292,9 @@ public sealed class SocketConn : IDisposable
     /// <summary>
     /// Starts a fifteen second timer, ensures FDRs have loaded in before requesting SCs from server.
     /// </summary>
-    public void Connect()
+    public async void Connect()
     {
-        _fifteensecTimer = new()
-        {
-            AutoReset = false,
-            Interval = 15000,
-        };
-
-        _fifteensecTimer.Elapsed += ConnectIO;
-        _fifteensecTimer.Start();
-        _mainForm.SetAerodrome(_bayManager.AerodromeName);
-    }
-
-    /// <summary>
-    /// Disconnects the io.
-    /// </summary>
-    public void Disconnect()
-    {
-        _io.DisconnectAsync();
-    }
-
-    /// <inheritdoc/>
-    public void Dispose()
-    {
-        _fifteensecTimer?.Dispose();
-        _oneMinTimer?.Dispose();
-        _io.Dispose();
-    }
-
-    /// <summary>
-    /// Creates the cache data transfer object.
-    /// </summary>
-    /// <returns>The cache data transfer object.</returns>
-    private static CacheDTO CreateCacheDTO()
-    {
-        return new() { strips = StripController.StripControllers.ConvertAll(x => (StripControllerDTO)x), };
-    }
-
-    private async void ConnectIO(object sender, ElapsedEventArgs e)
-    {
+        MMI.InvokeOnGUI(() => _mainForm.SetAerodrome(_bayManager.AerodromeName));
         try
         {
             AddMessage("c: Attempting connection " + OzStripsConfig.socketioaddr);
@@ -351,6 +313,30 @@ public sealed class SocketConn : IDisposable
         {
             Errors.Add(ex, "OzStrips");
         }
+    }
+
+    /// <summary>
+    /// Disconnects the io.
+    /// </summary>
+    public void Disconnect()
+    {
+        _io.DisconnectAsync();
+    }
+
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        _oneMinTimer?.Dispose();
+        _io.Dispose();
+    }
+
+    /// <summary>
+    /// Creates the cache data transfer object.
+    /// </summary>
+    /// <returns>The cache data transfer object.</returns>
+    private static CacheDTO CreateCacheDTO()
+    {
+        return new() { strips = StripController.StripControllers.ConvertAll(x => (StripControllerDTO)x), };
     }
 
     private void ToggleFresh(object sender, ElapsedEventArgs e)
