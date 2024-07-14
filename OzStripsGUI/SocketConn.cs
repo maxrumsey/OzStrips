@@ -124,7 +124,7 @@ public sealed class SocketConn : IDisposable
 
             if (mainForm.Visible && _freshClient)
             {
-                mainForm.Invoke(() => StripController.LoadCache(scDTO, bayManager));
+                mainForm.Invoke(() => StripController.LoadCache(scDTO, bayManager, this));
             }
         });
 
@@ -212,6 +212,15 @@ public sealed class SocketConn : IDisposable
         {
             _io.EmitAsync("client:sc_change", scDTO);
         }
+    }
+
+    /// <summary>
+    /// Requests bay order data from server.
+    /// </summary>
+    public void ReadyForBayData()
+    {
+        AddMessage("c:req_bays:");
+        _io.EmitAsync("client:req_bays");
     }
 
     /// <summary>

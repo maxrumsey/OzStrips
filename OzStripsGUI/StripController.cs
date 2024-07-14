@@ -479,12 +479,15 @@ public sealed class StripController : IDisposable
     /// </summary>
     /// <param name="cacheData">The cache data.</param>
     /// <param name="bayManager">The bay manager.</param>
-    public static void LoadCache(CacheDTO cacheData, BayManager bayManager)
+    /// <param name="socketConn">The socket connection.</param>
+    public static void LoadCache(CacheDTO cacheData, BayManager bayManager, SocketConn socketConn)
     {
         foreach (var stripDTO in cacheData.strips)
         {
             UpdateFDR(stripDTO, bayManager);
         }
+
+        socketConn.ReadyForBayData();
     }
 
     /// <summary>
