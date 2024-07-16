@@ -19,6 +19,8 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
 /// </remarks>
 public class StripBaseGUI : UserControl
 {
+    private string _rtetooltiptext = string.Empty;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="StripBaseGUI"/> class.
     /// </summary>
@@ -253,11 +255,33 @@ public class StripBaseGUI : UserControl
         if (StripElements.ContainsKey("route"))
         {
             StripElements["route"].Text = StripController.FirstWpt;
+
+            StripElements["route"].BackColor = DetermineRouteBackColour();
         }
 
         if (StripToolTips.ContainsKey("routetooltip") && StripElements.ContainsKey("route"))
         {
-            StripToolTips["routetooltip"].SetToolTip(StripElements["route"], StripController.Route);
+            if (StripController.DodgyRoute)
+            {
+                var routes = new List<string>();
+                Array.ForEach(StripController.ValidRoutes, x => routes.Add(x.route));
+                var str = StripController.Route +
+                                "\n---\nPotentially non-compliant route detected! Accepted Routes:\n" + string.Join("\n", routes) + "\nParsed Route: " + StripController.CondensedRoute;
+                if (str != _rtetooltiptext)
+                {
+                    StripToolTips["routetooltip"].SetToolTip(StripElements["route"], str);
+                    _rtetooltiptext = str;
+                }
+            }
+            else
+            {
+                var str = StripController.Route;
+                if (str != _rtetooltiptext)
+                {
+                    StripToolTips["routetooltip"].SetToolTip(StripElements["route"], str);
+                    _rtetooltiptext = str;
+                }
+            }
         }
 
         if (StripElements.ContainsKey("sid"))
@@ -388,7 +412,7 @@ public class StripBaseGUI : UserControl
 
         if (first == last)
         {
-            return Color.Transparent;
+            return Color.Empty;
         }
 
         var track = Conversions.CalculateTrack(first, last);
@@ -406,7 +430,7 @@ public class StripBaseGUI : UserControl
         var digit = int.Parse(StripController.RFL[1].ToString(), CultureInfo.InvariantCulture);
         var shouldbeeven = digit % 2 == 0;
 
-        var colour = Color.Transparent;
+        var colour = Color.Empty;
         if (even != shouldbeeven)
         {
             colour = Color.OrangeRed;
@@ -415,6 +439,21 @@ public class StripBaseGUI : UserControl
         else
         {
             StripToolTips["cfltooltip"].Active = false;
+        }
+
+        return colour;
+    }
+
+    /// <summary>
+    /// Determines the colour of the Route highlight.
+    /// </summary>
+    /// <returns>Colour.</returns>
+    protected Color DetermineRouteBackColour()
+    {
+        var colour = Color.Empty;
+        if (StripController.DodgyRoute)
+        {
+            colour = Color.OrangeRed;
         }
 
         return colour;

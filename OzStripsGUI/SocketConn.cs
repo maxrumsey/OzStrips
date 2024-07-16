@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Timers;
@@ -139,6 +140,31 @@ public sealed class SocketConn : IDisposable
             }
         });
 
+        _io.On("server:routes", (data) =>
+        {
+            try
+            {
+                var acid = data.GetValue<string>();
+                var routes = data.GetValue<RouteDTO[]>(1);
+
+                AddMessage("s:routes: " + System.Text.Json.JsonSerializer.Serialize(data));
+
+                if (mainForm.Visible)
+                {
+                    var sc = StripController.GetController(acid);
+
+                    if (sc is not null)
+                    {
+                        sc.ValidRoutes = routes;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Errors.Add(ex, "OzStrips");
+            }
+        });
+
         _io.On("server:metar", metarRaw =>
         {
             var metar = metarRaw.GetValue<string>();
@@ -211,6 +237,19 @@ public sealed class SocketConn : IDisposable
         if (CanSendDTO)
         {
             _io.EmitAsync("client:sc_change", scDTO);
+        }
+    }
+
+    /// <summary>
+    /// Requests routes for a given sc.
+    /// </summary>
+    /// <param name="sc">The strip controller.</param>
+    public void RequestRoutes(StripController sc)
+    {
+        AddMessage("c:get_routes: " + sc.FDR.Callsign);
+        if (CanSendDTO)
+        {
+            _io.EmitAsync("client:get_routes", sc.FDR.DepAirport, sc.FDR.DesAirport, sc.FDR.Callsign);
         }
     }
 

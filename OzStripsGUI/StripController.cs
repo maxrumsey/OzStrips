@@ -22,6 +22,8 @@ public sealed class StripController : IDisposable
 {
     private static readonly Regex _headingRegex = new(@"H(\d{3})");
     private static readonly Regex _routeRegex = new(@"^[^\d/]+$");
+    private static readonly Regex _sidRouteRegex = new(@"[\w\d]+\/\d\d");
+    private static readonly Regex _gpscoordRegex = new(@"[\d]+\w[\d]+\w");
 
     private readonly BayManager _bayManager;
     private readonly SocketConn _socketConn;
@@ -66,6 +68,31 @@ public sealed class StripController : IDisposable
     /// Gets or sets the take off time.
     /// </summary>
     public DateTime? TakeOffTime { get; set; }
+
+    /// <summary>
+    /// Gets or sets the valid routes.
+    /// </summary>
+    public RouteDTO[]? ValidRoutes { get; set; }
+
+    /// <summary>
+    /// Gets or sets the condensed route.
+    /// </summary>
+    public string? CondensedRoute { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not a list of valid routes has been selected.
+    /// </summary>
+    public bool RequestedRoutes { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not a list of valid routes has been compared to the current route.
+    /// </summary>
+    public bool ParsedRoutes { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not an aircraft has filed a dodgy route.
+    /// </summary>
+    public bool DodgyRoute { get; set; }
 
     /// <summary>
     /// Gets the ICAO name of the aerodrome being controlled.
@@ -643,14 +670,51 @@ public sealed class StripController : IDisposable
     /// </summary>
     public void UpdateFDR()
     {
-        _stripControl?.UpdateStrip();
-
         var distance = GetDistToAerodrome(_bayManager.AerodromeName);
 
         if (distance is -1 or > 50 && ArrDepType == StripArrDepType.DEPARTURE)
         {
             _bayManager.DeleteStrip(this);
         }
+
+        if (ValidRoutes is null && !RequestedRoutes)
+        {
+            _socketConn.RequestRoutes(this);
+            RequestedRoutes = true;
+        }
+
+        if (ValidRoutes is not null)
+        {
+            CondensedRoute = CleanVatsysRoute(FDR.Route);
+            DodgyRoute = true;
+            foreach (var validroute in ValidRoutes)
+            {
+                if (validroute.route.Contains(CondensedRoute))
+                {
+                    DodgyRoute = false;
+                }
+            }
+
+            if (ArrDepType != StripArrDepType.DEPARTURE || (int)FDR.State > 5)
+            {
+                DodgyRoute = false;
+            }
+
+            // account for situations where aircraft joins route from interim point via sid.
+            if (DodgyRoute)
+            {
+                var rte = string.Join(" ", CleanVatsysRoute(FDR.Route).Split(' ').Skip(1).ToArray());
+                foreach (var validroute in ValidRoutes)
+                {
+                    if (validroute.route.Contains(rte))
+                    {
+                        DodgyRoute = false;
+                    }
+                }
+            }
+        }
+
+        _stripControl?.UpdateStrip();
     }
 
     /// <summary>
@@ -780,5 +844,29 @@ public sealed class StripController : IDisposable
     {
         _stripControl?.Dispose();
         StripHolderControl?.Dispose();
+    }
+
+    private static string CleanVatsysRoute(string rawRoute)
+    {
+        var rawRouteArr = rawRoute.Split(' ');
+        var routeArr = new List<string>();
+
+        foreach (var routeElement in rawRouteArr)
+        {
+            if (routeElement.Contains("/"))
+            {
+                // Don't include SIDs or gps coords in route
+                if (!_sidRouteRegex.Match(routeElement).Success && !_gpscoordRegex.Match(routeElement).Success)
+                {
+                    routeArr.Add(routeElement);
+                }
+            }
+            else
+            {
+                routeArr.Add(routeElement);
+            }
+        }
+
+        return string.Join(" ", routeArr);
     }
 }
