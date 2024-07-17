@@ -856,7 +856,7 @@ public sealed class StripController : IDisposable
             if (routeElement.Contains("/"))
             {
                 // Don't include SIDs or gps coords in route
-                if (!_sidRouteRegex.Match(routeElement).Success && !_gpscoordRegex.Match(routeElement).Success)
+                if (!_sidRouteRegex.Match(routeElement).Success && !_gpscoordRegex.Match(routeElement).Success && routeElement != "DCT")
                 {
                     routeArr.Add(routeElement);
                 }
@@ -866,6 +866,34 @@ public sealed class StripController : IDisposable
                 routeArr.Add(routeElement);
             }
         }
+
+        /*
+         * Remove SIDs and STARS
+         */
+        if (char.IsNumber(routeArr.Last().Last()))
+        {
+            routeArr.RemoveAt(routeArr.Count - 1);
+        }
+
+        if (char.IsNumber(routeArr.First().Last()))
+        {
+            routeArr.RemoveAt(0);
+        }
+
+        /*
+         * Remove first and last waypoint incase they have filed / are cleared via a SID.
+         * (Will validate based on route only)
+         */
+        if (!routeArr.First().Any(char.IsDigit))
+        {
+            routeArr.RemoveAt(0);
+        }
+
+        if (!routeArr.Last().Any(char.IsDigit))
+        {
+            routeArr.RemoveAt(routeArr.Count - 1);
+        }
+
 
         return string.Join(" ", routeArr);
     }
