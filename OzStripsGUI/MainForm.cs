@@ -109,10 +109,17 @@ public partial class MainForm : Form
     /// <param name="readyForConnection">Whether or not a connection can be made.</param>
     public void MarkConnectionReadiness(bool readyForConnection)
     {
-        _readyForConnection = readyForConnection;
-        if (_readyForConnection)
+        try
         {
-            _socketConn.Connect();
+            _readyForConnection = readyForConnection;
+            if (_readyForConnection)
+            {
+                _socketConn.Connect();
+            }
+        }
+        catch (Exception ex)
+        {
+            Errors.Add(ex, "OzStrips");
         }
     }
 
@@ -122,11 +129,18 @@ public partial class MainForm : Form
     /// <param name="name">The aerodrome name.</param>
     public void SetAerodrome(string name)
     {
-        if (_bayManager != null)
+        try
         {
-            _bayManager.SetAerodrome(name, _socketConn);
-            _socketConn.SetAerodrome();
-            lb_ad.Text = name;
+            if (_bayManager != null)
+            {
+                _bayManager.SetAerodrome(name, _socketConn);
+                _socketConn.SetAerodrome();
+                lb_ad.Text = name;
+            }
+        }
+        catch (Exception ex)
+        {
+            Errors.Add(ex, "OzStrips");
         }
     }
 
@@ -178,7 +192,14 @@ public partial class MainForm : Form
     /// <param name="fdr">Selected FDR.</param>
     public void SetSelectedTrack(string? fdr)
     {
-        _bayManager.Callsign = fdr;
+        try
+        {
+            _bayManager.Callsign = fdr;
+        }
+        catch (Exception ex)
+        {
+            Errors.Add(ex, "OzStrips");
+        }
     }
 
     /// <summary>
@@ -186,9 +207,16 @@ public partial class MainForm : Form
     /// </summary>
     public void DisconnectVATSIM()
     {
-        _bayManager.WipeStrips();
-        StripController.StripControllers.Clear();
-        _socketConn.Disconnect();
+        try
+        {
+            _bayManager.WipeStrips();
+            StripController.StripControllers.Clear();
+            _socketConn.Disconnect();
+        }
+        catch (Exception ex)
+        {
+            Errors.Add(ex, "OzStrips");
+        }
     }
 
     /// <summary>
@@ -198,7 +226,14 @@ public partial class MainForm : Form
     /// <remarks>Triggered from Connector plugin.</remarks>
     public void UpdateFDR(FDP2.FDR fdr)
     {
-        StripController.UpdateFDR(fdr, _bayManager, _socketConn);
+        try
+        {
+            StripController.UpdateFDR(fdr, _bayManager, _socketConn);
+        }
+        catch (Exception ex)
+        {
+            Errors.Add(ex, "OzStrips");
+        }
     }
 
     /// <summary>
@@ -207,15 +242,22 @@ public partial class MainForm : Form
     /// <param name="args">Event arguments.</param>
     public void HandleDisconnect(Network.PilotUpdateEventArgs args)
     {
-        if (!args.Removed || args.UpdatedPilot is null)
+        try
         {
-            return;
-        }
+            if (!args.Removed || args.UpdatedPilot is null)
+            {
+                return;
+            }
 
-        var strip = StripController.GetController(args.UpdatedPilot.Callsign);
-        if (strip is not null)
+            var strip = StripController.GetController(args.UpdatedPilot.Callsign);
+            if (strip is not null)
+            {
+                _bayManager.DeleteStrip(strip);
+            }
+        }
+        catch (Exception ex)
         {
-            _bayManager.DeleteStrip(strip);
+            Errors.Add(ex, "OzStrips");
         }
     }
 

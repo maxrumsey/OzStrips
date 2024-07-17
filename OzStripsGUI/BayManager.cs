@@ -417,24 +417,31 @@ public class BayManager(FlowLayoutPanel main)
     /// </summary>
     public void ReloadStrips()
     {
-        foreach (var strip in StripController.StripControllers)
+        try
         {
-            foreach (var bay in Bays)
+            foreach (var strip in StripController.StripControllers)
             {
-                if (bay.OwnsStrip(strip))
+                foreach (var bay in Bays)
                 {
-                    bay.RemoveStrip(strip);
+                    if (bay.OwnsStrip(strip))
+                    {
+                        bay.RemoveStrip(strip);
+                    }
                 }
+
+                strip.ClearStripControl();
+                strip.CreateStripObj();
+                AddStrip(strip, false);
             }
 
-            strip.ClearStripControl();
-            strip.CreateStripObj();
-            AddStrip(strip, false);
+            foreach (var bay in Bays)
+            {
+                bay.Orderstrips();
+            }
         }
-
-        foreach (var bay in Bays)
+        catch (Exception ex)
         {
-            bay.Orderstrips();
+            Errors.Add(ex, "OzStrips");
         }
     }
 
@@ -443,9 +450,16 @@ public class BayManager(FlowLayoutPanel main)
     /// </summary>
     public void ForceRerender()
     {
-        foreach (var bay in Bays)
+        try
         {
-            bay.ForceRerender();
+            foreach (var bay in Bays)
+            {
+                bay.ForceRerender();
+            }
+        }
+        catch (Exception ex)
+        {
+            Errors.Add(ex, "OzStrips");
         }
     }
 
@@ -484,9 +498,16 @@ public class BayManager(FlowLayoutPanel main)
     /// <param name="relPos">The relative position.</param>
     public void PositionKey(int relPos)
     {
-        if (PickedController != null)
+        try
         {
-            FindBay(PickedController)?.ChangeStripPosition(PickedController, relPos);
+            if (PickedController != null)
+            {
+                FindBay(PickedController)?.ChangeStripPosition(PickedController, relPos);
+            }
+        }
+        catch (Exception ex)
+        {
+            Errors.Add(ex, "OzStrips");
         }
     }
 }
