@@ -867,6 +867,11 @@ public sealed class StripController : IDisposable
             }
         }
 
+        if (routeArr.Count < 3)
+        {
+            return "FAIL";
+        }
+
         /*
          * Remove SIDs and STARS
          */
@@ -884,6 +889,11 @@ public sealed class StripController : IDisposable
          * Remove first and last waypoint incase they have filed / are cleared via a SID.
          * (Will validate based on route only)
          */
+        if (routeArr.Count < 3)
+        {
+            return "FAIL";
+        }
+
         if (!routeArr.First().Any(char.IsDigit))
         {
             routeArr.RemoveAt(0);
@@ -893,7 +903,6 @@ public sealed class StripController : IDisposable
         {
             routeArr.RemoveAt(routeArr.Count - 1);
         }
-
 
         return string.Join(" ", routeArr);
     }
