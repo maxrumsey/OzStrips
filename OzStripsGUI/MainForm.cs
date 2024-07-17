@@ -198,7 +198,7 @@ public partial class MainForm : Form
     /// <param name="args">Event arguments.</param>
     public void HandleDisconnect(Network.PilotUpdateEventArgs args)
     {
-        if (!args.Removed)
+        if (!args.Removed || args.UpdatedPilot is null)
         {
             return;
         }
