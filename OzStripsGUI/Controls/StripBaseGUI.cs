@@ -431,7 +431,7 @@ public class StripBaseGUI : UserControl
         var shouldbeeven = digit % 2 == 0;
 
         var colour = Color.Empty;
-        if (even != shouldbeeven)
+        if (even != shouldbeeven && FDR.RFL >= 3000)
         {
             colour = Color.OrangeRed;
             StripToolTips["cfltooltip"].Active = true;
