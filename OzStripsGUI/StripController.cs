@@ -856,12 +856,12 @@ public sealed class StripController : IDisposable
             if (routeElement.Contains("/"))
             {
                 // Don't include SIDs or gps coords in route
-                if (!_sidRouteRegex.Match(routeElement).Success && !_gpscoordRegex.Match(routeElement).Success && routeElement != "DCT")
+                if (!_sidRouteRegex.Match(routeElement).Success && !_gpscoordRegex.Match(routeElement).Success)
                 {
                     routeArr.Add(routeElement);
                 }
             }
-            else
+            else if (routeElement != "DCT")
             {
                 routeArr.Add(routeElement);
             }
