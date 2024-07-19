@@ -351,7 +351,7 @@ public class StripBaseGUI : UserControl
         {
             StripElements["ready"].Text = StripController.Ready ? "RDY" : string.Empty;
 
-            if (!StripController.Ready && (StripController.CurrentBay == StripBay.BAY_HOLDSHORT || StripController.CurrentBay == StripBay.BAY_RUNWAY) && StripController.ArrDepType == StripArrDepType.DEPARTURE)
+            if (!StripController.Ready && (StripController.CurrentBay == StripBay.BAY_HOLDSHORT || StripController.CurrentBay == StripBay.BAY_RUNWAY))
             {
                 StripElements["ready"].BackColor = Color.Orange;
             }
@@ -431,7 +431,7 @@ public class StripBaseGUI : UserControl
         var shouldbeeven = digit % 2 == 0;
 
         var colour = Color.Empty;
-        if (even != shouldbeeven && FDR.RFL >= 3000 && StripController.ArrDepType == StripArrDepType.DEPARTURE)
+        if (even != shouldbeeven && FDR.RFL >= 3000)
         {
             colour = Color.OrangeRed;
             StripToolTips["cfltooltip"].Active = true;
