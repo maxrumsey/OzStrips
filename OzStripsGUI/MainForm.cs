@@ -325,8 +325,7 @@ public partial class MainForm : Form
     {
         if (_bayManager != null && e.KeyChar == Convert.ToChar(Keys.Enter, CultureInfo.InvariantCulture))
         {
-            _bayManager.SetAerodrome(toolStripTextBox1.Text.ToUpper(CultureInfo.InvariantCulture), _socketConn);
-            lb_ad.Text = toolStripTextBox1.Text.ToUpper(CultureInfo.InvariantCulture);
+            SetAerodrome(toolStripTextBox1.Text.ToUpper(CultureInfo.InvariantCulture));
             e.Handled = true;
         }
     }
