@@ -22,8 +22,8 @@ public sealed class StripController : IDisposable
 {
     private static readonly Regex _headingRegex = new(@"H(\d{3})");
     private static readonly Regex _routeRegex = new(@"^[^\d/]+$");
-    private static readonly Regex _sidRouteRegex = new(@"[\w\d]+\/\d\d");
-    private static readonly Regex _gpscoordRegex = new(@"[\d]+\w[\d]+\w");
+    private static readonly Regex _sidRouteRegex = new(@"^[\w\d]+\/\d\d");
+    private static readonly Regex _gpscoordRegex = new(@"^[\d]+\w[\d]+\w");
 
     private readonly BayManager _bayManager;
     private readonly SocketConn _socketConn;
@@ -666,15 +666,51 @@ public sealed class StripController : IDisposable
     }
 
     /// <summary>
-    /// Refreshes strip properties, determines if strip should be removed.
+    /// Determines whether or not a SC is still valid (or should be kept alive).
     /// </summary>
-    public void UpdateFDR()
+    /// <returns>Valid SC.</returns>
+    public bool DetermineSCValidity()
     {
+        if (FDR is null)
+        {
+            Errors.Add(new Exception("Strip deleted due to non-existence of vatsys FDR."), "OzStrips");
+            return false;
+        }
+
+        if (Network.GetOnlinePilots.Find(x => x.Callsign == FDR.Callsign) is null)
+        {
+            return false;
+        }
+
+        if (FDR.State < FDR.FDRStates.STATE_PREACTIVE && ArrDepType == StripArrDepType.DEPARTURE)
+        {
+            return false;
+        }
+
         var distance = GetDistToAerodrome(_bayManager.AerodromeName);
 
         if (distance is -1 or > 50 && ArrDepType == StripArrDepType.DEPARTURE)
         {
+            return false;
+        }
+
+        if (!ApplicableToAerodrome(_bayManager.AerodromeName))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Refreshes strip properties, determines if strip should be removed.
+    /// </summary>
+    public void UpdateFDR()
+    {
+        if (!DetermineSCValidity())
+        {
             _bayManager.DeleteStrip(this);
+            return;
         }
 
         if (ValidRoutes is null && !RequestedRoutes)
@@ -858,7 +894,7 @@ public sealed class StripController : IDisposable
                 // Don't include SIDs or gps coords in route
                 if (!_sidRouteRegex.Match(routeElement).Success && !_gpscoordRegex.Match(routeElement).Success)
                 {
-                    routeArr.Add(routeElement);
+                    routeArr.Add(routeElement.Split('/').First());
                 }
             }
             else if (routeElement != "DCT")

@@ -314,16 +314,9 @@ public class BayManager(FlowLayoutPanel main)
     /// <param name="save">If the strip controller should be saved.</param>
     public void AddStrip(StripController stripController, bool save = true)
     {
-        var distance = stripController.GetDistToAerodrome(AerodromeName);
-
-        if (!stripController.ApplicableToAerodrome(AerodromeName))
+        if (!stripController.DetermineSCValidity())
         {
             return;
-        }
-
-        if (distance is > 50 or -1 && stripController.ArrDepType == StripArrDepType.DEPARTURE)
-        {
-            return; // prevent arr strips disappearing on gnd
         }
 
         foreach (var bay in Bays)
