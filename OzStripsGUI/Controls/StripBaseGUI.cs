@@ -183,7 +183,11 @@ public class StripBaseGUI : UserControl
     {
         if (Properties.OzStripsSettings.Default.UseVatSysPopup)
         {
-            MMI.OpenCFLMenu(MMI.FindTrack(FDR), Cursor.Position);
+            var track = MMI.FindTrack(FDR);
+            if (track is not null)
+            {
+                MMI.OpenCFLMenu(track, Cursor.Position);
+            }
         }
         else
         {
@@ -297,16 +301,16 @@ public class StripBaseGUI : UserControl
         if (StripElements.ContainsKey("CFL"))
         {
             StripElements["CFL"].Text = StripController.CFL;
-
-            if (StripElements.ContainsKey("rfl") && StripController.ArrDepType == StripArrDepType.DEPARTURE)
+            try
             {
-                try
+                var colour = DetermineCFLBackColour();
+                if (StripElements.ContainsKey("rfl") && StripController.ArrDepType == StripArrDepType.DEPARTURE)
                 {
-                    StripElements["CFL"].BackColor = DetermineCFLBackColour();
+                    StripElements["CFL"].BackColor = colour;
                 }
-                catch
-                {
-                }
+            }
+            catch
+            {
             }
         }
 
