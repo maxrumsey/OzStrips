@@ -543,10 +543,14 @@
             // ttp_rte
             // 
             ttp_rte.ShowAlways = true;
+            ttp_rte.UseAnimation = false;
+            ttp_rte.UseFading = false;
             // 
             // ttp_cfl
             // 
             ttp_cfl.ShowAlways = true;
+            ttp_cfl.UseAnimation = false;
+            ttp_cfl.UseFading = false;
             // 
             // pl_rdy
             // 

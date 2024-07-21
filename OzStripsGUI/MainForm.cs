@@ -136,6 +136,7 @@ public partial class MainForm : Form
                 _bayManager.SetAerodrome(name, _socketConn);
                 _socketConn.SetAerodrome();
                 lb_ad.Text = name;
+                SetATISCode("Z");
             }
         }
         catch (Exception ex)
