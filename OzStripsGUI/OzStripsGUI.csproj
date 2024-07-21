@@ -58,8 +58,8 @@
         <Content Include="ozstrips.ico" />
     </ItemGroup>
     <ItemGroup>
-      <Reference Include="vatSys">
-        <HintPath>..\..\..\..\..\Program Files (x86)\vatSys\bin\vatSys.exe</HintPath>
+      <Reference Include="$(VatSysDir)\bin\vatSys.exe">
+        <Private>False</Private>
       </Reference>
     </ItemGroup>
     <ItemGroup>
