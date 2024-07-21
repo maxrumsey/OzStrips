@@ -457,7 +457,7 @@ public class StripBaseGUI : UserControl
         var colour = Color.Empty;
         if (StripController.DodgyRoute)
         {
-            colour = Color.OrangeRed;
+            colour = Color.Orange;
         }
 
         return colour;
