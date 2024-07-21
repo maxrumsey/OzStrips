@@ -254,7 +254,10 @@ public sealed class SocketConn : IDisposable
     public void RequestRoutes(StripController sc)
     {
         AddMessage("c:get_routes: " + sc.FDR.Callsign);
-        _io.EmitAsync("client:get_routes", sc.FDR.DepAirport, sc.FDR.DesAirport, sc.FDR.Callsign);
+        if (_io.Connected)
+        {
+            _io.EmitAsync("client:get_routes", sc.FDR.DepAirport, sc.FDR.DesAirport, sc.FDR.Callsign);
+        }
     }
 
     /// <summary>
