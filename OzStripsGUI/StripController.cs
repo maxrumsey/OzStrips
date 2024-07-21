@@ -723,6 +723,11 @@ public sealed class StripController : IDisposable
                     }
                 }
             }
+
+            if (!DodgyRoute && CondensedRoute == "FAIL")
+            {
+                DodgyRoute = true;
+            }
         }
 
         _stripControl?.UpdateStrip();
