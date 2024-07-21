@@ -82,7 +82,7 @@ public sealed class StripController : IDisposable
     /// <summary>
     /// Gets or sets a value indicating whether or not a list of valid routes has been selected.
     /// </summary>
-    public bool RequestedRoutes { get; set; }
+    public DateTime RequestedRoutes { get; set; } = DateTime.MaxValue;
 
     /// <summary>
     /// Gets or sets a value indicating whether or not a list of valid routes has been compared to the current route.
@@ -687,10 +687,11 @@ public sealed class StripController : IDisposable
             return;
         }
 
-        if (ValidRoutes is null && !RequestedRoutes)
+        // Route fetch will retry every minute.
+        if (ValidRoutes is null && (RequestedRoutes == DateTime.MaxValue || (DateTime.Now - RequestedRoutes) > TimeSpan.FromMinutes(1)))
         {
             _socketConn.RequestRoutes(this);
-            RequestedRoutes = true;
+            RequestedRoutes = DateTime.Now;
         }
 
         if (ValidRoutes is not null)
