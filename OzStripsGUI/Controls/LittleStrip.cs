@@ -26,9 +26,9 @@ public partial class LittleStrip : StripBaseGUI
             pl_clx,
             pl_rwy,
             pl_route,
-            pl_hdg,
             pl_alt,
             pl_req,
+            pl_rdy,
         ];
 
         CockColourControls =

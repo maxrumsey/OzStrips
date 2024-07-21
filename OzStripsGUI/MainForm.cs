@@ -109,29 +109,44 @@ public partial class MainForm : Form
     /// <param name="readyForConnection">Whether or not a connection can be made.</param>
     public void MarkConnectionReadiness(bool readyForConnection)
     {
-        _readyForConnection = readyForConnection;
-        if (_readyForConnection)
+        try
         {
-            _socketConn.Connect();
+            _readyForConnection = readyForConnection;
+            if (_readyForConnection)
+            {
+                _socketConn.Connect();
+            }
+        }
+        catch (Exception ex)
+        {
+            Errors.Add(ex, "OzStrips");
         }
     }
 
     /// <summary>
-    /// Sets the current aerodrome.
+    /// Sets the current aerodrome. Called by the GUI, and subsequently calls SetAerodrome() for various managers.
     /// </summary>
     /// <param name="name">The aerodrome name.</param>
     public void SetAerodrome(string name)
     {
-        if (_bayManager != null)
+        try
         {
-            _bayManager.SetAerodrome(name, _socketConn);
-            _socketConn.SetAerodrome();
-            lb_ad.Text = name;
+            if (_bayManager != null)
+            {
+                _bayManager.SetAerodrome(name, _socketConn);
+                _socketConn.SetAerodrome();
+                lb_ad.Text = name;
+                SetATISCode("Z");
+            }
+        }
+        catch (Exception ex)
+        {
+            Errors.Add(ex, "OzStrips");
         }
     }
 
     /// <summary>
-    /// Sets the METAR information.
+    /// Sets the METAR information. Called from SocketConn.
     /// </summary>
     /// <param name="metar">The METAR.</param>
     public void SetMetar(string metar)
@@ -145,7 +160,7 @@ public partial class MainForm : Form
     }
 
     /// <summary>
-    /// Sets the ATIS code.
+    /// Sets the ATIS code. Called from SocketConn.
     /// </summary>
     /// <param name="code">The ATIS code.</param>
     public void SetATISCode(string code)
@@ -166,7 +181,7 @@ public partial class MainForm : Form
     /// <summary>
     /// Sets the connection status, green is connected, orange/red if not.
     /// </summary>
-    /// <param name="conn">If connected or not.</param>
+    /// <param name="conn">Connection status.</param>
     public void SetConnStatus(bool conn)
     {
         pl_stat.BackColor = conn ? Color.Green : Color.OrangeRed;
@@ -178,7 +193,14 @@ public partial class MainForm : Form
     /// <param name="fdr">Selected FDR.</param>
     public void SetSelectedTrack(string? fdr)
     {
-        _bayManager.Callsign = fdr;
+        try
+        {
+            _bayManager.PickedCallsign = fdr;
+        }
+        catch (Exception ex)
+        {
+            Errors.Add(ex, "OzStrips");
+        }
     }
 
     /// <summary>
@@ -186,9 +208,16 @@ public partial class MainForm : Form
     /// </summary>
     public void DisconnectVATSIM()
     {
-        _bayManager.WipeStrips();
-        StripController.StripControllers.Clear();
-        _socketConn.Disconnect();
+        try
+        {
+            _bayManager.WipeStrips();
+            StripController.StripControllers.Clear();
+            _socketConn.Disconnect();
+        }
+        catch (Exception ex)
+        {
+            Errors.Add(ex, "OzStrips");
+        }
     }
 
     /// <summary>
@@ -198,7 +227,14 @@ public partial class MainForm : Form
     /// <remarks>Triggered from Connector plugin.</remarks>
     public void UpdateFDR(FDP2.FDR fdr)
     {
-        StripController.UpdateFDR(fdr, _bayManager, _socketConn);
+        try
+        {
+            StripController.UpdateFDR(fdr, _bayManager, _socketConn);
+        }
+        catch (Exception ex)
+        {
+            Errors.Add(ex, "OzStrips");
+        }
     }
 
     /// <summary>
@@ -207,17 +243,28 @@ public partial class MainForm : Form
     /// <param name="args">Event arguments.</param>
     public void HandleDisconnect(Network.PilotUpdateEventArgs args)
     {
-        if (!args.Removed || args.UpdatedPilot is null)
+        try
         {
-            return;
-        }
+            if (!args.Removed || args.UpdatedPilot is null)
+            {
+                return;
+            }
 
-        var strip = StripController.GetController(args.UpdatedPilot.Callsign);
-        if (strip is not null)
+            var strip = StripController.GetController(args.UpdatedPilot.Callsign);
+            if (strip is not null)
+            {
+                _bayManager.DeleteStrip(strip);
+            }
+        }
+        catch (Exception ex)
         {
-            _bayManager.DeleteStrip(strip);
+            Errors.Add(ex, "OzStrips");
         }
     }
+
+    /*
+     * GUI Below
+     */
 
     /// <inheritdoc/>
     protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -283,8 +330,7 @@ public partial class MainForm : Form
     {
         if (_bayManager != null && e.KeyChar == Convert.ToChar(Keys.Enter, CultureInfo.InvariantCulture))
         {
-            _bayManager.SetAerodrome(toolStripTextBox1.Text.ToUpper(CultureInfo.InvariantCulture), _socketConn);
-            lb_ad.Text = toolStripTextBox1.Text.ToUpper(CultureInfo.InvariantCulture);
+            SetAerodrome(toolStripTextBox1.Text.ToUpper(CultureInfo.InvariantCulture));
             e.Handled = true;
         }
     }

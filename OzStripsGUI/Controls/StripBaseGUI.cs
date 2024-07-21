@@ -183,7 +183,11 @@ public class StripBaseGUI : UserControl
     {
         if (Properties.OzStripsSettings.Default.UseVatSysPopup)
         {
-            MMI.OpenCFLMenu(MMI.FindTrack(FDR), Cursor.Position);
+            var track = MMI.FindTrack(FDR);
+            if (track is not null)
+            {
+                MMI.OpenCFLMenu(track, Cursor.Position);
+            }
         }
         else
         {
@@ -297,16 +301,16 @@ public class StripBaseGUI : UserControl
         if (StripElements.ContainsKey("CFL"))
         {
             StripElements["CFL"].Text = StripController.CFL;
-
-            if (StripElements.ContainsKey("rfl") && StripController.ArrDepType == StripArrDepType.DEPARTURE)
+            try
             {
-                try
+                var colour = DetermineCFLBackColour();
+                if (StripElements.ContainsKey("rfl") && StripController.ArrDepType == StripArrDepType.DEPARTURE)
                 {
-                    StripElements["CFL"].BackColor = DetermineCFLBackColour();
+                    StripElements["CFL"].BackColor = colour;
                 }
-                catch
-                {
-                }
+            }
+            catch
+            {
             }
         }
 
@@ -351,7 +355,7 @@ public class StripBaseGUI : UserControl
         {
             StripElements["ready"].Text = StripController.Ready ? "RDY" : string.Empty;
 
-            if (!StripController.Ready && (StripController.CurrentBay == StripBay.BAY_HOLDSHORT || StripController.CurrentBay == StripBay.BAY_RUNWAY))
+            if (!StripController.Ready && (StripController.CurrentBay == StripBay.BAY_HOLDSHORT || StripController.CurrentBay == StripBay.BAY_RUNWAY) && StripController.ArrDepType == StripArrDepType.DEPARTURE)
             {
                 StripElements["ready"].BackColor = Color.Orange;
             }
@@ -431,7 +435,7 @@ public class StripBaseGUI : UserControl
         var shouldbeeven = digit % 2 == 0;
 
         var colour = Color.Empty;
-        if (even != shouldbeeven)
+        if (even != shouldbeeven && FDR.RFL >= 3000 && StripController.ArrDepType == StripArrDepType.DEPARTURE)
         {
             colour = Color.OrangeRed;
             StripToolTips["cfltooltip"].Active = true;
@@ -453,7 +457,7 @@ public class StripBaseGUI : UserControl
         var colour = Color.Empty;
         if (StripController.DodgyRoute)
         {
-            colour = Color.OrangeRed;
+            colour = Color.Orange;
         }
 
         return colour;

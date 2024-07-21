@@ -39,14 +39,17 @@ public class BayManager(FlowLayoutPanel main)
     /// <summary>
     /// Sets the last selected track's FDR in vatSys.
     /// </summary>
-    public string? Callsign
+    public string? PickedCallsign
     {
         set
         {
             if (value is not null)
             {
-                var fdr = StripController.GetFDR(value);
-                SetPicked(fdr);
+                var sc = StripController.GetController(value);
+                if (sc is not null)
+                {
+                    SetPicked(sc.FDR);
+                }
             }
             else
             {
@@ -101,7 +104,7 @@ public class BayManager(FlowLayoutPanel main)
     }
 
     /// <summary>
-    /// Force update the strip.
+    /// Forces a track into the first bay.
     /// </summary>
     /// <param name="socketConn">The socket connection.</param>
     public void ForceStrip(SocketConn socketConn)
@@ -153,7 +156,7 @@ public class BayManager(FlowLayoutPanel main)
     }
 
     /// <summary>
-    /// Allow the strip to cross and toggles the crossing.
+    /// Toggles crossing highlight on a strip.
     /// </summary>
     public void CrossStrip()
     {
@@ -197,7 +200,7 @@ public class BayManager(FlowLayoutPanel main)
     }
 
     /// <summary>
-    /// Sets the aerodrome.
+    /// Sets the aerodrome. Reinitialises various classes.
     /// </summary>
     /// <param name="name">The name of the aerodrome.</param>
     /// <param name="socketConn">The socket connection.</param>
@@ -301,6 +304,7 @@ public class BayManager(FlowLayoutPanel main)
     /// </summary>
     public void WipeStrips()
     {
+        PickedController = null;
         foreach (var bay in Bays)
         {
             bay.WipeStrips();
@@ -314,16 +318,9 @@ public class BayManager(FlowLayoutPanel main)
     /// <param name="save">If the strip controller should be saved.</param>
     public void AddStrip(StripController stripController, bool save = true)
     {
-        var distance = stripController.GetDistToAerodrome(AerodromeName);
-
-        if (!stripController.ApplicableToAerodrome(AerodromeName))
+        if (!stripController.DetermineSCValidity())
         {
             return;
-        }
-
-        if (distance is > 50 or -1 && stripController.ArrDepType == StripArrDepType.DEPARTURE)
-        {
-            return; // prevent arr strips disappearing on gnd
         }
 
         foreach (var bay in Bays)
@@ -413,28 +410,35 @@ public class BayManager(FlowLayoutPanel main)
     }
 
     /// <summary>
-    /// Reloads the strips.
+    /// Reloads the strips. Called when stripboard layout is changed.
     /// </summary>
     public void ReloadStrips()
     {
-        foreach (var strip in StripController.StripControllers)
+        try
         {
-            foreach (var bay in Bays)
+            foreach (var strip in StripController.StripControllers)
             {
-                if (bay.OwnsStrip(strip))
+                foreach (var bay in Bays)
                 {
-                    bay.RemoveStrip(strip);
+                    if (bay.OwnsStrip(strip))
+                    {
+                        bay.RemoveStrip(strip);
+                    }
                 }
+
+                strip.ClearStripControl();
+                strip.CreateStripObj();
+                AddStrip(strip, false);
             }
 
-            strip.ClearStripControl();
-            strip.CreateStripObj();
-            AddStrip(strip, false);
+            foreach (var bay in Bays)
+            {
+                bay.Orderstrips();
+            }
         }
-
-        foreach (var bay in Bays)
+        catch (Exception ex)
         {
-            bay.Orderstrips();
+            Errors.Add(ex, "OzStrips");
         }
     }
 
@@ -443,9 +447,16 @@ public class BayManager(FlowLayoutPanel main)
     /// </summary>
     public void ForceRerender()
     {
-        foreach (var bay in Bays)
+        try
         {
-            bay.ForceRerender();
+            foreach (var bay in Bays)
+            {
+                bay.ForceRerender();
+            }
+        }
+        catch (Exception ex)
+        {
+            Errors.Add(ex, "OzStrips");
         }
     }
 
@@ -484,9 +495,16 @@ public class BayManager(FlowLayoutPanel main)
     /// <param name="relPos">The relative position.</param>
     public void PositionKey(int relPos)
     {
-        if (PickedController != null)
+        try
         {
-            FindBay(PickedController)?.ChangeStripPosition(PickedController, relPos);
+            if (PickedController != null)
+            {
+                FindBay(PickedController)?.ChangeStripPosition(PickedController, relPos);
+            }
+        }
+        catch (Exception ex)
+        {
+            Errors.Add(ex, "OzStrips");
         }
     }
 }

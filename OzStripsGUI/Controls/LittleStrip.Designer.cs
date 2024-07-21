@@ -544,10 +544,14 @@
             // ttp_route
             // 
             ttp_route.ShowAlways = true;
+            ttp_route.UseAnimation = false;
+            ttp_route.UseFading = false;
             // 
             // ttp_cfl
             // 
             ttp_cfl.ShowAlways = true;
+            ttp_cfl.UseAnimation = false;
+            ttp_cfl.UseFading = false;
             // 
             // pl_rdy
             // 

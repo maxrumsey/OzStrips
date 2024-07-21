@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Timers;
 using MaxRumsey.OzStripsPlugin.Gui.DTO;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using SocketIO.Serializer.NewtonsoftJson;
 using vatsys;
 
 namespace MaxRumsey.OzStripsPlugin.Gui;
@@ -85,14 +80,23 @@ public sealed class SocketConn : IDisposable
         _io.OnDisconnected += (_, _) =>
         {
             AddMessage("c: conn lost");
-            mainForm.SetConnStatus(false);
+            if (mainForm.Visible)
+            {
+                mainForm.Invoke(() => mainForm.SetConnStatus(false));
+            }
         };
 
         _io.OnError += (_, e) =>
         {
             AddMessage("c: error" + e);
-            mainForm.SetConnStatus(false);
-            MMI.InvokeOnGUI(() => Errors.Add(new(e), "OzStrips"));
+            if (mainForm.Visible)
+            {
+                mainForm.Invoke(() =>
+                {
+                    mainForm.SetConnStatus(false);
+                    Errors.Add(new(e), "OzStrips");
+                });
+            }
         };
 
         _io.OnReconnected += (_, _) =>
@@ -102,7 +106,10 @@ public sealed class SocketConn : IDisposable
                 _io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName);
             }
 
-            mainForm.SetConnStatus(true);
+            if (mainForm.Visible)
+            {
+                mainForm.Invoke(() => mainForm.SetConnStatus(true));
+            }
         };
 
         _io.OnReconnectError += (_, _) => AddMessage("recon error");
@@ -247,7 +254,7 @@ public sealed class SocketConn : IDisposable
     public void RequestRoutes(StripController sc)
     {
         AddMessage("c:get_routes: " + sc.FDR.Callsign);
-        if (CanSendDTO)
+        if (_io.Connected)
         {
             _io.EmitAsync("client:get_routes", sc.FDR.DepAirport, sc.FDR.DesAirport, sc.FDR.Callsign);
         }

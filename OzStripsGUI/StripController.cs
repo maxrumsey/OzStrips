@@ -22,8 +22,8 @@ public sealed class StripController : IDisposable
 {
     private static readonly Regex _headingRegex = new(@"H(\d{3})");
     private static readonly Regex _routeRegex = new(@"^[^\d/]+$");
-    private static readonly Regex _sidRouteRegex = new(@"[\w\d]+\/\d\d");
-    private static readonly Regex _gpscoordRegex = new(@"[\d]+\w[\d]+\w");
+    private static readonly Regex _sidRouteRegex = new(@"^[\w\d]+\/\d\d");
+    private static readonly Regex _gpscoordRegex = new(@"^[\d]+\w[\d]+\w");
 
     private readonly BayManager _bayManager;
     private readonly SocketConn _socketConn;
@@ -82,7 +82,7 @@ public sealed class StripController : IDisposable
     /// <summary>
     /// Gets or sets a value indicating whether or not a list of valid routes has been selected.
     /// </summary>
-    public bool RequestedRoutes { get; set; }
+    public DateTime RequestedRoutes { get; set; } = DateTime.MaxValue;
 
     /// <summary>
     /// Gets or sets a value indicating whether or not a list of valid routes has been compared to the current route.
@@ -424,24 +424,6 @@ public sealed class StripController : IDisposable
     }
 
     /// <summary>
-    /// Looks up fdr by name.
-    /// </summary>
-    /// <param name="name">The aircraft callsign.</param>
-    /// <returns>The aircraft's FDR.</returns>
-    public static FDR? GetFDR(string name)
-    {
-        foreach (var controller in StripControllers)
-        {
-            if (controller.FDR.Callsign == name)
-            {
-                return controller.FDR;
-            }
-        }
-
-        return null;
-    }
-
-    /// <summary>
     /// Looks up controller by name.
     /// </summary>
     /// <param name="name">The aircraft callsign.</param>
@@ -563,14 +545,6 @@ public sealed class StripController : IDisposable
     }
 
     /// <summary>
-    /// Clears the strip controllers.
-    /// </summary>
-    public static void ClearControllers()
-    {
-        StripControllers.Clear();
-    }
-
-    /// <summary>
     /// Sets the HMI picked state.
     /// </summary>
     /// <param name="picked">True if picked, false otherwise.</param>
@@ -666,21 +640,58 @@ public sealed class StripController : IDisposable
     }
 
     /// <summary>
-    /// Refreshes strip properties, determines if strip should be removed.
+    /// Determines whether or not a SC is still valid (or should be kept alive).
     /// </summary>
-    public void UpdateFDR()
+    /// <returns>Valid SC.</returns>
+    public bool DetermineSCValidity()
     {
+        if (FDR is null)
+        {
+            Errors.Add(new Exception("Strip deleted due to non-existence of vatsys FDR."), "OzStrips");
+            return false;
+        }
+
+        if (Network.GetOnlinePilots.Find(x => x.Callsign == FDR.Callsign) is null)
+        {
+            return false;
+        }
+
+        if (FDR.State < FDR.FDRStates.STATE_PREACTIVE && ArrDepType == StripArrDepType.DEPARTURE)
+        {
+            return false;
+        }
+
         var distance = GetDistToAerodrome(_bayManager.AerodromeName);
 
         if (distance is -1 or > 50 && ArrDepType == StripArrDepType.DEPARTURE)
         {
-            _bayManager.DeleteStrip(this);
+            return false;
         }
 
-        if (ValidRoutes is null && !RequestedRoutes)
+        if (!ApplicableToAerodrome(_bayManager.AerodromeName))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Refreshes strip properties, determines if strip should be removed.
+    /// </summary>
+    public void UpdateFDR()
+    {
+        if (!DetermineSCValidity())
+        {
+            _bayManager.DeleteStrip(this);
+            return;
+        }
+
+        // Route fetch will retry every minute.
+        if (ValidRoutes is null && (RequestedRoutes == DateTime.MaxValue || (DateTime.Now - RequestedRoutes) > TimeSpan.FromMinutes(1)))
         {
             _socketConn.RequestRoutes(this);
-            RequestedRoutes = true;
+            RequestedRoutes = DateTime.Now;
         }
 
         if (ValidRoutes is not null)
@@ -711,6 +722,11 @@ public sealed class StripController : IDisposable
                         DodgyRoute = false;
                     }
                 }
+            }
+
+            if (!DodgyRoute && CondensedRoute == "FAIL")
+            {
+                DodgyRoute = true;
             }
         }
 
@@ -858,13 +874,50 @@ public sealed class StripController : IDisposable
                 // Don't include SIDs or gps coords in route
                 if (!_sidRouteRegex.Match(routeElement).Success && !_gpscoordRegex.Match(routeElement).Success)
                 {
-                    routeArr.Add(routeElement);
+                    routeArr.Add(routeElement.Split('/').First());
                 }
             }
-            else
+            else if (routeElement != "DCT")
             {
                 routeArr.Add(routeElement);
             }
+        }
+
+        if (routeArr.Count < 3)
+        {
+            return "FAIL";
+        }
+
+        /*
+         * Remove SIDs and STARS
+         */
+        if (char.IsNumber(routeArr.Last().Last()))
+        {
+            routeArr.RemoveAt(routeArr.Count - 1);
+        }
+
+        if (char.IsNumber(routeArr.First().Last()))
+        {
+            routeArr.RemoveAt(0);
+        }
+
+        /*
+         * Remove first and last waypoint incase they have filed / are cleared via a SID.
+         * (Will validate based on route only)
+         */
+        if (routeArr.Count < 3)
+        {
+            return "FAIL";
+        }
+
+        if (!routeArr.First().Any(char.IsDigit))
+        {
+            routeArr.RemoveAt(0);
+        }
+
+        if (!routeArr.Last().Any(char.IsDigit))
+        {
+            routeArr.RemoveAt(routeArr.Count - 1);
         }
 
         return string.Join(" ", routeArr);

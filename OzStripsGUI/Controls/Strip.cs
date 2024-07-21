@@ -29,6 +29,7 @@ public partial class Strip : StripBaseGUI
             pl_hdg,
             pl_alt,
             pl_req,
+            pl_rdy,
         ];
 
         CockColourControls =
