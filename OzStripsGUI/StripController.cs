@@ -424,24 +424,6 @@ public sealed class StripController : IDisposable
     }
 
     /// <summary>
-    /// Looks up fdr by name.
-    /// </summary>
-    /// <param name="name">The aircraft callsign.</param>
-    /// <returns>The aircraft's FDR.</returns>
-    public static FDR? GetFDR(string name)
-    {
-        foreach (var controller in StripControllers)
-        {
-            if (controller.FDR.Callsign == name)
-            {
-                return controller.FDR;
-            }
-        }
-
-        return null;
-    }
-
-    /// <summary>
     /// Looks up controller by name.
     /// </summary>
     /// <param name="name">The aircraft callsign.</param>
@@ -560,14 +542,6 @@ public sealed class StripController : IDisposable
                 return;
             }
         }
-    }
-
-    /// <summary>
-    /// Clears the strip controllers.
-    /// </summary>
-    public static void ClearControllers()
-    {
-        StripControllers.Clear();
     }
 
     /// <summary>

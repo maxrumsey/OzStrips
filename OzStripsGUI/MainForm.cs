@@ -124,7 +124,7 @@ public partial class MainForm : Form
     }
 
     /// <summary>
-    /// Sets the current aerodrome.
+    /// Sets the current aerodrome. Called by the GUI, and subsequently calls SetAerodrome() for various managers.
     /// </summary>
     /// <param name="name">The aerodrome name.</param>
     public void SetAerodrome(string name)
@@ -145,7 +145,7 @@ public partial class MainForm : Form
     }
 
     /// <summary>
-    /// Sets the METAR information.
+    /// Sets the METAR information. Called from SocketConn.
     /// </summary>
     /// <param name="metar">The METAR.</param>
     public void SetMetar(string metar)
@@ -159,7 +159,7 @@ public partial class MainForm : Form
     }
 
     /// <summary>
-    /// Sets the ATIS code.
+    /// Sets the ATIS code. Called from SocketConn.
     /// </summary>
     /// <param name="code">The ATIS code.</param>
     public void SetATISCode(string code)
@@ -180,7 +180,7 @@ public partial class MainForm : Form
     /// <summary>
     /// Sets the connection status, green is connected, orange/red if not.
     /// </summary>
-    /// <param name="conn">If connected or not.</param>
+    /// <param name="conn">Connection status.</param>
     public void SetConnStatus(bool conn)
     {
         pl_stat.BackColor = conn ? Color.Green : Color.OrangeRed;
@@ -194,7 +194,7 @@ public partial class MainForm : Form
     {
         try
         {
-            _bayManager.Callsign = fdr;
+            _bayManager.PickedCallsign = fdr;
         }
         catch (Exception ex)
         {
@@ -260,6 +260,10 @@ public partial class MainForm : Form
             Errors.Add(ex, "OzStrips");
         }
     }
+
+    /*
+     * GUI Below
+     */
 
     /// <inheritdoc/>
     protected override bool ProcessCmdKey(ref Message msg, Keys keyData)

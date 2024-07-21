@@ -39,14 +39,17 @@ public class BayManager(FlowLayoutPanel main)
     /// <summary>
     /// Sets the last selected track's FDR in vatSys.
     /// </summary>
-    public string? Callsign
+    public string? PickedCallsign
     {
         set
         {
             if (value is not null)
             {
-                var fdr = StripController.GetFDR(value);
-                SetPicked(fdr);
+                var sc = StripController.GetController(value);
+                if (sc is not null)
+                {
+                    SetPicked(sc.FDR);
+                }
             }
             else
             {
@@ -101,7 +104,7 @@ public class BayManager(FlowLayoutPanel main)
     }
 
     /// <summary>
-    /// Force update the strip.
+    /// Forces a track into the first bay.
     /// </summary>
     /// <param name="socketConn">The socket connection.</param>
     public void ForceStrip(SocketConn socketConn)
@@ -153,7 +156,7 @@ public class BayManager(FlowLayoutPanel main)
     }
 
     /// <summary>
-    /// Allow the strip to cross and toggles the crossing.
+    /// Toggles crossing highlight on a strip.
     /// </summary>
     public void CrossStrip()
     {
@@ -197,7 +200,7 @@ public class BayManager(FlowLayoutPanel main)
     }
 
     /// <summary>
-    /// Sets the aerodrome.
+    /// Sets the aerodrome. Reinitialises various classes.
     /// </summary>
     /// <param name="name">The name of the aerodrome.</param>
     /// <param name="socketConn">The socket connection.</param>
@@ -301,6 +304,7 @@ public class BayManager(FlowLayoutPanel main)
     /// </summary>
     public void WipeStrips()
     {
+        PickedController = null;
         foreach (var bay in Bays)
         {
             bay.WipeStrips();
@@ -406,7 +410,7 @@ public class BayManager(FlowLayoutPanel main)
     }
 
     /// <summary>
-    /// Reloads the strips.
+    /// Reloads the strips. Called when stripboard layout is changed.
     /// </summary>
     public void ReloadStrips()
     {
