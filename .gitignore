@@ -398,3 +398,8 @@ FodyWeavers.xsd
 *.sln.iml
 
 site/*
+
+# OzStrips Installer
+build/
+dist/
+installer.spec
