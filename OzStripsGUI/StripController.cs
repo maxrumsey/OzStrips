@@ -277,7 +277,7 @@ public sealed class StripController : IDisposable
     {
         get
         {
-            return FDR.Route.Split(' ').ToList().Find(x => _routeRegex.Match(x).Success) ?? FDR.Route;
+            return FDR.Route.Split(' ').ToList().Find(x => _routeRegex.Match(x).Success && x != "DCT") ?? FDR.Route;
         }
     }
 
@@ -807,7 +807,7 @@ public sealed class StripController : IDisposable
                 }
             }
 
-            if (adCoord != null)
+            if (adCoord != null && planeCoord != null)
             {
                 return Conversions.CalculateDistance(adCoord, planeCoord);
             }
