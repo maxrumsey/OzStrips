@@ -6,27 +6,36 @@ import ctypes
 import shutil
 import sys
 import subprocess
+import time
 
 def error(msg):
     ctypes.windll.user32.MessageBoxW(0, msg, "OzStrips Error", 1)
 
 try:
     url = "https://github.com/maxrumsey/OzStrips/releases/download/latest/Plugin.zip"
-
+    plugindir = os.path.expanduser("~\\Documents\\vatSys Files\\Profiles\\Australia\\Plugins")
+    
     print(sys.argv)
 
-    if len(sys.argv) > 1:
+    if len(sys.argv) > 2:
         url = sys.argv[1]
+        plugindir = sys.argv[2]
     
     os.system("taskkill /im vatSys.exe")
+    time.sleep(4)
     tempdir = tempfile.gettempdir() + "\\ozstrips\\"
 
-    plugindir = os.path.expanduser("~\\Documents\\vatSys Files\\Profiles\\Australia\\Plugins")
-    if os.path.exists(tempdir):
-        shutil.rmtree(tempdir)
+    try:
+        if os.path.exists(tempdir + "\\OzStrips\\"):
+            shutil.rmtree(tempdir + "\\OzStrips\\")
 
-    os.makedirs(tempdir)
-    os.makedirs(tempdir + "\\OzStrips")
+        if os.path.exists(tempdir + "plugin.zip"):
+            os.remove(tempdir + "plugin.zip")
+
+        if (not os.path.exists(tempdir)): os.makedirs(tempdir)
+        if (not os.path.exists(tempdir + "\\OzStrips")): os.makedirs(tempdir + "\\OzStrips")
+    except shutil.Error as e:
+        print(e)
 
     urllib.request.urlretrieve(url, tempdir + "plugin.zip")
 
@@ -36,9 +45,6 @@ try:
 
     with zipfile.ZipFile(tempdir + "plugin.zip", 'r') as zip_ref:
         zip_ref.extractall(tempdir + "\\OzStrips")
-
-    if sys.argv[0].endswith(".exe"):
-        shutil.move(sys.argv[0], tempdir + "\\installer.backup")
 
     try:
         if os.path.exists(plugindir + "\\OzStrips"):
@@ -50,6 +56,7 @@ try:
 
     proc_exe = subprocess.call("C:\\Program Files (x86)\\vatSys\\bin\\vatSys.exe", cwd="C:\\Program Files (x86)\\vatSys\\bin\\")
 
-except:
-    error("A fatal error occurred while updating. Please reinstall OzStrips!")
+except Exception as e:
+    print(str(e))
+    error("A fatal error occurred while updating. Please reinstall OzStrips!\n")
     sys.exit(1)

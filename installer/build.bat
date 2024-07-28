@@ -1,1 +1,2 @@
-python -m PyInstaller ./installer.py
+rmdir /s /q dist build
+python -m PyInstaller --one-file ./installer.py
