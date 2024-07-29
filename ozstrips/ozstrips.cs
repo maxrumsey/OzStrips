@@ -54,8 +54,6 @@ public sealed class OzStrips : IPlugin, IDisposable
     /// <param name="updated">The information about the update.</param>
     public void OnFDRUpdate(FDP2.FDR updated)
     {
-        ////Errors.Add(new Exception("mew"));
-        ////System.Diagnostics.Process.Start("http://google.com");
         if (_gui?.IsHandleCreated == true)
         {
             MMI.InvokeOnGUI(() => _gui.UpdateFDR(updated));
