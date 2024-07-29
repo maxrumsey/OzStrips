@@ -1,0 +1,1 @@
+signtool.exe sign /f ..\..\..\certificate.pfx /p %1 /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 ./dist/installer.exe

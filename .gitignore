@@ -402,4 +402,3 @@ site/*
 # OzStrips Installer
 build/
 dist/
-installer.spec

@@ -1,2 +1,2 @@
 rmdir /s /q dist build
-python -m PyInstaller --one-file ./installer.py
+python -m PyInstaller --onefile ./installer.py
