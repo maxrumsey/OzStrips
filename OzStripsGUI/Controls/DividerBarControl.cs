@@ -22,7 +22,7 @@ public partial class DividerBarControl : UserControl
     /// </summary>
     public void ReloadSize()
     {
-        if (!Properties.OzStripsSettings.Default.UseBigStrips)
+        if (Properties.OzStripsSettings.Default.StripSize != 2)
         {
             Size = new System.Drawing.Size(431, 30);
             label1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);

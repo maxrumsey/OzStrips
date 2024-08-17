@@ -614,14 +614,13 @@ public sealed class StripController : IDisposable
 
         ////stripHolderControl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         StripHolderControl.Size = new(100, 100);
-        if (OzStripsSettings.Default.UseBigStrips)
+
+        _stripControl = OzStripsSettings.Default.StripSize switch
         {
-            _stripControl = new Strip(this);
-        }
-        else
-        {
-            _stripControl = new LittleStrip(this);
-        }
+            0 => new TinyStrip(this),
+            2 => new Strip(this),
+            _ => new LittleStrip(this),
+        };
 
         _stripControl.Initialise();
         _stripControl.UpdateStrip();

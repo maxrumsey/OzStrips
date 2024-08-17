@@ -533,7 +533,7 @@ public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMe
             return;
         }
 
-        var x_each = (main.Size.Width - (main.VerticalScroll.Visible ? 16 : 0)) / _currentLayoutIndex;
+        var x_each = (main.Size.Width - (main.VerticalScroll.Visible ? 20 : 0)) / _currentLayoutIndex;
 
         foreach (var panel in _flpVerticalBoards)
         {

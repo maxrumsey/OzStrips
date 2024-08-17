@@ -12,7 +12,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.9.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.10.0.0")]
     internal sealed partial class OzStripsSettings : global::System.Configuration.ApplicationSettingsBase {
         
         private static OzStripsSettings defaultInstance = ((OzStripsSettings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new OzStripsSettings())));
@@ -26,24 +26,24 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool UseBigStrips {
-            get {
-                return ((bool)(this["UseBigStrips"]));
-            }
-            set {
-                this["UseBigStrips"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool UseVatSysPopup {
             get {
                 return ((bool)(this["UseVatSysPopup"]));
             }
             set {
                 this["UseVatSysPopup"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int StripSize {
+            get {
+                return ((int)(this["StripSize"]));
+            }
+            set {
+                this["StripSize"] = value;
             }
         }
     }

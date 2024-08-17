@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.Gui.Controls;
+using MaxRumsey.OzStripsPlugin.Gui.Properties;
 using vatsys;
 
 namespace MaxRumsey.OzStripsPlugin.Gui;
@@ -445,7 +446,7 @@ public partial class MainForm : Form
 
     private void NormalToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        Properties.OzStripsSettings.Default.UseBigStrips = true;
+        Properties.OzStripsSettings.Default.StripSize = 2;
         Properties.OzStripsSettings.Default.Save();
         _bayManager.ReloadStrips();
         SetStripSizeCheckBox();
@@ -453,7 +454,7 @@ public partial class MainForm : Form
 
     private void SmallToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        Properties.OzStripsSettings.Default.UseBigStrips = false;
+        Properties.OzStripsSettings.Default.StripSize = 1;
         Properties.OzStripsSettings.Default.Save();
         _bayManager.ReloadStrips();
         SetStripSizeCheckBox();
@@ -461,15 +462,21 @@ public partial class MainForm : Form
 
     private void SetStripSizeCheckBox()
     {
-        if (Properties.OzStripsSettings.Default.UseBigStrips)
+        normalToolStripMenuItem.Checked = false;
+        smallToolStripMenuItem.Checked = false;
+        tinyToolStripMenuItem.Checked = false;
+
+        switch (OzStripsSettings.Default.StripSize)
         {
-            normalToolStripMenuItem.Checked = true;
-            smallToolStripMenuItem.Checked = false;
-        }
-        else
-        {
-            normalToolStripMenuItem.Checked = false;
-            smallToolStripMenuItem.Checked = true;
+            case 0:
+                tinyToolStripMenuItem.Checked = true;
+                break;
+            case 1:
+                smallToolStripMenuItem.Checked = true;
+                break;
+            case 2:
+                normalToolStripMenuItem.Checked = true;
+                break;
         }
     }
 
@@ -479,5 +486,13 @@ public partial class MainForm : Form
         var bm = new BaseModal(modalChild, "OzStrips Settings");
         bm.ReturnEvent += modalChild.ModalReturned;
         bm.Show(MainForm.MainFormInstance);
+    }
+
+    private void TinyToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        Properties.OzStripsSettings.Default.StripSize = 0;
+        Properties.OzStripsSettings.Default.Save();
+        _bayManager.ReloadStrips();
+        SetStripSizeCheckBox();
     }
 }
