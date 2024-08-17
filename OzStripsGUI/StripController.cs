@@ -709,7 +709,8 @@ public sealed class StripController : IDisposable
             if (ArrDepType != StripArrDepType.DEPARTURE || (int)FDR.State > 5)
             {
                 DodgyRoute = false;
-            } else
+            }
+            else
             {
                 // account for situations where aircraft joins route from interim point via sid.
                 if (DodgyRoute)
