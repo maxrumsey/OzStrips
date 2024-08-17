@@ -796,7 +796,7 @@ public sealed class StripController : IDisposable
         try
         {
             var adCoord = Airspace2.GetAirport(aerodrome)?.LatLong;
-            var planeCoord = FDR.PredictedPosition.Location;
+            var planeCoord = FDR.PredictedPosition?.Location;
             var radarTracks = (from radarTrack in RDP.RadarTracks
                                where radarTrack.ActualAircraft.Callsign == FDR.Callsign
                                select radarTrack).ToList();
@@ -805,11 +805,11 @@ public sealed class StripController : IDisposable
             {
                 foreach (var rTrack in radarTracks)
                 {
-                    planeCoord = rTrack.ActualAircraft.Position;
+                    planeCoord = rTrack.ActualAircraft?.Position;
                 }
             }
 
-            if (adCoord != null)
+            if (adCoord is not null && planeCoord is not null)
             {
                 return Conversions.CalculateDistance(adCoord, planeCoord);
             }
