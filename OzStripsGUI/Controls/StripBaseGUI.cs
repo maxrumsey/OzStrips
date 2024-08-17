@@ -246,24 +246,17 @@ public class StripBaseGUI : UserControl
             return;
         }
 
-        if (StripElements.ContainsKey("eobt"))
-        {
-            StripElements["eobt"].Text = StripController.Time;
-        }
+        SetLabel("eobt", StripController.Time);
 
-        StripElements["acid"].Text = FDR.Callsign;
-        StripElements["ssr"].Text = (FDR.AssignedSSRCode == -1) ? "XXXX" : Convert.ToString(FDR.AssignedSSRCode, 8).PadLeft(4, '0');
-        StripElements["type"].Text = FDR.AircraftType;
-        StripElements["frul"].Text = FDR.FlightRules;
+        SetLabel("acid", FDR.Callsign);
+        SetLabel("ssr", (FDR.AssignedSSRCode == -1) ? "XXXX" : Convert.ToString(FDR.AssignedSSRCode, 8).PadLeft(4, '0'));
+        SetLabel("type", FDR.AircraftType);
+        SetLabel("frul", FDR.FlightRules);
 
-        if (StripElements.ContainsKey("route"))
-        {
-            StripElements["route"].Text = StripController.FirstWpt;
+        SetLabel("route", StripController.FirstWpt);
+        SetBackColour("route", DetermineRouteBackColour());
 
-            StripElements["route"].BackColor = DetermineRouteBackColour();
-        }
-
-        if (StripToolTips.ContainsKey("routetooltip") && StripElements.ContainsKey("route"))
+        if (StripToolTips.ContainsKey("routetooltip"))
         {
             if (StripController.DodgyRoute)
             {
@@ -288,101 +281,73 @@ public class StripBaseGUI : UserControl
             }
         }
 
-        if (StripElements.ContainsKey("sid"))
-        {
-            StripElements["sid"].Text = StripController.SID;
-        }
+        SetLabel("sid", StripController.SID);
 
-        if (StripElements.ContainsKey("ades"))
-        {
-            StripElements["ades"].Text = FDR.DesAirport;
-        }
+        SetLabel("ades", FDR.DesAirport);
+        SetLabel("CFL", StripController.CFL);
 
-        if (StripElements.ContainsKey("CFL"))
+        try
         {
-            StripElements["CFL"].Text = StripController.CFL;
-            try
+            if (StripController.ArrDepType == StripArrDepType.DEPARTURE)
             {
                 var colour = DetermineCFLBackColour();
-                if (StripElements.ContainsKey("rfl") && StripController.ArrDepType == StripArrDepType.DEPARTURE)
-                {
-                    StripElements["CFL"].BackColor = colour;
-                }
-            }
-            catch
-            {
+                SetBackColour("CFL", colour);
             }
         }
-
-        if (StripElements.ContainsKey("HDG"))
+        catch
         {
-            StripElements["HDG"].Text = string.IsNullOrEmpty(StripController.HDG) ? string.Empty : "H" + StripController.HDG;
         }
 
-        if (StripElements.ContainsKey("CLX"))
-        {
-            StripElements["CLX"].Text = StripController.CLX;
-        }
+        SetLabel("HDG", string.IsNullOrEmpty(StripController.HDG) ? string.Empty : "H" + StripController.HDG);
 
-        if (StripElements.ContainsKey("stand"))
-        {
-            StripElements["stand"].Text = StripController.Gate;
-        }
+        SetLabel("CLX", StripController.CLX);
 
-        if (StripElements.ContainsKey("remark"))
-        {
-            StripElements["remark"].Text = StripController.Remark;
-        }
+        SetLabel("stand", StripController.Gate);
 
-        if (StripElements.ContainsKey("tot") && StripController.TakeOffTime != null)
+        SetLabel("remark", StripController.Remark);
+
+        if (StripController.TakeOffTime != null)
         {
             var diff = (TimeSpan)(DateTime.UtcNow - StripController.TakeOffTime);
-            StripElements["tot"].Text = diff.ToString(@"mm\:ss", CultureInfo.InvariantCulture);
-            StripElements["tot"].ForeColor = Color.Green;
+            SetLabel("tot", diff.ToString(@"mm\:ss", CultureInfo.InvariantCulture));
+            SetForeColour("tot", Color.Green);
         }
-        else if (StripElements.ContainsKey("tot"))
+        else
         {
-            StripElements["tot"].Text = "00:00";
-            StripElements["tot"].ForeColor = Color.Black;
-        }
-
-        if (StripElements.ContainsKey("rfl"))
-        {
-            StripElements["rfl"].Text = StripController.RFL;
+            SetLabel("tot", "00:00");
+            SetForeColour("tot", Color.Black);
         }
 
-        if (StripElements.ContainsKey("ready"))
-        {
-            StripElements["ready"].Text = StripController.Ready ? "RDY" : string.Empty;
+        SetLabel("rfl", StripController.RFL);
 
-            if (!StripController.Ready && (StripController.CurrentBay == StripBay.BAY_HOLDSHORT || StripController.CurrentBay == StripBay.BAY_RUNWAY) && StripController.ArrDepType == StripArrDepType.DEPARTURE)
-            {
-                StripElements["ready"].BackColor = Color.Orange;
-            }
-            else
-            {
-                StripElements["ready"].BackColor = Color.Empty;
-            }
+        SetLabel("ready", StripController.Ready ? "RDY" : string.Empty);
+
+        if (!StripController.Ready && (StripController.CurrentBay == StripBay.BAY_HOLDSHORT || StripController.CurrentBay == StripBay.BAY_RUNWAY) && StripController.ArrDepType == StripArrDepType.DEPARTURE)
+        {
+            SetBackColour("ready", Color.Orange);
+        }
+        else
+        {
+            SetBackColour("ready", Color.Empty);
         }
 
-        if (StripElements.ContainsKey("glop"))
-        {
-            StripElements["glop"].Text = FDR.GlobalOpData;
-        }
+        SetLabel("glop", FDR.GlobalOpData);
 
-        if (StripElements.ContainsKey("ssrsymbol") && StripController.SquawkCorrect)
+        if (StripController.SquawkCorrect)
         {
-            StripElements["ssrsymbol"].Text = "*";
+            SetLabel("ssrsymbol", "*");
         }
-        else if (StripElements.ContainsKey("ssrsymbol"))
+        else
         {
-            StripElements["ssrsymbol"].Text = string.Empty;
+            SetLabel("ssrsymbol", string.Empty);
         }
 
         SetCross(false);
         Cock(0, false, false);
-        StripElements["rwy"].Text = StripController.RWY;
-        StripElements["wtc"].Text = FDR.AircraftWake;
+
+        SetLabel("rwy", StripController.RWY);
+        SetLabel("wtc", FDR.AircraftWake);
+
         ResumeLayout();
     }
 
@@ -571,5 +536,29 @@ public class StripBaseGUI : UserControl
         StripController.Remark = control.Remark;
         FDP2.SetGlobalOps(StripController.FDR, control.Glop);
         StripController.SyncStrip();
+    }
+
+    private void SetLabel(string label, string text)
+    {
+        if (StripElements.ContainsKey(label) && StripElements[label].Text != text)
+        {
+            StripElements[label].Text = text;
+        }
+    }
+
+    private void SetForeColour(string label, Color color)
+    {
+        if (StripElements.ContainsKey(label) && StripElements[label].ForeColor != color)
+        {
+            StripElements[label].ForeColor = color;
+        }
+    }
+
+    private void SetBackColour(string label, Color color)
+    {
+        if (StripElements.ContainsKey(label) && StripElements[label].BackColor != color)
+        {
+            StripElements[label].BackColor = color;
+        }
     }
 }
