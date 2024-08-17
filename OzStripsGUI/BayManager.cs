@@ -17,14 +17,24 @@ namespace MaxRumsey.OzStripsPlugin.Gui;
 /// Initializes a new instance of the <see cref="BayManager"/> class.
 /// </remarks>
 /// <param name="main">The flow layout for the bay.</param>
-public class BayManager(FlowLayoutPanel main)
+/// <param name="layoutMethod">The current layout caller.</param>
+public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMethod)
 {
     private readonly List<FlowLayoutPanel> _flpVerticalBoards = [];
+
+    private readonly Action<object, EventArgs> _currentLayout = layoutMethod;
+
+    private int _currentLayoutIndex;
 
     /// <summary>
     /// Gets or sets the picked controller.
     /// </summary>
     public StripController? PickedController { get; set; }
+
+    /// <summary>
+    /// Gets or sets the number of present bays.
+    /// </summary>
+    public int BayNum { get; set; }
 
     /// <summary>
     /// Gets or sets the aerodrome name.
@@ -217,15 +227,6 @@ public class BayManager(FlowLayoutPanel main)
     }
 
     /// <summary>
-    /// Adds a vertical board.
-    /// </summary>
-    /// <param name="flpVertical">The vertical board.</param>
-    public void AddVertBoard(FlowLayoutPanel flpVertical)
-    {
-        _flpVerticalBoards.Add(flpVertical);
-    }
-
-    /// <summary>
     /// Sets a controller to be picked.
     /// </summary>
     /// <param name="controller">The controller.</param>
@@ -388,9 +389,32 @@ public class BayManager(FlowLayoutPanel main)
     {
         if (verticalBoardNumber >= _flpVerticalBoards.Count)
         {
-            Errors.Add(new InvalidOperationException("The vertical board number " + verticalBoardNumber + " is outside range and not valid"), "OzStrips");
+            verticalBoardNumber = _flpVerticalBoards.Count - 1;
+        }
+
+        if (verticalBoardNumber < 0)
+        {
+            Errors.Add(new InvalidOperationException("No vertical board flow layout panels exist"), "OzStrips");
             return;
         }
+
+        if (_currentLayoutIndex != 3)
+        {
+            var maxflpnum = BayNum / _currentLayoutIndex;
+            if (_flpVerticalBoards[verticalBoardNumber].Controls.Count >= maxflpnum)
+            {
+                verticalBoardNumber = _currentLayoutIndex - 1;
+                for (var i = 0; i < _flpVerticalBoards.Count; i++)
+                {
+                    if (_flpVerticalBoards[i].Controls.Count < maxflpnum)
+                    {
+                        verticalBoardNumber = i;
+                    }
+                }
+            }
+        }
+
+        bay.VerticalBoardNumber = verticalBoardNumber;
 
         Bays.Add(bay);
         _flpVerticalBoards[verticalBoardNumber].Controls.Add(bay.ChildPanel);
@@ -470,9 +494,46 @@ public class BayManager(FlowLayoutPanel main)
             return;
         }
 
+        if (_currentLayoutIndex == 0)
+        {
+            AddVertBoard();
+            AddVertBoard();
+            AddVertBoard();
+            _currentLayoutIndex = 3;
+            _currentLayout(this, new EventArgs());
+        }
+
         var y_main = main.Size.Height;
 
-        var x_each = main.Size.Width / 3;
+        if (main.Size.Width <= 840 && _currentLayoutIndex != 1)
+        {
+            ClearVertBoards();
+            AddVertBoard();
+            _currentLayoutIndex = 1;
+            _currentLayout(this, new EventArgs());
+            return;
+        }
+        else if (main.Size.Width > 840 && main.Size.Width <= 1250 && _currentLayoutIndex != 2)
+        {
+            ClearVertBoards();
+            AddVertBoard();
+            AddVertBoard();
+            _currentLayoutIndex = 2;
+            _currentLayout(this, new EventArgs());
+            return;
+        }
+        else if (main.Size.Width > 1250 && _currentLayoutIndex != 3)
+        {
+            ClearVertBoards();
+            AddVertBoard();
+            AddVertBoard();
+            AddVertBoard();
+            _currentLayoutIndex = 3;
+            _currentLayout(this, new EventArgs());
+            return;
+        }
+
+        var x_each = (main.Size.Width - (main.VerticalScroll.Visible ? 16 : 0)) / _currentLayoutIndex;
 
         foreach (var panel in _flpVerticalBoards)
         {
@@ -485,7 +546,14 @@ public class BayManager(FlowLayoutPanel main)
         foreach (var bay in Bays)
         {
             var childnum = _flpVerticalBoards[bay.VerticalBoardNumber].Controls.Count;
-            bay.ChildPanel.Size = new(x_each - 4, (y_main - 4) / childnum);
+            var height = (y_main - 4) / childnum;
+
+            if (height < 300)
+            {
+                height = 300;
+            }
+
+            bay.ChildPanel.Size = new(x_each - 4, height);
         }
     }
 
@@ -506,5 +574,44 @@ public class BayManager(FlowLayoutPanel main)
         {
             Errors.Add(ex, "OzStrips");
         }
+    }
+
+    /// <summary>
+    /// Clears all vertical boards.
+    /// </summary>
+    private void ClearVertBoards()
+    {
+        main.Controls.Clear();
+        _flpVerticalBoards.Clear();
+    }
+
+    /// <summary>
+    /// Determines how many vertical boards are needed.
+    /// </summary>
+    private void DetermineVertBoardNumber()
+    {
+        main.Controls.Clear();
+        _flpVerticalBoards.Clear();
+    }
+
+    /// <summary>
+    /// Adds a vertical board.
+    /// </summary>
+    private void AddVertBoard()
+    {
+        var flp = new FlowLayoutPanel
+        {
+            AutoScroll = false,
+            Margin = new(0),
+            Padding = new(0),
+            Size = new(100, 100),
+            Location = new(0, 0),
+            AutoSize = true,
+            WrapContents = false,
+            FlowDirection = FlowDirection.TopDown,
+        };
+
+        main.Controls.Add(flp);
+        _flpVerticalBoards.Add(flp);
     }
 }

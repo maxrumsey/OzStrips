@@ -35,9 +35,9 @@ public class Bay
     }
 
     /// <summary>
-    /// Gets the vertical board number.
+    /// Gets or sets the vertical board number.
     /// </summary>
-    public int VerticalBoardNumber { get; }
+    public int VerticalBoardNumber { get; set; }
 
     /// <summary>
     /// Gets the bay child panel.

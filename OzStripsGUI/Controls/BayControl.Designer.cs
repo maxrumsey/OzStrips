@@ -49,7 +49,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Controls
             panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             panel1.Location = new System.Drawing.Point(0, 0);
             panel1.Name = "panel1";
-            panel1.Size = new System.Drawing.Size(481, 322);
+            panel1.Size = new System.Drawing.Size(481, 350);
             panel1.TabIndex = 0;
             // 
             // flp_stripbay
@@ -60,7 +60,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Controls
             flp_stripbay.FlowDirection = System.Windows.Forms.FlowDirection.BottomUp;
             flp_stripbay.Location = new System.Drawing.Point(0, 42);
             flp_stripbay.Name = "flp_stripbay";
-            flp_stripbay.Size = new System.Drawing.Size(481, 280);
+            flp_stripbay.Size = new System.Drawing.Size(481, 308);
             flp_stripbay.TabIndex = 1;
             flp_stripbay.WrapContents = false;
             flp_stripbay.Click += LabelBayNameClicked;
@@ -128,8 +128,9 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Controls
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             Controls.Add(panel1);
             Margin = new System.Windows.Forms.Padding(0);
+            MinimumSize = new System.Drawing.Size(0, 300);
             Name = "BayControl";
-            Size = new System.Drawing.Size(481, 322);
+            Size = new System.Drawing.Size(481, 350);
             panel1.ResumeLayout(false);
             panel2.ResumeLayout(false);
             ResumeLayout(false);

@@ -45,26 +45,13 @@ public partial class MainForm : Form
         AddAerodrome("YPPH");
         AddAerodrome("YSSY");
 
-        _bayManager = new(flp_main);
+        _bayManager = new(flp_main, AllToolStripMenuItem_Click);
         _socketConn = new(_bayManager, this);
 
         if (_readyForConnection)
         {
             _socketConn.Connect();
         }
-
-        AddVerticalStripBoard();
-        AddVerticalStripBoard();
-        AddVerticalStripBoard();
-
-        _ = new Bay([StripBay.BAY_PREA], _bayManager, _socketConn, "Preactive", 0);
-        _ = new Bay([StripBay.BAY_CLEARED], _bayManager, _socketConn, "Cleared", 0);
-        _ = new Bay([StripBay.BAY_PUSHED], _bayManager, _socketConn, "Pushback", 1);
-        _ = new Bay([StripBay.BAY_TAXI], _bayManager, _socketConn, "Taxi", 1);
-        _ = new Bay([StripBay.BAY_HOLDSHORT], _bayManager, _socketConn, "Holding Point", 1);
-        _ = new Bay([StripBay.BAY_RUNWAY], _bayManager, _socketConn, "Runway", 2);
-        _ = new Bay([StripBay.BAY_OUT], _bayManager, _socketConn, "Departed", 2);
-        _ = new Bay([StripBay.BAY_ARRIVAL], _bayManager, _socketConn, "Arrivals", 2);
 
         _bayManager.Resize();
 
@@ -301,21 +288,6 @@ public partial class MainForm : Form
         _bayManager.Resize();
     }
 
-    private void AddVerticalStripBoard()
-    {
-        var flp = new FlowLayoutPanel
-        {
-            AutoScroll = true,
-            Margin = new(0),
-            Padding = new(0),
-            Size = new(100, 100),
-            Location = new(0, 0),
-        };
-
-        flp_main.Controls.Add(flp);
-        _bayManager.AddVertBoard(flp);
-    }
-
     private void AddAerodrome(string name)
     {
         var toolStripMenuItem = new ToolStripMenuItem
@@ -348,6 +320,7 @@ public partial class MainForm : Form
     private void ACDToolStripMenuItem_Click(object sender, EventArgs e)
     {
         _bayManager.WipeBays();
+        _bayManager.BayNum = 3;
         _ = new Bay([StripBay.BAY_PREA], _bayManager, _socketConn, "Preactive", 0);
         _ = new Bay([StripBay.BAY_CLEARED], _bayManager, _socketConn, "Cleared", 1);
         _ = new Bay([StripBay.BAY_PUSHED], _bayManager, _socketConn, "Pushback", 2);
@@ -358,6 +331,7 @@ public partial class MainForm : Form
     private void SMCToolStripMenuItem_Click(object sender, EventArgs e)
     {
         _bayManager.WipeBays();
+        _bayManager.BayNum = 5;
         _ = new Bay([StripBay.BAY_CLEARED], _bayManager, _socketConn, "Cleared", 0);
         _ = new Bay([StripBay.BAY_PUSHED], _bayManager, _socketConn, "Pushback", 0);
         _ = new Bay([StripBay.BAY_TAXI], _bayManager, _socketConn, "Taxi", 1);
@@ -370,6 +344,7 @@ public partial class MainForm : Form
     private void SMCACDToolStripMenuItem_Click(object sender, EventArgs e)
     {
         _bayManager.WipeBays();
+        _bayManager.BayNum = 6;
         _ = new Bay([StripBay.BAY_PREA], _bayManager, _socketConn, "Preactive", 0);
         _ = new Bay([StripBay.BAY_CLEARED], _bayManager, _socketConn, "Cleared", 0);
         _ = new Bay([StripBay.BAY_PUSHED], _bayManager, _socketConn, "Pushback", 0);
@@ -383,6 +358,7 @@ public partial class MainForm : Form
     private void ADCToolStripMenuItem_Click(object sender, EventArgs e)
     {
         _bayManager.WipeBays();
+        _bayManager.BayNum = 4;
         _ = new Bay([StripBay.BAY_HOLDSHORT], _bayManager, _socketConn, "Holding Point", 0);
         _ = new Bay([StripBay.BAY_RUNWAY], _bayManager, _socketConn, "Runway", 1);
         _ = new Bay([StripBay.BAY_OUT], _bayManager, _socketConn, "Departed", 2);
@@ -394,6 +370,7 @@ public partial class MainForm : Form
     private void AllToolStripMenuItem_Click(object sender, EventArgs e)
     {
         _bayManager.WipeBays();
+        _bayManager.BayNum = 8;
         _ = new Bay([StripBay.BAY_PREA], _bayManager, _socketConn, "Preactive", 0);
         _ = new Bay([StripBay.BAY_CLEARED], _bayManager, _socketConn, "Cleared", 0);
         _ = new Bay([StripBay.BAY_PUSHED], _bayManager, _socketConn, "Pushback", 1);
@@ -409,6 +386,7 @@ public partial class MainForm : Form
     private void ADCSMCToolStripMenuItem_Click(object sender, EventArgs e)
     {
         _bayManager.WipeBays();
+        _bayManager.BayNum = 7;
         _ = new Bay([StripBay.BAY_CLEARED], _bayManager, _socketConn, "Cleared", 0);
         _ = new Bay([StripBay.BAY_PUSHED], _bayManager, _socketConn, "Pushback", 0);
         _ = new Bay([StripBay.BAY_TAXI], _bayManager, _socketConn, "Taxi", 1);
