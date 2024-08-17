@@ -420,8 +420,13 @@ public class StripBaseGUI : UserControl
         }
 
         var track = Conversions.CalculateTrack(first, last);
-        var variation = LogicalPositions.Positions.Where(e => e.Name == StripController.ParentAerodrome).FirstOrDefault().MagneticVariation;
+        var positions = LogicalPositions.Positions.Where(e => e.Name == StripController.ParentAerodrome).FirstOrDefault();
+        if (positions is null)
+        {
+            return Color.Empty;
+        }
 
+        var variation = positions.MagneticVariation;
         track += variation;
 
         var even = true;
