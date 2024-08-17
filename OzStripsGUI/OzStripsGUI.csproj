@@ -27,10 +27,11 @@
     <ItemGroup>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="SocketIO.Serializer.NewtonsoftJson" Version="3.1.1" />
-        <PackageReference Include="System.Text.Json" Version="8.0.3" />
+        <PackageReference Include="System.Text.Json" Version="8.0.4" />
         <PackageReference Include="SocketIOClient" Version="3.1.1" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Update="Controls\TinyStrip.cs" />
         <Compile Update="Controls\SettingsWindowControl.cs">
           <SubType>UserControl</SubType>
         </Compile>
@@ -54,16 +55,16 @@
             <LastGenOutput>Config.Designer.cs</LastGenOutput>
         </EmbeddedResource>
     </ItemGroup>
-    <ItemGroup>
-        <Content Include="ozstrips.ico" />
-    </ItemGroup>
-    <ItemGroup>
-      <Reference Include="$(VatSysDir)\bin\vatSys.exe">
-        <Private>False</Private>
-      </Reference>
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Update="OzStripsConfig.Designer.cs">
+  <ItemGroup>
+    <Content Include="ozstrips.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="vatSys">
+      <HintPath>C:\Program Files (x86)\vatSys\bin\vatSys.exe</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="OzStripsConfig.Designer.cs">
             <DesignTime>True</DesignTime>
             <AutoGen>True</AutoGen>
             <DependentUpon>OzStripsConfig.resx</DependentUpon>
