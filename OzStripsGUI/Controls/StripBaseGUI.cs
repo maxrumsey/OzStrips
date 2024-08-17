@@ -268,7 +268,7 @@ public class StripBaseGUI : UserControl
             if (StripController.DodgyRoute)
             {
                 var routes = new List<string>();
-                Array.ForEach(StripController.ValidRoutes, x => routes.Add(x.route));
+                Array.ForEach(StripController.ValidRoutes, x => routes.Add("(" + x.acft + ") " + x.route));
                 var str = StripController.Route +
                                 "\n---\nPotentially non-compliant route detected! Accepted Routes:\n" + string.Join("\n", routes) + "\nParsed Route: " + StripController.CondensedRoute;
                 if (str != _rtetooltiptext)
