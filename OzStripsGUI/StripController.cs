@@ -709,24 +709,25 @@ public sealed class StripController : IDisposable
             if (ArrDepType != StripArrDepType.DEPARTURE || (int)FDR.State > 5)
             {
                 DodgyRoute = false;
-            }
-
-            // account for situations where aircraft joins route from interim point via sid.
-            if (DodgyRoute)
+            } else
             {
-                var rte = string.Join(" ", CleanVatsysRoute(FDR.Route).Split(' ').Skip(1).ToArray());
-                foreach (var validroute in ValidRoutes)
+                // account for situations where aircraft joins route from interim point via sid.
+                if (DodgyRoute)
                 {
-                    if (validroute.route.Contains(rte))
+                    var rte = string.Join(" ", CleanVatsysRoute(FDR.Route).Split(' ').Skip(1).ToArray());
+                    foreach (var validroute in ValidRoutes)
                     {
-                        DodgyRoute = false;
+                        if (validroute.route.Contains(rte))
+                        {
+                            DodgyRoute = false;
+                        }
                     }
                 }
-            }
 
-            if (!DodgyRoute && CondensedRoute == "FAIL")
-            {
-                DodgyRoute = true;
+                if (!DodgyRoute && CondensedRoute == "FAIL")
+                {
+                    DodgyRoute = true;
+                }
             }
         }
 
