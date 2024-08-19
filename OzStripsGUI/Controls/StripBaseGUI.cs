@@ -219,6 +219,18 @@ public class StripBaseGUI : UserControl
     }
 
     /// <summary>
+    /// Opens the Reroute window.
+    /// </summary>
+    public void OpenRerouteMenu()
+    {
+        var modalChild = new RerouteControl(StripController);
+        var bm = new BaseModal(modalChild, "Reroute :: " + StripController.FDR.Callsign);
+
+        // modalChild.BaseModal = bm;
+        bm.Show(MainForm.MainFormInstance);
+    }
+
+    /// <summary>
     /// Opens the SID window.
     /// </summary>
     public void OpenSIDWindow()
@@ -461,10 +473,17 @@ public class StripBaseGUI : UserControl
     /// <summary>
     /// Opens that VATSYS flight data record mod menu.
     /// </summary>
-    protected void OpenVatsysFDRModMenu()
+    /// <param name="e">Mouse Event Args.</param>
+    protected void OpenVatsysFDRModMenu(MouseEventArgs e)
     {
-        ////MMI.OpenFPWindow(stripController.fdr);
-        StripController.OpenVatsysFDR();
+        if (e.Button == MouseButtons.Left)
+        {
+            StripController.OpenVatsysFDR();
+        }
+        else
+        {
+            OpenRerouteMenu();
+        }
     }
 
     /// <summary>

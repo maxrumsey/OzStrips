@@ -83,7 +83,7 @@ public partial class TinyStrip : StripBaseGUI
 
     private void OpenFDR(object sender, EventArgs e)
     {
-        OpenVatsysFDRModMenu();
+        OpenVatsysFDRModMenu((MouseEventArgs)e);
     }
 
     private void AcidClicked(object sender, EventArgs e)
