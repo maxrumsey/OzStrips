@@ -64,6 +64,7 @@
             this.ls_routes.Name = "ls_routes";
             this.ls_routes.Size = new System.Drawing.Size(400, 121);
             this.ls_routes.TabIndex = 2;
+            this.ls_routes.SelectedIndexChanged += new System.EventHandler(this.RouteSelected);
             // 
             // lb_route
             // 

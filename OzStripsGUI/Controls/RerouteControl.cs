@@ -48,6 +48,12 @@ public partial class RerouteControl : UserControl
 
     private void Save_Click(object sender, EventArgs e)
     {
+        if (!_stripController.FDR.HavePermission)
+        {
+            lb_error.Text = "Permission denied.";
+            return;
+        }
+
         try
         {
             lb_error.Text = string.Empty;
