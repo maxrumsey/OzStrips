@@ -48,4 +48,9 @@ public partial class SettingsWindowControl : UserControl
         Properties.OzStripsSettings.Default.UseVatSysPopup = usevatsyspopup;
         Properties.OzStripsSettings.Default.Save();
     }
+
+    private void SBButtonClick(object sender, EventArgs e)
+    {
+        return;
+    }
 }
