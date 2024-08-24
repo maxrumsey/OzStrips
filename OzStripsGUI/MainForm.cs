@@ -169,10 +169,9 @@ public partial class MainForm : Form
     /// <summary>
     /// Sets the connection status, green is connected, orange/red if not.
     /// </summary>
-    /// <param name="conn">Connection status.</param>
-    public void SetConnStatus(bool conn)
+    public void SetConnStatus()
     {
-        pl_stat.BackColor = conn ? Color.Green : Color.OrangeRed;
+        pl_stat.BackColor = _socketConn.Connected ? Color.Green : Color.OrangeRed;
     }
 
     /// <summary>
@@ -482,7 +481,7 @@ public partial class MainForm : Form
 
     private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        var modalChild = new SettingsWindowControl();
+        var modalChild = new SettingsWindowControl(_socketConn);
         var bm = new BaseModal(modalChild, "OzStrips Settings");
         bm.ReturnEvent += modalChild.ModalReturned;
         bm.Show(MainForm.MainFormInstance);
@@ -494,5 +493,10 @@ public partial class MainForm : Form
         Properties.OzStripsSettings.Default.Save();
         _bayManager.ReloadStrips();
         SetStripSizeCheckBox();
+    }
+
+    private void MainForm_Load(object sender, EventArgs e)
+    {
+        SetConnStatus();
     }
 }

@@ -464,6 +464,7 @@
             Text = "OzStrips";
             FormClosed += MainForm_FormClosed;
             SizeChanged += MainFormSizeChanged;
+            Load += MainForm_Load;
             pl_controlbar.ResumeLayout(false);
             pl_controlbar.PerformLayout();
             pl_atis.ResumeLayout(false);

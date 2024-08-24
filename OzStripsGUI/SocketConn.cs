@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using MaxRumsey.OzStripsPlugin.Gui.DTO;
 using vatsys;
+using static MaxRumsey.OzStripsPlugin.Gui.SocketConn;
 
 namespace MaxRumsey.OzStripsPlugin.Gui;
 
@@ -61,10 +62,11 @@ public sealed class SocketConn : IDisposable
             {
                 _freshClient = true;
                 _connectionMade = true;
-                await _io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName, Network.Me.RealName);
+                await _io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName, Network.Me.RealName, Server);
+                Connected = true;
                 if (mainForm.Visible)
                 {
-                    mainForm.Invoke(() => mainForm.SetConnStatus(true));
+                    mainForm.Invoke(() => mainForm.SetConnStatus());
                 }
 
                 await Task.Delay(TimeSpan.FromSeconds(60));
@@ -80,20 +82,22 @@ public sealed class SocketConn : IDisposable
         _io.OnDisconnected += (_, _) =>
         {
             AddMessage("c: conn lost");
+            Connected = false;
             if (mainForm.Visible)
             {
-                mainForm.Invoke(() => mainForm.SetConnStatus(false));
+                mainForm.Invoke(() => mainForm.SetConnStatus());
             }
         };
 
         _io.OnError += (_, e) =>
         {
             AddMessage("c: error" + e);
+            Connected = false;
             if (mainForm.Visible)
             {
                 mainForm.Invoke(() =>
                 {
-                    mainForm.SetConnStatus(false);
+                    mainForm.SetConnStatus();
                     Errors.Add(new(e), "OzStrips");
                 });
             }
@@ -103,12 +107,13 @@ public sealed class SocketConn : IDisposable
         {
             if (_io.Connected)
             {
-                _io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName);
+                _io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName, Network.Me.RealName, Server);
             }
 
+            Connected = true;
             if (mainForm.Visible)
             {
-                mainForm.Invoke(() => mainForm.SetConnStatus(true));
+                mainForm.Invoke(() => mainForm.SetConnStatus());
             }
         };
 
@@ -208,9 +213,45 @@ public sealed class SocketConn : IDisposable
     }
 
     /// <summary>
+    /// Available server types.
+    /// </summary>
+    public enum Servers
+    {
+        /// <summary>
+        /// Default connection.
+        /// </summary>
+        VATSIM,
+
+        /// <summary>
+        /// Sweatbox 1.
+        /// </summary>
+        SWEATBOX1,
+
+        /// <summary>
+        /// Sweatbox 2.
+        /// </summary>
+        SWEATBOX2,
+
+        /// <summary>
+        /// Sweatbox 3.
+        /// </summary>
+        SWEATBOX3,
+    }
+
+    /// <summary>
     /// Gets the messages, used for debugging.
     /// </summary>
     public List<string> Messages { get; } = [];
+
+    /// <summary>
+    /// Gets or sets the current server type.
+    /// </summary>
+    public Servers Server { get; set; } = Servers.VATSIM;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the client is connected.
+    /// </summary>
+    public bool Connected { get; set; }
 
     /// <summary>
     /// Gets a value indicating whether the user has permission to send data to server.
@@ -318,8 +359,18 @@ public sealed class SocketConn : IDisposable
         _oneMinTimer.Start();
         if (_io.Connected)
         {
-            _io.EmitAsync("client:aerodrome_subscribe", _bayManager.AerodromeName);
+            _io.EmitAsync("client:aerodrome_subscribe", _bayManager.AerodromeName, Network.Me.RealName, Server);
         }
+    }
+
+    /// <summary>
+    /// Sets the server type.
+    /// </summary>
+    /// <param name="type">Server connection type.</param>
+    public void SetServerType(Servers type)
+    {
+        Server = type;
+        SetAerodrome();
     }
 
     /// <summary>

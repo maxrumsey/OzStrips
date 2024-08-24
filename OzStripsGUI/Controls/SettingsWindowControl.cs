@@ -13,12 +13,17 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
 /// </summary>
 public partial class SettingsWindowControl : UserControl
 {
+    private readonly SocketConn _socket;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="SettingsWindowControl"/> class.
     /// </summary>
-    public SettingsWindowControl()
+    /// <param name="socketConn">Socket Controller.</param>
+    public SettingsWindowControl(SocketConn socketConn)
     {
         InitializeComponent();
+
+        _socket = socketConn;
 
         if (Properties.OzStripsSettings.Default.UseVatSysPopup)
         {
@@ -30,6 +35,25 @@ public partial class SettingsWindowControl : UserControl
             rb_vatsys.Checked = false;
             rb_ozstrips.Checked = true;
         }
+
+        var servercontrol = rb_vatsim;
+
+        switch (_socket.Server)
+        {
+            case SocketConn.Servers.SWEATBOX1:
+                servercontrol = rb_sb1;
+                break;
+            case SocketConn.Servers.SWEATBOX2:
+                servercontrol = rb_sb2;
+                break;
+            case SocketConn.Servers.SWEATBOX3:
+                servercontrol = rb_sb3;
+                break;
+            default:
+                break;
+        }
+
+        servercontrol.Checked = true;
     }
 
     /// <summary>
@@ -51,6 +75,21 @@ public partial class SettingsWindowControl : UserControl
 
     private void SBButtonClick(object sender, EventArgs e)
     {
-        return;
+        var type = SocketConn.Servers.VATSIM;
+
+        if (rb_sb1.Checked)
+        {
+            type = SocketConn.Servers.SWEATBOX1;
+        }
+        else if (rb_sb2.Checked)
+        {
+            type = SocketConn.Servers.SWEATBOX2;
+        }
+        else if (rb_sb3.Checked)
+        {
+            type = SocketConn.Servers.SWEATBOX3;
+        }
+
+        _socket.SetServerType(type);
     }
 }
