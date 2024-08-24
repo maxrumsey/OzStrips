@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -19,7 +20,8 @@ public partial class SettingsWindowControl : UserControl
     /// Initializes a new instance of the <see cref="SettingsWindowControl"/> class.
     /// </summary>
     /// <param name="socketConn">Socket Controller.</param>
-    public SettingsWindowControl(SocketConn socketConn)
+    /// <param name="aerodromes">List of aerodromes.</param>
+    public SettingsWindowControl(SocketConn socketConn, List<string> aerodromes)
     {
         InitializeComponent();
 
@@ -54,6 +56,11 @@ public partial class SettingsWindowControl : UserControl
         }
 
         servercontrol.Checked = true;
+
+        foreach (var s in aerodromes)
+        {
+            lb_ads.Items.Add(s);
+        }
     }
 
     /// <summary>
@@ -91,5 +98,39 @@ public partial class SettingsWindowControl : UserControl
         }
 
         _socket.SetServerType(type);
+    }
+
+    private void ADAddClick(object sender, EventArgs e)
+    {
+        if (tb_ad.Text.Length == 4 && tb_ad.Text.All(char.IsLetter))
+        {
+            lb_ads.Items.Add(tb_ad.Text.ToUpper(CultureInfo.InvariantCulture));
+            tb_ad.Text = string.Empty;
+
+            if (MainForm.MainFormInstance is not null)
+            {
+                MainForm.MainFormInstance.SetAerodromeList(lb_ads.Items.OfType<string>().ToList());
+            }
+        }
+    }
+
+    private void ADRemoveClick(object sender, EventArgs e)
+    {
+        if (lb_ads.SelectedIndex != -1)
+        {
+            lb_ads.Items.RemoveAt(lb_ads.SelectedIndex);
+            if (MainForm.MainFormInstance is not null)
+            {
+                MainForm.MainFormInstance.SetAerodromeList(lb_ads.Items.OfType<string>().ToList());
+            }
+        }
+    }
+
+    private void ADKeyPress(object sender, KeyPressEventArgs e)
+    {
+        if (e.KeyChar == (char)Keys.Return)
+        {
+            ADAddClick(sender, e);
+        }
     }
 }

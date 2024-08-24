@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.Gui.Controls;
 using MaxRumsey.OzStripsPlugin.Gui.Properties;
@@ -16,6 +18,7 @@ public partial class MainForm : Form
     private readonly Timer _timer;
     private readonly BayManager _bayManager;
     private readonly SocketConn _socketConn;
+    private readonly List<string> _aerodromes = new List<string>();
     private string _metar = string.Empty;
 
     private bool _readyForConnection;
@@ -38,16 +41,17 @@ public partial class MainForm : Form
         _timer.Tick += UpdateTimer;
         _timer.Start();
 
+        _bayManager = new(flp_main, AllToolStripMenuItem_Click);
+        _socketConn = new(_bayManager, this);
+
         AddAerodrome("YBBN");
         AddAerodrome("YBCG");
         AddAerodrome("YBSU");
-        AddAerodrome("YMML"); // todo: add more ads
-        AddAerodrome("YPDN");
+        AddAerodrome("YMEN");
+        AddAerodrome("YMML");
         AddAerodrome("YPPH");
+        AddAerodrome("YSCB");
         AddAerodrome("YSSY");
-
-        _bayManager = new(flp_main, AllToolStripMenuItem_Click);
-        _socketConn = new(_bayManager, this);
 
         if (_readyForConnection)
         {
@@ -88,6 +92,28 @@ public partial class MainForm : Form
             var cp = base.CreateParams;
             cp.ExStyle |= 0x02000000;  // Turn on WS_EX_COMPOSITED
             return cp;
+        }
+    }
+
+    /// <summary>
+    /// Gets or sets the list of aerodromes.
+    /// </summary>
+    /// <param name="value">The list of aerodromes.</param>
+    public void SetAerodromeList(List<string> value)
+    {
+        _aerodromes.Clear();
+
+        foreach (var item in ts_ad.DropDownItems.OfType<ToolStripItem>().ToArray())
+        {
+            if (item.Tag is null)
+            {
+                ts_ad.DropDownItems.Remove(item);
+            }
+        }
+
+        foreach (var item in value)
+        {
+            AddAerodrome(item);
         }
     }
 
@@ -290,21 +316,14 @@ public partial class MainForm : Form
 
     private void AddAerodrome(string name)
     {
+        _aerodromes.Add(name);
+
         var toolStripMenuItem = new ToolStripMenuItem
         {
             Text = name,
         };
         toolStripMenuItem.Click += (sender, e) => SetAerodrome(name);
         ts_ad.DropDownItems.Add(toolStripMenuItem);
-    }
-
-    private void ToolStripTextBox1_KeyPress(object sender, KeyPressEventArgs e)
-    {
-        if (_bayManager != null && e.KeyChar == Convert.ToChar(Keys.Enter, CultureInfo.InvariantCulture))
-        {
-            SetAerodrome(toolStripTextBox1.Text.ToUpper(CultureInfo.InvariantCulture));
-            e.Handled = true;
-        }
     }
 
     private void Bt_inhibit_Click(object sender, EventArgs e)
@@ -481,7 +500,7 @@ public partial class MainForm : Form
 
     private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        var modalChild = new SettingsWindowControl(_socketConn);
+        var modalChild = new SettingsWindowControl(_socketConn, _aerodromes);
         var bm = new BaseModal(modalChild, "OzStrips Settings");
         bm.ReturnEvent += modalChild.ModalReturned;
         bm.Show(MainForm.MainFormInstance);
@@ -498,5 +517,19 @@ public partial class MainForm : Form
     private void MainForm_Load(object sender, EventArgs e)
     {
         SetConnStatus();
+    }
+
+    private void ModifyButtonClicked(object sender, EventArgs e)
+    {
+        SettingsToolStripMenuItem_Click(this, new EventArgs());
+    }
+
+    private void AerodromeSelectorKeyDown(object sender, KeyPressEventArgs e)
+    {
+        if (_bayManager != null && e.KeyChar == Convert.ToChar(Keys.Enter, CultureInfo.InvariantCulture))
+        {
+            SetAerodrome(toolStripTextBox1.Text.ToUpper(CultureInfo.InvariantCulture));
+            e.Handled = true;
+        }
     }
 }

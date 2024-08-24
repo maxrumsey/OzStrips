@@ -27,31 +27,166 @@
         private void InitializeComponent()
         {
             this.gp_main = new System.Windows.Forms.GroupBox();
+            this.gb_ads = new System.Windows.Forms.GroupBox();
+            this.bt_add = new System.Windows.Forms.Button();
+            this.tb_ad = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.bt_remove = new System.Windows.Forms.Button();
+            this.lb_ads = new System.Windows.Forms.ListBox();
+            this.gb_server = new System.Windows.Forms.GroupBox();
+            this.bt_sbset = new System.Windows.Forms.Button();
+            this.rb_sb3 = new System.Windows.Forms.RadioButton();
+            this.rb_sb2 = new System.Windows.Forms.RadioButton();
+            this.rb_sb1 = new System.Windows.Forms.RadioButton();
+            this.rb_vatsim = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.rb_ozstrips = new System.Windows.Forms.RadioButton();
             this.rb_vatsys = new System.Windows.Forms.RadioButton();
-            this.gb_server = new System.Windows.Forms.GroupBox();
-            this.rb_vatsim = new System.Windows.Forms.RadioButton();
-            this.rb_sb1 = new System.Windows.Forms.RadioButton();
-            this.rb_sb2 = new System.Windows.Forms.RadioButton();
-            this.rb_sb3 = new System.Windows.Forms.RadioButton();
-            this.bt_sbset = new System.Windows.Forms.Button();
             this.gp_main.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.gb_ads.SuspendLayout();
             this.gb_server.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // gp_main
             // 
+            this.gp_main.Controls.Add(this.gb_ads);
             this.gp_main.Controls.Add(this.gb_server);
             this.gp_main.Controls.Add(this.groupBox1);
             this.gp_main.Location = new System.Drawing.Point(4, 4);
             this.gp_main.Name = "gp_main";
-            this.gp_main.Size = new System.Drawing.Size(399, 284);
+            this.gp_main.Size = new System.Drawing.Size(469, 284);
             this.gp_main.TabIndex = 0;
             this.gp_main.TabStop = false;
             this.gp_main.Text = "Settings";
+            // 
+            // gb_ads
+            // 
+            this.gb_ads.Controls.Add(this.bt_add);
+            this.gb_ads.Controls.Add(this.tb_ad);
+            this.gb_ads.Controls.Add(this.label2);
+            this.gb_ads.Controls.Add(this.bt_remove);
+            this.gb_ads.Controls.Add(this.lb_ads);
+            this.gb_ads.Location = new System.Drawing.Point(236, 20);
+            this.gb_ads.Name = "gb_ads";
+            this.gb_ads.Size = new System.Drawing.Size(227, 151);
+            this.gb_ads.TabIndex = 2;
+            this.gb_ads.TabStop = false;
+            this.gb_ads.Text = "Aerodromes";
+            // 
+            // bt_add
+            // 
+            this.bt_add.Location = new System.Drawing.Point(117, 100);
+            this.bt_add.Name = "bt_add";
+            this.bt_add.Size = new System.Drawing.Size(103, 23);
+            this.bt_add.TabIndex = 4;
+            this.bt_add.Text = "Add";
+            this.bt_add.UseVisualStyleBackColor = true;
+            this.bt_add.Click += new System.EventHandler(this.ADAddClick);
+            // 
+            // tb_ad
+            // 
+            this.tb_ad.Location = new System.Drawing.Point(117, 74);
+            this.tb_ad.Name = "tb_ad";
+            this.tb_ad.Size = new System.Drawing.Size(100, 20);
+            this.tb_ad.TabIndex = 3;
+            this.tb_ad.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ADKeyPress);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(117, 61);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(89, 13);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Aerodrome Name";
+            // 
+            // bt_remove
+            // 
+            this.bt_remove.Location = new System.Drawing.Point(118, 20);
+            this.bt_remove.Name = "bt_remove";
+            this.bt_remove.Size = new System.Drawing.Size(103, 23);
+            this.bt_remove.TabIndex = 1;
+            this.bt_remove.Text = "Remove";
+            this.bt_remove.UseVisualStyleBackColor = true;
+            this.bt_remove.Click += new System.EventHandler(this.ADRemoveClick);
+            // 
+            // lb_ads
+            // 
+            this.lb_ads.FormattingEnabled = true;
+            this.lb_ads.Location = new System.Drawing.Point(7, 20);
+            this.lb_ads.Name = "lb_ads";
+            this.lb_ads.Size = new System.Drawing.Size(104, 121);
+            this.lb_ads.TabIndex = 0;
+            // 
+            // gb_server
+            // 
+            this.gb_server.Controls.Add(this.bt_sbset);
+            this.gb_server.Controls.Add(this.rb_sb3);
+            this.gb_server.Controls.Add(this.rb_sb2);
+            this.gb_server.Controls.Add(this.rb_sb1);
+            this.gb_server.Controls.Add(this.rb_vatsim);
+            this.gb_server.Location = new System.Drawing.Point(7, 111);
+            this.gb_server.Name = "gb_server";
+            this.gb_server.Size = new System.Drawing.Size(222, 143);
+            this.gb_server.TabIndex = 1;
+            this.gb_server.TabStop = false;
+            this.gb_server.Text = "Server";
+            // 
+            // bt_sbset
+            // 
+            this.bt_sbset.Location = new System.Drawing.Point(10, 112);
+            this.bt_sbset.Name = "bt_sbset";
+            this.bt_sbset.Size = new System.Drawing.Size(75, 23);
+            this.bt_sbset.TabIndex = 4;
+            this.bt_sbset.Text = "Set";
+            this.bt_sbset.UseVisualStyleBackColor = true;
+            this.bt_sbset.Click += new System.EventHandler(this.SBButtonClick);
+            // 
+            // rb_sb3
+            // 
+            this.rb_sb3.AutoSize = true;
+            this.rb_sb3.Location = new System.Drawing.Point(10, 89);
+            this.rb_sb3.Name = "rb_sb3";
+            this.rb_sb3.Size = new System.Drawing.Size(81, 17);
+            this.rb_sb3.TabIndex = 3;
+            this.rb_sb3.TabStop = true;
+            this.rb_sb3.Text = "Sweatbox 3";
+            this.rb_sb3.UseVisualStyleBackColor = true;
+            // 
+            // rb_sb2
+            // 
+            this.rb_sb2.AutoSize = true;
+            this.rb_sb2.Location = new System.Drawing.Point(10, 66);
+            this.rb_sb2.Name = "rb_sb2";
+            this.rb_sb2.Size = new System.Drawing.Size(81, 17);
+            this.rb_sb2.TabIndex = 2;
+            this.rb_sb2.TabStop = true;
+            this.rb_sb2.Text = "Sweatbox 2";
+            this.rb_sb2.UseVisualStyleBackColor = true;
+            // 
+            // rb_sb1
+            // 
+            this.rb_sb1.AutoSize = true;
+            this.rb_sb1.Location = new System.Drawing.Point(10, 43);
+            this.rb_sb1.Name = "rb_sb1";
+            this.rb_sb1.Size = new System.Drawing.Size(81, 17);
+            this.rb_sb1.TabIndex = 1;
+            this.rb_sb1.TabStop = true;
+            this.rb_sb1.Text = "Sweatbox 1";
+            this.rb_sb1.UseVisualStyleBackColor = true;
+            // 
+            // rb_vatsim
+            // 
+            this.rb_vatsim.AutoSize = true;
+            this.rb_vatsim.Location = new System.Drawing.Point(10, 20);
+            this.rb_vatsim.Name = "rb_vatsim";
+            this.rb_vatsim.Size = new System.Drawing.Size(65, 17);
+            this.rb_vatsim.TabIndex = 0;
+            this.rb_vatsim.TabStop = true;
+            this.rb_vatsim.Text = "VATSIM";
+            this.rb_vatsim.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
@@ -96,84 +231,18 @@
             this.rb_vatsys.Text = "vatSys Popup";
             this.rb_vatsys.UseVisualStyleBackColor = true;
             // 
-            // gb_server
-            // 
-            this.gb_server.Controls.Add(this.bt_sbset);
-            this.gb_server.Controls.Add(this.rb_sb3);
-            this.gb_server.Controls.Add(this.rb_sb2);
-            this.gb_server.Controls.Add(this.rb_sb1);
-            this.gb_server.Controls.Add(this.rb_vatsim);
-            this.gb_server.Location = new System.Drawing.Point(7, 111);
-            this.gb_server.Name = "gb_server";
-            this.gb_server.Size = new System.Drawing.Size(222, 143);
-            this.gb_server.TabIndex = 1;
-            this.gb_server.TabStop = false;
-            this.gb_server.Text = "Server";
-            // 
-            // rb_vatsim
-            // 
-            this.rb_vatsim.AutoSize = true;
-            this.rb_vatsim.Location = new System.Drawing.Point(10, 20);
-            this.rb_vatsim.Name = "rb_vatsim";
-            this.rb_vatsim.Size = new System.Drawing.Size(65, 17);
-            this.rb_vatsim.TabIndex = 0;
-            this.rb_vatsim.TabStop = true;
-            this.rb_vatsim.Text = "VATSIM";
-            this.rb_vatsim.UseVisualStyleBackColor = true;
-            // 
-            // rb_sb1
-            // 
-            this.rb_sb1.AutoSize = true;
-            this.rb_sb1.Location = new System.Drawing.Point(10, 43);
-            this.rb_sb1.Name = "rb_sb1";
-            this.rb_sb1.Size = new System.Drawing.Size(81, 17);
-            this.rb_sb1.TabIndex = 1;
-            this.rb_sb1.TabStop = true;
-            this.rb_sb1.Text = "Sweatbox 1";
-            this.rb_sb1.UseVisualStyleBackColor = true;
-            // 
-            // rb_sb2
-            // 
-            this.rb_sb2.AutoSize = true;
-            this.rb_sb2.Location = new System.Drawing.Point(10, 66);
-            this.rb_sb2.Name = "rb_sb2";
-            this.rb_sb2.Size = new System.Drawing.Size(81, 17);
-            this.rb_sb2.TabIndex = 2;
-            this.rb_sb2.TabStop = true;
-            this.rb_sb2.Text = "Sweatbox 2";
-            this.rb_sb2.UseVisualStyleBackColor = true;
-            // 
-            // rb_sb3
-            // 
-            this.rb_sb3.AutoSize = true;
-            this.rb_sb3.Location = new System.Drawing.Point(10, 89);
-            this.rb_sb3.Name = "rb_sb3";
-            this.rb_sb3.Size = new System.Drawing.Size(81, 17);
-            this.rb_sb3.TabIndex = 3;
-            this.rb_sb3.TabStop = true;
-            this.rb_sb3.Text = "Sweatbox 3";
-            this.rb_sb3.UseVisualStyleBackColor = true;
-            // 
-            // bt_sbset
-            // 
-            this.bt_sbset.Location = new System.Drawing.Point(10, 112);
-            this.bt_sbset.Name = "bt_sbset";
-            this.bt_sbset.Size = new System.Drawing.Size(75, 23);
-            this.bt_sbset.TabIndex = 4;
-            this.bt_sbset.Text = "Set";
-            this.bt_sbset.UseVisualStyleBackColor = true;
-            this.bt_sbset.Click += new System.EventHandler(this.SBButtonClick);
-            // 
             // SettingsWindowControl
             // 
             this.Controls.Add(this.gp_main);
             this.Name = "SettingsWindowControl";
-            this.Size = new System.Drawing.Size(406, 291);
+            this.Size = new System.Drawing.Size(476, 296);
             this.gp_main.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.gb_ads.ResumeLayout(false);
+            this.gb_ads.PerformLayout();
             this.gb_server.ResumeLayout(false);
             this.gb_server.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -189,5 +258,11 @@
         private System.Windows.Forms.RadioButton rb_sb2;
         private System.Windows.Forms.RadioButton rb_sb1;
         private System.Windows.Forms.Button bt_sbset;
+        private System.Windows.Forms.GroupBox gb_ads;
+        private System.Windows.Forms.Button bt_add;
+        private System.Windows.Forms.TextBox tb_ad;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button bt_remove;
+        private System.Windows.Forms.ListBox lb_ads;
     }
 }
