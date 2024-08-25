@@ -237,6 +237,7 @@ public class Bay
     /// </summary>
     public void Orderstrips()
     {
+        ChildPanel.SuspendLayout();
         ChildPanel.ChildPanel.SuspendLayout();
         ChildPanel.ChildPanel.Controls.Clear();
         var queueLen = CountQueued();
@@ -256,6 +257,7 @@ public class Bay
         }
 
         ChildPanel.ChildPanel.ResumeLayout();
+        ChildPanel.ResumeLayout();
     }
 
     /// <summary>
