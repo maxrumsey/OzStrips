@@ -22,6 +22,7 @@ public partial class MainForm : Form
     private string _metar = string.Empty;
 
     private bool _readyForConnection;
+    private bool _postresizechecked = true;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MainForm"/> class.
@@ -353,6 +354,12 @@ public partial class MainForm : Form
             return;
         }
 
+        if (!_postresizechecked)
+        {
+            _postresizechecked = true;
+            _bayManager.Resize();
+        }
+
         Invoke(() =>
         {
             tb_Time.Text = DateTime.UtcNow.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
@@ -362,6 +369,7 @@ public partial class MainForm : Form
 
     private void MainFormSizeChanged(object sender, EventArgs e)
     {
+        _postresizechecked = false;
         _bayManager.Resize();
     }
 
