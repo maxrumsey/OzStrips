@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Globalization;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Timers;
@@ -32,6 +35,15 @@ public sealed class OzStrips : IPlugin, IDisposable
     /// </summary>
     public OzStrips()
     {
+        try
+        {
+            var task = SendError();
+        }
+        catch (Exception ex)
+        {
+            Errors.Add(ex, "OzStrips Error Reporter");
+        }
+
         Network.Connected += Connected;
         Network.Disconnected += Disconnected;
         _ozStripsOpener = new(CustomToolStripMenuItemWindowType.Main, CustomToolStripMenuItemCategory.Windows, new ToolStripMenuItem("OzStrips"));
@@ -41,6 +53,8 @@ public sealed class OzStrips : IPlugin, IDisposable
         MMI.SelectedGroundTrackChanged += SelectedGroundTrackChanged;
         Network.OnlinePilotsChanged += Network_OnlinePilotsChanged;
         _ = CheckVersion();
+
+        AppDomain.CurrentDomain.UnhandledException += ErrorHandler;
     }
 
     /// <summary>
@@ -119,6 +133,25 @@ public sealed class OzStrips : IPlugin, IDisposable
         }
     }
 
+    private static async Task SendError()
+    {
+        if (File.Exists(Helpers.GetFilesFolder() + "ozstrips_log.txt"))
+        {
+            var str = File.ReadAllText(Helpers.GetFilesFolder() + "ozstrips_log.txt");
+#pragma warning disable CA1862 // Use the 'StringComparison' method overloads to perform case-insensitive string comparisons
+            if (str.ToLower(CultureInfo.InvariantCulture).Contains("ozstrips"))
+            {
+                var data = new Dictionary<string, string>
+                {
+                    { "error", str },
+                };
+                File.Delete(Helpers.GetFilesFolder() + "ozstrips_log.txt");
+                await _httpClient.PostAsync(OzStripsConfig.socketioaddr + "/crash", new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json"));
+            }
+#pragma warning restore CA1862 // Use the 'StringComparison' method overloads to perform case-insensitive string comparisons
+        }
+    }
+
     private void Network_OnlinePilotsChanged(object sender, Network.PilotUpdateEventArgs e)
     {
         if (e.Removed && _gui?.IsDisposed == false)
@@ -169,6 +202,15 @@ public sealed class OzStrips : IPlugin, IDisposable
         {
             MMI.InvokeOnGUI(() => _gui.DisconnectVATSIM());
             _gui.MarkConnectionReadiness(_readyForConnection);
+        }
+    }
+
+    private void ErrorHandler(object sender, UnhandledExceptionEventArgs ex)
+    {
+        var error = ex.ExceptionObject as Exception;
+        if (error is not null)
+        {
+            File.WriteAllText(Helpers.GetFilesFolder() + "ozstrips_log.txt", error.Message + "\n" + error.StackTrace);
         }
     }
 
