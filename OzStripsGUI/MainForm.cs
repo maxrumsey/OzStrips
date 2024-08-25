@@ -160,6 +160,35 @@ public partial class MainForm : Form
     }
 
     /// <summary>
+    /// Moves to the next/previous aerodrome.
+    /// </summary>
+    /// <param name="direction">Direction to move in.</param>
+    public void MoveLateralAerodrome(int direction)
+    {
+        var index = 0;
+        for (var i = 0; i < _aerodromes.Count; i++)
+        {
+            if (_aerodromes[i] == _bayManager.AerodromeName)
+            {
+                index = i;
+            }
+        }
+
+        index += direction;
+        if (index >= _aerodromes.Count)
+        {
+            index = 0;
+        }
+
+        if (index < 0)
+        {
+            index = _aerodromes.Count - 1;
+        }
+
+        SetAerodrome(_aerodromes[index]);
+    }
+
+    /// <summary>
     /// Sets the METAR information. Called from SocketConn.
     /// </summary>
     /// <param name="metar">The METAR.</param>
@@ -299,6 +328,12 @@ public partial class MainForm : Form
                 return true;
             case Keys.Tab:
                 _bayManager.CockStrip();
+                return true;
+            case Keys.OemOpenBrackets:
+                MoveLateralAerodrome(-1);
+                return true;
+            case Keys.OemCloseBrackets:
+                MoveLateralAerodrome(1);
                 return true;
             default:
                 break;
