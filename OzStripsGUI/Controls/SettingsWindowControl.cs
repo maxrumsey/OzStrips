@@ -133,4 +133,9 @@ public partial class SettingsWindowControl : UserControl
             ADAddClick(sender, e);
         }
     }
+
+    private void KeyboardCommandsOpened(object sender, LinkLabelLinkClickedEventArgs e)
+    {
+        System.Diagnostics.Process.Start("https://maxrumsey.xyz/OzStrips/reference/keyboardcommands/");
+    }
 }
