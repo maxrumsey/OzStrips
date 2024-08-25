@@ -198,8 +198,9 @@ public class Bay
     /// Adds the strip to the bay.
     /// </summary>
     /// <param name="stripController">The strip.</param>
+    /// <param name="inhibitreorders">Whether or not to inhibit reorders.</param>
     /// <remarks>todo: check for dupes.</remarks>
-    public void AddStrip(StripController stripController)
+    public void AddStrip(StripController stripController, bool inhibitreorders)
     {
         var strip = new StripListItem
         {
@@ -208,7 +209,10 @@ public class Bay
         };
 
         Strips.Add(strip); // todo: add control action
-        Orderstrips();
+        if (!inhibitreorders)
+        {
+            Orderstrips();
+        }
     }
 
     /// <summary>

@@ -248,9 +248,7 @@ public class StripBaseGUI : UserControl
     /// <summary>
     /// Updates the strip.
     /// </summary>
-#pragma warning disable CA1502 // Avoid excessive complexity
     public void UpdateStrip()
-#pragma warning restore CA1502 // Avoid excessive complexity
     {
         SuspendLayout();
         if (FDR == null)

@@ -465,8 +465,9 @@ public sealed class StripController : IDisposable
     /// <param name="fdr">The flight data record.</param>
     /// <param name="bayManager">The bay manager.</param>
     /// <param name="socketConn">The socket connection.</param>
+    /// <param name="inhibitReorders">Whether or not to inhibit strip reordering.</param>
     /// <returns>The appropriate strip controller for the FDR.</returns>
-    public static StripController UpdateFDR(FDR fdr, BayManager bayManager, SocketConn socketConn)
+    public static StripController UpdateFDR(FDR fdr, BayManager bayManager, SocketConn socketConn, bool inhibitReorders = false)
     {
         foreach (var controller in StripControllers)
         {
@@ -485,7 +486,7 @@ public sealed class StripController : IDisposable
 
         // todo: add this logic into separate static function
         var stripController = new StripController(fdr, bayManager, socketConn);
-        bayManager.AddStrip(stripController);
+        bayManager.AddStrip(stripController, true, inhibitReorders);
         return stripController;
     }
 

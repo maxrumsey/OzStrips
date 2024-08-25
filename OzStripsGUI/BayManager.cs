@@ -244,7 +244,12 @@ public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMe
 
         foreach (var fdr in FDP2.GetFDRs)
         {
-            StripController.UpdateFDR(fdr, this, socketConn);
+            StripController.UpdateFDR(fdr, this, socketConn, true);
+        }
+
+        foreach (var bay in Bays)
+        {
+            bay.Orderstrips();
         }
     }
 
@@ -339,7 +344,8 @@ public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMe
     /// </summary>
     /// <param name="stripController">The strip controller to add.</param>
     /// <param name="save">If the strip controller should be saved.</param>
-    public void AddStrip(StripController stripController, bool save = true)
+    /// <param name="inhibitreorders">Whether or not to inhibit strip reodering.</param>
+    public void AddStrip(StripController stripController, bool save = true, bool inhibitreorders = false)
     {
         if (!stripController.DetermineSCValidity())
         {
@@ -350,7 +356,7 @@ public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMe
         {
             if (bay.ResponsibleFor(stripController.CurrentBay))
             {
-                bay.AddStrip(stripController);
+                bay.AddStrip(stripController, inhibitreorders);
             }
         }
 
@@ -474,7 +480,7 @@ public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMe
 
                 strip.ClearStripControl();
                 strip.CreateStripObj();
-                AddStrip(strip, false);
+                AddStrip(strip, false, true);
             }
 
             foreach (var bay in Bays)
