@@ -1,4 +1,20 @@
 # Changelog
+## v0.4.1
+### Features
+- Made OzStrips responsive to changes in window size.
+- Added the tiny strip.
+- Added the ability to customise aerodrome list.
+- Added a few keyboard commands.
+- Added ability to use OzStrips on the sweatbox.
+- Added the reroute menu.
+- Added aircraft-types to routes.
+- Added error reporting to server.
+
+### Bugfixes
+- Fixed bug with cruising altitude being above F410 and causing a NSCA alert.
+- Optimised strips and moving between aerodromes.
+- Fixed issue where server connection light would not update on super fast connections.
+
 ## v0.3.7
 ### Bugfixes
 - Fix crashing issues.
