@@ -389,6 +389,9 @@ public class StripBaseGUI : UserControl
         var first = FDR.ParsedRoute.First().Intersection.LatLong;
         var last = FDR.ParsedRoute.Last().Intersection.LatLong;
 
+        int[] eastRVSM = [41000, 45000, 49000];
+        int[] westRVSM = [43000, 47000, 51000];
+
         if (first == last)
         {
             return Color.Empty;
@@ -423,6 +426,17 @@ public class StripBaseGUI : UserControl
         else
         {
             StripToolTips["cfltooltip"].Active = false;
+        }
+
+        if (FDR.RFL >= 41000 && ((even && westRVSM.Contains(FDR.RFL)) || (!even && eastRVSM.Contains(FDR.RFL))))
+        {
+            colour = Color.Empty;
+            StripToolTips["cfltooltip"].Active = false;
+        }
+        else if (FDR.RFL >= 41000 && StripController.ArrDepType == StripArrDepType.DEPARTURE)
+        {
+            colour = Color.OrangeRed;
+            StripToolTips["cfltooltip"].Active = true;
         }
 
         return colour;
