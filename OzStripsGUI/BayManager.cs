@@ -140,6 +140,28 @@ public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMe
     }
 
     /// <summary>
+    /// SidTriggers the selected strip.
+    /// </summary>
+    public void SidTrigger()
+    {
+        if (PickedController is not null)
+        {
+            PickedController.SIDTrigger();
+        }
+    }
+
+    /// <summary>
+    /// Cocks the selected strip.
+    /// </summary>
+    public void CockStrip()
+    {
+        if (PickedController is not null)
+        {
+            PickedController.CockStrip();
+        }
+    }
+
+    /// <summary>
     /// Inhibit the strip.
     /// </summary>
     public void Inhibit()
@@ -568,6 +590,24 @@ public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMe
             if (PickedController != null)
             {
                 FindBay(PickedController)?.ChangeStripPosition(PickedController, relPos);
+            }
+        }
+        catch (Exception ex)
+        {
+            Errors.Add(ex, "OzStrips");
+        }
+    }
+
+    /// <summary>
+    /// Queues up the selected strip.
+    /// </summary>
+    public void QueueUp()
+    {
+        try
+        {
+            if (PickedController != null)
+            {
+                FindBay(PickedController)?.QueueUp();
             }
         }
         catch (Exception ex)

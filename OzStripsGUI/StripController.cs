@@ -554,6 +554,14 @@ public sealed class StripController : IDisposable
     }
 
     /// <summary>
+    /// Cocks the selected strip.
+    /// </summary>
+    public void CockStrip()
+    {
+        _stripControl?.Cock(-1);
+    }
+
+    /// <summary>
     /// That the strip has taken off.
     /// </summary>
     public void TakeOff()

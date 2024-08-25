@@ -275,25 +275,41 @@ public partial class MainForm : Form
         }
     }
 
-    /*
-     * GUI Below
-     */
-
-    /// <inheritdoc/>
+    /// <summary>
+    /// Overrides keypress event to capture all keypresses.
+    /// </summary>
+    /// <param name="msg">Sender.</param>
+    /// <param name="keyData">Key.</param>
+    /// <returns>Handled.</returns>
     protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
     {
         switch (keyData)
         {
             case Keys.Up:
                 _bayManager.PositionKey(1);
-                break;
+                return true;
             case Keys.Down:
                 _bayManager.PositionKey(-1);
+                return true;
+            case Keys.Space:
+                _bayManager.QueueUp();
+                return true;
+            case Keys.Enter:
+                _bayManager.SidTrigger();
+                return true;
+            case Keys.Tab:
+                _bayManager.CockStrip();
+                return true;
+            default:
                 break;
         }
 
         return base.ProcessCmdKey(ref msg, keyData);
     }
+
+    /*
+     * GUI Below
+     */
 
     private void UpdateTimer(object sender, EventArgs e)
     {
