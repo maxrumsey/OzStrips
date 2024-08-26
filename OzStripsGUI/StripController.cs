@@ -507,6 +507,17 @@ public sealed class StripController : IDisposable
     }
 
     /// <summary>
+    /// Marks all strips as awaiting routes to be fetched from the server. Called on connection establishment.
+    /// </summary>
+    public static void MarkAllStripsAsAwaitingRoutes()
+    {
+        foreach (var strip in StripControllers)
+        {
+            strip.RequestedRoutes = DateTime.MaxValue;
+        }
+    }
+
+    /// <summary>
     /// Receives a SC DTO object, updates relevant SC.
     /// </summary>
     /// <param name="stripControllerData">The strip controller data.</param>

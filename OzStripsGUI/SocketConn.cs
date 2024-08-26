@@ -69,6 +69,8 @@ public sealed class SocketConn : IDisposable
                     mainForm.Invoke(() => mainForm.SetConnStatus());
                 }
 
+                StripController.MarkAllStripsAsAwaitingRoutes();
+
                 await Task.Delay(TimeSpan.FromSeconds(60));
                 _freshClient = false;
             }
