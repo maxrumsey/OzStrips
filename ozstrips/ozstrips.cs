@@ -37,7 +37,7 @@ public sealed class OzStrips : IPlugin, IDisposable
     {
         try
         {
-            var task = SendError();
+            _ = SendError();
         }
         catch (Exception ex)
         {
@@ -135,7 +135,7 @@ public sealed class OzStrips : IPlugin, IDisposable
 
     private static async Task SendError()
     {
-        if (File.Exists(Helpers.GetFilesFolder() + "ozstrips_log.txt"))
+      if (File.Exists(Helpers.GetFilesFolder() + "ozstrips_log.txt"))
         {
             var str = File.ReadAllText(Helpers.GetFilesFolder() + "ozstrips_log.txt");
 #pragma warning disable CA1862 // Use the 'StringComparison' method overloads to perform case-insensitive string comparisons
@@ -146,8 +146,9 @@ public sealed class OzStrips : IPlugin, IDisposable
                     { "error", str },
                 };
                 File.Delete(Helpers.GetFilesFolder() + "ozstrips_log.txt");
-                await _httpClient.PostAsync(OzStripsConfig.socketioaddr + "/crash", new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json"));
-            }
+                var uri = (OzStripsConfig.socketioaddr + "/crash").Replace("//", "/").Replace(":/", "://");
+                _ = await _httpClient.PostAsync(uri, new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json")).ConfigureAwait(false);
+                }
 #pragma warning restore CA1862 // Use the 'StringComparison' method overloads to perform case-insensitive string comparisons
         }
     }
