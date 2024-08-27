@@ -1,4 +1,11 @@
 # Changelog
+## v0.4.2
+### Bugfixes
+- Fixed race condition causing a NRE
+- Fixed bug with error message reported.
+- Fixed bug with error message related to network connections.
+- Optimised some control creation.
+
 ## v0.4.1
 ### Features
 - Made OzStrips responsive to changes in window size.
