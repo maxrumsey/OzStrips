@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.Gui.DTO;
 
@@ -247,9 +248,17 @@ public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMe
             StripController.UpdateFDR(fdr, this, socketConn, true);
         }
 
-        foreach (var bay in Bays)
+        var instance = MainForm.MainFormInstance;
+        if (instance is not null)
         {
-            bay.Orderstrips();
+            LockWindowUpdate(instance.Handle);
+
+            foreach (var bay in Bays)
+            {
+                bay.Orderstrips();
+            }
+
+            LockWindowUpdate(IntPtr.Zero);
         }
     }
 
@@ -621,6 +630,9 @@ public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMe
             Errors.Add(ex, "OzStrips");
         }
     }
+
+    [DllImport("user32.dll")]
+    private static extern long LockWindowUpdate(IntPtr handle);
 
     /// <summary>
     /// Clears all vertical boards.
