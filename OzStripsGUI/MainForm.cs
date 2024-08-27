@@ -370,7 +370,10 @@ public partial class MainForm : Form
     private void MainFormSizeChanged(object sender, EventArgs e)
     {
         _postresizechecked = false;
-        _bayManager.Resize();
+        if (_bayManager is not null)
+        {
+            _bayManager.Resize();
+        }
     }
 
     private void AddAerodrome(string name)
