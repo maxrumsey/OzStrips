@@ -51,6 +51,12 @@ public sealed class StripController : IDisposable
             CurrentBay = StripBay.BAY_ARRIVAL;
         }
 
+        if (!DetermineSCValidity())
+        {
+            Dispose();
+            return;
+        }
+
         CreateStripObj();
     }
 
