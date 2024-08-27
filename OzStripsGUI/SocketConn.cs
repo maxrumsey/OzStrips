@@ -21,6 +21,7 @@ public sealed class SocketConn : IDisposable
     private bool _freshClient = true;
     private bool _connectionMade;
     private Timer? _oneMinTimer;
+    private bool _disposed;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SocketConn"/> class.
@@ -409,10 +410,10 @@ public sealed class SocketConn : IDisposable
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             _io.ConnectAsync().ConfigureAwait(false);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            await Task.Delay(TimeSpan.FromSeconds(60));
-            if (!_connectionMade)
+            await Task.Delay(TimeSpan.FromSeconds(15));
+            if (!_connectionMade && !_disposed)
             {
-                Util.ShowErrorBox("Connection Failed.\n" +
+                Util.ShowErrorBox("OzStrips Connection Failed.\n" +
                     "This may be an issue with an outstanding Navigraph connection within vatSys.\n" +
                     "Go to Help -> Documentation -> FAQ for more information.");
             }
@@ -436,6 +437,7 @@ public sealed class SocketConn : IDisposable
     {
         _oneMinTimer?.Dispose();
         _io.Dispose();
+        _disposed = true;
     }
 
     /// <summary>

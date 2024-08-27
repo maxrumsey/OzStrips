@@ -502,6 +502,7 @@ public partial class MainForm : Form
     private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
     {
         _socketConn.Close();
+        _socketConn.Dispose();
     }
 
     private void Bt_pdc_Click(object sender, EventArgs e)
