@@ -30,7 +30,7 @@ public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMe
     /// <summary>
     /// Gets or sets the picked controller.
     /// </summary>
-    public StripController? PickedController { get; set; }
+    public IStripController? PickedController { get; set; }
 
     /// <summary>
     /// Gets or sets the number of present bays.
@@ -45,7 +45,7 @@ public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMe
     /// <summary>
     /// Gets the list of bays.
     /// </summary>
-    public List<Bay> Bays { get; } = [];
+    public List<IBay> Bays { get; } = [];
 
     /// <summary>
     /// Sets the last selected track's FDR in vatSys.
@@ -75,7 +75,7 @@ public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMe
     /// <param name="bayDTO">The bay data.</param>
     public void UpdateOrder(BayDTO bayDTO)
     {
-        Bay? bay = null;
+        IBay? bay = null;
         foreach (var currentBay in Bays)
         {
             if (currentBay.BayTypes.Contains(bayDTO.bay))
@@ -225,7 +225,7 @@ public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMe
     /// Deletes the specified strip.
     /// </summary>
     /// <param name="strip">The strip to delete.</param>
-    public void DeleteStrip(StripController strip)
+    public void DeleteStrip(IStripController strip)
     {
         strip.SendDeleteMessage();
         FindBay(strip)?.RemoveStrip(strip, true);
@@ -267,7 +267,7 @@ public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMe
     /// </summary>
     /// <param name="controller">The controller.</param>
     /// <param name="sendToVatsys">Selects relevant track in vatSys.</param>
-    public void SetPicked(StripController controller, bool sendToVatsys = false)
+    public void SetPicked(IStripController controller, bool sendToVatsys = false)
     {
         PickedController?.SetHMIPicked(false);
         PickedController = controller;
@@ -300,7 +300,7 @@ public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMe
     {
         if (fdr is not null)
         {
-            StripController? foundSC = null;
+            IStripController? foundSC = null;
             foreach (var controller in StripController.StripControllers)
             {
                 if (controller.FDR.Callsign == fdr.Callsign)
@@ -354,7 +354,7 @@ public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMe
     /// <param name="stripController">The strip controller to add.</param>
     /// <param name="save">If the strip controller should be saved.</param>
     /// <param name="inhibitreorders">Whether or not to inhibit strip reodering.</param>
-    public void AddStrip(StripController stripController, bool save = true, bool inhibitreorders = false)
+    public void AddStrip(IStripController stripController, bool save = true, bool inhibitreorders = false)
     {
         if (!stripController.DetermineSCValidity())
         {
@@ -380,7 +380,7 @@ public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMe
     /// </summary>
     /// <param name="stripController">The strip.</param>
     /// <returns>The bay if the name matches.</returns>
-    public Bay? FindBay(StripController stripController)
+    public IBay? FindBay(IStripController stripController)
     {
         foreach (var bay in Bays)
         {
@@ -397,7 +397,7 @@ public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMe
     /// Updates the bay from the controller.
     /// </summary>
     /// <param name="stripController">The strip controller.</param>
-    public void UpdateBay(StripController stripController)
+    public void UpdateBay(IStripController stripController)
     {
         foreach (var bay in Bays)
         {
@@ -422,7 +422,7 @@ public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMe
     /// </summary>
     /// <param name="bay">The bay.</param>
     /// <param name="verticalBoardNumber">The vertical board number.</param>
-    public void AddBay(Bay bay, int verticalBoardNumber)
+    public void AddBay(IBay bay, int verticalBoardNumber)
     {
         if (verticalBoardNumber >= _flpVerticalBoards.Count)
         {

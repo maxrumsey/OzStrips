@@ -41,4 +41,45 @@ public class StripControllerTests
 
         Assert.AreEqual(StripArrDepType.DEPARTURE, type);
     }
+
+    [TestMethod]
+    public void TestDefaultBayAssignment()
+    {
+        var fdr = new FDP2.FDR();
+        fdr.DepAirport = "YSSY";
+        fdr.DesAirport = "YMML";
+
+        _bayManager.Setup(x => x.AerodromeName).Returns("YMML");
+
+        var sut = new StripController(fdr, _bayManager.Object, _socketConn.Object);
+        var bay = sut.CurrentBay;
+
+        Assert.AreEqual(StripBay.BAY_ARRIVAL, bay);
+    }
+
+    [TestMethod]
+    public void TestHeadingParsing()
+    {
+        var fdr = new FDP2.FDR();
+        fdr.GlobalOpData = "H180";
+
+        var sut = new StripController(fdr, _bayManager.Object, _socketConn.Object);
+
+        var heading = sut.HDG;
+
+        Assert.AreEqual("180", heading);
+    }
+
+    [TestMethod]
+    public void TestFirstRouteWpt()
+    {
+        var fdr = new FDP2.FDR();
+        fdr.RouteNoParse = "DOSEL1/27 DCT MANDA";
+
+        var sut = new StripController(fdr, _bayManager.Object, _socketConn.Object);
+
+        var firstwpt = sut.FirstWpt;
+
+        Assert.AreEqual("MANDA", firstwpt);
+    }
 }

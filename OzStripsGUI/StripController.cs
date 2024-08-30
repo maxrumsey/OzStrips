@@ -18,7 +18,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui;
 /// <summary>
 /// Responsible for strip logic, represents a Vatsys FDR.
 /// </summary>
-public sealed class StripController : IDisposable
+public sealed class StripController : IStripController
 {
     private static readonly Regex _headingRegex = new(@"H(\d{3})");
     private static readonly Regex _routeRegex = new(@"^[^\d/]+$");
@@ -28,8 +28,6 @@ public sealed class StripController : IDisposable
     private readonly IBayManager _bayManager;
     private readonly ISocketConn _socketConn;
     ////private readonly StripLayoutTypes StripType;
-
-    private StripBaseGUI? _stripControl;
 
     private bool _crossing;
 
@@ -55,7 +53,7 @@ public sealed class StripController : IDisposable
     /// <summary>
     /// Gets a list of strip controllers.
     /// </summary>
-    public static List<StripController> StripControllers { get; } = [];
+    public static List<IStripController> StripControllers { get; } = [];
 
     /// <summary>
     /// Gets or sets the strip holder control.
@@ -98,9 +96,9 @@ public sealed class StripController : IDisposable
     public string ParentAerodrome { get; }
 
     /// <summary>
-    /// Gets the flight data record.
+    /// Gets or sets the flight data record.
     /// </summary>
-    public FDR FDR { get; internal set; }
+    public FDR FDR { get; set; }
 
     /// <summary>
     /// Gets or sets the current strip bay.
@@ -121,9 +119,14 @@ public sealed class StripController : IDisposable
         set
         {
             _crossing = value;
-            _stripControl?.SetCross();
+            StripControl?.SetCross();
         }
     }
+
+    /// <summary>
+    /// Gets or sets the strip control.
+    /// </summary>
+    public StripBaseGUI? StripControl { get; set; }
 
     /// <summary>
     /// Gets the arrival or departure type.
@@ -426,7 +429,7 @@ public sealed class StripController : IDisposable
     /// </summary>
     /// <param name="name">The aircraft callsign.</param>
     /// <returns>The aircraft's FDR.</returns>
-    public static StripController? GetController(string name)
+    public static IStripController? GetController(string name)
     {
         foreach (var controller in StripControllers)
         {
@@ -465,7 +468,7 @@ public sealed class StripController : IDisposable
     /// <param name="socketConn">The socket connection.</param>
     /// <param name="inhibitReorders">Whether or not to inhibit strip reordering.</param>
     /// <returns>The appropriate strip controller for the FDR.</returns>
-    public static StripController UpdateFDR(FDR fdr, IBayManager bayManager, ISocketConn socketConn, bool inhibitReorders = false)
+    public static IStripController UpdateFDR(FDR fdr, IBayManager bayManager, ISocketConn socketConn, bool inhibitReorders = false)
     {
         foreach (var controller in StripControllers)
         {
@@ -536,14 +539,13 @@ public sealed class StripController : IDisposable
                 }
 
                 controller.CurrentBay = stripControllerData.bay;
-                controller._stripControl?.Cock(stripControllerData.cockLevel, false);
+                controller.StripControl?.Cock(stripControllerData.cockLevel, false);
                 controller.TakeOffTime = stripControllerData.TOT == "\0" ?
                     null :
                     DateTime.Parse(stripControllerData.TOT, CultureInfo.InvariantCulture);
 
                 controller.Remark = !string.IsNullOrWhiteSpace(stripControllerData.remark) ? stripControllerData.remark : string.Empty;
-                controller._crossing = stripControllerData.crossing;
-                controller._stripControl?.SetCross(false);
+                controller.Crossing = stripControllerData.crossing;
                 controller.Ready = stripControllerData.ready;
                 if (changeBay)
                 {
@@ -575,7 +577,7 @@ public sealed class StripController : IDisposable
     /// <param name="picked">True if picked, false otherwise.</param>
     public void SetHMIPicked(bool picked)
     {
-        _stripControl?.HMI_TogglePick(picked);
+        StripControl?.HMI_TogglePick(picked);
     }
 
     /// <summary>
@@ -583,7 +585,7 @@ public sealed class StripController : IDisposable
     /// </summary>
     public void CockStrip()
     {
-        _stripControl?.Cock(-1);
+        StripControl?.Cock(-1);
     }
 
     /// <summary>
@@ -648,19 +650,19 @@ public sealed class StripController : IDisposable
         ////stripHolderControl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         StripHolderControl.Size = new(100, 100);
 
-        _stripControl = OzStripsSettings.Default.StripSize switch
+        StripControl = OzStripsSettings.Default.StripSize switch
         {
             0 => new TinyStrip(this),
             2 => new Strip(this),
             _ => new LittleStrip(this),
         };
 
-        _stripControl.Initialise();
-        _stripControl.UpdateStrip();
-        _stripControl.HMI_TogglePick(_bayManager.PickedController == this);
+        StripControl.Initialise();
+        StripControl.UpdateStrip();
+        StripControl.HMI_TogglePick(_bayManager.PickedController == this);
 
-        StripHolderControl.Size = _stripControl.Size with { Height = _stripControl.Size.Height + 6 };
-        StripHolderControl.Controls.Add(_stripControl);
+        StripHolderControl.Size = StripControl.Size with { Height = StripControl.Size.Height + 6 };
+        StripHolderControl.Controls.Add(StripControl);
     }
 
     /// <summary>
@@ -764,7 +766,7 @@ public sealed class StripController : IDisposable
             }
         }
 
-        _stripControl?.UpdateStrip();
+        StripControl?.UpdateStrip();
     }
 
     /// <summary>
@@ -892,7 +894,7 @@ public sealed class StripController : IDisposable
     /// <inheritdoc/>
     public void Dispose()
     {
-        _stripControl?.Dispose();
+        StripControl?.Dispose();
         StripHolderControl?.Dispose();
     }
 

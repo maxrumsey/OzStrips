@@ -421,7 +421,7 @@ public class SocketConn : ISocketConn
     /// <returns>The cache data transfer object.</returns>
     private static CacheDTO CreateCacheDTO()
     {
-        return new() { strips = StripController.StripControllers.ConvertAll(x => (StripControllerDTO)x), };
+        return new() { strips = StripController.StripControllers.ConvertAll(x => (StripControllerDTO)(StripController)x), };
     }
 
     private void ToggleFresh(object sender, ElapsedEventArgs e)
