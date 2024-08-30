@@ -1,4 +1,4 @@
-{
+﻿{
     "$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
     "settings": {
         "indentation": {
@@ -6,10 +6,10 @@
             "indentationSize": 4
         },
         "documentationRules": {
-            "documentExposedElements": true,
+            "documentExposedElements": false,
             "documentInternalElements": false,
             "documentPrivateElements": false,
-            "documentInterfaces": true,
+            "documentInterfaces": false,
             "documentPrivateFields": false,
             "documentationCulture": "en-US",
             "xmlHeader": false,

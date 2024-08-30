@@ -19,7 +19,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui;
 /// </remarks>
 /// <param name="main">The flow layout for the bay.</param>
 /// <param name="layoutMethod">The current layout caller.</param>
-public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMethod)
+public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMethod) : IBayManager
 {
     private readonly List<FlowLayoutPanel> _flpVerticalBoards = [];
 

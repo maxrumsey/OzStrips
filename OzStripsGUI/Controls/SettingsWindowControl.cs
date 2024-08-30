@@ -42,13 +42,13 @@ public partial class SettingsWindowControl : UserControl
 
         switch (_socket.Server)
         {
-            case SocketConn.Servers.SWEATBOX1:
+            case ISocketConn.Servers.SWEATBOX1:
                 servercontrol = rb_sb1;
                 break;
-            case SocketConn.Servers.SWEATBOX2:
+            case ISocketConn.Servers.SWEATBOX2:
                 servercontrol = rb_sb2;
                 break;
-            case SocketConn.Servers.SWEATBOX3:
+            case ISocketConn.Servers.SWEATBOX3:
                 servercontrol = rb_sb3;
                 break;
             default:
@@ -82,19 +82,19 @@ public partial class SettingsWindowControl : UserControl
 
     private void SBButtonClick(object sender, EventArgs e)
     {
-        var type = SocketConn.Servers.VATSIM;
+        var type = ISocketConn.Servers.VATSIM;
 
         if (rb_sb1.Checked)
         {
-            type = SocketConn.Servers.SWEATBOX1;
+            type = ISocketConn.Servers.SWEATBOX1;
         }
         else if (rb_sb2.Checked)
         {
-            type = SocketConn.Servers.SWEATBOX2;
+            type = ISocketConn.Servers.SWEATBOX2;
         }
         else if (rb_sb3.Checked)
         {
-            type = SocketConn.Servers.SWEATBOX3;
+            type = ISocketConn.Servers.SWEATBOX3;
         }
 
         _socket.SetServerType(type);

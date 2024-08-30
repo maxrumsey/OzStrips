@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using MaxRumsey.OzStripsPlugin.Gui.DTO;
 using vatsys;
+using static MaxRumsey.OzStripsPlugin.Gui.ISocketConn;
 using static MaxRumsey.OzStripsPlugin.Gui.SocketConn;
 
 namespace MaxRumsey.OzStripsPlugin.Gui;
@@ -11,7 +12,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui;
 /// <summary>
 /// Handles communications by the sockets.
 /// </summary>
-public sealed class SocketConn : IDisposable
+public class SocketConn : ISocketConn
 {
     private readonly SocketIOClient.SocketIO _io;
     private readonly BayManager _bayManager;
@@ -213,32 +214,6 @@ public sealed class SocketConn : IDisposable
                 SendCache();
             }
         });
-    }
-
-    /// <summary>
-    /// Available server types.
-    /// </summary>
-    public enum Servers
-    {
-        /// <summary>
-        /// Default connection.
-        /// </summary>
-        VATSIM,
-
-        /// <summary>
-        /// Sweatbox 1.
-        /// </summary>
-        SWEATBOX1,
-
-        /// <summary>
-        /// Sweatbox 2.
-        /// </summary>
-        SWEATBOX2,
-
-        /// <summary>
-        /// Sweatbox 3.
-        /// </summary>
-        SWEATBOX3,
     }
 
     /// <summary>

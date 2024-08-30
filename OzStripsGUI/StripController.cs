@@ -25,8 +25,8 @@ public sealed class StripController : IDisposable
     private static readonly Regex _sidRouteRegex = new(@"^[\w\d]+\/\d\d");
     private static readonly Regex _gpscoordRegex = new(@"^[\d]+\w[\d]+\w");
 
-    private readonly BayManager _bayManager;
-    private readonly SocketConn _socketConn;
+    private readonly IBayManager _bayManager;
+    private readonly ISocketConn _socketConn;
     ////private readonly StripLayoutTypes StripType;
 
     private StripBaseGUI? _stripControl;
@@ -39,7 +39,7 @@ public sealed class StripController : IDisposable
     /// <param name="fdr">The flight data record.</param>
     /// <param name="bayManager">Gets or sets the bay manager.</param>
     /// <param name="socketConn">The socket connection.</param>
-    public StripController(FDR fdr, BayManager bayManager, SocketConn socketConn)
+    public StripController(FDR fdr, IBayManager bayManager, ISocketConn socketConn)
     {
         FDR = fdr;
         _bayManager = bayManager;
@@ -50,14 +50,6 @@ public sealed class StripController : IDisposable
         {
             CurrentBay = StripBay.BAY_ARRIVAL;
         }
-
-        if (!DetermineSCValidity())
-        {
-            Dispose();
-            return;
-        }
-
-        CreateStripObj();
     }
 
     /// <summary>
@@ -473,7 +465,7 @@ public sealed class StripController : IDisposable
     /// <param name="socketConn">The socket connection.</param>
     /// <param name="inhibitReorders">Whether or not to inhibit strip reordering.</param>
     /// <returns>The appropriate strip controller for the FDR.</returns>
-    public static StripController UpdateFDR(FDR fdr, BayManager bayManager, SocketConn socketConn, bool inhibitReorders = false)
+    public static StripController UpdateFDR(FDR fdr, IBayManager bayManager, ISocketConn socketConn, bool inhibitReorders = false)
     {
         foreach (var controller in StripControllers)
         {
@@ -492,6 +484,7 @@ public sealed class StripController : IDisposable
 
         // todo: add this logic into separate static function
         var stripController = new StripController(fdr, bayManager, socketConn);
+        stripController.Setup();
         bayManager.AddStrip(stripController, true, inhibitReorders);
         return stripController;
     }
@@ -560,6 +553,20 @@ public sealed class StripController : IDisposable
                 return;
             }
         }
+    }
+
+    /// <summary>
+    /// Performs initial setup checks and creations.
+    /// </summary>
+    public void Setup()
+    {
+        if (!DetermineSCValidity())
+        {
+            Dispose();
+            return;
+        }
+
+        CreateStripObj();
     }
 
     /// <summary>
