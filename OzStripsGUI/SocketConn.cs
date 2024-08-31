@@ -70,7 +70,7 @@ public sealed class SocketConn : IDisposable
                     mainForm.Invoke(() => mainForm.SetConnStatus());
                 }
 
-                StripController.MarkAllStripsAsAwaitingRoutes();
+                _bayManager.StripRepository.MarkAllStripsAsAwaitingRoutes();
 
                 await Task.Delay(TimeSpan.FromSeconds(60));
                 _freshClient = false;
@@ -129,7 +129,7 @@ public sealed class SocketConn : IDisposable
 
             if (mainForm.Visible)
             {
-                mainForm.Invoke(() => StripController.UpdateFDR(scDTO, bayManager));
+                mainForm.Invoke(() => _bayManager.StripRepository.UpdateFDR(scDTO, bayManager));
             }
         });
 
@@ -140,7 +140,7 @@ public sealed class SocketConn : IDisposable
 
             if (mainForm.Visible && _freshClient)
             {
-                mainForm.Invoke(() => StripController.LoadCache(scDTO, bayManager, this));
+                mainForm.Invoke(() => _bayManager.StripRepository.LoadCache(scDTO, bayManager, this));
             }
         });
 
@@ -166,7 +166,7 @@ public sealed class SocketConn : IDisposable
 
                 if (mainForm.Visible)
                 {
-                    var sc = StripController.GetController(acid);
+                    var sc = _bayManager.StripRepository.GetController(acid);
 
                     if (sc is not null)
                     {

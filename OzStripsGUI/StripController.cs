@@ -29,8 +29,6 @@ public sealed class StripController : IDisposable
     private readonly SocketConn _socketConn;
     ////private readonly StripLayoutTypes StripType;
 
-    private StripBaseGUI? _stripControl;
-
     private bool _crossing;
 
     /// <summary>
@@ -106,6 +104,11 @@ public sealed class StripController : IDisposable
     public string ParentAerodrome { get; }
 
     /// <summary>
+    /// Gets the base control.
+    /// </summary>
+    public StripBaseGUI? Control { get; private set; }
+
+    /// <summary>
     /// Gets the flight data record.
     /// </summary>
     public FDR FDR { get; internal set; }
@@ -129,7 +132,7 @@ public sealed class StripController : IDisposable
         set
         {
             _crossing = value;
-            _stripControl?.SetCross();
+            Control?.SetCross();
         }
     }
 
@@ -430,24 +433,6 @@ public sealed class StripController : IDisposable
     }
 
     /// <summary>
-    /// Looks up controller by name.
-    /// </summary>
-    /// <param name="name">The aircraft callsign.</param>
-    /// <returns>The aircraft's FDR.</returns>
-    public static StripController? GetController(string name)
-    {
-        foreach (var controller in StripControllers)
-        {
-            if (controller.FDR.Callsign == name)
-            {
-                return controller;
-            }
-        }
-
-        return null;
-    }
-
-    /// <summary>
     /// Adds a error string to the VATSYS error system.
     /// </summary>
     /// <param name="error">The error.</param>
@@ -466,109 +451,12 @@ public sealed class StripController : IDisposable
     }
 
     /// <summary>
-    /// Receives a fdr, updates according SC.
-    /// </summary>
-    /// <param name="fdr">The flight data record.</param>
-    /// <param name="bayManager">The bay manager.</param>
-    /// <param name="socketConn">The socket connection.</param>
-    /// <param name="inhibitReorders">Whether or not to inhibit strip reordering.</param>
-    /// <returns>The appropriate strip controller for the FDR.</returns>
-    public static StripController UpdateFDR(FDR fdr, BayManager bayManager, SocketConn socketConn, bool inhibitReorders = false)
-    {
-        foreach (var controller in StripControllers)
-        {
-            if (controller.FDR.Callsign == fdr.Callsign)
-            {
-                if (GetFDRIndex(fdr.Callsign) == -1)
-                {
-                    bayManager.DeleteStrip(controller);
-                }
-
-                controller.FDR = fdr;
-                controller.UpdateFDR();
-                return controller;
-            }
-        }
-
-        // todo: add this logic into separate static function
-        var stripController = new StripController(fdr, bayManager, socketConn);
-        bayManager.AddStrip(stripController, true, inhibitReorders);
-        return stripController;
-    }
-
-    /// <summary>
-    /// Loads in a cacheDTO object received from server, sets SCs accordingly.
-    /// </summary>
-    /// <param name="cacheData">The cache data.</param>
-    /// <param name="bayManager">The bay manager.</param>
-    /// <param name="socketConn">The socket connection.</param>
-    public static void LoadCache(CacheDTO cacheData, BayManager bayManager, SocketConn socketConn)
-    {
-        foreach (var stripDTO in cacheData.strips)
-        {
-            UpdateFDR(stripDTO, bayManager);
-        }
-
-        socketConn.ReadyForBayData();
-    }
-
-    /// <summary>
-    /// Marks all strips as awaiting routes to be fetched from the server. Called on connection establishment.
-    /// </summary>
-    public static void MarkAllStripsAsAwaitingRoutes()
-    {
-        foreach (var strip in StripControllers)
-        {
-            strip.RequestedRoutes = DateTime.MaxValue;
-        }
-    }
-
-    /// <summary>
-    /// Receives a SC DTO object, updates relevant SC.
-    /// </summary>
-    /// <param name="stripControllerData">The strip controller data.</param>
-    /// <param name="bayManager">The bay manager.</param>
-    public static void UpdateFDR(StripControllerDTO stripControllerData, BayManager bayManager)
-    {
-        foreach (var controller in StripControllers)
-        {
-            if (controller.FDR.Callsign == stripControllerData.acid)
-            {
-                var changeBay = false;
-                controller.CLX = !string.IsNullOrWhiteSpace(stripControllerData.CLX) ? stripControllerData.CLX : string.Empty;
-                controller.Gate = stripControllerData.GATE ?? string.Empty;
-                if (controller.CurrentBay != stripControllerData.bay)
-                {
-                    changeBay = true;
-                }
-
-                controller.CurrentBay = stripControllerData.bay;
-                controller._stripControl?.Cock(stripControllerData.cockLevel, false);
-                controller.TakeOffTime = stripControllerData.TOT == "\0" ?
-                    null :
-                    DateTime.Parse(stripControllerData.TOT, CultureInfo.InvariantCulture);
-
-                controller.Remark = !string.IsNullOrWhiteSpace(stripControllerData.remark) ? stripControllerData.remark : string.Empty;
-                controller._crossing = stripControllerData.crossing;
-                controller._stripControl?.SetCross(false);
-                controller.Ready = stripControllerData.ready;
-                if (changeBay)
-                {
-                    bayManager.UpdateBay(controller); // prevent unessesscary reshufles
-                }
-
-                return;
-            }
-        }
-    }
-
-    /// <summary>
     /// Sets the HMI picked state.
     /// </summary>
     /// <param name="picked">True if picked, false otherwise.</param>
     public void SetHMIPicked(bool picked)
     {
-        _stripControl?.HMI_TogglePick(picked);
+        Control?.HMI_TogglePick(picked);
     }
 
     /// <summary>
@@ -576,7 +464,7 @@ public sealed class StripController : IDisposable
     /// </summary>
     public void CockStrip()
     {
-        _stripControl?.Cock(-1);
+        Control?.Cock(-1);
     }
 
     /// <summary>
@@ -641,19 +529,19 @@ public sealed class StripController : IDisposable
         ////stripHolderControl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         StripHolderControl.Size = new(100, 100);
 
-        _stripControl = OzStripsSettings.Default.StripSize switch
+        Control = OzStripsSettings.Default.StripSize switch
         {
             0 => new TinyStrip(this),
             2 => new Strip(this),
             _ => new LittleStrip(this),
         };
 
-        _stripControl.Initialise();
-        _stripControl.UpdateStrip();
-        _stripControl.HMI_TogglePick(_bayManager.PickedController == this);
+        Control.Initialise();
+        Control.UpdateStrip();
+        Control.HMI_TogglePick(_bayManager.PickedController == this);
 
-        StripHolderControl.Size = _stripControl.Size with { Height = _stripControl.Size.Height + 6 };
-        StripHolderControl.Controls.Add(_stripControl);
+        StripHolderControl.Size = Control.Size with { Height = Control.Size.Height + 6 };
+        StripHolderControl.Controls.Add(Control);
     }
 
     /// <summary>
@@ -757,7 +645,7 @@ public sealed class StripController : IDisposable
             }
         }
 
-        _stripControl?.UpdateStrip();
+        Control?.UpdateStrip();
     }
 
     /// <summary>
@@ -885,7 +773,7 @@ public sealed class StripController : IDisposable
     /// <inheritdoc/>
     public void Dispose()
     {
-        _stripControl?.Dispose();
+        Control?.Dispose();
         StripHolderControl?.Dispose();
     }
 

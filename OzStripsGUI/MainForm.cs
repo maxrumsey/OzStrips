@@ -272,7 +272,7 @@ public partial class MainForm : Form
     {
         try
         {
-            StripController.UpdateFDR(fdr, _bayManager, _socketConn);
+            _bayManager.StripRepository.UpdateFDR(fdr, _bayManager, _socketConn);
         }
         catch (Exception ex)
         {
@@ -293,7 +293,7 @@ public partial class MainForm : Form
                 return;
             }
 
-            var strip = StripController.GetController(args.UpdatedPilot.Callsign);
+            var strip = _bayManager.StripRepository.GetController(args.UpdatedPilot.Callsign);
             if (strip is not null)
             {
                 _bayManager.DeleteStrip(strip);

@@ -33,6 +33,11 @@ public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMe
     public StripController? PickedController { get; set; }
 
     /// <summary>
+    /// Gets the strip repository.
+    /// </summary>
+    public StripRepository StripRepository { get; } = new StripRepository();
+
+    /// <summary>
     /// Gets or sets the number of present bays.
     /// </summary>
     public int BayNum { get; set; }
@@ -56,7 +61,7 @@ public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMe
         {
             if (value is not null)
             {
-                var sc = StripController.GetController(value);
+                var sc = StripRepository.GetController(value);
                 if (sc is not null)
                 {
                     SetPicked(sc.FDR);
@@ -128,7 +133,7 @@ public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMe
                 return;
             }
 
-            var controller = StripController.UpdateFDR(fdr, this, socketConn);
+            var controller = StripRepository.UpdateFDR(fdr, this, socketConn);
 
             if (controller != null && Bays[0] != null)
             {
@@ -245,7 +250,7 @@ public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMe
 
         foreach (var fdr in FDP2.GetFDRs)
         {
-            StripController.UpdateFDR(fdr, this, socketConn, true);
+            StripRepository.UpdateFDR(fdr, this, socketConn, true);
         }
 
         var instance = MainForm.MainFormInstance;
