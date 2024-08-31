@@ -12,7 +12,7 @@ public partial class TinyStrip : StripBaseGUI
     /// Initializes a new instance of the <see cref="TinyStrip"/> class.
     /// </summary>
     /// <param name="controller">The strip controller.</param>
-    public TinyStrip(StripController controller)
+    public TinyStrip(Strip controller)
         : base(controller)
     {
         InitializeComponent();

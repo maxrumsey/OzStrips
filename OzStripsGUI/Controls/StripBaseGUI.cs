@@ -25,7 +25,7 @@ public class StripBaseGUI : UserControl
     /// Initializes a new instance of the <see cref="StripBaseGUI"/> class.
     /// </summary>
     /// <param name="stripController">The Strip Controller.</param>
-    public StripBaseGUI(StripController stripController)
+    public StripBaseGUI(Strip stripController)
     {
         StripController = stripController;
         FDR = stripController.FDR;
@@ -44,7 +44,7 @@ public class StripBaseGUI : UserControl
     /// <summary>
     /// Gets the strip controller.
     /// </summary>
-    protected StripController StripController { get; }
+    protected Strip StripController { get; }
 
     /// <summary>
     /// Gets the flight data record.

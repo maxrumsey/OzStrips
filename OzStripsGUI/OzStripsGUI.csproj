@@ -35,9 +35,6 @@
         <Compile Update="Controls\SettingsWindowControl.cs">
           <SubType>UserControl</SubType>
         </Compile>
-        <Compile Update="Controls\LittleStrip.cs">
-          <SubType>UserControl</SubType>
-        </Compile>
         <Compile Update="OzStripsConfig.Designer.cs">
             <DesignTime>True</DesignTime>
             <AutoGen>True</AutoGen>

@@ -276,7 +276,7 @@ public sealed class SocketConn : IDisposable
     /// Syncs the strip controller.
     /// </summary>
     /// <param name="sc">The strip controller.</param>
-    public void SyncSC(StripController sc)
+    public void SyncSC(Strip sc)
     {
         StripControllerDTO scDTO = sc;
         AddMessage("c:sc_change: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
@@ -295,7 +295,7 @@ public sealed class SocketConn : IDisposable
     /// Requests routes for a given sc.
     /// </summary>
     /// <param name="sc">The strip controller.</param>
-    public void RequestRoutes(StripController sc)
+    public void RequestRoutes(Strip sc)
     {
         AddMessage("c:get_routes: " + sc.FDR.Callsign);
         if (_io.Connected)
@@ -317,7 +317,7 @@ public sealed class SocketConn : IDisposable
     /// Syncs the deletion of a controller.
     /// </summary>
     /// <param name="sc">The strip controller.</param>
-    public void SyncDeletion(StripController sc)
+    public void SyncDeletion(Strip sc)
     {
         SCDeletionDTO scDTO = sc;
         AddMessage("c:sc_delete: " + System.Text.Json.JsonSerializer.Serialize(scDTO));

@@ -142,7 +142,7 @@ public class Bay
     /// </summary>
     /// <param name="controller">The controller.</param>
     /// <returns>True if it owns the strip, false otherwise.</returns>
-    public bool OwnsStrip(StripController controller)
+    public bool OwnsStrip(Strip controller)
     {
         var found = false;
         foreach (var item in Strips)
@@ -161,7 +161,7 @@ public class Bay
     /// </summary>
     /// <param name="controller">The controller to remove.</param>
     /// <param name="remove">If the controller should be removed or not.</param>
-    public void RemoveStrip(StripController controller, bool remove)
+    public void RemoveStrip(Strip controller, bool remove)
     {
         if (remove)
         {
@@ -175,7 +175,7 @@ public class Bay
     /// Removes the specified strip.
     /// </summary>
     /// <param name="controller">The controller.</param>
-    public void RemoveStrip(StripController controller)
+    public void RemoveStrip(Strip controller)
     {
         RemoveStrip(controller, true);
     }
@@ -200,7 +200,7 @@ public class Bay
     /// <param name="stripController">The strip.</param>
     /// <param name="inhibitreorders">Whether or not to inhibit reorders.</param>
     /// <remarks>todo: check for dupes.</remarks>
-    public void AddStrip(StripController stripController, bool inhibitreorders)
+    public void AddStrip(Strip stripController, bool inhibitreorders)
     {
         var strip = new StripListItem
         {
@@ -265,7 +265,7 @@ public class Bay
     /// </summary>
     /// <param name="stripController">The strip controller.</param>
     /// <param name="relativePosition">The relative position.</param>
-    public void ChangeStripPosition(StripController stripController, int relativePosition)
+    public void ChangeStripPosition(Strip stripController, int relativePosition)
     {
         var originalPosition = Strips.FindIndex(a => a.StripController == stripController);
         var stripItem = Strips[originalPosition];

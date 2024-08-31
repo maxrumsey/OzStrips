@@ -14,14 +14,14 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
 public partial class AltHdgControl : UserControl
 {
     private readonly List<Airspace2.SystemRunway> _runways;
-    private readonly StripController _stripController;
+    private readonly Strip _stripController;
     private readonly bool _fullyLoaded;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AltHdgControl"/> class.
     /// </summary>
     /// <param name="controller">The controller.</param>
-    public AltHdgControl(StripController controller)
+    public AltHdgControl(Strip controller)
     {
         _stripController = controller;
         _runways = controller.PossibleDepRunways;

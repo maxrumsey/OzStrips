@@ -32,7 +32,7 @@ public class BayManager
     /// <summary>
     /// Gets or sets the picked controller.
     /// </summary>
-    public StripController? PickedController { get; set; }
+    public Strip? PickedController { get; set; }
 
     /// <summary>
     /// Gets the strip repository.
@@ -213,7 +213,7 @@ public class BayManager
     /// </summary>
     /// <param name="controller">The controller.</param>
     /// <param name="sendToVatsys">Selects relevant track in vatSys.</param>
-    public void SetPicked(StripController controller, bool sendToVatsys = false)
+    public void SetPicked(Strip controller, bool sendToVatsys = false)
     {
         PickedController?.SetHMIPicked(false);
         PickedController = controller;
@@ -246,7 +246,7 @@ public class BayManager
     {
         if (fdr is not null)
         {
-            StripController? foundSC = null;
+            Strip? foundSC = null;
             foreach (var controller in StripRepository.Controllers)
             {
                 if (controller.FDR.Callsign == fdr.Callsign)
@@ -300,7 +300,7 @@ public class BayManager
     /// <param name="stripController">The strip controller to add.</param>
     /// <param name="save">If the strip controller should be saved.</param>
     /// <param name="inhibitreorders">Whether or not to inhibit strip reodering.</param>
-    public void AddStrip(StripController stripController, bool save = true, bool inhibitreorders = false)
+    public void AddStrip(Strip stripController, bool save = true, bool inhibitreorders = false)
     {
         if (!stripController.DetermineSCValidity())
         {
@@ -325,7 +325,7 @@ public class BayManager
     /// Updates the bay from the controller.
     /// </summary>
     /// <param name="stripController">The strip controller.</param>
-    public void UpdateBay(StripController stripController)
+    public void UpdateBay(Strip stripController)
     {
         foreach (var bay in BayRepository.Bays)
         {

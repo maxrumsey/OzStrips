@@ -10,7 +10,7 @@ public class StripListItem
     /// <summary>
     /// Gets or sets the strip controller.
     /// </summary>
-    public StripController? StripController { get; set; }
+    public Strip? StripController { get; set; }
 
     /// <summary>
     /// Gets or sets the strip item type.

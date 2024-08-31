@@ -15,7 +15,7 @@ public partial class BayCLXControl : UserControl
     /// </summary>
     /// <param name="controller">The strip controller.</param>
     /// <param name="labelName">The label that opened the control.</param>
-    public BayCLXControl(StripController controller, string labelName)
+    public BayCLXControl(Strip controller, string labelName)
     {
         InitializeComponent();
 

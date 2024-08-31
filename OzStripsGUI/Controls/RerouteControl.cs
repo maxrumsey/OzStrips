@@ -14,14 +14,14 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
 /// </summary>
 public partial class RerouteControl : UserControl
 {
-    private readonly StripController _stripController;
+    private readonly Strip _stripController;
     private readonly RouteDTO[]? _routes;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RerouteControl"/> class.
     /// </summary>
     /// <param name="controller">The controller.</param>
-    public RerouteControl(StripController controller)
+    public RerouteControl(Strip controller)
     {
         InitializeComponent();
         SuspendLayout();

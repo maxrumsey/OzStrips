@@ -18,7 +18,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui;
 /// <summary>
 /// Responsible for strip logic, represents a Vatsys FDR.
 /// </summary>
-public sealed class StripController : IDisposable
+public sealed class Strip : IDisposable
 {
     private static readonly Regex _headingRegex = new(@"H(\d{3})");
     private static readonly Regex _routeRegex = new(@"^[^\d/]+$");
@@ -32,12 +32,12 @@ public sealed class StripController : IDisposable
     private bool _crossing;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="StripController"/> class.
+    /// Initializes a new instance of the <see cref="Strip"/> class.
     /// </summary>
     /// <param name="fdr">The flight data record.</param>
     /// <param name="bayManager">Gets or sets the bay manager.</param>
     /// <param name="socketConn">The socket connection.</param>
-    public StripController(FDR fdr, BayManager bayManager, SocketConn socketConn)
+    public Strip(FDR fdr, BayManager bayManager, SocketConn socketConn)
     {
         FDR = fdr;
         _bayManager = bayManager;
@@ -395,7 +395,7 @@ public sealed class StripController : IDisposable
     /// Converts a strip controller to the data object.
     /// </summary>
     /// <param name="sc">The strip controller.</param>
-    public static implicit operator StripControllerDTO(StripController sc)
+    public static implicit operator StripControllerDTO(Strip sc)
     {
         var scDTO = new StripControllerDTO
         {
@@ -417,7 +417,7 @@ public sealed class StripController : IDisposable
     /// Converts a strip controller to the data object.
     /// </summary>
     /// <param name="sc">The strip controller.</param>
-    public static implicit operator SCDeletionDTO(StripController sc)
+    public static implicit operator SCDeletionDTO(Strip sc)
     {
         var scDTO = new SCDeletionDTO
         {
@@ -524,12 +524,7 @@ public sealed class StripController : IDisposable
         ////stripHolderControl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         StripHolderControl.Size = new(100, 100);
 
-        Control = OzStripsSettings.Default.StripSize switch
-        {
-            0 => new TinyStrip(this),
-            2 => new Strip(this),
-            _ => new LittleStrip(this),
-        };
+        Control = new TinyStrip(this);
 
         Control.Initialise();
         Control.UpdateStrip();

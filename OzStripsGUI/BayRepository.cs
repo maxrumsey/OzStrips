@@ -82,7 +82,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
     /// Deletes the specified strip.
     /// </summary>
     /// <param name="strip">The strip to delete.</param>
-    public void DeleteStrip(StripController strip)
+    public void DeleteStrip(Strip strip)
     {
         strip.SendDeleteMessage();
         FindBay(strip)?.RemoveStrip(strip, true);
@@ -94,7 +94,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
     /// </summary>
     /// <param name="stripController">The strip.</param>
     /// <returns>The bay if the name matches.</returns>
-    public Bay? FindBay(StripController stripController)
+    public Bay? FindBay(Strip stripController)
     {
         foreach (var bay in Bays)
         {

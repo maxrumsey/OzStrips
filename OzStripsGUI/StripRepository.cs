@@ -17,14 +17,14 @@ public class StripRepository
     /// <summary>
     /// Gets a list of strip controllers.
     /// </summary>
-    public List<StripController> Controllers { get; } = new List<StripController>();
+    public List<Strip> Controllers { get; } = new List<Strip>();
 
     /// <summary>
     /// Looks up controller by name.
     /// </summary>
     /// <param name="name">The aircraft callsign.</param>
     /// <returns>The aircraft's FDR.</returns>
-    public StripController? GetController(string name)
+    public Strip? GetController(string name)
     {
         foreach (var controller in Controllers)
         {
@@ -45,7 +45,7 @@ public class StripRepository
     /// <param name="socketConn">The socket connection.</param>
     /// <param name="inhibitReorders">Whether or not to inhibit strip reordering.</param>
     /// <returns>The appropriate strip controller for the FDR.</returns>
-    public StripController UpdateFDR(FDR fdr, BayManager bayManager, SocketConn socketConn, bool inhibitReorders = false)
+    public Strip UpdateFDR(FDR fdr, BayManager bayManager, SocketConn socketConn, bool inhibitReorders = false)
     {
         foreach (var controller in Controllers)
         {
@@ -63,7 +63,7 @@ public class StripRepository
         }
 
         // todo: add this logic into separate static function
-        var stripController = new StripController(fdr, bayManager, socketConn);
+        var stripController = new Strip(fdr, bayManager, socketConn);
         bayManager.AddStrip(stripController, true, inhibitReorders);
         return stripController;
     }
