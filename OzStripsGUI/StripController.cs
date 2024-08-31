@@ -59,11 +59,6 @@ public sealed class StripController : IDisposable
     }
 
     /// <summary>
-    /// Gets a list of strip controllers.
-    /// </summary>
-    public static List<StripController> StripControllers { get; } = [];
-
-    /// <summary>
     /// Gets or sets the strip holder control.
     /// </summary>
     public Control? StripHolderControl { get; set; }
@@ -596,7 +591,7 @@ public sealed class StripController : IDisposable
     {
         if (!DetermineSCValidity())
         {
-            _bayManager.DeleteStrip(this);
+            _bayManager.BayRepository.DeleteStrip(this);
             return;
         }
 

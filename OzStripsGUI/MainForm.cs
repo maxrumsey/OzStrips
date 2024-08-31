@@ -59,7 +59,7 @@ public partial class MainForm : Form
             _socketConn.Connect();
         }
 
-        _bayManager.Resize();
+        _bayManager.BayRepository.Resize();
 
         if (IsDebug)
         {
@@ -254,7 +254,7 @@ public partial class MainForm : Form
         try
         {
             _bayManager.WipeStrips();
-            StripController.StripControllers.Clear();
+            _bayManager.StripRepository.Controllers.Clear();
             _socketConn.Disconnect();
         }
         catch (Exception ex)
@@ -296,7 +296,7 @@ public partial class MainForm : Form
             var strip = _bayManager.StripRepository.GetController(args.UpdatedPilot.Callsign);
             if (strip is not null)
             {
-                _bayManager.DeleteStrip(strip);
+                _bayManager.BayRepository.DeleteStrip(strip);
             }
         }
         catch (Exception ex)
@@ -357,7 +357,7 @@ public partial class MainForm : Form
         if (!_postresizechecked)
         {
             _postresizechecked = true;
-            _bayManager.Resize();
+            _bayManager.BayRepository.Resize();
         }
 
         Invoke(() =>
@@ -372,7 +372,7 @@ public partial class MainForm : Form
         _postresizechecked = false;
         if (_bayManager is not null)
         {
-            _bayManager.Resize();
+            _bayManager.BayRepository.Resize();
         }
     }
 
@@ -400,58 +400,58 @@ public partial class MainForm : Form
 
     private void ACDToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        _bayManager.WipeBays();
-        _bayManager.BayNum = 3;
+        _bayManager.BayRepository.WipeBays();
+        _bayManager.BayRepository.BayNum = 3;
         _ = new Bay([StripBay.BAY_PREA], _bayManager, _socketConn, "Preactive", 0);
         _ = new Bay([StripBay.BAY_CLEARED], _bayManager, _socketConn, "Cleared", 1);
         _ = new Bay([StripBay.BAY_PUSHED], _bayManager, _socketConn, "Pushback", 2);
-        _bayManager.Resize();
-        _bayManager.ReloadStrips();
+        _bayManager.BayRepository.Resize();
+        _bayManager.BayRepository.ReloadStrips();
     }
 
     private void SMCToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        _bayManager.WipeBays();
-        _bayManager.BayNum = 5;
+        _bayManager.BayRepository.WipeBays();
+        _bayManager.BayRepository.BayNum = 5;
         _ = new Bay([StripBay.BAY_CLEARED], _bayManager, _socketConn, "Cleared", 0);
         _ = new Bay([StripBay.BAY_PUSHED], _bayManager, _socketConn, "Pushback", 0);
         _ = new Bay([StripBay.BAY_TAXI], _bayManager, _socketConn, "Taxi", 1);
         _ = new Bay([StripBay.BAY_HOLDSHORT], _bayManager, _socketConn, "Holding Point", 2);
         _ = new Bay([StripBay.BAY_RUNWAY], _bayManager, _socketConn, "Runway", 2);
-        _bayManager.Resize();
-        _bayManager.ReloadStrips();
+        _bayManager.BayRepository.Resize();
+        _bayManager.BayRepository.ReloadStrips();
     }
 
     private void SMCACDToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        _bayManager.WipeBays();
-        _bayManager.BayNum = 6;
+        _bayManager.BayRepository.WipeBays();
+        _bayManager.BayRepository.BayNum = 6;
         _ = new Bay([StripBay.BAY_PREA], _bayManager, _socketConn, "Preactive", 0);
         _ = new Bay([StripBay.BAY_CLEARED], _bayManager, _socketConn, "Cleared", 0);
         _ = new Bay([StripBay.BAY_PUSHED], _bayManager, _socketConn, "Pushback", 0);
         _ = new Bay([StripBay.BAY_TAXI], _bayManager, _socketConn, "Taxi", 1);
         _ = new Bay([StripBay.BAY_HOLDSHORT], _bayManager, _socketConn, "Holding Point", 2);
         _ = new Bay([StripBay.BAY_RUNWAY], _bayManager, _socketConn, "Runway", 2);
-        _bayManager.Resize();
-        _bayManager.ReloadStrips();
+        _bayManager.BayRepository.Resize();
+        _bayManager.BayRepository.ReloadStrips();
     }
 
     private void ADCToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        _bayManager.WipeBays();
-        _bayManager.BayNum = 4;
+        _bayManager.BayRepository.WipeBays();
+        _bayManager.BayRepository.BayNum = 4;
         _ = new Bay([StripBay.BAY_HOLDSHORT], _bayManager, _socketConn, "Holding Point", 0);
         _ = new Bay([StripBay.BAY_RUNWAY], _bayManager, _socketConn, "Runway", 1);
         _ = new Bay([StripBay.BAY_OUT], _bayManager, _socketConn, "Departed", 2);
         _ = new Bay([StripBay.BAY_ARRIVAL], _bayManager, _socketConn, "Arrivals", 2);
-        _bayManager.Resize();
-        _bayManager.ReloadStrips();
+        _bayManager.BayRepository.Resize();
+        _bayManager.BayRepository.ReloadStrips();
     }
 
     private void AllToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        _bayManager.WipeBays();
-        _bayManager.BayNum = 8;
+        _bayManager.BayRepository.WipeBays();
+        _bayManager.BayRepository.BayNum = 8;
         _ = new Bay([StripBay.BAY_PREA], _bayManager, _socketConn, "Preactive", 0);
         _ = new Bay([StripBay.BAY_CLEARED], _bayManager, _socketConn, "Cleared", 0);
         _ = new Bay([StripBay.BAY_PUSHED], _bayManager, _socketConn, "Pushback", 1);
@@ -460,14 +460,14 @@ public partial class MainForm : Form
         _ = new Bay([StripBay.BAY_RUNWAY], _bayManager, _socketConn, "Runway", 2);
         _ = new Bay([StripBay.BAY_OUT], _bayManager, _socketConn, "Departed", 2);
         _ = new Bay([StripBay.BAY_ARRIVAL], _bayManager, _socketConn, "Arrivals", 2);
-        _bayManager.Resize();
-        _bayManager.ReloadStrips();
+        _bayManager.BayRepository.Resize();
+        _bayManager.BayRepository.ReloadStrips();
     }
 
     private void ADCSMCToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        _bayManager.WipeBays();
-        _bayManager.BayNum = 7;
+        _bayManager.BayRepository.WipeBays();
+        _bayManager.BayRepository.BayNum = 7;
         _ = new Bay([StripBay.BAY_CLEARED], _bayManager, _socketConn, "Cleared", 0);
         _ = new Bay([StripBay.BAY_PUSHED], _bayManager, _socketConn, "Pushback", 0);
         _ = new Bay([StripBay.BAY_TAXI], _bayManager, _socketConn, "Taxi", 1);
@@ -475,8 +475,8 @@ public partial class MainForm : Form
         _ = new Bay([StripBay.BAY_RUNWAY], _bayManager, _socketConn, "Runway", 2);
         _ = new Bay([StripBay.BAY_OUT], _bayManager, _socketConn, "Departed", 2);
         _ = new Bay([StripBay.BAY_ARRIVAL], _bayManager, _socketConn, "Arrivals", 2);
-        _bayManager.Resize();
-        _bayManager.ReloadStrips();
+        _bayManager.BayRepository.Resize();
+        _bayManager.BayRepository.ReloadStrips();
     }
 
     private void Bt_cross_Click(object sender, EventArgs e)
@@ -529,7 +529,7 @@ public partial class MainForm : Form
     {
         Properties.OzStripsSettings.Default.StripSize = 2;
         Properties.OzStripsSettings.Default.Save();
-        _bayManager.ReloadStrips();
+        _bayManager.BayRepository.ReloadStrips();
         SetStripSizeCheckBox();
     }
 
@@ -537,7 +537,7 @@ public partial class MainForm : Form
     {
         Properties.OzStripsSettings.Default.StripSize = 1;
         Properties.OzStripsSettings.Default.Save();
-        _bayManager.ReloadStrips();
+        _bayManager.BayRepository.ReloadStrips();
         SetStripSizeCheckBox();
     }
 
@@ -573,7 +573,7 @@ public partial class MainForm : Form
     {
         Properties.OzStripsSettings.Default.StripSize = 0;
         Properties.OzStripsSettings.Default.Save();
-        _bayManager.ReloadStrips();
+        _bayManager.BayRepository.ReloadStrips();
         SetStripSizeCheckBox();
     }
 

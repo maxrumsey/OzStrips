@@ -151,7 +151,7 @@ public sealed class SocketConn : IDisposable
 
             if (mainForm.Visible)
             {
-                mainForm.Invoke(() => bayManager.UpdateOrder(bayDTO));
+                mainForm.Invoke(() => bayManager.BayRepository.UpdateOrder(bayDTO));
             }
         });
 
@@ -444,9 +444,9 @@ public sealed class SocketConn : IDisposable
     /// Creates the cache data transfer object.
     /// </summary>
     /// <returns>The cache data transfer object.</returns>
-    private static CacheDTO CreateCacheDTO()
+    private CacheDTO CreateCacheDTO()
     {
-        return new() { strips = StripController.StripControllers.ConvertAll(x => (StripControllerDTO)x), };
+        return new() { strips = _bayManager.StripRepository.Controllers.ConvertAll(x => (StripControllerDTO)x), };
     }
 
     private void ToggleFresh(object sender, ElapsedEventArgs e)

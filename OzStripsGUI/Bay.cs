@@ -31,7 +31,7 @@ public class Bay
         VerticalBoardNumber = vertBoardNum;
         ChildPanel = new(bayManager, name, this);
 
-        bayManager.AddBay(this, vertBoardNum);
+        bayManager.BayRepository.AddBay(this, vertBoardNum);
     }
 
     /// <summary>

@@ -53,7 +53,7 @@ public class StripRepository
             {
                 if (GetFDRIndex(fdr.Callsign) == -1)
                 {
-                    bayManager.DeleteStrip(controller);
+                    bayManager.BayRepository.DeleteStrip(controller);
                 }
 
                 controller.FDR = fdr;
