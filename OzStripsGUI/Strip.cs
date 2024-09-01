@@ -127,7 +127,6 @@ public sealed class Strip : IDisposable
         set
         {
             _crossing = value;
-            Control?.SetCross();
         }
     }
 
