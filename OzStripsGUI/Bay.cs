@@ -9,10 +9,11 @@ namespace MaxRumsey.OzStripsPlugin.Gui;
 /// <summary>
 /// A bay.
 /// </summary>
-public class Bay
+public class Bay : System.IDisposable
 {
     private readonly BayManager _bayManager;
     private readonly SocketConn _socketConnection;
+    private readonly BayRenderController _bayRenderController;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Bay"/> class.
@@ -30,6 +31,10 @@ public class Bay
         Name = name;
         VerticalBoardNumber = vertBoardNum;
         ChildPanel = new(bayManager, name, this);
+
+        _bayRenderController = new BayRenderController(this);
+
+        _bayRenderController.Setup();
 
         bayManager.BayRepository.AddBay(this, vertBoardNum);
     }
@@ -237,27 +242,7 @@ public class Bay
     /// </summary>
     public void Orderstrips()
     {
-        ChildPanel.SuspendLayout();
-        ChildPanel.ChildPanel.SuspendLayout();
-        ChildPanel.ChildPanel.Controls.Clear();
-        var queueLen = CountQueued();
-        foreach (var strip in Strips)
-        {
-            switch (strip.Type)
-            {
-                case StripItemType.STRIP when strip.StripController?.StripHolderControl != null:
-                    ChildPanel.ChildPanel.Controls.Add(strip.StripController!.StripHolderControl);
-                    break;
-                case StripItemType.QUEUEBAR when strip.DividerBarControl is not null:
-                    ChildPanel.ChildPanel.Controls.Add(strip.DividerBarControl);
-                    strip.DividerBarControl?.SetVal(queueLen);
-                    strip.DividerBarControl?.ReloadSize();
-                    break;
-            }
-        }
-
-        ChildPanel.ChildPanel.ResumeLayout();
-        ChildPanel.ResumeLayout();
+        _bayRenderController.SetHeight();
     }
 
     /// <summary>
@@ -381,5 +366,13 @@ public class Bay
         }
 
         return returnedItem;
+    }
+
+    /// <summary>
+    /// Dispose.
+    /// </summary>
+    public void Dispose()
+    {
+        throw new System.NotImplementedException();
     }
 }

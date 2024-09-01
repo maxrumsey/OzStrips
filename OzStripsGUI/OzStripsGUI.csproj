@@ -23,14 +23,19 @@
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net472|x86'">
       <Optimize>False</Optimize>
     </PropertyGroup>
-
+  
     <ItemGroup>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="SkiaSharp" Version="3.0.0-preview.4.1" />
+        <PackageReference Include="SkiaSharp.Views.WindowsForms" Version="3.0.0-preview.4.1" />
         <PackageReference Include="SocketIO.Serializer.NewtonsoftJson" Version="3.1.1" />
         <PackageReference Include="System.Text.Json" Version="8.0.4" />
         <PackageReference Include="SocketIOClient" Version="3.1.1" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Update="BayRenderController.cs">
+          <SubType>Component</SubType>
+        </Compile>
         <Compile Update="Controls\TinyStrip.cs" />
         <Compile Update="Controls\SettingsWindowControl.cs">
           <SubType>UserControl</SubType>
@@ -76,6 +81,9 @@
         </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
+      <None Update="libSkiaSharp.dylib">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
       <None Update="Properties\OzStripsSettings.settings">
         <Generator>SettingsSingleFileGenerator</Generator>
         <LastGenOutput>OzStripsSettings.Designer.cs</LastGenOutput>

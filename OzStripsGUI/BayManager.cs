@@ -153,6 +153,7 @@ public class BayManager
         if (PickedController != null)
         {
             PickedController.Crossing = !PickedController.Crossing;
+            PickedController.Control?.SetCross();
             SetPicked(true);
         }
     }
