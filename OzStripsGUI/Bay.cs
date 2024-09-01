@@ -211,6 +211,7 @@ public class Bay : System.IDisposable
         {
             StripController = stripController,
             Type = StripItemType.STRIP,
+            StripView = new StripView(stripController, _bayRenderController),
         };
 
         Strips.Add(strip); // todo: add control action

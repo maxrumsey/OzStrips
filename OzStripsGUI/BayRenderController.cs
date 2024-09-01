@@ -13,8 +13,11 @@ namespace MaxRumsey.OzStripsPlugin;
 
 internal class BayRenderController(Bay bay) : IDisposable
 {
+    public const int StripHeight = 50;
+    public const int StripWidth = 300;
+
     private readonly Bay _bay = bay;
-    private readonly int _stripHeight = 50;
+    private readonly StripElementList? _striplist = StripElementList.Deserialize("C:/Users/exiflame/Desktop/List.xml");
     private SKControl? _skControl;
 
     public void Dispose()
@@ -41,8 +44,9 @@ internal class BayRenderController(Bay bay) : IDisposable
             return;
         }
 
-        var y = _bay.Strips.Count * _stripHeight;
+        var y = _bay.Strips.Count * StripHeight;
         _skControl.Size = new Size(_skControl.Size.Width, y);
+        var z = _striplist;
     }
 
     private void Paint(object sender, SKPaintSurfaceEventArgs e)
@@ -57,18 +61,15 @@ internal class BayRenderController(Bay bay) : IDisposable
         // make sure the canvas is blank
         canvas.Clear(SKColors.White);
 
-        // draw some text
-        using var paint = new SKPaint
+        for (var i = 0; i < _bay.Strips.Count; i++)
         {
-            Color = SKColors.Black,
-            IsAntialias = true,
-            Style = SKPaintStyle.Fill,
-        };
-        using var font = new SKFont
-        {
-            Size = 24,
-        };
-        var coord = new SKPoint(e.Info.Width / 2, (e.Info.Height + font.Size) / 2);
-        canvas.DrawText("SkiaSharp", coord, SKTextAlign.Center, font, paint);
+            var stripView = _bay.Strips[i].StripView;
+
+            if (stripView is not null)
+            {
+                stripView.Origin = new SKPoint(0, i * StripHeight);
+                stripView.Render(canvas);
+            }
+        }
     }
 }

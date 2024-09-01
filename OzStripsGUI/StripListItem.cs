@@ -21,4 +21,9 @@ public class StripListItem
     /// Gets or sets the divider bar.
     /// </summary>
     public DividerBarControl? DividerBarControl { get; set; }
+
+    /// <summary>
+    /// Gets or sets the view class.
+    /// </summary>
+    internal StripView? StripView { get; set; }
 }
