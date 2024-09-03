@@ -40,6 +40,7 @@ public static class StripElements
 
     public enum Actions
     {
+        NONE,
         SHOW_ROUTE,
         OPEN_HDG_ALT,
         OPENFDR,

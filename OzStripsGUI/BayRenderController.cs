@@ -34,6 +34,7 @@ internal class BayRenderController(Bay bay) : IDisposable
         _skControl = new SKControl();
         _skControl.Size = new System.Drawing.Size(10, 1);
         _skControl.PaintSurface += Paint;
+        _skControl.Click += Click;
         _skControl.Name = "StripBoard";
         _skControl.BackColor = Color.Wheat;
         _skControl.Dock = DockStyle.Top;
@@ -76,5 +77,16 @@ internal class BayRenderController(Bay bay) : IDisposable
         }
 
         canvas.Flush();
+    }
+
+    private void Click(object sender, MouseEventArgs e)
+    {
+        var i = e.X / StripHeight;
+        var strip = _bay.Strips.ElementAtOrDefault(i);
+
+        if (strip is not null)
+        {
+            strip.StripView?.HandleClick(e);
+        }
     }
 }

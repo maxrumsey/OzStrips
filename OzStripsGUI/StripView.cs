@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using SkiaSharp;
 using static vatsys.FDP2;
 
@@ -67,6 +68,11 @@ internal class StripView(Strip strip, BayRenderController bayRC)
 
             canvas.DrawText(text, new SKPoint(baseX + (element.W / 2), baseY + ((fontsize + element.H) / 2)), SKTextAlign.Center, new SKFont(typeface, fontsize), textpaint);
         }
+    }
+
+    public void HandleClick(MouseEventArgs e)
+    {
+        
     }
 
     private string GetElementText(StripElement element)

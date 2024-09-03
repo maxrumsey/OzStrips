@@ -24,7 +24,7 @@ public class StripElement
     /// <summary>
     /// Gets or sets the left click action.
     /// </summary>
-    public StripElements.Actions LeftClick { get; set; }
+    public StripElements.Actions LeftClick { get; set; } = StripElements.Actions.NONE;
 
     /// <summary>
     /// Gets or sets the Origin.X.
@@ -45,4 +45,9 @@ public class StripElement
     /// Gets or sets strip height.
     /// </summary>
     public int H { get; set; }
+
+    /// <summary>
+    /// Gets or sets the font size in pixels.
+    /// </summary>
+    public int FontSize { get; set; } = 12;
 }
