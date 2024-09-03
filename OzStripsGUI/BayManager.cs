@@ -241,6 +241,12 @@ public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMe
     {
         AerodromeName = name;
         WipeStrips();
+
+        for (var i = StripController.StripControllers.Count - 1; i >= 0; i--)
+        {
+            StripController.StripControllers[i].Dispose();
+        }
+
         StripController.StripControllers.Clear();
 
         foreach (var fdr in FDP2.GetFDRs)
