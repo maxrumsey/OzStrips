@@ -18,6 +18,11 @@ namespace MaxRumsey.OzStripsPlugin.Gui;
 public class StripElementList
 {
     /// <summary>
+    /// Gets or sets the currently loaded stirpelementlist layout.
+    /// </summary>
+    public static StripElementList? Instance { get; set; }
+
+    /// <summary>
     /// Gets or sets a list of strip elements.
     /// </summary>
     [XmlElement("StripElement")]
@@ -35,10 +40,18 @@ public class StripElementList
 
             return element;
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             Errors.Add(ex, "OzStrips");
         }
 
         return null;
+    }
+
+    internal static void Load()
+    {
+        var path = Path.Combine("C:/Users/exiflame/Desktop/List.xml");
+
+        Instance = Deserialize(path);
     }
 }

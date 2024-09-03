@@ -72,6 +72,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.tinyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flp_main = new System.Windows.Forms.FlowLayoutPanel();
             this.tt_metar = new System.Windows.Forms.ToolTip(this.components);
+            this.reloadStripToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pl_controlbar.SuspendLayout();
             this.pl_atis.SuspendLayout();
             this.pl_ad.SuspendLayout();
@@ -272,7 +273,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             // modifyToolStripMenuItem
             // 
             this.modifyToolStripMenuItem.Name = "modifyToolStripMenuItem";
-            this.modifyToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.modifyToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.modifyToolStripMenuItem.Tag = "permanent";
             this.modifyToolStripMenuItem.Text = "Modify";
             this.modifyToolStripMenuItem.Click += new System.EventHandler(this.ModifyButtonClicked);
@@ -287,7 +288,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(157, 6);
             this.toolStripSeparator1.Tag = "permanent";
             // 
             // ts_mode
@@ -356,7 +357,8 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             // debugToolStripMenuItem
             // 
             this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem1});
+            this.toolStripMenuItem1,
+            this.reloadStripToolStripMenuItem});
             this.debugToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.debugToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
@@ -367,7 +369,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             // 
             this.toolStripMenuItem1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(172, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItem1.Text = "SocketIO Log";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.ToolStripMenuItem1_Click);
             // 
@@ -486,6 +488,13 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             // 
             this.tt_metar.ToolTipTitle = "METAR";
             // 
+            // reloadStripToolStripMenuItem
+            // 
+            this.reloadStripToolStripMenuItem.Name = "reloadStripToolStripMenuItem";
+            this.reloadStripToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.reloadStripToolStripMenuItem.Text = "ReloadStrip";
+            this.reloadStripToolStripMenuItem.Click += new System.EventHandler(this.ReloadStripItem);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -558,5 +567,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
         private ToolStripMenuItem modifyToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripTextBox toolStripTextBox1;
+        private ToolStripMenuItem reloadStripToolStripMenuItem;
     }
 }

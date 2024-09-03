@@ -595,4 +595,9 @@ public partial class MainForm : Form
             e.Handled = true;
         }
     }
+
+    private void ReloadStripItem(object sender, EventArgs e)
+    {
+        StripElementList.Load();
+    }
 }

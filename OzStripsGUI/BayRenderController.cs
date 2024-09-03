@@ -17,7 +17,6 @@ internal class BayRenderController(Bay bay) : IDisposable
     public const int StripWidth = 300;
 
     private readonly Bay _bay = bay;
-    private readonly StripElementList? _striplist = StripElementList.Deserialize("C:/Users/exiflame/Desktop/List.xml");
     private SKControl? _skControl;
 
     public void Dispose()
@@ -27,6 +26,11 @@ internal class BayRenderController(Bay bay) : IDisposable
 
     public void Setup()
     {
+        if (StripElementList.Instance is null)
+        {
+            StripElementList.Load();
+        }
+
         _skControl = new SKControl();
         _skControl.Size = new System.Drawing.Size(10, 1);
         _skControl.PaintSurface += Paint;
@@ -46,7 +50,6 @@ internal class BayRenderController(Bay bay) : IDisposable
 
         var y = _bay.Strips.Count * StripHeight;
         _skControl.Size = new Size(_skControl.Size.Width, y);
-        var z = _striplist;
     }
 
     private void Paint(object sender, SKPaintSurfaceEventArgs e)
@@ -71,5 +74,7 @@ internal class BayRenderController(Bay bay) : IDisposable
                 stripView.Render(canvas);
             }
         }
+
+        canvas.Flush();
     }
 }
