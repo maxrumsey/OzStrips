@@ -95,6 +95,7 @@
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "BaseModal";
             this.TopMost = true;
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.BaseModal_FormClosed);
             this.ResumeLayout(false);
             this.PerformLayout();
 

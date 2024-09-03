@@ -79,4 +79,9 @@ public partial class BaseModal : Form
         // child.confirm();
         ExitModal(true);
     }
+
+    private void BaseModal_FormClosed(object sender, FormClosedEventArgs e)
+    {
+        Dispose();
+    }
 }

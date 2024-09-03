@@ -661,7 +661,15 @@ public sealed class StripController : IDisposable
     /// </summary>
     public void ClearStripControl()
     {
-        StripHolderControl?.Controls.Clear();
+        var controls = StripHolderControl?.Controls;
+
+        if (controls is not null)
+        {
+            for (var i = controls.Count; i >= 0; i--)
+            {
+                controls[i].Dispose();
+            }
+        }
     }
 
     /// <summary>

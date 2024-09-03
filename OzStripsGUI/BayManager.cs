@@ -639,15 +639,11 @@ public class BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMe
     /// </summary>
     private void ClearVertBoards()
     {
-        main.Controls.Clear();
-        _flpVerticalBoards.Clear();
-    }
+        for (var i = main.Controls.Count - 1; i >= 0; i--)
+        {
+            main.Controls[i].Dispose();
+        }
 
-    /// <summary>
-    /// Determines how many vertical boards are needed.
-    /// </summary>
-    private void DetermineVertBoardNumber()
-    {
         main.Controls.Clear();
         _flpVerticalBoards.Clear();
     }
