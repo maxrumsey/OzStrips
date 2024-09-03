@@ -1,4 +1,8 @@
 # Changelog
+## v0.4.3
+### Bugfixes
+- Fixed issue with ozstrips leaking user handles over long sessions.
+
 ## v0.4.2
 ### Bugfixes
 - Fixed race condition causing a NRE
