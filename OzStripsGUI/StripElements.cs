@@ -36,6 +36,7 @@ public static class StripElements
         SSRSYMBOL,
         RWY,
         WTC,
+        ROUTE,
     }
 
     public enum Actions
@@ -43,7 +44,7 @@ public static class StripElements
         NONE,
         SHOW_ROUTE,
         OPEN_HDG_ALT,
-        OPENFDR,
+        OPEN_FDR,
         PICK,
         ASSIGN_SSR,
         OPEN_SID,

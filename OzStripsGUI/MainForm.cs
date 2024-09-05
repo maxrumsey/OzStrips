@@ -340,6 +340,8 @@ public partial class MainForm : Form
                 break;
         }
 
+        _bayManager.ForceRerender();
+
         return base.ProcessCmdKey(ref msg, keyData);
     }
 

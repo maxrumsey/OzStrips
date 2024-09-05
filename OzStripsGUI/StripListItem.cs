@@ -18,12 +18,7 @@ public class StripListItem
     public StripItemType Type { get; set; }
 
     /// <summary>
-    /// Gets or sets the divider bar.
-    /// </summary>
-    public DividerBarControl? DividerBarControl { get; set; }
-
-    /// <summary>
     /// Gets or sets the view class.
     /// </summary>
-    internal StripView? StripView { get; set; }
+    internal IRenderedStripItem? RenderedStripItem { get; set; }
 }

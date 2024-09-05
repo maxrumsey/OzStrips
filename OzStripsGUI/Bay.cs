@@ -27,6 +27,7 @@ public class Bay : System.IDisposable
     {
         BayTypes = bays;
         _bayManager = bayManager;
+        BayManager = bayManager;
         _socketConnection = socketConn;
         Name = name;
         VerticalBoardNumber = vertBoardNum;
@@ -83,6 +84,11 @@ public class Bay : System.IDisposable
             return val;
         }
     }
+
+    /// <summary>
+    /// Gets the current bay manager.
+    /// </summary>
+    public BayManager BayManager { get; }
 
     /// <summary>
     /// Converts the Bay into a Bay Transfer object.
@@ -211,7 +217,7 @@ public class Bay : System.IDisposable
         {
             StripController = stripController,
             Type = StripItemType.STRIP,
-            StripView = new StripView(stripController, _bayRenderController),
+            RenderedStripItem = new StripView(stripController, _bayRenderController),
         };
 
         Strips.Add(strip); // todo: add control action
@@ -236,6 +242,8 @@ public class Bay : System.IDisposable
                 s.StripController?.UpdateFDR();
             }
         }
+
+        _bayRenderController.Redraw();
     }
 
     /// <summary>
@@ -309,7 +317,7 @@ public class Bay : System.IDisposable
             var newItem = new StripListItem
             {
                 Type = StripItemType.QUEUEBAR,
-                DividerBarControl = new(),
+                RenderedStripItem = new BarView(_bayRenderController),
             };
             Strips.Insert(0, newItem);
         }
