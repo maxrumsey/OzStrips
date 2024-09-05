@@ -164,8 +164,6 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
                     }
                 }
 
-                strip.ClearStripControl();
-                strip.CreateStripObj();
                 _bayManager.AddStrip(strip, false, true);
             }
 

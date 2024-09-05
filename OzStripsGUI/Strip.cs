@@ -18,7 +18,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui;
 /// <summary>
 /// Responsible for strip logic, represents a Vatsys FDR.
 /// </summary>
-public sealed class Strip : IDisposable
+public sealed class Strip
 {
     private static readonly Regex _headingRegex = new(@"H(\d{3})");
     private static readonly Regex _routeRegex = new(@"^[^\d/]+$");
@@ -48,14 +48,6 @@ public sealed class Strip : IDisposable
         {
             CurrentBay = StripBay.BAY_ARRIVAL;
         }
-
-        if (!DetermineSCValidity())
-        {
-            Dispose();
-            return;
-        }
-
-        CreateStripObj();
     }
 
     /// <summary>
@@ -101,7 +93,7 @@ public sealed class Strip : IDisposable
     /// <summary>
     /// Gets the base control.
     /// </summary>
-    public StripBaseGUI? Control { get; private set; }
+    public StripController? Control { get; private set; }
 
     /// <summary>
     /// Gets the flight data record.
@@ -504,36 +496,6 @@ public sealed class Strip : IDisposable
     }
 
     /// <summary>
-    /// Creates control for strip.
-    /// </summary>
-    public void CreateStripObj()
-    {
-        StripHolderControl = new Panel
-        {
-            BackColor = Color.FromArgb(193, 230, 242),
-        };
-        if (ArrDepType == StripArrDepType.ARRIVAL)
-        {
-            StripHolderControl.BackColor = Color.FromArgb(255, 255, 160);
-        }
-
-        StripHolderControl.Padding = new(3);
-        StripHolderControl.Margin = new(0);
-
-        ////stripHolderControl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-        StripHolderControl.Size = new(100, 100);
-
-        Control = new TinyStrip(this);
-
-        Control.Initialise();
-        Control.UpdateStrip();
-        Control.HMI_TogglePick(_bayManager.PickedController == this);
-
-        StripHolderControl.Size = Control.Size with { Height = Control.Size.Height + 6 };
-        StripHolderControl.Controls.Add(Control);
-    }
-
-    /// <summary>
     /// Removes items from the strip holder control.
     /// </summary>
     public void ClearStripControl()
@@ -633,8 +595,6 @@ public sealed class Strip : IDisposable
                 }
             }
         }
-
-        Control?.UpdateStrip();
     }
 
     /// <summary>
@@ -757,13 +717,6 @@ public sealed class Strip : IDisposable
     public void SyncStrip()
     {
         _socketConn.SyncSC(this);
-    }
-
-    /// <inheritdoc/>
-    public void Dispose()
-    {
-        Control?.Dispose();
-        StripHolderControl?.Dispose();
     }
 
     private static string CleanVatsysRoute(string rawRoute)

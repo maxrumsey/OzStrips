@@ -336,8 +336,6 @@ public class BayManager
             }
         }
 
-        stripController.ClearStripControl();
-        stripController.CreateStripObj();
         AddStrip(stripController);
 
         if (stripController.CurrentBay >= StripBay.BAY_PUSHED)

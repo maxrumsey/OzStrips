@@ -36,7 +36,6 @@
         <Compile Update="BayRenderController.cs">
           <SubType>Component</SubType>
         </Compile>
-        <Compile Update="Controls\TinyStrip.cs" />
         <Compile Update="Controls\SettingsWindowControl.cs">
           <SubType>UserControl</SubType>
         </Compile>

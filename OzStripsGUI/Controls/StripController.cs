@@ -15,36 +15,26 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
 /// The strip base.
 /// </summary>
 /// <remarks>
-/// Initializes a new instance of the <see cref="StripBaseGUI"/> class.
+/// Initializes a new instance of the <see cref="StripController"/> class.
 /// </remarks>
-public class StripBaseGUI : UserControl
+public class StripController
 {
-    private string _rtetooltiptext = string.Empty;
+    // private string _rtetooltiptext = string.Empty;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="StripBaseGUI"/> class.
+    /// Initializes a new instance of the <see cref="StripController"/> class.
     /// </summary>
     /// <param name="stripController">The Strip Controller.</param>
-    public StripBaseGUI(Strip stripController)
+    public StripController(Strip stripController)
     {
-        StripController = stripController;
+        Strip = stripController;
         FDR = stripController.FDR;
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="StripBaseGUI"/> class.
-    /// Used exclusively in Design-Time.
-    /// </summary>
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-    public StripBaseGUI()
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-    {
     }
 
     /// <summary>
     /// Gets the strip controller.
     /// </summary>
-    protected Strip StripController { get; }
+    protected Strip Strip { get; }
 
     /// <summary>
     /// Gets the flight data record.
@@ -91,7 +81,7 @@ public class StripBaseGUI : UserControl
     {
         if (cockLevel == -1)
         {
-            cockLevel = StripController.CockLevel + 1;
+            cockLevel = Strip.CockLevel + 1;
             if (cockLevel >= 2)
             {
                 cockLevel = 0;
@@ -100,12 +90,12 @@ public class StripBaseGUI : UserControl
 
         if (update)
         {
-            StripController.CockLevel = cockLevel;
+            Strip.CockLevel = cockLevel;
         }
 
         var marginLeft = 0;
         var color = Color.Empty;
-        if (StripController.CockLevel == 1)
+        if (Strip.CockLevel == 1)
         {
             marginLeft = 30;
             color = Color.Cyan;
@@ -116,14 +106,14 @@ public class StripBaseGUI : UserControl
             pl.BackColor = color;
         }
 
-        if (StripController.StripHolderControl is not null)
+        if (Strip.StripHolderControl is not null)
         {
-            StripController.StripHolderControl.Margin = new(marginLeft, 0, 0, 0);
+            Strip.StripHolderControl.Margin = new(marginLeft, 0, 0, 0);
         }
 
         if (sync)
         {
-            StripController.SyncStrip();
+            Strip.SyncStrip();
         }
     }
 
@@ -134,7 +124,7 @@ public class StripBaseGUI : UserControl
     public void SetCross(bool sync = true)
     {
         var color = DefColor;
-        if (StripController.Crossing)
+        if (Strip.Crossing)
         {
             color = Color.Salmon;
         }
@@ -146,16 +136,8 @@ public class StripBaseGUI : UserControl
 
         if (sync)
         {
-            StripController.SyncStrip();
+            Strip.SyncStrip();
         }
-    }
-
-    /// <summary>
-    /// Initialises the form.
-    /// </summary>
-    public void Initialise()
-    {
-        Dock = DockStyle.Fill;
     }
 
     /// <summary>
@@ -223,8 +205,8 @@ public class StripBaseGUI : UserControl
     /// </summary>
     public void OpenRerouteMenu()
     {
-        var modalChild = new RerouteControl(StripController);
-        var bm = new BaseModal(modalChild, "Reroute :: " + StripController.FDR.Callsign);
+        var modalChild = new RerouteControl(Strip);
+        var bm = new BaseModal(modalChild, "Reroute :: " + Strip.FDR.Callsign);
 
         // modalChild.BaseModal = bm;
         bm.Show(MainForm.MainFormInstance);
@@ -245,35 +227,32 @@ public class StripBaseGUI : UserControl
         }
     }
 
-    /// <summary>
-    /// Updates the strip.
-    /// </summary>
+    /*
     public void UpdateStrip()
     {
-        SuspendLayout();
         if (FDR == null)
         {
             return;
         }
 
-        SetLabel("eobt", StripController.Time);
+        SetLabel("eobt", Strip.Time);
 
         SetLabel("acid", FDR.Callsign);
         SetLabel("ssr", (FDR.AssignedSSRCode == -1) ? "XXXX" : Convert.ToString(FDR.AssignedSSRCode, 8).PadLeft(4, '0'));
         SetLabel("type", FDR.AircraftType);
         SetLabel("frul", FDR.FlightRules);
 
-        SetLabel("route", StripController.FirstWpt);
+        SetLabel("route", Strip.FirstWpt);
         SetBackColour("route", DetermineRouteBackColour());
 
         if (StripToolTips.ContainsKey("routetooltip"))
         {
-            if (StripController.DodgyRoute)
+            if (Strip.DodgyRoute)
             {
                 var routes = new List<string>();
-                Array.ForEach(StripController.ValidRoutes, x => routes.Add("(" + x.acft + ") " + x.route));
-                var str = StripController.Route +
-                                "\n---\nPotentially non-compliant route detected! Accepted Routes:\n" + string.Join("\n", routes) + "\nParsed Route: " + StripController.CondensedRoute;
+                Array.ForEach(Strip.ValidRoutes, x => routes.Add("(" + x.acft + ") " + x.route));
+                var str = Strip.Route +
+                                "\n---\nPotentially non-compliant route detected! Accepted Routes:\n" + string.Join("\n", routes) + "\nParsed Route: " + Strip.CondensedRoute;
                 if (str != _rtetooltiptext)
                 {
                     StripToolTips["routetooltip"].SetToolTip(StripElements["route"], str);
@@ -282,7 +261,7 @@ public class StripBaseGUI : UserControl
             }
             else
             {
-                var str = StripController.Route;
+                var str = Strip.Route;
                 if (str != _rtetooltiptext)
                 {
                     StripToolTips["routetooltip"].SetToolTip(StripElements["route"], str);
@@ -291,14 +270,14 @@ public class StripBaseGUI : UserControl
             }
         }
 
-        SetLabel("sid", StripController.SID);
+        SetLabel("sid", Strip.SID);
 
         SetLabel("ades", FDR.DesAirport);
-        SetLabel("CFL", StripController.CFL);
+        SetLabel("CFL", Strip.CFL);
 
         try
         {
-            if (StripController.ArrDepType == StripArrDepType.DEPARTURE)
+            if (Strip.ArrDepType == StripArrDepType.DEPARTURE)
             {
                 var colour = DetermineCFLBackColour();
                 SetBackColour("CFL", colour);
@@ -308,17 +287,17 @@ public class StripBaseGUI : UserControl
         {
         }
 
-        SetLabel("HDG", string.IsNullOrEmpty(StripController.HDG) ? string.Empty : "H" + StripController.HDG);
+        SetLabel("HDG", string.IsNullOrEmpty(Strip.HDG) ? string.Empty : "H" + Strip.HDG);
 
-        SetLabel("CLX", StripController.CLX);
+        SetLabel("CLX", Strip.CLX);
 
-        SetLabel("stand", StripController.Gate);
+        SetLabel("stand", Strip.Gate);
 
-        SetLabel("remark", StripController.Remark);
+        SetLabel("remark", Strip.Remark);
 
-        if (StripController.TakeOffTime != null)
+        if (Strip.TakeOffTime != null)
         {
-            var diff = (TimeSpan)(DateTime.UtcNow - StripController.TakeOffTime);
+            var diff = (TimeSpan)(DateTime.UtcNow - Strip.TakeOffTime);
             SetLabel("tot", diff.ToString(@"mm\:ss", CultureInfo.InvariantCulture));
             SetForeColour("tot", Color.Green);
         }
@@ -328,11 +307,11 @@ public class StripBaseGUI : UserControl
             SetForeColour("tot", Color.Black);
         }
 
-        SetLabel("rfl", StripController.RFL);
+        SetLabel("rfl", Strip.RFL);
 
-        SetLabel("ready", StripController.Ready ? "RDY" : string.Empty);
+        SetLabel("ready", Strip.Ready ? "RDY" : string.Empty);
 
-        if (!StripController.Ready && (StripController.CurrentBay == StripBay.BAY_HOLDSHORT || StripController.CurrentBay == StripBay.BAY_RUNWAY) && StripController.ArrDepType == StripArrDepType.DEPARTURE)
+        if (!Strip.Ready && (Strip.CurrentBay == StripBay.BAY_HOLDSHORT || Strip.CurrentBay == StripBay.BAY_RUNWAY) && Strip.ArrDepType == StripArrDepType.DEPARTURE)
         {
             SetBackColour("ready", Color.Orange);
         }
@@ -343,7 +322,7 @@ public class StripBaseGUI : UserControl
 
         SetLabel("glop", FDR.GlobalOpData);
 
-        if (StripController.SquawkCorrect)
+        if (Strip.SquawkCorrect)
         {
             SetLabel("ssrsymbol", "*");
         }
@@ -355,11 +334,12 @@ public class StripBaseGUI : UserControl
         SetCross(false);
         Cock(0, false, false);
 
-        SetLabel("rwy", StripController.RWY);
+        SetLabel("rwy", Strip.RWY);
         SetLabel("wtc", FDR.AircraftWake);
 
         ResumeLayout();
     }
+    */
 
     /// <summary>
     /// Toggles display of the route for the strip.
@@ -398,7 +378,7 @@ public class StripBaseGUI : UserControl
         }
 
         var track = Conversions.CalculateTrack(first, last);
-        var positions = LogicalPositions.Positions.Where(e => e.Name == StripController.ParentAerodrome).FirstOrDefault();
+        var positions = LogicalPositions.Positions.Where(e => e.Name == Strip.ParentAerodrome).FirstOrDefault();
         if (positions is null)
         {
             return Color.Empty;
@@ -414,11 +394,11 @@ public class StripBaseGUI : UserControl
             even = false;
         }
 
-        var digit = int.Parse(StripController.RFL[1].ToString(), CultureInfo.InvariantCulture);
+        var digit = int.Parse(Strip.RFL[1].ToString(), CultureInfo.InvariantCulture);
         var shouldbeeven = digit % 2 == 0;
 
         var colour = Color.Empty;
-        if (even != shouldbeeven && FDR.RFL >= 3000 && StripController.ArrDepType == StripArrDepType.DEPARTURE)
+        if (even != shouldbeeven && FDR.RFL >= 3000 && Strip.ArrDepType == StripArrDepType.DEPARTURE)
         {
             colour = Color.OrangeRed;
             StripToolTips["cfltooltip"].Active = true;
@@ -433,7 +413,7 @@ public class StripBaseGUI : UserControl
             colour = Color.Empty;
             StripToolTips["cfltooltip"].Active = false;
         }
-        else if (FDR.RFL >= 41000 && StripController.ArrDepType == StripArrDepType.DEPARTURE)
+        else if (FDR.RFL >= 41000 && Strip.ArrDepType == StripArrDepType.DEPARTURE)
         {
             colour = Color.OrangeRed;
             StripToolTips["cfltooltip"].Active = true;
@@ -449,7 +429,7 @@ public class StripBaseGUI : UserControl
     protected Color DetermineRouteBackColour()
     {
         var colour = Color.Empty;
-        if (StripController.DodgyRoute)
+        if (Strip.DodgyRoute)
         {
             colour = Color.Orange;
         }
@@ -462,8 +442,8 @@ public class StripBaseGUI : UserControl
     /// </summary>
     protected void OpenHdgAltModal()
     {
-        var modalChild = new AltHdgControl(StripController);
-        var bm = new BaseModal(modalChild, "ACD Menu :: " + StripController.FDR.Callsign);
+        var modalChild = new AltHdgControl(Strip);
+        var bm = new BaseModal(modalChild, "ACD Menu :: " + Strip.FDR.Callsign);
         modalChild.BaseModal = bm;
         bm.ReturnEvent += HeadingAltReturned;
         bm.Show(MainForm.MainFormInstance);
@@ -475,8 +455,8 @@ public class StripBaseGUI : UserControl
     /// <param name="labelName">Label Name.</param>
     protected void OpenCLXBayModal(string labelName)
     {
-        var modalChild = new BayCLXControl(StripController, labelName);
-        var bm = new BaseModal(modalChild, "SMC Menu :: " + StripController.FDR.Callsign);
+        var modalChild = new BayCLXControl(Strip, labelName);
+        var bm = new BaseModal(modalChild, "SMC Menu :: " + Strip.FDR.Callsign);
         modalChild.BaseModal = bm;
         bm.ReturnEvent += CLXBayReturned;
         bm.Show(MainForm.MainFormInstance);
@@ -490,7 +470,7 @@ public class StripBaseGUI : UserControl
     {
         if (e.Button == MouseButtons.Left)
         {
-            StripController.OpenVatsysFDR();
+            Strip.OpenVatsysFDR();
         }
         else
         {
@@ -503,7 +483,7 @@ public class StripBaseGUI : UserControl
     /// </summary>
     protected void TogglePick()
     {
-        StripController.TogglePick();
+        Strip.TogglePick();
     }
 
     /// <summary>
@@ -511,8 +491,8 @@ public class StripBaseGUI : UserControl
     /// </summary>
     protected void ToggleReady()
     {
-        StripController.Ready = !StripController.Ready;
-        StripController.SyncStrip();
+        Strip.Ready = !Strip.Ready;
+        Strip.SyncStrip();
     }
 
     /// <summary>
@@ -522,7 +502,7 @@ public class StripBaseGUI : UserControl
     {
         if (FDR.AssignedSSRCode == -1 && Network.Me.IsRealATC)
         {
-            FDP2.SetASSR(StripController.FDR);
+            FDP2.SetASSR(Strip.FDR);
         }
     }
 
@@ -538,21 +518,21 @@ public class StripBaseGUI : UserControl
             var control = (AltHdgControl)args.Child;
             if (!string.IsNullOrEmpty(control.Alt))
             {
-                StripController.CFL = control.Alt;
+                Strip.CFL = control.Alt;
             }
 
-            StripController.HDG = control.Hdg;
-            if (!string.IsNullOrEmpty(control.Runway) && StripController.RWY != control.Runway)
+            Strip.HDG = control.Hdg;
+            if (!string.IsNullOrEmpty(control.Runway) && Strip.RWY != control.Runway)
             {
-                StripController.RWY = control.Runway;
+                Strip.RWY = control.Runway;
             }
 
-            if (!string.IsNullOrEmpty(control.SID) && StripController.SID != control.SID)
+            if (!string.IsNullOrEmpty(control.SID) && Strip.SID != control.SID)
             {
-                StripController.SID = control.SID;
+                Strip.SID = control.SID;
             }
 
-            StripController.SyncStrip();
+            Strip.SyncStrip();
         }
         catch (Exception)
         {
@@ -562,34 +542,10 @@ public class StripBaseGUI : UserControl
     private void CLXBayReturned(object source, ModalReturnArgs args)
     {
         var control = (BayCLXControl)args.Child;
-        StripController.CLX = control.CLX;
-        StripController.Gate = control.Gate;
-        StripController.Remark = control.Remark;
-        FDP2.SetGlobalOps(StripController.FDR, control.Glop);
-        StripController.SyncStrip();
-    }
-
-    private void SetLabel(string label, string text)
-    {
-        if (StripElements.ContainsKey(label) && StripElements[label].Text != text)
-        {
-            StripElements[label].Text = text;
-        }
-    }
-
-    private void SetForeColour(string label, Color color)
-    {
-        if (StripElements.ContainsKey(label) && StripElements[label].ForeColor != color)
-        {
-            StripElements[label].ForeColor = color;
-        }
-    }
-
-    private void SetBackColour(string label, Color color)
-    {
-        if (StripElements.ContainsKey(label) && StripElements[label].BackColor != color)
-        {
-            StripElements[label].BackColor = color;
-        }
+        Strip.CLX = control.CLX;
+        Strip.Gate = control.Gate;
+        Strip.Remark = control.Remark;
+        FDP2.SetGlobalOps(Strip.FDR, control.Glop);
+        Strip.SyncStrip();
     }
 }
