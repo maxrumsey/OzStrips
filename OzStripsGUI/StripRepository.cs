@@ -88,14 +88,14 @@ public class StripRepository
                 }
 
                 controller.CurrentBay = stripControllerData.bay;
-                controller.Control?.Cock(stripControllerData.cockLevel, false);
+                controller.Controller?.Cock(stripControllerData.cockLevel, false);
                 controller.TakeOffTime = stripControllerData.TOT == "\0" ?
                     null :
                     DateTime.Parse(stripControllerData.TOT, CultureInfo.InvariantCulture);
 
                 controller.Remark = !string.IsNullOrWhiteSpace(stripControllerData.remark) ? stripControllerData.remark : string.Empty;
                 controller.Crossing = stripControllerData.crossing;
-                controller.Control?.SetCross(false);
+                controller.Controller?.SetCross(false);
                 controller.Ready = stripControllerData.ready;
                 if (changeBay)
                 {

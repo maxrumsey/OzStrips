@@ -48,12 +48,9 @@ public sealed class Strip
         {
             CurrentBay = StripBay.BAY_ARRIVAL;
         }
-    }
 
-    /// <summary>
-    /// Gets or sets the strip holder control.
-    /// </summary>
-    public Control? StripHolderControl { get; set; }
+        Controller = new StripController(this);
+    }
 
     /// <summary>
     /// Gets or sets the take off time.
@@ -91,9 +88,9 @@ public sealed class Strip
     public string ParentAerodrome { get; }
 
     /// <summary>
-    /// Gets the base control.
+    /// Gets the strip view controller.
     /// </summary>
-    public StripController? Control { get; private set; }
+    public StripController Controller { get; }
 
     /// <summary>
     /// Gets the flight data record.
@@ -442,7 +439,7 @@ public sealed class Strip
     /// <param name="picked">True if picked, false otherwise.</param>
     public void SetHMIPicked(bool picked)
     {
-        Control?.HMI_TogglePick(picked);
+        Controller?.HMI_TogglePick(picked);
     }
 
     /// <summary>
@@ -450,7 +447,7 @@ public sealed class Strip
     /// </summary>
     public void CockStrip()
     {
-        Control?.Cock(-1);
+        Controller?.Cock(-1);
     }
 
     /// <summary>
@@ -493,14 +490,6 @@ public sealed class Strip
     public void SendDeleteMessage()
     {
         _socketConn.SyncDeletion(this);
-    }
-
-    /// <summary>
-    /// Removes items from the strip holder control.
-    /// </summary>
-    public void ClearStripControl()
-    {
-        StripHolderControl?.Controls.Clear();
     }
 
     /// <summary>

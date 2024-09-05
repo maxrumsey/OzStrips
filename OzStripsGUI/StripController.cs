@@ -5,11 +5,11 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
-
+using MaxRumsey.OzStripsPlugin.Gui.Controls;
 using vatsys;
 using static vatsys.FDP2;
 
-namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
+namespace MaxRumsey.OzStripsPlugin.Gui;
 
 /// <summary>
 /// The strip base.
@@ -91,24 +91,6 @@ public class StripController
         if (update)
         {
             Strip.CockLevel = cockLevel;
-        }
-
-        var marginLeft = 0;
-        var color = Color.Empty;
-        if (Strip.CockLevel == 1)
-        {
-            marginLeft = 30;
-            color = Color.Cyan;
-        }
-
-        foreach (var pl in CockColourControls)
-        {
-            pl.BackColor = color;
-        }
-
-        if (Strip.StripHolderControl is not null)
-        {
-            Strip.StripHolderControl.Margin = new(marginLeft, 0, 0, 0);
         }
 
         if (sync)
