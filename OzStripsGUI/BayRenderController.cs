@@ -13,8 +13,8 @@ namespace MaxRumsey.OzStripsPlugin;
 
 internal class BayRenderController(Bay bay) : IDisposable
 {
-    public const int StripHeight = 50;
-    public const int StripWidth = 300;
+    public const int StripHeight = 64;
+    public const int StripWidth = 420;
     public const int CockOffset = 30;
     private SKControl? _skControl;
 

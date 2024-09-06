@@ -61,16 +61,16 @@ public partial class BayCLXControl : UserControl
 
         switch (_callingLabel)
         {
-            case "lb_remark":
+            case "remark":
                 ActiveControl = tb_remark;
                 break;
-            case "lb_glop":
+            case "glop":
                 ActiveControl = tb_glop;
                 break;
-            case "lb_std":
+            case "std":
                 ActiveControl = tb_bay;
                 break;
-            case "lb_clx":
+            case "clx":
                 ActiveControl = tb_clx;
                 break;
         }

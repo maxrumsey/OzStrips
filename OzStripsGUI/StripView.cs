@@ -69,7 +69,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             var text = GetElementText(element);
             var fontsize = element.FontSize;
 
-            var typeface = SKTypeface.FromFamilyName("Segoe UI", SKFontStyle.Bold);
+            var typeface = SKTypeface.FromFamilyName("Segoe UI", 700, 5, SKFontStyleSlant.Upright);
 
             canvas.DrawRect(baseX, baseY, element.W, element.H, basepaint);
             canvas.DrawRect(baseX, baseY, element.W, element.H, elpaint);
@@ -99,7 +99,13 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
         if (clicked is not null)
         {
-            HandleClickAction(clicked.LeftClick);
+            var action = clicked.LeftClick;
+            if (e.Button == MouseButtons.Right)
+            {
+                action = clicked.RightClick;
+            }
+
+            HandleClickAction(action);
         }
     }
 
@@ -128,6 +134,45 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             case StripElements.Actions.PICK:
                 _strip.TogglePick();
                 break;
+            case StripElements.Actions.ASSIGN_SSR:
+                _strip.Controller.AssignSSR();
+                break;
+            case StripElements.Actions.MOD_CLX:
+                _strip.Controller.OpenCLXBayModal("clx");
+                break;
+            case StripElements.Actions.MOD_STD:
+                _strip.Controller.OpenCLXBayModal("std");
+                break;
+            case StripElements.Actions.MOD_GLOP:
+                _strip.Controller.OpenCLXBayModal("glop");
+                break;
+            case StripElements.Actions.MOD_REMARK:
+                _strip.Controller.OpenCLXBayModal("remark");
+                break;
+            case StripElements.Actions.MOD_CFL:
+                _strip.Controller.OpenCFLWindow();
+                break;
+            case StripElements.Actions.MOD_RWY:
+                _strip.Controller.OpenRWYWindow();
+                break;
+            case StripElements.Actions.MOD_SID:
+                _strip.Controller.OpenSIDWindow();
+                break;
+            case StripElements.Actions.OPEN_HDG_ALT:
+                _strip.Controller.OpenHDGWindow();
+                break;
+            case StripElements.Actions.OPEN_REROUTE:
+                _strip.Controller.OpenRerouteMenu();
+                break;
+            case StripElements.Actions.SET_READY:
+                _strip.Controller.ToggleReady();
+                break;
+            case StripElements.Actions.SET_TOT:
+                _strip.TakeOff();
+                break;
+            case StripElements.Actions.COCK:
+                _strip.CockStrip();
+                break;
         }
     }
 
@@ -141,6 +186,42 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 return _strip.FDR.Callsign;
             case StripElements.Values.SSR:
                 return (_strip.FDR.AssignedSSRCode == -1) ? "XXXX" : Convert.ToString(_strip.FDR.AssignedSSRCode, 8).PadLeft(4, '0');
+            case StripElements.Values.ADES:
+                return _strip.FDR.DesAirport;
+            case StripElements.Values.ROUTE:
+                return "R";
+            case StripElements.Values.FRUL:
+                return _strip.FDR.FlightRules;
+            case StripElements.Values.SSR_SYMBOL:
+                return _strip.SquawkCorrect ? "*" : string.Empty;
+            case StripElements.Values.TYPE:
+                return _strip.FDR.AircraftType;
+            case StripElements.Values.WTC:
+                return _strip.FDR.AircraftWake;
+            case StripElements.Values.RWY:
+                return _strip.RWY;
+            case StripElements.Values.READY:
+                return _strip.Ready ? "RDY" : string.Empty;
+            case StripElements.Values.CLX:
+                return _strip.CLX;
+            case StripElements.Values.SID:
+                return _strip.SID;
+            case StripElements.Values.FIRST_WPT:
+                if (_strip.FirstWpt.Length > 5)
+                {
+                    return _strip.FirstWpt.Substring(0, 5) + "...";
+                }
+                else
+                {
+                    return _strip.FirstWpt;
+                }
+
+            case StripElements.Values.RFL:
+                return _strip.RFL;
+            case StripElements.Values.CFL:
+                return _strip.CFL;
+            case StripElements.Values.STAND:
+                return _strip.Gate;
             default:
                 break;
         }
@@ -165,7 +246,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             case StripElements.Values.WTC:
             case StripElements.Values.ROUTE:
             case StripElements.Values.FRUL:
-            case StripElements.Values.SSRSYMBOL:
+            case StripElements.Values.SSR_SYMBOL:
             case StripElements.Values.TYPE:
             case StripElements.Values.SSR:
                 if (_strip.CockLevel == 1)
@@ -174,6 +255,8 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 }
 
                 break;
+            case StripElements.Values.SID:
+                return SKColors.Green;
         }
 
         return SKColor.Empty;
@@ -190,6 +273,8 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 }
 
                 break;
+            case StripElements.Values.RFL:
+                return SKColors.Gray;
         }
 
         return SKColors.Black;
@@ -199,7 +284,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
     {
         var paint = new SKPaint()
         {
-            Color = (_strip.ArrDepType == StripArrDepType.ARRIVAL) ? SKColors.Yellow : SKColors.CornflowerBlue,
+            Color = (_strip.ArrDepType == StripArrDepType.ARRIVAL) ? SKColor.Parse("ffffa0") : SKColor.Parse("c1e6f2"),
             Style = SKPaintStyle.Fill,
         };
 

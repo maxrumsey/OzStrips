@@ -50,7 +50,7 @@ public class StripElementList
 
     internal static void Load()
     {
-        var path = Path.Combine("C:/Users/exiflame/Desktop/List.xml");
+        var path = Path.Combine("C:\\Users\\exiflame\\Documents\\ozstripstest\\Strip.xml");
 
         Instance = Deserialize(path);
     }

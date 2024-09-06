@@ -39,6 +39,6 @@ internal class BarView(BayRenderController bayRC) : IRenderedStripItem
             Style = SKPaintStyle.Fill,
         };
 
-        canvas.DrawRect(Origin.X, Origin.Y, BayRenderController.StripWidth, BayRenderController.StripHeight, paint);
+        canvas.DrawRect(Origin.X, Origin.Y, BayRenderController.StripWidth + 4, BayRenderController.StripHeight, paint);
     }
 }

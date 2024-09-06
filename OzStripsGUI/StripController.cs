@@ -209,6 +209,39 @@ public class StripController
         }
     }
 
+    /// <summary>
+    /// Opens the Clearance bya modal.
+    /// </summary>
+    /// <param name="labelName">Label Name.</param>
+    public void OpenCLXBayModal(string labelName)
+    {
+        var modalChild = new BayCLXControl(Strip, labelName);
+        var bm = new BaseModal(modalChild, "SMC Menu :: " + Strip.FDR.Callsign);
+        modalChild.BaseModal = bm;
+        bm.ReturnEvent += CLXBayReturned;
+        bm.Show(MainForm.MainFormInstance);
+    }
+
+    /// <summary>
+    /// Assigns a squawk.
+    /// </summary>
+    public void AssignSSR()
+    {
+        if (FDR.AssignedSSRCode == -1 && Network.Me.IsRealATC)
+        {
+            FDP2.SetASSR(Strip.FDR);
+        }
+    }
+
+    /// <summary>
+    /// Toggles strip ready status.
+    /// </summary>
+    public void ToggleReady()
+    {
+        Strip.Ready = !Strip.Ready;
+        Strip.SyncStrip();
+    }
+
     /*
     public void UpdateStrip()
     {
@@ -432,19 +465,6 @@ public class StripController
     }
 
     /// <summary>
-    /// Opens the Clearance bya modal.
-    /// </summary>
-    /// <param name="labelName">Label Name.</param>
-    protected void OpenCLXBayModal(string labelName)
-    {
-        var modalChild = new BayCLXControl(Strip, labelName);
-        var bm = new BaseModal(modalChild, "SMC Menu :: " + Strip.FDR.Callsign);
-        modalChild.BaseModal = bm;
-        bm.ReturnEvent += CLXBayReturned;
-        bm.Show(MainForm.MainFormInstance);
-    }
-
-    /// <summary>
     /// Opens that VATSYS flight data record mod menu.
     /// </summary>
     /// <param name="e">Mouse Event Args.</param>
@@ -466,26 +486,6 @@ public class StripController
     protected void TogglePick()
     {
         Strip.TogglePick();
-    }
-
-    /// <summary>
-    /// Toggles strip ready status.
-    /// </summary>
-    protected void ToggleReady()
-    {
-        Strip.Ready = !Strip.Ready;
-        Strip.SyncStrip();
-    }
-
-    /// <summary>
-    /// Assigns a squawk.
-    /// </summary>
-    protected void AssignSSR()
-    {
-        if (FDR.AssignedSSRCode == -1 && Network.Me.IsRealATC)
-        {
-            FDP2.SetASSR(Strip.FDR);
-        }
     }
 
     /// <summary>

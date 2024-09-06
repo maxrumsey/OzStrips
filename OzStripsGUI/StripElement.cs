@@ -27,6 +27,11 @@ public class StripElement
     public StripElements.Actions LeftClick { get; set; } = StripElements.Actions.NONE;
 
     /// <summary>
+    /// Gets or sets the left click action.
+    /// </summary>
+    public StripElements.Actions RightClick { get; set; } = StripElements.Actions.NONE;
+
+    /// <summary>
     /// Gets or sets the Origin.X.
     /// </summary>
     public int X { get; set; }
