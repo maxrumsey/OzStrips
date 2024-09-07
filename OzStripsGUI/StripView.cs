@@ -78,6 +78,11 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
         }
     }
 
+    public void MarkPicked(bool picked)
+    {
+        _strip.SetHMIPicked(picked);
+    }
+
     public void HandleClick(MouseEventArgs e)
     {
         var stripelementlist = StripElementList.Instance?.List;

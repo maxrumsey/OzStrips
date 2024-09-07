@@ -18,6 +18,11 @@ public class StripListItem
     public StripItemType Type { get; set; }
 
     /// <summary>
+    /// Gets or sets the bar text.
+    /// </summary>
+    public string? BarText { get; set; }
+
+    /// <summary>
     /// Gets or sets the view class.
     /// </summary>
     internal IRenderedStripItem? RenderedStripItem { get; set; }

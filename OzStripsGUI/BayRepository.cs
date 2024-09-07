@@ -108,6 +108,24 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
     }
 
     /// <summary>
+    /// Finds the specified bay.
+    /// </summary>
+    /// <param name="item">The strip.</param>
+    /// <returns>The bay if the name matches.</returns>
+    public Bay? FindBay(StripListItem item)
+    {
+        foreach (var bay in Bays)
+        {
+            if (bay.Strips.Contains(item))
+            {
+                return bay;
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
     /// Adds the bay to the vertical board.
     /// </summary>
     /// <param name="bay">The bay.</param>

@@ -18,5 +18,5 @@ public enum StripItemType
     /// <summary>
     /// Indicates that the strip or section is blocked and cannot be used currently.
     /// </summary>
-    BLOCKED,
+    BAR,
 }

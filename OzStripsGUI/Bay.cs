@@ -257,11 +257,11 @@ public class Bay : System.IDisposable
     /// <summary>
     /// Changes a strip position.
     /// </summary>
-    /// <param name="stripController">The strip controller.</param>
+    /// <param name="item">The strip.</param>
     /// <param name="relativePosition">The relative position.</param>
-    public void ChangeStripPosition(Strip stripController, int relativePosition)
+    public void ChangeStripPosition(StripListItem item, int relativePosition)
     {
-        var originalPosition = Strips.FindIndex(a => a.StripController == stripController);
+        var originalPosition = Strips.FindIndex(a => a == item);
         var stripItem = Strips[originalPosition];
         var newPosition = originalPosition + relativePosition;
 
@@ -318,7 +318,9 @@ public class Bay : System.IDisposable
             {
                 Type = StripItemType.QUEUEBAR,
                 RenderedStripItem = new BarView(_bayRenderController),
+                BarText = "test",
             };
+            ((BarView)newItem.RenderedStripItem).Item = newItem;
             Strips.Insert(0, newItem);
         }
         else if (currentItem is not null && force is null or false)
@@ -372,6 +374,25 @@ public class Bay : System.IDisposable
         {
             AddDivider(true, false);
             return GetListItemByStr(code);
+        }
+
+        return returnedItem;
+    }
+
+    /// <summary>
+    /// Gets if available a list item by strip.
+    /// </summary>
+    /// <param name="strip">The strip.</param>
+    /// <returns>The list item if there is a match, otherwise null.</returns>
+    public StripListItem? GetListItem(Strip strip)
+    {
+        StripListItem? returnedItem = null;
+        foreach (var stripListItem in Strips)
+        {
+            if (stripListItem.Type == StripItemType.STRIP && stripListItem.StripController == strip)
+            {
+                returnedItem = stripListItem;
+            }
         }
 
         return returnedItem;

@@ -29,4 +29,10 @@ internal interface IRenderedStripItem
     /// </summary>
     /// <param name="canvas">Canvas.</param>
     void Render(SKCanvas canvas);
+
+    /// <summary>
+    /// Marks the strip as picked or not.
+    /// </summary>
+    /// <param name="picked">Whether to mark them as picked or not.</param>
+    void MarkPicked(bool picked);
 }

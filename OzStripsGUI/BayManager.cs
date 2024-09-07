@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.Gui.DTO;
@@ -30,9 +32,25 @@ public class BayManager
     }
 
     /// <summary>
-    /// Gets or sets the picked controller.
+    /// Gets the picked controller.
     /// </summary>
-    public Strip? PickedController { get; set; }
+    public Strip? PickedController
+    {
+        get
+        {
+            if (PickedStripItem is not null && PickedStripItem.Type == StripItemType.STRIP)
+            {
+                return PickedStripItem.StripController;
+            }
+
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Gets or sets the picked list item.
+    /// </summary>
+    public StripListItem? PickedStripItem { get; set; }
 
     /// <summary>
     /// Gets the strip repository.
@@ -210,19 +228,19 @@ public class BayManager
     }
 
     /// <summary>
-    /// Sets a controller to be picked.
+    /// Sets a strip item to be picked.
     /// </summary>
-    /// <param name="controller">The controller.</param>
+    /// <param name="item">The strip item.</param>
     /// <param name="sendToVatsys">Selects relevant track in vatSys.</param>
-    public void SetPicked(Strip controller, bool sendToVatsys = false)
+    public void SetPicked(StripListItem item, bool sendToVatsys = false)
     {
-        PickedController?.SetHMIPicked(false);
-        PickedController = controller;
-        controller.SetHMIPicked(true);
+        SetPicked(false);
+        PickedStripItem = item;
+        item.RenderedStripItem?.MarkPicked(true);
 
-        if (sendToVatsys)
+        if (sendToVatsys && item.Type == StripItemType.STRIP)
         {
-            var rTrack = RDP.RadarTracks.FirstOrDefault(x => x.ActualAircraft.Callsign == controller.FDR.Callsign);
+            var rTrack = RDP.RadarTracks.FirstOrDefault(x => x.ActualAircraft.Callsign == item.StripController?.FDR.Callsign);
             var track = MMI.FindTrack(rTrack);
             if (track is not null)
             {
@@ -236,6 +254,23 @@ public class BayManager
                     MMI.SelectOrDeselectGroundTrack(track);
                 }
             }
+        }
+    }
+
+    /// <summary>
+    /// Toggles a strip item as picked.
+    /// </summary>
+    /// <param name="item">The strip item.</param>
+    /// <param name="sendToVatsys">Selects relevant track in vatSys.</param>
+    public void TogglePicked(StripListItem item, bool sendToVatsys = false)
+    {
+        if (PickedStripItem == item)
+        {
+            SetPicked(sendToVatsys);
+        }
+        else
+        {
+            SetPicked(item, sendToVatsys);
         }
     }
 
@@ -258,7 +293,7 @@ public class BayManager
 
             if (foundSC is not null)
             {
-                SetPicked(foundSC);
+                SetPickedStripItem(foundSC);
             }
         }
         else
@@ -273,8 +308,8 @@ public class BayManager
     /// <param name="sendToVatsys">Deselect ground track in vatSys.</param>
     public void SetPicked(bool sendToVatsys = false)
     {
-        PickedController?.SetHMIPicked(false);
-        PickedController = null;
+        PickedStripItem?.RenderedStripItem?.MarkPicked(false);
+        PickedStripItem = null;
 
         if (sendToVatsys)
         {
@@ -288,7 +323,7 @@ public class BayManager
     /// </summary>
     public void WipeStrips()
     {
-        PickedController = null;
+        PickedStripItem = null;
         foreach (var bay in BayRepository.Bays)
         {
             bay.WipeStrips();
@@ -370,9 +405,9 @@ public class BayManager
     {
         try
         {
-            if (PickedController != null)
+            if (PickedStripItem != null)
             {
-                BayRepository.FindBay(PickedController)?.ChangeStripPosition(PickedController, relPos);
+                BayRepository.FindBay(PickedStripItem)?.ChangeStripPosition(PickedStripItem, relPos);
             }
         }
         catch (Exception ex)
@@ -396,6 +431,23 @@ public class BayManager
         catch (Exception ex)
         {
             Errors.Add(ex, "OzStrips");
+        }
+    }
+
+    /// <summary>
+    /// Sets the picked strip item.
+    /// </summary>
+    /// <param name="strip">The strip item.</param>
+    /// <param name="sendToVatsys">Whether or not the change is propogated to vatsys.</param>
+    public void SetPickedStripItem(Strip strip, bool sendToVatsys = false)
+    {
+        foreach (var bay in BayRepository.Bays)
+        {
+            var item = bay.GetListItem(strip);
+            if (item is not null)
+            {
+                SetPicked(item, sendToVatsys);
+            }
         }
     }
 

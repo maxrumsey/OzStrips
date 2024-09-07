@@ -623,7 +623,7 @@ public sealed class Strip
         }
         else
         {
-            _bayManager.SetPicked(this, true);
+            _bayManager.SetPickedStripItem(this, true);
         }
     }
 
