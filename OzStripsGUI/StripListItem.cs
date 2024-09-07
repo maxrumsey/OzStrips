@@ -20,7 +20,7 @@ public class StripListItem
     /// <summary>
     /// Gets or sets the bar text.
     /// </summary>
-    public string? BarText { get; set; }
+    public string? BarText { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the view class.
