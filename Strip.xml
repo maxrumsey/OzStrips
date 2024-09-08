@@ -123,6 +123,7 @@
     <Value>FIRST_WPT</Value>
     <LeftClick>OPEN_FDR</LeftClick>
     <RightClick>OPEN_REROUTE</RightClick>
+    <Hover>ROUTE_WARNING</Hover>
   </StripElement>
   <!-- COL 9 -->
   <StripElement>

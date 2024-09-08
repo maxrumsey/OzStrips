@@ -114,6 +114,45 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
         }
     }
 
+    public void HandleHover(Point e)
+    {
+        var stripelementlist = StripElementList.Instance?.List;
+        if (stripelementlist is null)
+        {
+            return;
+        }
+
+        var flag = false;
+
+        StripElement? hovered = null;
+        foreach (var element in stripelementlist)
+        {
+            if (element is not null && element.Hover is not StripElements.HoverActions.NONE &&
+                (element.X + ElementOrigin.X) <= e.X && e.X < (element.W + element.X + ElementOrigin.X) &&
+                (element.Y + ElementOrigin.Y) <= e.Y && e.Y < (element.Y + element.H + ElementOrigin.Y))
+            {
+                hovered = element;
+            }
+        }
+
+        if (hovered is not null && _bayRenderController.ToolTip is not null)
+        {
+            switch (hovered.Hover)
+            {
+                case StripElements.HoverActions.ROUTE_WARNING:
+                    _bayRenderController.ToolTip.Show("bruh " + _strip.FDR.Callsign, _bayRenderController.SkControl, e);
+                    flag = true;
+                    break;
+            }
+        }
+
+        if (!flag && _bayRenderController.ToolTip is not null)
+        {
+            _bayRenderController.ToolTip.RemoveAll();
+            _bayRenderController.ToolTip.Hide(_bayRenderController.SkControl);
+        }
+    }
+
     private void HandleClickAction(StripElements.Actions action)
     {
         switch (action)

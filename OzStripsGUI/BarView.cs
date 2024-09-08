@@ -48,6 +48,11 @@ internal class BarView(BayRenderController bayRC) : IRenderedStripItem
         _picked = picked;
     }
 
+    public void HandleHover(Point e)
+    {
+        return;
+    }
+
     private void DrawStripFrame(SKCanvas canvas)
     {
         var paint = new SKPaint()

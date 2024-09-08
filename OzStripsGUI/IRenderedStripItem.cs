@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Drawing;
+using System.Windows.Forms;
 using SkiaSharp;
 
 namespace MaxRumsey.OzStripsPlugin.Gui;
@@ -23,6 +24,12 @@ internal interface IRenderedStripItem
     /// </summary>
     /// <param name="e">The mouse event args.</param>
     void HandleClick(MouseEventArgs e);
+
+    /// <summary>
+    /// Triggered when the item is hovered on.
+    /// </summary>
+    /// <param name="point">The mouse position.</param>
+    void HandleHover(Point point);
 
     /// <summary>
     /// Called when the item is rendered.

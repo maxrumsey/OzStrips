@@ -60,6 +60,13 @@ public static class StripElements
         SET_READY,
         SET_TOT,
     }
+
+    public enum HoverActions
+    {
+        NONE,
+        ROUTE_WARNING,
+        RFL_WARNING,
+    }
 }
 #pragma warning restore SA1600 // Elements should be documented
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
