@@ -149,8 +149,31 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 case StripElements.HoverActions.ROUTE_WARNING:
                     if (_bayRenderController.HoveredItem != StripElements.HoverActions.ROUTE_WARNING)
                     {
-                        _bayRenderController.ToolTip.Show("bruh " + _strip.FDR.Callsign, _bayRenderController.SkControl, e);
                         _bayRenderController.HoveredItem = StripElements.HoverActions.ROUTE_WARNING;
+
+                        string str;
+
+                        if (_strip.DodgyRoute)
+                        {
+                            var routes = new List<string>();
+                            Array.ForEach(_strip.ValidRoutes, x => routes.Add("(" + x.acft + ") " + x.route));
+                            str = _strip.Route +
+                                "\n---\nPotentially non-compliant route detected! Accepted Routes:\n" + string.Join("\n", routes) + "\nParsed Route: " + _strip.CondensedRoute;
+                        }
+                        else
+                        {
+                            str = _strip.Route;
+                        }
+
+                        _bayRenderController.ToolTip.Show(str, _bayRenderController.SkControl, e);
+                    }
+
+                    break;
+                case StripElements.HoverActions.RFL_WARNING:
+                    if (_bayRenderController.HoveredItem != StripElements.HoverActions.RFL_WARNING && _strip.Controller.ShowCFLToolTip)
+                    {
+                        _bayRenderController.HoveredItem = StripElements.HoverActions.RFL_WARNING;
+                        _bayRenderController.ToolTip.Show("Potentially non-compliant filed cruise level detected.", _bayRenderController.SkControl, e);
                     }
 
                     break;
@@ -335,6 +358,14 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 return _strip.Controller.DetermineCFLBackColour();
             case StripElements.Values.FIRST_WPT:
                 return _strip.Controller.DetermineRouteBackColour();
+            case StripElements.Values.READY:
+                var colour = SKColor.Empty;
+                if (!_strip.Ready && (_strip.CurrentBay == StripBay.BAY_HOLDSHORT || _strip.CurrentBay == StripBay.BAY_RUNWAY) && _strip.ArrDepType == StripArrDepType.DEPARTURE)
+                {
+                    colour = SKColors.Orange;
+                }
+
+                return colour;
         }
 
         return SKColor.Empty;
