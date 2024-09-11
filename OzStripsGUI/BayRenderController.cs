@@ -17,6 +17,8 @@ internal class BayRenderController(Bay bay) : IDisposable
     public const int StripWidth = 420;
     public const int CockOffset = 30;
 
+    public StripElements.HoverActions? HoveredItem { get; set; }
+
     public Bay Bay { get; } = bay;
 
     public ToolTip? ToolTip { get; private set; }

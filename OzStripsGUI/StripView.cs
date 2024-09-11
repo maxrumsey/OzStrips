@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -135,19 +136,30 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             }
         }
 
+        if (hovered is not null && hovered.Hover != StripElements.HoverActions.NONE)
+        {
+            flag = true;
+        }
+
+        // todo: make less hacky
         if (hovered is not null && _bayRenderController.ToolTip is not null)
         {
             switch (hovered.Hover)
             {
                 case StripElements.HoverActions.ROUTE_WARNING:
-                    _bayRenderController.ToolTip.Show("bruh " + _strip.FDR.Callsign, _bayRenderController.SkControl, e);
-                    flag = true;
+                    if (_bayRenderController.HoveredItem != StripElements.HoverActions.ROUTE_WARNING)
+                    {
+                        _bayRenderController.ToolTip.Show("bruh " + _strip.FDR.Callsign, _bayRenderController.SkControl, e);
+                        _bayRenderController.HoveredItem = StripElements.HoverActions.ROUTE_WARNING;
+                    }
+
                     break;
             }
         }
 
         if (!flag && _bayRenderController.ToolTip is not null)
         {
+            _bayRenderController.HoveredItem = null;
             _bayRenderController.ToolTip.RemoveAll();
             _bayRenderController.ToolTip.Hide(_bayRenderController.SkControl);
         }
@@ -220,6 +232,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
         }
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "Necessary.")]
     private string GetElementText(StripElement element)
     {
         switch (element.Value)
@@ -266,6 +279,23 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 return _strip.CFL;
             case StripElements.Values.STAND:
                 return _strip.Gate;
+            case StripElements.Values.GLOP:
+                return _strip.FDR.GlobalOpData;
+            case StripElements.Values.REMARK:
+                return _strip.Remark;
+            case StripElements.Values.HDG:
+                return _strip.HDG;
+            case StripElements.Values.TOT:
+                if (_strip.TakeOffTime != null)
+                {
+                    var diff = (TimeSpan)(DateTime.UtcNow - _strip.TakeOffTime);
+                    return diff.ToString(@"mm\:ss", CultureInfo.InvariantCulture);
+                }
+                else
+                {
+                    return "00:00";
+                }
+
             default:
                 break;
         }
@@ -301,6 +331,10 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 break;
             case StripElements.Values.SID:
                 return SKColors.Green;
+            case StripElements.Values.CFL:
+                return _strip.Controller.DetermineCFLBackColour();
+            case StripElements.Values.FIRST_WPT:
+                return _strip.Controller.DetermineRouteBackColour();
         }
 
         return SKColor.Empty;

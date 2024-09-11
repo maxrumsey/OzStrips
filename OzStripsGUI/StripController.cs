@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.Gui.Controls;
+using SkiaSharp;
 using vatsys;
 using static vatsys.FDP2;
 
@@ -30,6 +31,11 @@ public class StripController
         Strip = stripController;
         FDR = stripController.FDR;
     }
+
+    /// <summary>
+    /// Gets a value indicating whether or not the CFL tooltip should be shown.
+    /// </summary>
+    public bool ShowCFLToolTip { get; private set; }
 
     /// <summary>
     /// Gets the strip controller.
@@ -157,6 +163,83 @@ public class StripController
         {
             OpenHdgAltModal();
         }
+    }
+
+    /// <summary>
+    /// Determines the colour of the CFL highlight.
+    /// </summary>
+    /// <returns>Colour.</returns>
+    public SKColor DetermineCFLBackColour()
+    {
+        var first = FDR.ParsedRoute.First().Intersection.LatLong;
+        var last = FDR.ParsedRoute.Last().Intersection.LatLong;
+
+        int[] eastRVSM = [41000, 45000, 49000];
+        int[] westRVSM = [43000, 47000, 51000];
+
+        if (first == last)
+        {
+            return SKColor.Empty;
+        }
+
+        var track = Conversions.CalculateTrack(first, last);
+        var positions = LogicalPositions.Positions.Where(e => e.Name == Strip.ParentAerodrome).FirstOrDefault();
+        if (positions is null)
+        {
+            return SKColor.Empty;
+        }
+
+        var variation = positions.MagneticVariation;
+        track += variation;
+
+        var even = true;
+
+        if (track >= 0 && track < 180)
+        {
+            even = false;
+        }
+
+        var digit = int.Parse(Strip.RFL[1].ToString(), CultureInfo.InvariantCulture);
+        var shouldbeeven = digit % 2 == 0;
+
+        var colour = SKColor.Empty;
+        if (even != shouldbeeven && FDR.RFL >= 3000 && Strip.ArrDepType == StripArrDepType.DEPARTURE)
+        {
+            colour = SKColors.OrangeRed;
+            ShowCFLToolTip = true;
+        }
+        else
+        {
+            ShowCFLToolTip = false;
+        }
+
+        if (FDR.RFL >= 41000 && ((even && westRVSM.Contains(FDR.RFL)) || (!even && eastRVSM.Contains(FDR.RFL))))
+        {
+            colour = SKColor.Empty;
+            ShowCFLToolTip = false;
+        }
+        else if (FDR.RFL >= 41000 && Strip.ArrDepType == StripArrDepType.DEPARTURE)
+        {
+            colour = SKColors.OrangeRed;
+            ShowCFLToolTip = true;
+        }
+
+        return colour;
+    }
+
+    /// <summary>
+    /// Determines the colour of the Route highlight.
+    /// </summary>
+    /// <returns>Colour.</returns>
+    public SKColor DetermineRouteBackColour()
+    {
+        var colour = SKColor.Empty;
+        if (Strip.DodgyRoute)
+        {
+            colour = SKColors.Orange;
+        }
+
+        return colour;
     }
 
     /// <summary>
@@ -373,83 +456,6 @@ public class StripController
                 MMI.ShowGraphicRoute(track);
             }
         }
-    }
-
-    /// <summary>
-    /// Determines the colour of the CFL highlight.
-    /// </summary>
-    /// <returns>Colour.</returns>
-    protected Color DetermineCFLBackColour()
-    {
-        var first = FDR.ParsedRoute.First().Intersection.LatLong;
-        var last = FDR.ParsedRoute.Last().Intersection.LatLong;
-
-        int[] eastRVSM = [41000, 45000, 49000];
-        int[] westRVSM = [43000, 47000, 51000];
-
-        if (first == last)
-        {
-            return Color.Empty;
-        }
-
-        var track = Conversions.CalculateTrack(first, last);
-        var positions = LogicalPositions.Positions.Where(e => e.Name == Strip.ParentAerodrome).FirstOrDefault();
-        if (positions is null)
-        {
-            return Color.Empty;
-        }
-
-        var variation = positions.MagneticVariation;
-        track += variation;
-
-        var even = true;
-
-        if (track >= 0 && track < 180)
-        {
-            even = false;
-        }
-
-        var digit = int.Parse(Strip.RFL[1].ToString(), CultureInfo.InvariantCulture);
-        var shouldbeeven = digit % 2 == 0;
-
-        var colour = Color.Empty;
-        if (even != shouldbeeven && FDR.RFL >= 3000 && Strip.ArrDepType == StripArrDepType.DEPARTURE)
-        {
-            colour = Color.OrangeRed;
-            StripToolTips["cfltooltip"].Active = true;
-        }
-        else
-        {
-            StripToolTips["cfltooltip"].Active = false;
-        }
-
-        if (FDR.RFL >= 41000 && ((even && westRVSM.Contains(FDR.RFL)) || (!even && eastRVSM.Contains(FDR.RFL))))
-        {
-            colour = Color.Empty;
-            StripToolTips["cfltooltip"].Active = false;
-        }
-        else if (FDR.RFL >= 41000 && Strip.ArrDepType == StripArrDepType.DEPARTURE)
-        {
-            colour = Color.OrangeRed;
-            StripToolTips["cfltooltip"].Active = true;
-        }
-
-        return colour;
-    }
-
-    /// <summary>
-    /// Determines the colour of the Route highlight.
-    /// </summary>
-    /// <returns>Colour.</returns>
-    protected Color DetermineRouteBackColour()
-    {
-        var colour = Color.Empty;
-        if (Strip.DodgyRoute)
-        {
-            colour = Color.Orange;
-        }
-
-        return colour;
     }
 
     /// <summary>

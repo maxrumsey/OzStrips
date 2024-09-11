@@ -142,4 +142,37 @@
     <Value>CFL</Value>
     <LeftClick>MOD_CFL</LeftClick>
   </StripElement>
+  <!-- Base -->
+  <StripElement>
+    <X>0</X>
+    <Y>40</Y>
+    <W>165</W>
+    <H>20</H>
+    <Value>GLOP</Value>
+    <LeftClick>MOD_GLOP</LeftClick>
+  </StripElement>
+  <StripElement>
+    <X>165</X>
+    <Y>40</Y>
+    <W>165</W>
+    <H>20</H>
+    <Value>REMARK</Value>
+    <LeftClick>MOD_REMARK</LeftClick>
+  </StripElement>
+  <StripElement>
+    <X>330</X>
+    <Y>40</Y>
+    <W>60</W>
+    <H>20</H>
+    <Value>HDG</Value>
+    <LeftClick>OPEN_HDG_ALT</LeftClick>
+  </StripElement>
+  <StripElement>
+    <X>390</X>
+    <Y>40</Y>
+    <W>30</W>
+    <H>20</H>
+    <Value>TOT</Value>
+    <LeftClick>SET_TOT</LeftClick>
+  </StripElement>
 </StripElementList>
