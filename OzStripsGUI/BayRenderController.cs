@@ -45,7 +45,7 @@ internal class BayRenderController(Bay bay) : IDisposable
         SkControl.MouseMove += Hover;
         SkControl.Name = "StripBoard";
         SkControl.BackColor = Color.Wheat;
-        SkControl.Dock = DockStyle.Bottom;
+        SkControl.Dock = DockStyle.Top;
         Bay.ChildPanel.ChildPanel.Controls.Add(SkControl);
         SkControl.Show();
 
@@ -78,7 +78,7 @@ internal class BayRenderController(Bay bay) : IDisposable
         var canvas = e.Surface.Canvas;
 
         // make sure the canvas is blank
-        canvas.Clear(SKColors.White);
+        canvas.Clear(SKColor.Parse("404040"));
         var total = Bay.Strips.Count - 1;
         for (var i = total; i >= 0; i--)
         {
