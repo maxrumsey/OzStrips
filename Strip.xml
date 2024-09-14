@@ -141,6 +141,7 @@
     <H>20</H>
     <Value>CFL</Value>
     <LeftClick>MOD_CFL</LeftClick>
+    <Hover>RFL_WARNING</Hover>
   </StripElement>
   <!-- Base -->
   <StripElement>
