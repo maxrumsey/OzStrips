@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.Gui.Controls;
@@ -38,6 +39,8 @@ public partial class MainForm : Form
         {
             Interval = 100,
         };
+
+        Util.SetAndReturnDLLVar();
 
         _timer.Tick += UpdateTimer;
         _timer.Start();

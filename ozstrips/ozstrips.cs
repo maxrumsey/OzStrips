@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using System.Globalization;
 using System.IO;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
@@ -23,7 +24,6 @@ public sealed class OzStrips : IPlugin, IDisposable
     private const string _versionUrl = "https://raw.githubusercontent.com/maxrumsey/OzStrips/master/Version.json";
     private static readonly HttpClient _httpClient = new();
     private static readonly Version _version = new(OzStripsConfig.version);
-
     private readonly CustomToolStripMenuItem _ozStripsOpener;
     private MainForm? _gui;
 
@@ -38,6 +38,7 @@ public sealed class OzStrips : IPlugin, IDisposable
         try
         {
             _ = SendError();
+            SetAndCreateEnvVar();
         }
         catch (Exception ex)
         {
@@ -151,6 +152,14 @@ public sealed class OzStrips : IPlugin, IDisposable
                 }
 #pragma warning restore CA1862 // Use the 'StringComparison' method overloads to perform case-insensitive string comparisons
         }
+    }
+
+    private static void SetAndCreateEnvVar()
+    {
+        var appdata_path = Util.SetAndReturnDLLVar();
+        var assembly_folder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        Directory.CreateDirectory(appdata_path);
+        File.Copy(assembly_folder + @"\libSkiaSharp.adll", appdata_path + "libSkiaSharp.dll");
     }
 
     private void Network_OnlinePilotsChanged(object sender, Network.PilotUpdateEventArgs e)
