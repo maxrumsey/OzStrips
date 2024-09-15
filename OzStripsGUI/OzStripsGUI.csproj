@@ -87,5 +87,8 @@
         <Generator>SettingsSingleFileGenerator</Generator>
         <LastGenOutput>OzStripsSettings.Designer.cs</LastGenOutput>
       </None>
+      <None Update="Strip.xml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 </Project>

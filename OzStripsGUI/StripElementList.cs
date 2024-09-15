@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,7 +51,7 @@ public class StripElementList
 
     internal static void Load()
     {
-        var path = Path.Combine("C:\\Users\\exiflame\\Documents\\ozstripstest\\Strip.xml");
+        var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\Strip.xml");
 
         Instance = Deserialize(path);
     }
