@@ -113,6 +113,10 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
             HandleClickAction(action);
         }
+        else
+        {
+            _bayRenderController.Bay.BayManager.DropStrip(_bayRenderController.Bay);
+        }
     }
 
     public void HandleHover(Point e)
