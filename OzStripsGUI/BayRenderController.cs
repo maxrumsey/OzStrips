@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.Gui;
 using SkiaSharp;
 using SkiaSharp.Views.Desktop;
+using vatsys;
 
 namespace MaxRumsey.OzStripsPlugin;
 
@@ -71,52 +72,66 @@ internal class BayRenderController(Bay bay) : IDisposable
 
     private void Paint(object sender, SKPaintSurfaceEventArgs e)
     {
-        if (SkControl is null)
+        try
         {
-            return;
-        }
-
-        var canvas = e.Surface.Canvas;
-
-        // make sure the canvas is blank
-        canvas.Clear(SKColor.Parse("404040"));
-        var total = Bay.Strips.Count - 1;
-        var y = 0;
-        for (var i = total; i >= 0; i--)
-        {
-            if (Bay.Strips[i].Type == StripItemType.QUEUEBAR && Bay.Strips[i].BarText is not null)
+            if (SkControl is null)
             {
-                var count = 0;
-                for (var j = i; j >= 0; j--)
+                return;
+            }
+
+            var canvas = e.Surface.Canvas;
+
+            // make sure the canvas is blank
+            canvas.Clear(SKColor.Parse("404040"));
+            var total = Bay.Strips.Count - 1;
+            var y = 0;
+            for (var i = total; i >= 0; i--)
+            {
+                if (Bay.Strips[i].Type == Gui.StripItemType.QUEUEBAR && Bay.Strips[i].BarText is not null)
                 {
-                    if (Bay.Strips[j].Type == StripItemType.STRIP)
+                    var count = 0;
+                    for (var j = i; j >= 0; j--)
                     {
-                        count++;
+                        if (Bay.Strips[j].Type == Gui.StripItemType.STRIP)
+                        {
+                            count++;
+                        }
+                    }
+
+                    Bay.Strips[i].BarText = $"Queue ({count})";
+                }
+
+                var stripView = Bay.Strips[i].RenderedStripItem;
+
+                if (stripView is not null)
+                {
+                    var strip = Bay.Strips[i]?.StripController;
+                    var cocked = false;
+                    if (strip is not null && strip.CockLevel == 1)
+                    {
+                        cocked = true;
+                    }
+
+                    stripView.Origin = new SKPoint(cocked ? CockOffset : 0, y);
+                    try
+                    {
+                        stripView.Render(canvas);
+                    }
+                    catch (Exception ex)
+                    {
+                        Errors.Add(ex, $"Ozstrips Renderer - Strip {Bay.Strips[i]?.StripController?.FDR.Callsign}");
                     }
                 }
 
-                Bay.Strips[i].BarText = $"Queue ({count})";
+                y += Bay.Strips[i].Type == Gui.StripItemType.STRIP ? StripHeight : BarHeight;
             }
 
-            var stripView = Bay.Strips[i].RenderedStripItem;
-
-            if (stripView is not null)
-            {
-                var strip = Bay.Strips[i]?.StripController;
-                var cocked = false;
-                if (strip is not null && strip.CockLevel == 1)
-                {
-                    cocked = true;
-                }
-
-                stripView.Origin = new SKPoint(cocked ? CockOffset : 0, y);
-                stripView.Render(canvas);
-            }
-
-            y += Bay.Strips[i].Type == StripItemType.STRIP ? StripHeight : BarHeight;
+            canvas.Flush();
         }
-
-        canvas.Flush();
+        catch (Exception ex)
+        {
+            Errors.Add(ex, "Ozstrips Renderer");
+        }
     }
 
     private void Click(object sender, EventArgs e)
@@ -159,7 +174,7 @@ internal class BayRenderController(Bay bay) : IDisposable
         for (var i = total; i >= 0; i--)
         {
             var y_offset = BarHeight;
-            if (Bay.Strips[i].Type == StripItemType.STRIP)
+            if (Bay.Strips[i].Type == Gui.StripItemType.STRIP)
             {
                 y_offset = StripHeight;
             }
