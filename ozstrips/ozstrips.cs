@@ -38,11 +38,19 @@ public sealed class OzStrips : IPlugin, IDisposable
         try
         {
             _ = SendError();
-            SetAndCreateEnvVar();
         }
         catch (Exception ex)
         {
             Errors.Add(ex, "OzStrips Error Reporter");
+        }
+
+        try
+        {
+            SetAndCreateEnvVar();
+        }
+        catch (Exception ex)
+        {
+            Errors.Add(ex, "OzStrips");
         }
 
         Network.Connected += Connected;
@@ -159,7 +167,7 @@ public sealed class OzStrips : IPlugin, IDisposable
         var appdata_path = Util.SetAndReturnDLLVar();
         var assembly_folder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         Directory.CreateDirectory(appdata_path);
-        File.Copy(assembly_folder + @"\libSkiaSharp.adll", appdata_path + "libSkiaSharp.dll");
+        File.Copy(assembly_folder + @"\libSkiaSharp.adll", appdata_path + "libSkiaSharp.dll", true);
     }
 
     private void Network_OnlinePilotsChanged(object sender, Network.PilotUpdateEventArgs e)
