@@ -82,6 +82,20 @@ internal class BayRenderController(Bay bay) : IDisposable
         var total = Bay.Strips.Count - 1;
         for (var i = total; i >= 0; i--)
         {
+            if (Bay.Strips[i].Type == StripItemType.QUEUEBAR && Bay.Strips[i].BarText is not null)
+            {
+                var count = 0;
+                for (var j = i; j >= 0; j--)
+                {
+                    if (Bay.Strips[j].Type == StripItemType.STRIP)
+                    {
+                        count++;
+                    }
+                }
+
+                Bay.Strips[i].BarText = $"Queue ({count})";
+            }
+
             var stripView = Bay.Strips[i].RenderedStripItem;
 
             if (stripView is not null)

@@ -318,7 +318,7 @@ public class Bay : System.IDisposable
             {
                 Type = StripItemType.QUEUEBAR,
                 RenderedStripItem = new BarView(_bayRenderController),
-                BarText = "test",
+                BarText = "Queue (0)",
             };
             ((BarView)newItem.RenderedStripItem).Item = newItem;
             Strips.Insert(0, newItem);
