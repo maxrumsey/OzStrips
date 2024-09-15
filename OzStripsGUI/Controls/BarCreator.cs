@@ -53,7 +53,7 @@ public partial class BarCreator : UserControl
     /// <param name="e">Args.</param>
     public void ModalReturned(object sender, ModalReturnArgs e)
     {
-        _bm.AddBar(cb_bay.Text, _bartypes[cb_item.Text], cb_item.Text);
+        _bm.AddBar(cb_bay.Text, _bartypes[cb_item.Text], tb_text.Text);
     }
 
     private void BarTypeChanged(object sender, EventArgs e)

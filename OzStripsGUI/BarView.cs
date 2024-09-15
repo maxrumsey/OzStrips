@@ -88,9 +88,23 @@ internal class BarView(BayRenderController bayRC) : IRenderedStripItem
     {
         var paint = new SKPaint()
         {
-            Color = _picked ? SKColors.DarkGray : SKColors.Gray,
+            Color = SKColors.Gray,
             Style = SKPaintStyle.Fill,
         };
+
+        if (Item?.Style == 1)
+        {
+            paint.Color = SKColors.LightGray;
+        }
+        else if (Item?.Style == 2)
+        {
+            paint.Color = SKColors.Orange;
+        }
+
+        if (_picked)
+        {
+            paint.Color = SKColors.DarkGray;
+        }
 
         canvas.DrawRect(Origin.X, Origin.Y, BayRenderController.StripWidth + 4, BayRenderController.StripHeight, paint);
     }
