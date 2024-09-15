@@ -3,6 +3,7 @@ using System.Linq;
 
 using MaxRumsey.OzStripsPlugin.Gui.Controls;
 using MaxRumsey.OzStripsPlugin.Gui.DTO;
+using Microsoft.SqlServer.Server;
 
 namespace MaxRumsey.OzStripsPlugin.Gui;
 
@@ -107,6 +108,9 @@ public class Bay : System.IDisposable
                     break;
                 case StripItemType.QUEUEBAR:
                     childList.Add("\a"); // indicates q-bar
+                    break;
+                case StripItemType.BAR:
+                    childList.Add($"\a{item.Style}{item.BarText}");
                     break;
             }
         }
@@ -295,6 +299,32 @@ public class Bay : System.IDisposable
     }
 
     /// <summary>
+    /// Creates and adds the specified bar.
+    /// </summary>
+    /// <param name="type">Bartype.</param>
+    /// <param name="text">Bar text.</param>
+    /// <param name="sync">Whether or not to sync bar to server.</param>
+    public void AddBar(int type, string text, bool sync = true)
+    {
+        var bar = new StripListItem()
+        {
+            Type = StripItemType.BAR,
+            BarText = text,
+            RenderedStripItem = new BarView(_bayRenderController),
+            Style = type,
+        };
+
+        ((BarView)bar.RenderedStripItem).Item = bar;
+        Strips.Add(bar);
+        Orderstrips();
+
+        if (sync)
+        {
+            _socketConnection.SyncBay(this);
+        }
+    }
+
+    /// <summary>
     /// Adds a new divider.
     /// </summary>
     /// <param name="force">If the division should be forced.</param>
@@ -364,6 +394,10 @@ public class Bay : System.IDisposable
             {
                 returnedItem = stripListItem;
             }
+            else if (code[0] == '\a' && stripListItem.Type == StripItemType.BAR && stripListItem.BarText == code.Substring(2))
+            {
+                returnedItem = stripListItem;
+            }
             else if (stripListItem.Type == StripItemType.STRIP && stripListItem.StripController?.FDR.Callsign == code)
             {
                 returnedItem = stripListItem;
@@ -373,6 +407,17 @@ public class Bay : System.IDisposable
         if (code == "\a" && returnedItem == null)
         {
             AddDivider(true, false);
+            return GetListItemByStr(code);
+        }
+        else if (code[0] == '\a' && returnedItem is null)
+        {
+            var res = int.TryParse(code[1].ToString(), out var x);
+            if (!res)
+            {
+                x = 1;
+            }
+
+            AddBar(x, code.Substring(2), false);
             return GetListItemByStr(code);
         }
 

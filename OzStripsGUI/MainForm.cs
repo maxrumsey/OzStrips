@@ -608,4 +608,12 @@ public partial class MainForm : Form
     {
         StripElementList.Load();
     }
+
+    private void BarCreatorClick(object sender, EventArgs e)
+    {
+        var modalChild = new BarCreator(_bayManager);
+        var bm = new BaseModal(modalChild, "Add Bar");
+        bm.ReturnEvent += modalChild.ModalReturned;
+        bm.Show(this);
+    }
 }

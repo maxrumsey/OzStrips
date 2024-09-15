@@ -26,4 +26,6 @@ public class StripListItem
     /// Gets or sets the view class.
     /// </summary>
     internal IRenderedStripItem? RenderedStripItem { get; set; }
+
+    internal int? Style { get; set; }
 }

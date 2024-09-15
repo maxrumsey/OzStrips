@@ -435,6 +435,26 @@ public class BayManager
     }
 
     /// <summary>
+    /// Creates the specified bar.
+    /// </summary>
+    /// <param name="baystring">Bay name.</param>
+    /// <param name="type">Type of bay.</param>
+    /// <param name="text">Text on bar.</param>
+    public void AddBar(string baystring, int type, string text)
+    {
+        try
+        {
+            var bay = BayRepository.Bays.Find(x => x.Name == baystring);
+
+            bay.AddBar(type, text);
+        }
+        catch (Exception ex)
+        {
+            Errors.Add(ex, "OzStrips");
+        }
+    }
+
+    /// <summary>
     /// Sets the picked strip item.
     /// </summary>
     /// <param name="strip">The strip item.</param>
