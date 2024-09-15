@@ -365,11 +365,14 @@ public partial class MainForm : Form
             _bayManager.BayRepository.Resize();
         }
 
-        Invoke(() =>
+        if (!IsDisposed)
         {
-            tb_Time.Text = DateTime.UtcNow.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
-            _bayManager.ForceRerender();
-        });
+            Invoke(() =>
+            {
+                tb_Time.Text = DateTime.UtcNow.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
+                _bayManager.ForceRerender();
+            });
+        }
     }
 
     private void MainFormSizeChanged(object sender, EventArgs e)
