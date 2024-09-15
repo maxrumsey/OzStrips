@@ -61,7 +61,7 @@ internal class BarView(BayRenderController bayRC) : IRenderedStripItem
             Style = SKPaintStyle.Stroke,
         };
 
-        canvas.DrawRect(Origin.X, Origin.Y, BayRenderController.StripWidth + 4, BayRenderController.StripHeight, paint);
+        canvas.DrawRect(Origin.X, Origin.Y, BayRenderController.StripWidth + 4, BayRenderController.BarHeight, paint);
     }
 
     private void DrawStripText(SKCanvas canvas)
@@ -81,7 +81,7 @@ internal class BarView(BayRenderController bayRC) : IRenderedStripItem
 
         var typeface = SKTypeface.FromFamilyName("Segoe UI", 700, 5, SKFontStyleSlant.Upright);
 
-        canvas.DrawText(Item.BarText, new SKPoint(Origin.X + ((BayRenderController.StripWidth + 4) / 2), Origin.Y + ((fontsize + BayRenderController.StripHeight) / 2)), SKTextAlign.Center, new SKFont(typeface, fontsize), paint);
+        canvas.DrawText(Item.BarText, new SKPoint(Origin.X + ((BayRenderController.StripWidth + 4) / 2), Origin.Y + ((fontsize + BayRenderController.BarHeight) / 2)), SKTextAlign.Center, new SKFont(typeface, fontsize), paint);
     }
 
     private void DrawStripBackground(SKCanvas canvas)
@@ -106,6 +106,6 @@ internal class BarView(BayRenderController bayRC) : IRenderedStripItem
             paint.Color = SKColors.DarkGray;
         }
 
-        canvas.DrawRect(Origin.X, Origin.Y, BayRenderController.StripWidth + 4, BayRenderController.StripHeight, paint);
+        canvas.DrawRect(Origin.X, Origin.Y, BayRenderController.StripWidth + 4, BayRenderController.BarHeight, paint);
     }
 }

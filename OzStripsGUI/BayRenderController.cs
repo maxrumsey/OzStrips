@@ -14,6 +14,7 @@ namespace MaxRumsey.OzStripsPlugin;
 internal class BayRenderController(Bay bay) : IDisposable
 {
     public const int StripHeight = 64;
+    public const int BarHeight = 30;
     public const int StripWidth = 420;
     public const int CockOffset = 30;
 
@@ -80,6 +81,7 @@ internal class BayRenderController(Bay bay) : IDisposable
         // make sure the canvas is blank
         canvas.Clear(SKColor.Parse("404040"));
         var total = Bay.Strips.Count - 1;
+        var y = 0;
         for (var i = total; i >= 0; i--)
         {
             if (Bay.Strips[i].Type == StripItemType.QUEUEBAR && Bay.Strips[i].BarText is not null)
@@ -107,9 +109,11 @@ internal class BayRenderController(Bay bay) : IDisposable
                     cocked = true;
                 }
 
-                stripView.Origin = new SKPoint(cocked ? CockOffset : 0, (total - i) * StripHeight);
+                stripView.Origin = new SKPoint(cocked ? CockOffset : 0, y);
                 stripView.Render(canvas);
             }
+
+            y += Bay.Strips[i].Type == StripItemType.STRIP ? StripHeight : BarHeight;
         }
 
         canvas.Flush();
@@ -151,7 +155,23 @@ internal class BayRenderController(Bay bay) : IDisposable
     private StripListItem? DetermineStripAtPos(int y)
     {
         var total = Bay.Strips.Count - 1;
-        var i = y / StripHeight;
-        return Bay.Strips.ElementAtOrDefault(total - i);
+        var jy = 0;
+        for (var i = total; i >= 0; i--)
+        {
+            var y_offset = BarHeight;
+            if (Bay.Strips[i].Type == StripItemType.STRIP)
+            {
+                y_offset = StripHeight;
+            }
+
+            if (jy <= y && y < (jy + y_offset))
+            {
+                return Bay.Strips[i];
+            }
+
+            jy += y_offset;
+        }
+
+        return null;
     }
 }
