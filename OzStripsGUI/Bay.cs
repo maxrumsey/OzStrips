@@ -325,6 +325,23 @@ public class Bay : System.IDisposable
     }
 
     /// <summary>
+    /// Creates and adds the specified bar.
+    /// </summary>
+    /// <param name="bar">The bar.</param>
+    /// <param name="sync">Whether or not to sync the bar to server.</param>
+    public void DeleteBar(StripListItem bar, bool sync = true)
+    {
+        Strips.Remove(bar);
+
+        Orderstrips();
+
+        if (sync)
+        {
+            _socketConnection.SyncBay(this);
+        }
+    }
+
+    /// <summary>
     /// Adds a new divider.
     /// </summary>
     /// <param name="force">If the division should be forced.</param>

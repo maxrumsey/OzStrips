@@ -90,6 +90,15 @@ public class BayManager
     }
 
     /// <summary>
+    /// Gets the bay the current picked striplistitem is from.
+    /// </summary>
+    public Bay? PickedBay
+    {
+        get;
+        internal set;
+    }
+
+    /// <summary>
     /// Forces a track into the first bay.
     /// </summary>
     /// <param name="socketConn">The socket connection.</param>
@@ -148,6 +157,10 @@ public class BayManager
             PickedController.SyncStrip();
             UpdateBay(PickedController);
             SetPicked(true);
+        }
+        else if (PickedBay is not null && PickedStripItem is not null && PickedStripItem.Type != StripItemType.STRIP)
+        {
+            PickedBay.DeleteBar(PickedStripItem);
         }
     }
 
@@ -232,10 +245,12 @@ public class BayManager
     /// </summary>
     /// <param name="item">The strip item.</param>
     /// <param name="sendToVatsys">Selects relevant track in vatSys.</param>
-    public void SetPicked(StripListItem item, bool sendToVatsys = false)
+    /// <param name="bay">The bay the item is from.</param>
+    public void SetPicked(StripListItem item, bool sendToVatsys = false, Bay? bay = null)
     {
         SetPicked(false);
         PickedStripItem = item;
+        PickedBay = bay;
         item.RenderedStripItem?.MarkPicked(true);
 
         if (sendToVatsys && item.Type == StripItemType.STRIP)
@@ -262,7 +277,8 @@ public class BayManager
     /// </summary>
     /// <param name="item">The strip item.</param>
     /// <param name="sendToVatsys">Selects relevant track in vatSys.</param>
-    public void TogglePicked(StripListItem item, bool sendToVatsys = false)
+    /// <param name="bay">The specified bay.</param>
+    public void TogglePicked(StripListItem item, bool sendToVatsys = false, Bay? bay = null)
     {
         if (PickedStripItem == item)
         {
@@ -270,7 +286,7 @@ public class BayManager
         }
         else
         {
-            SetPicked(item, sendToVatsys);
+            SetPicked(item, sendToVatsys, bay);
         }
     }
 
@@ -466,7 +482,7 @@ public class BayManager
             var item = bay.GetListItem(strip);
             if (item is not null)
             {
-                SetPicked(item, sendToVatsys);
+                SetPicked(item, sendToVatsys, bay);
             }
         }
     }
