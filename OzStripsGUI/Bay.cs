@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
+using System.Runtime.InteropServices;
 using MaxRumsey.OzStripsPlugin.Gui.Controls;
 using MaxRumsey.OzStripsPlugin.Gui.DTO;
 using Microsoft.SqlServer.Server;
@@ -315,12 +315,25 @@ public class Bay : System.IDisposable
         };
 
         ((BarView)bar.RenderedStripItem).Item = bar;
-        Strips.Add(bar);
-        Orderstrips();
+        var found = false;
 
-        if (sync)
+        foreach (var item in Strips)
         {
-            _socketConnection.SyncBay(this);
+            if (item.Matches(bar))
+            {
+                found = true;
+            }
+        }
+
+        if (!found)
+        {
+            Strips.Add(bar);
+            Orderstrips();
+
+            if (sync)
+            {
+                _socketConnection.SyncBay(this);
+            }
         }
     }
 

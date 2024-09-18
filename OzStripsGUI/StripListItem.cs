@@ -28,4 +28,28 @@ public class StripListItem
     internal IRenderedStripItem? RenderedStripItem { get; set; }
 
     internal int? Style { get; set; }
+
+    /// <summary>
+    /// Determines whether or not an object equals the class.
+    /// </summary>
+    /// <param name="obj">The object.</param>
+    /// <returns>Equal.</returns>
+    public bool Matches(object obj)
+    {
+        if (obj.GetType() != typeof(StripListItem))
+        {
+            return false;
+        }
+
+        var item = (StripListItem)obj;
+        if (item.StripController == StripController &&
+            item.Type == Type &&
+            item.BarText == BarText &&
+            item.Style == Style)
+        {
+            return true;
+        }
+
+        return false;
+    }
 }
