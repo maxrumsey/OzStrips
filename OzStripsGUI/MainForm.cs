@@ -336,6 +336,11 @@ public partial class MainForm : Form
             _bayManager.PositionToNextBar(-1);
             return true;
         }
+        else if (keyData == (Keys.X | Keys.Alt))
+        {
+            _bayManager.AddBar("Runway", 3, "XXX CROSSING XXX");
+            return true;
+        }
 
         switch (keyData)
         {

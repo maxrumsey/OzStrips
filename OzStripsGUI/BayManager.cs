@@ -516,7 +516,10 @@ public class BayManager
         {
             var bay = BayRepository.Bays.Find(x => x.Name == baystring);
 
-            bay.AddBar(type, text);
+            if (bay is not null)
+            {
+                bay.AddBar(type, text);
+            }
         }
         catch (Exception ex)
         {
