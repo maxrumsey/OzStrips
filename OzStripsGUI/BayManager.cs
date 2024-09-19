@@ -79,12 +79,12 @@ public class BayManager
                 var sc = StripRepository.GetController(value);
                 if (sc is not null)
                 {
-                    SetPicked(sc.FDR);
+                    SetPickedFromFDR(sc.FDR);
                 }
             }
             else
             {
-                SetPicked();
+                RemovePicked();
             }
         }
     }
@@ -156,7 +156,7 @@ public class BayManager
             PickedController.CurrentBay = StripBay.BAY_DEAD;
             PickedController.SyncStrip();
             UpdateBay(PickedController);
-            SetPicked(true);
+            RemovePicked(true);
         }
         else if (PickedBay is not null && PickedStripItem is not null && PickedStripItem.Type != StripItemType.STRIP)
         {
@@ -172,7 +172,7 @@ public class BayManager
         if (PickedController != null)
         {
             MMI.OpenCPDLCWindow(PickedController.FDR, null, CPDLC.MessageCategories.FirstOrDefault(m => m.Name == "PDC"));
-            SetPicked(true);
+            RemovePicked(true);
         }
     }
 
@@ -185,7 +185,7 @@ public class BayManager
         {
             PickedController.Crossing = !PickedController.Crossing;
             PickedController.Controller?.SetCross();
-            SetPicked(true);
+            RemovePicked(true);
         }
     }
 
@@ -206,7 +206,7 @@ public class BayManager
             PickedController.CurrentBay = newBay;
             PickedController.SyncStrip();
             UpdateBay(PickedController);
-            SetPicked(true);
+            RemovePicked(true);
         }
         else
         {
@@ -250,9 +250,9 @@ public class BayManager
     /// <param name="item">The strip item.</param>
     /// <param name="sendToVatsys">Selects relevant track in vatSys.</param>
     /// <param name="bay">The bay the item is from.</param>
-    public void SetPicked(StripListItem item, bool sendToVatsys = false, Bay? bay = null)
+    public void SetPickedStripItem(StripListItem item, bool sendToVatsys = false, Bay? bay = null)
     {
-        SetPicked(false);
+        RemovePicked(false);
         PickedStripItem = item;
         PickedBay = bay;
         item.RenderedStripItem?.MarkPicked(true);
@@ -286,11 +286,11 @@ public class BayManager
     {
         if (PickedStripItem == item)
         {
-            SetPicked(sendToVatsys);
+            RemovePicked(sendToVatsys);
         }
         else
         {
-            SetPicked(item, sendToVatsys, bay);
+            SetPickedStripItem(item, sendToVatsys, bay);
         }
     }
 
@@ -298,7 +298,7 @@ public class BayManager
     /// Sets a controller to be picked, from an FDR.
     /// </summary>
     /// <param name="fdr">The fdr.</param>
-    public void SetPicked(FDR? fdr)
+    public void SetPickedFromFDR(FDR? fdr)
     {
         if (fdr is not null)
         {
@@ -318,7 +318,7 @@ public class BayManager
         }
         else
         {
-            SetPicked();
+            RemovePicked();
         }
     }
 
@@ -326,7 +326,7 @@ public class BayManager
     /// Sets the picked controller to be empty.
     /// </summary>
     /// <param name="sendToVatsys">Deselect ground track in vatSys.</param>
-    public void SetPicked(bool sendToVatsys = false)
+    public void RemovePicked(bool sendToVatsys = false)
     {
         PickedStripItem?.RenderedStripItem?.MarkPicked(false);
         PickedStripItem = null;
@@ -539,7 +539,7 @@ public class BayManager
             var item = bay.GetListItem(strip);
             if (item is not null)
             {
-                SetPicked(item, sendToVatsys, bay);
+                SetPickedStripItem(item, sendToVatsys, bay);
             }
         }
     }

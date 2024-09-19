@@ -406,7 +406,7 @@ public class Bay : System.IDisposable
             AddDivider(true, false);
             var item = Strips.Find(a => a?.StripController == _bayManager.PickedController);
             ChangeStripPositionAbs(item, DivPosition);
-            _bayManager.SetPicked(true);
+            _bayManager.RemovePicked(true);
             _socketConnection.SyncBay(this);
         }
     }
