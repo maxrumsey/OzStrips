@@ -137,7 +137,7 @@ public partial class MainForm : Form
         }
         catch (Exception ex)
         {
-            Errors.Add(ex, "OzStrips");
+            Util.LogError(ex);
         }
     }
 
@@ -159,7 +159,7 @@ public partial class MainForm : Form
         }
         catch (Exception ex)
         {
-            Errors.Add(ex, "OzStrips");
+            Util.LogError(ex);
         }
     }
 
@@ -245,7 +245,7 @@ public partial class MainForm : Form
         }
         catch (Exception ex)
         {
-            Errors.Add(ex, "OzStrips");
+            Util.LogError(ex);
         }
     }
 
@@ -262,7 +262,7 @@ public partial class MainForm : Form
         }
         catch (Exception ex)
         {
-            Errors.Add(ex, "OzStrips");
+            Util.LogError(ex);
         }
     }
 
@@ -289,7 +289,7 @@ public partial class MainForm : Form
         }
         catch (Exception ex)
         {
-            Errors.Add(ex, "OzStrips");
+            Util.LogError(ex);
         }
     }
 
@@ -314,7 +314,7 @@ public partial class MainForm : Form
         }
         catch (Exception ex)
         {
-            Errors.Add(ex, "OzStrips");
+            Util.LogError(ex);
         }
     }
 

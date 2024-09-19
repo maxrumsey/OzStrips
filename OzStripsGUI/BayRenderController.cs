@@ -119,7 +119,7 @@ internal class BayRenderController(Bay bay) : IDisposable
                     }
                     catch (Exception ex)
                     {
-                        Errors.Add(ex, $"Ozstrips Renderer - Strip {Bay.Strips[i]?.StripController?.FDR.Callsign}");
+                        Util.LogError(ex, $"Ozstrips Renderer - Strip {Bay.Strips[i]?.StripController?.FDR.Callsign}");
                     }
                 }
 
@@ -130,7 +130,7 @@ internal class BayRenderController(Bay bay) : IDisposable
         }
         catch (Exception ex)
         {
-            Errors.Add(ex, "Ozstrips Renderer");
+            Util.LogError(ex, "Ozstrips Renderer");
         }
     }
 

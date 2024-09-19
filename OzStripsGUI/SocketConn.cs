@@ -101,7 +101,7 @@ public sealed class SocketConn : IDisposable
                 mainForm.Invoke(() =>
                 {
                     mainForm.SetConnStatus();
-                    Errors.Add(new(e), "OzStrips");
+                    Util.LogError(new(e));
                 });
             }
         };
@@ -176,7 +176,7 @@ public sealed class SocketConn : IDisposable
             }
             catch (Exception ex)
             {
-                Errors.Add(ex, "OzStrips");
+                Util.LogError(ex);
             }
         });
 
@@ -420,7 +420,7 @@ public sealed class SocketConn : IDisposable
         }
         catch (Exception ex)
         {
-            Errors.Add(ex, "OzStrips");
+            Util.LogError(ex);
         }
     }
 

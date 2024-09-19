@@ -83,7 +83,7 @@ public partial class RerouteControl : UserControl
         catch (Exception ex)
         {
             lb_error.Text = ex.Message;
-            Errors.Add(ex, "OzStrips");
+            Util.LogError(ex);
         }
     }
 }

@@ -43,7 +43,7 @@ public class StripElementList
         }
         catch (Exception ex)
         {
-            Errors.Add(ex, "OzStrips");
+           Util.LogError(ex);
         }
 
         return null;

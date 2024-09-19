@@ -413,7 +413,7 @@ public class BayManager
         }
         catch (Exception ex)
         {
-            Errors.Add(ex, "OzStrips");
+            Util.LogError(ex);
         }
     }
 
@@ -482,7 +482,7 @@ public class BayManager
         }
         catch (Exception ex)
         {
-            Errors.Add(ex, "OzStrips");
+            Util.LogError(ex);
         }
     }
 
@@ -500,7 +500,7 @@ public class BayManager
         }
         catch (Exception ex)
         {
-            Errors.Add(ex, "OzStrips");
+            Util.LogError(ex);
         }
     }
 
@@ -523,7 +523,7 @@ public class BayManager
         }
         catch (Exception ex)
         {
-            Errors.Add(ex, "OzStrips");
+            Util.LogError(ex);
         }
     }
 

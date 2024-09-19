@@ -1,5 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json;
+using SocketIOClient.Transport.Http;
+using vatsys;
 
 namespace MaxRumsey.OzStripsPlugin.Gui;
 
@@ -44,5 +50,33 @@ public static class Util
         var appdata_path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\ozstrips\";
         Environment.SetEnvironmentVariable("path", Environment.GetEnvironmentVariable("path") + ";" + appdata_path);
         return appdata_path;
+    }
+
+    /// <summary>
+    /// Logs an error to vatsys, and posts it to the server.
+    /// </summary>
+    /// <param name="error">Exception.</param>
+    /// <param name="source">Source string.</param>
+    public static async void LogError(Exception error, string source = "OzStrips")
+    {
+        Errors.Add(error, source);
+
+        try
+        {
+            using (var client = new HttpClient())
+            {
+                var data = new Dictionary<string, string>
+                {
+                    { "error", "ERROR: " + error.Message + "\n" + error.StackTrace },
+                };
+                var uri = (OzStripsConfig.socketioaddr + "/crash").Replace("//", "/").Replace(":/", "://");
+                var task = client.PostAsync(uri, new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json"));
+                _ = await task.ConfigureAwait(false);
+            }
+        }
+        catch (Exception ex)
+        {
+            Errors.Add(ex, "OzStrips Error Reporter");
+        }
     }
 }

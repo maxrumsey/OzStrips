@@ -139,7 +139,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
 
         if (verticalBoardNumber < 0)
         {
-            Errors.Add(new InvalidOperationException("No vertical board flow layout panels exist"), "OzStrips");
+            Util.LogError(new InvalidOperationException("No vertical board flow layout panels exist"));
             return;
         }
 
@@ -192,7 +192,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
         }
         catch (Exception ex)
         {
-            Errors.Add(ex, "OzStrips");
+            Util.LogError(ex);
         }
     }
 

@@ -329,7 +329,7 @@ public sealed class Strip
 
             if (!found)
             {
-                CreateError("Attempted to set invalid SID");
+                Util.LogError(new("Attempted to set invalid SID"));
             }
         }
     }
@@ -417,24 +417,6 @@ public sealed class Strip
     }
 
     /// <summary>
-    /// Adds a error string to the VATSYS error system.
-    /// </summary>
-    /// <param name="error">The error.</param>
-    public static void CreateError(string error)
-    {
-        CreateError(new Exception(error));
-    }
-
-    /// <summary>
-    /// Adds a exception to the VATSYS error system.
-    /// </summary>
-    /// <param name="error">The error exception.</param>
-    public static void CreateError(Exception error)
-    {
-        Errors.Add(error, "OzStrips");
-    }
-
-    /// <summary>
     /// Sets the HMI picked state.
     /// </summary>
     /// <param name="picked">True if picked, false otherwise.</param>
@@ -501,7 +483,7 @@ public sealed class Strip
     {
         if (FDR is null)
         {
-            Errors.Add(new Exception("Strip deleted due to non-existence of vatsys FDR."), "OzStrips");
+            Util.LogError(new("Strip deleted due to non-existence of vatsys FDR."));
             return false;
         }
 
@@ -688,7 +670,7 @@ public sealed class Strip
         }
         catch (Exception e)
         {
-            Errors.Add(e, "OzStrips");
+            Util.LogError(e);
             return null;
         }
     }
