@@ -49,7 +49,7 @@ public sealed class SocketConn : IDisposable
             {
                 mainForm.Invoke(() =>
                 {
-                    Util.ShowErrorBox("OzStrips incompatible with current API version! " + metaDTO.apiversion + " " + OzStripsConfig.apiversion);
+                    Util.ShowErrorBox("OzStrips incompatible with current API version! " + metaDTO.apiversion + " " + OzStripsConfig.apiversion + ".\nOzStrips will now close.");
                     mainForm.Close();
                     mainForm.Dispose();
                 });
