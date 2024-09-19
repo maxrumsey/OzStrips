@@ -318,10 +318,12 @@ public partial class MainForm : Form
     {
         if (keyData == (Keys.Up | Keys.Control))
         {
+            _bayManager.PositionToNextBar(1);
             return true;
         }
         else if (keyData == (Keys.Down | Keys.Control))
         {
+            _bayManager.PositionToNextBar(-1);
             return true;
         }
 

@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.Gui.DTO;
-
+using OpenTK.Graphics.ES11;
 using vatsys;
 using static vatsys.FDP2;
 
@@ -410,6 +410,56 @@ public class BayManager
         catch (Exception ex)
         {
             Errors.Add(ex, "OzStrips");
+        }
+    }
+
+    /// <summary>
+    /// Move strips to the next bar.
+    /// </summary>
+    /// <param name="direction">Position (up/down).</param>
+    public void PositionToNextBar(int direction)
+    {
+        if (PickedStripItem is null)
+        {
+            return;
+        }
+
+        var bay = BayRepository.FindBay(PickedStripItem);
+        if (bay is null)
+        {
+            return;
+        }
+
+        var index = bay.Strips.IndexOf(PickedStripItem);
+        if (bay.Strips.ElementAtOrDefault(index + direction)?.Type != StripItemType.STRIP)
+        {
+            bay.ChangeStripPosition(PickedStripItem, direction);
+            return;
+        }
+
+        if (direction == 1)
+        {
+            for (var i = index + 2; i < bay.Strips.Count; i++)
+            {
+                var presentElement = bay.Strips.ElementAtOrDefault(i);
+                if (presentElement is not null && presentElement.Type != StripItemType.STRIP)
+                {
+                    bay.ChangeStripPositionAbs(PickedStripItem, i - 1);
+                    break;
+                }
+            }
+        }
+        else
+        {
+            for (var i = index - 2; i >= 0; i--)
+            {
+                var presentElement = bay.Strips.ElementAtOrDefault(i);
+                if (presentElement is not null && presentElement.Type != StripItemType.STRIP)
+                {
+                    bay.ChangeStripPositionAbs(PickedStripItem, i + 1);
+                    break;
+                }
+            }
         }
     }
 
