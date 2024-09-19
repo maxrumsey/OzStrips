@@ -348,6 +348,12 @@ public partial class MainForm : Form
             case Keys.OemCloseBrackets:
                 MoveLateralAerodrome(1);
                 return true;
+            case Keys.Back:
+                _bayManager.Inhibit();
+                return true;
+            case Keys.X:
+                _bayManager.CrossStrip();
+                return true;
             default:
                 break;
         }
