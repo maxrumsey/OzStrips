@@ -53,31 +53,6 @@ public class StripController
     protected Panel? PickToggleControl { get; set; }
 
     /// <summary>
-    /// Gets or sets the cross colour controls.
-    /// </summary>
-    protected Panel[] CrossColourControls { get; set; } = [];
-
-    /// <summary>
-    /// Gets or sets the cock colour controls.
-    /// </summary>
-    protected Panel[] CockColourControls { get; set; } = [];
-
-    /// <summary>
-    /// Gets or sets the default color.
-    /// </summary>
-    protected Color DefColor { get; set; } = Color.Empty;
-
-    /// <summary>
-    /// Gets or sets a dictionary containg strip controls.
-    /// </summary>
-    protected Dictionary<string, Control> StripElements { get; set; } = new Dictionary<string, Control>();
-
-    /// <summary>
-    /// Gets or sets a dictionary containg strip tooltips.
-    /// </summary>
-    protected Dictionary<string, ToolTip> StripToolTips { get; set; } = new Dictionary<string, ToolTip>();
-
-    /// <summary>
     /// Changes the cock level.
     /// </summary>
     /// <param name="cockLevel">The new cock level.</param>
@@ -111,17 +86,6 @@ public class StripController
     /// <param name="sync">If the cross should be synced.</param>
     public void SetCross(bool sync = true)
     {
-        var color = DefColor;
-        if (Strip.Crossing)
-        {
-            color = Color.Salmon;
-        }
-
-        foreach (Control control in CrossColourControls)
-        {
-            control.BackColor = color;
-        }
-
         if (sync)
         {
             Strip.SyncStrip();
@@ -440,25 +404,6 @@ public class StripController
     */
 
     /// <summary>
-    /// Toggles display of the route for the strip.
-    /// </summary>
-    protected void ToggleRoute()
-    {
-        var track = MMI.FindTrack(FDR);
-        if (track is not null)
-        {
-            if (track.GraphicRTE)
-            {
-                MMI.HideGraphicRoute(track);
-            }
-            else
-            {
-                MMI.ShowGraphicRoute(track);
-            }
-        }
-    }
-
-    /// <summary>
     /// Opens the heading/altitude modal dialog.
     /// </summary>
     protected void OpenHdgAltModal()
@@ -468,30 +413,6 @@ public class StripController
         modalChild.BaseModal = bm;
         bm.ReturnEvent += HeadingAltReturned;
         bm.Show(MainForm.MainFormInstance);
-    }
-
-    /// <summary>
-    /// Opens that VATSYS flight data record mod menu.
-    /// </summary>
-    /// <param name="e">Mouse Event Args.</param>
-    protected void OpenVatsysFDRModMenu(MouseEventArgs e)
-    {
-        if (e.Button == MouseButtons.Left)
-        {
-            Strip.OpenVatsysFDR();
-        }
-        else
-        {
-            OpenRerouteMenu();
-        }
-    }
-
-    /// <summary>
-    /// Toggles the pick.
-    /// </summary>
-    protected void TogglePick()
-    {
-        Strip.TogglePick();
     }
 
     /// <summary>
