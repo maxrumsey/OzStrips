@@ -165,7 +165,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.bt_force.TabStop = false;
             this.bt_force.Text = "FOR STP";
             this.bt_force.UseVisualStyleBackColor = false;
-            this.bt_force.Click += new System.EventHandler(this.Bt_force_Click);
+            this.bt_force.Click += new System.EventHandler(this.ForceStrip);
             // 
             // bt_inhibit
             // 

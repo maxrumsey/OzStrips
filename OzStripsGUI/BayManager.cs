@@ -208,6 +208,10 @@ public class BayManager
             UpdateBay(PickedController);
             SetPicked(true);
         }
+        else
+        {
+            MainForm.MainFormInstance?.ForceStrip(null, null);
+        }
     }
 
     /// <summary>

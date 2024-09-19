@@ -267,6 +267,16 @@ public partial class MainForm : Form
     }
 
     /// <summary>
+    /// Forces a strip.
+    /// </summary>
+    /// <param name="sender">Sending object.</param>
+    /// <param name="e">EventArgs.</param>
+    public void ForceStrip(object? sender, EventArgs? e)
+    {
+        _bayManager.ForceStrip(_socketConn);
+    }
+
+    /// <summary>
     /// Updates the flight data record.
     /// </summary>
     /// <param name="fdr">The flgiht data record.</param>
@@ -416,11 +426,6 @@ public partial class MainForm : Form
     private void Bt_inhibit_Click(object sender, EventArgs e)
     {
         _bayManager.Inhibit();
-    }
-
-    private void Bt_force_Click(object sender, EventArgs e)
-    {
-        _bayManager.ForceStrip(_socketConn);
     }
 
     private void ACDToolStripMenuItem_Click(object sender, EventArgs e)
