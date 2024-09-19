@@ -1,4 +1,5 @@
 ﻿using MaxRumsey.OzStripsPlugin.Gui.Controls;
+using static vatsys.FDP2;
 
 namespace MaxRumsey.OzStripsPlugin.Gui;
 
@@ -28,6 +29,22 @@ public class StripListItem
     internal IRenderedStripItem? RenderedStripItem { get; set; }
 
     internal int? Style { get; set; }
+
+    /// <summary>
+    /// To string method.
+    /// </summary>
+    /// <returns>Description.</returns>
+    public override string ToString()
+    {
+        if (Type == StripItemType.STRIP)
+        {
+            return StripController?.ToString() ?? string.Empty;
+        }
+        else
+        {
+            return "BAR";
+        }
+    }
 
     /// <summary>
     /// Determines whether or not an object equals the class.

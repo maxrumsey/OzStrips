@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -690,6 +691,15 @@ public sealed class Strip
             Errors.Add(e, "OzStrips");
             return null;
         }
+    }
+
+    /// <summary>
+    /// To string method.
+    /// </summary>
+    /// <returns>Description.</returns>
+    public override string ToString()
+    {
+        return FDR.Callsign;
     }
 
     /// <summary>
