@@ -36,7 +36,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
         };
         DrawStripBackground(canvas);
 
-        canvas.DrawRect(ElementOrigin.X, ElementOrigin.Y, BayRenderController.StripWidth, BayRenderController.StripHeight - (2 * _padding) - 1, bdrypaint);
+        canvas.DrawRect(ElementOrigin.X, ElementOrigin.Y, BayRenderController.StripWidth, BayRenderController.StripHeight - (2 * _padding), bdrypaint);
 
         foreach (var element in stripelementlist)
         {

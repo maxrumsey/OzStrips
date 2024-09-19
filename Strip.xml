@@ -175,5 +175,6 @@
     <H>20</H>
     <Value>TOT</Value>
     <LeftClick>SET_TOT</LeftClick>
+    <FontSize>10</FontSize>
   </StripElement>
 </StripElementList>

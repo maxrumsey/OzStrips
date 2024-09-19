@@ -61,7 +61,7 @@ internal class BarView(BayRenderController bayRC) : IRenderedStripItem
             Style = SKPaintStyle.Stroke,
         };
 
-        canvas.DrawRect(Origin.X, Origin.Y, BayRenderController.StripWidth + 4, BayRenderController.BarHeight, paint);
+        canvas.DrawRect(Origin.X, Origin.Y, BayRenderController.StripWidth + 4, BayRenderController.BarHeight - 1, paint);
     }
 
     private void DrawStripText(SKCanvas canvas)
@@ -106,6 +106,6 @@ internal class BarView(BayRenderController bayRC) : IRenderedStripItem
             paint.Color = SKColors.DarkGray;
         }
 
-        canvas.DrawRect(Origin.X, Origin.Y, BayRenderController.StripWidth + 4, BayRenderController.BarHeight, paint);
+        canvas.DrawRect(Origin.X, Origin.Y, BayRenderController.StripWidth + 4, BayRenderController.BarHeight - 1, paint);
     }
 }
