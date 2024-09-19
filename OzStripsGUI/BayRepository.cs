@@ -17,9 +17,9 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
 {
     private readonly List<FlowLayoutPanel> _flpVerticalBoards = [];
 
-    private readonly Action<object, EventArgs> _currentLayout = layoutMethod;
-
     private readonly BayManager _bayManager = sender;
+
+    private Action<object, EventArgs> _currentLayout = layoutMethod;
 
     private int _currentLayoutIndex;
 
@@ -194,6 +194,15 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
         {
             Errors.Add(ex, "OzStrips");
         }
+    }
+
+    /// <summary>
+    /// Sets the current resize mode layout function.
+    /// </summary>
+    /// <param name="func">Layout function.</param>
+    public void SetLayout(Action<object, EventArgs> func)
+    {
+        _currentLayout = func;
     }
 
     /// <summary>

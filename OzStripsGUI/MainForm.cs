@@ -316,6 +316,15 @@ public partial class MainForm : Form
     /// <returns>Handled.</returns>
     protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
     {
+        if (keyData == (Keys.Up | Keys.Control))
+        {
+            return true;
+        }
+        else if (keyData == (Keys.Down | Keys.Control))
+        {
+            return true;
+        }
+
         switch (keyData)
         {
             case Keys.Up:
@@ -408,6 +417,7 @@ public partial class MainForm : Form
 
     private void ACDToolStripMenuItem_Click(object sender, EventArgs e)
     {
+        _bayManager.BayRepository.SetLayout(ACDToolStripMenuItem_Click);
         _bayManager.BayRepository.WipeBays();
         _bayManager.BayRepository.BayNum = 3;
         _ = new Bay([StripBay.BAY_PREA], _bayManager, _socketConn, "Preactive", 0);
@@ -419,6 +429,7 @@ public partial class MainForm : Form
 
     private void SMCToolStripMenuItem_Click(object sender, EventArgs e)
     {
+        _bayManager.BayRepository.SetLayout(SMCToolStripMenuItem_Click);
         _bayManager.BayRepository.WipeBays();
         _bayManager.BayRepository.BayNum = 5;
         _ = new Bay([StripBay.BAY_CLEARED], _bayManager, _socketConn, "Cleared", 0);
@@ -432,6 +443,7 @@ public partial class MainForm : Form
 
     private void SMCACDToolStripMenuItem_Click(object sender, EventArgs e)
     {
+        _bayManager.BayRepository.SetLayout(SMCACDToolStripMenuItem_Click);
         _bayManager.BayRepository.WipeBays();
         _bayManager.BayRepository.BayNum = 6;
         _ = new Bay([StripBay.BAY_PREA], _bayManager, _socketConn, "Preactive", 0);
@@ -446,6 +458,7 @@ public partial class MainForm : Form
 
     private void ADCToolStripMenuItem_Click(object sender, EventArgs e)
     {
+        _bayManager.BayRepository.SetLayout(ADCToolStripMenuItem_Click);
         _bayManager.BayRepository.WipeBays();
         _bayManager.BayRepository.BayNum = 4;
         _ = new Bay([StripBay.BAY_HOLDSHORT], _bayManager, _socketConn, "Holding Point", 0);
@@ -458,6 +471,7 @@ public partial class MainForm : Form
 
     private void AllToolStripMenuItem_Click(object sender, EventArgs e)
     {
+        _bayManager.BayRepository.SetLayout(AllToolStripMenuItem_Click);
         _bayManager.BayRepository.WipeBays();
         _bayManager.BayRepository.BayNum = 8;
         _ = new Bay([StripBay.BAY_PREA], _bayManager, _socketConn, "Preactive", 0);
@@ -474,6 +488,7 @@ public partial class MainForm : Form
 
     private void ADCSMCToolStripMenuItem_Click(object sender, EventArgs e)
     {
+        _bayManager.BayRepository.SetLayout(ADCSMCToolStripMenuItem_Click);
         _bayManager.BayRepository.WipeBays();
         _bayManager.BayRepository.BayNum = 7;
         _ = new Bay([StripBay.BAY_CLEARED], _bayManager, _socketConn, "Cleared", 0);
