@@ -26,6 +26,7 @@ public partial class BarCreator : UserControl
     {
         InitializeComponent();
 
+        _bartypes.Add("XXX CROSSING XXX", 3);
         _bartypes.Add("Runway ## Released to SMC", 1);
         _bartypes.Add("Autorelease Suspended", 2);
         _bartypes.Add("Monitor Ground", 1);

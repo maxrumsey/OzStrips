@@ -77,6 +77,12 @@ internal class BarView(BayRenderController bayRC) : IRenderedStripItem
             Style = SKPaintStyle.StrokeAndFill,
             IsAntialias = true,
         };
+
+        if (Item.Style == 3)
+        {
+            paint.Color = SKColors.White;
+        }
+
         var fontsize = 18;
 
         var typeface = SKTypeface.FromFamilyName("Segoe UI", 700, 5, SKFontStyleSlant.Upright);
@@ -99,6 +105,10 @@ internal class BarView(BayRenderController bayRC) : IRenderedStripItem
         else if (Item?.Style == 2)
         {
             paint.Color = SKColors.Orange;
+        }
+        else if (Item?.Style == 3)
+        {
+            paint.Color = SKColors.Red;
         }
 
         if (_picked)
