@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using MaxRumsey.OzStripsPlugin.Gui.Controls;
 using MaxRumsey.OzStripsPlugin.Gui.DTO;
 using Microsoft.SqlServer.Server;
+using static vatsys.FDP2;
 
 namespace MaxRumsey.OzStripsPlugin.Gui;
 
@@ -452,6 +453,15 @@ public class Bay : System.IDisposable
         }
 
         return returnedItem;
+    }
+
+    /// <summary>
+    /// To string method.
+    /// </summary>
+    /// <returns>Description.</returns>
+    public override string ToString()
+    {
+        return Name;
     }
 
     /// <summary>
