@@ -32,11 +32,11 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Controls
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.pl_main = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.bt_div = new System.Windows.Forms.Button();
             this.bt_queue = new System.Windows.Forms.Button();
             this.lb_bay_name = new System.Windows.Forms.Label();
-            this.pl_main = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -52,6 +52,16 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Controls
             this.panel1.Size = new System.Drawing.Size(481, 350);
             this.panel1.TabIndex = 0;
             // 
+            // pl_main
+            // 
+            this.pl_main.AutoScroll = true;
+            this.pl_main.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pl_main.Location = new System.Drawing.Point(0, 36);
+            this.pl_main.Name = "pl_main";
+            this.pl_main.Size = new System.Drawing.Size(481, 314);
+            this.pl_main.TabIndex = 1;
+            this.pl_main.Click += new System.EventHandler(this.LabelBayNameClicked);
+            // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.Black;
@@ -61,7 +71,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Controls
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(481, 42);
+            this.panel2.Size = new System.Drawing.Size(481, 36);
             this.panel2.TabIndex = 0;
             // 
             // bt_div
@@ -69,11 +79,11 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Controls
             this.bt_div.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.bt_div.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
             this.bt_div.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.bt_div.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bt_div.Font = new System.Drawing.Font("Terminus (TTF)", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bt_div.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.bt_div.Location = new System.Drawing.Point(330, 5);
             this.bt_div.Name = "bt_div";
-            this.bt_div.Size = new System.Drawing.Size(145, 32);
+            this.bt_div.Size = new System.Drawing.Size(145, 24);
             this.bt_div.TabIndex = 3;
             this.bt_div.TabStop = false;
             this.bt_div.Text = "Toggle Queue Bar";
@@ -85,11 +95,11 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Controls
             this.bt_queue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.bt_queue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
             this.bt_queue.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.bt_queue.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bt_queue.Font = new System.Drawing.Font("Terminus (TTF)", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bt_queue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.bt_queue.Location = new System.Drawing.Point(208, 5);
             this.bt_queue.Name = "bt_queue";
-            this.bt_queue.Size = new System.Drawing.Size(116, 32);
+            this.bt_queue.Size = new System.Drawing.Size(116, 24);
             this.bt_queue.TabIndex = 2;
             this.bt_queue.TabStop = false;
             this.bt_queue.Text = "Add to Queue";
@@ -103,21 +113,11 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Controls
             this.lb_bay_name.ForeColor = System.Drawing.Color.White;
             this.lb_bay_name.Location = new System.Drawing.Point(0, 0);
             this.lb_bay_name.Name = "lb_bay_name";
-            this.lb_bay_name.Size = new System.Drawing.Size(481, 42);
+            this.lb_bay_name.Size = new System.Drawing.Size(481, 36);
             this.lb_bay_name.TabIndex = 0;
             this.lb_bay_name.Text = "Bay Name";
             this.lb_bay_name.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lb_bay_name.Click += new System.EventHandler(this.LabelBayNameClicked);
-            // 
-            // pl_main
-            // 
-            this.pl_main.AutoScroll = true;
-            this.pl_main.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pl_main.Location = new System.Drawing.Point(0, 42);
-            this.pl_main.Name = "pl_main";
-            this.pl_main.Size = new System.Drawing.Size(481, 308);
-            this.pl_main.TabIndex = 1;
-            this.pl_main.Click += new System.EventHandler(this.LabelBayNameClicked);
             // 
             // BayControl
             // 
