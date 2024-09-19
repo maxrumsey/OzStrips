@@ -28,7 +28,7 @@ public partial class BarCreator : UserControl
 
         _bartypes.Add("Runway ## Released to SMC", 1);
         _bartypes.Add("Autorelease Suspended", 2);
-        _bartypes.Add("Pushback with Coordinator", 1);
+        _bartypes.Add("Monitor Ground", 1);
         _bartypes.Add("W - ###.# E - ###.#", 1);
 
         foreach (var bay in bayManager.BayRepository.Bays)
