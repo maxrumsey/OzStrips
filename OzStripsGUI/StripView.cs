@@ -351,6 +351,15 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 }
 
                 break;
+            case StripElements.Values.GLOP:
+            case StripElements.Values.REMARK:
+            case StripElements.Values.HDG:
+                if (_strip.Crossing)
+                {
+                    return SKColors.Red;
+                }
+
+                break;
             case StripElements.Values.SID:
                 return SKColors.Green;
             case StripElements.Values.CFL:
