@@ -1,4 +1,19 @@
 # Changelog
+## v0.4.4 (prerelease)
+### Features
+- Added ability to create strip bars
+- Completely rewrote strip rendering logic
+    - Reduced load time when switching between aerodromes
+- Added move to next bar (ctr up/down), cross (X), Inhibit (backspace) keyboard commands.
+- Improved error reporting.
+- Resized some controls.
+### Bugfixes
+- Fixed bug where view mode is not preserved on form resize.
+
+## v0.4.3
+### Bugfixes
+- Fixed leaking of winforms controls on disposal.
+
 ## v0.4.2
 ### Bugfixes
 - Fixed race condition causing a NRE
