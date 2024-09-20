@@ -61,7 +61,19 @@ internal class BayRenderController(Bay bay) : IDisposable
             return;
         }
 
-        var y = Bay.Strips.Count * StripHeight;
+        var y = 0;
+        foreach (var item in Bay.Strips)
+        {
+            if (item.Type == Gui.StripItemType.STRIP)
+            {
+                y += StripHeight;
+            }
+            else
+            {
+                y += BarHeight;
+            }
+        }
+
         SkControl.Size = new Size(SkControl.Size.Width, y);
     }
 
