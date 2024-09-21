@@ -1,5 +1,5 @@
 # Changelog
-## v0.4.4 (prerelease)
+## v0.4.4
 ### Features
 - Added ability to create strip bars
 - Completely rewrote strip rendering logic
