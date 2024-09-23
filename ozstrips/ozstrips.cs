@@ -165,7 +165,14 @@ public sealed class OzStrips : IPlugin, IDisposable
         var appdata_path = Util.SetAndReturnDLLVar();
         var assembly_folder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         Directory.CreateDirectory(appdata_path);
-        File.Copy(assembly_folder + @"\libSkiaSharp.adll", appdata_path + "libSkiaSharp.dll", true);
+        try
+        {
+            File.Copy(assembly_folder + @"\libSkiaSharp.adll", appdata_path + "libSkiaSharp.dll", true);
+        }
+        catch
+        {
+            Errors.Add(new("Failed to load an internal Ozstrips file. This may be because you have another vatSys window open, and in this case, can be disregarded."), "Ozstrips");
+        }
     }
 
     private void Network_OnlinePilotsChanged(object sender, Network.PilotUpdateEventArgs e)

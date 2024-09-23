@@ -702,62 +702,68 @@ public sealed class Strip
 
     private static string CleanVatsysRoute(string rawRoute)
     {
-        var rawRouteArr = rawRoute.Split(' ');
-        var routeArr = new List<string>();
+        try {
+            var rawRouteArr = rawRoute.Split(' ');
+            var routeArr = new List<string>();
 
-        foreach (var routeElement in rawRouteArr)
-        {
-            if (routeElement.Contains("/"))
+            foreach (var routeElement in rawRouteArr)
             {
-                // Don't include SIDs or gps coords in route
-                if (!_sidRouteRegex.Match(routeElement).Success && !_gpscoordRegex.Match(routeElement).Success)
+                if (routeElement.Contains("/"))
                 {
-                    routeArr.Add(routeElement.Split('/').First());
+                    // Don't include SIDs or gps coords in route
+                    if (!_sidRouteRegex.Match(routeElement).Success && !_gpscoordRegex.Match(routeElement).Success)
+                    {
+                        routeArr.Add(routeElement.Split('/').First());
+                    }
+                }
+                else if (routeElement != "DCT")
+                {
+                    routeArr.Add(routeElement);
                 }
             }
-            else if (routeElement != "DCT")
+
+            if (routeArr.Count < 3)
             {
-                routeArr.Add(routeElement);
+                return "FAIL";
             }
-        }
 
-        if (routeArr.Count < 3)
+            /*
+                * Remove SIDs and STARS
+                */
+            if (char.IsNumber(routeArr.Last().Last()))
+            {
+                routeArr.RemoveAt(routeArr.Count - 1);
+            }
+
+            if (char.IsNumber(routeArr.First().Last()))
+            {
+                routeArr.RemoveAt(0);
+            }
+
+            /*
+                * Remove first and last waypoint incase they have filed / are cleared via a SID.
+                * (Will validate based on route only)
+                */
+            if (routeArr.Count < 3)
+            {
+                return "FAIL";
+            }
+
+            if (!routeArr.First().Any(char.IsDigit))
+            {
+                routeArr.RemoveAt(0);
+            }
+
+            if (!routeArr.Last().Any(char.IsDigit))
+            {
+                routeArr.RemoveAt(routeArr.Count - 1);
+            }
+
+            return string.Join(" ", routeArr);
+        }
+        catch
         {
             return "FAIL";
         }
-
-        /*
-         * Remove SIDs and STARS
-         */
-        if (char.IsNumber(routeArr.Last().Last()))
-        {
-            routeArr.RemoveAt(routeArr.Count - 1);
-        }
-
-        if (char.IsNumber(routeArr.First().Last()))
-        {
-            routeArr.RemoveAt(0);
-        }
-
-        /*
-         * Remove first and last waypoint incase they have filed / are cleared via a SID.
-         * (Will validate based on route only)
-         */
-        if (routeArr.Count < 3)
-        {
-            return "FAIL";
-        }
-
-        if (!routeArr.First().Any(char.IsDigit))
-        {
-            routeArr.RemoveAt(0);
-        }
-
-        if (!routeArr.Last().Any(char.IsDigit))
-        {
-            routeArr.RemoveAt(routeArr.Count - 1);
-        }
-
-        return string.Join(" ", routeArr);
     }
 }
