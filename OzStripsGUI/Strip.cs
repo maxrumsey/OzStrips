@@ -702,7 +702,8 @@ public sealed class Strip
 
     private static string CleanVatsysRoute(string rawRoute)
     {
-        try {
+        try
+        {
             var rawRouteArr = rawRoute.Split(' ');
             var routeArr = new List<string>();
 
