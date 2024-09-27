@@ -79,4 +79,29 @@ public static class Util
             Errors.Add(ex, "OzStrips Error Reporter");
         }
     }
+
+    /// <summary>
+    /// Logs an error to vatsys, and posts it to the server.
+    /// </summary>
+    /// <param name="text">Text to log.</param>
+    public static async void LogText(string text)
+    {
+        try
+        {
+            using (var client = new HttpClient())
+            {
+                var data = new Dictionary<string, string>
+                {
+                    { "error", "DIAG: " + text },
+                };
+                var uri = (OzStripsConfig.socketioaddr + "/crash").Replace("//", "/").Replace(":/", "://");
+                var task = client.PostAsync(uri, new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json"));
+                _ = await task.ConfigureAwait(false);
+            }
+        }
+        catch
+        {
+            return;
+        }
+    }
 }

@@ -23,6 +23,12 @@
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net472|x86'">
       <Optimize>False</Optimize>
     </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net481|AnyCPU'">
+      <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net481|AnyCPU'">
+      <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    </PropertyGroup>
   
     <ItemGroup>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />

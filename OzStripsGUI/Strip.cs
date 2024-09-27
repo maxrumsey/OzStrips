@@ -762,8 +762,9 @@ public sealed class Strip
 
             return string.Join(" ", routeArr);
         }
-        catch
+        catch (Exception ex)
         {
+            Util.LogText($"PARSER, RTE: {rawRoute}, ERR: {ex.Message}\n{ex.StackTrace}");
             return "FAIL";
         }
     }
