@@ -12,7 +12,7 @@ public class CustomFLP : FlowLayoutPanel
     /// </summary>
     public CustomFLP()
     {
-        SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+        // SetStyle(ControlStyles.AllPaintingInWmPaint, true);
         SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
         UpdateStyles();
     }

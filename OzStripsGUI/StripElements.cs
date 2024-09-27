@@ -1,0 +1,73 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MaxRumsey.OzStripsPlugin.Gui;
+
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+#pragma warning disable SA1600 // Elements should be documented
+#pragma warning disable SA1602 // Enumeration items should be documented
+public static class StripElements
+{
+    /// <summary>
+    /// List of possible values.
+    /// </summary>
+    public enum Values
+    {
+        EOBT,
+        ACID,
+        SSR,
+        TYPE,
+        FRUL,
+        FIRST_WPT,
+        SID,
+        ADES,
+        CFL,
+        HDG,
+        CLX,
+        STAND,
+        REMARK,
+        TOT,
+        RFL,
+        READY,
+        GLOP,
+        SSR_SYMBOL,
+        RWY,
+        WTC,
+        ROUTE,
+    }
+
+    public enum Actions
+    {
+        NONE,
+        SHOW_ROUTE,
+        OPEN_HDG_ALT,
+        OPEN_FDR,
+        PICK,
+        ASSIGN_SSR,
+        MOD_SID,
+        OPEN_REROUTE,
+        MOD_RWY,
+        MOD_CFL,
+        MOD_CLX,
+        MOD_STD,
+        MOD_GLOP,
+        MOD_REMARK,
+        COCK,
+        SID_TRIGGER,
+        SET_READY,
+        SET_TOT,
+    }
+
+    public enum HoverActions
+    {
+        NONE,
+        ROUTE_WARNING,
+        RFL_WARNING,
+    }
+}
+#pragma warning restore SA1600 // Elements should be documented
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
+#pragma warning restore SA1602 // Enumeration items should be documented

@@ -49,7 +49,7 @@ public sealed class SocketConn : IDisposable
             {
                 mainForm.Invoke(() =>
                 {
-                    Util.ShowErrorBox("OzStrips incompatible with current API version! " + metaDTO.apiversion + " " + OzStripsConfig.apiversion);
+                    Util.ShowErrorBox("OzStrips incompatible with current API version! " + metaDTO.apiversion + " " + OzStripsConfig.apiversion + ".\nOzStrips will now close.");
                     mainForm.Close();
                     mainForm.Dispose();
                 });
@@ -70,7 +70,7 @@ public sealed class SocketConn : IDisposable
                     mainForm.Invoke(() => mainForm.SetConnStatus());
                 }
 
-                StripController.MarkAllStripsAsAwaitingRoutes();
+                _bayManager.StripRepository.MarkAllStripsAsAwaitingRoutes();
 
                 await Task.Delay(TimeSpan.FromSeconds(60));
                 _freshClient = false;
@@ -101,7 +101,7 @@ public sealed class SocketConn : IDisposable
                 mainForm.Invoke(() =>
                 {
                     mainForm.SetConnStatus();
-                    Errors.Add(new(e), "OzStrips");
+                    Util.LogError(new(e));
                 });
             }
         };
@@ -129,7 +129,7 @@ public sealed class SocketConn : IDisposable
 
             if (mainForm.Visible)
             {
-                mainForm.Invoke(() => StripController.UpdateFDR(scDTO, bayManager));
+                mainForm.Invoke(() => _bayManager.StripRepository.UpdateFDR(scDTO, bayManager));
             }
         });
 
@@ -140,7 +140,7 @@ public sealed class SocketConn : IDisposable
 
             if (mainForm.Visible && _freshClient)
             {
-                mainForm.Invoke(() => StripController.LoadCache(scDTO, bayManager, this));
+                mainForm.Invoke(() => _bayManager.StripRepository.LoadCache(scDTO, bayManager, this));
             }
         });
 
@@ -151,7 +151,7 @@ public sealed class SocketConn : IDisposable
 
             if (mainForm.Visible)
             {
-                mainForm.Invoke(() => bayManager.UpdateOrder(bayDTO));
+                mainForm.Invoke(() => bayManager.BayRepository.UpdateOrder(bayDTO));
             }
         });
 
@@ -166,7 +166,7 @@ public sealed class SocketConn : IDisposable
 
                 if (mainForm.Visible)
                 {
-                    var sc = StripController.GetController(acid);
+                    var sc = _bayManager.StripRepository.GetController(acid);
 
                     if (sc is not null)
                     {
@@ -176,7 +176,7 @@ public sealed class SocketConn : IDisposable
             }
             catch (Exception ex)
             {
-                Errors.Add(ex, "OzStrips");
+                Util.LogError(ex);
             }
         });
 
@@ -276,7 +276,7 @@ public sealed class SocketConn : IDisposable
     /// Syncs the strip controller.
     /// </summary>
     /// <param name="sc">The strip controller.</param>
-    public void SyncSC(StripController sc)
+    public void SyncSC(Strip sc)
     {
         StripControllerDTO scDTO = sc;
         AddMessage("c:sc_change: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
@@ -295,7 +295,7 @@ public sealed class SocketConn : IDisposable
     /// Requests routes for a given sc.
     /// </summary>
     /// <param name="sc">The strip controller.</param>
-    public void RequestRoutes(StripController sc)
+    public void RequestRoutes(Strip sc)
     {
         AddMessage("c:get_routes: " + sc.FDR.Callsign);
         if (_io.Connected)
@@ -317,7 +317,7 @@ public sealed class SocketConn : IDisposable
     /// Syncs the deletion of a controller.
     /// </summary>
     /// <param name="sc">The strip controller.</param>
-    public void SyncDeletion(StripController sc)
+    public void SyncDeletion(Strip sc)
     {
         SCDeletionDTO scDTO = sc;
         AddMessage("c:sc_delete: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
@@ -420,7 +420,7 @@ public sealed class SocketConn : IDisposable
         }
         catch (Exception ex)
         {
-            Errors.Add(ex, "OzStrips");
+            Util.LogError(ex);
         }
     }
 
@@ -444,9 +444,9 @@ public sealed class SocketConn : IDisposable
     /// Creates the cache data transfer object.
     /// </summary>
     /// <returns>The cache data transfer object.</returns>
-    private static CacheDTO CreateCacheDTO()
+    private CacheDTO CreateCacheDTO()
     {
-        return new() { strips = StripController.StripControllers.ConvertAll(x => (StripControllerDTO)x), };
+        return new() { strips = _bayManager.StripRepository.Controllers.ConvertAll(x => (StripControllerDTO)x), };
     }
 
     private void ToggleFresh(object sender, ElapsedEventArgs e)

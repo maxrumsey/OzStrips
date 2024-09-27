@@ -6,17 +6,17 @@
 public enum StripBay
 {
     /// <summary>
-    /// Indicates the strip is not currently active.
+    /// Indicates the strip is not currently active (inhibited).
     /// </summary>
     BAY_DEAD,
 
     /// <summary>
-    /// Indicates preparation status before activation.
+    /// Indicates preactive strip state.
     /// </summary>
     BAY_PREA,
 
     /// <summary>
-    /// Indicates the strip has been cleared for the next stage.
+    /// Indicates the strip has received a clearance..
     /// </summary>
     BAY_CLEARED,
 
@@ -36,17 +36,17 @@ public enum StripBay
     BAY_HOLDSHORT,
 
     /// <summary>
-    /// Indicates the aircraft is on the runway.
+    /// Indicates the aircraft is cleared to enter/cross/use the runway.
     /// </summary>
     BAY_RUNWAY,
 
     /// <summary>
-    /// Indicates the aircraft has exited the runway.
+    /// Indicates the aircraft has departed.
     /// </summary>
     BAY_OUT,
 
     /// <summary>
-    /// Indicates the strip for an arriving aircraft.
+    /// Indicates the strip for an arriving aircraft, pending a landing clearance.
     /// </summary>
     BAY_ARRIVAL,
 }

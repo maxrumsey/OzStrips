@@ -23,19 +23,26 @@
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net472|x86'">
       <Optimize>False</Optimize>
     </PropertyGroup>
-
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net481|AnyCPU'">
+      <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net481|AnyCPU'">
+      <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    </PropertyGroup>
+  
     <ItemGroup>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="SkiaSharp" Version="3.0.0-preview.4.1" />
+        <PackageReference Include="SkiaSharp.Views.WindowsForms" Version="3.0.0-preview.4.1" />
         <PackageReference Include="SocketIO.Serializer.NewtonsoftJson" Version="3.1.1" />
         <PackageReference Include="System.Text.Json" Version="8.0.4" />
         <PackageReference Include="SocketIOClient" Version="3.1.1" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Update="Controls\TinyStrip.cs" />
-        <Compile Update="Controls\SettingsWindowControl.cs">
-          <SubType>UserControl</SubType>
+        <Compile Update="BayRenderController.cs">
+          <SubType>Component</SubType>
         </Compile>
-        <Compile Update="Controls\LittleStrip.cs">
+        <Compile Update="Controls\SettingsWindowControl.cs">
           <SubType>UserControl</SubType>
         </Compile>
         <Compile Update="OzStripsConfig.Designer.cs">
@@ -59,6 +66,7 @@
     <Content Include="ozstrips.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="System.Net.Http" />
     <Reference Include="vatSys">
       <HintPath>C:\Program Files (x86)\vatSys\bin\vatSys.exe</HintPath>
       <Private>False</Private>
@@ -79,9 +87,15 @@
         </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
+      <None Update="libSkiaSharp.dylib">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
       <None Update="Properties\OzStripsSettings.settings">
         <Generator>SettingsSingleFileGenerator</Generator>
         <LastGenOutput>OzStripsSettings.Designer.cs</LastGenOutput>
+      </None>
+      <None Update="Strip.xml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
 </Project>

@@ -15,7 +15,7 @@ public partial class BayCLXControl : UserControl
     /// </summary>
     /// <param name="controller">The strip controller.</param>
     /// <param name="labelName">The label that opened the control.</param>
-    public BayCLXControl(StripController controller, string labelName)
+    public BayCLXControl(Strip controller, string labelName)
     {
         InitializeComponent();
 
@@ -61,16 +61,16 @@ public partial class BayCLXControl : UserControl
 
         switch (_callingLabel)
         {
-            case "lb_remark":
+            case "remark":
                 ActiveControl = tb_remark;
                 break;
-            case "lb_glop":
+            case "glop":
                 ActiveControl = tb_glop;
                 break;
-            case "lb_std":
+            case "std":
                 ActiveControl = tb_bay;
                 break;
-            case "lb_clx":
+            case "clx":
                 ActiveControl = tb_clx;
                 break;
         }

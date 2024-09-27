@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using System.Globalization;
 using System.IO;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
@@ -23,7 +24,6 @@ public sealed class OzStrips : IPlugin, IDisposable
     private const string _versionUrl = "https://raw.githubusercontent.com/maxrumsey/OzStrips/master/Version.json";
     private static readonly HttpClient _httpClient = new();
     private static readonly Version _version = new(OzStripsConfig.version);
-
     private readonly CustomToolStripMenuItem _ozStripsOpener;
     private MainForm? _gui;
 
@@ -37,11 +37,20 @@ public sealed class OzStrips : IPlugin, IDisposable
     {
         try
         {
-            _ = SendError();
+            _ = SendCrash();
         }
         catch (Exception ex)
         {
-            Errors.Add(ex, "OzStrips Error Reporter");
+            Util.LogError(ex, "OzStrips Error Reporter");
+        }
+
+        try
+        {
+            SetAndCreateEnvVar();
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
         }
 
         Network.Connected += Connected;
@@ -68,8 +77,6 @@ public sealed class OzStrips : IPlugin, IDisposable
     /// <param name="updated">The information about the update.</param>
     public void OnFDRUpdate(FDP2.FDR updated)
     {
-        ////Errors.Add(new Exception("mew"));
-        ////System.Diagnostics.Process.Start("http://google.com");
         if (_gui?.IsHandleCreated == true)
         {
             MMI.InvokeOnGUI(() => _gui.UpdateFDR(updated));
@@ -109,7 +116,7 @@ public sealed class OzStrips : IPlugin, IDisposable
 
             if (string.IsNullOrWhiteSpace(response))
             {
-                Errors.Add(new("Could not get the version information from the OzStrips server. Cannot validate if latest version."), "OzStrips Connector");
+                Util.LogError(new("Could not get the version information from the OzStrips server. Cannot validate if latest version."));
                 return;
             }
 
@@ -117,7 +124,7 @@ public sealed class OzStrips : IPlugin, IDisposable
 
             if (version is null)
             {
-                Errors.Add(new("Could not load the version information for OzStrips."), "OzStrips Connector");
+                Util.LogError(new("Could not load the version information for OzStrips."));
                 return;
             }
 
@@ -126,14 +133,14 @@ public sealed class OzStrips : IPlugin, IDisposable
                 return;
             }
 
-            Errors.Add(new("A new version of the plugin is available."), "OzStrips Connector");
+            Errors.Add(new("A new version of the plugin is available."), "OzStrips");
         }
         catch
         {
         }
     }
 
-    private static async Task SendError()
+    private static async Task SendCrash()
     {
       if (File.Exists(Helpers.GetFilesFolder() + "ozstrips_log.txt"))
         {
@@ -150,6 +157,21 @@ public sealed class OzStrips : IPlugin, IDisposable
                 _ = await _httpClient.PostAsync(uri, new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json")).ConfigureAwait(false);
                 }
 #pragma warning restore CA1862 // Use the 'StringComparison' method overloads to perform case-insensitive string comparisons
+        }
+    }
+
+    private static void SetAndCreateEnvVar()
+    {
+        var appdata_path = Util.SetAndReturnDLLVar();
+        var assembly_folder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        Directory.CreateDirectory(appdata_path);
+        try
+        {
+            File.Copy(assembly_folder + @"\libSkiaSharp.adll", appdata_path + "libSkiaSharp.dll", true);
+        }
+        catch
+        {
+            Errors.Add(new("Failed to load an internal Ozstrips file. This may be because you have another vatSys window open, and in this case, can be disregarded."), "Ozstrips");
         }
     }
 

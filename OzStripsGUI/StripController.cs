@@ -1,960 +1,460 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
-
 using MaxRumsey.OzStripsPlugin.Gui.Controls;
-using MaxRumsey.OzStripsPlugin.Gui.DTO;
-using MaxRumsey.OzStripsPlugin.Gui.Properties;
+using SkiaSharp;
 using vatsys;
-
 using static vatsys.FDP2;
 
 namespace MaxRumsey.OzStripsPlugin.Gui;
 
 /// <summary>
-/// Responsible for strip logic, represents a Vatsys FDR.
+/// The strip base.
 /// </summary>
-public sealed class StripController : IDisposable
+/// <remarks>
+/// Initializes a new instance of the <see cref="StripController"/> class.
+/// </remarks>
+public class StripController
 {
-    private static readonly Regex _headingRegex = new(@"H(\d{3})");
-    private static readonly Regex _routeRegex = new(@"^[^\d/]+$");
-    private static readonly Regex _sidRouteRegex = new(@"^[\w\d]+\/\d\d");
-    private static readonly Regex _gpscoordRegex = new(@"^[\d]+\w[\d]+\w");
-
-    private readonly BayManager _bayManager;
-    private readonly SocketConn _socketConn;
-    ////private readonly StripLayoutTypes StripType;
-
-    private StripBaseGUI? _stripControl;
-
-    private bool _crossing;
+    // private string _rtetooltiptext = string.Empty;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="StripController"/> class.
     /// </summary>
-    /// <param name="fdr">The flight data record.</param>
-    /// <param name="bayManager">Gets or sets the bay manager.</param>
-    /// <param name="socketConn">The socket connection.</param>
-    public StripController(FDR fdr, BayManager bayManager, SocketConn socketConn)
+    /// <param name="stripController">The Strip Controller.</param>
+    public StripController(Strip stripController)
     {
-        FDR = fdr;
-        _bayManager = bayManager;
-        ParentAerodrome = bayManager.AerodromeName;
-        _socketConn = socketConn;
-        CurrentBay = StripBay.BAY_PREA;
-        if (ArrDepType == StripArrDepType.ARRIVAL)
-        {
-            CurrentBay = StripBay.BAY_ARRIVAL;
-        }
-
-        if (!DetermineSCValidity())
-        {
-            Dispose();
-            return;
-        }
-
-        CreateStripObj();
+        Strip = stripController;
+        FDR = stripController.FDR;
     }
 
     /// <summary>
-    /// Gets a list of strip controllers.
+    /// Gets a value indicating whether or not the CFL tooltip should be shown.
     /// </summary>
-    public static List<StripController> StripControllers { get; } = [];
+    public bool ShowCFLToolTip { get; private set; }
 
     /// <summary>
-    /// Gets or sets the strip holder control.
+    /// Gets the strip controller.
     /// </summary>
-    public Control? StripHolderControl { get; set; }
-
-    /// <summary>
-    /// Gets or sets the take off time.
-    /// </summary>
-    public DateTime? TakeOffTime { get; set; }
-
-    /// <summary>
-    /// Gets or sets the valid routes.
-    /// </summary>
-    public RouteDTO[]? ValidRoutes { get; set; }
-
-    /// <summary>
-    /// Gets or sets the condensed route.
-    /// </summary>
-    public string? CondensedRoute { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Gets or sets a value indicating whether or not a list of valid routes has been selected.
-    /// </summary>
-    public DateTime RequestedRoutes { get; set; } = DateTime.MaxValue;
-
-    /// <summary>
-    /// Gets or sets a value indicating whether or not a list of valid routes has been compared to the current route.
-    /// </summary>
-    public bool ParsedRoutes { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether or not an aircraft has filed a dodgy route.
-    /// </summary>
-    public bool DodgyRoute { get; set; }
-
-    /// <summary>
-    /// Gets the ICAO name of the aerodrome being controlled.
-    /// </summary>
-    public string ParentAerodrome { get; }
+    protected Strip Strip { get; }
 
     /// <summary>
     /// Gets the flight data record.
     /// </summary>
-    public FDR FDR { get; internal set; }
+    protected FDP2.FDR FDR { get; }
 
     /// <summary>
-    /// Gets or sets the current strip bay.
+    /// Gets or sets the pick toggle control.
     /// </summary>
-    public StripBay CurrentBay { get; set; }
+    protected Panel? PickToggleControl { get; set; }
 
     /// <summary>
-    /// Gets or sets the current cock level.
+    /// Changes the cock level.
     /// </summary>
-    public int CockLevel { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether or not the strip is in crossing mode.
-    /// </summary>
-    public bool Crossing
+    /// <param name="cockLevel">The new cock level.</param>
+    /// <param name="sync">If the cock level should be synced.</param>
+    /// <param name="update">If the cock level should update.</param>
+    public void Cock(int cockLevel, bool sync = true, bool update = true)
     {
-        get => _crossing;
-        set
+        if (cockLevel == -1)
         {
-            _crossing = value;
-            _stripControl?.SetCross();
-        }
-    }
-
-    /// <summary>
-    /// Gets the arrival or departure type.
-    /// </summary>
-    public StripArrDepType ArrDepType
-    {
-        get
-        {
-            if (_bayManager == null)
+            cockLevel = Strip.CockLevel + 1;
+            if (cockLevel >= 2)
             {
-                return StripArrDepType.UNKNOWN;
-            }
-
-            if (FDR.DesAirport.Equals(_bayManager.AerodromeName, StringComparison.InvariantCultureIgnoreCase))
-            {
-                return StripArrDepType.ARRIVAL;
-            }
-
-            return FDR.DepAirport.Equals(_bayManager.AerodromeName, StringComparison.CurrentCultureIgnoreCase) ?
-                StripArrDepType.DEPARTURE :
-                StripArrDepType.UNKNOWN;
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets the CFL.
-    /// </summary>
-    public string CFL
-    {
-        get => FDR.CFLString;
-
-        set
-        {
-            if (Network.Me.IsRealATC || MainForm.IsDebug)
-            {
-                SetCFL(FDR, value);
-            }
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets the clearance.
-    /// </summary>
-    public string CLX { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Gets or sets the remarks.
-    /// </summary>
-    public string Remark { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Gets he requested flight level.
-    /// </summary>
-    public string RFL
-    {
-        get
-        {
-            return (FDR.RFL / 100).ToString(CultureInfo.InvariantCulture).PadLeft(3, '0');
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether the strip is ready for departure.
-    /// </summary>
-    public bool Ready { get; set; }
-
-    /// <summary>
-    /// Gets or sets the gate.
-    /// </summary>
-    public string Gate { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Gets or sets the heading.
-    /// </summary>
-    public string HDG
-    {
-        get
-        {
-            var hdgMatch = _headingRegex.Match(FDR.GlobalOpData);
-            return hdgMatch.Success ? hdgMatch.Value.Replace("H", string.Empty) : string.Empty;
-        }
-
-        set
-        {
-            if ((Network.Me.IsRealATC || MainForm.IsDebug) && !string.IsNullOrWhiteSpace(value))
-            {
-                SetGlobalOps(FDR, "H" + value);
-            }
-        }
-    }
-
-    /// <summary>
-    /// Gets the current eobt time.
-    /// </summary>
-    public string Time
-    {
-        get
-        {
-            if (ArrDepType == StripArrDepType.DEPARTURE && FDR.ATD == DateTime.MaxValue)
-            {
-                return FDR.ETD.ToString("HHmm", CultureInfo.InvariantCulture);
-            }
-
-            return ArrDepType == StripArrDepType.DEPARTURE ?
-                FDR.ATD.ToString("HHmm", CultureInfo.InvariantCulture) :
-                string.Empty;
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets the runway.
-    /// </summary>
-    public string RWY
-    {
-        get
-        {
-            if (ArrDepType == StripArrDepType.DEPARTURE && FDR.DepartureRunway != null)
-            {
-                return FDR.DepartureRunway.Name;
-            }
-
-            return ArrDepType == StripArrDepType.ARRIVAL && FDR.ArrivalRunway != null ? FDR.ArrivalRunway.Name : string.Empty;
-        }
-
-        set
-        {
-            if (ArrDepType == StripArrDepType.DEPARTURE)
-            {
-                var aerodrome = FDR.DepAirport;
-                var runways = Airspace2.GetRunways(aerodrome);
-                foreach (var runway in runways)
-                {
-                    if (runway.Name == value)
-                    {
-                        if (Network.Me.IsRealATC || MainForm.IsDebug)
-                        {
-                            SetDepartureRunway(FDR, runway);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// Gets the first element in the route.
-    /// </summary>
-    public string FirstWpt
-    {
-        get
-        {
-            return FDR.Route.Split(' ').ToList().Find(x => _routeRegex.Match(x).Success && (x != "DCT")) ?? FDR.Route;
-        }
-    }
-
-    /// <summary>
-    /// Gets the full route text in the route.
-    /// </summary>
-    public string Route
-    {
-        get
-        {
-            return FDR.Route;
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets the SID.
-    /// </summary>
-    public string SID
-    {
-        get
-        {
-            if (ArrDepType == StripArrDepType.DEPARTURE && FDR.SID is not null)
-            {
-                return FDR.SID.Name;
-            }
-            else if (ArrDepType == StripArrDepType.DEPARTURE)
-            {
-                return string.Empty;
-            }
-            else
-            {
-                return ">";
+                cockLevel = 0;
             }
         }
 
-        set
+        if (update)
         {
-            var found = false;
-            foreach (var possibleSID in FDR.DepartureRunway.SIDs)
+            Strip.CockLevel = cockLevel;
+        }
+
+        if (sync)
+        {
+            Strip.SyncStrip();
+        }
+    }
+
+    /// <summary>
+    /// Sets the strip to cross.
+    /// </summary>
+    /// <param name="sync">If the cross should be synced.</param>
+    public void SetCross(bool sync = true)
+    {
+        if (sync)
+        {
+            Strip.SyncStrip();
+        }
+    }
+
+    /// <summary>
+    /// toggles if the HMI is picked.
+    /// </summary>
+    /// <param name="picked">If the value is picked or not.</param>
+    public void HMI_TogglePick(bool picked)
+    {
+        if (PickToggleControl != null)
+        {
+            var color = Color.Empty;
+            if (picked)
             {
-                if (possibleSID.sidStar.Name == value)
-                {
-                    if (value == FDR.SIDSTARString)
-                    {
-                        return; // dont needlessly set sid
-                    }
-
-                    if (Network.Me.IsRealATC || MainForm.IsDebug)
-                    {
-                        SetSID(FDR, possibleSID.sidStar);
-                    }
-
-                    found = true;
-                }
+                color = Color.Silver;
             }
 
-            if (!found)
+            PickToggleControl.BackColor = color;
+        }
+    }
+
+    /// <summary>
+    /// Opens the CFL window.
+    /// </summary>
+    public void OpenCFLWindow()
+    {
+        if (Properties.OzStripsSettings.Default.UseVatSysPopup)
+        {
+            var track = MMI.FindTrack(FDR);
+            if (track is not null)
             {
-                CreateError("Attempted to set invalid SID");
+                MMI.OpenCFLMenu(track, Cursor.Position);
             }
-        }
-    }
-
-    /// <summary>
-    /// Gets a list of possible departure runways.
-    /// </summary>
-    public List<Airspace2.SystemRunway> PossibleDepRunways
-    {
-        get
-        {
-            var aerodrome = FDR.DepAirport;
-            return Airspace2.GetRunways(aerodrome);
-        }
-    }
-
-    /// <summary>
-    /// Gets a value indicating whether the squawk code is correct.
-    /// </summary>
-    public bool SquawkCorrect
-    {
-        get
-        {
-            var rtrack = GetRadarTrack();
-            return rtrack?.ActualAircraft.TransponderModeC == true && rtrack.ActualAircraft.TransponderCode == FDR.AssignedSSRCode;
-        }
-    }
-
-    /// <summary>
-    /// Gets a dictionary which contains the departure next state for a given state.
-    /// </summary>
-    private static Dictionary<StripBay, StripBay> NextBayDep { get; } = new()
-    {
-        { StripBay.BAY_PREA, StripBay.BAY_CLEARED },
-        { StripBay.BAY_CLEARED, StripBay.BAY_PUSHED },
-        { StripBay.BAY_PUSHED, StripBay.BAY_TAXI },
-        { StripBay.BAY_TAXI, StripBay.BAY_HOLDSHORT },
-        { StripBay.BAY_RUNWAY, StripBay.BAY_OUT },
-        { StripBay.BAY_OUT, StripBay.BAY_DEAD },
-    };
-
-    /// <summary>
-    /// Gets a dictionary which contains the arrival next state for a given state.
-    /// </summary>
-    private static Dictionary<StripBay, StripBay> NextBayArr { get; } = new()
-    {
-        { StripBay.BAY_TAXI, StripBay.BAY_DEAD },
-        { StripBay.BAY_RUNWAY, StripBay.BAY_TAXI },
-    };
-
-    /// <summary>
-    /// Converts a strip controller to the data object.
-    /// </summary>
-    /// <param name="sc">The strip controller.</param>
-    public static implicit operator StripControllerDTO(StripController sc)
-    {
-        var scDTO = new StripControllerDTO
-        {
-            acid = sc.FDR.Callsign,
-            bay = sc.CurrentBay,
-            CLX = sc.CLX,
-            GATE = sc.Gate,
-            cockLevel = sc.CockLevel,
-            crossing = sc.Crossing,
-            remark = sc.Remark,
-            TOT = sc.TakeOffTime is not null ? sc.TakeOffTime!.ToString() : "\0",
-            ready = sc.Ready,
-        };
-
-        return scDTO;
-    }
-
-    /// <summary>
-    /// Converts a strip controller to the data object.
-    /// </summary>
-    /// <param name="sc">The strip controller.</param>
-    public static implicit operator SCDeletionDTO(StripController sc)
-    {
-        var scDTO = new SCDeletionDTO
-        {
-            acid = sc.FDR.Callsign,
-        };
-
-        return scDTO;
-    }
-
-    /// <summary>
-    /// Looks up controller by name.
-    /// </summary>
-    /// <param name="name">The aircraft callsign.</param>
-    /// <returns>The aircraft's FDR.</returns>
-    public static StripController? GetController(string name)
-    {
-        foreach (var controller in StripControllers)
-        {
-            if (controller.FDR.Callsign == name)
-            {
-                return controller;
-            }
-        }
-
-        return null;
-    }
-
-    /// <summary>
-    /// Adds a error string to the VATSYS error system.
-    /// </summary>
-    /// <param name="error">The error.</param>
-    public static void CreateError(string error)
-    {
-        CreateError(new Exception(error));
-    }
-
-    /// <summary>
-    /// Adds a exception to the VATSYS error system.
-    /// </summary>
-    /// <param name="error">The error exception.</param>
-    public static void CreateError(Exception error)
-    {
-        Errors.Add(error, "OzStrips");
-    }
-
-    /// <summary>
-    /// Receives a fdr, updates according SC.
-    /// </summary>
-    /// <param name="fdr">The flight data record.</param>
-    /// <param name="bayManager">The bay manager.</param>
-    /// <param name="socketConn">The socket connection.</param>
-    /// <param name="inhibitReorders">Whether or not to inhibit strip reordering.</param>
-    /// <returns>The appropriate strip controller for the FDR.</returns>
-    public static StripController UpdateFDR(FDR fdr, BayManager bayManager, SocketConn socketConn, bool inhibitReorders = false)
-    {
-        foreach (var controller in StripControllers)
-        {
-            if (controller.FDR.Callsign == fdr.Callsign)
-            {
-                if (GetFDRIndex(fdr.Callsign) == -1)
-                {
-                    bayManager.DeleteStrip(controller);
-                }
-
-                controller.FDR = fdr;
-                controller.UpdateFDR();
-                return controller;
-            }
-        }
-
-        // todo: add this logic into separate static function
-        var stripController = new StripController(fdr, bayManager, socketConn);
-        bayManager.AddStrip(stripController, true, inhibitReorders);
-        return stripController;
-    }
-
-    /// <summary>
-    /// Loads in a cacheDTO object received from server, sets SCs accordingly.
-    /// </summary>
-    /// <param name="cacheData">The cache data.</param>
-    /// <param name="bayManager">The bay manager.</param>
-    /// <param name="socketConn">The socket connection.</param>
-    public static void LoadCache(CacheDTO cacheData, BayManager bayManager, SocketConn socketConn)
-    {
-        foreach (var stripDTO in cacheData.strips)
-        {
-            UpdateFDR(stripDTO, bayManager);
-        }
-
-        socketConn.ReadyForBayData();
-    }
-
-    /// <summary>
-    /// Marks all strips as awaiting routes to be fetched from the server. Called on connection establishment.
-    /// </summary>
-    public static void MarkAllStripsAsAwaitingRoutes()
-    {
-        foreach (var strip in StripControllers)
-        {
-            strip.RequestedRoutes = DateTime.MaxValue;
-        }
-    }
-
-    /// <summary>
-    /// Receives a SC DTO object, updates relevant SC.
-    /// </summary>
-    /// <param name="stripControllerData">The strip controller data.</param>
-    /// <param name="bayManager">The bay manager.</param>
-    public static void UpdateFDR(StripControllerDTO stripControllerData, BayManager bayManager)
-    {
-        foreach (var controller in StripControllers)
-        {
-            if (controller.FDR.Callsign == stripControllerData.acid)
-            {
-                var changeBay = false;
-                controller.CLX = !string.IsNullOrWhiteSpace(stripControllerData.CLX) ? stripControllerData.CLX : string.Empty;
-                controller.Gate = stripControllerData.GATE ?? string.Empty;
-                if (controller.CurrentBay != stripControllerData.bay)
-                {
-                    changeBay = true;
-                }
-
-                controller.CurrentBay = stripControllerData.bay;
-                controller._stripControl?.Cock(stripControllerData.cockLevel, false);
-                controller.TakeOffTime = stripControllerData.TOT == "\0" ?
-                    null :
-                    DateTime.Parse(stripControllerData.TOT, CultureInfo.InvariantCulture);
-
-                controller.Remark = !string.IsNullOrWhiteSpace(stripControllerData.remark) ? stripControllerData.remark : string.Empty;
-                controller._crossing = stripControllerData.crossing;
-                controller._stripControl?.SetCross(false);
-                controller.Ready = stripControllerData.ready;
-                if (changeBay)
-                {
-                    bayManager.UpdateBay(controller); // prevent unessesscary reshufles
-                }
-
-                return;
-            }
-        }
-    }
-
-    /// <summary>
-    /// Sets the HMI picked state.
-    /// </summary>
-    /// <param name="picked">True if picked, false otherwise.</param>
-    public void SetHMIPicked(bool picked)
-    {
-        _stripControl?.HMI_TogglePick(picked);
-    }
-
-    /// <summary>
-    /// Cocks the selected strip.
-    /// </summary>
-    public void CockStrip()
-    {
-        _stripControl?.Cock(-1);
-    }
-
-    /// <summary>
-    /// That the strip has taken off.
-    /// </summary>
-    public void TakeOff()
-    {
-        if (TakeOffTime is null)
-        {
-            TakeOffTime = DateTime.UtcNow;
-            CoordinateStrip();
         }
         else
         {
-            TakeOffTime = null;
-        }
-
-        SyncStrip();
-    }
-
-    /// <summary>
-    /// Coordinates the strip with the server.
-    /// </summary>
-    public void CoordinateStrip()
-    {
-        if (FDR.State == FDR.FDRStates.STATE_PREACTIVE && (Network.Me.IsRealATC || MainForm.IsDebug))
-        {
-            MMI.EstFDR(FDR);
-        }
-
-        if (CurrentBay == StripBay.BAY_PREA)
-        {
-            Util.ShowWarnBox("You have coordinated this strip while it is in your Preactive Bay.\nYou will no longer be able make changes to the flight plan!\nOpen the vatSys Flight Plan window and deactivate the strip if you still need to make changes to SID, RWY or Altitude.");
+            OpenHdgAltModal();
         }
     }
 
     /// <summary>
-    /// Sends a strip deletion message to the server.
+    /// Determines the colour of the CFL highlight.
     /// </summary>
-    public void SendDeleteMessage()
+    /// <returns>Colour.</returns>
+    public SKColor DetermineCFLBackColour()
     {
-        _socketConn.SyncDeletion(this);
+        var first = FDR.ParsedRoute.First().Intersection.LatLong;
+        var last = FDR.ParsedRoute.Last().Intersection.LatLong;
+
+        int[] eastRVSM = [41000, 45000, 49000];
+        int[] westRVSM = [43000, 47000, 51000];
+
+        if (first == last)
+        {
+            return SKColor.Empty;
+        }
+
+        var track = Conversions.CalculateTrack(first, last);
+        var positions = LogicalPositions.Positions.Where(e => e.Name == Strip.ParentAerodrome).FirstOrDefault();
+        if (positions is null)
+        {
+            return SKColor.Empty;
+        }
+
+        var variation = positions.MagneticVariation;
+        track += variation;
+
+        var even = true;
+
+        if (track >= 0 && track < 180)
+        {
+            even = false;
+        }
+
+        var digit = int.Parse(Strip.RFL[1].ToString(), CultureInfo.InvariantCulture);
+        var shouldbeeven = digit % 2 == 0;
+
+        var colour = SKColor.Empty;
+        if (even != shouldbeeven && FDR.RFL >= 3000 && Strip.ArrDepType == StripArrDepType.DEPARTURE)
+        {
+            colour = SKColors.OrangeRed;
+            ShowCFLToolTip = true;
+        }
+        else
+        {
+            ShowCFLToolTip = false;
+        }
+
+        if (FDR.RFL >= 41000 && ((even && westRVSM.Contains(FDR.RFL)) || (!even && eastRVSM.Contains(FDR.RFL))))
+        {
+            colour = SKColor.Empty;
+            ShowCFLToolTip = false;
+        }
+        else if (FDR.RFL >= 41000 && Strip.ArrDepType == StripArrDepType.DEPARTURE)
+        {
+            colour = SKColors.OrangeRed;
+            ShowCFLToolTip = true;
+        }
+
+        return colour;
     }
 
     /// <summary>
-    /// Creates control for strip.
+    /// Determines the colour of the Route highlight.
     /// </summary>
-    public void CreateStripObj()
+    /// <returns>Colour.</returns>
+    public SKColor DetermineRouteBackColour()
     {
-        StripHolderControl = new Panel
+        var colour = SKColor.Empty;
+        if (Strip.DodgyRoute)
         {
-            BackColor = Color.FromArgb(193, 230, 242),
-        };
-        if (ArrDepType == StripArrDepType.ARRIVAL)
-        {
-            StripHolderControl.BackColor = Color.FromArgb(255, 255, 160);
+            colour = SKColors.Orange;
         }
 
-        StripHolderControl.Padding = new(3);
-        StripHolderControl.Margin = new(0);
-
-        ////stripHolderControl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-        StripHolderControl.Size = new(100, 100);
-
-        _stripControl = OzStripsSettings.Default.StripSize switch
-        {
-            0 => new TinyStrip(this),
-            2 => new Strip(this),
-            _ => new LittleStrip(this),
-        };
-
-        _stripControl.Initialise();
-        _stripControl.UpdateStrip();
-        _stripControl.HMI_TogglePick(_bayManager.PickedController == this);
-
-        StripHolderControl.Size = _stripControl.Size with { Height = _stripControl.Size.Height + 6 };
-        StripHolderControl.Controls.Add(_stripControl);
+        return colour;
     }
 
     /// <summary>
-    /// Removes items from the strip holder control.
+    /// Opens the HDG window.
     /// </summary>
-    public void ClearStripControl()
+    public void OpenHDGWindow()
     {
-        var controls = StripHolderControl?.Controls;
+        OpenHdgAltModal();
+    }
 
-        if (controls is not null)
+    /// <summary>
+    /// Opens the RWY window.
+    /// </summary>
+    public void OpenRWYWindow()
+    {
+        if (Properties.OzStripsSettings.Default.UseVatSysPopup)
         {
-            for (var i = controls.Count - 1; i >= 0; i--)
-            {
-                controls[i].Dispose();
-            }
+            MMI.OpenRWYMenu(FDR, Cursor.Position);
+        }
+        else
+        {
+            OpenHdgAltModal();
         }
     }
 
     /// <summary>
-    /// Determines whether or not a SC is still valid (or should be kept alive).
+    /// Opens the Reroute window.
     /// </summary>
-    /// <returns>Valid SC.</returns>
-    public bool DetermineSCValidity()
+    public void OpenRerouteMenu()
     {
-        if (FDR is null)
-        {
-            Errors.Add(new Exception("Strip deleted due to non-existence of vatsys FDR."), "OzStrips");
-            return false;
-        }
+        var modalChild = new RerouteControl(Strip);
+        var bm = new BaseModal(modalChild, "Reroute :: " + Strip.FDR.Callsign);
 
-        if (Network.GetOnlinePilots.Find(x => x.Callsign == FDR.Callsign) is null)
-        {
-            return false;
-        }
-
-        if (FDR.State < FDR.FDRStates.STATE_PREACTIVE && ArrDepType == StripArrDepType.DEPARTURE)
-        {
-            return false;
-        }
-
-        var distance = GetDistToAerodrome(_bayManager.AerodromeName);
-
-        if (distance is -1 or > 50 && ArrDepType == StripArrDepType.DEPARTURE)
-        {
-            return false;
-        }
-
-        if (!ApplicableToAerodrome(_bayManager.AerodromeName))
-        {
-            return false;
-        }
-
-        return true;
+        // modalChild.BaseModal = bm;
+        bm.Show(MainForm.MainFormInstance);
     }
 
     /// <summary>
-    /// Refreshes strip properties, determines if strip should be removed.
+    /// Opens the SID window.
     /// </summary>
-    public void UpdateFDR()
+    public void OpenSIDWindow()
     {
-        if (!DetermineSCValidity())
+        if (Properties.OzStripsSettings.Default.UseVatSysPopup)
         {
-            _bayManager.DeleteStrip(this);
+            MMI.OpenSIDSTARMenu(FDR, Cursor.Position);
+        }
+        else
+        {
+            OpenHdgAltModal();
+        }
+    }
+
+    /// <summary>
+    /// Opens the Clearance bya modal.
+    /// </summary>
+    /// <param name="labelName">Label Name.</param>
+    public void OpenCLXBayModal(string labelName)
+    {
+        var modalChild = new BayCLXControl(Strip, labelName);
+        var bm = new BaseModal(modalChild, "SMC Menu :: " + Strip.FDR.Callsign);
+        modalChild.BaseModal = bm;
+        bm.ReturnEvent += CLXBayReturned;
+        bm.Show(MainForm.MainFormInstance);
+    }
+
+    /// <summary>
+    /// Assigns a squawk.
+    /// </summary>
+    public void AssignSSR()
+    {
+        if (FDR.AssignedSSRCode == -1 && Network.Me.IsRealATC)
+        {
+            FDP2.SetASSR(Strip.FDR);
+        }
+    }
+
+    /// <summary>
+    /// Toggles strip ready status.
+    /// </summary>
+    public void ToggleReady()
+    {
+        Strip.Ready = !Strip.Ready;
+        Strip.SyncStrip();
+    }
+
+    /*
+    public void UpdateStrip()
+    {
+        if (FDR == null)
+        {
             return;
         }
 
-        // Route fetch will retry every minute.
-        if (ValidRoutes is null && (RequestedRoutes == DateTime.MaxValue || (DateTime.Now - RequestedRoutes) > TimeSpan.FromMinutes(1)))
-        {
-            _socketConn.RequestRoutes(this);
-            RequestedRoutes = DateTime.Now;
-        }
+        SetLabel("eobt", Strip.Time);
 
-        if (ValidRoutes is not null)
+        SetLabel("acid", FDR.Callsign);
+        SetLabel("ssr", (FDR.AssignedSSRCode == -1) ? "XXXX" : Convert.ToString(FDR.AssignedSSRCode, 8).PadLeft(4, '0'));
+        SetLabel("type", FDR.AircraftType);
+        SetLabel("frul", FDR.FlightRules);
+
+        SetLabel("route", Strip.FirstWpt);
+        SetBackColour("route", DetermineRouteBackColour());
+
+        if (StripToolTips.ContainsKey("routetooltip"))
         {
-            CondensedRoute = CleanVatsysRoute(FDR.Route);
-            DodgyRoute = true;
-            foreach (var validroute in ValidRoutes)
+            if (Strip.DodgyRoute)
             {
-                if (validroute.route.Contains(CondensedRoute))
+                var routes = new List<string>();
+                Array.ForEach(Strip.ValidRoutes, x => routes.Add("(" + x.acft + ") " + x.route));
+                var str = Strip.Route +
+                                "\n---\nPotentially non-compliant route detected! Accepted Routes:\n" + string.Join("\n", routes) + "\nParsed Route: " + Strip.CondensedRoute;
+                if (str != _rtetooltiptext)
                 {
-                    DodgyRoute = false;
+                    StripToolTips["routetooltip"].SetToolTip(StripElements["route"], str);
+                    _rtetooltiptext = str;
                 }
-            }
-
-            if (ArrDepType != StripArrDepType.DEPARTURE || (int)FDR.State > 5)
-            {
-                DodgyRoute = false;
             }
             else
             {
-                // account for situations where aircraft joins route from interim point via sid.
-                if (DodgyRoute)
+                var str = Strip.Route;
+                if (str != _rtetooltiptext)
                 {
-                    var rte = string.Join(" ", CleanVatsysRoute(FDR.Route).Split(' ').Skip(1).ToArray());
-                    foreach (var validroute in ValidRoutes)
-                    {
-                        if (validroute.route.Contains(rte))
-                        {
-                            DodgyRoute = false;
-                        }
-                    }
-                }
-
-                if (!DodgyRoute && CondensedRoute == "FAIL")
-                {
-                    DodgyRoute = true;
+                    StripToolTips["routetooltip"].SetToolTip(StripElements["route"], str);
+                    _rtetooltiptext = str;
                 }
             }
         }
 
-        _stripControl?.UpdateStrip();
-    }
+        SetLabel("sid", Strip.SID);
 
-    /// <summary>
-    /// Determines which bay to move strip to.
-    /// </summary>
-    public void SIDTrigger()
-    {
-        Dictionary<StripBay, StripBay> stripBayResultDict;
-        switch (ArrDepType)
-        {
-            case StripArrDepType.ARRIVAL:
-                stripBayResultDict = NextBayArr;
-                break;
-            case StripArrDepType.DEPARTURE:
-                stripBayResultDict = NextBayDep;
-                break;
-            default:
-                return;
-        }
+        SetLabel("ades", FDR.DesAirport);
+        SetLabel("CFL", Strip.CFL);
 
-        if (stripBayResultDict.TryGetValue(CurrentBay, out var nextBay))
-        {
-            CurrentBay = nextBay;
-            _bayManager.UpdateBay(this);
-            SyncStrip();
-        }
-    }
-
-    /// <summary>
-    /// Toggles the pick state.
-    /// </summary>
-    public void TogglePick()
-    {
-        if (_bayManager.PickedController == this)
-        {
-            _bayManager.SetPicked(true);
-        }
-        else
-        {
-            _bayManager.SetPicked(this, true);
-        }
-    }
-
-    /// <summary>
-    /// Determines if the strip is applicable to the passed aerodrome.
-    /// </summary>
-    /// <param name="name">The name of the aerodrome to check.</param>
-    /// <returns>True if it is applicable false otherwise.</returns>
-    public bool ApplicableToAerodrome(string name)
-    {
-        return FDR.DepAirport == name || FDR.DesAirport == name;
-    }
-
-    /// <summary>
-    /// Gets the distance to the specified aerodrome.
-    /// </summary>
-    /// <param name="aerodrome">The aerodrome to check.</param>
-    /// <returns>The distance, or -1 if it is unable to be determined.</returns>
-    public double GetDistToAerodrome(string aerodrome)
-    {
         try
         {
-            var adCoord = Airspace2.GetAirport(aerodrome)?.LatLong;
-            var planeCoord = FDR.PredictedPosition?.Location;
-            var radarTracks = (from radarTrack in RDP.RadarTracks
-                               where radarTrack.ActualAircraft.Callsign == FDR.Callsign
-                               select radarTrack).ToList();
-
-            if (radarTracks.Count > 0)
+            if (Strip.ArrDepType == StripArrDepType.DEPARTURE)
             {
-                foreach (var rTrack in radarTracks)
-                {
-                    planeCoord = rTrack.ActualAircraft?.Position;
-                }
-            }
-
-            if (adCoord is not null && planeCoord is not null)
-            {
-                return Conversions.CalculateDistance(adCoord, planeCoord);
+                var colour = DetermineCFLBackColour();
+                SetBackColour("CFL", colour);
             }
         }
         catch
         {
         }
 
-        return -1;
+        SetLabel("HDG", string.IsNullOrEmpty(Strip.HDG) ? string.Empty : "H" + Strip.HDG);
+
+        SetLabel("CLX", Strip.CLX);
+
+        SetLabel("stand", Strip.Gate);
+
+        SetLabel("remark", Strip.Remark);
+
+        if (Strip.TakeOffTime != null)
+        {
+            var diff = (TimeSpan)(DateTime.UtcNow - Strip.TakeOffTime);
+            SetLabel("tot", diff.ToString(@"mm\:ss", CultureInfo.InvariantCulture));
+            SetForeColour("tot", Color.Green);
+        }
+        else
+        {
+            SetLabel("tot", "00:00");
+            SetForeColour("tot", Color.Black);
+        }
+
+        SetLabel("rfl", Strip.RFL);
+
+        SetLabel("ready", Strip.Ready ? "RDY" : string.Empty);
+
+        if (!Strip.Ready && (Strip.CurrentBay == StripBay.BAY_HOLDSHORT || Strip.CurrentBay == StripBay.BAY_RUNWAY) && Strip.ArrDepType == StripArrDepType.DEPARTURE)
+        {
+            SetBackColour("ready", Color.Orange);
+        }
+        else
+        {
+            SetBackColour("ready", Color.Empty);
+        }
+
+        SetLabel("glop", FDR.GlobalOpData);
+
+        if (Strip.SquawkCorrect)
+        {
+            SetLabel("ssrsymbol", "*");
+        }
+        else
+        {
+            SetLabel("ssrsymbol", string.Empty);
+        }
+
+        SetCross(false);
+        Cock(0, false, false);
+
+        SetLabel("rwy", Strip.RWY);
+        SetLabel("wtc", FDR.AircraftWake);
+
+        ResumeLayout();
+    }
+    */
+
+    /// <summary>
+    /// Opens the heading/altitude modal dialog.
+    /// </summary>
+    protected void OpenHdgAltModal()
+    {
+        var modalChild = new AltHdgControl(Strip);
+        var bm = new BaseModal(modalChild, "ACD Menu :: " + Strip.FDR.Callsign);
+        modalChild.BaseModal = bm;
+        bm.ReturnEvent += HeadingAltReturned;
+        bm.Show(MainForm.MainFormInstance);
     }
 
     /// <summary>
-    /// Gets the radar track.
+    /// Callback for the heading alt return.
     /// </summary>
-    /// <returns>The tradar track or null if none available.</returns>
-    public RDP.RadarTrack? GetRadarTrack()
+    /// <param name="source">The source.</param>
+    /// <param name="args">The arguments.</param>
+    private void HeadingAltReturned(object source, ModalReturnArgs args)
     {
         try
         {
-            var radarTracks = RDP.RadarTracks
-                .Where(radarTrack => radarTrack.ActualAircraft.Callsign.Equals(FDR.Callsign))
-                .ToList();
-            return radarTracks.Count > 0 ? radarTracks[0] : null;
-        }
-        catch (Exception e)
-        {
-            Errors.Add(e, "OzStrips");
-            return null;
-        }
-    }
-
-    /// <summary>
-    /// Opens the VATSYS flight data record.
-    /// </summary>
-    public void OpenVatsysFDR()
-    {
-        MMI.OpenFPWindow(FDR);
-    }
-
-    /// <summary>
-    /// Sync the strip with the server.
-    /// </summary>
-    public void SyncStrip()
-    {
-        _socketConn.SyncSC(this);
-    }
-
-    /// <inheritdoc/>
-    public void Dispose()
-    {
-        _stripControl?.Dispose();
-        StripHolderControl?.Dispose();
-    }
-
-    private static string CleanVatsysRoute(string rawRoute)
-    {
-        var rawRouteArr = rawRoute.Split(' ');
-        var routeArr = new List<string>();
-
-        foreach (var routeElement in rawRouteArr)
-        {
-            if (routeElement.Contains("/"))
+            var control = (AltHdgControl)args.Child;
+            if (!string.IsNullOrEmpty(control.Alt))
             {
-                // Don't include SIDs or gps coords in route
-                if (!_sidRouteRegex.Match(routeElement).Success && !_gpscoordRegex.Match(routeElement).Success)
-                {
-                    routeArr.Add(routeElement.Split('/').First());
-                }
+                Strip.CFL = control.Alt;
             }
-            else if (routeElement != "DCT")
+
+            Strip.HDG = control.Hdg;
+            if (!string.IsNullOrEmpty(control.Runway) && Strip.RWY != control.Runway)
             {
-                routeArr.Add(routeElement);
+                Strip.RWY = control.Runway;
             }
-        }
 
-        if (routeArr.Count < 3)
+            if (!string.IsNullOrEmpty(control.SID) && Strip.SID != control.SID)
+            {
+                Strip.SID = control.SID;
+            }
+
+            Strip.SyncStrip();
+        }
+        catch (Exception)
         {
-            return "FAIL";
         }
+    }
 
-        /*
-         * Remove SIDs and STARS
-         */
-        if (char.IsNumber(routeArr.Last().Last()))
-        {
-            routeArr.RemoveAt(routeArr.Count - 1);
-        }
-
-        if (char.IsNumber(routeArr.First().Last()))
-        {
-            routeArr.RemoveAt(0);
-        }
-
-        /*
-         * Remove first and last waypoint incase they have filed / are cleared via a SID.
-         * (Will validate based on route only)
-         */
-        if (routeArr.Count < 3)
-        {
-            return "FAIL";
-        }
-
-        if (!routeArr.First().Any(char.IsDigit))
-        {
-            routeArr.RemoveAt(0);
-        }
-
-        if (!routeArr.Last().Any(char.IsDigit))
-        {
-            routeArr.RemoveAt(routeArr.Count - 1);
-        }
-
-        return string.Join(" ", routeArr);
+    private void CLXBayReturned(object source, ModalReturnArgs args)
+    {
+        var control = (BayCLXControl)args.Child;
+        Strip.CLX = control.CLX;
+        Strip.Gate = control.Gate;
+        Strip.Remark = control.Remark;
+        FDP2.SetGlobalOps(Strip.FDR, control.Glop);
+        Strip.SyncStrip();
     }
 }
