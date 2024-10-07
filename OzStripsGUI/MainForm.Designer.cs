@@ -33,6 +33,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.pl_controlbar = new System.Windows.Forms.Panel();
+            this.bt_bar = new System.Windows.Forms.Button();
             this.pl_atis = new System.Windows.Forms.Panel();
             this.lb_atis = new System.Windows.Forms.Label();
             this.bt_pdc = new System.Windows.Forms.Button();
@@ -66,14 +67,8 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.changelogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.stripToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.normalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.smallToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tinyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flp_main = new System.Windows.Forms.FlowLayoutPanel();
             this.tt_metar = new System.Windows.Forms.ToolTip(this.components);
-            this.bt_bar = new System.Windows.Forms.Button();
             this.pl_controlbar.SuspendLayout();
             this.pl_atis.SuspendLayout();
             this.pl_ad.SuspendLayout();
@@ -99,6 +94,21 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.pl_controlbar.Name = "pl_controlbar";
             this.pl_controlbar.Size = new System.Drawing.Size(1784, 45);
             this.pl_controlbar.TabIndex = 0;
+            // 
+            // bt_bar
+            // 
+            this.bt_bar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.bt_bar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.bt_bar.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bt_bar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
+            this.bt_bar.Location = new System.Drawing.Point(834, 3);
+            this.bt_bar.Name = "bt_bar";
+            this.bt_bar.Size = new System.Drawing.Size(96, 37);
+            this.bt_bar.TabIndex = 7;
+            this.bt_bar.TabStop = false;
+            this.bt_bar.Text = "ADD BAR";
+            this.bt_bar.UseVisualStyleBackColor = false;
+            this.bt_bar.Click += new System.EventHandler(this.BarCreatorClick);
             // 
             // pl_atis
             // 
@@ -252,8 +262,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.ts_mode,
             this.debugToolStripMenuItem,
             this.aboutToolStripMenuItem,
-            this.helpToolStripMenuItem,
-            this.viewToolStripMenuItem});
+            this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1784, 25);
@@ -275,7 +284,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             // modifyToolStripMenuItem
             // 
             this.modifyToolStripMenuItem.Name = "modifyToolStripMenuItem";
-            this.modifyToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.modifyToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.modifyToolStripMenuItem.Tag = "permanent";
             this.modifyToolStripMenuItem.Text = "Modify";
             this.modifyToolStripMenuItem.Click += new System.EventHandler(this.ModifyButtonClicked);
@@ -290,7 +299,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(157, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             this.toolStripSeparator1.Tag = "permanent";
             // 
             // ts_mode
@@ -438,49 +447,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.SettingsToolStripMenuItem_Click);
             // 
-            // viewToolStripMenuItem
-            // 
-            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.stripToolStripMenuItem});
-            this.viewToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.viewToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(52, 21);
-            this.viewToolStripMenuItem.Text = "View";
-            // 
-            // stripToolStripMenuItem
-            // 
-            this.stripToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.normalToolStripMenuItem,
-            this.smallToolStripMenuItem,
-            this.tinyToolStripMenuItem});
-            this.stripToolStripMenuItem.Name = "stripToolStripMenuItem";
-            this.stripToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
-            this.stripToolStripMenuItem.Text = "Strip";
-            // 
-            // normalToolStripMenuItem
-            // 
-            this.normalToolStripMenuItem.Checked = true;
-            this.normalToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.normalToolStripMenuItem.Name = "normalToolStripMenuItem";
-            this.normalToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
-            this.normalToolStripMenuItem.Text = "Normal";
-            this.normalToolStripMenuItem.Click += new System.EventHandler(this.NormalToolStripMenuItem_Click);
-            // 
-            // smallToolStripMenuItem
-            // 
-            this.smallToolStripMenuItem.Name = "smallToolStripMenuItem";
-            this.smallToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
-            this.smallToolStripMenuItem.Text = "Small";
-            this.smallToolStripMenuItem.Click += new System.EventHandler(this.SmallToolStripMenuItem_Click);
-            // 
-            // tinyToolStripMenuItem
-            // 
-            this.tinyToolStripMenuItem.Name = "tinyToolStripMenuItem";
-            this.tinyToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
-            this.tinyToolStripMenuItem.Text = "Tiny";
-            this.tinyToolStripMenuItem.Click += new System.EventHandler(this.TinyToolStripMenuItem_Click);
-            // 
             // flp_main
             // 
             this.flp_main.AutoScroll = true;
@@ -496,21 +462,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             // tt_metar
             // 
             this.tt_metar.ToolTipTitle = "METAR";
-            // 
-            // bt_bar
-            // 
-            this.bt_bar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
-            this.bt_bar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.bt_bar.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bt_bar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.bt_bar.Location = new System.Drawing.Point(834, 3);
-            this.bt_bar.Name = "bt_bar";
-            this.bt_bar.Size = new System.Drawing.Size(96, 37);
-            this.bt_bar.TabIndex = 7;
-            this.bt_bar.TabStop = false;
-            this.bt_bar.Text = "ADD BAR";
-            this.bt_bar.UseVisualStyleBackColor = false;
-            this.bt_bar.Click += new System.EventHandler(this.BarCreatorClick);
             // 
             // MainForm
             // 
@@ -573,13 +524,8 @@ namespace MaxRumsey.OzStripsPlugin.Gui
         private System.Windows.Forms.Panel pl_atis;
         private System.Windows.Forms.Label lb_atis;
         private System.Windows.Forms.ToolStripMenuItem changelogToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem stripToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem normalToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem smallToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem tinyToolStripMenuItem;
         private ToolStripMenuItem ts_ad;
         private ToolStripMenuItem modifyToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator1;
