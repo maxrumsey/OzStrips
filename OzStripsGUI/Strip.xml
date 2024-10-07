@@ -1,13 +1,13 @@
 <StripElementList>
   <!-- COL1 -->
-	<StripElement>
-		<X>0</X>
-		<Y>0</Y>
-		<W>50</W>
-		<H>20</H>
-		<Value>STAND</Value>
-		<LeftClick>MOD_STD</LeftClick>
-	</StripElement>
+  <StripElement>
+    <X>0</X>
+    <Y>0</Y>
+    <W>50</W>
+    <H>20</H>
+    <Value>STAND</Value>
+    <LeftClick>MOD_STD</LeftClick>
+  </StripElement>
   <StripElement>
     <X>0</X>
     <Y>20</Y>
@@ -17,14 +17,14 @@
     <LeftClick>OPEN_FDR</LeftClick>
   </StripElement>
   <!-- COL2 -->
-	<StripElement>
-		<X>50</X>
-		<Y>0</Y>
-		<W>50</W>
-		<H>20</H>
-		<Value>EOBT</Value>
-		<LeftClick>COCK</LeftClick>
-	</StripElement>
+  <StripElement>
+    <X>50</X>
+    <Y>0</Y>
+    <W>50</W>
+    <H>20</H>
+    <Value>EOBT</Value>
+    <LeftClick>COCK</LeftClick>
+  </StripElement>
   <StripElement>
     <X>50</X>
     <Y>20</Y>
@@ -114,6 +114,7 @@
     <H>20</H>
     <Value>SID</Value>
     <LeftClick>SID_TRIGGER</LeftClick>
+    <RightClick>MOD_SID</RightClick>
   </StripElement>
   <StripElement>
     <X>330</X>

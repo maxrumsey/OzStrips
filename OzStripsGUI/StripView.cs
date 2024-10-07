@@ -209,6 +209,9 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             case StripElements.Actions.OPEN_FDR:
                 _strip.OpenVatsysFDR();
                 break;
+            case StripElements.Actions.SID_TRIGGER:
+                _strip.SIDTrigger();
+                break;
             case StripElements.Actions.PICK:
                 _strip.TogglePick();
                 break;
