@@ -664,7 +664,7 @@ public sealed class Strip
         try
         {
             var radarTracks = RDP.RadarTracks
-                .Where(radarTrack => radarTrack.ActualAircraft.Callsign.Equals(FDR.Callsign))
+                .Where(radarTrack => radarTrack?.ActualAircraft?.Callsign?.Equals(FDR.Callsign) == true)
                 .ToList();
             return radarTracks.Count > 0 ? radarTracks[0] : null;
         }
