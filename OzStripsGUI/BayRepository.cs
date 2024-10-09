@@ -264,18 +264,44 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             panel.ResumeLayout();
         }
 
+        ResizeStripBays();
+    }
+
+    /// <summary>
+    /// Resizes only the strip bays.
+    /// </summary>
+    public void ResizeStripBays()
+    {
+        var smartresize = true;
+
+        var y_main = main.Size.Height;
+        var x_each = (main.Size.Width - (main.VerticalScroll.Visible ? 20 : 0)) / _currentLayoutIndex;
+
         foreach (var bay in Bays)
         {
             var childnum = _flpVerticalBoards[bay.VerticalBoardNumber].Controls.Count;
             var height = (y_main - 4) / childnum;
 
-            if (height < 300)
+            if (height < (smartresize ? 105 : 300))
             {
-                height = 300;
+                height = smartresize ? 105 : 300;
+            }
+
+            var reqheight = bay.GetRequestedHeight();
+            if (smartresize && reqheight > 0)
+            {
+                height = 36 + reqheight;
+
+                if (height > y_main / 2)
+                {
+                    height = y_main / 2;
+                }
             }
 
             bay.ChildPanel.Size = new(x_each - 4, height);
         }
+
+        // todo: allocate remaining space if present
     }
 
     /// <summary>

@@ -61,7 +61,15 @@ internal class BayRenderController(Bay bay) : IDisposable
             return;
         }
 
+        var y = GetHeight();
+
+        SkControl.Size = new Size(SkControl.Size.Width, y);
+    }
+
+    public int GetHeight()
+    {
         var y = 0;
+
         foreach (var item in Bay.Strips)
         {
             if (item.Type == Gui.StripItemType.STRIP)
@@ -74,7 +82,7 @@ internal class BayRenderController(Bay bay) : IDisposable
             }
         }
 
-        SkControl.Size = new Size(SkControl.Size.Width, y);
+        return y;
     }
 
     public void Redraw()

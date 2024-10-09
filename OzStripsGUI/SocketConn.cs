@@ -65,7 +65,7 @@ public sealed class SocketConn : IDisposable
                 _connectionMade = true;
                 await _io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName, Network.Me.RealName, Server);
                 Connected = true;
-                if (mainForm.Visible)
+                if (mainForm.Visible && !mainForm.IsDisposed)
                 {
                     mainForm.Invoke(() => mainForm.SetConnStatus());
                 }
