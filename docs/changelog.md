@@ -1,4 +1,10 @@
 # Changelog
+## v0.4.5
+### Bugfixes
+- Fixed issue with SID field actions in new strip
+- Temporarily disabled "View" modes as they are broken
+- Fixed error caused by iterating through the list of radar tracks.
+
 ## v0.4.4
 ### Features
 - Added ability to create strip bars
