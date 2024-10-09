@@ -125,7 +125,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Controls
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panel1);
             this.Margin = new System.Windows.Forms.Padding(0);
-            this.MinimumSize = new System.Drawing.Size(0, 105);
+            this.MinimumSize = new System.Drawing.Size(0, 50);
             this.Name = "BayControl";
             this.Size = new System.Drawing.Size(481, 350);
             this.panel1.ResumeLayout(false);

@@ -276,18 +276,20 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
 
         var y_main = main.Size.Height;
         var x_each = (main.Size.Width - (main.VerticalScroll.Visible ? 20 : 0)) / _currentLayoutIndex;
+        var allocated_space = new int[_currentLayoutIndex];
 
         foreach (var bay in Bays)
         {
             var childnum = _flpVerticalBoards[bay.VerticalBoardNumber].Controls.Count;
             var height = (y_main - 4) / childnum;
 
-            if (height < (smartresize ? 105 : 300))
+            if (height < (smartresize ? 70 : 300))
             {
-                height = smartresize ? 105 : 300;
+                height = smartresize ? 70 : 300;
             }
 
             var reqheight = bay.GetRequestedHeight();
+
             if (smartresize && reqheight > 0)
             {
                 height = 36 + reqheight;
@@ -297,11 +299,29 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
                     height = y_main / 2;
                 }
             }
+            else if (smartresize)
+            {
+                height = 70;
+            }
 
+            allocated_space[bay.VerticalBoardNumber] += height;
             bay.ChildPanel.Size = new(x_each - 4, height);
         }
 
-        // todo: allocate remaining space if present
+        if (smartresize)
+        {
+            for (var i = 0; i < _currentLayoutIndex; i++)
+            {
+                var remaining = y_main - allocated_space[i];
+
+                var each = remaining / _flpVerticalBoards[i].Controls.Count;
+
+                foreach (var bay in Bays.Where(x => x.VerticalBoardNumber == i))
+                {
+                    bay.ChildPanel.Size = new System.Drawing.Size(x_each, bay.ChildPanel.Size.Height + each);
+                }
+            }
+        }
     }
 
     /// <summary>
