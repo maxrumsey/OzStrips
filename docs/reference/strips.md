@@ -27,7 +27,7 @@ You will only see strips for aircraft that have requested planned an ADES or ADE
 | 10 | Callsign | Pick / Select Strip |
 | 11| Runway | Change |
 | 12 | Holding Point / Clearance Limit | Change |
-| 13 | SID | Move strip to next bay \* |
+| 13 | SID | (L) Move strip to next bay \* (R) Change SID |
 | 14 | First Waypoint | (L) Open flightplan (R) Open reroute menu | Potentially non-compliant route filed |
 | 15 | Departure Heading | Change |
 | 16 | Requested Level | Open flightplan |
