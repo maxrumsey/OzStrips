@@ -129,10 +129,7 @@ public class BayManager
     /// </summary>
     public void SidTrigger()
     {
-        if (PickedController is not null)
-        {
-            PickedController.SIDTrigger();
-        }
+        PickedController?.SIDTrigger();
     }
 
     /// <summary>
@@ -140,10 +137,7 @@ public class BayManager
     /// </summary>
     public void CockStrip()
     {
-        if (PickedController is not null)
-        {
-            PickedController.CockStrip();
-        }
+        PickedController?.CockStrip();
     }
 
     /// <summary>
@@ -516,17 +510,12 @@ public class BayManager
         {
             var bay = BayRepository.Bays.Find(x => x.Name == baystring);
 
-            if (bay is not null)
-            {
-                bay.AddBar(type, text);
-            }
+            bay?.AddBar(type, text);
         }
         catch (Exception ex)
         {
             Util.LogError(ex);
         }
-
-
     }
 
     /// <summary>
