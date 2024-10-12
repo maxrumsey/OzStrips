@@ -632,7 +632,7 @@ public sealed class Strip
             var adCoord = Airspace2.GetAirport(aerodrome)?.LatLong;
             var planeCoord = FDR.PredictedPosition?.Location;
             var radarTracks = (from radarTrack in RDP.RadarTracks
-                               where radarTrack.ActualAircraft.Callsign == FDR.Callsign
+                               where radarTrack?.ActualAircraft?.Callsign == FDR.Callsign
                                select radarTrack).ToList();
 
             if (radarTracks.Count > 0)

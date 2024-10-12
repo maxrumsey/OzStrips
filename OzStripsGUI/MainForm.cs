@@ -22,6 +22,8 @@ public partial class MainForm : Form
     private readonly List<string> _aerodromes = new List<string>();
     private string _metar = string.Empty;
 
+    private FormWindowState _lastState = FormWindowState.Minimized;
+
     private bool _readyForConnection;
     private bool _postresizechecked = true;
 
@@ -648,5 +650,18 @@ public partial class MainForm : Form
         var bm = new BaseModal(modalChild, "Add Bar");
         bm.ReturnEvent += modalChild.ModalReturned;
         bm.Show(this);
+    }
+
+    private void MainForm_Resize(object sender, EventArgs e)
+    {
+        if (WindowState != _lastState)
+        {
+            _lastState = WindowState;
+            _postresizechecked = false;
+            if (_bayManager is not null)
+            {
+                _bayManager.BayRepository.Resize();
+            }
+        }
     }
 }

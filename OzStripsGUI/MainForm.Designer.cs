@@ -471,7 +471,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.tinyToolStripMenuItem});
             this.stripToolStripMenuItem.Enabled = false;
             this.stripToolStripMenuItem.Name = "stripToolStripMenuItem";
-            this.stripToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.stripToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.stripToolStripMenuItem.Text = "Strip";
             // 
             // normalToolStripMenuItem
@@ -479,21 +479,21 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.normalToolStripMenuItem.Checked = true;
             this.normalToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.normalToolStripMenuItem.Name = "normalToolStripMenuItem";
-            this.normalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.normalToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.normalToolStripMenuItem.Text = "Normal";
             this.normalToolStripMenuItem.Click += new System.EventHandler(this.NormalToolStripMenuItem_Click);
             // 
             // smallToolStripMenuItem
             // 
             this.smallToolStripMenuItem.Name = "smallToolStripMenuItem";
-            this.smallToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.smallToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.smallToolStripMenuItem.Text = "Small";
             this.smallToolStripMenuItem.Click += new System.EventHandler(this.SmallToolStripMenuItem_Click);
             // 
             // tinyToolStripMenuItem
             // 
             this.tinyToolStripMenuItem.Name = "tinyToolStripMenuItem";
-            this.tinyToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.tinyToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.tinyToolStripMenuItem.Text = "Tiny";
             this.tinyToolStripMenuItem.Click += new System.EventHandler(this.TinyToolStripMenuItem_Click);
             // 
@@ -530,6 +530,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.ResizeEnd += new System.EventHandler(this.MainFormSizeChanged);
+            this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.pl_controlbar.ResumeLayout(false);
             this.pl_controlbar.PerformLayout();
             this.pl_atis.ResumeLayout(false);
