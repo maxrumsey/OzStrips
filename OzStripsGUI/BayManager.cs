@@ -236,6 +236,8 @@ public class BayManager
 
             LockWindowUpdate(IntPtr.Zero);
         }
+
+        BayRepository.ResizeStripBays();
     }
 
     /// <summary>
@@ -370,7 +372,10 @@ public class BayManager
             StripRepository.Controllers.Add(stripController);
         }
 
-        BayRepository.ResizeStripBays();
+        if (!inhibitreorders)
+        {
+            BayRepository.ResizeStripBays();
+        }
     }
 
     /// <summary>
