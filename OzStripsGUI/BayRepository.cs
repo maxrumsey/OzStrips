@@ -316,11 +316,13 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             bay.ChildPanel.Size = new(x_each - 4, height);
         }
 
+        var max = allocated_space.Max();
+
         if (smartresize)
         {
             for (var i = 0; i < _currentLayoutIndex; i++)
             {
-                var remaining = y_main - 4 - allocated_space[i];
+                var remaining = (max > y_main ? max : y_main) - 4 - allocated_space[i];
 
                 if (remaining <= 0)
                 {
