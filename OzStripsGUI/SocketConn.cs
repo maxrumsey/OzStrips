@@ -455,7 +455,7 @@ public sealed class SocketConn : IDisposable
         {
             _freshClient = false;
         }
-        catch (Exception)
+        catch
         {
         }
     }

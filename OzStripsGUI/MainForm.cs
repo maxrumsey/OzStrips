@@ -19,7 +19,7 @@ public partial class MainForm : Form
     private readonly Timer _timer;
     private readonly BayManager _bayManager;
     private readonly SocketConn _socketConn;
-    private readonly List<string> _aerodromes = new List<string>();
+    private readonly List<string> _aerodromes = [];
     private string _metar = string.Empty;
 
     private FormWindowState _lastState = FormWindowState.Minimized;
@@ -75,8 +75,6 @@ public partial class MainForm : Form
             toolStripMenuItem.Click += (_, _) => OpenManDebug();
             debugToolStripMenuItem.DropDownItems.Add(toolStripMenuItem);
         }
-
-        SetStripSizeCheckBox();
     }
 
     /// <summary>
@@ -141,6 +139,14 @@ public partial class MainForm : Form
         {
             Util.LogError(ex);
         }
+    }
+
+    /// <summary>
+    /// Forces a resize event to redraw stripbays.
+    /// </summary>
+    public void ForceResize()
+    {
+        _bayManager.BayRepository.Resize();
     }
 
     /// <summary>
@@ -412,10 +418,7 @@ public partial class MainForm : Form
     private void MainFormSizeChanged(object sender, EventArgs e)
     {
         _postresizechecked = false;
-        if (_bayManager is not null)
-        {
-            _bayManager.BayRepository.Resize();
-        }
+        _bayManager?.BayRepository.Resize();
     }
 
     private void AddAerodrome(string name)
@@ -568,40 +571,6 @@ public partial class MainForm : Form
         System.Diagnostics.Process.Start("https://maxrumsey.xyz/OzStrips/changelog");
     }
 
-    private void NormalToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-        Util.SetEnvVar("StripSize", 2);
-        _bayManager.BayRepository.ReloadStrips();
-        SetStripSizeCheckBox();
-    }
-
-    private void SmallToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-        Util.SetEnvVar("StripSize", 1);
-        _bayManager.BayRepository.ReloadStrips();
-        SetStripSizeCheckBox();
-    }
-
-    private void SetStripSizeCheckBox()
-    {
-        normalToolStripMenuItem.Checked = false;
-        smallToolStripMenuItem.Checked = false;
-        tinyToolStripMenuItem.Checked = false;
-
-        switch (OzStripsSettings.Default.StripSize)
-        {
-            case 0:
-                tinyToolStripMenuItem.Checked = true;
-                break;
-            case 1:
-                smallToolStripMenuItem.Checked = true;
-                break;
-            case 2:
-                normalToolStripMenuItem.Checked = true;
-                break;
-        }
-    }
-
     private void SetSmartResizeCheckBox()
     {
         colDisabledToolStripMenuItem.Checked = false;
@@ -634,21 +603,15 @@ public partial class MainForm : Form
         bm.Show(MainForm.MainFormInstance);
     }
 
-    private void TinyToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-        Util.SetEnvVar("StripSize", 0);
-        _bayManager.BayRepository.ReloadStrips();
-        SetStripSizeCheckBox();
-    }
-
     private void MainForm_Load(object sender, EventArgs e)
     {
         SetConnStatus();
+        SetSmartResizeCheckBox();
     }
 
     private void ModifyButtonClicked(object sender, EventArgs e)
     {
-        SettingsToolStripMenuItem_Click(this, new EventArgs());
+        SettingsToolStripMenuItem_Click(this, EventArgs.Empty);
     }
 
     private void AerodromeSelectorKeyDown(object sender, KeyPressEventArgs e)
@@ -679,10 +642,7 @@ public partial class MainForm : Form
         {
             _lastState = WindowState;
             _postresizechecked = false;
-            if (_bayManager is not null)
-            {
-                _bayManager.BayRepository.Resize();
-            }
+            _bayManager?.BayRepository.Resize();
         }
     }
 
@@ -694,13 +654,11 @@ public partial class MainForm : Form
     private void OneColumnToolStripMenuItem_Click(object sender, EventArgs e)
     {
         SetSmartResizeColumnMode(1);
-
     }
 
     private void TwoColumnsToolStripMenuItem_Click(object sender, EventArgs e)
     {
         SetSmartResizeColumnMode(2);
-
     }
 
     private void ThreeColumnsToolStripMenuItem_Click(object sender, EventArgs e)

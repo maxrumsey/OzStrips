@@ -361,10 +361,7 @@ public class Bay : System.IDisposable
     /// Gets the requested bay height.
     /// </summary>
     /// <returns>Height (px).</returns>
-    public int GetRequestedHeight()
-    {
-        return _bayRenderController.GetHeight();
-    }
+    public int GetRequestedHeight() => (int)(_bayRenderController.GetHeightPreScale() * BayRenderController.Scale);
 
     /// <summary>
     /// Adds a new divider.

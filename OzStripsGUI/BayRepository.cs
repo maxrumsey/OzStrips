@@ -279,6 +279,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
         {
             return;
         }
+
         var smartResize = OzStripsSettings.Default.SmartResize >= _currentLayoutIndex;
         var yMain = main.Size.Height;
         var xEach = (main.Size.Width - (main.VerticalScroll.Visible ? 17 : 0)) / _currentLayoutIndex;
@@ -337,7 +338,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
                     remaining -= each;
                 }
 
-                var last_bay = Bays.FirstOrDefault(x => x.VerticalBoardNumber == i);
+                var last_bay = Bays.Find(x => x.VerticalBoardNumber == i);
 
                 if (last_bay is not null)
                 {

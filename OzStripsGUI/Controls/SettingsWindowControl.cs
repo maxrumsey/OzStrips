@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using MaxRumsey.OzStripsPlugin.Gui.Properties;
 using vatsys;
 
 namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
@@ -61,6 +61,8 @@ public partial class SettingsWindowControl : UserControl
         {
             lb_ads.Items.Add(s);
         }
+
+        tb_scale.Value = (int)(100f * OzStripsSettings.Default.StripSize);
     }
 
     /// <summary>
@@ -76,8 +78,11 @@ public partial class SettingsWindowControl : UserControl
             usevatsyspopup = true;
         }
 
-        Properties.OzStripsSettings.Default.UseVatSysPopup = usevatsyspopup;
-        Properties.OzStripsSettings.Default.Save();
+        Util.SetEnvVar("UseVatSysPopup", usevatsyspopup);
+
+        Util.SetEnvVar("StripSize", tb_scale.Value / 100f);
+
+        MainForm.MainFormInstance?.ForceResize();
     }
 
     private void SBButtonClick(object sender, EventArgs e)
@@ -107,10 +112,7 @@ public partial class SettingsWindowControl : UserControl
             lb_ads.Items.Add(tb_ad.Text.ToUpper(CultureInfo.InvariantCulture));
             tb_ad.Text = string.Empty;
 
-            if (MainForm.MainFormInstance is not null)
-            {
-                MainForm.MainFormInstance.SetAerodromeList(lb_ads.Items.OfType<string>().ToList());
-            }
+            MainForm.MainFormInstance?.SetAerodromeList(lb_ads.Items.OfType<string>().ToList());
         }
     }
 
@@ -119,10 +121,7 @@ public partial class SettingsWindowControl : UserControl
         if (lb_ads.SelectedIndex != -1)
         {
             lb_ads.Items.RemoveAt(lb_ads.SelectedIndex);
-            if (MainForm.MainFormInstance is not null)
-            {
-                MainForm.MainFormInstance.SetAerodromeList(lb_ads.Items.OfType<string>().ToList());
-            }
+            MainForm.MainFormInstance?.SetAerodromeList(lb_ads.Items.OfType<string>().ToList());
         }
     }
 

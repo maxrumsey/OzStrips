@@ -63,16 +63,14 @@ public static class Util
 
         try
         {
-            using (var client = new HttpClient())
-            {
-                var data = new Dictionary<string, string>
+            using var client = new HttpClient();
+            var data = new Dictionary<string, string>
                 {
                     { "error", "ERROR: " + error.Message + "\n" + error.StackTrace },
                 };
-                var uri = (OzStripsConfig.socketioaddr + "/crash").Replace("//", "/").Replace(":/", "://");
-                var task = client.PostAsync(uri, new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json"));
-                _ = await task.ConfigureAwait(false);
-            }
+            var uri = (OzStripsConfig.socketioaddr + "/crash").Replace("//", "/").Replace(":/", "://");
+            var task = client.PostAsync(uri, new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json"));
+            _ = await task.ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -88,16 +86,14 @@ public static class Util
     {
         try
         {
-            using (var client = new HttpClient())
-            {
-                var data = new Dictionary<string, string>
+            using var client = new HttpClient();
+            var data = new Dictionary<string, string>
                 {
                     { "error", "DIAG: " + text },
                 };
-                var uri = (OzStripsConfig.socketioaddr + "/crash").Replace("//", "/").Replace(":/", "://");
-                var task = client.PostAsync(uri, new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json"));
-                _ = await task.ConfigureAwait(false);
-            }
+            var uri = (OzStripsConfig.socketioaddr + "/crash").Replace("//", "/").Replace(":/", "://");
+            var task = client.PostAsync(uri, new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json"));
+            _ = await task.ConfigureAwait(false);
         }
         catch
         {
@@ -110,7 +106,7 @@ public static class Util
     /// </summary>
     /// <param name="name">Variable name.</param>
     /// <param name="value">Variable value.</param>
-    public static void SetEnvVar(string name, int value)
+    public static void SetEnvVar(string name, object value)
     {
         Properties.OzStripsSettings.Default[name] = value;
         Properties.OzStripsSettings.Default.Save();
