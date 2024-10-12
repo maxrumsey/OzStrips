@@ -189,6 +189,8 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             {
                 bay.Orderstrips();
             }
+
+            ResizeStripBays();
         }
         catch (Exception ex)
         {
@@ -294,9 +296,9 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             {
                 height = 36 + reqheight;
 
-                if (height > y_main / 2)
+                if (height > (y_main - 4) / 2)
                 {
-                    height = y_main / 2;
+                    height = (y_main - 4) / 2;
                 }
             }
             else if (smartresize)
@@ -312,13 +314,21 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
         {
             for (var i = 0; i < _currentLayoutIndex; i++)
             {
-                var remaining = y_main - allocated_space[i];
+                var remaining = (y_main - 4) - allocated_space[i];
 
                 var each = remaining / _flpVerticalBoards[i].Controls.Count;
 
                 foreach (var bay in Bays.Where(x => x.VerticalBoardNumber == i))
                 {
-                    bay.ChildPanel.Size = new System.Drawing.Size(x_each, bay.ChildPanel.Size.Height + each);
+                    bay.ChildPanel.Size = new System.Drawing.Size(x_each - 4, bay.ChildPanel.Size.Height + each);
+                    remaining -= each;
+                }
+
+                var last_bay = Bays.Where(x => x.VerticalBoardNumber == i).FirstOrDefault();
+
+                if (last_bay is not null)
+                {
+                    last_bay.ChildPanel.Size = new System.Drawing.Size(x_each - 4, last_bay.ChildPanel.Size.Height + remaining);
                 }
             }
         }
