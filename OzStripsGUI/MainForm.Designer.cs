@@ -84,6 +84,8 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             // 
             // pl_controlbar
             // 
+            this.pl_controlbar.AutoScroll = true;
+            this.pl_controlbar.AutoSize = true;
             this.pl_controlbar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
             this.pl_controlbar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pl_controlbar.Controls.Add(this.bt_bar);
@@ -97,6 +99,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.pl_controlbar.Controls.Add(this.tb_Time);
             this.pl_controlbar.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.pl_controlbar.Location = new System.Drawing.Point(0, 916);
+            this.pl_controlbar.MinimumSize = new System.Drawing.Size(0, 45);
             this.pl_controlbar.Name = "pl_controlbar";
             this.pl_controlbar.Size = new System.Drawing.Size(1784, 45);
             this.pl_controlbar.TabIndex = 0;
@@ -472,7 +475,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.oneColumnToolStripMenuItem,
             this.colDisabledToolStripMenuItem});
             this.smartResizeToolStripMenuItem.Name = "smartResizeToolStripMenuItem";
-            this.smartResizeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.smartResizeToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.smartResizeToolStripMenuItem.Text = "Smart Resize";
             // 
             // threeColumnsToolStripMenuItem

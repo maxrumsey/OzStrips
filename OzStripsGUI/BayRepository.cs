@@ -268,6 +268,8 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             panel.Padding = new(2);
             panel.ResumeLayout();
         }
+
+        ResizeStripBays(); // prevents issues from scroll bars appearing.
     }
 
     /// <summary>

@@ -419,6 +419,7 @@ public partial class MainForm : Form
     {
         _postresizechecked = false;
         _bayManager?.BayRepository.Resize();
+        SetControlBarScrollBar();
     }
 
     private void AddAerodrome(string name)
@@ -643,6 +644,7 @@ public partial class MainForm : Form
             _lastState = WindowState;
             _postresizechecked = false;
             _bayManager?.BayRepository.Resize();
+            SetControlBarScrollBar();
         }
     }
 
@@ -671,5 +673,17 @@ public partial class MainForm : Form
         Util.SetEnvVar("SmartResize", cols);
         SetSmartResizeCheckBox();
         _bayManager.BayRepository.ReloadStrips();
+    }
+
+    private void SetControlBarScrollBar()
+    {
+        var margin = 0;
+
+        if (pl_controlbar.HorizontalScroll.Visible)
+        {
+            margin = 17;
+        }
+
+        pl_controlbar.Padding = new Padding(0, 0, 0, margin);
     }
 }
