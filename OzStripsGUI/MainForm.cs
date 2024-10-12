@@ -570,16 +570,14 @@ public partial class MainForm : Form
 
     private void NormalToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        Properties.OzStripsSettings.Default.StripSize = 2;
-        Properties.OzStripsSettings.Default.Save();
+        Util.SetEnvVar("StripSize", 2);
         _bayManager.BayRepository.ReloadStrips();
         SetStripSizeCheckBox();
     }
 
     private void SmallToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        Properties.OzStripsSettings.Default.StripSize = 1;
-        Properties.OzStripsSettings.Default.Save();
+        Util.SetEnvVar("StripSize", 1);
         _bayManager.BayRepository.ReloadStrips();
         SetStripSizeCheckBox();
     }
@@ -604,6 +602,30 @@ public partial class MainForm : Form
         }
     }
 
+    private void SetSmartResizeCheckBox()
+    {
+        colDisabledToolStripMenuItem.Checked = false;
+        oneColumnToolStripMenuItem.Checked = false;
+        twoColumnsToolStripMenuItem.Checked = false;
+        threeColumnsToolStripMenuItem.Checked = false;
+
+        switch (OzStripsSettings.Default.SmartResize)
+        {
+            case 0:
+                colDisabledToolStripMenuItem.Checked = true;
+                break;
+            case 1:
+                oneColumnToolStripMenuItem.Checked = true;
+                break;
+            case 2:
+                twoColumnsToolStripMenuItem.Checked = true;
+                break;
+            case 3:
+                threeColumnsToolStripMenuItem.Checked = true;
+                break;
+        }
+    }
+
     private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
     {
         var modalChild = new SettingsWindowControl(_socketConn, _aerodromes);
@@ -614,8 +636,7 @@ public partial class MainForm : Form
 
     private void TinyToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        Properties.OzStripsSettings.Default.StripSize = 0;
-        Properties.OzStripsSettings.Default.Save();
+        Util.SetEnvVar("StripSize", 0);
         _bayManager.BayRepository.ReloadStrips();
         SetStripSizeCheckBox();
     }
@@ -663,5 +684,34 @@ public partial class MainForm : Form
                 _bayManager.BayRepository.Resize();
             }
         }
+    }
+
+    private void ColDisabledToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        SetSmartResizeColumnMode(0);
+    }
+
+    private void OneColumnToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        SetSmartResizeColumnMode(1);
+
+    }
+
+    private void TwoColumnsToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        SetSmartResizeColumnMode(2);
+
+    }
+
+    private void ThreeColumnsToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        SetSmartResizeColumnMode(3);
+    }
+
+    private void SetSmartResizeColumnMode(int cols)
+    {
+        Util.SetEnvVar("SmartResize", cols);
+        SetSmartResizeCheckBox();
+        _bayManager.BayRepository.ReloadStrips();
     }
 }

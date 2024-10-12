@@ -74,6 +74,11 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.tinyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flp_main = new System.Windows.Forms.FlowLayoutPanel();
             this.tt_metar = new System.Windows.Forms.ToolTip(this.components);
+            this.smartResizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.threeColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.twoColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.oneColumnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.colDisabledToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pl_controlbar.SuspendLayout();
             this.pl_atis.SuspendLayout();
             this.pl_ad.SuspendLayout();
@@ -456,7 +461,8 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             // viewToolStripMenuItem
             // 
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.stripToolStripMenuItem});
+            this.stripToolStripMenuItem,
+            this.smartResizeToolStripMenuItem});
             this.viewToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.viewToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
@@ -471,7 +477,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.tinyToolStripMenuItem});
             this.stripToolStripMenuItem.Enabled = false;
             this.stripToolStripMenuItem.Name = "stripToolStripMenuItem";
-            this.stripToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.stripToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.stripToolStripMenuItem.Text = "Strip";
             // 
             // normalToolStripMenuItem
@@ -512,6 +518,45 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             // tt_metar
             // 
             this.tt_metar.ToolTipTitle = "METAR";
+            // 
+            // smartResizeToolStripMenuItem
+            // 
+            this.smartResizeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.threeColumnsToolStripMenuItem,
+            this.twoColumnsToolStripMenuItem,
+            this.oneColumnToolStripMenuItem,
+            this.colDisabledToolStripMenuItem});
+            this.smartResizeToolStripMenuItem.Name = "smartResizeToolStripMenuItem";
+            this.smartResizeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.smartResizeToolStripMenuItem.Text = "Smart Resize";
+            // 
+            // threeColumnsToolStripMenuItem
+            // 
+            this.threeColumnsToolStripMenuItem.Name = "threeColumnsToolStripMenuItem";
+            this.threeColumnsToolStripMenuItem.Size = new System.Drawing.Size(268, 22);
+            this.threeColumnsToolStripMenuItem.Text = "3 Columns";
+            this.threeColumnsToolStripMenuItem.Click += new System.EventHandler(this.ThreeColumnsToolStripMenuItem_Click);
+            // 
+            // twoColumnsToolStripMenuItem
+            // 
+            this.twoColumnsToolStripMenuItem.Name = "twoColumnsToolStripMenuItem";
+            this.twoColumnsToolStripMenuItem.Size = new System.Drawing.Size(268, 22);
+            this.twoColumnsToolStripMenuItem.Text = "2 Columns+ (Recommended)";
+            this.twoColumnsToolStripMenuItem.Click += new System.EventHandler(this.TwoColumnsToolStripMenuItem_Click);
+            // 
+            // oneColumnToolStripMenuItem
+            // 
+            this.oneColumnToolStripMenuItem.Name = "oneColumnToolStripMenuItem";
+            this.oneColumnToolStripMenuItem.Size = new System.Drawing.Size(268, 22);
+            this.oneColumnToolStripMenuItem.Text = "1 Column+";
+            this.oneColumnToolStripMenuItem.Click += new System.EventHandler(this.OneColumnToolStripMenuItem_Click);
+            // 
+            // colDisabledToolStripMenuItem
+            // 
+            this.colDisabledToolStripMenuItem.Name = "colDisabledToolStripMenuItem";
+            this.colDisabledToolStripMenuItem.Size = new System.Drawing.Size(268, 22);
+            this.colDisabledToolStripMenuItem.Text = "Disabled";
+            this.colDisabledToolStripMenuItem.Click += new System.EventHandler(this.ColDisabledToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -588,5 +633,10 @@ namespace MaxRumsey.OzStripsPlugin.Gui
         private ToolStripTextBox toolStripTextBox1;
         private ToolStripMenuItem reloadStripToolStripMenuItem;
         private Button bt_bar;
+        private ToolStripMenuItem smartResizeToolStripMenuItem;
+        private ToolStripMenuItem threeColumnsToolStripMenuItem;
+        private ToolStripMenuItem twoColumnsToolStripMenuItem;
+        private ToolStripMenuItem oneColumnToolStripMenuItem;
+        private ToolStripMenuItem colDisabledToolStripMenuItem;
     }
 }

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.Gui.DTO;
+using MaxRumsey.OzStripsPlugin.Gui.Properties;
 using vatsys;
 
 namespace MaxRumsey.OzStripsPlugin.Gui;
@@ -274,55 +275,54 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
     /// </summary>
     public void ResizeStripBays()
     {
-        var smartresize = true;
-
         if (_currentLayoutIndex == 0)
         {
             return;
         }
-
-        var y_main = main.Size.Height;
-        var x_each = (main.Size.Width - (main.VerticalScroll.Visible ? 17 : 0)) / _currentLayoutIndex;
-        var allocated_space = new int[_currentLayoutIndex];
+        var smartResize = OzStripsSettings.Default.SmartResize >= _currentLayoutIndex;
+        var yMain = main.Size.Height;
+        var xEach = (main.Size.Width - (main.VerticalScroll.Visible ? 17 : 0)) / _currentLayoutIndex;
+        var allocatedSpace = new int[_currentLayoutIndex];
 
         foreach (var bay in Bays)
         {
             bay.ChildPanel.SuspendLayout();
             var childnum = _flpVerticalBoards[bay.VerticalBoardNumber].Controls.Count;
-            var height = (y_main - 4) / childnum;
+            var height = (yMain - 4) / childnum;
 
-            if (height < (smartresize ? 70 : 300))
+            var smartResizeMaxHeight = smartResize ? 70 : 300;
+            if (height < smartResizeMaxHeight)
             {
-                height = smartresize ? 70 : 300;
+                height = smartResizeMaxHeight;
             }
 
             var reqheight = bay.GetRequestedHeight();
 
-            if (smartresize && reqheight > 0)
+            if (smartResize && reqheight > 0)
             {
                 height = 36 + reqheight;
 
-                if (height > (y_main - 4) / 2)
+                if (height > (yMain - 4) / 2)
                 {
-                    height = (y_main - 4) / 2;
+                    height = (yMain - 4) / 2;
                 }
             }
-            else if (smartresize)
+            else if (smartResize)
             {
                 height = 70;
             }
 
-            allocated_space[bay.VerticalBoardNumber] += height;
-            bay.ChildPanel.Size = new(x_each - 4, height);
+            allocatedSpace[bay.VerticalBoardNumber] += height;
+            bay.ChildPanel.Size = new(xEach - 4, height);
         }
 
-        var max = allocated_space.Max();
+        var max = allocatedSpace.Max();
 
-        if (smartresize)
+        if (smartResize)
         {
             for (var i = 0; i < _currentLayoutIndex; i++)
             {
-                var remaining = (max > y_main ? max : y_main) - 4 - allocated_space[i];
+                var remaining = (max > yMain ? max : yMain) - 4 - allocatedSpace[i];
 
                 if (remaining <= 0)
                 {
@@ -333,7 +333,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
 
                 foreach (var bay in Bays.Where(x => x.VerticalBoardNumber == i))
                 {
-                    bay.ChildPanel.Size = new System.Drawing.Size(x_each - 4, bay.ChildPanel.Size.Height + each);
+                    bay.ChildPanel.Size = new System.Drawing.Size(xEach - 4, bay.ChildPanel.Size.Height + each);
                     remaining -= each;
                 }
 
@@ -341,7 +341,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
 
                 if (last_bay is not null)
                 {
-                    last_bay.ChildPanel.Size = new System.Drawing.Size(x_each - 4, last_bay.ChildPanel.Size.Height + remaining);
+                    last_bay.ChildPanel.Size = new System.Drawing.Size(xEach - 4, last_bay.ChildPanel.Size.Height + remaining);
                 }
             }
         }

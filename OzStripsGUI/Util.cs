@@ -104,4 +104,15 @@ public static class Util
             return;
         }
     }
+
+    /// <summary>
+    /// Sets and saves an environment variable.
+    /// </summary>
+    /// <param name="name">Variable name.</param>
+    /// <param name="value">Variable value.</param>
+    public static void SetEnvVar(string name, int value)
+    {
+        Properties.OzStripsSettings.Default[name] = value;
+        Properties.OzStripsSettings.Default.Save();
+    }
 }
