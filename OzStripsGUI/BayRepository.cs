@@ -226,6 +226,8 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             _currentLayout(this, EventArgs.Empty);
         }
 
+        ResizeStripBays();
+
         var y_main = main.Size.Height;
 
         if (main.Size.Width <= 840 && _currentLayoutIndex != 1)
@@ -256,7 +258,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             return;
         }
 
-        var x_each = (main.Size.Width - (main.VerticalScroll.Visible ? 20 : 0)) / _currentLayoutIndex;
+        var x_each = (main.Size.Width - (main.VerticalScroll.Visible ? 17 : 0)) / _currentLayoutIndex;
 
         foreach (var panel in _flpVerticalBoards)
         {
@@ -265,8 +267,6 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             panel.Padding = new(2);
             panel.ResumeLayout();
         }
-
-        ResizeStripBays();
     }
 
     /// <summary>
@@ -276,12 +276,18 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
     {
         var smartresize = true;
 
+        if (_currentLayoutIndex == 0)
+        {
+            return;
+        }
+
         var y_main = main.Size.Height;
-        var x_each = (main.Size.Width - (main.VerticalScroll.Visible ? 20 : 0)) / _currentLayoutIndex;
+        var x_each = (main.Size.Width - (main.VerticalScroll.Visible ? 17 : 0)) / _currentLayoutIndex;
         var allocated_space = new int[_currentLayoutIndex];
 
         foreach (var bay in Bays)
         {
+            bay.ChildPanel.SuspendLayout();
             var childnum = _flpVerticalBoards[bay.VerticalBoardNumber].Controls.Count;
             var height = (y_main - 4) / childnum;
 
@@ -316,6 +322,11 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             {
                 var remaining = y_main - 4 - allocated_space[i];
 
+                if (remaining <= 0)
+                {
+                    continue;
+                }
+
                 var each = remaining / _flpVerticalBoards[i].Controls.Count;
 
                 foreach (var bay in Bays.Where(x => x.VerticalBoardNumber == i))
@@ -331,6 +342,11 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
                     last_bay.ChildPanel.Size = new System.Drawing.Size(x_each - 4, last_bay.ChildPanel.Size.Height + remaining);
                 }
             }
+        }
+
+        foreach (var bay in Bays)
+        {
+            bay.ChildPanel.ResumeLayout();
         }
     }
 

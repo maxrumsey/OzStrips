@@ -369,6 +369,8 @@ public class BayManager
         {
             StripRepository.Controllers.Add(stripController);
         }
+
+        BayRepository.ResizeStripBays();
     }
 
     /// <summary>

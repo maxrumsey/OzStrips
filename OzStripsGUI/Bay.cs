@@ -336,6 +336,8 @@ public class Bay : System.IDisposable
                 _socketConnection.SyncBay(this);
             }
         }
+
+        BayManager.BayRepository.ResizeStripBays();
     }
 
     /// <summary>
@@ -399,6 +401,7 @@ public class Bay : System.IDisposable
         }
 
         Orderstrips();
+        BayManager.BayRepository.ResizeStripBays();
         if (sync)
         {
             _socketConnection.SyncBay(this);
