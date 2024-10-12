@@ -22,7 +22,6 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
     {
         ElementOrigin = new SKPoint(Origin.X + _padding, Origin.Y + _padding);
 
-        var x = _bayRenderController;
         var stripelementlist = StripElementList.Instance?.List;
         if (stripelementlist is null)
         {

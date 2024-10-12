@@ -223,7 +223,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             AddVertBoard();
             AddVertBoard();
             _currentLayoutIndex = 3;
-            _currentLayout(this, new EventArgs());
+            _currentLayout(this, EventArgs.Empty);
         }
 
         var y_main = main.Size.Height;
@@ -233,7 +233,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             ClearVertBoards();
             AddVertBoard();
             _currentLayoutIndex = 1;
-            _currentLayout(this, new EventArgs());
+            _currentLayout(this, EventArgs.Empty);
             return;
         }
         else if (main.Size.Width > 840 && main.Size.Width <= 1250 && _currentLayoutIndex != 2)
@@ -242,7 +242,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             AddVertBoard();
             AddVertBoard();
             _currentLayoutIndex = 2;
-            _currentLayout(this, new EventArgs());
+            _currentLayout(this, EventArgs.Empty);
             return;
         }
         else if (main.Size.Width > 1250 && _currentLayoutIndex != 3)
@@ -252,7 +252,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             AddVertBoard();
             AddVertBoard();
             _currentLayoutIndex = 3;
-            _currentLayout(this, new EventArgs());
+            _currentLayout(this, EventArgs.Empty);
             return;
         }
 
@@ -314,7 +314,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
         {
             for (var i = 0; i < _currentLayoutIndex; i++)
             {
-                var remaining = (y_main - 4) - allocated_space[i];
+                var remaining = y_main - 4 - allocated_space[i];
 
                 var each = remaining / _flpVerticalBoards[i].Controls.Count;
 
@@ -324,7 +324,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
                     remaining -= each;
                 }
 
-                var last_bay = Bays.Where(x => x.VerticalBoardNumber == i).FirstOrDefault();
+                var last_bay = Bays.FirstOrDefault(x => x.VerticalBoardNumber == i);
 
                 if (last_bay is not null)
                 {
@@ -351,15 +351,6 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
     /// Clears all vertical boards.
     /// </summary>
     private void ClearVertBoards()
-    {
-        main.Controls.Clear();
-        _flpVerticalBoards.Clear();
-    }
-
-    /// <summary>
-    /// Determines how many vertical boards are needed.
-    /// </summary>
-    private void DetermineVertBoardNumber()
     {
         main.Controls.Clear();
         _flpVerticalBoards.Clear();

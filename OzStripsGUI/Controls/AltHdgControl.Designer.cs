@@ -299,6 +299,7 @@
             this.Controls.Add(this.groupBox1);
             this.Name = "AltHdgControl";
             this.Size = new System.Drawing.Size(213, 244);
+            this.Load += new System.EventHandler(this.AltHdgControl_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
