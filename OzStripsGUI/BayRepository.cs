@@ -327,7 +327,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             {
                 var remaining = (max > yMain ? max : yMain) - 4 - allocatedSpace[i];
 
-                if (remaining <= 0)
+                if (remaining <= 0 || _flpVerticalBoards[i].Controls.Count == 0)
                 {
                     continue;
                 }
