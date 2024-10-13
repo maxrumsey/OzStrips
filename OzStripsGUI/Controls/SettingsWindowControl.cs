@@ -127,7 +127,7 @@ public partial class SettingsWindowControl : UserControl
 
     private void ADKeyPress(object sender, KeyPressEventArgs e)
     {
-        if (e.KeyChar == (char)Keys.Return)
+       if (e.KeyChar == (char)Keys.Return)
         {
             ADAddClick(sender, e);
         }

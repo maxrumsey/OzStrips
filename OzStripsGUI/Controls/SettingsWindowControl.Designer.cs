@@ -40,20 +40,20 @@
             this.rb_sb2 = new System.Windows.Forms.RadioButton();
             this.rb_sb1 = new System.Windows.Forms.RadioButton();
             this.rb_vatsim = new System.Windows.Forms.RadioButton();
+            this.gb_scale = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tb_scale = new System.Windows.Forms.TrackBar();
             this.gb_popup = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.rb_ozstrips = new System.Windows.Forms.RadioButton();
             this.rb_vatsys = new System.Windows.Forms.RadioButton();
-            this.gb_scale = new System.Windows.Forms.GroupBox();
-            this.tb_scale = new System.Windows.Forms.TrackBar();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.gp_main.SuspendLayout();
             this.gb_ads.SuspendLayout();
             this.gb_server.SuspendLayout();
-            this.gb_popup.SuspendLayout();
             this.gb_scale.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tb_scale)).BeginInit();
+            this.gb_popup.SuspendLayout();
             this.SuspendLayout();
             // 
             // gp_main
@@ -79,6 +79,7 @@
             this.llb_keyboard.TabIndex = 3;
             this.llb_keyboard.TabStop = true;
             this.llb_keyboard.Text = "Keyboard Commands";
+            this.llb_keyboard.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.KeyboardCommandsOpened);
             // 
             // gb_ads
             // 
@@ -102,6 +103,7 @@
             this.bt_add.TabIndex = 4;
             this.bt_add.Text = "Add";
             this.bt_add.UseVisualStyleBackColor = true;
+            this.bt_add.Click += new System.EventHandler(this.ADAddClick);
             // 
             // tb_ad
             // 
@@ -109,6 +111,7 @@
             this.tb_ad.Name = "tb_ad";
             this.tb_ad.Size = new System.Drawing.Size(100, 20);
             this.tb_ad.TabIndex = 3;
+            this.tb_ad.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ADKeyPress);
             // 
             // label2
             // 
@@ -127,6 +130,7 @@
             this.bt_remove.TabIndex = 1;
             this.bt_remove.Text = "Remove";
             this.bt_remove.UseVisualStyleBackColor = true;
+            this.bt_remove.Click += new System.EventHandler(this.ADRemoveClick);
             // 
             // lb_ads
             // 
@@ -158,6 +162,7 @@
             this.bt_sbset.TabIndex = 4;
             this.bt_sbset.Text = "Set";
             this.bt_sbset.UseVisualStyleBackColor = true;
+            this.bt_sbset.Click += new System.EventHandler(this.SBButtonClick);
             // 
             // rb_sb3
             // 
@@ -203,6 +208,49 @@
             this.rb_vatsim.Text = "VATSIM";
             this.rb_vatsim.UseVisualStyleBackColor = true;
             // 
+            // gb_scale
+            // 
+            this.gb_scale.Controls.Add(this.label4);
+            this.gb_scale.Controls.Add(this.label3);
+            this.gb_scale.Controls.Add(this.tb_scale);
+            this.gb_scale.Location = new System.Drawing.Point(236, 177);
+            this.gb_scale.Name = "gb_scale";
+            this.gb_scale.Size = new System.Drawing.Size(227, 102);
+            this.gb_scale.TabIndex = 5;
+            this.gb_scale.TabStop = false;
+            this.gb_scale.Text = "Strip Scale";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(188, 63);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(33, 13);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "300%";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(7, 63);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(33, 13);
+            this.label3.TabIndex = 1;
+            this.label3.Text = "100%";
+            // 
+            // tb_scale
+            // 
+            this.tb_scale.LargeChange = 100;
+            this.tb_scale.Location = new System.Drawing.Point(7, 20);
+            this.tb_scale.Maximum = 300;
+            this.tb_scale.Minimum = 100;
+            this.tb_scale.Name = "tb_scale";
+            this.tb_scale.Size = new System.Drawing.Size(213, 45);
+            this.tb_scale.TabIndex = 0;
+            this.tb_scale.TickFrequency = 50;
+            this.tb_scale.TickStyle = System.Windows.Forms.TickStyle.Both;
+            this.tb_scale.Value = 100;
+            // 
             // gb_popup
             // 
             this.gb_popup.Controls.Add(this.label1);
@@ -246,49 +294,6 @@
             this.rb_vatsys.Text = "vatSys Popup";
             this.rb_vatsys.UseVisualStyleBackColor = true;
             // 
-            // gb_scale
-            // 
-            this.gb_scale.Controls.Add(this.label4);
-            this.gb_scale.Controls.Add(this.label3);
-            this.gb_scale.Controls.Add(this.tb_scale);
-            this.gb_scale.Location = new System.Drawing.Point(236, 177);
-            this.gb_scale.Name = "gb_scale";
-            this.gb_scale.Size = new System.Drawing.Size(227, 102);
-            this.gb_scale.TabIndex = 5;
-            this.gb_scale.TabStop = false;
-            this.gb_scale.Text = "Strip Scale";
-            // 
-            // tb_scale
-            // 
-            this.tb_scale.LargeChange = 100;
-            this.tb_scale.Location = new System.Drawing.Point(7, 20);
-            this.tb_scale.Maximum = 300;
-            this.tb_scale.Minimum = 100;
-            this.tb_scale.Name = "tb_scale";
-            this.tb_scale.Size = new System.Drawing.Size(213, 45);
-            this.tb_scale.TabIndex = 0;
-            this.tb_scale.TickFrequency = 50;
-            this.tb_scale.TickStyle = System.Windows.Forms.TickStyle.Both;
-            this.tb_scale.Value = 100;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(7, 63);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(33, 13);
-            this.label3.TabIndex = 1;
-            this.label3.Text = "100%";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(188, 63);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(33, 13);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "300%";
-            // 
             // SettingsWindowControl
             // 
             this.Controls.Add(this.gp_main);
@@ -300,11 +305,11 @@
             this.gb_ads.PerformLayout();
             this.gb_server.ResumeLayout(false);
             this.gb_server.PerformLayout();
-            this.gb_popup.ResumeLayout(false);
-            this.gb_popup.PerformLayout();
             this.gb_scale.ResumeLayout(false);
             this.gb_scale.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tb_scale)).EndInit();
+            this.gb_popup.ResumeLayout(false);
+            this.gb_popup.PerformLayout();
             this.ResumeLayout(false);
 
         }
