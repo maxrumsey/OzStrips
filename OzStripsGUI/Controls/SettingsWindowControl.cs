@@ -62,7 +62,7 @@ public partial class SettingsWindowControl : UserControl
             lb_ads.Items.Add(s);
         }
 
-        tb_scale.Value = (int)(100f * OzStripsSettings.Default.StripSize);
+        tb_scale.Value = (int)(100f * OzStripsSettings.Default.StripScale);
     }
 
     /// <summary>
@@ -80,7 +80,7 @@ public partial class SettingsWindowControl : UserControl
 
         Util.SetEnvVar("UseVatSysPopup", usevatsyspopup);
 
-        Util.SetEnvVar("StripSize", tb_scale.Value / 100f);
+        Util.SetEnvVar("StripScale", tb_scale.Value / 100f);
 
         MainForm.MainFormInstance?.ForceResize();
     }

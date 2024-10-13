@@ -20,7 +20,7 @@ internal class BayRenderController(Bay bay) : IDisposable
     public const int StripWidth = 420;
     public const int CockOffset = 30;
 
-    public static float Scale => OzStripsSettings.Default.StripSize;
+    public static float Scale => OzStripsSettings.Default.StripScale;
 
     public StripElements.HoverActions? HoveredItem { get; set; }
 
@@ -106,7 +106,7 @@ internal class BayRenderController(Bay bay) : IDisposable
 
             var canvas = e.Surface.Canvas;
 
-            canvas.Scale(OzStripsSettings.Default.StripSize);
+            canvas.Scale(OzStripsSettings.Default.StripScale);
 
             // make sure the canvas is blank
             canvas.Clear(SKColor.Parse("404040"));

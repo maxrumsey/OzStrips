@@ -38,12 +38,12 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public float StripSize {
+        public float StripScale {
             get {
-                return ((float)(this["StripSize"]));
+                return ((float)(this["StripScale"]));
             }
             set {
-                this["StripSize"] = value;
+                this["StripScale"] = value;
             }
         }
         

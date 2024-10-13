@@ -5,7 +5,7 @@
     <Setting Name="UseVatSysPopup" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="StripSize" Type="System.Single" Scope="User">
+    <Setting Name="StripScale" Type="System.Single" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="SmartResize" Type="System.Int32" Scope="User">
