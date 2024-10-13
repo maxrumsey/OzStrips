@@ -99,7 +99,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.pl_controlbar.Controls.Add(this.tb_Time);
             this.pl_controlbar.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.pl_controlbar.Location = new System.Drawing.Point(0, 916);
-            this.pl_controlbar.MinimumSize = new System.Drawing.Size(0, 45);
+            this.pl_controlbar.MinimumSize = new System.Drawing.Size(2, 45);
             this.pl_controlbar.Name = "pl_controlbar";
             this.pl_controlbar.Size = new System.Drawing.Size(1784, 45);
             this.pl_controlbar.TabIndex = 0;
@@ -475,34 +475,34 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.oneColumnToolStripMenuItem,
             this.colDisabledToolStripMenuItem});
             this.smartResizeToolStripMenuItem.Name = "smartResizeToolStripMenuItem";
-            this.smartResizeToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.smartResizeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.smartResizeToolStripMenuItem.Text = "Smart Resize";
             // 
             // threeColumnsToolStripMenuItem
             // 
             this.threeColumnsToolStripMenuItem.Name = "threeColumnsToolStripMenuItem";
-            this.threeColumnsToolStripMenuItem.Size = new System.Drawing.Size(268, 22);
-            this.threeColumnsToolStripMenuItem.Text = "3 Columns";
+            this.threeColumnsToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.threeColumnsToolStripMenuItem.Text = "3 Columns or Less";
             this.threeColumnsToolStripMenuItem.Click += new System.EventHandler(this.ThreeColumnsToolStripMenuItem_Click);
             // 
             // twoColumnsToolStripMenuItem
             // 
             this.twoColumnsToolStripMenuItem.Name = "twoColumnsToolStripMenuItem";
-            this.twoColumnsToolStripMenuItem.Size = new System.Drawing.Size(268, 22);
-            this.twoColumnsToolStripMenuItem.Text = "2 Columns+ (Recommended)";
+            this.twoColumnsToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.twoColumnsToolStripMenuItem.Text = "2 Columns or Less";
             this.twoColumnsToolStripMenuItem.Click += new System.EventHandler(this.TwoColumnsToolStripMenuItem_Click);
             // 
             // oneColumnToolStripMenuItem
             // 
             this.oneColumnToolStripMenuItem.Name = "oneColumnToolStripMenuItem";
-            this.oneColumnToolStripMenuItem.Size = new System.Drawing.Size(268, 22);
-            this.oneColumnToolStripMenuItem.Text = "1 Column+";
+            this.oneColumnToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.oneColumnToolStripMenuItem.Text = "1 Column";
             this.oneColumnToolStripMenuItem.Click += new System.EventHandler(this.OneColumnToolStripMenuItem_Click);
             // 
             // colDisabledToolStripMenuItem
             // 
             this.colDisabledToolStripMenuItem.Name = "colDisabledToolStripMenuItem";
-            this.colDisabledToolStripMenuItem.Size = new System.Drawing.Size(268, 22);
+            this.colDisabledToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.colDisabledToolStripMenuItem.Text = "Disabled";
             this.colDisabledToolStripMenuItem.Click += new System.EventHandler(this.ColDisabledToolStripMenuItem_Click);
             // 
