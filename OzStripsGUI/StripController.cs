@@ -13,7 +13,7 @@ using static vatsys.FDP2;
 namespace MaxRumsey.OzStripsPlugin.Gui;
 
 /// <summary>
-/// The strip base.
+/// Controls strip UI elements and actions.
 /// </summary>
 /// <remarks>
 /// Initializes a new instance of the <see cref="StripController"/> class.

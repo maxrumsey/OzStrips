@@ -14,8 +14,14 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
     private readonly BayRenderController _bayRenderController = bayRC;
     private readonly int _padding = 2;
 
+    /// <summary>
+    /// Gets or sets the root of the strip (taking into account strip cocking). The strip background is drawn from this point.
+    /// </summary>
     public SKPoint Origin { get; set; } = new SKPoint(0, 0);
 
+    /// <summary>
+    /// Gets or sets the root of the strip elements (black border).
+    /// </summary>
     public SKPoint ElementOrigin { get; set; } = new SKPoint(0, 0);
 
     public void Render(SKCanvas canvas)
@@ -109,6 +115,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
         }
         else
         {
+            // If no strip element was clicked, treat as a strip being dropped onto the bay.
             _bayRenderController.Bay.BayManager.DropStrip(_bayRenderController.Bay);
         }
     }
@@ -123,6 +130,9 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
         var flag = false;
 
+        /*
+         * Get strip element the mouse cursor is on right now
+         */
         StripElement? hovered = null;
         foreach (var element in stripelementlist)
         {
@@ -134,12 +144,18 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             }
         }
 
+        /*
+         * Set flag if the strip element will not trigger a tooltip
+         */
         if (hovered is not null && hovered.Hover != StripElements.HoverActions.NONE)
         {
             flag = true;
         }
 
         // todo: make less hacky
+        /*
+         * Tooltip triggered below
+         */
         if (hovered is not null && _bayRenderController.ToolTip is not null)
         {
             switch (hovered.Hover)
@@ -178,6 +194,9 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             }
         }
 
+        /*
+         * Remove tooltip if no tooltip is required at the moment.
+         */
         if (!flag && _bayRenderController.ToolTip is not null)
         {
             _bayRenderController.HoveredItem = null;
