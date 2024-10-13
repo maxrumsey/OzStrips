@@ -146,7 +146,8 @@ public partial class MainForm : Form
     /// </summary>
     public void ForceResize()
     {
-        _bayManager.BayRepository.Resize();
+        _bayManager.BayRepository.Resize(true);
+        _bayManager.BayRepository.Resize(); // double resize to take into account addition / subtraction of scroll bars.
     }
 
     /// <summary>

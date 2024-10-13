@@ -211,10 +211,17 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
     /// <summary>
     /// Resizes the control.
     /// </summary>
-    public void Resize()
+    /// <param name="triggerRelayout">Whether or not to trigger a relayout of bays.</param>
+    public void Resize(bool triggerRelayout = false)
     {
         if (main == null)
         {
+            return;
+        }
+
+        if (triggerRelayout)
+        {
+            _currentLayout(this, EventArgs.Empty);
             return;
         }
 
