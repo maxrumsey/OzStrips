@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.Gui.DTO;
+using MaxRumsey.OzStripsPlugin.Gui.Properties;
 using vatsys;
 
 namespace MaxRumsey.OzStripsPlugin.Gui;
@@ -189,6 +190,8 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             {
                 bay.Orderstrips();
             }
+
+            ResizeStripBays();
         }
         catch (Exception ex)
         {
@@ -208,10 +211,17 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
     /// <summary>
     /// Resizes the control.
     /// </summary>
-    public void Resize()
+    /// <param name="triggerRelayout">Whether or not to trigger a relayout of bays.</param>
+    public void Resize(bool triggerRelayout = false)
     {
         if (main == null)
         {
+            return;
+        }
+
+        if (triggerRelayout)
+        {
+            _currentLayout(this, EventArgs.Empty);
             return;
         }
 
@@ -221,8 +231,10 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             AddVertBoard();
             AddVertBoard();
             _currentLayoutIndex = 3;
-            _currentLayout(this, new EventArgs());
+            _currentLayout(this, EventArgs.Empty);
         }
+
+        ResizeStripBays();
 
         var y_main = main.Size.Height;
 
@@ -231,7 +243,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             ClearVertBoards();
             AddVertBoard();
             _currentLayoutIndex = 1;
-            _currentLayout(this, new EventArgs());
+            _currentLayout(this, EventArgs.Empty);
             return;
         }
         else if (main.Size.Width > 840 && main.Size.Width <= 1250 && _currentLayoutIndex != 2)
@@ -240,7 +252,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             AddVertBoard();
             AddVertBoard();
             _currentLayoutIndex = 2;
-            _currentLayout(this, new EventArgs());
+            _currentLayout(this, EventArgs.Empty);
             return;
         }
         else if (main.Size.Width > 1250 && _currentLayoutIndex != 3)
@@ -250,11 +262,11 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             AddVertBoard();
             AddVertBoard();
             _currentLayoutIndex = 3;
-            _currentLayout(this, new EventArgs());
+            _currentLayout(this, EventArgs.Empty);
             return;
         }
 
-        var x_each = (main.Size.Width - (main.VerticalScroll.Visible ? 20 : 0)) / _currentLayoutIndex;
+        var x_each = (main.Size.Width - (main.VerticalScroll.Visible ? 17 : 0)) / _currentLayoutIndex;
 
         foreach (var panel in _flpVerticalBoards)
         {
@@ -264,17 +276,89 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             panel.ResumeLayout();
         }
 
+        ResizeStripBays(); // prevents issues from scroll bars appearing.
+    }
+
+    /// <summary>
+    /// Resizes only the strip bays.
+    /// </summary>
+    public void ResizeStripBays()
+    {
+        if (_currentLayoutIndex == 0)
+        {
+            return;
+        }
+
+        var smartResize = OzStripsSettings.Default.SmartResize >= _currentLayoutIndex;
+        var yMain = main.Size.Height;
+        var xEach = (main.Size.Width - (main.VerticalScroll.Visible ? 17 : 0)) / _currentLayoutIndex;
+        var allocatedSpace = new int[_currentLayoutIndex];
+
         foreach (var bay in Bays)
         {
+            bay.ChildPanel.SuspendLayout();
             var childnum = _flpVerticalBoards[bay.VerticalBoardNumber].Controls.Count;
-            var height = (y_main - 4) / childnum;
+            var height = (yMain - 4) / childnum;
 
-            if (height < 300)
+            var smartResizeMaxHeight = smartResize ? 70 : 300;
+            if (height < smartResizeMaxHeight)
             {
-                height = 300;
+                height = smartResizeMaxHeight;
             }
 
-            bay.ChildPanel.Size = new(x_each - 4, height);
+            var reqheight = bay.GetRequestedHeight();
+
+            if (smartResize && reqheight > 0)
+            {
+                height = 36 + reqheight;
+
+                if (height > (yMain - 4) / 2)
+                {
+                    height = (yMain - 4) / 2;
+                }
+            }
+            else if (smartResize)
+            {
+                height = 70;
+            }
+
+            allocatedSpace[bay.VerticalBoardNumber] += height;
+            bay.ChildPanel.Size = new(xEach - 4, height);
+        }
+
+        var max = allocatedSpace.Max();
+
+        if (smartResize)
+        {
+            for (var i = 0; i < _currentLayoutIndex; i++)
+            {
+                var remaining = (max > yMain ? max : yMain) - 4 - allocatedSpace[i];
+
+                if (remaining <= 0 || _flpVerticalBoards[i].Controls.Count == 0)
+                {
+                    continue;
+                }
+
+                var each = remaining / _flpVerticalBoards[i].Controls.Count;
+
+                foreach (var bay in Bays.Where(x => x.VerticalBoardNumber == i))
+                {
+                    bay.ChildPanel.Size = new System.Drawing.Size(xEach - 4, bay.ChildPanel.Size.Height + each);
+                    remaining -= each;
+                }
+
+                var last_bay = Bays.Find(x => x.VerticalBoardNumber == i);
+
+                if (last_bay is not null)
+                {
+                    last_bay.ChildPanel.Size = new System.Drawing.Size(xEach - 4, last_bay.ChildPanel.Size.Height + remaining);
+                }
+            }
+        }
+
+        foreach (var bay in Bays)
+        {
+            bay.ChildPanel.ResumeLayout();
         }
     }
 
@@ -295,15 +379,6 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
     /// Clears all vertical boards.
     /// </summary>
     private void ClearVertBoards()
-    {
-        main.Controls.Clear();
-        _flpVerticalBoards.Clear();
-    }
-
-    /// <summary>
-    /// Determines how many vertical boards are needed.
-    /// </summary>
-    private void DetermineVertBoardNumber()
     {
         main.Controls.Clear();
         _flpVerticalBoards.Clear();

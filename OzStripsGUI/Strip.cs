@@ -513,7 +513,7 @@ public sealed class Strip
     }
 
     /// <summary>
-    /// Refreshes strip properties, determines if strip should be removed.
+    /// Refreshes strip properties, and determines if strip should be removed.
     /// </summary>
     public void UpdateFDR()
     {
@@ -570,7 +570,7 @@ public sealed class Strip
     }
 
     /// <summary>
-    /// Determines which bay to move strip to.
+    /// Moves the strip into the "next" bay.
     /// </summary>
     public void SIDTrigger()
     {
@@ -632,7 +632,7 @@ public sealed class Strip
             var adCoord = Airspace2.GetAirport(aerodrome)?.LatLong;
             var planeCoord = FDR.PredictedPosition?.Location;
             var radarTracks = (from radarTrack in RDP.RadarTracks
-                               where radarTrack.ActualAircraft.Callsign == FDR.Callsign
+                               where radarTrack?.ActualAircraft?.Callsign == FDR.Callsign
                                select radarTrack).ToList();
 
             if (radarTracks.Count > 0)
@@ -700,6 +700,11 @@ public sealed class Strip
         _socketConn.SyncSC(this);
     }
 
+    /// <summary>
+    /// Cleans up the vatsys route into a format parseable by the route checker.
+    /// </summary>
+    /// <param name="rawRoute">The raw route.</param>
+    /// <returns>The parsed route.</returns>
     private static string CleanVatsysRoute(string rawRoute)
     {
         try

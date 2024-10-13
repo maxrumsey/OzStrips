@@ -68,10 +68,11 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.stripToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.normalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.smallToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tinyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.smartResizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.threeColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.twoColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.oneColumnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.colDisabledToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flp_main = new System.Windows.Forms.FlowLayoutPanel();
             this.tt_metar = new System.Windows.Forms.ToolTip(this.components);
             this.pl_controlbar.SuspendLayout();
@@ -83,6 +84,8 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             // 
             // pl_controlbar
             // 
+            this.pl_controlbar.AutoScroll = true;
+            this.pl_controlbar.AutoSize = true;
             this.pl_controlbar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
             this.pl_controlbar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pl_controlbar.Controls.Add(this.bt_bar);
@@ -96,6 +99,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.pl_controlbar.Controls.Add(this.tb_Time);
             this.pl_controlbar.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.pl_controlbar.Location = new System.Drawing.Point(0, 916);
+            this.pl_controlbar.MinimumSize = new System.Drawing.Size(2, 45);
             this.pl_controlbar.Name = "pl_controlbar";
             this.pl_controlbar.Size = new System.Drawing.Size(1784, 45);
             this.pl_controlbar.TabIndex = 0;
@@ -456,46 +460,51 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             // viewToolStripMenuItem
             // 
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.stripToolStripMenuItem});
+            this.smartResizeToolStripMenuItem});
             this.viewToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.viewToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(52, 21);
             this.viewToolStripMenuItem.Text = "View";
             // 
-            // stripToolStripMenuItem
+            // smartResizeToolStripMenuItem
             // 
-            this.stripToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.normalToolStripMenuItem,
-            this.smallToolStripMenuItem,
-            this.tinyToolStripMenuItem});
-            this.stripToolStripMenuItem.Enabled = false;
-            this.stripToolStripMenuItem.Name = "stripToolStripMenuItem";
-            this.stripToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.stripToolStripMenuItem.Text = "Strip";
+            this.smartResizeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.threeColumnsToolStripMenuItem,
+            this.twoColumnsToolStripMenuItem,
+            this.oneColumnToolStripMenuItem,
+            this.colDisabledToolStripMenuItem});
+            this.smartResizeToolStripMenuItem.Name = "smartResizeToolStripMenuItem";
+            this.smartResizeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.smartResizeToolStripMenuItem.Text = "Smart Resize";
             // 
-            // normalToolStripMenuItem
+            // threeColumnsToolStripMenuItem
             // 
-            this.normalToolStripMenuItem.Checked = true;
-            this.normalToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.normalToolStripMenuItem.Name = "normalToolStripMenuItem";
-            this.normalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.normalToolStripMenuItem.Text = "Normal";
-            this.normalToolStripMenuItem.Click += new System.EventHandler(this.NormalToolStripMenuItem_Click);
+            this.threeColumnsToolStripMenuItem.Name = "threeColumnsToolStripMenuItem";
+            this.threeColumnsToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.threeColumnsToolStripMenuItem.Text = "3 Columns or Less";
+            this.threeColumnsToolStripMenuItem.Click += new System.EventHandler(this.ThreeColumnsToolStripMenuItem_Click);
             // 
-            // smallToolStripMenuItem
+            // twoColumnsToolStripMenuItem
             // 
-            this.smallToolStripMenuItem.Name = "smallToolStripMenuItem";
-            this.smallToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.smallToolStripMenuItem.Text = "Small";
-            this.smallToolStripMenuItem.Click += new System.EventHandler(this.SmallToolStripMenuItem_Click);
+            this.twoColumnsToolStripMenuItem.Name = "twoColumnsToolStripMenuItem";
+            this.twoColumnsToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.twoColumnsToolStripMenuItem.Text = "2 Columns or Less";
+            this.twoColumnsToolStripMenuItem.Click += new System.EventHandler(this.TwoColumnsToolStripMenuItem_Click);
             // 
-            // tinyToolStripMenuItem
+            // oneColumnToolStripMenuItem
             // 
-            this.tinyToolStripMenuItem.Name = "tinyToolStripMenuItem";
-            this.tinyToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.tinyToolStripMenuItem.Text = "Tiny";
-            this.tinyToolStripMenuItem.Click += new System.EventHandler(this.TinyToolStripMenuItem_Click);
+            this.oneColumnToolStripMenuItem.Name = "oneColumnToolStripMenuItem";
+            this.oneColumnToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.oneColumnToolStripMenuItem.Text = "1 Column";
+            this.oneColumnToolStripMenuItem.Click += new System.EventHandler(this.OneColumnToolStripMenuItem_Click);
+            // 
+            // colDisabledToolStripMenuItem
+            // 
+            this.colDisabledToolStripMenuItem.Name = "colDisabledToolStripMenuItem";
+            this.colDisabledToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.colDisabledToolStripMenuItem.Text = "Disabled";
+            this.colDisabledToolStripMenuItem.Click += new System.EventHandler(this.ColDisabledToolStripMenuItem_Click);
             // 
             // flp_main
             // 
@@ -529,7 +538,8 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.Text = "OzStrips";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.Load += new System.EventHandler(this.MainForm_Load);
-            this.SizeChanged += new System.EventHandler(this.MainFormSizeChanged);
+            this.ResizeEnd += new System.EventHandler(this.MainFormSizeChanged);
+            this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.pl_controlbar.ResumeLayout(false);
             this.pl_controlbar.PerformLayout();
             this.pl_atis.ResumeLayout(false);
@@ -575,17 +585,18 @@ namespace MaxRumsey.OzStripsPlugin.Gui
         private System.Windows.Forms.Label lb_atis;
         private System.Windows.Forms.ToolStripMenuItem changelogToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem stripToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem normalToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem smallToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem tinyToolStripMenuItem;
         private ToolStripMenuItem ts_ad;
         private ToolStripMenuItem modifyToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripTextBox toolStripTextBox1;
         private ToolStripMenuItem reloadStripToolStripMenuItem;
         private Button bt_bar;
+        private ToolStripMenuItem smartResizeToolStripMenuItem;
+        private ToolStripMenuItem threeColumnsToolStripMenuItem;
+        private ToolStripMenuItem twoColumnsToolStripMenuItem;
+        private ToolStripMenuItem oneColumnToolStripMenuItem;
+        private ToolStripMenuItem colDisabledToolStripMenuItem;
     }
 }

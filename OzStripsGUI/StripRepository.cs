@@ -38,7 +38,7 @@ public class StripRepository
     }
 
     /// <summary>
-    /// Receives a fdr, updates according SC.
+    /// Receives a fdr, updates existing strip controller, or makes a new one.
     /// </summary>
     /// <param name="fdr">The flight data record.</param>
     /// <param name="bayManager">The bay manager.</param>

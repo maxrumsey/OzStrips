@@ -13,7 +13,7 @@ using static vatsys.FDP2;
 namespace MaxRumsey.OzStripsPlugin.Gui;
 
 /// <summary>
-/// The strip base.
+/// Controls strip UI elements and actions.
 /// </summary>
 /// <remarks>
 /// Initializes a new instance of the <see cref="StripController"/> class.
@@ -125,7 +125,7 @@ public class StripController
         }
         else
         {
-            OpenHdgAltModal();
+            OpenHdgAltModal("cfl");
         }
     }
 
@@ -147,7 +147,7 @@ public class StripController
         }
 
         var track = Conversions.CalculateTrack(first, last);
-        var positions = LogicalPositions.Positions.Where(e => e.Name == Strip.ParentAerodrome).FirstOrDefault();
+        var positions = LogicalPositions.Positions.FirstOrDefault(e => e.Name == Strip.ParentAerodrome);
         if (positions is null)
         {
             return SKColor.Empty;
@@ -158,7 +158,7 @@ public class StripController
 
         var even = true;
 
-        if (track >= 0 && track < 180)
+        if (track is >= 0 and < 180)
         {
             even = false;
         }
@@ -211,7 +211,7 @@ public class StripController
     /// </summary>
     public void OpenHDGWindow()
     {
-        OpenHdgAltModal();
+        OpenHdgAltModal("hdg");
     }
 
     /// <summary>
@@ -406,9 +406,10 @@ public class StripController
     /// <summary>
     /// Opens the heading/altitude modal dialog.
     /// </summary>
-    protected void OpenHdgAltModal()
+    /// <param name="activeLabel">The label item to be designated as the active control.</param>
+    protected void OpenHdgAltModal(string activeLabel = "")
     {
-        var modalChild = new AltHdgControl(Strip);
+        var modalChild = new AltHdgControl(Strip, activeLabel);
         var bm = new BaseModal(modalChild, "ACD Menu :: " + Strip.FDR.Callsign);
         modalChild.BaseModal = bm;
         bm.ReturnEvent += HeadingAltReturned;
@@ -443,7 +444,7 @@ public class StripController
 
             Strip.SyncStrip();
         }
-        catch (Exception)
+        catch
         {
         }
     }

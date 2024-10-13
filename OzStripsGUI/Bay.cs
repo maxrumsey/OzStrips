@@ -336,6 +336,8 @@ public class Bay : System.IDisposable
                 _socketConnection.SyncBay(this);
             }
         }
+
+        BayManager.BayRepository.ResizeStripBays();
     }
 
     /// <summary>
@@ -354,6 +356,12 @@ public class Bay : System.IDisposable
             _socketConnection.SyncBay(this);
         }
     }
+
+    /// <summary>
+    /// Gets the requested bay height.
+    /// </summary>
+    /// <returns>Height (px).</returns>
+    public int GetRequestedHeight() => (int)(_bayRenderController.GetHeightPreScale() * BayRenderController.Scale);
 
     /// <summary>
     /// Adds a new divider.
@@ -390,6 +398,7 @@ public class Bay : System.IDisposable
         }
 
         Orderstrips();
+        BayManager.BayRepository.ResizeStripBays();
         if (sync)
         {
             _socketConnection.SyncBay(this);

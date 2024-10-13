@@ -12,7 +12,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.10.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.11.0.0")]
     internal sealed partial class OzStripsSettings : global::System.Configuration.ApplicationSettingsBase {
         
         private static OzStripsSettings defaultInstance = ((OzStripsSettings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new OzStripsSettings())));
@@ -38,12 +38,24 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int StripSize {
+        public float StripScale {
             get {
-                return ((int)(this["StripSize"]));
+                return ((float)(this["StripScale"]));
             }
             set {
-                this["StripSize"] = value;
+                this["StripScale"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int SmartResize {
+            get {
+                return ((int)(this["SmartResize"]));
+            }
+            set {
+                this["SmartResize"] = value;
             }
         }
     }

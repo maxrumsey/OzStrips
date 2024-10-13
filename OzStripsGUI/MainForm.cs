@@ -19,8 +19,10 @@ public partial class MainForm : Form
     private readonly Timer _timer;
     private readonly BayManager _bayManager;
     private readonly SocketConn _socketConn;
-    private readonly List<string> _aerodromes = new List<string>();
+    private readonly List<string> _aerodromes = [];
     private string _metar = string.Empty;
+
+    private FormWindowState _lastState = FormWindowState.Minimized;
 
     private bool _readyForConnection;
     private bool _postresizechecked = true;
@@ -73,8 +75,6 @@ public partial class MainForm : Form
             toolStripMenuItem.Click += (_, _) => OpenManDebug();
             debugToolStripMenuItem.DropDownItems.Add(toolStripMenuItem);
         }
-
-        SetStripSizeCheckBox();
     }
 
     /// <summary>
@@ -139,6 +139,15 @@ public partial class MainForm : Form
         {
             Util.LogError(ex);
         }
+    }
+
+    /// <summary>
+    /// Forces a resize event to redraw stripbays.
+    /// </summary>
+    public void ForceResize()
+    {
+        _bayManager.BayRepository.Resize(true);
+        _bayManager.BayRepository.Resize(); // double resize to take into account addition / subtraction of scroll bars.
     }
 
     /// <summary>
@@ -410,10 +419,8 @@ public partial class MainForm : Form
     private void MainFormSizeChanged(object sender, EventArgs e)
     {
         _postresizechecked = false;
-        if (_bayManager is not null)
-        {
-            _bayManager.BayRepository.Resize();
-        }
+        _bayManager?.BayRepository.Resize();
+        SetControlBarScrollBar();
     }
 
     private void AddAerodrome(string name)
@@ -566,38 +573,26 @@ public partial class MainForm : Form
         System.Diagnostics.Process.Start("https://maxrumsey.xyz/OzStrips/changelog");
     }
 
-    private void NormalToolStripMenuItem_Click(object sender, EventArgs e)
+    private void SetSmartResizeCheckBox()
     {
-        Properties.OzStripsSettings.Default.StripSize = 2;
-        Properties.OzStripsSettings.Default.Save();
-        _bayManager.BayRepository.ReloadStrips();
-        SetStripSizeCheckBox();
-    }
+        colDisabledToolStripMenuItem.Checked = false;
+        oneColumnToolStripMenuItem.Checked = false;
+        twoColumnsToolStripMenuItem.Checked = false;
+        threeColumnsToolStripMenuItem.Checked = false;
 
-    private void SmallToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-        Properties.OzStripsSettings.Default.StripSize = 1;
-        Properties.OzStripsSettings.Default.Save();
-        _bayManager.BayRepository.ReloadStrips();
-        SetStripSizeCheckBox();
-    }
-
-    private void SetStripSizeCheckBox()
-    {
-        normalToolStripMenuItem.Checked = false;
-        smallToolStripMenuItem.Checked = false;
-        tinyToolStripMenuItem.Checked = false;
-
-        switch (OzStripsSettings.Default.StripSize)
+        switch (OzStripsSettings.Default.SmartResize)
         {
             case 0:
-                tinyToolStripMenuItem.Checked = true;
+                colDisabledToolStripMenuItem.Checked = true;
                 break;
             case 1:
-                smallToolStripMenuItem.Checked = true;
+                oneColumnToolStripMenuItem.Checked = true;
                 break;
             case 2:
-                normalToolStripMenuItem.Checked = true;
+                twoColumnsToolStripMenuItem.Checked = true;
+                break;
+            case 3:
+                threeColumnsToolStripMenuItem.Checked = true;
                 break;
         }
     }
@@ -610,22 +605,15 @@ public partial class MainForm : Form
         bm.Show(MainForm.MainFormInstance);
     }
 
-    private void TinyToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-        Properties.OzStripsSettings.Default.StripSize = 0;
-        Properties.OzStripsSettings.Default.Save();
-        _bayManager.BayRepository.ReloadStrips();
-        SetStripSizeCheckBox();
-    }
-
     private void MainForm_Load(object sender, EventArgs e)
     {
         SetConnStatus();
+        SetSmartResizeCheckBox();
     }
 
     private void ModifyButtonClicked(object sender, EventArgs e)
     {
-        SettingsToolStripMenuItem_Click(this, new EventArgs());
+        SettingsToolStripMenuItem_Click(this, EventArgs.Empty);
     }
 
     private void AerodromeSelectorKeyDown(object sender, KeyPressEventArgs e)
@@ -648,5 +636,55 @@ public partial class MainForm : Form
         var bm = new BaseModal(modalChild, "Add Bar");
         bm.ReturnEvent += modalChild.ModalReturned;
         bm.Show(this);
+    }
+
+    private void MainForm_Resize(object sender, EventArgs e)
+    {
+        if (WindowState != _lastState)
+        {
+            _lastState = WindowState;
+            _postresizechecked = false;
+            _bayManager?.BayRepository.Resize();
+            SetControlBarScrollBar();
+        }
+    }
+
+    private void ColDisabledToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        SetSmartResizeColumnMode(0);
+    }
+
+    private void OneColumnToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        SetSmartResizeColumnMode(1);
+    }
+
+    private void TwoColumnsToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        SetSmartResizeColumnMode(2);
+    }
+
+    private void ThreeColumnsToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        SetSmartResizeColumnMode(3);
+    }
+
+    private void SetSmartResizeColumnMode(int cols)
+    {
+        Util.SetEnvVar("SmartResize", cols);
+        SetSmartResizeCheckBox();
+        _bayManager.BayRepository.ReloadStrips();
+    }
+
+    private void SetControlBarScrollBar()
+    {
+        var margin = 0;
+
+        if (pl_controlbar.HorizontalScroll.Visible)
+        {
+            margin = 17;
+        }
+
+        pl_controlbar.Padding = new Padding(0, 0, 0, margin);
     }
 }

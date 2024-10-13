@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -16,12 +17,13 @@ public partial class AltHdgControl : UserControl
     private readonly List<Airspace2.SystemRunway> _runways;
     private readonly Strip _stripController;
     private readonly bool _fullyLoaded;
-
+    private readonly string _callingLabel;
     /// <summary>
     /// Initializes a new instance of the <see cref="AltHdgControl"/> class.
     /// </summary>
     /// <param name="controller">The controller.</param>
-    public AltHdgControl(Strip controller)
+    /// <param name="callingLabel">The label item to be selected upon opening.</param>
+    public AltHdgControl(Strip controller, string callingLabel = "")
     {
         _stripController = controller;
         _runways = controller.PossibleDepRunways;
@@ -43,6 +45,8 @@ public partial class AltHdgControl : UserControl
         cb_runway.Text = controller.RWY;
         cb_sid.Text = controller.SID;
         ResumeLayout();
+
+        _callingLabel = callingLabel;
     }
 
     /// <summary>
@@ -187,6 +191,24 @@ public partial class AltHdgControl : UserControl
                 break;
             case Keys.Escape:
                 BaseModal?.ExitModal();
+                break;
+        }
+    }
+
+    private void AltHdgControl_Load(object sender, EventArgs e)
+    {
+        if (BaseModal is null)
+        {
+            return;
+        }
+
+        switch (_callingLabel)
+        {
+            case "hdg":
+                ActiveControl = tb_hdg;
+                break;
+            case "cfl":
+                ActiveControl = tb_alt;
                 break;
         }
     }
