@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Timers;
 using MaxRumsey.OzStripsPlugin.Gui.DTO;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.SignalR.Client;
 using vatsys;
 using static MaxRumsey.OzStripsPlugin.Gui.SocketConn;
 
@@ -13,13 +15,14 @@ namespace MaxRumsey.OzStripsPlugin.Gui;
 /// </summary>
 public sealed class SocketConn : IDisposable
 {
-    private readonly SocketIOClient.SocketIO _io;
+    private static bool MainFormValid => MainForm.MainFormInstance?.IsDisposed == false && MainForm.MainFormInstance.Visible;
+
+    private readonly HubConnection _connection;
     private readonly BayManager _bayManager;
     private readonly bool _isDebug = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
-    private readonly MainForm _mainForm;
-    private bool _versionShown;
+
+    // private bool _versionShown;
     private bool _freshClient = true;
-    private bool _connectionMade;
     private Timer? _oneMinTimer;
     private bool _disposed;
 
@@ -30,9 +33,98 @@ public sealed class SocketConn : IDisposable
     /// <param name="mainForm">The main form instance.</param>
     public SocketConn(BayManager bayManager, MainForm mainForm)
     {
-        _mainForm = mainForm;
+        _connection = new HubConnectionBuilder()
+            .WithUrl(OzStripsConfig.socketioaddr)
+            .WithAutomaticReconnect()
+            .Build();
+
         _bayManager = bayManager;
-        _io = new(OzStripsConfig.socketioaddr);
+
+        _connection.Closed += async (error) => await ConnectionLost(error);
+
+        _connection.Reconnected += async (connId) => await MarkConnected();
+
+        _connection.Reconnecting += async (error) => await ConnectionLost(error, true);
+
+        _connection.On<StripControllerDTO?>("StripUpdate", (StripControllerDTO? scDTO) =>
+        {
+            AddMessage("s:StripUpdate: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
+
+            if (mainForm.Visible && scDTO is not null)
+            {
+                mainForm.Invoke(() => _bayManager.StripRepository.UpdateFDR(scDTO, bayManager));
+            }
+        });
+
+        _connection.On("UpdateCache", [], async _ =>
+        {
+            AddMessage("s:UpdateCache: ");
+            if (_connection.State == HubConnectionState.Connected)
+            {
+                await _connection.InvokeAsync("RequestMetar");
+            }
+
+            if (!_freshClient)
+            {
+                SendCache();
+            }
+        });
+
+        _connection.On<string?>("AtisCode", (string? code) => // not functional
+        {
+            if (MainFormValid && code is not null)
+            {
+                MainForm.MainFormInstance?.Invoke(() => MainForm.MainFormInstance.SetATISCode(code));
+            }
+        });
+
+        _connection.On<string?>("Metar", (string? metar) => // not functional
+        {
+            if (MainFormValid && metar is not null)
+            {
+                 MainForm.MainFormInstance?.Invoke(() => MainForm.MainFormInstance.SetMetar(metar));
+            }
+        });
+
+        _connection.On("BayUpdate", (BayDTO? bayDTO) =>
+        {
+            AddMessage("s:BayUpdate: " + System.Text.Json.JsonSerializer.Serialize(bayDTO));
+
+            if (mainForm.Visible && bayDTO is not null)
+            {
+                mainForm.Invoke(() => bayManager.BayRepository.UpdateOrder(bayDTO));
+            }
+        });
+
+        _connection.On<string?, RouteDTO[]?>("server:routes", (string? acid, RouteDTO[]? routes) => // not functional.
+        {
+            if (acid is null ||
+                routes is null)
+            {
+                return;
+            }
+
+            try
+            {
+                AddMessage("s:routes: " + System.Text.Json.JsonSerializer.Serialize(routes));
+
+                if (mainForm.Visible)
+                {
+                    var sc = _bayManager.StripRepository.GetController(acid);
+
+                    if (sc is not null)
+                    {
+                        sc.ValidRoutes = routes;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Util.LogError(ex);
+            }
+        });
+
+        /*
         _io.OnAny((_, e) =>
         {
             var metaDTO = e.GetValue<MetadataDTO>(1);
@@ -56,163 +148,9 @@ public sealed class SocketConn : IDisposable
             }
         });
 
-        _io.OnConnected += async (_, _) =>
-        {
-            AddMessage("c: conn established");
-            if (Network.IsConnected)
-            {
-                _freshClient = true;
-                _connectionMade = true;
-                await _io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName, Network.Me.RealName, Server);
-                Connected = true;
-                if (mainForm.Visible && !mainForm.IsDisposed)
-                {
-                    mainForm.Invoke(() => mainForm.SetConnStatus());
-                }
+        
 
-                _bayManager.StripRepository.MarkAllStripsAsAwaitingRoutes();
-
-                await Task.Delay(TimeSpan.FromSeconds(60));
-                _freshClient = false;
-            }
-            else
-            {
-                AddMessage("c: disconnecting as vatsys connection was lost");
-                await _io.DisconnectAsync();
-            }
-        };
-
-        _io.OnDisconnected += (_, _) =>
-        {
-            AddMessage("c: conn lost");
-            Connected = false;
-            if (mainForm.Visible)
-            {
-                mainForm.Invoke(() => mainForm.SetConnStatus());
-            }
-        };
-
-        _io.OnError += (_, e) =>
-        {
-            AddMessage("c: error" + e);
-            Connected = false;
-            if (mainForm.Visible)
-            {
-                mainForm.Invoke(() =>
-                {
-                    mainForm.SetConnStatus();
-                    Util.LogError(new(e));
-                });
-            }
-        };
-
-        _io.OnReconnected += (_, _) =>
-        {
-            if (_io.Connected)
-            {
-                _io.EmitAsync("client:aerodrome_subscribe", bayManager.AerodromeName, Network.Me.RealName, Server);
-            }
-
-            Connected = true;
-            if (mainForm.Visible)
-            {
-                mainForm.Invoke(() => mainForm.SetConnStatus());
-            }
-        };
-
-        _io.OnReconnectError += (_, _) => AddMessage("recon error");
-
-        _io.On("server:sc_change", sc =>
-        {
-            var scDTO = sc.GetValue<StripControllerDTO>();
-            AddMessage("s:sc_change: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
-
-            if (mainForm.Visible)
-            {
-                mainForm.Invoke(() => _bayManager.StripRepository.UpdateFDR(scDTO, bayManager));
-            }
-        });
-
-        _io.On("server:sc_cache", sc =>
-        {
-            var scDTO = sc.GetValue<CacheDTO>();
-            AddMessage("s:sc_cache: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
-
-            if (mainForm.Visible && _freshClient)
-            {
-                mainForm.Invoke(() => _bayManager.StripRepository.LoadCache(scDTO, bayManager, this));
-            }
-        });
-
-        _io.On("server:order_change", bdto =>
-        {
-            var bayDTO = bdto.GetValue<BayDTO>();
-            AddMessage("s:order_change: " + System.Text.Json.JsonSerializer.Serialize(bayDTO));
-
-            if (mainForm.Visible)
-            {
-                mainForm.Invoke(() => bayManager.BayRepository.UpdateOrder(bayDTO));
-            }
-        });
-
-        _io.On("server:routes", (data) =>
-        {
-            try
-            {
-                var acid = data.GetValue<string>();
-                var routes = data.GetValue<RouteDTO[]>(1);
-
-                AddMessage("s:routes: " + System.Text.Json.JsonSerializer.Serialize(data));
-
-                if (mainForm.Visible)
-                {
-                    var sc = _bayManager.StripRepository.GetController(acid);
-
-                    if (sc is not null)
-                    {
-                        sc.ValidRoutes = routes;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Util.LogError(ex);
-            }
-        });
-
-        _io.On("server:metar", metarRaw =>
-        {
-            var metar = metarRaw.GetValue<string>();
-
-            if (mainForm.Visible)
-            {
-                mainForm.Invoke(() => _mainForm.SetMetar(metar));
-            }
-        });
-
-        _io.On("server:atis", codeRaw =>
-        {
-            var code = codeRaw.GetValue<string>();
-
-            if (mainForm.Visible)
-            {
-                mainForm.Invoke(() => _mainForm.SetATISCode(code));
-            }
-        });
-
-        _io.On("server:update_cache", _ =>
-        {
-            AddMessage("s:update_cache: ");
-            if (_io.Connected)
-            {
-                _io.EmitAsync("client:request_metar");
-            }
-
-            if (!_freshClient)
-            {
-                SendCache();
-            }
-        });
+        */
     }
 
     /// <summary>
@@ -268,7 +206,7 @@ public sealed class SocketConn : IDisposable
                 AddMessage("c: DTO Rejected!");
             }
 
-            return _io.Connected && (Network.Me.IsRealATC || _isDebug);
+            return _connection.State == HubConnectionState.Connected && (Network.Me.IsRealATC || _isDebug);
         }
     }
 
@@ -280,6 +218,7 @@ public sealed class SocketConn : IDisposable
     {
         StripControllerDTO scDTO = sc;
         AddMessage("c:sc_change: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
+
         if (string.IsNullOrEmpty(scDTO.acid))
         {
             return; // prevent bug
@@ -287,7 +226,7 @@ public sealed class SocketConn : IDisposable
 
         if (CanSendDTO)
         {
-            _io.EmitAsync("client:sc_change", scDTO);
+            _connection.InvokeAsync("StripChange", scDTO);
         }
     }
 
@@ -298,9 +237,9 @@ public sealed class SocketConn : IDisposable
     public void RequestRoutes(Strip sc)
     {
         AddMessage("c:get_routes: " + sc.FDR.Callsign);
-        if (_io.Connected)
+        if (_connection.State == HubConnectionState.Connected)
         {
-            _io.EmitAsync("client:get_routes", sc.FDR.DepAirport, sc.FDR.DesAirport, sc.FDR.Callsign);
+            _connection.InvokeAsync("GetRoutes", sc.FDR.DepAirport, sc.FDR.DesAirport, sc.FDR.Callsign);
         }
     }
 
@@ -310,7 +249,7 @@ public sealed class SocketConn : IDisposable
     public void ReadyForBayData()
     {
         AddMessage("c:req_bays:");
-        _io.EmitAsync("client:req_bays");
+        _connection.InvokeAsync("RequestBays");
     }
 
     /// <summary>
@@ -328,7 +267,7 @@ public sealed class SocketConn : IDisposable
 
         if (CanSendDTO)
         {
-            _io.EmitAsync("client:sc_delete", scDTO);
+            _connection.InvokeAsync("StripDelete", scDTO);
         }
     }
 
@@ -343,7 +282,7 @@ public sealed class SocketConn : IDisposable
 
         if (CanSendDTO)
         {
-            _io.EmitAsync("client:order_change", bayDTO);
+            _connection.InvokeAsync("BayChange", bayDTO);
         }
     }
 
@@ -360,9 +299,9 @@ public sealed class SocketConn : IDisposable
         };
         _oneMinTimer.Elapsed += ToggleFresh;
         _oneMinTimer.Start();
-        if (_io.Connected)
+        if (_connection.State == HubConnectionState.Connected) // was is io connected.
         {
-            _io.EmitAsync("client:aerodrome_subscribe", _bayManager.AerodromeName, Network.Me.RealName, Server);
+            _connection.InvokeAsync("SubscribeToAerodrome", _bayManager.AerodromeName, Network.Me.RealName, Server);
         }
     }
 
@@ -385,7 +324,7 @@ public sealed class SocketConn : IDisposable
         AddMessage("c:sc_cache: " + System.Text.Json.JsonSerializer.Serialize(cacheDTO));
         if (CanSendDTO)
         {
-            await _io.EmitAsync("client:sc_cache", cacheDTO);
+            await _connection.InvokeAsync("StripCache", cacheDTO);
         }
     }
 
@@ -394,8 +333,7 @@ public sealed class SocketConn : IDisposable
     /// </summary>
     public void Close()
     {
-        _io.DisconnectAsync();
-        _io.Dispose();
+        _connection.StopAsync();
     }
 
     /// <summary>
@@ -403,19 +341,29 @@ public sealed class SocketConn : IDisposable
     /// </summary>
     public async void Connect()
     {
-        MMI.InvokeOnGUI(() => _mainForm.SetAerodrome(_bayManager.AerodromeName));
+        MMI.InvokeOnGUI(() => MainForm.MainFormInstance?.SetAerodrome(_bayManager.AerodromeName));
         try
         {
             AddMessage("c: Attempting connection " + OzStripsConfig.socketioaddr);
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            _io.ConnectAsync().ConfigureAwait(false);
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            await Task.Delay(TimeSpan.FromSeconds(15));
-            if (!_connectionMade && !_disposed)
+            while (_connection.State != HubConnectionState.Connected)
             {
-                Util.ShowErrorBox("OzStrips Connection Failed.\n" +
-                    "This may be an issue with an outstanding Navigraph connection within vatSys.\n" +
-                    "Go to Help -> Documentation -> FAQ for more information.");
+                try
+                {
+                    await _connection.StartAsync();
+                }
+                catch (Exception ex)
+                {
+                    Util.LogError(ex);
+                }
+
+                if (_connection.State == HubConnectionState.Connected)
+                {
+                    await MarkConnected();
+                }
+                else
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(5));
+                }
             }
         }
         catch (Exception ex)
@@ -429,14 +377,14 @@ public sealed class SocketConn : IDisposable
     /// </summary>
     public void Disconnect()
     {
-        _io.DisconnectAsync();
+        _connection.StopAsync();
     }
 
     /// <inheritdoc/>
-    public void Dispose()
+    public async void Dispose()
     {
         _oneMinTimer?.Dispose();
-        _io.Dispose();
+        await _connection.DisposeAsync();
         _disposed = true;
     }
 
@@ -465,6 +413,50 @@ public sealed class SocketConn : IDisposable
         lock (Messages)
         {
             Messages.Add(message);
+        }
+    }
+
+    private async Task MarkConnected()
+    {
+        AddMessage("c: conn established");
+        if (Network.IsConnected)
+        {
+            _freshClient = true;
+            await _connection.SendAsync("SubscribeToAerodrome", _bayManager.AerodromeName, Network.Me.RealName, Server);
+
+            Connected = true;
+            if (MainFormValid)
+            {
+                MainForm.MainFormInstance?.Invoke(() => MainForm.MainFormInstance.SetConnStatus());
+            }
+
+            _bayManager.StripRepository.MarkAllStripsAsAwaitingRoutes();
+
+            await Task.Delay(TimeSpan.FromSeconds(60));
+            _freshClient = false;
+        }
+        else
+        {
+            AddMessage("c: disconnecting as vatsys connection was lost");
+            await _connection.StopAsync();
+        }
+    }
+
+    private async Task ConnectionLost(Exception? error, bool reconnecting = false)
+    {
+        if (error is not null)
+        {
+            AddMessage("server conn lost - " + error.Message);
+            if (!reconnecting)
+            {
+                await _connection.StartAsync();
+            }
+        }
+
+        Connected = false;
+        if (MainFormValid)
+        {
+            MainForm.MainFormInstance?.Invoke(() => MainForm.MainFormInstance.SetConnStatus());
         }
     }
 }
