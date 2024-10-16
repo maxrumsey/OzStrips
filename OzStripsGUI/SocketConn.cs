@@ -56,6 +56,16 @@ public sealed class SocketConn : IDisposable
             }
         });
 
+        _connection.On<List<StripControllerDTO>?>("StripCache", (List<StripControllerDTO>? scDTO) =>
+        {
+            AddMessage("s:StripCache: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
+
+            if (mainForm.Visible && scDTO is not null)
+            {
+                mainForm.Invoke(() => _bayManager.StripRepository.LoadCache(scDTO, bayManager, this));
+            }
+        });
+
         _connection.On("UpdateCache", [], async _ =>
         {
             AddMessage("s:UpdateCache: ");

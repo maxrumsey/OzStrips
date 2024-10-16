@@ -113,9 +113,9 @@ public class StripRepository
     /// <param name="cacheData">The cache data.</param>
     /// <param name="bayManager">The bay manager.</param>
     /// <param name="socketConn">The socket connection.</param>
-    public void LoadCache(CacheDTO cacheData, BayManager bayManager, SocketConn socketConn)
+    public void LoadCache(List<StripControllerDTO> cacheData, BayManager bayManager, SocketConn socketConn)
     {
-        foreach (var stripDTO in cacheData.strips)
+        foreach (var stripDTO in cacheData)
         {
             UpdateFDR(stripDTO, bayManager);
         }
