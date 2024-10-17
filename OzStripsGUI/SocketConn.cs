@@ -80,7 +80,7 @@ public sealed class SocketConn : IDisposable
             }
         });
 
-        _connection.On<string?>("AtisCode", (string? code) => // not functional
+        _connection.On<string?>("Atis", (string? code) => // not functional
         {
             if (MainFormValid && code is not null)
             {
@@ -355,7 +355,7 @@ public sealed class SocketConn : IDisposable
         try
         {
             AddMessage("c: Attempting connection " + OzStripsConfig.socketioaddr);
-            while (_connection.State != HubConnectionState.Connected)
+            while (_connection.State == HubConnectionState.Disconnected)
             {
                 try
                 {
