@@ -24,6 +24,7 @@ public sealed class SocketConn : IDisposable
     // private bool _versionShown;
     private bool _freshClient = true;
     private Timer? _oneMinTimer;
+    private bool _versionShown;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SocketConn"/> class.
@@ -33,7 +34,7 @@ public sealed class SocketConn : IDisposable
     public SocketConn(BayManager bayManager, MainForm mainForm)
     {
         _connection = new HubConnectionBuilder()
-            .WithUrl(OzStripsConfig.socketioaddr)
+            .WithUrl(OzStripsConfig.socketioaddr + "OzStripsHub")
             .WithAutomaticReconnect()
             .Build();
 
@@ -129,33 +130,22 @@ public sealed class SocketConn : IDisposable
             }
         });
 
-        /*
-        _io.OnAny((_, e) =>
+        _connection.On<string?>("VersionInfo", (string? appversion) => // not functional.
         {
-            var metaDTO = e.GetValue<MetadataDTO>(1);
-            if (!string.IsNullOrEmpty(metaDTO.apiversion) && metaDTO.version != OzStripsConfig.version && !_versionShown)
+            if (appversion is null)
+            {
+                return;
+            }
+
+            if (!_versionShown && appversion != OzStripsConfig.version)
             {
                 _versionShown = true;
                 if (mainForm.Visible)
                 {
-                    mainForm.Invoke(() => Util.ShowInfoBox("New Update Available: " + metaDTO.version));
+                    mainForm.Invoke(() => Util.ShowInfoBox("New Update Available: " + appversion));
                 }
             }
-
-            if (!string.IsNullOrEmpty(metaDTO.apiversion) && metaDTO.apiversion != OzStripsConfig.apiversion && mainForm.Visible)
-            {
-                mainForm.Invoke(() =>
-                {
-                    Util.ShowErrorBox("OzStrips incompatible with current API version! " + metaDTO.apiversion + " " + OzStripsConfig.apiversion + ".\nOzStrips will now close.");
-                    mainForm.Close();
-                    mainForm.Dispose();
-                });
-            }
         });
-
-        
-
-        */
     }
 
     /// <summary>
