@@ -33,7 +33,7 @@ public partial class RerouteControl : UserControl
             ls_routes.Items.Clear();
             foreach (var route in _routes)
             {
-                ls_routes.Items.Add($"({route.acft}):{route.route}");
+                ls_routes.Items.Add($"({route.AircraftType}):{route.RouteText}");
             }
         }
 

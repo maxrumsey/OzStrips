@@ -170,7 +170,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                         if (_strip.DodgyRoute)
                         {
                             var routes = new List<string>();
-                            Array.ForEach(_strip.ValidRoutes, x => routes.Add("(" + x.acft + ") " + x.route));
+                            Array.ForEach(_strip.ValidRoutes, x => routes.Add("(" + x.AircraftType + ") " + x.RouteText));
                             str = _strip.Route +
                                 "\n---\nPotentially non-compliant route detected! Accepted Routes:\n" + string.Join("\n", routes) + "\nParsed Route: " + _strip.CondensedRoute;
                         }

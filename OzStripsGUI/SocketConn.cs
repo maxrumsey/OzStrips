@@ -24,7 +24,6 @@ public sealed class SocketConn : IDisposable
     // private bool _versionShown;
     private bool _freshClient = true;
     private Timer? _oneMinTimer;
-    private bool _disposed;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SocketConn"/> class.
@@ -69,14 +68,9 @@ public sealed class SocketConn : IDisposable
         _connection.On("UpdateCache", [], async _ =>
         {
             AddMessage("s:UpdateCache: ");
-            if (_connection.State == HubConnectionState.Connected)
-            {
-                await _connection.InvokeAsync("RequestMetar");
-            }
-
             if (!_freshClient)
             {
-                SendCache();
+                await SendCache();
             }
         });
 
@@ -106,10 +100,11 @@ public sealed class SocketConn : IDisposable
             }
         });
 
-        _connection.On<string?, RouteDTO[]?>("server:routes", (string? acid, RouteDTO[]? routes) => // not functional.
+        _connection.On<string?, RouteDTO[]?>("Routes", (string? acid, RouteDTO[]? routes) => // not functional.
         {
             if (acid is null ||
-                routes is null)
+                routes is null ||
+                routes.Length == 0)
             {
                 return;
             }
@@ -328,7 +323,8 @@ public sealed class SocketConn : IDisposable
     /// <summary>
     /// Sends the cache to the server.
     /// </summary>
-    public async void SendCache()
+    /// <returns>Task.</returns>
+    public async Task SendCache()
     {
         var cacheDTO = CreateCacheDTO();
         AddMessage("c:sc_cache: " + System.Text.Json.JsonSerializer.Serialize(cacheDTO));
@@ -395,7 +391,6 @@ public sealed class SocketConn : IDisposable
     {
         _oneMinTimer?.Dispose();
         await _connection.DisposeAsync();
-        _disposed = true;
     }
 
     /// <summary>
