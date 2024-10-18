@@ -121,9 +121,9 @@
     <value>1</value>
   </data>
   <data name="socketioaddr" xml:space="preserve">
-    <value>http://dev1.maxrumsey.xyz:80/</value>
+    <value>https://ozstripsserver.maxrumsey.xyz/</value>
   </data>
   <data name="version" xml:space="preserve">
-    <value>0.4.6</value>
+    <value>0.5.0</value>
   </data>
 </root>
