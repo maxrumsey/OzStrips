@@ -256,16 +256,11 @@ public sealed class SocketConn : IDisposable
     /// <param name="sc">The strip controller.</param>
     public void SyncDeletion(Strip sc)
     {
-        SCDeletionDTO scDTO = sc;
-        AddMessage("c:StripDelete: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
-        if (string.IsNullOrEmpty(scDTO.acid))
-        {
-            return; // prevent bug
-        }
+        AddMessage("c:StripDelete: " + sc.FDR.Callsign);
 
         if (CanSendDTO)
         {
-            _connection.InvokeAsync("StripDelete", scDTO);
+            _connection.InvokeAsync("StripDelete", sc.FDR.Callsign);
         }
     }
 
