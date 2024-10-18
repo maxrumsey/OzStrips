@@ -40,43 +40,49 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
     /// <param name="bayDTO">The bay data.</param>
     public void UpdateOrder(BayDTO bayDTO)
     {
-        Bay? bay = null;
-        foreach (var currentBay in Bays)
-        {
-            if (currentBay.BayTypes.Contains(bayDTO.bay))
+        try {
+            Bay? bay = null;
+            foreach (var currentBay in Bays)
             {
-                bay = currentBay;
+                if (currentBay.BayTypes.Contains(bayDTO.bay))
+                {
+                    bay = currentBay;
+                }
             }
-        }
 
-        if (bay == null)
-        {
-            return;
-        }
-
-        var list = new List<StripListItem>();
-
-        foreach (var dtoItem in bayDTO.list)
-        {
-            var listItem = bay.GetListItemByStr(dtoItem);
-            if (listItem != null)
+            if (bay == null)
             {
-                list.Add(listItem);
+                return;
             }
-        }
 
-        // incase of dodgy timing
-        foreach (var oldListItem in bay.Strips)
-        {
-            if (!list.Contains(oldListItem) && oldListItem.Type == StripItemType.STRIP)
+            var list = new List<StripListItem>();
+
+            foreach (var dtoItem in bayDTO.list)
             {
-                list.Add(oldListItem);
+                var listItem = bay.GetListItemByStr(dtoItem);
+                if (listItem != null)
+                {
+                    list.Add(listItem);
+                }
             }
-        }
 
-        bay.Strips.Clear();
-        bay.Strips.AddRange(list);
-        bay.Orderstrips();
+            // incase of dodgy timing
+            foreach (var oldListItem in bay.Strips)
+            {
+                if (!list.Contains(oldListItem) && oldListItem.Type == StripItemType.STRIP)
+                {
+                    list.Add(oldListItem);
+                }
+            }
+
+            bay.Strips.Clear();
+            bay.Strips.AddRange(list);
+            bay.Orderstrips();
+            }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+        }
     }
 
     /// <summary>

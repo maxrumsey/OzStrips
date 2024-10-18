@@ -112,7 +112,7 @@ public sealed class SocketConn : IDisposable
 
             try
             {
-                AddMessage("s:routes: " + System.Text.Json.JsonSerializer.Serialize(routes));
+                AddMessage("s:Routes: " + System.Text.Json.JsonSerializer.Serialize(routes));
 
                 if (mainForm.Visible)
                 {
@@ -231,7 +231,7 @@ public sealed class SocketConn : IDisposable
     /// <param name="sc">The strip controller.</param>
     public void RequestRoutes(Strip sc)
     {
-        AddMessage("c:get_routes: " + sc.FDR.Callsign);
+        AddMessage("c:GetRoutes: " + sc.FDR.Callsign);
         if (_connection.State == HubConnectionState.Connected)
         {
             _connection.InvokeAsync("GetRoutes", sc.FDR.DepAirport, sc.FDR.DesAirport, sc.FDR.Callsign);
@@ -243,8 +243,11 @@ public sealed class SocketConn : IDisposable
     /// </summary>
     public void ReadyForBayData()
     {
-        AddMessage("c:req_bays:");
-        _connection.InvokeAsync("RequestBays");
+        if (_freshClient)
+        {
+            AddMessage("c:RequestBays:");
+            _connection.InvokeAsync("RequestBays");
+        }
     }
 
     /// <summary>
@@ -254,7 +257,7 @@ public sealed class SocketConn : IDisposable
     public void SyncDeletion(Strip sc)
     {
         SCDeletionDTO scDTO = sc;
-        AddMessage("c:sc_delete: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
+        AddMessage("c:StripDelete: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
         if (string.IsNullOrEmpty(scDTO.acid))
         {
             return; // prevent bug
@@ -273,7 +276,7 @@ public sealed class SocketConn : IDisposable
     public void SyncBay(Bay bay)
     {
         BayDTO bayDTO = bay;
-        AddMessage("c:order_change: " + System.Text.Json.JsonSerializer.Serialize(bayDTO));
+        AddMessage("c:BayChange: " + System.Text.Json.JsonSerializer.Serialize(bayDTO));
 
         if (CanSendDTO)
         {
@@ -317,7 +320,7 @@ public sealed class SocketConn : IDisposable
     public async Task SendCache()
     {
         var cacheDTO = CreateCacheDTO();
-        AddMessage("c:sc_cache: " + System.Text.Json.JsonSerializer.Serialize(cacheDTO));
+        AddMessage("c:StripCache: " + System.Text.Json.JsonSerializer.Serialize(cacheDTO));
         if (CanSendDTO)
         {
             await _connection.InvokeAsync("StripCache", cacheDTO);

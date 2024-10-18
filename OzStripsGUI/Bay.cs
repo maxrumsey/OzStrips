@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using MaxRumsey.OzStripsPlugin.Gui.Controls;
@@ -434,7 +435,7 @@ public class Bay : System.IDisposable
             {
                 returnedItem = stripListItem;
             }
-            else if (code[0] == '\a' && stripListItem.Type == StripItemType.BAR && stripListItem.BarText == code.Substring(2))
+            else if (code[0] == '\a' && stripListItem.Type == StripItemType.BAR && stripListItem.BarText == code.Substring(Math.Min(2, code.Length)))
             {
                 returnedItem = stripListItem;
             }
