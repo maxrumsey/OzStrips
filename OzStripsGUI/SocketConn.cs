@@ -362,6 +362,9 @@ public sealed class SocketConn : IDisposable
                 }
             }
         }
+        catch (ObjectDisposedException)
+        {
+        }
         catch (Exception ex)
         {
             Util.LogError(ex);
