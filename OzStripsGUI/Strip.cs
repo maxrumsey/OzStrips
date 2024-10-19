@@ -536,7 +536,7 @@ public sealed class Strip
             DodgyRoute = true;
             foreach (var validroute in ValidRoutes)
             {
-                if (validroute.route.Contains(CondensedRoute))
+                if (validroute.RouteText.Contains(CondensedRoute))
                 {
                     DodgyRoute = false;
                 }
@@ -554,7 +554,7 @@ public sealed class Strip
                     var rte = string.Join(" ", CleanVatsysRoute(FDR.Route).Split(' ').Skip(1).ToArray());
                     foreach (var validroute in ValidRoutes)
                     {
-                        if (validroute.route.Contains(rte))
+                        if (validroute.RouteText.Contains(rte))
                         {
                             DodgyRoute = false;
                         }

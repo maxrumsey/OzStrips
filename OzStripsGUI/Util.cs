@@ -67,8 +67,9 @@ public static class Util
             var data = new Dictionary<string, string>
                 {
                     { "error", "ERROR: " + error.Message + "\n" + error.StackTrace },
+                    { "version", OzStripsConfig.version },
                 };
-            var uri = (OzStripsConfig.socketioaddr + "/crash").Replace("//", "/").Replace(":/", "://");
+            var uri = (OzStripsConfig.socketioaddr + "Crash").Replace("//", "/").Replace(":/", "://");
             var task = client.PostAsync(uri, new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json"));
             _ = await task.ConfigureAwait(false);
         }

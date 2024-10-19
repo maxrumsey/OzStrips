@@ -75,35 +75,42 @@ public class StripRepository
     /// <param name="bayManager">The bay manager.</param>
     public void UpdateFDR(StripControllerDTO stripControllerData, BayManager bayManager)
     {
-        foreach (var controller in Controllers)
+        try
         {
-            if (controller.FDR.Callsign == stripControllerData.acid)
+            foreach (var controller in Controllers)
             {
-                var changeBay = false;
-                controller.CLX = !string.IsNullOrWhiteSpace(stripControllerData.CLX) ? stripControllerData.CLX : string.Empty;
-                controller.Gate = stripControllerData.GATE ?? string.Empty;
-                if (controller.CurrentBay != stripControllerData.bay)
+                if (controller.FDR.Callsign == stripControllerData.acid)
                 {
-                    changeBay = true;
+                    var changeBay = false;
+                    controller.CLX = !string.IsNullOrWhiteSpace(stripControllerData.CLX) ? stripControllerData.CLX : string.Empty;
+                    controller.Gate = stripControllerData.GATE ?? string.Empty;
+                    if (controller.CurrentBay != stripControllerData.bay)
+                    {
+                        changeBay = true;
+                    }
+
+                    controller.CurrentBay = stripControllerData.bay;
+                    controller.Controller?.Cock(stripControllerData.cockLevel, false);
+                    controller.TakeOffTime = stripControllerData.TOT == "\0" ?
+                        null :
+                        DateTime.Parse(stripControllerData.TOT, CultureInfo.InvariantCulture);
+
+                    controller.Remark = !string.IsNullOrWhiteSpace(stripControllerData.remark) ? stripControllerData.remark : string.Empty;
+                    controller.Crossing = stripControllerData.crossing;
+                    controller.Controller?.SetCross(false);
+                    controller.Ready = stripControllerData.ready;
+                    if (changeBay)
+                    {
+                        bayManager.UpdateBay(controller); // prevent unessesscary reshufles
+                    }
+
+                    return;
                 }
-
-                controller.CurrentBay = stripControllerData.bay;
-                controller.Controller?.Cock(stripControllerData.cockLevel, false);
-                controller.TakeOffTime = stripControllerData.TOT == "\0" ?
-                    null :
-                    DateTime.Parse(stripControllerData.TOT, CultureInfo.InvariantCulture);
-
-                controller.Remark = !string.IsNullOrWhiteSpace(stripControllerData.remark) ? stripControllerData.remark : string.Empty;
-                controller.Crossing = stripControllerData.crossing;
-                controller.Controller?.SetCross(false);
-                controller.Ready = stripControllerData.ready;
-                if (changeBay)
-                {
-                    bayManager.UpdateBay(controller); // prevent unessesscary reshufles
-                }
-
-                return;
             }
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
         }
     }
 
@@ -113,9 +120,9 @@ public class StripRepository
     /// <param name="cacheData">The cache data.</param>
     /// <param name="bayManager">The bay manager.</param>
     /// <param name="socketConn">The socket connection.</param>
-    public void LoadCache(CacheDTO cacheData, BayManager bayManager, SocketConn socketConn)
+    public void LoadCache(List<StripControllerDTO> cacheData, BayManager bayManager, SocketConn socketConn)
     {
-        foreach (var stripDTO in cacheData.strips)
+        foreach (var stripDTO in cacheData)
         {
             UpdateFDR(stripDTO, bayManager);
         }
