@@ -79,7 +79,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             bay.Strips.Clear();
             bay.Strips.AddRange(list);
             bay.Orderstrips();
-            }
+        }
         catch (Exception ex)
         {
             Util.LogError(ex);
