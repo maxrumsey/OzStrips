@@ -15,13 +15,10 @@ namespace MaxRumsey.OzStripsPlugin.Gui;
 /// </summary>
 public sealed class SocketConn : IDisposable
 {
-    private static bool MainFormValid => MainForm.MainFormInstance?.IsDisposed == false && MainForm.MainFormInstance.Visible;
-
     private readonly HubConnection _connection;
     private readonly BayManager _bayManager;
     private readonly bool _isDebug = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
 
-    // private bool _versionShown;
     private bool _freshClient = true;
     private Timer? _oneMinTimer;
     private bool _versionShown;
@@ -188,6 +185,8 @@ public sealed class SocketConn : IDisposable
     /// Gets or sets a value indicating whether the client is connected.
     /// </summary>
     public bool Connected { get; set; }
+
+    private static bool MainFormValid => MainForm.MainFormInstance?.IsDisposed == false && MainForm.MainFormInstance.Visible;
 
     /// <summary>
     /// Gets a value indicating whether the user has permission to send data to server.

@@ -40,7 +40,8 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
     /// <param name="bayDTO">The bay data.</param>
     public void UpdateOrder(BayDTO bayDTO)
     {
-        try {
+        try
+        {
             Bay? bay = null;
             foreach (var currentBay in Bays)
             {

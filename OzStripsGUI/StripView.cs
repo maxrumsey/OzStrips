@@ -382,7 +382,14 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
                 break;
             case StripElements.Values.SID:
-                return SKColors.Green;
+                var sidcolour = SKColors.Green;
+
+                if (_strip.FDR.FlightRules == "V" && !string.IsNullOrEmpty(_strip.FDR.SIDSTARString))
+                {
+                    sidcolour = SKColors.Orange;
+                }
+
+                return sidcolour;
             case StripElements.Values.CFL:
                 return _strip.Controller.DetermineCFLBackColour();
             case StripElements.Values.FIRST_WPT:
