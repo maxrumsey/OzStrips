@@ -22,6 +22,7 @@ public sealed class SocketConn : IDisposable
     private bool _freshClient = true;
     private Timer? _oneMinTimer;
     private bool _versionShown;
+    private bool _isDisposed;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SocketConn"/> class.
@@ -338,11 +339,14 @@ public sealed class SocketConn : IDisposable
         try
         {
             AddMessage("c: Attempting connection " + OzStripsConfig.socketioaddr);
-            while (_connection.State == HubConnectionState.Disconnected)
+            while (_connection.State == HubConnectionState.Disconnected && !_isDisposed)
             {
                 try
                 {
                     await _connection.StartAsync();
+                }
+                catch (ObjectDisposedException)
+                {
                 }
                 catch (Exception ex)
                 {
@@ -381,6 +385,7 @@ public sealed class SocketConn : IDisposable
     {
         _oneMinTimer?.Dispose();
         await _connection.DisposeAsync();
+        _isDisposed = true;
     }
 
     /// <summary>
@@ -439,16 +444,17 @@ public sealed class SocketConn : IDisposable
 
     private async Task ConnectionLost(Exception? error, bool reconnecting = false)
     {
+        Connected = false;
         if (error is not null)
         {
             AddMessage("server conn lost - " + error.Message);
-            if (!reconnecting)
+            if (!reconnecting && !_isDisposed)
             {
                 await _connection.StartAsync();
+                Connected = true;
             }
         }
 
-        Connected = false;
         if (MainFormValid)
         {
             MainForm.MainFormInstance?.Invoke(() => MainForm.MainFormInstance.SetConnStatus());
