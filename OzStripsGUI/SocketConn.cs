@@ -339,7 +339,7 @@ public sealed class SocketConn : IDisposable
         try
         {
             AddMessage("c: Attempting connection " + OzStripsConfig.socketioaddr);
-            while (_connection.State == HubConnectionState.Disconnected && !_isDisposed)
+            while (!_isDisposed && _connection.State == HubConnectionState.Disconnected)
             {
                 try
                 {
@@ -350,7 +350,7 @@ public sealed class SocketConn : IDisposable
                 }
                 catch (Exception ex)
                 {
-                    Util.LogError(ex);
+                    Errors.Add(ex, "OzStrips - Server Connection Failed");
                 }
 
                 if (_connection.State == HubConnectionState.Connected)
@@ -359,7 +359,7 @@ public sealed class SocketConn : IDisposable
                 }
                 else
                 {
-                    await Task.Delay(TimeSpan.FromSeconds(5));
+                    await Task.Delay(TimeSpan.FromSeconds(10));
                 }
             }
         }
@@ -383,9 +383,9 @@ public sealed class SocketConn : IDisposable
     /// <inheritdoc/>
     public async void Dispose()
     {
+        _isDisposed = true;
         _oneMinTimer?.Dispose();
         await _connection.DisposeAsync();
-        _isDisposed = true;
     }
 
     /// <summary>
