@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
-using SocketIOClient.Transport.Http;
 using vatsys;
 
 namespace MaxRumsey.OzStripsPlugin.Gui;
