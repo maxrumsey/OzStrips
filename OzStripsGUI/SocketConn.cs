@@ -241,9 +241,9 @@ public sealed class SocketConn : IDisposable
     /// <summary>
     /// Requests bay order data from server.
     /// </summary>
-    public void ReadyForBayData()
+    public void ReadyForBayData(bool force = false)
     {
-        if (_freshClient)
+        if (_freshClient || force)
         {
             AddMessage("c:RequestBays:");
             _connection.InvokeAsync("RequestBays");

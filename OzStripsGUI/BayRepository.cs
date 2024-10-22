@@ -176,7 +176,8 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
     /// <summary>
     /// Reloads the strips. Called when stripboard layout is changed.
     /// </summary>
-    public void ReloadStrips()
+    /// <param name="socketConn">Socket connection.</param>
+    public void ReloadStrips(SocketConn socketConn)
     {
         try
         {
@@ -197,6 +198,8 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             {
                 bay.Orderstrips();
             }
+
+            socketConn.ReadyForBayData(true);
 
             ResizeStripBays();
         }

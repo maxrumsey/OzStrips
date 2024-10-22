@@ -84,7 +84,7 @@ public class BayManager
             }
             else
             {
-                RemovePicked();
+                RemovePicked(false, true);
             }
         }
     }
@@ -150,7 +150,7 @@ public class BayManager
             PickedController.CurrentBay = StripBay.BAY_DEAD;
             PickedController.SyncStrip();
             UpdateBay(PickedController);
-            RemovePicked(true);
+            RemovePicked(true, true);
         }
         else if (PickedBay is not null && PickedStripItem is not null && PickedStripItem.Type != StripItemType.STRIP)
         {
@@ -248,7 +248,7 @@ public class BayManager
     /// <param name="bay">The bay the item is from.</param>
     public void SetPickedStripItem(StripListItem item, bool sendToVatsys = false, Bay? bay = null)
     {
-        RemovePicked(false);
+        RemovePicked(false, true);
         PickedStripItem = item;
         PickedBay = bay;
         item.RenderedStripItem?.MarkPicked(true);
@@ -282,7 +282,7 @@ public class BayManager
     {
         if (PickedStripItem == item)
         {
-            RemovePicked(sendToVatsys);
+            RemovePicked(sendToVatsys, true);
         }
         else
         {
@@ -307,14 +307,16 @@ public class BayManager
                 }
             }
 
-            if (foundSC is not null)
+            if (foundSC is not null && !SetPickedStripItem(foundSC))
             {
-                SetPickedStripItem(foundSC);
+                RemovePicked(false, true);
+                PickedStripItem = new();
+                PickedStripItem.StripController = foundSC;
             }
         }
         else
         {
-            RemovePicked();
+            RemovePicked(false, true);
         }
     }
 
@@ -322,7 +324,8 @@ public class BayManager
     /// Sets the picked controller to be empty.
     /// </summary>
     /// <param name="sendToVatsys">Deselect ground track in vatSys.</param>
-    public void RemovePicked(bool sendToVatsys = false)
+    /// <param name="force">Whether or not to respect the remove-pick-after action setting.</param>
+    public void RemovePicked(bool sendToVatsys = false, bool force = false)
     {
         PickedStripItem?.RenderedStripItem?.MarkPicked(false);
         PickedStripItem = null;
@@ -530,7 +533,8 @@ public class BayManager
     /// </summary>
     /// <param name="strip">The strip item.</param>
     /// <param name="sendToVatsys">Whether or not the change is propogated to vatsys.</param>
-    public void SetPickedStripItem(Strip strip, bool sendToVatsys = false)
+    /// <returns>Whether or not the bay was found.</returns>
+    public bool SetPickedStripItem(Strip strip, bool sendToVatsys = false)
     {
         foreach (var bay in BayRepository.Bays)
         {
@@ -538,8 +542,11 @@ public class BayManager
             if (item is not null)
             {
                 SetPickedStripItem(item, sendToVatsys, bay);
+                return true;
             }
         }
+
+        return false;
     }
 
     [DllImport("user32.dll")]
