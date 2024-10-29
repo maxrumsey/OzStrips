@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.Gui.DTO;
+using MaxRumsey.OzStripsPlugin.Gui.Properties;
 using OpenTK.Graphics.ES11;
 using vatsys;
 using static vatsys.FDP2;
@@ -200,6 +201,9 @@ public class BayManager
             PickedController.CurrentBay = newBay;
             PickedController.SyncStrip();
             UpdateBay(PickedController);
+
+            PickedStripItem = bay.GetListItem(PickedController);
+
             RemovePicked(true);
         }
         else
@@ -327,13 +331,16 @@ public class BayManager
     /// <param name="force">Whether or not to respect the remove-pick-after action setting.</param>
     public void RemovePicked(bool sendToVatsys = false, bool force = false)
     {
-        PickedStripItem?.RenderedStripItem?.MarkPicked(false);
-        PickedStripItem = null;
-
-        if (sendToVatsys)
+        if (force || !OzStripsSettings.Default.KeepStripPicked)
         {
-            MMI.SelectOrDeselectGroundTrack(MMI.SelectedGroundTrack);
-            MMI.SelectOrDeselectTrack(MMI.SelectedTrack);
+            PickedStripItem?.RenderedStripItem?.MarkPicked(false);
+            PickedStripItem = null;
+
+            if (sendToVatsys)
+            {
+                MMI.SelectOrDeselectGroundTrack(MMI.SelectedGroundTrack);
+                MMI.SelectOrDeselectTrack(MMI.SelectedTrack);
+            }
         }
     }
 
@@ -370,7 +377,7 @@ public class BayManager
             }
         }
 
-        if (save)
+        if (save && !StripRepository.Controllers.Contains(stripController))
         {
             StripRepository.Controllers.Add(stripController);
         }
@@ -397,7 +404,7 @@ public class BayManager
 
         AddStrip(stripController);
 
-        if (stripController.CurrentBay >= StripBay.BAY_PUSHED)
+        if (stripController.CurrentBay >= StripBay.BAY_CLEARED)
         {
             stripController.CoordinateStrip();
         }

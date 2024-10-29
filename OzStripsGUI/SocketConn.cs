@@ -243,7 +243,7 @@ public sealed class SocketConn : IDisposable
     /// </summary>
     public void ReadyForBayData(bool force = false)
     {
-        if (_freshClient || force)
+        if ((_freshClient || force) && Connected)
         {
             AddMessage("c:RequestBays:");
             _connection.InvokeAsync("RequestBays");
@@ -282,7 +282,7 @@ public sealed class SocketConn : IDisposable
     /// <summary>
     /// Sets the aerodrome based on the bay manager.
     /// </summary>
-    public void SetAerodrome()
+    public async Task SetAerodrome()
     {
         _freshClient = true;
         _oneMinTimer = new()
@@ -291,10 +291,10 @@ public sealed class SocketConn : IDisposable
             Interval = 60000,
         };
         _oneMinTimer.Elapsed += ToggleFresh;
-        _oneMinTimer.Start();
         if (_connection.State == HubConnectionState.Connected) // was is io connected.
         {
-            _connection.InvokeAsync("SubscribeToAerodrome", _bayManager.AerodromeName, Network.Me.RealName, Server);
+            await _connection.InvokeAsync("SubscribeToAerodrome", _bayManager.AerodromeName, Network.Me.RealName, Server);
+            _oneMinTimer.Start();
         }
     }
 
@@ -302,10 +302,16 @@ public sealed class SocketConn : IDisposable
     /// Sets the server type.
     /// </summary>
     /// <param name="type">Server connection type.</param>
-    public void SetServerType(Servers type)
+    public async void SetServerType(Servers type)
     {
         Server = type;
-        SetAerodrome();
+
+        if (!CanConnectToCurrentServer())
+        {
+            return;
+        }
+
+        await SetAerodrome();
     }
 
     /// <summary>
@@ -336,6 +342,12 @@ public sealed class SocketConn : IDisposable
     public async void Connect()
     {
         MMI.InvokeOnGUI(() => MainForm.MainFormInstance?.SetAerodrome(_bayManager.AerodromeName));
+
+        if (!CanConnectToCurrentServer())
+        {
+            return;
+        }
+
         try
         {
             AddMessage("c: Attempting connection " + OzStripsConfig.socketioaddr);
@@ -408,6 +420,18 @@ public sealed class SocketConn : IDisposable
         }
     }
 
+    private bool CanConnectToCurrentServer()
+    {
+        if (!Network.IsOfficialServer && Server == Servers.VATSIM)
+        {
+            Util.ShowErrorBox("Connection to OzStrips main server detected while connected to the Sweatbox.\n\n" +
+                "Please select the correct server in Help -> Settings.");
+            return false;
+        }
+
+        return true;
+    }
+
     private void AddMessage(string message)
     {
         lock (Messages)
@@ -421,10 +445,9 @@ public sealed class SocketConn : IDisposable
         AddMessage("c: conn established");
         if (Network.IsConnected)
         {
-            _freshClient = true;
-            await _connection.SendAsync("SubscribeToAerodrome", _bayManager.AerodromeName, Network.Me.RealName, Server);
-
             Connected = true;
+            await SetAerodrome();
+
             if (MainFormValid)
             {
                 MainForm.MainFormInstance?.Invoke(() => MainForm.MainFormInstance.SetConnStatus());
