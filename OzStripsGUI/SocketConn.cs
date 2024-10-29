@@ -58,7 +58,7 @@ public sealed class SocketConn : IDisposable
         {
             AddMessage("s:StripCache: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
 
-            if (mainForm.Visible && scDTO is not null)
+            if (mainForm.Visible && scDTO is not null && _freshClient)
             {
                 mainForm.Invoke(() => _bayManager.StripRepository.LoadCache(scDTO, bayManager, this));
             }
