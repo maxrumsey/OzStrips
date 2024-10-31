@@ -73,7 +73,7 @@ public sealed class SocketConn : IDisposable
             }
         });
 
-        _connection.On<string?>("Atis", (string? code) => // not functional
+        _connection.On<string?>("Atis", (string? code) =>
         {
             if (MainFormValid && code is not null)
             {
@@ -81,7 +81,9 @@ public sealed class SocketConn : IDisposable
             }
         });
 
-        _connection.On<string?>("Metar", (string? metar) => // not functional
+        _connection.On("ActivateWorldFlightMode", () => _bayManager.WorldFlightMode = true);
+
+        _connection.On<string?>("Metar", (string? metar) =>
         {
             if (MainFormValid && metar is not null)
             {
@@ -312,6 +314,10 @@ public sealed class SocketConn : IDisposable
         }
 
         await SetAerodrome();
+        if (_connection.State == HubConnectionState.Disconnected && MainForm.ReadyForConnection is not null && MainForm.ReadyForConnection == true)
+        {
+            Connect();
+        }
     }
 
     /// <summary>
@@ -337,7 +343,7 @@ public sealed class SocketConn : IDisposable
     }
 
     /// <summary>
-    /// Starts a fifteen second timer, ensures FDRs have loaded in before requesting SCs from server.
+    /// Creates a connection to the server.
     /// </summary>
     public async void Connect()
     {

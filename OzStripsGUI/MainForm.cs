@@ -87,6 +87,11 @@ public partial class MainForm : Form
     /// </summary>
     public static bool IsDebug =>
         !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
+    
+    /// <summary>
+    /// Gets whether or not a connection can be made to the server.
+    /// </summary>
+    public static bool? ReadyForConnection => MainForm.MainFormInstance?._readyForConnection;
 
     /// <inheritdoc/>
     protected override CreateParams CreateParams
