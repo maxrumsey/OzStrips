@@ -240,7 +240,7 @@ public class BayManager
 
             foreach (var bay in BayRepository.Bays)
             {
-                bay.Orderstrips();
+                bay.ResizeBay();
             }
 
             LockWindowUpdate(IntPtr.Zero);

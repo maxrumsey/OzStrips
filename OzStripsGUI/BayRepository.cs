@@ -78,7 +78,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
 
             bay.Strips.Clear();
             bay.Strips.AddRange(list);
-            bay.Orderstrips();
+            bay.ResizeBay();
         }
         catch (Exception ex)
         {
@@ -196,7 +196,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
 
             foreach (var bay in Bays)
             {
-                bay.Orderstrips();
+                bay.ResizeBay();
             }
 
             socketConn.ReadyForBayData(true);

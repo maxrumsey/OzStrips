@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.InteropServices;
 using MaxRumsey.OzStripsPlugin.Gui.Controls;
 using MaxRumsey.OzStripsPlugin.Gui.DTO;
@@ -185,7 +186,7 @@ public class Bay : System.IDisposable
             Strips.RemoveAll(item => item.StripController == controller);
         }
 
-        Orderstrips();
+        ResizeBay();
     }
 
     /// <summary>
@@ -208,7 +209,7 @@ public class Bay : System.IDisposable
         }
 
         Strips.Clear();
-        Orderstrips();
+        ResizeBay();
     }
 
     /// <summary>
@@ -226,10 +227,45 @@ public class Bay : System.IDisposable
             RenderedStripItem = new StripView(stripController, _bayRenderController),
         };
 
-        Strips.Add(strip); // todo: add control action
+        try
+        {
+            if (BayTypes.Contains(StripBay.BAY_PREA))
+            {
+                var abovetheBar = new List<StripListItem>() { strip };
+                for (var i = Strips.Count - 1; i >= 0; i--)
+                {
+                    if (Strips[i].Type == StripItemType.STRIP && Strips[i].StripController is not null)
+                    {
+                        abovetheBar.Add(Strips[i]);
+                        Strips.Remove(Strips[i]);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+    #pragma warning disable CS8602 // Dereference of a possibly null reference.
+                abovetheBar.OrderByDescending(x => x.StripController.FDR.Callsign).ToList();
+    #pragma warning restore CS8602 // Dereference of a possibly null reference.
+
+                Strips.AddRange(abovetheBar);
+            }
+            else
+            {
+                Strips.Add(strip);
+            }
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+
+            Strips.Add(strip);
+        }
+
         if (!inhibitreorders)
         {
-            Orderstrips();
+            ResizeBay();
         }
     }
 
@@ -255,7 +291,7 @@ public class Bay : System.IDisposable
     /// <summary>
     /// Orders the strips.
     /// </summary>
-    public void Orderstrips()
+    public void ResizeBay()
     {
         _bayRenderController.SetHeight();
     }
@@ -278,7 +314,7 @@ public class Bay : System.IDisposable
 
         Strips.RemoveAt(originalPosition);
         Strips.Insert(newPosition, stripItem);
-        Orderstrips();
+        ResizeBay();
         _socketConnection.SyncBay(this);
     }
 
@@ -296,7 +332,7 @@ public class Bay : System.IDisposable
 
         Strips.Remove(item);
         Strips.Insert(abspos, item);
-        Orderstrips();
+        ResizeBay();
         _socketConnection.SyncBay(this);
     }
 
@@ -330,7 +366,7 @@ public class Bay : System.IDisposable
         if (!found)
         {
             Strips.Add(bar);
-            Orderstrips();
+            ResizeBay();
 
             if (sync)
             {
@@ -350,7 +386,7 @@ public class Bay : System.IDisposable
     {
         Strips.Remove(bar);
 
-        Orderstrips();
+        ResizeBay();
 
         if (sync)
         {
@@ -398,7 +434,7 @@ public class Bay : System.IDisposable
             Strips.Remove(currentItem);
         }
 
-        Orderstrips();
+        ResizeBay();
         BayManager.BayRepository.ResizeStripBays();
         if (sync)
         {
