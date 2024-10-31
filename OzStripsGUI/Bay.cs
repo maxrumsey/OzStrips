@@ -246,7 +246,7 @@ public class Bay : System.IDisposable
                 }
 
     #pragma warning disable CS8602 // Dereference of a possibly null reference.
-                abovetheBar.OrderByDescending(x => x.StripController.FDR.Callsign).ToList();
+                abovetheBar = abovetheBar.OrderByDescending(x => x.StripController.FDR.Callsign).ToList();
     #pragma warning restore CS8602 // Dereference of a possibly null reference.
 
                 Strips.AddRange(abovetheBar);
