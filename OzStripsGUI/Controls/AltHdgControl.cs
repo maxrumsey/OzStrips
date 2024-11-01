@@ -18,7 +18,7 @@ public partial class AltHdgControl : UserControl
     private readonly Strip _stripController;
     private readonly bool _fullyLoaded;
     private readonly string _callingLabel;
-    
+
     /// <summary>
     /// Initializes a new instance of the <see cref="AltHdgControl"/> class.
     /// </summary>

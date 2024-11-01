@@ -42,7 +42,7 @@ public sealed class SocketConn : IDisposable
 
         _connection.Reconnected += async (connId) => await MarkConnected();
 
-        _connection.Reconnecting += async (error) => await ConnectionLost(error, true);
+        _connection.Reconnecting += async (error) => await ConnectionLost(error);
 
         _connection.On<StripControllerDTO?>("StripUpdate", (StripControllerDTO? scDTO) =>
         {
@@ -155,7 +155,8 @@ public sealed class SocketConn : IDisposable
             }
         });
 
-        _connection.On<string?>("Message", (string? message) => {
+        _connection.On<string?>("Message", (string? message) =>
+        {
             if (!mainForm.IsDisposed && message is not null)
             {
                 mainForm.Invoke(() => Util.ShowWarnBox(message));
@@ -251,8 +252,9 @@ public sealed class SocketConn : IDisposable
     {
         if (CanSendDTO && strip is not null)
         {
-            _connection.InvokeAsync("StripStatus", (StripControllerDTO) strip, acid);
-        } else if (CanSendDTO)
+            _connection.InvokeAsync("StripStatus", (StripControllerDTO)strip, acid);
+        }
+        else if (CanSendDTO)
         {
             _connection.InvokeAsync("StripStatus", null, acid);
         }
@@ -274,6 +276,7 @@ public sealed class SocketConn : IDisposable
     /// <summary>
     /// Requests bay order data from server.
     /// </summary>
+    /// <param name="force">Whether or not to force fetching of bay data.</param>
     public void ReadyForBayData(bool force = false)
     {
         if ((_freshClient || force) && Connected)
@@ -315,6 +318,7 @@ public sealed class SocketConn : IDisposable
     /// <summary>
     /// Sets the aerodrome based on the bay manager.
     /// </summary>
+    /// <returns>Task.</returns>
     public async Task SetAerodrome()
     {
         _freshClient = true;
@@ -377,7 +381,8 @@ public sealed class SocketConn : IDisposable
     /// <summary>
     /// Creates a connection to the server.
     /// </summary>
-    public async void Connect()
+    /// <returns>Task.</returns>
+    public async Task Connect()
     {
         MMI.InvokeOnGUI(() => MainForm.MainFormInstance?.SetAerodrome(_bayManager.AerodromeName));
 
@@ -503,7 +508,7 @@ public sealed class SocketConn : IDisposable
         }
     }
 
-    private void ConnectionLost(Exception? error, bool reconnecting = false)
+    private async Task ConnectionLost(Exception? error)
     {
         Connected = false;
         if (MainFormValid)
@@ -518,7 +523,7 @@ public sealed class SocketConn : IDisposable
 
         if (_connection.State == HubConnectionState.Disconnected)
         {
-            Connect();
+            await Connect();
         }
     }
 }

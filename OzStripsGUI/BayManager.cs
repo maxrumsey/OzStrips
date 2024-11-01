@@ -319,8 +319,10 @@ public class BayManager
             if (foundSC is not null && !SetPickedStripItem(foundSC))
             {
                 RemovePicked(false, true);
-                PickedStripItem = new();
-                PickedStripItem.StripController = foundSC;
+                PickedStripItem = new()
+                {
+                    StripController = foundSC,
+                };
             }
         }
         else
