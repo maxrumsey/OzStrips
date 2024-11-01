@@ -326,7 +326,8 @@ public sealed class SocketConn : IDisposable
         _oneMinTimer.Elapsed += ToggleFresh;
         if (_connection.State == HubConnectionState.Connected) // was is io connected.
         {
-            await _connection.InvokeAsync("SubscribeToAerodrome", _bayManager.AerodromeName, Network.Me.RealName, Server, OzStripsConfig.version);
+            await _connection.InvokeAsync("ProvideVersion", OzStripsConfig.version);
+            await _connection.InvokeAsync("SubscribeToAerodrome", _bayManager.AerodromeName, Network.Me.RealName, Server);
             _oneMinTimer.Start();
         }
     }
@@ -502,22 +503,22 @@ public sealed class SocketConn : IDisposable
         }
     }
 
-    private async Task ConnectionLost(Exception? error, bool reconnecting = false)
+    private void ConnectionLost(Exception? error, bool reconnecting = false)
     {
         Connected = false;
-        if (error is not null)
-        {
-            AddMessage("server conn lost - " + error.Message);
-            if (!reconnecting && !_isDisposed)
-            {
-                await _connection.StartAsync();
-                Connected = true;
-            }
-        }
-
         if (MainFormValid)
         {
             MainForm.MainFormInstance?.Invoke(() => MainForm.MainFormInstance.SetConnStatus());
+        }
+
+        if (error is not null)
+        {
+            AddMessage("server conn lost - " + error.Message);
+        }
+
+        if (_connection.State == HubConnectionState.Disconnected)
+        {
+            Connect();
         }
     }
 }
