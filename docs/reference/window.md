@@ -9,9 +9,11 @@ Select the relevant view mode. If operating top-down, select "All". If one aerod
 #### Example
 If ADC, SMC and ACD are online, but the ACD is not using OzStrips, the SMC would select "SMC+ACD".
 ### Debug
-The SocketIO message log can be viewed here. You will not need to access this as part of regular use.
+The SignalR message log can be viewed here. You will not need to access this as part of regular use.
 ### About
 View OzStrips information, including version number.
+### View
+Sets various view related options.
 
 ## Strip Bay
 Each strip bay will display relevant strips. See [Stripbay](stripbay.md) for more information.
@@ -34,3 +36,5 @@ Select a track on your Air ASD in vatSys, or with a strip selected in your vatSY
 Pick a strip and press this button to add crossing highlights for situational awareness.
 ### PDC Button
 Pick a strip and press this button to open the vatSYS PDC Window.
+### Add Bar Button
+Adds a custom menu bar.

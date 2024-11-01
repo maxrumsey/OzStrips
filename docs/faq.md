@@ -1,35 +1,8 @@
 # FAQ
 ## Why does my server connection never establish?
-Make sure you have selected your aerodrome in OzStrips, and you are connected in vatSys. A connection will never establish without a primed aerodrome.
-<figure markdown="span">
-  ![Select Aerodrome](images/sel_ad.png)
-</figure>
-
-If a connection never establishes, this is due to a bug associated with downloading Nav Data from Navigraph in vatSys. To resolve this, unlink your Navigraph account from vatSys as so:
-<figure markdown="span">
-  ![Unlink Navigraph](images/unlink_navigraph.png)
-</figure>
-
-You will need to restart vatSys.
-
-As a VATPAC member, there is no requirement to retrieve Nav Data from Navigraph, as this is handled by the ATS team.
+Make sure you are on the latest version of OzStrips!
 
 It takes roughly 10 seconds to connect, as OzStrips waits for vatSys to have downloaded all of it's Flight Plans.
-
-### Manual Method
-If a connection still fails to establish, you may manually need to remove the Navigraph connection string from your vatSys properties.
-
-1. Close vatSys.
-2. Search `%appdata%` in the Windows search bar.
-3. Click `AppData` in the navigation bar.
-4. Go to the `Local`, then `Sawbe.com` folder.
-5. Click on the folder named `vatSys.exe_Url_<random_text>`, then the folder named similarly to `0.4.8114.34539`.
-6. Open `user.config` in Notepad.
-7. Press Ctrl+F and search for `Navigraph`, delete the highlighted text: 
-![Config Text](images/navigraph_text.png)
-8. Save the file and reopen vatSys.
-
-If this still doesn't work, contact `ExiFlame` on Discord, or create a GitHub issue.
 
 ## How do I order strips vertically?
 Click on the aircraft's callsign and press your arrow keys.
@@ -40,7 +13,7 @@ Select an aircraft's strip **in vatSYS**, and press FOR STP, the aircraft's stri
 Pick an aircraft's strip **in OzStrips** and press INHI, the strip will disappear. To get the strip back, follow the steps above.
 
 ## When will the strip become Coordinated / Blue in vatSYS?
-When you activate the Take Off Timer, or move the strip into the Pushback bay.
+When you activate the Take Off Timer, or move the strip into the Cleared bay.
 
 *Note: You can not change the aircraft's CFL, SID, or RWY at this point.*
 
