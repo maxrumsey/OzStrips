@@ -3,7 +3,7 @@
 ### Features
 - Added several WF features including highlights for aircraft with STS/STATE
 - Strips become coordinated when moved into the cleared bay.
-- PREA strips are ordered alphabetically.
+- ~~PREA strips are ordered alphabetically.~~ *Pending end of WF*
 
 ### Bugfixes
 - Fixed error caused by empty routes in FDR.
