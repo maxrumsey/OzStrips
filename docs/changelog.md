@@ -9,6 +9,7 @@
 - Fixed error caused by empty routes in FDR.
 - Fix issues with non-All View Modes.
 - Fixed some issues with strip caching.
+- Fixed issue with client not reconnecting after an extended server downtime.
 
 ## v0.5.1
 ### Bugfixes
