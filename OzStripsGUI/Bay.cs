@@ -15,6 +15,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui;
 /// </summary>
 public class Bay : System.IDisposable
 {
+    private const bool ALPHASORT = false;
     private readonly BayManager _bayManager;
     private readonly SocketConn _socketConnection;
     private readonly BayRenderController _bayRenderController;
@@ -229,7 +230,7 @@ public class Bay : System.IDisposable
 
         try
         {
-            if (BayTypes.Contains(StripBay.BAY_PREA))
+            if (BayTypes.Contains(StripBay.BAY_PREA) && ALPHASORT)
             {
                 var abovetheBar = new List<StripListItem>() { strip };
                 for (var i = Strips.Count - 1; i >= 0; i--)
