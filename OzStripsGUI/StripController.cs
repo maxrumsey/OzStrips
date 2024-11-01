@@ -135,16 +135,18 @@ public class StripController
     /// <returns>Colour.</returns>
     public SKColor DetermineCFLBackColour()
     {
-        var first = FDR.ParsedRoute.First().Intersection.LatLong;
-        var last = FDR.ParsedRoute.Last().Intersection.LatLong;
+        var first = FDR.ParsedRoute.FirstOrDefault()?.Intersection.LatLong;
+        var last = FDR.ParsedRoute.LastOrDefault()?.Intersection.LatLong;
 
-        int[] eastRVSM = [41000, 45000, 49000];
-        int[] westRVSM = [43000, 47000, 51000];
-
-        if (first == last)
+        if (first is null ||
+            last is null ||
+            first == last)
         {
             return SKColor.Empty;
         }
+
+        int[] eastRVSM = [41000, 45000, 49000];
+        int[] westRVSM = [43000, 47000, 51000];
 
         var track = Conversions.CalculateTrack(first, last);
         var positions = LogicalPositions.Positions.FirstOrDefault(e => e.Name == Strip.ParentAerodrome);

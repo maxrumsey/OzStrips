@@ -355,6 +355,10 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 {
                     return SKColors.Silver;
                 }
+                else if (_strip.FDR.Remarks.ToLower(CultureInfo.InvariantCulture).Contains("state") && _bayRenderController.Bay.BayManager.WorldFlightMode)
+                {
+                    return SKColors.Yellow;
+                }
 
                 break;
             case StripElements.Values.STAND:

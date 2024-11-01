@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.Gui.DTO;
+using MaxRumsey.OzStripsPlugin.Gui.Properties;
 using OpenTK.Graphics.ES11;
 using vatsys;
 using static vatsys.FDP2;
@@ -53,6 +54,11 @@ public class BayManager
     public StripListItem? PickedStripItem { get; set; }
 
     /// <summary>
+    /// Gets or sets a value indicating whether or not WF mode is activated.
+    /// </summary>
+    public bool WorldFlightMode { get; set; }
+
+    /// <summary>
     /// Gets the strip repository.
     /// </summary>
     public StripRepository StripRepository { get; } = new StripRepository();
@@ -84,7 +90,7 @@ public class BayManager
             }
             else
             {
-                RemovePicked();
+                RemovePicked(false, true);
             }
         }
     }
@@ -150,7 +156,7 @@ public class BayManager
             PickedController.CurrentBay = StripBay.BAY_DEAD;
             PickedController.SyncStrip();
             UpdateBay(PickedController);
-            RemovePicked(true);
+            RemovePicked(true, true);
         }
         else if (PickedBay is not null && PickedStripItem is not null && PickedStripItem.Type != StripItemType.STRIP)
         {
@@ -200,6 +206,9 @@ public class BayManager
             PickedController.CurrentBay = newBay;
             PickedController.SyncStrip();
             UpdateBay(PickedController);
+
+            PickedStripItem = bay.GetListItem(PickedController);
+
             RemovePicked(true);
         }
         else
@@ -225,13 +234,13 @@ public class BayManager
         }
 
         var instance = MainForm.MainFormInstance;
-        if (instance is not null)
+        if (instance?.IsDisposed == false)
         {
             LockWindowUpdate(instance.Handle);
 
             foreach (var bay in BayRepository.Bays)
             {
-                bay.Orderstrips();
+                bay.ResizeBay();
             }
 
             LockWindowUpdate(IntPtr.Zero);
@@ -248,7 +257,7 @@ public class BayManager
     /// <param name="bay">The bay the item is from.</param>
     public void SetPickedStripItem(StripListItem item, bool sendToVatsys = false, Bay? bay = null)
     {
-        RemovePicked(false);
+        RemovePicked(false, true);
         PickedStripItem = item;
         PickedBay = bay;
         item.RenderedStripItem?.MarkPicked(true);
@@ -282,7 +291,7 @@ public class BayManager
     {
         if (PickedStripItem == item)
         {
-            RemovePicked(sendToVatsys);
+            RemovePicked(sendToVatsys, true);
         }
         else
         {
@@ -307,14 +316,18 @@ public class BayManager
                 }
             }
 
-            if (foundSC is not null)
+            if (foundSC is not null && !SetPickedStripItem(foundSC))
             {
-                SetPickedStripItem(foundSC);
+                RemovePicked(false, true);
+                PickedStripItem = new()
+                {
+                    StripController = foundSC,
+                };
             }
         }
         else
         {
-            RemovePicked();
+            RemovePicked(false, true);
         }
     }
 
@@ -322,15 +335,19 @@ public class BayManager
     /// Sets the picked controller to be empty.
     /// </summary>
     /// <param name="sendToVatsys">Deselect ground track in vatSys.</param>
-    public void RemovePicked(bool sendToVatsys = false)
+    /// <param name="force">Whether or not to respect the remove-pick-after action setting.</param>
+    public void RemovePicked(bool sendToVatsys = false, bool force = false)
     {
-        PickedStripItem?.RenderedStripItem?.MarkPicked(false);
-        PickedStripItem = null;
-
-        if (sendToVatsys)
+        if (force || !OzStripsSettings.Default.KeepStripPicked)
         {
-            MMI.SelectOrDeselectGroundTrack(MMI.SelectedGroundTrack);
-            MMI.SelectOrDeselectTrack(MMI.SelectedTrack);
+            PickedStripItem?.RenderedStripItem?.MarkPicked(false);
+            PickedStripItem = null;
+
+            if (sendToVatsys)
+            {
+                MMI.SelectOrDeselectGroundTrack(MMI.SelectedGroundTrack);
+                MMI.SelectOrDeselectTrack(MMI.SelectedTrack);
+            }
         }
     }
 
@@ -367,7 +384,7 @@ public class BayManager
             }
         }
 
-        if (save)
+        if (save && !StripRepository.Controllers.Contains(stripController))
         {
             StripRepository.Controllers.Add(stripController);
         }
@@ -394,7 +411,7 @@ public class BayManager
 
         AddStrip(stripController);
 
-        if (stripController.CurrentBay >= StripBay.BAY_PUSHED)
+        if (stripController.CurrentBay >= StripBay.BAY_CLEARED)
         {
             stripController.CoordinateStrip();
         }
@@ -530,7 +547,8 @@ public class BayManager
     /// </summary>
     /// <param name="strip">The strip item.</param>
     /// <param name="sendToVatsys">Whether or not the change is propogated to vatsys.</param>
-    public void SetPickedStripItem(Strip strip, bool sendToVatsys = false)
+    /// <returns>Whether or not the bay was found.</returns>
+    public bool SetPickedStripItem(Strip strip, bool sendToVatsys = false)
     {
         foreach (var bay in BayRepository.Bays)
         {
@@ -538,8 +556,11 @@ public class BayManager
             if (item is not null)
             {
                 SetPickedStripItem(item, sendToVatsys, bay);
+                return true;
             }
         }
+
+        return false;
     }
 
     [DllImport("user32.dll")]

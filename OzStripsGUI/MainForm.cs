@@ -88,6 +88,11 @@ public partial class MainForm : Form
     public static bool IsDebug =>
         !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
 
+    /// <summary>
+    /// Gets whether or not a connection can be made to the server.
+    /// </summary>
+    public static bool? ReadyForConnection => MainForm.MainFormInstance?._readyForConnection;
+
     /// <inheritdoc/>
     protected override CreateParams CreateParams
     {
@@ -449,7 +454,7 @@ public partial class MainForm : Form
         _ = new Bay([StripBay.BAY_CLEARED], _bayManager, _socketConn, "Cleared", 1);
         _ = new Bay([StripBay.BAY_PUSHED], _bayManager, _socketConn, "Pushback", 2);
         _bayManager.BayRepository.Resize();
-        _bayManager.BayRepository.ReloadStrips();
+        _bayManager.BayRepository.ReloadStrips(_socketConn);
     }
 
     private void SMCToolStripMenuItem_Click(object sender, EventArgs e)
@@ -463,7 +468,7 @@ public partial class MainForm : Form
         _ = new Bay([StripBay.BAY_HOLDSHORT], _bayManager, _socketConn, "Holding Point", 2);
         _ = new Bay([StripBay.BAY_RUNWAY], _bayManager, _socketConn, "Runway", 2);
         _bayManager.BayRepository.Resize();
-        _bayManager.BayRepository.ReloadStrips();
+        _bayManager.BayRepository.ReloadStrips(_socketConn);
     }
 
     private void SMCACDToolStripMenuItem_Click(object sender, EventArgs e)
@@ -478,7 +483,7 @@ public partial class MainForm : Form
         _ = new Bay([StripBay.BAY_HOLDSHORT], _bayManager, _socketConn, "Holding Point", 2);
         _ = new Bay([StripBay.BAY_RUNWAY], _bayManager, _socketConn, "Runway", 2);
         _bayManager.BayRepository.Resize();
-        _bayManager.BayRepository.ReloadStrips();
+        _bayManager.BayRepository.ReloadStrips(_socketConn);
     }
 
     private void ADCToolStripMenuItem_Click(object sender, EventArgs e)
@@ -491,7 +496,7 @@ public partial class MainForm : Form
         _ = new Bay([StripBay.BAY_OUT], _bayManager, _socketConn, "Departed", 2);
         _ = new Bay([StripBay.BAY_ARRIVAL], _bayManager, _socketConn, "Arrivals", 2);
         _bayManager.BayRepository.Resize();
-        _bayManager.BayRepository.ReloadStrips();
+        _bayManager.BayRepository.ReloadStrips(_socketConn);
     }
 
     private void AllToolStripMenuItem_Click(object sender, EventArgs e)
@@ -508,7 +513,7 @@ public partial class MainForm : Form
         _ = new Bay([StripBay.BAY_OUT], _bayManager, _socketConn, "Departed", 2);
         _ = new Bay([StripBay.BAY_ARRIVAL], _bayManager, _socketConn, "Arrivals", 2);
         _bayManager.BayRepository.Resize();
-        _bayManager.BayRepository.ReloadStrips();
+        _bayManager.BayRepository.ReloadStrips(_socketConn);
     }
 
     private void ADCSMCToolStripMenuItem_Click(object sender, EventArgs e)
@@ -524,7 +529,7 @@ public partial class MainForm : Form
         _ = new Bay([StripBay.BAY_OUT], _bayManager, _socketConn, "Departed", 2);
         _ = new Bay([StripBay.BAY_ARRIVAL], _bayManager, _socketConn, "Arrivals", 2);
         _bayManager.BayRepository.Resize();
-        _bayManager.BayRepository.ReloadStrips();
+        _bayManager.BayRepository.ReloadStrips(_socketConn);
     }
 
     private void Bt_cross_Click(object sender, EventArgs e)
@@ -673,7 +678,7 @@ public partial class MainForm : Form
     {
         Util.SetEnvVar("SmartResize", cols);
         SetSmartResizeCheckBox();
-        _bayManager.BayRepository.ReloadStrips();
+        _bayManager.BayRepository.ReloadStrips(_socketConn);
     }
 
     private void SetControlBarScrollBar()

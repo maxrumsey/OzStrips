@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -78,7 +79,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
 
             bay.Strips.Clear();
             bay.Strips.AddRange(list);
-            bay.Orderstrips();
+            bay.ResizeBay();
         }
         catch (Exception ex)
         {
@@ -176,7 +177,8 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
     /// <summary>
     /// Reloads the strips. Called when stripboard layout is changed.
     /// </summary>
-    public void ReloadStrips()
+    /// <param name="socketConn">Socket connection.</param>
+    public void ReloadStrips(SocketConn socketConn)
     {
         try
         {
@@ -195,8 +197,10 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
 
             foreach (var bay in Bays)
             {
-                bay.Orderstrips();
+                bay.ResizeBay();
             }
+
+            socketConn.ReadyForBayData(true);
 
             ResizeStripBays();
         }
@@ -305,6 +309,12 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
         {
             bay.ChildPanel.SuspendLayout();
             var childnum = _flpVerticalBoards[bay.VerticalBoardNumber].Controls.Count;
+
+            if (childnum == 0)
+            {
+                return;
+            }
+
             var height = (yMain - 4) / childnum;
 
             var smartResizeMaxHeight = smartResize ? 70 : 300;

@@ -17,7 +17,7 @@ public class StripRepository
     /// <summary>
     /// Gets a list of strip controllers.
     /// </summary>
-    public List<Strip> Controllers { get; } = new List<Strip>();
+    public List<Strip> Controllers { get; } = [];
 
     /// <summary>
     /// Looks up controller by name.
@@ -139,5 +139,24 @@ public class StripRepository
         {
             strip.RequestedRoutes = DateTime.MaxValue;
         }
+    }
+
+    /// <summary>
+    /// Fetches strip status and returns it to server.
+    /// </summary>
+    /// <param name="acid">Strip callsign to check up on.</param>
+    /// <param name="socketConn">Socket connection.</param>
+    public void GetStripStatus(string acid, SocketConn socketConn)
+    {
+        foreach (var strip in Controllers)
+        {
+            if (strip.FDR.Callsign == acid)
+            {
+                socketConn.SendStripStatus(strip, acid);
+                return;
+            }
+        }
+
+        socketConn.SendStripStatus(null, acid);
     }
 }

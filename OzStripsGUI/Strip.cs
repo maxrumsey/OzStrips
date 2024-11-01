@@ -602,7 +602,7 @@ public sealed class Strip
     {
         if (_bayManager.PickedController == this)
         {
-            _bayManager.RemovePicked(true);
+            _bayManager.RemovePicked(true, true);
         }
         else
         {

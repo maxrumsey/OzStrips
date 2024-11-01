@@ -42,7 +42,7 @@ public sealed class SocketConn : IDisposable
 
         _connection.Reconnected += async (connId) => await MarkConnected();
 
-        _connection.Reconnecting += async (error) => await ConnectionLost(error, true);
+        _connection.Reconnecting += async (error) => await ConnectionLost(error);
 
         _connection.On<StripControllerDTO?>("StripUpdate", (StripControllerDTO? scDTO) =>
         {
@@ -58,7 +58,7 @@ public sealed class SocketConn : IDisposable
         {
             AddMessage("s:StripCache: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
 
-            if (mainForm.Visible && scDTO is not null)
+            if (mainForm.Visible && scDTO is not null && _freshClient)
             {
                 mainForm.Invoke(() => _bayManager.StripRepository.LoadCache(scDTO, bayManager, this));
             }
@@ -73,7 +73,7 @@ public sealed class SocketConn : IDisposable
             }
         });
 
-        _connection.On<string?>("Atis", (string? code) => // not functional
+        _connection.On<string?>("Atis", (string? code) =>
         {
             if (MainFormValid && code is not null)
             {
@@ -81,7 +81,9 @@ public sealed class SocketConn : IDisposable
             }
         });
 
-        _connection.On<string?>("Metar", (string? metar) => // not functional
+        _connection.On("ActivateWorldFlightMode", () => _bayManager.WorldFlightMode = true);
+
+        _connection.On<string?>("Metar", (string? metar) =>
         {
             if (MainFormValid && metar is not null)
             {
@@ -128,6 +130,14 @@ public sealed class SocketConn : IDisposable
             }
         });
 
+        _connection.On<string?>("GetStripStatus", (string? acid) =>
+        {
+            if (MainFormValid && acid is not null)
+            {
+                MainForm.MainFormInstance?.Invoke(() => _bayManager.StripRepository.GetStripStatus(acid, this));
+            }
+        });
+
         _connection.On<string?>("VersionInfo", (string? appversion) => // not functional.
         {
             if (appversion is null)
@@ -142,6 +152,14 @@ public sealed class SocketConn : IDisposable
                 {
                     mainForm.Invoke(() => Util.ShowInfoBox("New Update Available: " + appversion));
                 }
+            }
+        });
+
+        _connection.On<string?>("Message", (string? message) =>
+        {
+            if (!mainForm.IsDisposed && message is not null)
+            {
+                mainForm.Invoke(() => Util.ShowWarnBox(message));
             }
         });
     }
@@ -226,6 +244,23 @@ public sealed class SocketConn : IDisposable
     }
 
     /// <summary>
+    /// Sends strip status to the server.
+    /// </summary>
+    /// <param name="strip">Strip object.</param>
+    /// <param name="acid">Strip callsign.</param>
+    public void SendStripStatus(Strip? strip, string acid)
+    {
+        if (CanSendDTO && strip is not null)
+        {
+            _connection.InvokeAsync("StripStatus", (StripControllerDTO)strip, acid);
+        }
+        else if (CanSendDTO)
+        {
+            _connection.InvokeAsync("StripStatus", null, acid);
+        }
+    }
+
+    /// <summary>
     /// Requests routes for a given sc.
     /// </summary>
     /// <param name="sc">The strip controller.</param>
@@ -241,9 +276,10 @@ public sealed class SocketConn : IDisposable
     /// <summary>
     /// Requests bay order data from server.
     /// </summary>
-    public void ReadyForBayData()
+    /// <param name="force">Whether or not to force fetching of bay data.</param>
+    public void ReadyForBayData(bool force = false)
     {
-        if (_freshClient)
+        if ((_freshClient || force) && Connected)
         {
             AddMessage("c:RequestBays:");
             _connection.InvokeAsync("RequestBays");
@@ -282,7 +318,8 @@ public sealed class SocketConn : IDisposable
     /// <summary>
     /// Sets the aerodrome based on the bay manager.
     /// </summary>
-    public void SetAerodrome()
+    /// <returns>Task.</returns>
+    public async Task SetAerodrome()
     {
         _freshClient = true;
         _oneMinTimer = new()
@@ -291,10 +328,11 @@ public sealed class SocketConn : IDisposable
             Interval = 60000,
         };
         _oneMinTimer.Elapsed += ToggleFresh;
-        _oneMinTimer.Start();
         if (_connection.State == HubConnectionState.Connected) // was is io connected.
         {
-            _connection.InvokeAsync("SubscribeToAerodrome", _bayManager.AerodromeName, Network.Me.RealName, Server);
+            await _connection.InvokeAsync("ProvideVersion", OzStripsConfig.version);
+            await _connection.InvokeAsync("SubscribeToAerodrome", _bayManager.AerodromeName, Network.Me.RealName, Server);
+            _oneMinTimer.Start();
         }
     }
 
@@ -302,10 +340,20 @@ public sealed class SocketConn : IDisposable
     /// Sets the server type.
     /// </summary>
     /// <param name="type">Server connection type.</param>
-    public void SetServerType(Servers type)
+    public async void SetServerType(Servers type)
     {
         Server = type;
-        SetAerodrome();
+
+        if (!CanConnectToCurrentServer())
+        {
+            return;
+        }
+
+        await SetAerodrome();
+        if (_connection.State == HubConnectionState.Disconnected && MainForm.ReadyForConnection is not null && MainForm.ReadyForConnection == true)
+        {
+            Connect();
+        }
     }
 
     /// <summary>
@@ -331,11 +379,18 @@ public sealed class SocketConn : IDisposable
     }
 
     /// <summary>
-    /// Starts a fifteen second timer, ensures FDRs have loaded in before requesting SCs from server.
+    /// Creates a connection to the server.
     /// </summary>
-    public async void Connect()
+    /// <returns>Task.</returns>
+    public async Task Connect()
     {
         MMI.InvokeOnGUI(() => MainForm.MainFormInstance?.SetAerodrome(_bayManager.AerodromeName));
+
+        if (!CanConnectToCurrentServer())
+        {
+            return;
+        }
+
         try
         {
             AddMessage("c: Attempting connection " + OzStripsConfig.socketioaddr);
@@ -408,6 +463,18 @@ public sealed class SocketConn : IDisposable
         }
     }
 
+    private bool CanConnectToCurrentServer()
+    {
+        if (!Network.IsOfficialServer && Server == Servers.VATSIM)
+        {
+            Util.ShowErrorBox("Connection to OzStrips main server detected while connected to the Sweatbox.\n\n" +
+                "Please select the correct server in Help -> Settings.");
+            return false;
+        }
+
+        return true;
+    }
+
     private void AddMessage(string message)
     {
         lock (Messages)
@@ -421,10 +488,9 @@ public sealed class SocketConn : IDisposable
         AddMessage("c: conn established");
         if (Network.IsConnected)
         {
-            _freshClient = true;
-            await _connection.SendAsync("SubscribeToAerodrome", _bayManager.AerodromeName, Network.Me.RealName, Server);
-
             Connected = true;
+            await SetAerodrome();
+
             if (MainFormValid)
             {
                 MainForm.MainFormInstance?.Invoke(() => MainForm.MainFormInstance.SetConnStatus());
@@ -442,22 +508,22 @@ public sealed class SocketConn : IDisposable
         }
     }
 
-    private async Task ConnectionLost(Exception? error, bool reconnecting = false)
+    private async Task ConnectionLost(Exception? error)
     {
         Connected = false;
-        if (error is not null)
-        {
-            AddMessage("server conn lost - " + error.Message);
-            if (!reconnecting && !_isDisposed)
-            {
-                await _connection.StartAsync();
-                Connected = true;
-            }
-        }
-
         if (MainFormValid)
         {
             MainForm.MainFormInstance?.Invoke(() => MainForm.MainFormInstance.SetConnStatus());
+        }
+
+        if (error is not null)
+        {
+            AddMessage("server conn lost - " + error.Message);
+        }
+
+        if (_connection.State == HubConnectionState.Disconnected)
+        {
+            await Connect();
         }
     }
 }

@@ -2,9 +2,9 @@
 ![Strip Bays](../images/fullwindow.png)
 
 ## Buttons
-### Start Queue Button
+### Add to Queue Button
 Pick a strip, and press "Start Queue" to add a queue bar if it is not present, and place the strip below the bar. The number of aircraft below the bar ("queued up") will be displayed in parentheses.
-### Stop Queue Button
+### Toggle Queue Bar Button
 This button toggles the presence of the queue bar.
 
 ## Moving Strips 
