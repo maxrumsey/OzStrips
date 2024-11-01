@@ -234,7 +234,7 @@ public class BayManager
         }
 
         var instance = MainForm.MainFormInstance;
-        if (instance is not null)
+        if (instance?.IsDisposed == false)
         {
             LockWindowUpdate(instance.Handle);
 
