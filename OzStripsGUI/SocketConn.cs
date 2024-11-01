@@ -154,6 +154,13 @@ public sealed class SocketConn : IDisposable
                 }
             }
         });
+
+        _connection.On<string?>("Message", (string? message) => {
+            if (!mainForm.IsDisposed && message is not null)
+            {
+                mainForm.Invoke(() => Util.ShowWarnBox(message));
+            }
+        });
     }
 
     /// <summary>
@@ -319,7 +326,7 @@ public sealed class SocketConn : IDisposable
         _oneMinTimer.Elapsed += ToggleFresh;
         if (_connection.State == HubConnectionState.Connected) // was is io connected.
         {
-            await _connection.InvokeAsync("SubscribeToAerodrome", _bayManager.AerodromeName, Network.Me.RealName, Server);
+            await _connection.InvokeAsync("SubscribeToAerodrome", _bayManager.AerodromeName, Network.Me.RealName, Server, OzStripsConfig.version);
             _oneMinTimer.Start();
         }
     }
