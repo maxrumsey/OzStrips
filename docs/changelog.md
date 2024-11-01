@@ -10,6 +10,7 @@
 - Fix issues with non-All View Modes.
 - Fixed some issues with strip caching.
 - Fixed issue with client not reconnecting after an extended server downtime.
+- Fixed error when MainForm is accessed while disposed.
 
 ## v0.5.1
 ### Bugfixes
