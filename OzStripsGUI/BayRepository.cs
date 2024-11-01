@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -308,6 +309,12 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
         {
             bay.ChildPanel.SuspendLayout();
             var childnum = _flpVerticalBoards[bay.VerticalBoardNumber].Controls.Count;
+
+            if (childnum == 0)
+            {
+                return;
+            }
+
             var height = (yMain - 4) / childnum;
 
             var smartResizeMaxHeight = smartResize ? 70 : 300;
