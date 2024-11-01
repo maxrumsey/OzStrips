@@ -390,14 +390,14 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             // 
             this.toolStripMenuItem1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(172, 22);
-            this.toolStripMenuItem1.Text = "SocketIO Log";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem1.Text = "SignalR Log";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.ToolStripMenuItem1_Click);
             // 
             // reloadStripToolStripMenuItem
             // 
             this.reloadStripToolStripMenuItem.Name = "reloadStripToolStripMenuItem";
-            this.reloadStripToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.reloadStripToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.reloadStripToolStripMenuItem.Text = "ReloadStrip";
             this.reloadStripToolStripMenuItem.Click += new System.EventHandler(this.ReloadStripItem);
             // 
@@ -475,7 +475,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.oneColumnToolStripMenuItem,
             this.colDisabledToolStripMenuItem});
             this.smartResizeToolStripMenuItem.Name = "smartResizeToolStripMenuItem";
-            this.smartResizeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.smartResizeToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.smartResizeToolStripMenuItem.Text = "Smart Resize";
             // 
             // threeColumnsToolStripMenuItem
