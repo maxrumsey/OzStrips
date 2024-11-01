@@ -140,4 +140,22 @@ public class StripRepository
             strip.RequestedRoutes = DateTime.MaxValue;
         }
     }
+
+    /// <summary>
+    /// Fetches strip status and returns it to server.
+    /// </summary>
+    /// <param name="acid">Strip callsign to check up on.</param>
+    public void GetStripStatus(string acid, SocketConn socketConn)
+    {
+        foreach (var strip in Controllers)
+        {
+            if (strip.FDR.Callsign == acid)
+            {
+                socketConn.SendStripStatus(strip, acid);
+                return;
+            }
+        }
+
+        socketConn.SendStripStatus(null, acid);
+    }
 }

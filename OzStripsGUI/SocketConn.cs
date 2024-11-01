@@ -130,6 +130,14 @@ public sealed class SocketConn : IDisposable
             }
         });
 
+        _connection.On<string?>("GetStripStatus", (string? acid) =>
+        {
+            if (MainFormValid && acid is not null)
+            {
+                MainForm.MainFormInstance?.Invoke(() => _bayManager.StripRepository.GetStripStatus(acid, this));
+            }
+        });
+
         _connection.On<string?>("VersionInfo", (string? appversion) => // not functional.
         {
             if (appversion is null)
@@ -224,6 +232,22 @@ public sealed class SocketConn : IDisposable
         if (CanSendDTO)
         {
             _connection.InvokeAsync("StripChange", scDTO);
+        }
+    }
+
+    /// <summary>
+    /// Sends strip status to the server.
+    /// </summary>
+    /// <param name="strip">Strip object.</param>
+    /// <param name="acid">Strip callsign.</param>
+    public void SendStripStatus(Strip? strip, string acid)
+    {
+        if (CanSendDTO && strip is not null)
+        {
+            _connection.InvokeAsync("StripStatus", (StripControllerDTO) strip, acid);
+        } else if (CanSendDTO)
+        {
+            _connection.InvokeAsync("StripStatus", null, acid);
         }
     }
 
