@@ -1,4 +1,26 @@
 # Changelog
+## v0.5.2
+### Features
+- Added several WF features including highlights for aircraft with STS/STATE
+- Strips become coordinated when moved into the cleared bay.
+- PREA strips are ordered alphabetically.
+
+### Bugfixes
+- Fixed error caused by empty routes in FDR.
+- Fix issues with non-All View Modes.
+- Fixed some issues with strip caching.
+
+## v0.5.1
+### Bugfixes
+- Fixed bug caused when OzStrips closes as a connection is trying to establish.
+
+## v0.5.0
+### Features
+- Completely rewrote the server & client network communication system.
+- Alert comes up for a VFR aircraft with a SID.
+- Improve some error handling.
+- Fixed some issues with loading of bays.
+
 ## v0.4.5
 ### Bugfixes
 - Fixed issue with SID field actions in new strip
