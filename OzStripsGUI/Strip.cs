@@ -766,7 +766,23 @@ public sealed class Strip
                 routeArr.RemoveAt(routeArr.Count - 1);
             }
 
-            return string.Join(" ", routeArr);
+            // Remove intermediary wpts.
+            var finalArr = new List<string>();
+
+            for (var i = 0; i < routeArr.Count; i++)
+            {
+                var element = routeArr[i];
+
+                if (i + 2 < routeArr.Count && element == routeArr[i + 2])
+                {
+                    i += 1;
+                    continue;
+                }
+
+                finalArr.Add(element);
+            }
+
+            return string.Join(" ", finalArr);
         }
         catch (Exception ex)
         {
