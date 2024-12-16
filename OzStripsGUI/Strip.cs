@@ -23,8 +23,9 @@ public sealed class Strip
 {
     private static readonly Regex _headingRegex = new(@"H(\d{3})");
     private static readonly Regex _routeRegex = new(@"^[^\d/]+$");
-    private static readonly Regex _sidRouteRegex = new(@"^[\w\d]+\/\d\d");
+    private static readonly Regex _sidRouteRegex = new(@"^[\w\d]+\/[\d]{2}\w?");
     private static readonly Regex _gpscoordRegex = new(@"^[\d]+\w[\d]+\w");
+    private static readonly Regex _airwayRegex = new(@"^\w\d+");
 
     private readonly BayManager _bayManager;
     private readonly SocketConn _socketConn;
@@ -714,45 +715,45 @@ public sealed class Strip
 
             foreach (var routeElement in rawRouteArr)
             {
+                // Don't include GPS waypoints.
+                if (_gpscoordRegex.Match(routeElement).Success)
+                {
+                    continue;
+                }
+
                 if (routeElement.Contains("/"))
                 {
-                    // Don't include SIDs or gps coords in route
-                    if (!_sidRouteRegex.Match(routeElement).Success && !_gpscoordRegex.Match(routeElement).Success)
+                    // Don't include vatsys inserted SIDs
+                    if (!_sidRouteRegex.Match(routeElement).Success)
                     {
                         routeArr.Add(routeElement.Split('/').First());
                     }
                 }
                 else if (routeElement != "DCT")
                 {
+                    // Don't include funky simbrief inserted waypoints.
+                    if (routeElement.Any(char.IsDigit) && !_airwayRegex.IsMatch(routeElement))
+                    {
+                        continue;
+                    }
+
                     routeArr.Add(routeElement);
                 }
             }
 
+
             if (routeArr.Count < 3)
             {
-                return "FAIL";
+                return "\0";
             }
 
             /*
-                * Remove SIDs and STARS
-                */
-            if (char.IsNumber(routeArr.Last().Last()))
-            {
-                routeArr.RemoveAt(routeArr.Count - 1);
-            }
-
-            if (char.IsNumber(routeArr.First().Last()))
-            {
-                routeArr.RemoveAt(0);
-            }
-
-            /*
-                * Remove first and last waypoint incase they have filed / are cleared via a SID.
-                * (Will validate based on route only)
+                * Remove first and last waypoint
+                * (Will validate based on airways only)
                 */
             if (routeArr.Count < 3)
             {
-                return "FAIL";
+                return "\0";
             }
 
             if (!routeArr.First().Any(char.IsDigit))
@@ -770,7 +771,7 @@ public sealed class Strip
         catch (Exception ex)
         {
             Util.LogText($"PARSER, RTE: {rawRoute}, ERR: {ex.Message}\n{ex.StackTrace}");
-            return "FAIL";
+            return "\0";
         }
     }
 }
