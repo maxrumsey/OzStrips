@@ -62,10 +62,8 @@ public partial class SettingsWindowControl : UserControl
             lb_ads.Items.Add(s);
         }
 
-        if (OzStripsSettings.Default.KeepStripPicked)
-        {
-            cb_keeppicked.Checked = true;
-        }
+        cb_keeppicked.Checked = OzStripsSettings.Default.KeepStripPicked;
+        cb_preasort.Checked = OzStripsSettings.Default.AlphaSortPrea;
 
         tb_scale.Value = (int)(100f * OzStripsSettings.Default.StripScale);
     }
@@ -88,6 +86,8 @@ public partial class SettingsWindowControl : UserControl
         Util.SetEnvVar("StripScale", tb_scale.Value / 100f);
 
         Util.SetEnvVar("KeepStripPicked", cb_keeppicked.Checked);
+
+        Util.SetEnvVar("AlphaSortPrea", cb_preasort.Checked);
 
         MainForm.MainFormInstance?.ForceResize();
     }

@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Runtime.InteropServices;
 using MaxRumsey.OzStripsPlugin.Gui.Controls;
 using MaxRumsey.OzStripsPlugin.Gui.DTO;
+using MaxRumsey.OzStripsPlugin.Gui.Properties;
 using Microsoft.SqlServer.Server;
 using static vatsys.FDP2;
 
@@ -230,7 +231,7 @@ public class Bay : System.IDisposable
 
         try
         {
-            if (BayTypes.Contains(StripBay.BAY_PREA) && ALPHASORT)
+            if (BayTypes.Contains(StripBay.BAY_PREA) && OzStripsSettings.Default.AlphaSortPrea)
             {
                 var abovetheBar = new List<StripListItem>() { strip };
                 for (var i = Strips.Count - 1; i >= 0; i--)

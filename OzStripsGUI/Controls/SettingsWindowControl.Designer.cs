@@ -27,6 +27,8 @@
         private void InitializeComponent()
         {
             this.gp_main = new System.Windows.Forms.GroupBox();
+            this.gb_int = new System.Windows.Forms.GroupBox();
+            this.cb_keeppicked = new System.Windows.Forms.CheckBox();
             this.llb_keyboard = new System.Windows.Forms.LinkLabel();
             this.gb_ads = new System.Windows.Forms.GroupBox();
             this.bt_add = new System.Windows.Forms.Button();
@@ -48,15 +50,14 @@
             this.label1 = new System.Windows.Forms.Label();
             this.rb_ozstrips = new System.Windows.Forms.RadioButton();
             this.rb_vatsys = new System.Windows.Forms.RadioButton();
-            this.gb_int = new System.Windows.Forms.GroupBox();
-            this.cb_keeppicked = new System.Windows.Forms.CheckBox();
+            this.cb_preasort = new System.Windows.Forms.CheckBox();
             this.gp_main.SuspendLayout();
+            this.gb_int.SuspendLayout();
             this.gb_ads.SuspendLayout();
             this.gb_server.SuspendLayout();
             this.gb_scale.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tb_scale)).BeginInit();
             this.gb_popup.SuspendLayout();
-            this.gb_int.SuspendLayout();
             this.SuspendLayout();
             // 
             // gp_main
@@ -69,10 +70,31 @@
             this.gp_main.Controls.Add(this.gb_popup);
             this.gp_main.Location = new System.Drawing.Point(4, 4);
             this.gp_main.Name = "gp_main";
-            this.gp_main.Size = new System.Drawing.Size(469, 340);
+            this.gp_main.Size = new System.Drawing.Size(469, 355);
             this.gp_main.TabIndex = 0;
             this.gp_main.TabStop = false;
             this.gp_main.Text = "Settings";
+            // 
+            // gb_int
+            // 
+            this.gb_int.Controls.Add(this.cb_preasort);
+            this.gb_int.Controls.Add(this.cb_keeppicked);
+            this.gb_int.Location = new System.Drawing.Point(236, 285);
+            this.gb_int.Name = "gb_int";
+            this.gb_int.Size = new System.Drawing.Size(227, 64);
+            this.gb_int.TabIndex = 6;
+            this.gb_int.TabStop = false;
+            this.gb_int.Text = "Strip Interaction";
+            // 
+            // cb_keeppicked
+            // 
+            this.cb_keeppicked.AutoSize = true;
+            this.cb_keeppicked.Location = new System.Drawing.Point(7, 20);
+            this.cb_keeppicked.Name = "cb_keeppicked";
+            this.cb_keeppicked.Size = new System.Drawing.Size(167, 17);
+            this.cb_keeppicked.TabIndex = 0;
+            this.cb_keeppicked.Text = "Keep strip picked after action.";
+            this.cb_keeppicked.UseVisualStyleBackColor = true;
             // 
             // llb_keyboard
             // 
@@ -298,33 +320,25 @@
             this.rb_vatsys.Text = "vatSys Popup";
             this.rb_vatsys.UseVisualStyleBackColor = true;
             // 
-            // gb_int
+            // cb_preasort
             // 
-            this.gb_int.Controls.Add(this.cb_keeppicked);
-            this.gb_int.Location = new System.Drawing.Point(236, 285);
-            this.gb_int.Name = "gb_int";
-            this.gb_int.Size = new System.Drawing.Size(227, 48);
-            this.gb_int.TabIndex = 6;
-            this.gb_int.TabStop = false;
-            this.gb_int.Text = "Strip Interaction";
-            // 
-            // cb_keeppicked
-            // 
-            this.cb_keeppicked.AutoSize = true;
-            this.cb_keeppicked.Location = new System.Drawing.Point(7, 20);
-            this.cb_keeppicked.Name = "cb_keeppicked";
-            this.cb_keeppicked.Size = new System.Drawing.Size(167, 17);
-            this.cb_keeppicked.TabIndex = 0;
-            this.cb_keeppicked.Text = "Keep strip picked after action.";
-            this.cb_keeppicked.UseVisualStyleBackColor = true;
+            this.cb_preasort.AutoSize = true;
+            this.cb_preasort.Location = new System.Drawing.Point(7, 38);
+            this.cb_preasort.Name = "cb_preasort";
+            this.cb_preasort.Size = new System.Drawing.Size(188, 17);
+            this.cb_preasort.TabIndex = 1;
+            this.cb_preasort.Text = "Alphabetically sort preactive strips.";
+            this.cb_preasort.UseVisualStyleBackColor = true;
             // 
             // SettingsWindowControl
             // 
             this.Controls.Add(this.gp_main);
             this.Name = "SettingsWindowControl";
-            this.Size = new System.Drawing.Size(476, 351);
+            this.Size = new System.Drawing.Size(476, 363);
             this.gp_main.ResumeLayout(false);
             this.gp_main.PerformLayout();
+            this.gb_int.ResumeLayout(false);
+            this.gb_int.PerformLayout();
             this.gb_ads.ResumeLayout(false);
             this.gb_ads.PerformLayout();
             this.gb_server.ResumeLayout(false);
@@ -334,8 +348,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.tb_scale)).EndInit();
             this.gb_popup.ResumeLayout(false);
             this.gb_popup.PerformLayout();
-            this.gb_int.ResumeLayout(false);
-            this.gb_int.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -364,5 +376,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.GroupBox gb_int;
         private System.Windows.Forms.CheckBox cb_keeppicked;
+        private System.Windows.Forms.CheckBox cb_preasort;
     }
 }

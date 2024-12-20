@@ -70,5 +70,17 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Properties {
                 this["KeepStripPicked"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AlphaSortPrea {
+            get {
+                return ((bool)(this["AlphaSortPrea"]));
+            }
+            set {
+                this["AlphaSortPrea"] = value;
+            }
+        }
     }
 }
