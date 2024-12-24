@@ -1,4 +1,10 @@
 # Changelog
+## v0.5.3
+### Bugfixes
+- Fixes issues with the route-parser.
+### Features
+- Preactive strips are now automatically sorted alphabetically, toggleable in settings.
+
 ## v0.5.2
 ### Features
 - Added several WF features including highlights for aircraft with STS/STATE
