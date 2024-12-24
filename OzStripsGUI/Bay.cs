@@ -16,7 +16,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui;
 /// </summary>
 public class Bay : System.IDisposable
 {
-    private const bool ALPHASORT = false;
     private readonly BayManager _bayManager;
     private readonly SocketConn _socketConnection;
     private readonly BayRenderController _bayRenderController;
