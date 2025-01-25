@@ -1,4 +1,11 @@
 # Changelog
+## v0.5.4
+### Bugfixes
+- Added fix for HDG not being removed from GLOP when removed from popup window.
+
+### Features
+- Added alert when an aircraft with a radar SID without a heading is placed in the holding point / runway / departure bay.
+
 ## v0.5.3
 ### Bugfixes
 - Fixes issues with the route-parser.
