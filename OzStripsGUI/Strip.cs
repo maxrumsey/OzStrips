@@ -208,6 +208,14 @@ public sealed class Strip
             {
                 SetGlobalOps(FDR, "H" + value);
             }
+
+            /*
+             * Only blank GLOPs when a heading is in the GLOP.
+             */
+            else if ((Network.Me.IsRealATC || MainForm.IsDebug) && _headingRegex.Match(FDR.GlobalOpData).Success)
+            {
+                SetGlobalOps(FDR, string.Empty);
+            }
         }
     }
 
