@@ -384,6 +384,18 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                     return SKColors.Red;
                 }
 
+                /*
+                 * HDG unassigned to radar sid in rwy bay.
+                 */
+                if (element.Value == StripElements.Values.HDG &&
+                    _strip.CurrentBay >= StripBay.BAY_HOLDSHORT &&
+                    string.IsNullOrEmpty(_strip.HDG) &&
+                    _strip.SID.Length == 3 &&
+                    _strip.ArrDepType == StripArrDepType.DEPARTURE)
+                {
+                    return SKColors.Orange;
+                }
+
                 break;
             case StripElements.Values.SID:
                 var sidcolour = SKColors.Green;
