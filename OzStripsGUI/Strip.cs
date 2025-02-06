@@ -274,12 +274,13 @@ public sealed class Strip
 
     /// <summary>
     /// Gets the first element in the route.
+    /// Don't include first waypoint, and if going DCT, mark first element as DCT.
     /// </summary>
     public string FirstWpt
     {
         get
         {
-            return FDR.Route.Split(' ').ToList().Find(x => _routeRegex.Match(x).Success && (x != "DCT")) ?? FDR.Route;
+            return FDR.Route.Split(' ').ToList().Find(x => _routeRegex.Match(x).Success && (x != "DCT") && x != FDR.DepAirport) ?? "DCT";
         }
     }
 
