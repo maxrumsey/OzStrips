@@ -25,8 +25,10 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
 
     private int _currentLayoutIndex;
 
+    private int _bayAmount;
+
     /// <summary>
-    /// Gets or sets the number of present bays.
+    /// Gets or sets the number of total bays possible.
     /// </summary>
     public int BayNum { get; set; }
 
@@ -138,7 +140,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
     /// Adds the bay to the vertical board.
     /// </summary>
     /// <param name="bay">The bay.</param>
-    /// <param name="verticalBoardNumber">The vertical board number.</param>
+    /// <param name="verticalBoardNumber">The desired vertical board number.</param>
     public void AddBay(Bay bay, int verticalBoardNumber)
     {
         if (verticalBoardNumber >= _flpVerticalBoards.Count)
@@ -152,18 +154,24 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             return;
         }
 
-        if (_currentLayoutIndex != 3)
+        if (_currentLayoutIndex != 3) // Less than 3 cols.
         {
-            var maxflpnum = BayNum / _currentLayoutIndex;
-            if (_flpVerticalBoards[verticalBoardNumber].Controls.Count >= maxflpnum)
+            /*
+             * Layout left to right, top to bottom.
+             * verticalBoardNumber = _bayAmount % _currentLayoutIndex;
+             */
+
+            /*
+             * Lay out top to bottom., left to right.
+             */
+            var maxBaysPerCol = Math.Ceiling((float)BayNum / _currentLayoutIndex); // Max number of bays per col. Doesn't take into account realistic size of bay.
+            verticalBoardNumber = _currentLayoutIndex - 1;
+            for (var i = 0; i < _flpVerticalBoards.Count; i++)
             {
-                verticalBoardNumber = _currentLayoutIndex - 1;
-                for (var i = 0; i < _flpVerticalBoards.Count; i++)
+                if (_flpVerticalBoards[i].Controls.Count < maxBaysPerCol)
                 {
-                    if (_flpVerticalBoards[i].Controls.Count < maxflpnum)
-                    {
-                        verticalBoardNumber = i;
-                    }
+                    verticalBoardNumber = i;
+                    break;
                 }
             }
         }
@@ -171,6 +179,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
         bay.VerticalBoardNumber = verticalBoardNumber;
 
         Bays.Add(bay);
+        _bayAmount++;
         _flpVerticalBoards[verticalBoardNumber].Controls.Add(bay.ChildPanel);
     }
 
@@ -384,6 +393,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
     /// </summary>
     public void WipeBays()
     {
+        _bayAmount = 0;
         Bays.Clear();
         foreach (var flpVerticalBoard in _flpVerticalBoards)
         {
