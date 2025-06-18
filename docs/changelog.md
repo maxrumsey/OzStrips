@@ -1,4 +1,11 @@
 # Changelog
+## v0.5.6
+### Features
+- Added warning to SSR field when an aircraft isn't squawking correct code / mode C in TAXI or superior bay.
+
+- Changed how BLK levels are displayed.
+
+## v0.5.5
 ## v0.5.4
 ### Bugfixes
 - Added fix for HDG not being removed from GLOP when removed from popup window.

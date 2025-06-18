@@ -193,10 +193,15 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
                     break;
                 case StripElements.HoverActions.RFL_WARNING:
-                    if (_bayRenderController.HoveredItem != StripElements.HoverActions.RFL_WARNING && _strip.Controller.ShowCFLToolTip)
+                    if (_bayRenderController.HoveredItem != StripElements.HoverActions.RFL_WARNING && (_strip.Controller.ShowCFLToolTip || _strip.CFL.Contains("B")))
                     {
                         _bayRenderController.HoveredItem = StripElements.HoverActions.RFL_WARNING;
-                        _bayRenderController.ToolTip.Show("Potentially non-compliant filed cruise level detected.", _bayRenderController.SkControl, e);
+                        _bayRenderController.ToolTip.Show(
+                            String.Trim(
+                            ((_strip.CFL.Contains("B") ? _strip.CFL + "\n" : string.Empty) +
+                            (_strip.Controller.ShowCFLToolTip ? "Potentially non-compliant filed cruise level detected." : string.Empty)
+                            ),
+                            bayRenderController.SkControl, e);
                     }
 
                     break;
@@ -337,6 +342,11 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             case StripElements.Values.RFL:
                 return _strip.RFL;
             case StripElements.Values.CFL:
+                if (_strip.CFL.Contains("B"))
+                {
+                    return "BLK";
+                }
+
                 return _strip.CFL;
             case StripElements.Values.STAND:
                 return _strip.Gate;
