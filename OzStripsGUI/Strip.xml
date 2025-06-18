@@ -62,6 +62,7 @@
     <W>25</W>
     <H>20</H>
     <Value>SSR_SYMBOL</Value>
+    <Hover>SSR_WARNING</Hover>
   </StripElement>
   <StripElement>
     <X>125</X>
@@ -70,6 +71,7 @@
     <H>20</H>
     <Value>SSR</Value>
     <LeftClick>ASSIGN_SSR</LeftClick>
+    <Hover>SSR_WARNING</Hover>
   </StripElement>
   <!-- COL 5 -->
   <StripElement>

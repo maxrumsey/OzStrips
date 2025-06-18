@@ -66,6 +66,7 @@ public static class StripElements
         NONE,
         ROUTE_WARNING,
         RFL_WARNING,
+        SSR_WARNING,
     }
 }
 #pragma warning restore SA1600 // Elements should be documented

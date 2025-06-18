@@ -191,6 +191,15 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                     }
 
                     break;
+                case StripElements.HoverActions.SSR_WARNING:
+                    if (_bayRenderController.HoveredItem != StripElements.HoverActions.SSR_WARNING &&
+                    !_strip.SquawkCorrect && _strip.CurrentBay >= StripBay.BAY_TAXI)
+                    {
+                        _bayRenderController.HoveredItem = StripElements.HoverActions.SSR_WARNING;
+                        _bayRenderController.ToolTip.Show("Incorrect SSR Code or Mode.", _bayRenderController.SkControl, e);
+                    }
+
+                    break;
             }
         }
 
@@ -370,10 +379,19 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             case StripElements.Values.SSR_SYMBOL:
             case StripElements.Values.TYPE:
             case StripElements.Values.SSR:
-                if (_strip.CockLevel == 1)
+                /*
+                * Incorrect SSR Code & Mode C alert
+                */
+                if ((element.Value == StripElements.Values.SSR || element.Value == StripElements.Values.SSR_SYMBOL) &&
+                !_strip.SquawkCorrect && _strip.CurrentBay >= StripBay.BAY_TAXI)
                 {
-                    return SKColors.Cyan;
+                    return SKColors.Orange;
                 }
+
+                if (_strip.CockLevel == 1)
+                    {
+                        return SKColors.Cyan;
+                    }
 
                 break;
             case StripElements.Values.GLOP:
