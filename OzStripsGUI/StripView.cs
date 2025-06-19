@@ -14,6 +14,15 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
     private readonly BayRenderController _bayRenderController = bayRC;
     private readonly int _padding = 2;
 
+    private bool ShowSSRError
+    {
+        get
+
+        {
+            return !_strip.SquawkCorrect && _strip.CurrentBay >= StripBay.BAY_TAXI && _strip.ArrDepType == StripArrDepType.DEPARTURE;
+        }
+    }
+
     /// <summary>
     /// Gets or sets the root of the strip (taking into account strip cocking). The strip background is drawn from this point.
     /// </summary>
@@ -193,7 +202,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                     break;
                 case StripElements.HoverActions.SSR_WARNING:
                     if (_bayRenderController.HoveredItem != StripElements.HoverActions.SSR_WARNING &&
-                    !_strip.SquawkCorrect && _strip.CurrentBay >= StripBay.BAY_TAXI)
+                    ShowSSRError)
                     {
                         _bayRenderController.HoveredItem = StripElements.HoverActions.SSR_WARNING;
                         _bayRenderController.ToolTip.Show("Incorrect SSR Code or Mode.", _bayRenderController.SkControl, e);
@@ -383,15 +392,15 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 * Incorrect SSR Code & Mode C alert
                 */
                 if ((element.Value == StripElements.Values.SSR || element.Value == StripElements.Values.SSR_SYMBOL) &&
-                !_strip.SquawkCorrect && _strip.CurrentBay >= StripBay.BAY_TAXI)
+                ShowSSRError)
                 {
                     return SKColors.Orange;
                 }
 
                 if (_strip.CockLevel == 1)
-                    {
-                        return SKColors.Cyan;
-                    }
+                {
+                    return SKColors.Cyan;
+                }
 
                 break;
             case StripElements.Values.GLOP:

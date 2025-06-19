@@ -364,15 +364,15 @@ public sealed class Strip
         get
         {
             var rtrack = GetRadarTrack();
-            var ssrCodeCorrect = rtrack.ActualAircraft.TransponderCode == FDR.AssignedSSRCode;
-
+            var ssrCodeCorrect = rtrack?.ActualAircraft.TransponderCode == FDR.AssignedSSRCode;
+            var modec = rtrack?.ActualAircraft.TransponderModeC;
             // Probably a cleaner way to do this, but I am lazy and it is 2AM.
             if (FDR.AircraftType == "A388")
             {
                 return ssrCodeCorrect;
             }
 
-            return rtrack?.ActualAircraft.TransponderModeC && ssrCodeCorrect;
+            return modec == true && ssrCodeCorrect;
         }
     }
 
