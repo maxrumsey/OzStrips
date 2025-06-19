@@ -197,11 +197,11 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                     {
                         _bayRenderController.HoveredItem = StripElements.HoverActions.RFL_WARNING;
                         _bayRenderController.ToolTip.Show(
-                            String.Trim(
-                            ((_strip.CFL.Contains("B") ? _strip.CFL + "\n" : string.Empty) +
-                            (_strip.Controller.ShowCFLToolTip ? "Potentially non-compliant filed cruise level detected." : string.Empty)
-                            ),
-                            bayRenderController.SkControl, e);
+                       (
+                        (_strip.CFL.Contains("B") ? (_strip.CFL + "\n") : string.Empty) +
+                        (_strip.Controller.ShowCFLToolTip ? "Potentially non-compliant filed cruise level detected." : string.Empty)).Trim(),
+                       _bayRenderController.SkControl,
+                       e);
                     }
 
                     break;
