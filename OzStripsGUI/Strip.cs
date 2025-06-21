@@ -321,7 +321,7 @@ public sealed class Strip
 
             if (_gpscoordRegex.IsMatch(wpt))
             {
-                return "GPS";
+                return "#GPS#";
             }
 
             return wpt;
