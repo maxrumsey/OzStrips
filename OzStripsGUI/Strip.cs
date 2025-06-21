@@ -22,7 +22,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui;
 public sealed class Strip
 {
     private static readonly Regex _headingRegex = new(@"H(\d{3})");
-    private static readonly Regex _routeRegex = new(@"^[^\d/]+$");
+    // private static readonly Regex _routeRegex = new(@"^[^\d/]+$");
     private static readonly Regex _sidRouteRegex = new(@"^[\w\d]+\/[\d]{2}\w?");
     private static readonly Regex _gpscoordRegex = new(@"^[\d]+\w[\d]+\w");
     private static readonly Regex _airwayRegex = new(@"^\w\d+");
@@ -284,15 +284,47 @@ public sealed class Strip
             var firstWptUnsuitableMatches = new List<string> { aerodrome };
 
             firstWptUnsuitableMatches.AddRange(Util.DifferingAerodromeWaypoints.Where(x => x.Key == aerodrome).Select(x => x.Value));
+            var wpt = string.Empty;
 
             // Procedural SIDs
             if (FDR.SID != null && FDR.SID.Name.Length > 3)
             {
-                return FDR.RouteNoParse.Split(' ').ToList().Find(x => _routeRegex.Match(x).Success && (x != "DCT") && !firstWptUnsuitableMatches.Where(unsuitMatch => unsuitMatch.Contains(x)).Any()) ?? "DCT";
+                /*
+                 * Don't Match:
+                 * SID Names
+                 * DCTs
+                 * YMML/ ML/ TESATs etc
+                 */
+                wpt = FDR.RouteNoParse.Split(' ').ToList().Find(x => !_sidRouteRegex.IsMatch(x) && (x != "DCT") && !firstWptUnsuitableMatches.Where(unsuitMatch => unsuitMatch.Contains(x)).Any()) ?? "DCT";
+            }
+            else
+            {
+                // Radar SIDs and other routing.
+                /*
+                 * Don't Match:
+                 * YMML/ TESAT/ ML etc
+                 */
+                var intersection = FDR.ParsedRoute.Where(x => x.Type == FDR.ExtractedRoute.Segment.SegmentTypes.WAYPOINT && x.SIDSTARName.Length == 0).ToList().Find(x => !firstWptUnsuitableMatches.Where(unsuitMatch => unsuitMatch.Contains(x.Intersection.Name)).Any());
+
+                if (intersection is not null)
+                {
+                    // If latlong return fullname (will match regex);
+                    // ie don't return Albany for YABA.
+                    wpt = intersection.Intersection.FullName.Length > 0 && char.IsDigit(intersection.Intersection.FullName[0]) ? intersection.Intersection.FullName : intersection.Intersection.Name;
+                }
+                else
+                {
+                    // No intersection found, return DCT.
+                    wpt = "DCT";
+                }
             }
 
-            // Radar SIDs and other routing.
-            return FDR.ParsedRoute.Where(x => x.Type == FDR.ExtractedRoute.Segment.SegmentTypes.WAYPOINT && x.SIDSTARName.Length == 0).ToList().Find(x => _routeRegex.Match(x.Intersection.Name).Success && !firstWptUnsuitableMatches.Where(unsuitMatch => unsuitMatch.Contains(x.Intersection.Name)).Any())?.Intersection.Name ?? "DCT";
+            if (_gpscoordRegex.IsMatch(wpt))
+            {
+                return "GPS";
+            }
+
+            return wpt;
         }
     }
 
