@@ -280,7 +280,19 @@ public sealed class Strip
     {
         get
         {
-            return FDR.Route.Split(' ').ToList().Find(x => _routeRegex.Match(x).Success && (x != "DCT") && x != FDR.DepAirport) ?? "DCT";
+            var aerodrome = FDR.DepAirport;
+            var firstWptUnsuitableMatches = new List<string> { aerodrome };
+
+            firstWptUnsuitableMatches.AddRange(Util.DifferingAerodromeWaypoints.Where(x => x.Key == aerodrome).Select(x => x.Value));
+
+            // Procedural SIDs
+            if (FDR.SID != null && FDR.SID.Name.Length > 3)
+            {
+                return FDR.RouteNoParse.Split(' ').ToList().Find(x => _routeRegex.Match(x).Success && (x != "DCT") && !firstWptUnsuitableMatches.Where(unsuitMatch => unsuitMatch.Contains(x)).Any()) ?? "DCT";
+            }
+
+            // Radar SIDs and other routing.
+            return FDR.ParsedRoute.Where(x => x.Type == FDR.ExtractedRoute.Segment.SegmentTypes.WAYPOINT && x.SIDSTARName.Length == 0).ToList().Find(x => _routeRegex.Match(x.Intersection.Name).Success && !firstWptUnsuitableMatches.Where(unsuitMatch => unsuitMatch.Contains(x.Intersection.Name)).Any())?.Intersection.Name ?? "DCT";
         }
     }
 

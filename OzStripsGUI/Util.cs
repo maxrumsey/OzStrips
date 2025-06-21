@@ -111,4 +111,18 @@ public static class Util
         Properties.OzStripsSettings.Default[name] = value;
         Properties.OzStripsSettings.Default.Save();
     }
+
+    /// <summary>
+    /// Gets a dictionary containing aerodrome waypoints that differ from the normal format.
+    /// </summary>
+    public static readonly Dictionary<string, string> DifferingAerodromeWaypoints = new()
+    {
+        { "YSSY", "TESAT" },
+        { "YBCG", "GOMOL" },
+        { "YBHM", "OVRON" },
+        { "YMEN", "ESDAN" },
+        { "YMHB", "TASUM" },
+        { "YSNW", "NWA" },
+        { "YPED", "DOLVU" },
+    };
 }
