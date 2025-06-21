@@ -5,7 +5,15 @@
 
 - Changed how BLK levels are displayed.
 
+- Pick or de-picking a strip also picks the corresponding PREA track.
+- 
+- Picking a ground track will also pick the air/ normal strip (and vice-versa).
+
 ## v0.5.5
+### Bugfixes
+- Refactored how bays display / are layed out in 1/2 col modes.
+
+- Changed how first waypoint is displayed.
 ## v0.5.4
 ### Bugfixes
 - Added fix for HDG not being removed from GLOP when removed from popup window.
