@@ -75,7 +75,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
             var highlightPaint = element?.Value == StripElements.Values.SID ? new SKPaint()
             {
-                Color = SKColors.Orange,
+                Color = SKColors.Yellow,
                 Style = SKPaintStyle.Stroke,
                 StrokeWidth = 2,
             } : null;
@@ -225,6 +225,15 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                         _bayRenderController.ToolTip.Show("Incorrect SSR Code or Mode.", _bayRenderController.SkControl, e);
                     }
 
+                    break;
+                case StripElements.HoverActions.SID_TRIGGER:
+                    var transExists = _strip.SIDTransition?.Length > 0;
+                    if (_bayRenderController.HoveredItem != StripElements.HoverActions.SID_TRIGGER && 
+                        (transExists || _strip.VFRSIDAssigned))
+                    {
+                        _bayRenderController.HoveredItem = StripElements.HoverActions.SID_TRIGGER;
+                        _bayRenderController.ToolTip.Show((transExists ? _strip.SIDTransition + " Transition\n" : string.Empty) + (_strip.VFRSIDAssigned ? "VFR Aircraft issued a SID." : string.Empty), _bayRenderController.SkControl, e);
+                    }
                     break;
             }
         }
@@ -449,7 +458,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             case StripElements.Values.SID:
                 var sidcolour = SKColors.Green;
 
-                if (_strip.FDR.FlightRules == "V" && !string.IsNullOrEmpty(_strip.FDR.SIDSTARString))
+                if (_strip.VFRSIDAssigned)
                 {
                     sidcolour = SKColors.Orange;
                 }

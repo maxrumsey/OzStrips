@@ -117,6 +117,7 @@
     <Value>SID</Value>
     <LeftClick>SID_TRIGGER</LeftClick>
     <RightClick>MOD_SID</RightClick>
+    <Hover>SID_TRIGGER</Hover>
   </StripElement>
   <StripElement>
     <X>330</X>

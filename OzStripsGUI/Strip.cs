@@ -362,6 +362,17 @@ public sealed class Strip
     }
 
     /// <summary>
+    /// Gets a value indicating whether a VFR aircraft has been given a SID.
+    /// </summary>
+    public bool VFRSIDAssigned
+    {
+        get
+        {
+            return FDR.FlightRules == "V" && !string.IsNullOrEmpty(FDR.SIDSTARString);
+        }
+    }
+
+    /// <summary>
     /// Gets the full route text in the route.
     /// </summary>
     public string Route
