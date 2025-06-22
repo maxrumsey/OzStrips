@@ -22,7 +22,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui;
 public sealed class Strip
 {
     private static readonly Regex _headingRegex = new(@"H(\d{3})");
-    // private static readonly Regex _routeRegex = new(@"^[^\d/]+$");
+    private static readonly Regex _firstWptLatLongRegex = new(@"^[^\d/]+$");
     private static readonly Regex _sidRouteRegex = new(@"^[\w\d]+\/[\d]{2}\w?");
     private static readonly Regex _gpscoordRegex = new(@"^[\d]+\w[\d]+\w");
     private static readonly Regex _airwayRegex = new(@"^\w\d+");
@@ -297,9 +297,19 @@ public sealed class Strip
                  */
                 wpt = FDR.RouteNoParse.Split(' ').ToList().Find(x => !_sidRouteRegex.IsMatch(x) && (x != "DCT") && !firstWptUnsuitableMatches.Where(unsuitMatch => unsuitMatch.Contains(x)).Any()) ?? "DCT";
             }
+            else if (FDR.SID != null)
+            {
+                // Radar SIDs
+                /*
+                 * Don't Match:
+                 * YMML/ TESAT/ ML etc
+                 * GPS wpts (due to SY3 issue)
+                 */
+                wpt = FDR.ParsedRoute.Where(x => x.Type == FDR.ExtractedRoute.Segment.SegmentTypes.WAYPOINT && x.SIDSTARName.Length == 0 && _firstWptLatLongRegex.IsMatch(x.Intersection.Name)).ToList().Find(x => !firstWptUnsuitableMatches.Where(unsuitMatch => unsuitMatch.Contains(x.Intersection.Name)).Any())?.Intersection.Name ?? "DCT";
+            }
             else
             {
-                // Radar SIDs and other routing.
+                // Other routing (vfr).
                 /*
                  * Don't Match:
                  * YMML/ TESAT/ ML etc
