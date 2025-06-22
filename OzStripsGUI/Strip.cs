@@ -279,7 +279,7 @@ public sealed class Strip
     {
         get
         {
-            if (FDR.SID is null || FDR.SID.Transitions.Count == 0)
+            if (FDR.SID is null || FDR.SID.Transitions.Count == 0 || ArrDepType == StripArrDepType.DEPARTURE)
             {
                 return null;
             }
