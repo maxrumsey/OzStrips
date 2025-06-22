@@ -273,6 +273,29 @@ public sealed class Strip
     }
 
     /// <summary>
+    /// Gets the SID transition for the strip, if applicable.
+    /// </summary>
+    public string? SIDTransition
+    {
+        get
+        {
+            if (FDR.SID is null || FDR.SID.Transitions.Count == 0)
+            {
+                return null;
+            }
+
+            var wpt = FirstWpt;
+
+            if (FDR.SID.Transitions.ContainsKey(wpt))
+            {
+                return wpt;
+            }
+
+            return "RADAR";
+        }
+    }
+
+    /// <summary>
     /// Gets the first element in the route.
     /// Don't include first waypoint, and if going DCT, mark first element as DCT.
     /// </summary>
@@ -295,7 +318,7 @@ public sealed class Strip
                  * DCTs
                  * YMML/ ML/ TESATs etc
                  */
-                wpt = FDR.RouteNoParse.Split(' ').ToList().Find(x => !_sidRouteRegex.IsMatch(x) && (x != "DCT") && !firstWptUnsuitableMatches.Where(unsuitMatch => unsuitMatch.Contains(x)).Any()) ?? "DCT";
+                wpt = FDR.RouteNoParse.Split(' ').ToList().Find(x => _firstWptLatLongRegex.IsMatch(x) && (x != "DCT") && !firstWptUnsuitableMatches.Where(unsuitMatch => unsuitMatch.Contains(x)).Any()) ?? "DCT";
             }
             else if (FDR.SID != null)
             {

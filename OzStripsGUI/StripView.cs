@@ -73,6 +73,13 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 Style = SKPaintStyle.StrokeAndFill,
             };
 
+            var highlightPaint = element?.Value == StripElements.Values.SID ? new SKPaint()
+            {
+                Color = SKColors.Orange,
+                Style = SKPaintStyle.Stroke,
+                StrokeWidth = 2,
+            } : null;
+
             var baseX = ElementOrigin.X + element.X;
             var baseY = ElementOrigin.Y + element.Y;
 
@@ -83,6 +90,11 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
             canvas.DrawRect(baseX, baseY, element.W, element.H, basepaint);
             canvas.DrawRect(baseX, baseY, element.W, element.H, elpaint);
+
+            if (_strip.SIDTransition is not null && highlightPaint is not null)
+            {
+                canvas.DrawRect(baseX + 2, baseY + 2, element.W - 3, element.H - 3, highlightPaint);
+            }
 
             canvas.DrawText(text, new SKPoint(baseX + (element.W / 2), baseY + ((fontsize + element.H) / 2)), SKTextAlign.Center, new SKFont(typeface, fontsize), textpaint);
         }
