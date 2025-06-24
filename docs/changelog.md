@@ -1,4 +1,26 @@
 # Changelog
+## v0.5.6
+### Features
+- Added warning to SSR field when an aircraft isn't squawking correct code / mode C in TAXI or superior bay.
+
+- Changed how BLK levels are displayed.
+
+- Pick or de-picking a strip also picks the corresponding PREA track.
+
+- Picking a ground track will also pick the air/ normal strip (and vice-versa).
+
+- The first waypoint will (should) always display the first waypoint where the flight planned route is commenced. (No MLs / TESATs)
+
+- At SY and AS, SIDs with transitions will have the SID TRIGGER box be highlighted, and on hover will display the name of the transition.
+
+### Bugfixes
+- Fixed issue where when an aircraft refiles without disconnecting, UI would display the new FDR elements, but clicking on the RWY / SID field would display details from the original FDR.
+
+## v0.5.5
+### Bugfixes
+- Refactored how bays display / are layed out in 1/2 col modes.
+
+- Changed how first waypoint is displayed.
 ## v0.5.4
 ### Bugfixes
 - Added fix for HDG not being removed from GLOP when removed from popup window.

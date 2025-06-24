@@ -22,7 +22,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui;
 public sealed class Strip
 {
     private static readonly Regex _headingRegex = new(@"H(\d{3})");
-    private static readonly Regex _routeRegex = new(@"^[^\d/]+$");
+    private static readonly Regex _firstWptLatLongRegex = new(@"^[^\d/]+$");
     private static readonly Regex _sidRouteRegex = new(@"^[\w\d]+\/[\d]{2}\w?");
     private static readonly Regex _gpscoordRegex = new(@"^[\d]+\w[\d]+\w");
     private static readonly Regex _airwayRegex = new(@"^\w\d+");
@@ -273,6 +273,29 @@ public sealed class Strip
     }
 
     /// <summary>
+    /// Gets the SID transition for the strip, if applicable.
+    /// </summary>
+    public string? SIDTransition
+    {
+        get
+        {
+            if (FDR.SID is null || FDR.SID.Transitions.Count == 0 || ArrDepType != StripArrDepType.DEPARTURE)
+            {
+                return null;
+            }
+
+            var wpt = FirstWpt;
+
+            if (FDR.SID.Transitions.ContainsKey(wpt))
+            {
+                return wpt;
+            }
+
+            return "RADAR";
+        }
+    }
+
+    /// <summary>
     /// Gets the first element in the route.
     /// Don't include first waypoint, and if going DCT, mark first element as DCT.
     /// </summary>
@@ -280,7 +303,72 @@ public sealed class Strip
     {
         get
         {
-            return FDR.Route.Split(' ').ToList().Find(x => _routeRegex.Match(x).Success && (x != "DCT") && x != FDR.DepAirport) ?? "DCT";
+            var aerodrome = FDR.DepAirport;
+            var firstWptUnsuitableMatches = new List<string> { aerodrome };
+
+            firstWptUnsuitableMatches.AddRange(Util.DifferingAerodromeWaypoints.Where(x => x.Key == aerodrome).Select(x => x.Value));
+            var wpt = string.Empty;
+
+            // Procedural SIDs
+            if (FDR.SID != null && FDR.SID.Name.Length > 3)
+            {
+                /*
+                 * Don't Match:
+                 * SID Names
+                 * DCTs
+                 * YMML/ ML/ TESATs etc
+                 */
+                wpt = FDR.RouteNoParse.Split(' ').ToList().Find(x => _firstWptLatLongRegex.IsMatch(x) && (x != "DCT") && !firstWptUnsuitableMatches.Where(unsuitMatch => unsuitMatch.Contains(x)).Any()) ?? "DCT";
+            }
+            else if (FDR.SID != null)
+            {
+                // Radar SIDs
+                /*
+                 * Don't Match:
+                 * YMML/ TESAT/ ML etc
+                 * GPS wpts (due to SY3 issue)
+                 */
+                wpt = FDR.ParsedRoute.Where(x => x.Type == FDR.ExtractedRoute.Segment.SegmentTypes.WAYPOINT && x.SIDSTARName.Length == 0 && _firstWptLatLongRegex.IsMatch(x.Intersection.Name)).ToList().Find(x => !firstWptUnsuitableMatches.Where(unsuitMatch => unsuitMatch.Contains(x.Intersection.Name)).Any())?.Intersection.Name ?? "DCT";
+            }
+            else
+            {
+                // Other routing (vfr).
+                /*
+                 * Don't Match:
+                 * YMML/ TESAT/ ML etc
+                 */
+                var intersection = FDR.ParsedRoute.Where(x => x.Type == FDR.ExtractedRoute.Segment.SegmentTypes.WAYPOINT && x.SIDSTARName.Length == 0).ToList().Find(x => !firstWptUnsuitableMatches.Where(unsuitMatch => unsuitMatch.Contains(x.Intersection.Name)).Any());
+
+                if (intersection is not null)
+                {
+                    // If latlong return fullname (will match regex);
+                    // ie don't return Albany for YABA.
+                    wpt = intersection.Intersection.FullName.Length > 0 && char.IsDigit(intersection.Intersection.FullName[0]) ? intersection.Intersection.FullName : intersection.Intersection.Name;
+                }
+                else
+                {
+                    // No intersection found, return DCT.
+                    wpt = "DCT";
+                }
+            }
+
+            if (_gpscoordRegex.IsMatch(wpt))
+            {
+                return "#GPS#";
+            }
+
+            return wpt;
+        }
+    }
+
+    /// <summary>
+    /// Gets a value indicating whether a VFR aircraft has been given a SID.
+    /// </summary>
+    public bool VFRSIDAssigned
+    {
+        get
+        {
+            return FDR.FlightRules == "V" && !string.IsNullOrEmpty(FDR.SIDSTARString);
         }
     }
 
@@ -364,7 +452,15 @@ public sealed class Strip
         get
         {
             var rtrack = GetRadarTrack();
-            return rtrack?.ActualAircraft.TransponderModeC == true && rtrack.ActualAircraft.TransponderCode == FDR.AssignedSSRCode;
+            var ssrCodeCorrect = rtrack?.ActualAircraft.TransponderCode == FDR.AssignedSSRCode;
+            var modec = rtrack?.ActualAircraft.TransponderModeC;
+            // Probably a cleaner way to do this, but I am lazy and it is 2AM.
+            if (FDR.AircraftType == "A388")
+            {
+                return ssrCodeCorrect;
+            }
+
+            return modec == true && ssrCodeCorrect;
         }
     }
 
@@ -616,7 +712,7 @@ public sealed class Strip
         }
         else
         {
-            _bayManager.SetPickedStripItem(this, true);
+            _bayManager.SetPickedStripItem(this);
         }
     }
 

@@ -14,6 +14,15 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
     private readonly BayRenderController _bayRenderController = bayRC;
     private readonly int _padding = 2;
 
+    private bool ShowSSRError
+    {
+        get
+
+        {
+            return !_strip.SquawkCorrect && _strip.CurrentBay >= StripBay.BAY_TAXI && _strip.ArrDepType == StripArrDepType.DEPARTURE;
+        }
+    }
+
     /// <summary>
     /// Gets or sets the root of the strip (taking into account strip cocking). The strip background is drawn from this point.
     /// </summary>
@@ -64,6 +73,13 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 Style = SKPaintStyle.StrokeAndFill,
             };
 
+            var highlightPaint = element?.Value == StripElements.Values.SID ? new SKPaint()
+            {
+                Color = SKColors.Yellow,
+                Style = SKPaintStyle.Stroke,
+                StrokeWidth = 2,
+            } : null;
+
             var baseX = ElementOrigin.X + element.X;
             var baseY = ElementOrigin.Y + element.Y;
 
@@ -74,6 +90,11 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
             canvas.DrawRect(baseX, baseY, element.W, element.H, basepaint);
             canvas.DrawRect(baseX, baseY, element.W, element.H, elpaint);
+
+            if (_strip.SIDTransition is not null && highlightPaint is not null)
+            {
+                canvas.DrawRect(baseX + 2, baseY + 2, element.W - 3, element.H - 3, highlightPaint);
+            }
 
             canvas.DrawText(text, new SKPoint(baseX + (element.W / 2), baseY + ((fontsize + element.H) / 2)), SKTextAlign.Center, new SKFont(typeface, fontsize), textpaint);
         }
@@ -184,12 +205,35 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
                     break;
                 case StripElements.HoverActions.RFL_WARNING:
-                    if (_bayRenderController.HoveredItem != StripElements.HoverActions.RFL_WARNING && _strip.Controller.ShowCFLToolTip)
+                    if (_bayRenderController.HoveredItem != StripElements.HoverActions.RFL_WARNING && (_strip.Controller.ShowCFLToolTip || _strip.CFL.Contains("B")))
                     {
                         _bayRenderController.HoveredItem = StripElements.HoverActions.RFL_WARNING;
-                        _bayRenderController.ToolTip.Show("Potentially non-compliant filed cruise level detected.", _bayRenderController.SkControl, e);
+                        _bayRenderController.ToolTip.Show(
+                       (
+                        (_strip.CFL.Contains("B") ? (_strip.CFL + "\n") : string.Empty) +
+                        (_strip.Controller.ShowCFLToolTip ? "Potentially non-compliant filed cruise level detected." : string.Empty)).Trim(),
+                       _bayRenderController.SkControl,
+                       e);
                     }
 
+                    break;
+                case StripElements.HoverActions.SSR_WARNING:
+                    if (_bayRenderController.HoveredItem != StripElements.HoverActions.SSR_WARNING &&
+                    ShowSSRError)
+                    {
+                        _bayRenderController.HoveredItem = StripElements.HoverActions.SSR_WARNING;
+                        _bayRenderController.ToolTip.Show("Incorrect SSR Code or Mode.", _bayRenderController.SkControl, e);
+                    }
+
+                    break;
+                case StripElements.HoverActions.SID_TRIGGER:
+                    var transExists = _strip.SIDTransition?.Length > 0;
+                    if (_bayRenderController.HoveredItem != StripElements.HoverActions.SID_TRIGGER && 
+                        (transExists || _strip.VFRSIDAssigned))
+                    {
+                        _bayRenderController.HoveredItem = StripElements.HoverActions.SID_TRIGGER;
+                        _bayRenderController.ToolTip.Show((transExists ? _strip.SIDTransition + " Transition\n" : string.Empty) + (_strip.VFRSIDAssigned ? "VFR Aircraft issued a SID." : string.Empty), _bayRenderController.SkControl, e);
+                    }
                     break;
             }
         }
@@ -319,6 +363,11 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             case StripElements.Values.RFL:
                 return _strip.RFL;
             case StripElements.Values.CFL:
+                if (_strip.CFL.Contains("B"))
+                {
+                    return "BLK";
+                }
+
                 return _strip.CFL;
             case StripElements.Values.STAND:
                 return _strip.Gate;
@@ -370,6 +419,15 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             case StripElements.Values.SSR_SYMBOL:
             case StripElements.Values.TYPE:
             case StripElements.Values.SSR:
+                /*
+                * Incorrect SSR Code & Mode C alert
+                */
+                if ((element.Value == StripElements.Values.SSR || element.Value == StripElements.Values.SSR_SYMBOL) &&
+                ShowSSRError)
+                {
+                    return SKColors.Orange;
+                }
+
                 if (_strip.CockLevel == 1)
                 {
                     return SKColors.Cyan;
@@ -400,7 +458,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             case StripElements.Values.SID:
                 var sidcolour = SKColors.Green;
 
-                if (_strip.FDR.FlightRules == "V" && !string.IsNullOrEmpty(_strip.FDR.SIDSTARString))
+                if (_strip.VFRSIDAssigned)
                 {
                     sidcolour = SKColors.Orange;
                 }

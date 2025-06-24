@@ -29,7 +29,6 @@ public class StripController
     public StripController(Strip stripController)
     {
         Strip = stripController;
-        FDR = stripController.FDR;
     }
 
     /// <summary>
@@ -45,7 +44,13 @@ public class StripController
     /// <summary>
     /// Gets the flight data record.
     /// </summary>
-    protected FDP2.FDR FDR { get; }
+    protected FDP2.FDR FDR
+    {
+        get
+        {
+            return Strip.FDR;
+        }
+    }
 
     /// <summary>
     /// Gets or sets the pick toggle control.

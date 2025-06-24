@@ -74,34 +74,45 @@ public class BayManager
     public string AerodromeName { get; set; } = "????";
 
     /// <summary>
-    /// Sets the last selected track's FDR in vatSys.
-    /// </summary>
-    public string? PickedCallsign
-    {
-        set
-        {
-            if (value is not null)
-            {
-                var sc = StripRepository.GetController(value);
-                if (sc is not null)
-                {
-                    SetPickedFromFDR(sc.FDR);
-                }
-            }
-            else
-            {
-                RemovePicked(false, true);
-            }
-        }
-    }
-
-    /// <summary>
     /// Gets the bay the current picked striplistitem is from.
     /// </summary>
     public Bay? PickedBay
     {
         get;
         internal set;
+    }
+
+    /// <summary>
+    /// Sets the picked callsign, and if deselecting a track, deselects the corresponding air/ground track.
+    /// </summary>
+    /// <param name="callsign">Aircraft callsign.</param>
+    /// <param name="ground">Whether or not the track is a ground track.</param>
+    public void SetPickedCallsign(string callsign, bool ground)
+    {
+        if (callsign is not null)
+        {
+            var sc = StripRepository.GetController(callsign);
+            if (sc is not null)
+            {
+                SetPickedFromFDR(sc.FDR);
+            }
+        }
+        else
+        {
+            /*
+             * Spaghetti.
+             */
+            if (ground && MMI.SelectedTrack != null)
+            {
+                MMI.SelectOrDeselectTrack(MMI.SelectedTrack);
+            }
+            else if (!ground && MMI.SelectedGroundTrack != null)
+            {
+                MMI.SelectOrDeselectGroundTrack(MMI.SelectedGroundTrack);
+            }
+
+            RemovePicked(false, true);
+        }
     }
 
     /// <summary>
@@ -253,7 +264,6 @@ public class BayManager
     /// Sets a strip item to be picked.
     /// </summary>
     /// <param name="item">The strip item.</param>
-    /// <param name="sendToVatsys">Selects relevant track in vatSys.</param>
     /// <param name="bay">The bay the item is from.</param>
     public void SetPickedStripItem(StripListItem item, bool sendToVatsys = false, Bay? bay = null)
     {
@@ -262,21 +272,20 @@ public class BayManager
         PickedBay = bay;
         item.RenderedStripItem?.MarkPicked(true);
 
-        if (sendToVatsys && item.Type == StripItemType.STRIP)
+        if (item.Type == StripItemType.STRIP)
         {
             var rTrack = RDP.RadarTracks.FirstOrDefault(x => x.ActualAircraft.Callsign == item.StripController?.FDR.Callsign);
-            var track = MMI.FindTrack(rTrack);
-            if (track is not null)
-            {
-                if (MMI.SelectedTrack != track)
-                {
-                    MMI.SelectOrDeselectTrack(track);
-                }
+            var groundTrack = MMI.FindTrack(rTrack);
+            var fdrTrack = MMI.FindTrack(item.StripController?.FDR);
 
-                if (MMI.SelectedGroundTrack != track)
-                {
-                    MMI.SelectOrDeselectGroundTrack(track);
-                }
+            if (fdrTrack is not null && MMI.SelectedTrack != fdrTrack)
+            {
+                MMI.SelectOrDeselectTrack(fdrTrack);
+            }
+
+            if (groundTrack is not null && MMI.SelectedGroundTrack != groundTrack)
+            {
+                MMI.SelectOrDeselectGroundTrack(groundTrack);
             }
         }
     }
@@ -285,7 +294,6 @@ public class BayManager
     /// Toggles a strip item as picked.
     /// </summary>
     /// <param name="item">The strip item.</param>
-    /// <param name="sendToVatsys">Selects relevant track in vatSys.</param>
     /// <param name="bay">The specified bay.</param>
     public void TogglePicked(StripListItem item, bool sendToVatsys = false, Bay? bay = null)
     {
@@ -334,7 +342,6 @@ public class BayManager
     /// <summary>
     /// Sets the picked controller to be empty.
     /// </summary>
-    /// <param name="sendToVatsys">Deselect ground track in vatSys.</param>
     /// <param name="force">Whether or not to respect the remove-pick-after action setting.</param>
     public void RemovePicked(bool sendToVatsys = false, bool force = false)
     {
@@ -546,7 +553,6 @@ public class BayManager
     /// Sets the picked strip item.
     /// </summary>
     /// <param name="strip">The strip item.</param>
-    /// <param name="sendToVatsys">Whether or not the change is propogated to vatsys.</param>
     /// <returns>Whether or not the bay was found.</returns>
     public bool SetPickedStripItem(Strip strip, bool sendToVatsys = false)
     {
