@@ -8,17 +8,17 @@
 Departure strips are blue, while arrival strips are yellow.
 
 ## Strip Posting
-You will only see strips for aircraft that have requested planned an ADES or ADEP of your aerodrome. Aircraft doing circuit work at your aerodrome, but not arriving or departing there will not receive a strip.
+You will only see strips for aircraft that have requested planned an ADES or ADEP of your aerodrome. Aircraft doing circuit work at your aerodrome, but not arriving or departing there will not have a strip.
 
 ## Strip Layout
-![Strip Reference](../images/strip_reference.png)
+![Strip Reference](../images/strip.png)
 
-| Element | Description | Click Action | Possible Alert |
-|---------|-------------|--------------|----------------|
-| 1 | Bay Number | Change |
+| Element | Description | Left Click | Right Click | Possible Alert |
+|---------|-------------|--------------|----------------|--|
+| 1 | Bay Number | Edit Bay Number |
 | 2 | Filed Off Blocks Time | Cock Strip |
-| 3 | Aircraft Type | (L) Open flightplan (R) Open reroute menu |
-| 4 | Destination | (L) Open flightplan (R) Open reroute menu |
+| 3 | Aircraft Type | (L) Open flightplan |
+| 4 | Destination | (L) Open flightplan |
 | 5 | Route Button | Show route on vatSys ASD |
 | 6 | Flight Rules | |
 | 7 | Correct SSR Code + Mode C Received | |
