@@ -1,6 +1,6 @@
 # Strip
 <figure markdown="span">
-  ![Strip](../images/strip.png)
+  ![Strip](../images/strip_filled.png)
   <figcaption>A departure strip</figcaption>
 </figure>
 
@@ -8,33 +8,34 @@
 Departure strips are blue, while arrival strips are yellow.
 
 ## Strip Posting
-You will only see strips for aircraft that have requested planned an ADES or ADEP of your aerodrome. Aircraft doing circuit work at your aerodrome, but not arriving or departing there will not receive a strip.
+You will only see strips for aircraft that have requested planned an ADES or ADEP of your aerodrome. Aircraft doing circuit work at your aerodrome, but not arriving or departing there will not have a strip.
 
 ## Strip Layout
-![Strip Reference](../images/strip_reference.png)
+![Strip Reference](../images/strip.png)
 
-| Element | Description | Click Action | Possible Alert |
-|---------|-------------|--------------|----------------|
-| 1 | Bay Number | Change |
-| 2 | Filed Off Blocks Time | Cock Strip |
-| 3 | Aircraft Type | (L) Open flightplan (R) Open reroute menu |
-| 4 | Destination | (L) Open flightplan (R) Open reroute menu |
-| 5 | Route Button | Show route on vatSys ASD |
-| 6 | Flight Rules | |
-| 7 | Correct SSR Code + Mode C Received | |
-| 8 | SSR Code | Generate Code |
-| 9 | Wake Turbulence Category | |
-| 10 | Callsign | Pick / Select Strip |
-| 11| Runway | Change |
-| 12 | Holding Point / Clearance Limit | Change |
-| 13 | SID | (L) Move strip to next bay \* (R) Change SID |
-| 14 | First Waypoint | (L) Open flightplan (R) Open reroute menu | Potentially non-compliant route filed |
-| 15 | Departure Heading | Change |
-| 16 | Requested Level | Open flightplan |
-| 17 | Cleared Level | Change | Non-standard cruising level |
-| 18 | Takeoff Timer | Start / Reset # |
-| 19 | Global Ops Data ^ | Change |
-| 20 | Local Remarks ^ | Change |
+| Number | Content | Left Click | Right Click | Possible Alert / Alarm |
+|---------|-------------|--------------| ----------- | -- |
+| **1** | **Bay Number** | Edit Bay Number | |
+| **2** | **Filed Off Blocks Time** | Cock Strip | |
+| **3** | **Aircraft Type** | Open Flightplan | |
+| **4** | **Wake Turbulence Category** | | |
+| **5** | **Destination** | Open Flightplan | |
+| **6** | **Route Indicator** | Show Route | |
+| **7** | **Flight Rules** | | |
+| **8** | **Correct SSR Code + Mode C Received** | | | Incorrect SSR Code or Mode |
+| **9** | **SSR Code** | Autogenerate Code | | Incorrect SSR Code or Mode |
+| **10** | **Callsign** | Select Strip | | Worldflight Team |
+| **11** | **Runway** | Change Runway | |
+| **12** | **Ready Flag** | Toggle Ready Flag | | Aircraft in Holding Point / Runway bay but not ready |
+| **13** | **Holding Point** | Edit Holding Point | |
+| **14** | **SID** \* | Move strip to next bay | Change SID | (Yellow Outline) SID Transition Exists or (Orange Background) VFR Aircraft issued a SID |
+| **15** | **First Waypoint** | Open flightplan | Open Reroute Window | Potentially Incorrect Routing |
+| **16** | **Requested Level** | Open flightplan | |
+| **17** | **Cleared Level** | Change CFL | | Incorrect Cruising Level |
+| **18** | **vatSys Global Ops Field** ^ | Edit | |
+| **19** | **OzStrips Remarks** ^ | Edit | |
+| **20** | **Departure Heading** | Edit Departure Heading | | No HDG input to Radar SID Departures |
+| **21** | **Takeoff Timer** \# | Start / Reset | |
 
 \* Won't automatically move bay into runway, this must be done manually.
 
@@ -45,7 +46,28 @@ You will only see strips for aircraft that have requested planned an ADES or ADE
 ## Alerts
 ### Non-standard Cruising Altitude
 Indicates a pilot had filed a level that is non-compliant with the table of standard cruising levels per the Australian AIP.
+
 ### Non-compliant Route Filed
 Indicates a pilot has filed a route that is contrary to the list of routes in the Australian ERSA Flight Planning Requirements document.
 
 It is at the controller's discretion whether or not the aircraft is recleared along a new route. Take into account possible workload and loss of strategic separation due to the non-compliant route, effect on TCU operations and ability of the pilot to reenter a new route.
+
+### Aircraft not Ready
+An aircraft is in the Holding Point or Runway bay without reporting ready.
+
+### VFR Aircraft Issued a SID
+A VFR aircraft has been issued a SID.
+
+### SID Transition Exists
+This SID has a transition.
+
+![SID Transition](../images/trans.png)
+
+### WorldFlight Team
+This pilot is an official WorldFlight team. (Only visible during WorldFlight mode).
+
+### Incorrect SSR Code or Mode
+An aircraft has commenced taxiing, without squawking Mode C and the correct code. (Exception exists for A388s, where they will only alert if not squawking the correct code).
+
+### HDG not Assigned to Radar SID
+An aircraft departing on a RADAR SID does not have a heading issued, in the Holding Point or Runway Bay.

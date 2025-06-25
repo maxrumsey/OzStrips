@@ -1,5 +1,5 @@
 # Window
-![Window](../images/fullwindow.png)
+![Window](../images/sb.png)
 
 ## Menu Bar
 ### Aerodrome
