@@ -1,4 +1,7 @@
 # Flight Thread
+
+**It is highly recommended that this guide is read in conjunction with VATPAC's [OzStrips Guide](https://sops.vatpac.org/client/towerstrips/), if you are a member of their division.**
+
 ## Departure
 ### ACD
 
