@@ -39,6 +39,7 @@
     <W>25</W>
     <H>20</H>
     <Value>FRUL</Value>
+    <LeftClick>SHOW_ROUTE</LeftClick>
   </StripElement>
   <!-- COL 3/4 -->
   <StripElement>
@@ -61,8 +62,8 @@
     <Y>20</Y>
     <W>25</W>
     <H>20</H>
-    <Value>SSR_SYMBOL</Value>
-    <Hover>SSR_WARNING</Hover>
+    <Value>PDC_INDICATOR</Value>
+    <LeftClick>OPEN_PDC</LeftClick>
   </StripElement>
   <StripElement>
     <X>125</X>

@@ -316,6 +316,9 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             case StripElements.Actions.COCK:
                 _strip.CockStrip();
                 break;
+            case StripElements.Actions.OPEN_PDC:
+                _bayRenderController.Bay.BayManager.SendPDC(_strip);
+                break;
         }
     }
 
@@ -333,11 +336,21 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             case StripElements.Values.ADES:
                 return _strip.FDR.DesAirport;
             case StripElements.Values.ROUTE:
-                return "R";
+                if (_strip.FDR.TextOnly)
+                {
+                    return "T";
+                }
+                else if (_strip.FDR.ReceiveOnly)
+                {
+                    return "R";
+                }
+
+                return string.Empty;
+
             case StripElements.Values.FRUL:
                 return _strip.FDR.FlightRules;
-            case StripElements.Values.SSR_SYMBOL:
-                return _strip.SquawkCorrect ? "*" : string.Empty;
+            case StripElements.Values.PDC_INDICATOR:
+                return _strip.FDR.PDCSent ? "P" : string.Empty;
             case StripElements.Values.TYPE:
                 return _strip.FDR.AircraftType;
             case StripElements.Values.WTC:
@@ -390,7 +403,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
             default:
                 break;
-        }
+            }
 
         return string.Empty;
     }
@@ -416,13 +429,13 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             case StripElements.Values.WTC:
             case StripElements.Values.ROUTE:
             case StripElements.Values.FRUL:
-            case StripElements.Values.SSR_SYMBOL:
+            case StripElements.Values.PDC_INDICATOR:
             case StripElements.Values.TYPE:
             case StripElements.Values.SSR:
                 /*
                 * Incorrect SSR Code & Mode C alert
                 */
-                if ((element.Value == StripElements.Values.SSR || element.Value == StripElements.Values.SSR_SYMBOL) &&
+                if ((element.Value == StripElements.Values.SSR) &&
                 ShowSSRError)
                 {
                     return SKColors.Orange;
