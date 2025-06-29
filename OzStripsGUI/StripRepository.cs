@@ -56,6 +56,8 @@ public class StripRepository
                     bayManager.BayRepository.DeleteStrip(controller);
                 }
 
+                controller.CheckAndInvalidateSavedRoutes(fdr);
+
                 controller.FDR = fdr;
                 controller.UpdateFDR();
                 return controller;
