@@ -93,7 +93,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
             if (_strip.SIDTransition is not null && highlightPaint is not null)
             {
-                canvas.DrawRect(baseX + 2, baseY + 2, element.W - 3, element.H - 3, highlightPaint);
+                canvas.DrawRect(baseX + 1.5f, baseY + 1.5f, element.W - 2, element.H - 2, highlightPaint);
             }
 
             canvas.DrawText(text, new SKPoint(baseX + (element.W / 2), baseY + ((fontsize + element.H) / 2)), SKTextAlign.Center, new SKFont(typeface, fontsize), textpaint);
