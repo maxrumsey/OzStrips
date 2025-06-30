@@ -20,9 +20,9 @@ You will only see strips for aircraft that have requested planned an ADES or ADE
 | **3** | **Aircraft Type** | Open Flightplan | |
 | **4** | **Wake Turbulence Category** | | |
 | **5** | **Destination** | Open Flightplan | |
-| **6** | **Route Indicator** | Show Route | |
-| **7** | **Flight Rules** | | |
-| **8** | **Correct SSR Code + Mode C Received** | | | Incorrect SSR Code or Mode |
+| **6** | **Voice Receive Capability Indicator** | Show Route | |
+| **7** | **Flight Rules** | Show Route | |
+| **8** | **PDC Indicator** | Open PDC Window | Open PM Window | |
 | **9** | **SSR Code** | Autogenerate Code | | Incorrect SSR Code or Mode |
 | **10** | **Callsign** | Select Strip | | Worldflight Team |
 | **11** | **Runway** | Change Runway | |
