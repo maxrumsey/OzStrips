@@ -7,6 +7,7 @@
 - Right click PDC field to open PM window.
 ### Bugfixes
 - Pilots who refile on the ground will not have old valid routing data shown.
+- Fixed issue where OzStrips would scroll when clicking on form when OzStrips is not focused.
 
 ## v0.5.6
 ### Features

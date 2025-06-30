@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using MaxRumsey.OzStripsPlugin.Gui.Controls;
+using System.Windows.Forms;
 
 namespace MaxRumsey.OzStripsPlugin.Gui
 {
@@ -71,7 +72,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.twoColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.oneColumnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colDisabledToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.flp_main = new System.Windows.Forms.FlowLayoutPanel();
+            this.flp_main = new NoScrollFLP();
             this.tt_metar = new System.Windows.Forms.ToolTip(this.components);
             this.pl_controlbar.SuspendLayout();
             this.pl_atis.SuspendLayout();
@@ -526,7 +527,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
         private System.Windows.Forms.Panel pl_stat;
         private System.Windows.Forms.Label lb_stat;
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.FlowLayoutPanel flp_main;
+        private NoScrollFLP flp_main;
         private System.Windows.Forms.Panel pl_ad;
         private System.Windows.Forms.Label lb_ad;
         private System.Windows.Forms.Button bt_inhibit;
