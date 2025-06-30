@@ -1,4 +1,13 @@
 # Changelog
+## v0.5.7
+### Features
+- Added text pilot strip field.
+- Added PDC indicator in place of SSR asterix.
+- Pilots who disconnect and reconnect will not lose their strip.
+- Right click PDC field to open PM window.
+### Bugfixes
+- Pilots who refile on the ground will not have old valid routing data shown.
+
 ## v0.5.6
 ### Features
 - Added warning to SSR field when an aircraft isn't squawking correct code / mode C in TAXI or superior bay.

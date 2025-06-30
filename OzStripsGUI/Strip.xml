@@ -64,6 +64,7 @@
     <H>20</H>
     <Value>PDC_INDICATOR</Value>
     <LeftClick>OPEN_PDC</LeftClick>
+    <RightClick>OPEN_PM</RightClick>
   </StripElement>
   <StripElement>
     <X>125</X>

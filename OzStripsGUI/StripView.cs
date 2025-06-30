@@ -319,6 +319,9 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             case StripElements.Actions.OPEN_PDC:
                 _bayRenderController.Bay.BayManager.SendPDC(_strip);
                 break;
+            case StripElements.Actions.OPEN_PM:
+                MMI.OpenPMWindow(_strip.FDR.Callsign);
+                break;
         }
     }
 
