@@ -67,6 +67,7 @@ public class StripRepository
         // todo: add this logic into separate static function
         var stripController = new Strip(fdr, bayManager, socketConn);
         bayManager.AddStrip(stripController, true, inhibitReorders);
+        stripController.FetchStripData();
         return stripController;
     }
 

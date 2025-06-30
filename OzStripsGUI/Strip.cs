@@ -737,6 +737,14 @@ public sealed class Strip
     }
 
     /// <summary>
+    /// Requests new strip data from the server, for new strips.
+    /// </summary>
+    public void FetchStripData()
+    {
+        _socketConn.RequestStrip(this);
+    }
+
+    /// <summary>
     /// Determines if the strip is applicable to the passed aerodrome.
     /// </summary>
     /// <param name="name">The name of the aerodrome to check.</param>

@@ -36,9 +36,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.bt_bar = new System.Windows.Forms.Button();
             this.pl_atis = new System.Windows.Forms.Panel();
             this.lb_atis = new System.Windows.Forms.Label();
-            this.bt_pdc = new System.Windows.Forms.Button();
             this.bt_cross = new System.Windows.Forms.Button();
-            this.bt_force = new System.Windows.Forms.Button();
             this.bt_inhibit = new System.Windows.Forms.Button();
             this.pl_ad = new System.Windows.Forms.Panel();
             this.lb_ad = new System.Windows.Forms.Label();
@@ -90,9 +88,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.pl_controlbar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pl_controlbar.Controls.Add(this.bt_bar);
             this.pl_controlbar.Controls.Add(this.pl_atis);
-            this.pl_controlbar.Controls.Add(this.bt_pdc);
             this.pl_controlbar.Controls.Add(this.bt_cross);
-            this.pl_controlbar.Controls.Add(this.bt_force);
             this.pl_controlbar.Controls.Add(this.bt_inhibit);
             this.pl_controlbar.Controls.Add(this.pl_ad);
             this.pl_controlbar.Controls.Add(this.pl_stat);
@@ -110,7 +106,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.bt_bar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.bt_bar.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bt_bar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.bt_bar.Location = new System.Drawing.Point(834, 3);
+            this.bt_bar.Location = new System.Drawing.Point(642, 3);
             this.bt_bar.Name = "bt_bar";
             this.bt_bar.Size = new System.Drawing.Size(96, 37);
             this.bt_bar.TabIndex = 7;
@@ -141,28 +137,13 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.lb_atis.Text = "Z";
             this.lb_atis.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // bt_pdc
-            // 
-            this.bt_pdc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
-            this.bt_pdc.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.bt_pdc.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bt_pdc.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.bt_pdc.Location = new System.Drawing.Point(736, 3);
-            this.bt_pdc.Name = "bt_pdc";
-            this.bt_pdc.Size = new System.Drawing.Size(96, 37);
-            this.bt_pdc.TabIndex = 6;
-            this.bt_pdc.TabStop = false;
-            this.bt_pdc.Text = "PDC";
-            this.bt_pdc.UseVisualStyleBackColor = false;
-            this.bt_pdc.Click += new System.EventHandler(this.Bt_pdc_Click);
-            // 
             // bt_cross
             // 
             this.bt_cross.BackColor = System.Drawing.Color.RosyBrown;
             this.bt_cross.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.bt_cross.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bt_cross.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.bt_cross.Location = new System.Drawing.Point(592, 3);
+            this.bt_cross.Location = new System.Drawing.Point(496, 3);
             this.bt_cross.Name = "bt_cross";
             this.bt_cross.Size = new System.Drawing.Size(142, 37);
             this.bt_cross.TabIndex = 5;
@@ -170,21 +151,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.bt_cross.Text = "XX CROSS XX";
             this.bt_cross.UseVisualStyleBackColor = false;
             this.bt_cross.Click += new System.EventHandler(this.Bt_cross_Click);
-            // 
-            // bt_force
-            // 
-            this.bt_force.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
-            this.bt_force.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.bt_force.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bt_force.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.bt_force.Location = new System.Drawing.Point(494, 3);
-            this.bt_force.Name = "bt_force";
-            this.bt_force.Size = new System.Drawing.Size(96, 37);
-            this.bt_force.TabIndex = 4;
-            this.bt_force.TabStop = false;
-            this.bt_force.Text = "FOR STP";
-            this.bt_force.UseVisualStyleBackColor = false;
-            this.bt_force.Click += new System.EventHandler(this.ForceStrip);
             // 
             // bt_inhibit
             // 
@@ -390,14 +356,14 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             // 
             this.toolStripMenuItem1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(164, 22);
             this.toolStripMenuItem1.Text = "SignalR Log";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.ToolStripMenuItem1_Click);
             // 
             // reloadStripToolStripMenuItem
             // 
             this.reloadStripToolStripMenuItem.Name = "reloadStripToolStripMenuItem";
-            this.reloadStripToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.reloadStripToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.reloadStripToolStripMenuItem.Text = "ReloadStrip";
             this.reloadStripToolStripMenuItem.Click += new System.EventHandler(this.ReloadStripItem);
             // 
@@ -564,7 +530,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
         private System.Windows.Forms.Panel pl_ad;
         private System.Windows.Forms.Label lb_ad;
         private System.Windows.Forms.Button bt_inhibit;
-        private System.Windows.Forms.Button bt_force;
         private System.Windows.Forms.ToolStripMenuItem ts_mode;
         private System.Windows.Forms.ToolStripMenuItem aCDToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sMCToolStripMenuItem;
@@ -576,7 +541,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
         private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-        private System.Windows.Forms.Button bt_pdc;
         private System.Windows.Forms.ToolTip tt_metar;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gitHubToolStripMenuItem;

@@ -95,7 +95,14 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
     /// <param name="strip">The strip to delete.</param>
     public void DeleteStrip(Strip strip)
     {
-        strip.SendDeleteMessage();
+        /*
+         * Don't send delete messages for deps incase they log back in.
+         */
+        if (strip.ArrDepType == StripArrDepType.ARRIVAL)
+        {
+            strip.SendDeleteMessage();
+        }
+
         FindBay(strip)?.RemoveStrip(strip, true);
         _bayManager.StripRepository.Controllers.Remove(strip);
     }

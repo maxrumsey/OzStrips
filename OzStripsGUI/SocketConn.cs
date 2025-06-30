@@ -274,6 +274,20 @@ public sealed class SocketConn : IDisposable
     }
 
     /// <summary>
+    /// Requests strip data from the server.
+    /// </summary>
+    /// <param name="strip">Strip to fetch.</param>
+    public void RequestStrip(Strip strip)
+    {
+        AddMessage("c:RequestStrip: " + strip.FDR.Callsign);
+
+        if (_connection.State == HubConnectionState.Connected)
+        {
+            _connection.InvokeAsync("RequestStrip", strip.FDR.Callsign);
+        }
+    }
+
+    /// <summary>
     /// Requests bay order data from server.
     /// </summary>
     /// <param name="force">Whether or not to force fetching of bay data.</param>
