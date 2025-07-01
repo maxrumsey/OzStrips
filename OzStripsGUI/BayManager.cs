@@ -178,12 +178,17 @@ public class BayManager
     /// <summary>
     /// Send the PDC.
     /// </summary>
-    public void SendPDC()
+    /// <param name="strip">Strip to open PDC form for. Null if use picked controller.</param>
+    public void SendPDC(Strip? strip = null)
     {
-        if (PickedController != null)
+        if (PickedController != null && strip == null)
         {
             MMI.OpenCPDLCWindow(PickedController.FDR, null, CPDLC.MessageCategories.FirstOrDefault(m => m.Name == "PDC"));
             RemovePicked(true);
+        }
+        else if (strip != null)
+        {
+            MMI.OpenCPDLCWindow(strip.FDR, null, CPDLC.MessageCategories.FirstOrDefault(m => m.Name == "PDC"));
         }
     }
 

@@ -56,6 +56,8 @@ public class StripRepository
                     bayManager.BayRepository.DeleteStrip(controller);
                 }
 
+                controller.CheckAndInvalidateSavedRoutes(fdr);
+
                 controller.FDR = fdr;
                 controller.UpdateFDR();
                 return controller;
@@ -65,6 +67,7 @@ public class StripRepository
         // todo: add this logic into separate static function
         var stripController = new Strip(fdr, bayManager, socketConn);
         bayManager.AddStrip(stripController, true, inhibitReorders);
+        stripController.FetchStripData();
         return stripController;
     }
 

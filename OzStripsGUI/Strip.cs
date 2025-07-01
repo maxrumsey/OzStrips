@@ -80,6 +80,11 @@ public sealed class Strip
     public bool ParsedRoutes { get; set; }
 
     /// <summary>
+    /// Gets or sets a string containing the aerodrome pair that valid routes were fetched for.
+    /// </summary>
+    public string ValidRoutesAerodromePairing { get; set; } = string.Empty;
+
+    /// <summary>
     /// Gets or sets a value indicating whether or not an aircraft has filed a dodgy route.
     /// </summary>
     public bool DodgyRoute { get; set; }
@@ -574,6 +579,20 @@ public sealed class Strip
     }
 
     /// <summary>
+    /// When we receive a new FDR, with different ADEP or ADEs, check if we need to clean out old routes.
+    /// </summary>
+    /// <param name="_fdr">New FDR.</param>
+    public void CheckAndInvalidateSavedRoutes(FDR _fdr)
+    {
+        var adPair = _fdr.DepAirport + _fdr.DesAirport;
+        if (adPair != ValidRoutesAerodromePairing)
+        {
+            ValidRoutes = null;
+            RequestedRoutes = DateTime.MaxValue;
+        }
+    }
+
+    /// <summary>
     /// Sends a strip deletion message to the server.
     /// </summary>
     public void SendDeleteMessage()
@@ -638,6 +657,7 @@ public sealed class Strip
 
         if (ValidRoutes is not null)
         {
+            ValidRoutesAerodromePairing = FDR.DepAirport + FDR.DesAirport;
             CondensedRoute = CleanVatsysRoute(FDR.Route);
             DodgyRoute = true;
             foreach (var validroute in ValidRoutes)
@@ -714,6 +734,14 @@ public sealed class Strip
         {
             _bayManager.SetPickedStripItem(this);
         }
+    }
+
+    /// <summary>
+    /// Requests new strip data from the server, for new strips.
+    /// </summary>
+    public void FetchStripData()
+    {
+        _socketConn.RequestStrip(this);
     }
 
     /// <summary>

@@ -1,7 +1,7 @@
 ﻿namespace MaxRumsey.OzStripsPlugin.Gui;
 
 /// <summary>
-/// Defines the various statuses of a strip bay in air traffic control simulation.
+/// Defines the various statuses of a strip bay in OzStrips.
 /// </summary>
 public enum StripBay
 {
@@ -16,7 +16,7 @@ public enum StripBay
     BAY_PREA,
 
     /// <summary>
-    /// Indicates the strip has received a clearance..
+    /// Indicates the strip has received a clearance.
     /// </summary>
     BAY_CLEARED,
 

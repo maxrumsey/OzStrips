@@ -33,7 +33,7 @@ public static class StripElements
         RFL,
         READY,
         GLOP,
-        SSR_SYMBOL,
+        PDC_INDICATOR,
         RWY,
         WTC,
         ROUTE,
@@ -59,6 +59,8 @@ public static class StripElements
         SID_TRIGGER,
         SET_READY,
         SET_TOT,
+        OPEN_PDC,
+        OPEN_PM,
     }
 
     public enum HoverActions
