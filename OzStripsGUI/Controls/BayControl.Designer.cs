@@ -32,7 +32,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Controls
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.pl_main = new System.Windows.Forms.Panel();
+            this.pl_main = new NoScrollPanel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.bt_div = new System.Windows.Forms.Button();
             this.bt_queue = new System.Windows.Forms.Button();
@@ -141,6 +141,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Controls
         private System.Windows.Forms.Label lb_bay_name;
         private System.Windows.Forms.Button bt_queue;
         private System.Windows.Forms.Button bt_div;
-        private System.Windows.Forms.Panel pl_main;
+        private NoScrollPanel pl_main;
     }
 }
