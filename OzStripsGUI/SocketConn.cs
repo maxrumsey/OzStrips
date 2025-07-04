@@ -339,8 +339,17 @@ public sealed class SocketConn : IDisposable
         _oneMinTimer.Elapsed += ToggleFresh;
         if (_connection.State == HubConnectionState.Connected) // was is io connected.
         {
+            var connmetadata = new ConnectionMetadataDTO()
+            {
+                Version = OzStripsConfig.version,
+                APIVersion = OzStripsConfig.apiversion,
+                Server = Server,
+                AerodromeName = _bayManager.AerodromeName,
+                Callsign = Network.Me.Callsign,
+            };
+
             await _connection.InvokeAsync("ProvideVersion", OzStripsConfig.version);
-            await _connection.InvokeAsync("SubscribeToAerodrome", _bayManager.AerodromeName, Network.Me.RealName, Server);
+            await _connection.InvokeAsync("SubscribeToAerodrome", connmetadata);
             _oneMinTimer.Start();
         }
     }
