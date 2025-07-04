@@ -31,7 +31,9 @@
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="$(VatSysDir)\bin\vatSys.exe " />
+    <Reference Include="$(VatSysDir)\bin\vatSys.exe ">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System.Net.Http" />
   </ItemGroup>
 
@@ -63,9 +65,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Reference Update="C:\Program Files %28x86%29\vatSys\bin\vatSys.exe">
-      <Private>False</Private>
-    </Reference>
   </ItemGroup>
 </Project>
 
