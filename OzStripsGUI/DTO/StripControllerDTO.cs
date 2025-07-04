@@ -11,12 +11,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui.DTO;
 public class StripControllerDTO
 {
     /// <summary>
-    /// Gets or sets the aircraft identifier.
-    /// </summary>
-    [JsonPropertyName("acid")]
-    public string acid { get; set; } = string.Empty;
-
-    /// <summary>
     /// Gets or sets the bay information for the strip.
     /// </summary>
     [JsonPropertyName("bay")]
@@ -69,4 +63,9 @@ public class StripControllerDTO
     /// </summary>
     [JsonPropertyName("ready")]
     public bool ready { get; set; }
+
+    /// <summary>
+    /// Gets or sets the strip key which uniquely identifies the strip.
+    /// </summary>
+    public StripKey StripKey { get; set; }
 }

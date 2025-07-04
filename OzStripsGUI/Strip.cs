@@ -127,6 +127,23 @@ public sealed class Strip
     }
 
     /// <summary>
+    /// Gets the strip key.
+    /// </summary>
+    public StripKey StripKey
+    {
+        get
+        {
+            return new StripKey()
+            {
+                Callsign = FDR.Callsign,
+                VatsimID = Network.GetOnlinePilots.Find(x => x.Callsign == FDR.Callsign).ID,
+                ADEP = FDR.DepAirport,
+                ADES = FDR.DesAirport,
+            };
+        }
+    }
+
+    /// <summary>
     /// Gets the arrival or departure type.
     /// </summary>
     public StripArrDepType ArrDepType
@@ -499,7 +516,6 @@ public sealed class Strip
     {
         var scDTO = new StripControllerDTO
         {
-            acid = sc.FDR.Callsign,
             bay = sc.CurrentBay,
             CLX = sc.CLX,
             GATE = sc.Gate,
@@ -508,20 +524,7 @@ public sealed class Strip
             remark = sc.Remark,
             TOT = sc.TakeOffTime is not null ? sc.TakeOffTime!.ToString() : "\0",
             ready = sc.Ready,
-        };
-
-        return scDTO;
-    }
-
-    /// <summary>
-    /// Converts a strip controller to the data object.
-    /// </summary>
-    /// <param name="sc">The strip controller.</param>
-    public static implicit operator SCDeletionDTO(Strip sc)
-    {
-        var scDTO = new SCDeletionDTO
-        {
-            acid = sc.FDR.Callsign,
+            StripKey = sc.StripKey,
         };
 
         return scDTO;

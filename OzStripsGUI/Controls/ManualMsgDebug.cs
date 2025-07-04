@@ -27,7 +27,6 @@ public partial class ManualMsgDebug : UserControl
     {
         var scDTO = new StripControllerDTO
         {
-            acid = tb_acid.Text,
             bay = (StripBay)int.Parse(tb_baynum.Text, CultureInfo.InvariantCulture),
             CLX = tb_clx.Text,
             GATE = tb_bay.Text,

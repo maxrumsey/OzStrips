@@ -38,6 +38,24 @@ public class StripRepository
     }
 
     /// <summary>
+    /// Gets a strip from a key.
+    /// </summary>
+    /// <param name="key">Strip key.</param>
+    /// <returns>Strip or null.</returns>
+    public Strip? GetController(StripKey key)
+    {
+        foreach (var controller in Controllers)
+        {
+            if (controller.StripKey.Matches(key))
+            {
+                return controller;
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
     /// Receives a fdr, updates existing strip controller, or makes a new one.
     /// </summary>
     /// <param name="fdr">The flight data record.</param>
@@ -82,7 +100,7 @@ public class StripRepository
         {
             foreach (var controller in Controllers)
             {
-                if (controller.FDR.Callsign == stripControllerData.acid)
+                if (controller.StripKey.Matches(stripControllerData.StripKey))
                 {
                     var changeBay = false;
                     controller.CLX = !string.IsNullOrWhiteSpace(stripControllerData.CLX) ? stripControllerData.CLX : string.Empty;

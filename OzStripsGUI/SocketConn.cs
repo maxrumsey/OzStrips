@@ -101,9 +101,9 @@ public sealed class SocketConn : IDisposable
             }
         });
 
-        _connection.On<string?, RouteDTO[]?>("Routes", (string? acid, RouteDTO[]? routes) => // not functional.
+        _connection.On<StripKey?, RouteDTO[]?>("Routes", (StripKey? key, RouteDTO[]? routes) => // not functional.
         {
-            if (acid is null ||
+            if (key is null ||
                 routes is null ||
                 routes.Length == 0)
             {
@@ -116,7 +116,7 @@ public sealed class SocketConn : IDisposable
 
                 if (mainForm.Visible)
                 {
-                    var sc = _bayManager.StripRepository.GetController(acid);
+                    var sc = _bayManager.StripRepository.GetController(key);
 
                     if (sc is not null)
                     {
@@ -232,11 +232,6 @@ public sealed class SocketConn : IDisposable
         StripControllerDTO scDTO = sc;
         AddMessage("c:sc_change: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
 
-        if (string.IsNullOrEmpty(scDTO.acid))
-        {
-            return; // prevent bug
-        }
-
         if (CanSendDTO)
         {
             _connection.InvokeAsync("StripChange", scDTO);
@@ -269,7 +264,7 @@ public sealed class SocketConn : IDisposable
         AddMessage("c:GetRoutes: " + sc.FDR.Callsign);
         if (_connection.State == HubConnectionState.Connected)
         {
-            _connection.InvokeAsync("GetRoutes", sc.FDR.DepAirport, sc.FDR.DesAirport, sc.FDR.Callsign);
+            _connection.InvokeAsync("GetRoutes", sc.StripKey);
         }
     }
 
@@ -283,7 +278,7 @@ public sealed class SocketConn : IDisposable
 
         if (_connection.State == HubConnectionState.Connected)
         {
-            _connection.InvokeAsync("RequestStrip", strip.FDR.Callsign);
+            _connection.InvokeAsync("RequestStrip", strip.StripKey);
         }
     }
 
