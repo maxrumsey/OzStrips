@@ -41,6 +41,16 @@ public static class Util
     }
 
     /// <summary>
+    /// Creates a question box with a specified message and returns the result.
+    /// </summary>
+    /// <param name="message">Message to show.</param>
+    /// <returns>Question Result.</returns>
+    public static DialogResult ShowQuestionBox(string message)
+    {
+        return MessageBox.Show(Form.ActiveForm, message, "OzStrips", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+    }
+
+    /// <summary>
     /// Creates an env var for ozstrips DLLs and returns the path.
     /// </summary>
     /// <returns>Path where dlls will be copied to.</returns>

@@ -334,6 +334,19 @@ public partial class MainForm : Form
     }
 
     /// <summary>
+    /// Opens the settings window.
+    /// </summary>
+    /// <param name="sender">Sender.</param>
+    /// <param name="e">Args.</param>
+    public void ShowSettings(object sender, EventArgs e)
+    {
+        var modalChild = new SettingsWindowControl(_socketConn, _aerodromes);
+        var bm = new BaseModal(modalChild, "OzStrips Settings");
+        bm.ReturnEvent += modalChild.ModalReturned;
+        bm.Show(MainForm.MainFormInstance);
+    }
+
+    /// <summary>
     /// Overrides keypress event to capture all keypresses.
     /// </summary>
     /// <param name="msg">Sender.</param>
@@ -603,14 +616,6 @@ public partial class MainForm : Form
         }
     }
 
-    private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-        var modalChild = new SettingsWindowControl(_socketConn, _aerodromes);
-        var bm = new BaseModal(modalChild, "OzStrips Settings");
-        bm.ReturnEvent += modalChild.ModalReturned;
-        bm.Show(MainForm.MainFormInstance);
-    }
-
     private void MainForm_Load(object sender, EventArgs e)
     {
         SetConnStatus();
@@ -619,7 +624,7 @@ public partial class MainForm : Form
 
     private void ModifyButtonClicked(object sender, EventArgs e)
     {
-        SettingsToolStripMenuItem_Click(this, EventArgs.Empty);
+        ShowSettings(this, EventArgs.Empty);
     }
 
     private void AerodromeSelectorKeyDown(object sender, KeyPressEventArgs e)

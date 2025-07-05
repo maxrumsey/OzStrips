@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.Gui.DTO;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -20,7 +21,7 @@ public sealed class SocketConn : IDisposable
     private readonly bool _isDebug = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
 
     private bool _freshClient = true;
-    private Timer? _oneMinTimer;
+    private System.Timers.Timer? _oneMinTimer;
     private bool _versionShown;
     private bool _isDisposed;
 
@@ -485,8 +486,14 @@ public sealed class SocketConn : IDisposable
     {
         if (!Network.IsOfficialServer && Server == Servers.VATSIM)
         {
-            Util.ShowErrorBox("Connection to OzStrips main server detected while connected to the Sweatbox.\n\n" +
-                "Please select the correct server in Help -> Settings.");
+            var result = Util.ShowQuestionBox("Connection to OzStrips main server detected while connected to the Sweatbox.\n\n" +
+                "Would you like to go to Settings and set Sweatbox mode?");
+
+            if (result == DialogResult.Yes)
+            {
+                MainForm.MainFormInstance?.ShowSettings(this, new());
+            }
+
             return false;
         }
 
