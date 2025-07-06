@@ -1,5 +1,5 @@
 # Strip Bay
-![Strip Bays](../images/fullwindow.png)
+![Strip Bays](../images/sb.png)
 
 ## Buttons
 ### Add to Queue Button
