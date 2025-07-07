@@ -698,4 +698,9 @@ public partial class MainForm : Form
 
         pl_controlbar.Padding = new Padding(0, 0, 0, margin);
     }
+
+    private void FlipFlopStrip(object sender, EventArgs e)
+    {
+        _bayManager.FlipFlopStrip();
+    }
 }

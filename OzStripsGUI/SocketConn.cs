@@ -45,7 +45,7 @@ public sealed class SocketConn : IDisposable
 
         _connection.Reconnecting += async (error) => await ConnectionLost(error);
 
-        _connection.On<StripControllerDTO?>("StripUpdate", (StripControllerDTO? scDTO) =>
+        _connection.On<StripDTO?>("StripUpdate", (StripDTO? scDTO) =>
         {
             AddMessage("s:StripUpdate: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
 
@@ -55,7 +55,7 @@ public sealed class SocketConn : IDisposable
             }
         });
 
-        _connection.On<List<StripControllerDTO>?>("StripCache", (List<StripControllerDTO>? scDTO) =>
+        _connection.On<List<StripDTO>?>("StripCache", (List<StripDTO>? scDTO) =>
         {
             AddMessage("s:StripCache: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
 
@@ -230,7 +230,7 @@ public sealed class SocketConn : IDisposable
     /// <param name="sc">The strip controller.</param>
     public void SyncSC(Strip sc)
     {
-        StripControllerDTO scDTO = sc;
+        StripDTO scDTO = sc;
         AddMessage("c:sc_change: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
 
         if (CanSendDTO)
@@ -248,7 +248,7 @@ public sealed class SocketConn : IDisposable
     {
         if (CanSendDTO && strip is not null)
         {
-            _connection.InvokeAsync("StripStatus", (StripControllerDTO)strip, acid);
+            _connection.InvokeAsync("StripStatus", (StripDTO)strip, acid);
         }
         else if (CanSendDTO)
         {
@@ -468,7 +468,7 @@ public sealed class SocketConn : IDisposable
     /// <returns>The cache data transfer object.</returns>
     private CacheDTO CreateCacheDTO()
     {
-        return new() { strips = _bayManager.StripRepository.Controllers.ConvertAll(x => (StripControllerDTO)x), };
+        return new() { strips = _bayManager.StripRepository.Controllers.ConvertAll(x => (StripDTO)x), };
     }
 
     private void ToggleFresh(object sender, ElapsedEventArgs e)

@@ -98,7 +98,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
         /*
          * Don't send delete messages for deps incase they log back in.
          */
-        if (strip.ArrDepType == StripArrDepType.ARRIVAL)
+        if (strip.DefaultStripType == StripType.ARRIVAL)
         {
             strip.SendDeleteMessage();
         }

@@ -3,7 +3,7 @@
 /// <summary>
 /// Defines the types of air traffic operations for controller strips, distinguishing between arrivals, departures, and unspecified types.
 /// </summary>
-public enum StripArrDepType
+public enum StripType
 {
     /// <summary>
     /// Represents an arriving aircraft. Used for managing incoming flights to an airport.
@@ -16,7 +16,12 @@ public enum StripArrDepType
     DEPARTURE,
 
     /// <summary>
-    /// Indicates an unknown or unspecified operation type, used when the operation type cannot be determined.
+    /// Indicates a strip arriving and departing from the same aerodrme.
     /// </summary>
-    UNKNOWN,
+    LOCAL,
+
+    /// <summary>
+    /// Indicates a strip status of nil / not relevant.
+    /// </summary>
+    UNKNOWN = -1,
 }

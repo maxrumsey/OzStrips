@@ -8,7 +8,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui.DTO;
 /// <summary>
 /// Represents a controller strip with various operational details.
 /// </summary>
-public class StripControllerDTO
+public class StripDTO
 {
     /// <summary>
     /// Gets or sets the bay information for the strip.
@@ -68,4 +68,9 @@ public class StripControllerDTO
     /// Gets or sets the strip key which uniquely identifies the strip.
     /// </summary>
     public StripKey StripKey { get; set; }
+
+    /// <summary>
+    /// Gets or sets the strip overriden type.
+    /// </summary>
+    public StripType OverrideStripType { get; set; } = StripType.UNKNOWN;
 }

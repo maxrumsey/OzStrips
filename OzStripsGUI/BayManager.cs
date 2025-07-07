@@ -206,6 +206,18 @@ public class BayManager
     }
 
     /// <summary>
+    /// Toggles crossing highlight on a strip.
+    /// </summary>
+    public void FlipFlopStrip()
+    {
+        if (PickedController != null)
+        {
+            PickedController.FlipFlop();
+            RemovePicked(true);
+        }
+    }
+
+    /// <summary>
     /// Drop the strip to the specified bay.
     /// </summary>
     /// <param name="bay">The bay.</param>

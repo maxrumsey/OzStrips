@@ -174,7 +174,7 @@ public class StripController
         var shouldbeeven = digit % 2 == 0;
 
         var colour = SKColor.Empty;
-        if (even != shouldbeeven && FDR.RFL >= 3000 && Strip.ArrDepType == StripArrDepType.DEPARTURE)
+        if (even != shouldbeeven && FDR.RFL >= 3000 && Strip.StripType == StripType.DEPARTURE)
         {
             colour = SKColors.OrangeRed;
             ShowCFLToolTip = true;
@@ -189,7 +189,7 @@ public class StripController
             colour = SKColor.Empty;
             ShowCFLToolTip = false;
         }
-        else if (FDR.RFL >= 41000 && Strip.ArrDepType == StripArrDepType.DEPARTURE)
+        else if (FDR.RFL >= 41000 && Strip.StripType == StripType.DEPARTURE)
         {
             colour = SKColors.OrangeRed;
             ShowCFLToolTip = true;

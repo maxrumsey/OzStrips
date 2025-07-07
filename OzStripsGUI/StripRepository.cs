@@ -94,7 +94,7 @@ public class StripRepository
     /// </summary>
     /// <param name="stripControllerData">The strip controller data.</param>
     /// <param name="bayManager">The bay manager.</param>
-    public void UpdateFDR(StripControllerDTO stripControllerData, BayManager bayManager)
+    public void UpdateFDR(StripDTO stripControllerData, BayManager bayManager)
     {
         try
         {
@@ -141,7 +141,7 @@ public class StripRepository
     /// <param name="cacheData">The cache data.</param>
     /// <param name="bayManager">The bay manager.</param>
     /// <param name="socketConn">The socket connection.</param>
-    public void LoadCache(List<StripControllerDTO> cacheData, BayManager bayManager, SocketConn socketConn)
+    public void LoadCache(List<StripDTO> cacheData, BayManager bayManager, SocketConn socketConn)
     {
         foreach (var stripDTO in cacheData)
         {
