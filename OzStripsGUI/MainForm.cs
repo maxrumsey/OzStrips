@@ -272,7 +272,7 @@ public partial class MainForm : Form
         try
         {
             _bayManager.WipeStrips();
-            _bayManager.StripRepository.Controllers.Clear();
+            _bayManager.StripRepository.Strips.Clear();
             _socketConn.Disconnect();
         }
         catch (Exception ex)

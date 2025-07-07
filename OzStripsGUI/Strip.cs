@@ -558,6 +558,7 @@ public sealed class Strip
             TOT = sc.TakeOffTime is not null ? sc.TakeOffTime!.ToString() : "\0",
             ready = sc.Ready,
             StripKey = sc.StripKey,
+            OverrideStripType = sc.OverrideStripType,
         };
 
         return scDTO;

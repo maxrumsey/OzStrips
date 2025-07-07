@@ -35,6 +35,6 @@ public partial class ManualMsgDebug : UserControl
             TOT = "\0",
         };
 
-        _bayManager.StripRepository.UpdateFDR(scDTO, _bayManager);
+        _bayManager.StripRepository.UpdateStripData(scDTO, _bayManager);
     }
 }
