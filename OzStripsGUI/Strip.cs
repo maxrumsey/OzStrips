@@ -624,7 +624,7 @@ public sealed class Strip
     /// </summary>
     public void CoordinateStrip()
     {
-        if (FDR.State == FDR.FDRStates.STATE_PREACTIVE && (Network.Me.IsRealATC || MainForm.IsDebug))
+        if (FDR.State == FDR.FDRStates.STATE_PREACTIVE && (Network.Me.IsRealATC || MainForm.IsDebug) && StripType != StripType.LOCAL)
         {
             MMI.EstFDR(FDR);
         }
