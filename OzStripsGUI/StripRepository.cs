@@ -74,15 +74,26 @@ public class StripRepository
                     bayManager.BayRepository.DeleteStrip(controller);
                 }
 
-                controller.CheckAndInvalidateSavedRoutes(fdr);
-
-                controller.FDR = fdr;
-                controller.UpdateFDR();
-                return controller;
+                // If ades / adep changed, delete and recreate strip.
+                if (controller.ADESADEPPairChanged(fdr))
+                {
+                    bayManager.BayRepository.DeleteStrip(controller);
+                    return CreateStrip(fdr, bayManager, socketConn, inhibitReorders);
+                }
+                else
+                {
+                    controller.FDR = fdr;
+                    controller.UpdateFDR();
+                    return controller;
+                }
             }
         }
 
-        // todo: add this logic into separate static function
+        return CreateStrip(fdr, bayManager, socketConn, inhibitReorders);
+    }
+
+    private static Strip CreateStrip(FDR fdr, BayManager bayManager, SocketConn socketConn, bool inhibitReorders = false)
+    {
         var stripController = new Strip(fdr, bayManager, socketConn);
         bayManager.AddStrip(stripController, true, inhibitReorders);
         stripController.FetchStripData();

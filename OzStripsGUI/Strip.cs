@@ -445,11 +445,11 @@ public sealed class Strip
     {
         get
         {
-            if (StripType == StripType.DEPARTURE && FDR.SID is not null)
+            if (StripType != StripType.ARRIVAL && FDR.SID is not null)
             {
                 return FDR.SID.Name;
             }
-            else if (StripType == StripType.DEPARTURE)
+            else if (StripType != StripType.ARRIVAL)
             {
                 return string.Empty;
             }
@@ -539,6 +539,15 @@ public sealed class Strip
     {
         { StripBay.BAY_TAXI, StripBay.BAY_DEAD },
         { StripBay.BAY_RUNWAY, StripBay.BAY_TAXI },
+    };
+
+    /// <summary>
+    /// Gets a dictionary which contains the arrival next state for a given state.
+    /// </summary>
+    private static Dictionary<StripBay, StripBay> NextBayLocal { get; } = new()
+    {
+        { StripBay.BAY_ARRIVAL, StripBay.BAY_RUNWAY },
+        { StripBay.BAY_RUNWAY, StripBay.BAY_ARRIVAL },
     };
 
     /// <summary>
@@ -636,17 +645,13 @@ public sealed class Strip
     }
 
     /// <summary>
-    /// When we receive a new FDR, with different ADEP or ADEs, check if we need to clean out old routes.
+    /// Check if adep or ades changed.
     /// </summary>
     /// <param name="_fdr">New FDR.</param>
-    public void CheckAndInvalidateSavedRoutes(FDR _fdr)
+    public bool ADESADEPPairChanged(FDR _fdr)
     {
         var adPair = _fdr.DepAirport + _fdr.DesAirport;
-        if (adPair != ValidRoutesAerodromePairing)
-        {
-            ValidRoutes = null;
-            RequestedRoutes = DateTime.MaxValue;
-        }
+        return adPair != ValidRoutesAerodromePairing;
     }
 
     /// <summary>
@@ -761,6 +766,7 @@ public sealed class Strip
     {
         // TODO: do something with this.
         Dictionary<StripBay, StripBay> stripBayResultDict;
+
         switch (StripType)
         {
             case StripType.ARRIVAL:
@@ -768,6 +774,10 @@ public sealed class Strip
                 break;
             case StripType.DEPARTURE:
                 stripBayResultDict = NextBayDep;
+                break;
+
+            case StripType.LOCAL:
+                stripBayResultDict = NextBayLocal;
                 break;
             default:
                 return;
