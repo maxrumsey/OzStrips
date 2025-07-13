@@ -51,6 +51,8 @@ public sealed class Strip
             CurrentBay = StripBay.BAY_ARRIVAL;
         }
 
+        OriginalAerodromePair = FDR.DepAirport + FDR.DesAirport;
+
         Controller = new StripController(this);
     }
 
@@ -82,7 +84,7 @@ public sealed class Strip
     /// <summary>
     /// Gets or sets a string containing the aerodrome pair that valid routes were fetched for.
     /// </summary>
-    public string ValidRoutesAerodromePairing { get; set; } = string.Empty;
+    public string OriginalAerodromePair { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets a value indicating whether or not an aircraft has filed a dodgy route.
@@ -651,7 +653,7 @@ public sealed class Strip
     public bool ADESADEPPairChanged(FDR _fdr)
     {
         var adPair = _fdr.DepAirport + _fdr.DesAirport;
-        return adPair != ValidRoutesAerodromePairing;
+        return adPair != OriginalAerodromePair;
     }
 
     /// <summary>
@@ -720,7 +722,6 @@ public sealed class Strip
 
         if (ValidRoutes is not null)
         {
-            ValidRoutesAerodromePairing = FDR.DepAirport + FDR.DesAirport;
             CondensedRoute = CleanVatsysRoute(FDR.Route);
             DodgyRoute = true;
             foreach (var validroute in ValidRoutes)
