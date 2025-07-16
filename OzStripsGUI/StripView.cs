@@ -19,7 +19,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
         get
 
         {
-            return !_strip.SquawkCorrect && _strip.CurrentBay >= StripBay.BAY_TAXI && _strip.DefaultStripType != StripType.ARRIVAL;
+            return !_strip.SquawkCorrect && _strip.CurrentBay >= StripBay.BAY_TAXI && _strip.StripType == StripType.DEPARTURE;
         }
     }
 
