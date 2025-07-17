@@ -425,7 +425,7 @@ public sealed class Strip
     {
         get
         {
-            return FDR.FlightRules == "V" && !string.IsNullOrEmpty(FDR.SIDSTARString);
+            return FDR.FlightRules == "V" && !string.IsNullOrEmpty(FDR.SIDSTARString) && StripType != StripType.ARRIVAL;
         }
     }
 

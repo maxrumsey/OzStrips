@@ -399,6 +399,9 @@ public partial class MainForm : Form
             case Keys.X:
                 _bayManager.CrossStrip();
                 return true;
+            case Keys.F:
+                _bayManager.FlipFlopStrip();
+                return true;
             default:
                 break;
         }
