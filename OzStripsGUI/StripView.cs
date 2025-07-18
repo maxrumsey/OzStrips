@@ -486,7 +486,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 return _strip.Controller.DetermineRouteBackColour();
             case StripElements.Values.READY:
                 var colour = SKColor.Empty;
-                if (!_strip.Ready && (_strip.CurrentBay == StripBay.BAY_HOLDSHORT || _strip.CurrentBay == StripBay.BAY_RUNWAY) && _strip.StripType == StripType.DEPARTURE)
+                if (!_strip.Ready && (_strip.CurrentBay == StripBay.BAY_HOLDSHORT || _strip.CurrentBay == StripBay.BAY_RUNWAY) && _strip.StripType != StripType.ARRIVAL)
                 {
                     colour = SKColors.Orange;
                 }
