@@ -124,6 +124,6 @@
     <value>http://localhost:5153/</value>
   </data>
   <data name="version" xml:space="preserve">
-    <value>0.6.0</value>
+    <value>0.6.1</value>
   </data>
 </root>

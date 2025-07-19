@@ -635,7 +635,7 @@ public sealed class Strip
     }
 
     /// <summary>
-    /// Coordinates the strip with the server.
+    /// Coordinates the strip.
     /// </summary>
     public void CoordinateStrip()
     {
@@ -647,6 +647,17 @@ public sealed class Strip
         if (CurrentBay == StripBay.BAY_PREA)
         {
             Util.ShowWarnBox("You have coordinated this strip while it is in your Preactive Bay.\nYou will no longer be able make changes to the flight plan!\nOpen the vatSys Flight Plan window and deactivate the strip if you still need to make changes to SID, RWY or Altitude.");
+        }
+    }
+
+    /// <summary>
+    /// Deactivates the strip.
+    /// </summary>
+    public void DeactivateStrip()
+    {
+        if (FDR.State == FDR.FDRStates.STATE_COORDINATED && (Network.Me.IsRealATC || MainForm.IsDebug))
+        {
+            FDP2.BackFDR(FDR);
         }
     }
 

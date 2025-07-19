@@ -422,22 +422,27 @@ public class BayManager
     /// <summary>
     /// Updates the bay from the controller.
     /// </summary>
-    /// <param name="stripController">The strip controller.</param>
-    public void UpdateBay(Strip stripController)
+    /// <param name="strip">The strip controller.</param>
+    /// Called by inhibits, moving strips, sid triggers, server pos updates.
+    public void UpdateBay(Strip strip)
     {
         foreach (var bay in BayRepository.Bays)
         {
-            if (bay.OwnsStrip(stripController))
+            if (bay.OwnsStrip(strip))
             {
-                bay.RemoveStrip(stripController);
+                bay.RemoveStrip(strip);
             }
         }
 
-        AddStrip(stripController);
+        AddStrip(strip);
 
-        if (stripController.CurrentBay >= StripBay.BAY_CLEARED)
+        if (strip.CurrentBay >= StripBay.BAY_CLEARED)
         {
-            stripController.CoordinateStrip();
+            strip.CoordinateStrip();
+        }
+        else if (strip.CurrentBay == StripBay.BAY_PREA)
+        {
+            strip.DeactivateStrip();
         }
     }
 
