@@ -12,7 +12,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.11.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.13.0.0")]
     internal sealed partial class OzStripsSettings : global::System.Configuration.ApplicationSettingsBase {
         
         private static OzStripsSettings defaultInstance = ((OzStripsSettings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new OzStripsSettings())));
@@ -49,7 +49,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
         public int SmartResize {
             get {
                 return ((int)(this["SmartResize"]));
@@ -61,7 +61,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool KeepStripPicked {
             get {
                 return ((bool)(this["KeepStripPicked"]));
