@@ -25,9 +25,8 @@ public partial class ManualMsgDebug : UserControl
 
     private void SendButton(object sender, EventArgs e)
     {
-        var scDTO = new StripControllerDTO
+        var scDTO = new StripDTO
         {
-            acid = tb_acid.Text,
             bay = (StripBay)int.Parse(tb_baynum.Text, CultureInfo.InvariantCulture),
             CLX = tb_clx.Text,
             GATE = tb_bay.Text,
@@ -36,6 +35,6 @@ public partial class ManualMsgDebug : UserControl
             TOT = "\0",
         };
 
-        _bayManager.StripRepository.UpdateFDR(scDTO, _bayManager);
+        _bayManager.StripRepository.UpdateStripData(scDTO, _bayManager);
     }
 }

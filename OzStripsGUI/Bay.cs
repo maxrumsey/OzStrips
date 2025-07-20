@@ -230,7 +230,7 @@ public class Bay : System.IDisposable
 
         try
         {
-            if (BayTypes.Contains(StripBay.BAY_PREA) && OzStripsSettings.Default.AlphaSortPrea)
+            if (BayTypes.Contains(StripBay.BAY_PREA) && false) // OzStripsSettings.Default.AlphaSortPrea)
             {
                 var abovetheBar = new List<StripListItem>() { strip };
                 for (var i = Strips.Count - 1; i >= 0; i--)

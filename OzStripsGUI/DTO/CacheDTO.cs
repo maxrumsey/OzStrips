@@ -14,5 +14,5 @@ public class CacheDTO
     /// Gets or sets the list of strip controllers.
     /// </summary>
     [JsonPropertyName("strips")]
-    public List<StripControllerDTO> strips { get; set; } = [];
+    public List<StripDTO> strips { get; set; } = [];
 }

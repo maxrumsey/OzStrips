@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.Gui.DTO;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -20,7 +21,7 @@ public sealed class SocketConn : IDisposable
     private readonly bool _isDebug = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
 
     private bool _freshClient = true;
-    private Timer? _oneMinTimer;
+    private System.Timers.Timer? _oneMinTimer;
     private bool _versionShown;
     private bool _isDisposed;
 
@@ -44,17 +45,17 @@ public sealed class SocketConn : IDisposable
 
         _connection.Reconnecting += async (error) => await ConnectionLost(error);
 
-        _connection.On<StripControllerDTO?>("StripUpdate", (StripControllerDTO? scDTO) =>
+        _connection.On<StripDTO?>("StripUpdate", (StripDTO? scDTO) =>
         {
             AddMessage("s:StripUpdate: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
 
             if (mainForm.Visible && scDTO is not null)
             {
-                mainForm.Invoke(() => _bayManager.StripRepository.UpdateFDR(scDTO, bayManager));
+                mainForm.Invoke(() => _bayManager.StripRepository.UpdateStripData(scDTO, bayManager));
             }
         });
 
-        _connection.On<List<StripControllerDTO>?>("StripCache", (List<StripControllerDTO>? scDTO) =>
+        _connection.On<List<StripDTO>?>("StripCache", (List<StripDTO>? scDTO) =>
         {
             AddMessage("s:StripCache: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
 
@@ -101,9 +102,9 @@ public sealed class SocketConn : IDisposable
             }
         });
 
-        _connection.On<string?, RouteDTO[]?>("Routes", (string? acid, RouteDTO[]? routes) => // not functional.
+        _connection.On<StripKey?, RouteDTO[]?>("Routes", (StripKey? key, RouteDTO[]? routes) => // not functional.
         {
-            if (acid is null ||
+            if (key is null ||
                 routes is null ||
                 routes.Length == 0)
             {
@@ -116,7 +117,7 @@ public sealed class SocketConn : IDisposable
 
                 if (mainForm.Visible)
                 {
-                    var sc = _bayManager.StripRepository.GetController(acid);
+                    var sc = _bayManager.StripRepository.GetController(key);
 
                     if (sc is not null)
                     {
@@ -229,13 +230,8 @@ public sealed class SocketConn : IDisposable
     /// <param name="sc">The strip controller.</param>
     public void SyncSC(Strip sc)
     {
-        StripControllerDTO scDTO = sc;
+        StripDTO scDTO = sc;
         AddMessage("c:sc_change: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
-
-        if (string.IsNullOrEmpty(scDTO.acid))
-        {
-            return; // prevent bug
-        }
 
         if (CanSendDTO)
         {
@@ -252,7 +248,7 @@ public sealed class SocketConn : IDisposable
     {
         if (CanSendDTO && strip is not null)
         {
-            _connection.InvokeAsync("StripStatus", (StripControllerDTO)strip, acid);
+            _connection.InvokeAsync("StripStatus", (StripDTO)strip, acid);
         }
         else if (CanSendDTO)
         {
@@ -269,7 +265,7 @@ public sealed class SocketConn : IDisposable
         AddMessage("c:GetRoutes: " + sc.FDR.Callsign);
         if (_connection.State == HubConnectionState.Connected)
         {
-            _connection.InvokeAsync("GetRoutes", sc.FDR.DepAirport, sc.FDR.DesAirport, sc.FDR.Callsign);
+            _connection.InvokeAsync("GetRoutes", sc.StripKey);
         }
     }
 
@@ -283,7 +279,7 @@ public sealed class SocketConn : IDisposable
 
         if (_connection.State == HubConnectionState.Connected)
         {
-            _connection.InvokeAsync("RequestStrip", strip.FDR.Callsign);
+            _connection.InvokeAsync("RequestStrip", strip.StripKey);
         }
     }
 
@@ -344,8 +340,17 @@ public sealed class SocketConn : IDisposable
         _oneMinTimer.Elapsed += ToggleFresh;
         if (_connection.State == HubConnectionState.Connected) // was is io connected.
         {
+            var connmetadata = new ConnectionMetadataDTO()
+            {
+                Version = OzStripsConfig.version,
+                APIVersion = OzStripsConfig.apiversion,
+                Server = Server,
+                AerodromeName = _bayManager.AerodromeName,
+                Callsign = Network.Me.Callsign,
+            };
+
             await _connection.InvokeAsync("ProvideVersion", OzStripsConfig.version);
-            await _connection.InvokeAsync("SubscribeToAerodrome", _bayManager.AerodromeName, Network.Me.RealName, Server);
+            await _connection.InvokeAsync("SubscribeToAerodrome", connmetadata);
             _oneMinTimer.Start();
         }
     }
@@ -463,7 +468,7 @@ public sealed class SocketConn : IDisposable
     /// <returns>The cache data transfer object.</returns>
     private CacheDTO CreateCacheDTO()
     {
-        return new() { strips = _bayManager.StripRepository.Controllers.ConvertAll(x => (StripControllerDTO)x), };
+        return new() { strips = _bayManager.StripRepository.Strips.ConvertAll(x => (StripDTO)x), };
     }
 
     private void ToggleFresh(object sender, ElapsedEventArgs e)
@@ -481,8 +486,14 @@ public sealed class SocketConn : IDisposable
     {
         if (!Network.IsOfficialServer && Server == Servers.VATSIM)
         {
-            Util.ShowErrorBox("Connection to OzStrips main server detected while connected to the Sweatbox.\n\n" +
-                "Please select the correct server in Help -> Settings.");
+            var result = Util.ShowQuestionBox("Connection to OzStrips main server detected while connected to the Sweatbox.\n\n" +
+                "Would you like to go to Settings and set Sweatbox mode?");
+
+            if (result == DialogResult.Yes)
+            {
+                MainForm.MainFormInstance?.ShowSettings(this, new());
+            }
+
             return false;
         }
 

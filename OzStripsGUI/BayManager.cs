@@ -206,6 +206,18 @@ public class BayManager
     }
 
     /// <summary>
+    /// Toggles crossing highlight on a strip.
+    /// </summary>
+    public void FlipFlopStrip()
+    {
+        if (PickedController != null)
+        {
+            PickedController.FlipFlop();
+            RemovePicked(true);
+        }
+    }
+
+    /// <summary>
     /// Drop the strip to the specified bay.
     /// </summary>
     /// <param name="bay">The bay.</param>
@@ -242,7 +254,7 @@ public class BayManager
     {
         AerodromeName = name;
         WipeStrips();
-        StripRepository.Controllers.Clear();
+        StripRepository.Strips.Clear();
 
         foreach (var fdr in FDP2.GetFDRs)
         {
@@ -321,7 +333,7 @@ public class BayManager
         if (fdr is not null)
         {
             Strip? foundSC = null;
-            foreach (var controller in StripRepository.Controllers)
+            foreach (var controller in StripRepository.Strips)
             {
                 if (controller.FDR.Callsign == fdr.Callsign)
                 {
@@ -378,27 +390,27 @@ public class BayManager
     /// <summary>
     /// Adds a strip.
     /// </summary>
-    /// <param name="stripController">The strip controller to add.</param>
-    /// <param name="save">If the strip controller should be saved.</param>
+    /// <param name="strip">The strip to add.</param>
+    /// <param name="save">If the strip should be saved to the server.</param>
     /// <param name="inhibitreorders">Whether or not to inhibit strip reodering.</param>
-    public void AddStrip(Strip stripController, bool save = true, bool inhibitreorders = false)
+    public void AddStrip(Strip strip, bool save = true, bool inhibitreorders = false)
     {
-        if (!stripController.DetermineSCValidity())
+        if (!strip.DetermineSCValidity())
         {
             return;
         }
 
         foreach (var bay in BayRepository.Bays)
         {
-            if (bay.ResponsibleFor(stripController.CurrentBay))
+            if (bay.ResponsibleFor(strip.CurrentBay))
             {
-                bay.AddStrip(stripController, inhibitreorders);
+                bay.AddStrip(strip, inhibitreorders);
             }
         }
 
-        if (save && !StripRepository.Controllers.Contains(stripController))
+        if (save && !StripRepository.Strips.Contains(strip))
         {
-            StripRepository.Controllers.Add(stripController);
+            StripRepository.Strips.Add(strip);
         }
 
         if (!inhibitreorders)
@@ -410,22 +422,27 @@ public class BayManager
     /// <summary>
     /// Updates the bay from the controller.
     /// </summary>
-    /// <param name="stripController">The strip controller.</param>
-    public void UpdateBay(Strip stripController)
+    /// <param name="strip">The strip controller.</param>
+    /// Called by inhibits, moving strips, sid triggers, server pos updates.
+    public void UpdateBay(Strip strip)
     {
         foreach (var bay in BayRepository.Bays)
         {
-            if (bay.OwnsStrip(stripController))
+            if (bay.OwnsStrip(strip))
             {
-                bay.RemoveStrip(stripController);
+                bay.RemoveStrip(strip);
             }
         }
 
-        AddStrip(stripController);
+        AddStrip(strip);
 
-        if (stripController.CurrentBay >= StripBay.BAY_CLEARED)
+        if (strip.CurrentBay >= StripBay.BAY_CLEARED)
         {
-            stripController.CoordinateStrip();
+            strip.CoordinateStrip();
+        }
+        else if (strip.CurrentBay == StripBay.BAY_PREA)
+        {
+            strip.DeactivateStrip();
         }
     }
 

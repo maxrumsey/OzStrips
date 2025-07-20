@@ -272,7 +272,7 @@ public partial class MainForm : Form
         try
         {
             _bayManager.WipeStrips();
-            _bayManager.StripRepository.Controllers.Clear();
+            _bayManager.StripRepository.Strips.Clear();
             _socketConn.Disconnect();
         }
         catch (Exception ex)
@@ -334,6 +334,19 @@ public partial class MainForm : Form
     }
 
     /// <summary>
+    /// Opens the settings window.
+    /// </summary>
+    /// <param name="sender">Sender.</param>
+    /// <param name="e">Args.</param>
+    public void ShowSettings(object sender, EventArgs e)
+    {
+        var modalChild = new SettingsWindowControl(_socketConn, _aerodromes);
+        var bm = new BaseModal(modalChild, "OzStrips Settings");
+        bm.ReturnEvent += modalChild.ModalReturned;
+        bm.Show(MainForm.MainFormInstance);
+    }
+
+    /// <summary>
     /// Overrides keypress event to capture all keypresses.
     /// </summary>
     /// <param name="msg">Sender.</param>
@@ -385,6 +398,9 @@ public partial class MainForm : Form
                 return true;
             case Keys.X:
                 _bayManager.CrossStrip();
+                return true;
+            case Keys.F:
+                _bayManager.FlipFlopStrip();
                 return true;
             default:
                 break;
@@ -603,14 +619,6 @@ public partial class MainForm : Form
         }
     }
 
-    private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-        var modalChild = new SettingsWindowControl(_socketConn, _aerodromes);
-        var bm = new BaseModal(modalChild, "OzStrips Settings");
-        bm.ReturnEvent += modalChild.ModalReturned;
-        bm.Show(MainForm.MainFormInstance);
-    }
-
     private void MainForm_Load(object sender, EventArgs e)
     {
         SetConnStatus();
@@ -619,7 +627,7 @@ public partial class MainForm : Form
 
     private void ModifyButtonClicked(object sender, EventArgs e)
     {
-        SettingsToolStripMenuItem_Click(this, EventArgs.Empty);
+        ShowSettings(this, EventArgs.Empty);
     }
 
     private void AerodromeSelectorKeyDown(object sender, KeyPressEventArgs e)
@@ -692,5 +700,10 @@ public partial class MainForm : Form
         }
 
         pl_controlbar.Padding = new Padding(0, 0, 0, margin);
+    }
+
+    private void FlipFlopStrip(object sender, EventArgs e)
+    {
+        _bayManager.FlipFlopStrip();
     }
 }

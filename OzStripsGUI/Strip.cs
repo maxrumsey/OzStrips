@@ -46,10 +46,12 @@ public sealed class Strip
         ParentAerodrome = bayManager.AerodromeName;
         _socketConn = socketConn;
         CurrentBay = StripBay.BAY_PREA;
-        if (ArrDepType == StripArrDepType.ARRIVAL)
+        if (StripType == StripType.ARRIVAL)
         {
             CurrentBay = StripBay.BAY_ARRIVAL;
         }
+
+        OriginalAerodromePair = FDR.DepAirport + FDR.DesAirport;
 
         Controller = new StripController(this);
     }
@@ -82,7 +84,7 @@ public sealed class Strip
     /// <summary>
     /// Gets or sets a string containing the aerodrome pair that valid routes were fetched for.
     /// </summary>
-    public string ValidRoutesAerodromePairing { get; set; } = string.Empty;
+    public string OriginalAerodromePair { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets a value indicating whether or not an aircraft has filed a dodgy route.
@@ -127,27 +129,77 @@ public sealed class Strip
     }
 
     /// <summary>
-    /// Gets the arrival or departure type.
+    /// Gets the strip key.
     /// </summary>
-    public StripArrDepType ArrDepType
+    public StripKey StripKey
     {
         get
         {
-            if (_bayManager == null)
+            return new StripKey()
             {
-                return StripArrDepType.UNKNOWN;
-            }
-
-            if (FDR.DesAirport.Equals(_bayManager.AerodromeName, StringComparison.InvariantCultureIgnoreCase))
-            {
-                return StripArrDepType.ARRIVAL;
-            }
-
-            return FDR.DepAirport.Equals(_bayManager.AerodromeName, StringComparison.CurrentCultureIgnoreCase) ?
-                StripArrDepType.DEPARTURE :
-                StripArrDepType.UNKNOWN;
+                Callsign = FDR.Callsign,
+                VatsimID = Network.GetOnlinePilots.Find(x => x?.Callsign == FDR.Callsign)?.ID ?? string.Empty,
+                ADEP = FDR.DepAirport,
+                ADES = FDR.DesAirport,
+            };
         }
     }
+
+    /// <summary>
+    /// Gets the default or original strip type, regardless of any overrides.
+    /// </summary>
+    public StripType DefaultStripType
+    {
+        get
+        {
+            if (FDR.DesAirport == _bayManager.AerodromeName && FDR.DepAirport == _bayManager.AerodromeName)
+            {
+                return StripType.LOCAL;
+            }
+
+            if (FDR.DesAirport == _bayManager.AerodromeName)
+            {
+                return StripType.ARRIVAL;
+            }
+
+            if (FDR.DepAirport == _bayManager.AerodromeName)
+            {
+                return StripType.DEPARTURE;
+            }
+
+            return StripType.UNKNOWN;
+        }
+    }
+
+    /// <summary>
+    /// Gets the arrival or departure type.
+    /// </summary>
+    public StripType StripType
+    {
+        get
+        {
+            var originalType = DefaultStripType;
+
+            if (originalType != StripType.LOCAL)
+            {
+                return originalType;
+            }
+            else
+            {
+                if (OverrideStripType == StripType.UNKNOWN)
+                {
+                    OverrideStripType = StripType.DEPARTURE;
+                }
+
+                return OverrideStripType;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Gets or sets a value which when set will override the default arr/dep type.
+    /// </summary>
+    public StripType OverrideStripType { get; set; } = StripType.UNKNOWN;
 
     /// <summary>
     /// Gets or sets the CFL.
@@ -231,12 +283,12 @@ public sealed class Strip
     {
         get
         {
-            if (ArrDepType == StripArrDepType.DEPARTURE && FDR.ATD == DateTime.MaxValue)
+            if (StripType == StripType.DEPARTURE && FDR.ATD == DateTime.MaxValue)
             {
                 return FDR.ETD.ToString("HHmm", CultureInfo.InvariantCulture);
             }
 
-            return ArrDepType == StripArrDepType.DEPARTURE ?
+            return StripType == StripType.DEPARTURE ?
                 FDR.ATD.ToString("HHmm", CultureInfo.InvariantCulture) :
                 string.Empty;
         }
@@ -249,17 +301,17 @@ public sealed class Strip
     {
         get
         {
-            if (ArrDepType == StripArrDepType.DEPARTURE && FDR.DepartureRunway != null)
+            if ((StripType == StripType.DEPARTURE || StripType == StripType.LOCAL) && FDR.DepartureRunway != null)
             {
                 return FDR.DepartureRunway.Name;
             }
 
-            return ArrDepType == StripArrDepType.ARRIVAL && FDR.ArrivalRunway != null ? FDR.ArrivalRunway.Name : string.Empty;
+            return StripType == StripType.ARRIVAL && FDR.ArrivalRunway != null ? FDR.ArrivalRunway.Name : string.Empty;
         }
 
         set
         {
-            if (ArrDepType == StripArrDepType.DEPARTURE)
+            if (DefaultStripType == StripType.DEPARTURE || DefaultStripType == StripType.LOCAL)
             {
                 var aerodrome = FDR.DepAirport;
                 var runways = Airspace2.GetRunways(aerodrome);
@@ -284,7 +336,7 @@ public sealed class Strip
     {
         get
         {
-            if (FDR.SID is null || FDR.SID.Transitions.Count == 0 || ArrDepType != StripArrDepType.DEPARTURE)
+            if (FDR.SID is null || FDR.SID.Transitions.Count == 0 || StripType != StripType.DEPARTURE)
             {
                 return null;
             }
@@ -373,7 +425,7 @@ public sealed class Strip
     {
         get
         {
-            return FDR.FlightRules == "V" && !string.IsNullOrEmpty(FDR.SIDSTARString);
+            return FDR.FlightRules == "V" && !string.IsNullOrEmpty(FDR.SIDSTARString) && StripType != StripType.ARRIVAL;
         }
     }
 
@@ -395,11 +447,11 @@ public sealed class Strip
     {
         get
         {
-            if (ArrDepType == StripArrDepType.DEPARTURE && FDR.SID is not null)
+            if (StripType != StripType.ARRIVAL && FDR.SID is not null)
             {
                 return FDR.SID.Name;
             }
-            else if (ArrDepType == StripArrDepType.DEPARTURE)
+            else if (StripType != StripType.ARRIVAL)
             {
                 return string.Empty;
             }
@@ -492,14 +544,26 @@ public sealed class Strip
     };
 
     /// <summary>
+    /// Gets a dictionary which contains the arrival next state for a given state.
+    /// </summary>
+    private static Dictionary<StripBay, StripBay> NextBayLocal { get; } = new()
+    {
+        { StripBay.BAY_PREA, StripBay.BAY_CLEARED },
+        { StripBay.BAY_CLEARED, StripBay.BAY_PUSHED },
+        { StripBay.BAY_PUSHED, StripBay.BAY_TAXI },
+        { StripBay.BAY_TAXI, StripBay.BAY_HOLDSHORT },
+        { StripBay.BAY_ARRIVAL, StripBay.BAY_RUNWAY },
+        { StripBay.BAY_RUNWAY, StripBay.BAY_ARRIVAL },
+    };
+
+    /// <summary>
     /// Converts a strip controller to the data object.
     /// </summary>
     /// <param name="sc">The strip controller.</param>
-    public static implicit operator StripControllerDTO(Strip sc)
+    public static implicit operator StripDTO(Strip sc)
     {
-        var scDTO = new StripControllerDTO
+        var scDTO = new StripDTO
         {
-            acid = sc.FDR.Callsign,
             bay = sc.CurrentBay,
             CLX = sc.CLX,
             GATE = sc.Gate,
@@ -508,20 +572,8 @@ public sealed class Strip
             remark = sc.Remark,
             TOT = sc.TakeOffTime is not null ? sc.TakeOffTime!.ToString() : "\0",
             ready = sc.Ready,
-        };
-
-        return scDTO;
-    }
-
-    /// <summary>
-    /// Converts a strip controller to the data object.
-    /// </summary>
-    /// <param name="sc">The strip controller.</param>
-    public static implicit operator SCDeletionDTO(Strip sc)
-    {
-        var scDTO = new SCDeletionDTO
-        {
-            acid = sc.FDR.Callsign,
+            StripKey = sc.StripKey,
+            OverrideStripType = sc.OverrideStripType,
         };
 
         return scDTO;
@@ -563,11 +615,31 @@ public sealed class Strip
     }
 
     /// <summary>
-    /// Coordinates the strip with the server.
+    /// For local strips, cycle between APP, DEP and LOC strip modes.
+    /// </summary>
+    public void FlipFlop()
+    {
+        if (DefaultStripType != StripType.LOCAL)
+        {
+            return;
+        }
+
+        OverrideStripType++;
+
+        if (OverrideStripType > StripType.LOCAL)
+        {
+            OverrideStripType = StripType.ARRIVAL;
+        }
+
+        SyncStrip();
+    }
+
+    /// <summary>
+    /// Coordinates the strip.
     /// </summary>
     public void CoordinateStrip()
     {
-        if (FDR.State == FDR.FDRStates.STATE_PREACTIVE && (Network.Me.IsRealATC || MainForm.IsDebug))
+        if (FDR.State == FDR.FDRStates.STATE_PREACTIVE && (Network.Me.IsRealATC || MainForm.IsDebug) && StripType != StripType.LOCAL)
         {
             MMI.EstFDR(FDR);
         }
@@ -579,17 +651,24 @@ public sealed class Strip
     }
 
     /// <summary>
-    /// When we receive a new FDR, with different ADEP or ADEs, check if we need to clean out old routes.
+    /// Deactivates the strip.
+    /// </summary>
+    public void DeactivateStrip()
+    {
+        if (FDR.State == FDR.FDRStates.STATE_COORDINATED && (Network.Me.IsRealATC || MainForm.IsDebug))
+        {
+            FDP2.BackFDR(FDR);
+        }
+    }
+
+    /// <summary>
+    /// Check if adep or ades changed.
     /// </summary>
     /// <param name="_fdr">New FDR.</param>
-    public void CheckAndInvalidateSavedRoutes(FDR _fdr)
+    public bool ADESADEPPairChanged(FDR _fdr)
     {
         var adPair = _fdr.DepAirport + _fdr.DesAirport;
-        if (adPair != ValidRoutesAerodromePairing)
-        {
-            ValidRoutes = null;
-            RequestedRoutes = DateTime.MaxValue;
-        }
+        return adPair != OriginalAerodromePair;
     }
 
     /// <summary>
@@ -617,14 +696,15 @@ public sealed class Strip
             return false;
         }
 
-        if (FDR.State < FDR.FDRStates.STATE_PREACTIVE && ArrDepType == StripArrDepType.DEPARTURE)
+        // FIN, SUS or INCT FDRs
+        if (FDR.State < FDR.FDRStates.STATE_PREACTIVE && StripType == StripType.DEPARTURE)
         {
             return false;
         }
 
         var distance = GetDistToAerodrome(_bayManager.AerodromeName);
 
-        if (distance is -1 or > 50 && ArrDepType == StripArrDepType.DEPARTURE)
+        if (distance is -1 or > 50 && DefaultStripType == StripType.DEPARTURE)
         {
             return false;
         }
@@ -657,7 +737,6 @@ public sealed class Strip
 
         if (ValidRoutes is not null)
         {
-            ValidRoutesAerodromePairing = FDR.DepAirport + FDR.DesAirport;
             CondensedRoute = CleanVatsysRoute(FDR.Route);
             DodgyRoute = true;
             foreach (var validroute in ValidRoutes)
@@ -668,7 +747,8 @@ public sealed class Strip
                 }
             }
 
-            if (ArrDepType != StripArrDepType.DEPARTURE || (int)FDR.State > 5)
+            // If not departure or FDR active.
+            if (DefaultStripType != StripType.DEPARTURE || (int)FDR.State > 5)
             {
                 DodgyRoute = false;
             }
@@ -700,14 +780,20 @@ public sealed class Strip
     /// </summary>
     public void SIDTrigger()
     {
+        // TODO: do something with this.
         Dictionary<StripBay, StripBay> stripBayResultDict;
-        switch (ArrDepType)
+
+        switch (StripType)
         {
-            case StripArrDepType.ARRIVAL:
+            case StripType.ARRIVAL:
                 stripBayResultDict = NextBayArr;
                 break;
-            case StripArrDepType.DEPARTURE:
+            case StripType.DEPARTURE:
                 stripBayResultDict = NextBayDep;
+                break;
+
+            case StripType.LOCAL:
+                stripBayResultDict = NextBayLocal;
                 break;
             default:
                 return;

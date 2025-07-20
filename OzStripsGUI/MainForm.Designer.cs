@@ -34,6 +34,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.pl_controlbar = new System.Windows.Forms.Panel();
+            this.bt_flip = new System.Windows.Forms.Button();
             this.bt_bar = new System.Windows.Forms.Button();
             this.pl_atis = new System.Windows.Forms.Panel();
             this.lb_atis = new System.Windows.Forms.Label();
@@ -87,6 +88,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.pl_controlbar.AutoSize = true;
             this.pl_controlbar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
             this.pl_controlbar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pl_controlbar.Controls.Add(this.bt_flip);
             this.pl_controlbar.Controls.Add(this.bt_bar);
             this.pl_controlbar.Controls.Add(this.pl_atis);
             this.pl_controlbar.Controls.Add(this.bt_cross);
@@ -100,6 +102,21 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.pl_controlbar.Name = "pl_controlbar";
             this.pl_controlbar.Size = new System.Drawing.Size(1784, 45);
             this.pl_controlbar.TabIndex = 0;
+            // 
+            // bt_flip
+            // 
+            this.bt_flip.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.bt_flip.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.bt_flip.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bt_flip.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
+            this.bt_flip.Location = new System.Drawing.Point(742, 3);
+            this.bt_flip.Name = "bt_flip";
+            this.bt_flip.Size = new System.Drawing.Size(96, 37);
+            this.bt_flip.TabIndex = 8;
+            this.bt_flip.TabStop = false;
+            this.bt_flip.Text = "FLIP FLOP";
+            this.bt_flip.UseVisualStyleBackColor = false;
+            this.bt_flip.Click += new System.EventHandler(this.FlipFlopStrip);
             // 
             // bt_bar
             // 
@@ -422,7 +439,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
-            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.SettingsToolStripMenuItem_Click);
+            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.ShowSettings);
             // 
             // viewToolStripMenuItem
             // 
@@ -563,5 +580,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
         private ToolStripMenuItem twoColumnsToolStripMenuItem;
         private ToolStripMenuItem oneColumnToolStripMenuItem;
         private ToolStripMenuItem colDisabledToolStripMenuItem;
+        private Button bt_flip;
     }
 }

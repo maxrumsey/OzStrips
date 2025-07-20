@@ -19,7 +19,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
         get
 
         {
-            return !_strip.SquawkCorrect && _strip.CurrentBay >= StripBay.BAY_TAXI && _strip.ArrDepType == StripArrDepType.DEPARTURE;
+            return !_strip.SquawkCorrect && _strip.CurrentBay >= StripBay.BAY_TAXI && _strip.StripType == StripType.DEPARTURE;
         }
     }
 
@@ -93,7 +93,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
             if (_strip.SIDTransition is not null && highlightPaint is not null)
             {
-                canvas.DrawRect(baseX + 1.5f, baseY + 1.5f, element.W - 2, element.H - 2, highlightPaint);
+                canvas.DrawRect(baseX + 1.5f, baseY + 1.5f, element.W - 2.5f, element.H - 2.5f, highlightPaint);
             }
 
             canvas.DrawText(text, new SKPoint(baseX + (element.W / 2), baseY + ((fontsize + element.H) / 2)), SKTextAlign.Center, new SKFont(typeface, fontsize), textpaint);
@@ -465,7 +465,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                     _strip.CurrentBay >= StripBay.BAY_HOLDSHORT &&
                     string.IsNullOrEmpty(_strip.HDG) &&
                     _strip.SID.Length == 3 &&
-                    _strip.ArrDepType == StripArrDepType.DEPARTURE)
+                    _strip.StripType == StripType.DEPARTURE)
                 {
                     return SKColors.Orange;
                 }
@@ -486,7 +486,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 return _strip.Controller.DetermineRouteBackColour();
             case StripElements.Values.READY:
                 var colour = SKColor.Empty;
-                if (!_strip.Ready && (_strip.CurrentBay == StripBay.BAY_HOLDSHORT || _strip.CurrentBay == StripBay.BAY_RUNWAY) && _strip.ArrDepType == StripArrDepType.DEPARTURE)
+                if (!_strip.Ready && (_strip.CurrentBay == StripBay.BAY_HOLDSHORT || _strip.CurrentBay == StripBay.BAY_RUNWAY) && _strip.StripType != StripType.ARRIVAL)
                 {
                     colour = SKColors.Orange;
                 }
@@ -517,9 +517,29 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
     private void DrawStripBackground(SKCanvas canvas)
     {
+        var color = SKColor.Empty;
+
+        switch (_strip.StripType)
+        {
+            case StripType.ARRIVAL:
+                color = SKColor.Parse("ffffa0"); // Light yellow for arrivals
+                break;
+            case StripType.DEPARTURE:
+                color = SKColor.Parse("c1e6f2"); // Light blue for departures
+                break;
+            case StripType.LOCAL:
+                color = SKColor.Parse("e6aedd"); // Light purple for local
+                break;
+            case StripType.UNKNOWN:
+            default:
+                color = SKColor.Parse("404040"); // Default gray for unknown
+                break;
+        }
+
+
         var paint = new SKPaint()
         {
-            Color = (_strip.ArrDepType == StripArrDepType.ARRIVAL) ? SKColor.Parse("ffffa0") : SKColor.Parse("c1e6f2"),
+            Color = color,
             Style = SKPaintStyle.Fill,
         };
 

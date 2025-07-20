@@ -258,7 +258,14 @@ public sealed class OzStrips : IPlugin, IDisposable
             return;
         }
 
-        _gui.Show(Form.ActiveForm);
+        var vatSysMainForm = Application.OpenForms["MainForm"];
+
+        if (vatSysMainForm == null)
+        {
+            return;
+        }
+
+        _gui.Show(vatSysMainForm);
     }
 
     /// <summary>

@@ -95,16 +95,18 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
     /// <param name="strip">The strip to delete.</param>
     public void DeleteStrip(Strip strip)
     {
+        // todo: add force delete server flag.
+
         /*
          * Don't send delete messages for deps incase they log back in.
          */
-        if (strip.ArrDepType == StripArrDepType.ARRIVAL)
+        if (strip.DefaultStripType == StripType.ARRIVAL)
         {
             strip.SendDeleteMessage();
         }
 
         FindBay(strip)?.RemoveStrip(strip, true);
-        _bayManager.StripRepository.Controllers.Remove(strip);
+        _bayManager.StripRepository.Strips.Remove(strip);
     }
 
     /// <summary>
@@ -198,7 +200,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
     {
         try
         {
-            foreach (var strip in _bayManager.StripRepository.Controllers)
+            foreach (var strip in _bayManager.StripRepository.Strips)
             {
                 foreach (var bay in Bays)
                 {

@@ -1,4 +1,19 @@
 # Changelog
+## v0.6.0
+### Features
+- Added Local / Circuit strip type (pink).
+- Added ability to flip/flop ADEP-ADEP strips between arr, loc and dep modes.
+- Added "CIRCUIT AREA RELEASED" bar.
+- Inhibited strip coordination for local strips.
+- Made Sweatbox Error message less annoying.
+
+### Bugfixes
+- On a strip refile, data is properly refreshed.
+- Disabled ALPHA sort of PREA strips pending bugfix.
+
+### Misc Changes
+- Changed how server correlates server strips with client strips.
+
 ## v0.5.7
 ### Features
 - Added text pilot strip field.

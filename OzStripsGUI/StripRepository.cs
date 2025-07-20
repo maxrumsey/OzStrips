@@ -17,7 +17,7 @@ public class StripRepository
     /// <summary>
     /// Gets a list of strip controllers.
     /// </summary>
-    public List<Strip> Controllers { get; } = [];
+    public List<Strip> Strips { get; } = [];
 
     /// <summary>
     /// Looks up controller by name.
@@ -26,9 +26,27 @@ public class StripRepository
     /// <returns>The aircraft's FDR.</returns>
     public Strip? GetController(string name)
     {
-        foreach (var controller in Controllers)
+        foreach (var controller in Strips)
         {
             if (controller.FDR.Callsign == name)
+            {
+                return controller;
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Gets a strip from a key.
+    /// </summary>
+    /// <param name="key">Strip key.</param>
+    /// <returns>Strip or null.</returns>
+    public Strip? GetController(StripKey key)
+    {
+        foreach (var controller in Strips)
+        {
+            if (controller.StripKey.Matches(key))
             {
                 return controller;
             }
@@ -47,7 +65,7 @@ public class StripRepository
     /// <returns>The appropriate strip controller for the FDR.</returns>
     public Strip UpdateFDR(FDR fdr, BayManager bayManager, SocketConn socketConn, bool inhibitReorders = false)
     {
-        foreach (var controller in Controllers)
+        foreach (var controller in Strips)
         {
             if (controller.FDR.Callsign == fdr.Callsign)
             {
@@ -56,15 +74,26 @@ public class StripRepository
                     bayManager.BayRepository.DeleteStrip(controller);
                 }
 
-                controller.CheckAndInvalidateSavedRoutes(fdr);
-
-                controller.FDR = fdr;
-                controller.UpdateFDR();
-                return controller;
+                // If ades / adep changed, delete and recreate strip.
+                if (controller.ADESADEPPairChanged(fdr))
+                {
+                    bayManager.BayRepository.DeleteStrip(controller);
+                    return CreateStrip(fdr, bayManager, socketConn, inhibitReorders);
+                }
+                else
+                {
+                    controller.FDR = fdr;
+                    controller.UpdateFDR();
+                    return controller;
+                }
             }
         }
 
-        // todo: add this logic into separate static function
+        return CreateStrip(fdr, bayManager, socketConn, inhibitReorders);
+    }
+
+    private static Strip CreateStrip(FDR fdr, BayManager bayManager, SocketConn socketConn, bool inhibitReorders = false)
+    {
         var stripController = new Strip(fdr, bayManager, socketConn);
         bayManager.AddStrip(stripController, true, inhibitReorders);
         stripController.FetchStripData();
@@ -74,37 +103,43 @@ public class StripRepository
     /// <summary>
     /// Receives a SC DTO object, updates relevant SC.
     /// </summary>
-    /// <param name="stripControllerData">The strip controller data.</param>
+    /// <param name="stripDTO">The strip controller data.</param>
     /// <param name="bayManager">The bay manager.</param>
-    public void UpdateFDR(StripControllerDTO stripControllerData, BayManager bayManager)
+    public void UpdateStripData(StripDTO stripDTO, BayManager bayManager)
     {
+        // todo: move this to strip class?
         try
         {
-            foreach (var controller in Controllers)
+            foreach (var strip in Strips)
             {
-                if (controller.FDR.Callsign == stripControllerData.acid)
+                if (strip.StripKey.Matches(stripDTO.StripKey))
                 {
                     var changeBay = false;
-                    controller.CLX = !string.IsNullOrWhiteSpace(stripControllerData.CLX) ? stripControllerData.CLX : string.Empty;
-                    controller.Gate = stripControllerData.GATE ?? string.Empty;
-                    if (controller.CurrentBay != stripControllerData.bay)
+                    strip.CLX = !string.IsNullOrWhiteSpace(stripDTO.CLX) ? stripDTO.CLX : string.Empty;
+                    strip.Gate = stripDTO.GATE ?? string.Empty;
+
+                    if (strip.CurrentBay != stripDTO.bay)
                     {
                         changeBay = true;
                     }
 
-                    controller.CurrentBay = stripControllerData.bay;
-                    controller.Controller?.Cock(stripControllerData.cockLevel, false);
-                    controller.TakeOffTime = stripControllerData.TOT == "\0" ?
+                    strip.CurrentBay = stripDTO.bay;
+                    strip.Controller?.Cock(stripDTO.cockLevel, false);
+                    strip.TakeOffTime = stripDTO.TOT == "\0" ?
                         null :
-                        DateTime.Parse(stripControllerData.TOT, CultureInfo.InvariantCulture);
+                        DateTime.Parse(stripDTO.TOT, CultureInfo.InvariantCulture);
 
-                    controller.Remark = !string.IsNullOrWhiteSpace(stripControllerData.remark) ? stripControllerData.remark : string.Empty;
-                    controller.Crossing = stripControllerData.crossing;
-                    controller.Controller?.SetCross(false);
-                    controller.Ready = stripControllerData.ready;
+                    strip.Remark = !string.IsNullOrWhiteSpace(stripDTO.remark) ? stripDTO.remark : string.Empty;
+                    strip.Crossing = stripDTO.crossing;
+                    strip.Controller?.SetCross(false);
+                    strip.Ready = stripDTO.ready;
+                    strip.OverrideStripType = stripDTO.OverrideStripType;
                     if (changeBay)
                     {
-                        bayManager.UpdateBay(controller); // prevent unessesscary reshufles
+                        bayManager.UpdateBay(strip); /* prevent unessesscary reshufles
+                        * now that we render using skiasharp, is this necessary?
+                        * yes, will prevent needless skiacabvas height changes.
+                        */
                     }
 
                     return;
@@ -123,11 +158,11 @@ public class StripRepository
     /// <param name="cacheData">The cache data.</param>
     /// <param name="bayManager">The bay manager.</param>
     /// <param name="socketConn">The socket connection.</param>
-    public void LoadCache(List<StripControllerDTO> cacheData, BayManager bayManager, SocketConn socketConn)
+    public void LoadCache(List<StripDTO> cacheData, BayManager bayManager, SocketConn socketConn)
     {
         foreach (var stripDTO in cacheData)
         {
-            UpdateFDR(stripDTO, bayManager);
+            UpdateStripData(stripDTO, bayManager);
         }
 
         socketConn.ReadyForBayData();
@@ -138,7 +173,7 @@ public class StripRepository
     /// </summary>
     public void MarkAllStripsAsAwaitingRoutes()
     {
-        foreach (var strip in Controllers)
+        foreach (var strip in Strips)
         {
             strip.RequestedRoutes = DateTime.MaxValue;
         }
@@ -151,7 +186,7 @@ public class StripRepository
     /// <param name="socketConn">Socket connection.</param>
     public void GetStripStatus(string acid, SocketConn socketConn)
     {
-        foreach (var strip in Controllers)
+        foreach (var strip in Strips)
         {
             if (strip.FDR.Callsign == acid)
             {
