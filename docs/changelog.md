@@ -6,6 +6,7 @@
 - Added "CIRCUIT AREA RELEASED" bar.
 - Inhibited strip coordination for local strips.
 - Made Sweatbox Error message less annoying.
+- Putting a strip into the PREA bay deactivates it, allowing changes.
 
 ### Bugfixes
 - On a strip refile, data is properly refreshed.
