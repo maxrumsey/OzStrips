@@ -5,5 +5,8 @@
 
 [Docs](https://maxrumsey.xyz/OzStrips/)
 
+## 📖 User Guide
+For detailed instructions on how to use OzStrips, see the [User Guide](docs/OzStrips_User_Guide.md).
+
 # Installation
 [Install the vatSYS Plugin Manager](https://github.com/badvectors/PluginManager)
