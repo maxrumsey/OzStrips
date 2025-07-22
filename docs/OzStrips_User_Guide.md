@@ -1,122 +1,325 @@
-# OzStrips User Guide
+# OzStrips User Guide - New User Edition
 
-OzStrips is a plugin for vatSys that emulates a tower's electronic strips system. This guide covers how to use the OzStrips software interface and features effectively.
+Welcome to OzStrips! This guide is designed to get you up and running quickly. For detailed operational usage refer to refer to your local vatsim division
 
 ---
 
 ## 📋 Table of Contents
 
-- [Installation](#installation)
-- [Getting Started](#getting-started)
-- [Interface Overview](#interface-overview)
-- [Working with Strips](#working-with-strips)
-- [Strip Field Functions](#strip-field-functions)
-- [Keyboard Shortcuts](#keyboard-shortcuts)
-- [Customization](#customization)
-- [Troubleshooting](#troubleshooting)
-- [Quick Reference](#quick-reference)
+### Getting Started
+- [What is OzStrips?](#what-is-ozstrips)
+- [Quick Start (5 Minutes)](#quick-start-5-minutes)
+- [Essential Concepts (Learn These First)](#essential-concepts-learn-these-first)
+- [Your First 10 Minutes](#your-first-10-minutes)
+
+### Core Skills
+- [Common Tasks (How to Do What You Need)](#common-tasks-how-to-do-what-you-need)
+- [Essential Strip Fields (Start with These)](#essential-strip-fields-start-with-these)
+- [Essential Keyboard Shortcuts](#essential-keyboard-shortcuts)
+- [Common Issues (And How to Fix Them)](#common-issues-and-how-to-fix-them)
+
+### Customization & Advanced Features
+- [Customizing Your View](#customizing-your-view)
+- [Understanding Alerts and Warnings](#understanding-alerts-and-warnings)
+
+### Reference & Troubleshooting
+- [Next Steps](#next-steps)
+- [Complete Strip Field Reference](#complete-strip-field-reference)
+- [Complete Keyboard Shortcuts](#complete-keyboard-shortcuts)
+- [Detailed Workflow Examples](#detailed-workflow-examples)
+- [Comprehensive Troubleshooting](#comprehensive-troubleshooting)
+- [Getting Help](#getting-help)
 
 ---
 
-## 🚀 Installation
+---
 
-### Installing OzStrips
-The OzStrips plugin is included by default in the Australia and Pacific vatSys profiles provided by VATPAC. Alternatively, it can be downloaded using the [vatSys Plugin Manager](https://github.com/badvectors/PluginManager).
+## 🎯 What is OzStrips?
 
-If the client is installed correctly, there will be an **OzStrips** option in the Window dropdown menu.
+OzStrips is a plugin for vatSys that replaces paper flight strips with digital ones. Think of it as a digital version of the paper strips that air traffic controllers use to track aircraft.
+
+**Why use OzStrips?**
+- No more paper strips cluttering your desk
+- Automatic updates when aircraft move between positions
+- Visual alerts for potential issues
+- Integration with vatSys for seamless operation
+
+---
+
+## 🚀 Quick Start (5 Minutes)
+
+### Step 1: Install and Connect
+1. **Install**: OzStrips comes with VATPAC's vatSys profiles, or download using the [vatSys Plugin Manager](https://github.com/badvectors/PluginManager)
+2. **Open**: Go to **Window** → **OzStrips** in vatSys
+3. **Connect**: Select your airport from the dropdown
+4. **Verify**: Connection status should turn green
 
 ![OzStrips Dropdown](images/ozstripsdropdown.png)
 
-*OzStrips option in the vatSys Window dropdown menu*
+*Finding OzStrips in the vatSys menu*
+
+### Step 2: Your First Strip
+When an aircraft files a flight plan to/from your airport, a strip will appear automatically.
+
+**What you'll see:**
+- **Blue strips** = Departing aircraft
+- **Yellow strips** = Arriving aircraft  
+- **Pink strips** = Local aircraft (circuits)
+
+![Strip Example](images/ozstripsexample.png)
+
+*Your first strip - this aircraft is departing (blue)*
+
+### Step 3: Basic Strip Movement
+**The easiest way to move strips:**
+1. **Click the SID box** (Standard Instrument Departure) on the strip
+2. The strip moves to the next bay automatically
+3. This is called "SID triggering" and is the recommended method
+
+**Alternative method (pick and drop):**
+1. Click the **callsign** to select the strip
+2. Click the **destination bay** to drop it there
+
+### Step 4: Understanding Strip Bays
+Strips move through different bays representing stages of flight:
+
+| Bay | Meaning | What Happens Here |
+|-----|---------|-------------------|
+| **Preactive** | Aircraft filed plan, not cleared yet | Initial planning |
+| **Cleared** | Aircraft has clearance | Ready for pushback |
+| **Pushback** | Aircraft requesting/approved pushback | Ground operations |
+| **Holding Point** | Aircraft at holding point | Ready for taxi |
+| **Runway** | Aircraft on runway | Ready for takeoff |
+| **Departures** | Aircraft airborne | Handed off to departures |
+
+![OzStrips Window](images/ozstripswindow.png)
+
+*The main OzStrips interface showing different bays*
 
 ---
 
-## 🎯 Getting Started
+## 📚 Essential Concepts (Learn These First)
 
-### Connecting to an Aerodrome
-1. Open vatSys and connect to VATSIM
-2. Go to **Window** → **OzStrips** in the vatSys menu
-3. Select your aerodrome from the dropdown menu or type the ICAO code
-4. Wait for the connection status to turn green
+### What is a "Strip"?
+A strip is a digital card containing all the information about an aircraft's flight. Each strip has multiple fields you can interact with.
 
-![Aerodrome Selection](images/ozstripsaerodromeselect.png)
+### What is "SID Triggering"?
+Clicking the SID (Standard Instrument Departure) box automatically moves the strip to the next bay. This is the safest and most efficient way to move strips.
 
-*Select your aerodrome from the dropdown menu*
+### What are "Bays"?
+Bays are sections of your stripboard that represent different stages of an aircraft's flight. Strips move from left to right as the aircraft progresses.
 
-> **Tip**: Pressing `[` and `]` will cycle through the aerodromes in the dropdown menu, allowing controllers to provide top-down coverage to multiple locations easily.
+### What do the colors mean?
+- **Blue**: Departure aircraft (leaving your airport)
+- **Yellow**: Arrival aircraft (coming to your airport)
+- **Pink**: Local aircraft (staying in your area, like training flights)
 
-### Configuring Your View
+---
 
-#### View Mode Selection
-Once connected to the relevant aerodrome, select the view mode which is most suitable for your position. Use the **View Mode** menu item to select a layout.
+## 🎮 Your First 10 Minutes
 
-![View Mode](images/ozstripsviewmode.png)
+### Try This: Move a Strip
+1. Find a strip in the "Preactive" bay
+2. Click the **SID box** (the field that shows the departure procedure)
+3. Watch the strip move to the "Cleared" bay
+4. Click the SID box again to move it to "Pushback"
 
-*Select the appropriate view mode for your controller position*
+### Try This: Check for Issues
+Look for these visual indicators on strips:
+- **Orange background**: Potential problems (hover for details)
+- **Yellow border**: Warnings that need attention
+- **Red highlights**: Critical issues
 
-#### Layout Options
-OzStrips offers different layout options to suit your needs:
+### Try This: Use Keyboard Shortcuts
+- **Enter**: SID trigger (move to next bay) - *Most important!*
+- **Tab**: Mark aircraft as ready
+- **F**: Switch between Arrival/Departure/Local
+- **X**: Mark as crossing runway
 
-**Narrow Layout (Single Column)**
-The plugin window will adjust to being resized, automatically collapsing into a two and single column layout, which is helpful for users with small screens.
+---
+
+## 🔧 Common Tasks (How to Do What You Need)
+
+### Moving Strips Between Positions
+**Recommended method (SID triggering):**
+1. Click the **SID box** on the strip
+2. Strip moves to next bay automatically
+3. Repeat as needed
+
+**Manual method (pick and drop):**
+1. Click the **callsign** to select the strip
+2. Click the **destination bay** to drop it
+3. Use this only when SID triggering isn't appropriate
+
+### Marking Aircraft as Ready
+- **Click the "Ready" field** on the strip, OR
+- **Press Tab** while the strip is selected
+
+### Changing Aircraft Type
+- **Click the aircraft type field** to open flight plan
+- **Right-click** for additional options
+
+### Assigning Runways
+- **Click the runway field** to change runway assignment
+- Available runways depend on your airport
+
+### Handling Arrivals vs Departures
+- **Press F** to switch strip type if needed
+- **Blue strips** = Departures (leaving)
+- **Yellow strips** = Arrivals (coming in)
+
+---
+
+## ⚠️ Common Issues (And How to Fix Them)
+
+### "Aircraft not appearing in OzStrips"
+**Solution:**
+1. Click the aircraft in vatSys
+2. Press **FOR STP** 
+3. Check that the aircraft is going to/from your airport
+
+### "Strip moved to wrong bay"
+**Solution:**
+1. Use **SID triggering** instead of drag-and-drop
+2. Use **Backspace** to remove the strip
+3. Press **FOR STP** to restore it
+
+### "Connection shows red"
+**Solution:**
+1. Wait 10 seconds for connection to establish
+2. Check your internet connection
+3. Restart OzStrips if needed
+
+### "Strip type is wrong (arrival showing as departure)"
+**Solution:**
+1. Select the strip
+2. Press **F** to flip-flop the type
+3. Check the aircraft's filed route
+
+---
+
+## 🎯 Essential Strip Fields (Start with These)
+
+You don't need to know all 21 fields right away. Start with these essential ones:
+
+| Field | What It Does | How to Use |
+|-------|-------------|------------|
+| **Callsign** | Aircraft identification | Click to select strip |
+| **SID** | Departure procedure | Click to move to next bay |
+| **Runway** | Assigned runway | Click to change runway |
+| **Ready** | Aircraft ready status | Click to mark as ready |
+| **CFL** | Cleared flight level | Click to change altitude |
+
+**Pro tip**: You can hover over any field to see what it does!
+
+---
+
+## ⌨️ Essential Keyboard Shortcuts
+
+Learn these 5 shortcuts first:
+
+| Key | What It Does | When to Use |
+|-----|-------------|-------------|
+| **Enter** | Move strip to next bay | Most common action |
+| **Tab** | Mark aircraft as ready | When aircraft reports ready |
+| **F** | Switch strip type | If arrival/departure is wrong |
+| **X** | Mark as crossing | Aircraft crossing runway |
+| **Backspace** | Remove strip | Hide strip when no longer needed |
+
+---
+
+## 🎨 Customizing Your View
+
+### Adjust Strip Size
+- Go to **Help** → **Settings**
+- Use the **Strip Scale** slider
+- Smaller strips = more strips visible
+
+### Smart Resize
+- Enable **Smart Resize** for automatic bay height adjustment
+- Useful when you have limited screen space
+
+![Smart Resize](images/ozstripssmartresize.png)
+
+*Smart resize setting for automatic layout adjustment*
+
+### View Modes
+- **Single Column**: For small screens
+- **Multi-Column**: Standard view
+- **Narrow Layout**: Automatically adjusts to screen size
 
 ![Narrow Layout](images/ozstripsnarrow.png)
 
 *Single column layout for compact displays*
 
-**Smart Resize Setting**
-By default, the height of each strip bay is fixed, however using the **Smart Resize** functionality, they can be set to a dynamic height based on the number of strips in each bay. This is helpful when using the plugin in a collapsed column layout or with limited screen height.
+![View Mode](images/ozstripsviewmode.png)
 
-![Smart Resize](images/ozstripssmartresize.png)
-
-*Enable smart resize for automatic layout adjustment*
+*Selecting different view modes*
 
 ---
 
-## 🖥️ Interface Overview
+## 🔍 Understanding Alerts and Warnings
 
-### Main Window Layout
+OzStrips will show you visual warnings when there are potential issues:
 
-The OzStrips interface is organized into a grid layout with multiple panels:
+### Orange Background
+- **SSR Code**: Aircraft not squawking correct code
+- **SID Field**: VFR aircraft assigned SID (shouldn't happen)
+- **Route Field**: Non-compliant route filed
 
-![OzStrips Window](images/ozstripswindow.png)
+![Bad Level](images/ozstripsbadlevel.png)
 
-*Main OzStrips interface showing the stripboard layout*
+*Example of incorrect level assignment (orange background)*
 
-The stripboard is divided into multiple bays, each representing a stage in an aircraft's flight thread.
+![Bad Route](images/ozstripsbadroute.png)
 
-### Control Bar
+*Example of incorrect route assignment (orange background)*
 
-The bottom of the window holds the Control Bar. This panel contains the server connection status, aerodrome selected and ATIS code, among other elements.
+![VFR SID](images/ozstripsvfrsid.png)
 
-Each button has the following function:
+*Example of VFR aircraft assigned SID (orange background)*
 
-| Button | Function |
-|--------|----------|
-| **INHIBIT** | Hides a strip from the stripboard (used when a strip is no longer needed) |
-| **XX CROSS XX** | Adds a red highlight to the selected strip, denoting an intention to cross a runway |
-| **ADD BAR** | Allows controllers to place a variety of fixed bars anywhere on the stripboard, reflecting status changes and allowing additional queues to be built |
-| **FLIP FLOP** | Toggles the selected strip between Departure, Arrival & Local states |
+### Yellow Border
+- **SID Field**: SID has a transition (normal, just informational)
 
-### Missing Strips
+![SID Transition](images/ozstripssidtransition.png)
 
-Selecting a track on the Ground Radar or ASD will select the relevant strip in OzStrips, and vice versa. If a strip is missing from the stripboard, select the ground track from the vatSys Ground window, then click the desired OzStrips bay to place the strip there.
+*SID with transition (yellow border)*
+
+### Red Highlights
+- **Crossing**: Aircraft marked as crossing runway
+- **Critical Issues**: Serious problems requiring attention
+
+**How to check what's wrong:**
+1. **Hover over the field** to see details
+2. **Click the field** to fix the issue
+3. **Check the tooltip** for specific guidance
 
 ---
 
-## 📋 Working with Strips
+## 📖 Next Steps
 
-### Strip Basics
+### Once You're Comfortable with the Basics:
+1. **Learn more strip fields** - See the complete reference table
+2. **Explore keyboard shortcuts** - Full list in the reference section
+3. **Try different view modes** - Find what works for your setup
+4. **Practice with workflow examples** - See how real controllers use it
 
-The background colour of the strip corresponds to its status as an arrival or a departure. **Departing** aircraft have a blue strip, **arriving** aircraft have a yellow strip, and **local** aircraft have a pink strip.
+### Reference Materials:
+- **Complete Strip Field Reference**: All 21 fields and their functions
+- **Keyboard Shortcuts**: Full list of all shortcuts
+- **Workflow Examples**: Real-world usage scenarios
+- **Troubleshooting**: Detailed problem-solving guide
 
-![Strip Example](images/ozstripstrip.png)
+---
 
-*Basic strip showing flight information*
-
-### Complete Strip Field Reference
+## 📋 Complete Strip Field Reference
 
 Each strip contains 21 fields that can be interacted with:
+
+![Strip Reference](images/ozstripstrip.png)
+
+*Reference strip showing all 21 fields*
 
 | Field # | Content | Left Click | Right Click | Possible Alert / Alarm |
 |---------|---------|------------|-------------|----------------------|
@@ -144,177 +347,9 @@ Each strip contains 21 fields that can be interacted with:
 
 > **Note**: SID triggering won't automatically move strips into the runway bay - this must be done manually to prevent accidental runway placement.
 
-![Strip with Data](images/ozstripsexample.png)
-
-*Example strip with filled information showing current state*
-
-### Strip Colors and States
-
-#### Strip Colors
-| Color | Aircraft Type |
-|-------|---------------|
-| **Blue** | Departure aircraft |
-| **Yellow** | Arrival aircraft |
-| **Pink** | Local aircraft (circuits) |
-
-#### Strip States
-| State | Description |
-|-------|-------------|
-| **Preactive** | Aircraft filed flight plan, not yet cleared |
-| **Cleared** | Aircraft has clearance, ready for pushback |
-| **Pushback** | Aircraft requesting/approved for pushback |
-| **Holding Point** | Aircraft at holding point, ready for taxi |
-| **Runway** | Aircraft on runway, ready for takeoff |
-| **Departures** | Aircraft airborne, handed off to departures |
-
-### Moving Strips
-
-Strips can be moved in between strip bays by clicking on their callsign, and clicking the bay where you want them to go. Strips can be moved to the next bay by clicking on the SID box (referred to as **SID triggering**).
-
-> **Note**: Strips can not be SID triggered from the **Holding Point Bay** to the **Runway Bay**, to prevent accidental placement onto the runway.
-
-### Local Flights
-Pink local strips denote aircraft whose planned operation remains entirely on the ADC frequency (they will not be passed to Departures or leave ADC's jurisdiction).
-
 ---
 
-## 🔧 Strip Field Functions
-
-### Core Interactive Functions
-
-Each strip field has specific functions you can access. Here are the main interactive functions available:
-
-**Assigned Heading**
-
-![Assigned Heading](images/ozstripsassignedheading.png)
-
-*Setting assigned headings for aircraft*
-
-**Radar SID**
-
-![Radar SID](images/ozstripsradarsid.png)
-
-*Radar SID assignment interface*
-
-**SID Transition**
-
-![SID Transition](images/ozstripssidtransition.png)
-
-*SID transition management*
-
-**Squawk Code Assignment**
-
-![Squawk Assignment](images/ozstripssquawk.png)
-
-*Squawk code assignment interface*
-
-**Coordinator Interface**
-
-![Coordinator](images/ozstripscoordinator.png)
-
-*Coordinator interface for multi-position operations*
-
-### Additional Functions
-
-**Flight Data Record (FDR)**
-- **Left Click**: Open flightplan for aircraft type, destination, and first waypoint fields
-- **Right Click**: Open reroute window for first waypoint field
-
-**Route Display**
-- **Left Click**: Show/hide graphic route for voice receive capability and flight rules fields
-
-**SSR Code Management**
-- **Left Click**: Auto-generate SSR code
-- **Hover**: Shows warning for incorrect SSR code or mode
-
-**Level Management**
-- **Left Click**: Open flightplan for requested level
-- **Left Click**: Change cleared flight level (CFL)
-
-**Global Operations**
-- **Left Click**: Edit vatSys global ops field (visible to all controllers)
-
-**Local Remarks**
-- **Left Click**: Edit OzStrips remarks (visible only to OzStrips users)
-
-**Takeoff Timer**
-- **Left Click**: Start/reset takeoff timer
-- **Note**: Will also coordinate (activate) the strip if not already done
-
-**PDC Operations**
-- **Left Click**: Open PDC window
-- **Right Click**: Open pilot message (PM) window
-
-**Clearance Management**
-- **Left Click**: Open clearance window (CLX)
-- **Left Click**: Open standard window (STD)
-- **Left Click**: Open global ops window (GLOP)
-
-> **Note**: All strip fields support both left and right click actions where applicable. Hover actions provide additional warnings and information for specific fields.
-
----
-
-## 📊 Workflow Examples
-
-### ACD (Aerodrome Control) Workflow
-![ACD Workflow](images/ozstripsworkflowacd.png)
-
-*Typical workflow for aerodrome control operations*
-
-### ADC (Approach Departure Control) Workflow  
-![ADC Workflow](images/ozstripsworkflowadc.png)
-
-*Workflow for approach and departure control*
-
-### SMC (Surface Movement Control) Workflow
-![SMC Workflow](images/ozstripsworkflowsmc.png)
-
-*Surface movement control workflow*
-
----
-
-## ⚠️ Common Errors
-
-### Bad Level Assignment
-![Bad Level](images/ozstripsbadlevel.png)
-
-*Example of incorrect level assignment*
-
-**What's Wrong**: The aircraft has filed a cruising level that is non-compliant with the table of standard cruising levels per the Australian AIP. This typically means the pilot has selected an altitude that doesn't follow the standard flight level rules (eastbound flights use odd thousands, westbound flights use even thousands).
-
-**How to Fix**: 
-- Check the aircraft's filed route direction
-- Ensure the cruising level follows standard flight level rules
-- Contact the pilot to request a corrected flight plan
-
-### Bad Route Assignment
-![Bad Route](images/ozstripsbadroute.png)
-
-*Example of incorrect route assignment*
-
-**What's Wrong**: The aircraft has filed a route that is contrary to the list of routes in the Australian ERSA Flight Planning Requirements document. The system compares the filed route against a database of valid routes for the specific aerodrome pair and flags non-compliant routes.
-
-**How to Fix**:
-- Review the accepted routes for the departure/destination pair
-- Consider reclearing the aircraft along a compliant route
-- Take into account workload and strategic separation implications
-- Check if the pilot can reenter a new route
-
-### VFR SID Issues
-![VFR SID](images/ozstripsvfrsid.png)
-
-*Common VFR SID assignment errors*
-
-**What's Wrong**: A VFR aircraft has been issued a SID (Standard Instrument Departure). VFR aircraft typically should not be assigned SIDs as they operate under visual flight rules and should follow visual departure procedures.
-
-**How to Fix**:
-- Remove the SID assignment for VFR aircraft
-- Use visual departure procedures instead
-- Ensure the aircraft follows appropriate VFR routing
-
----
-
-## ⌨️ Keyboard Shortcuts
+## ⌨️ Complete Keyboard Shortcuts
 
 | Key | Action | When to Use |
 |-----|--------|-------------|
@@ -334,20 +369,46 @@ Each strip field has specific functions you can access. Here are the main intera
 
 ---
 
-## ⚙️ Customization
+## 📊 Detailed Workflow Examples
 
-### Strip Scale
-The size of each strip can be adjusted using the **Strip Scale** slider, under **Help** > **Settings**. Users with limited screen real estate may benefit from using a smaller strip size.
+### ACD (Aerodrome Control) Workflow
+![ACD Workflow](images/ozstripsworkflowacd.png)
 
-### Smart Resize
-By default, the height of each strip bay is fixed, however using the **Smart Resize** functionality, they can be set to a dynamic height based on the number of strips in each bay. This is helpful when using the plugin in a collapsed column layout or with limited screen height.
+*Typical workflow for aerodrome control operations*
 
-### Custom Bars
-The **ADD BAR** button allows controllers to place a variety of fixed bars anywhere on the stripboard, reflecting status changes and allowing additional queues to be built.
+**ACD Workflow Steps:**
+1. **Preactive Bay**: Aircraft files flight plan
+2. **Cleared Bay**: Aircraft receives clearance
+3. **Pushback Bay**: Aircraft requests/approved for pushback
+4. **Holding Point Bay**: Aircraft at holding point, ready for taxi
+5. **Runway Bay**: Aircraft on runway, ready for takeoff
+6. **Departures Bay**: Aircraft airborne, handed off to departures
+
+### ADC (Approach Departure Control) Workflow  
+![ADC Workflow](images/ozstripsworkflowadc.png)
+
+*Workflow for approach and departure control*
+
+**ADC Workflow Steps:**
+1. **Monitor arrivals** from approach control
+2. **Coordinate departures** with tower
+3. **Manage traffic flow** between arrivals and departures
+4. **Hand off departures** to en-route control
+
+### SMC (Surface Movement Control) Workflow
+![SMC Workflow](images/ozstripsworkflowsmc.png)
+
+*Surface movement control workflow*
+
+**SMC Workflow Steps:**
+1. **Monitor ground traffic** movement
+2. **Coordinate taxi routes** and holding points
+3. **Manage runway crossings** and safety
+4. **Coordinate with tower** for runway operations
 
 ---
 
-## 🔧 Troubleshooting
+## 🔧 Comprehensive Troubleshooting
 
 ### Connection Issues
 **Problem**: CONN STAT shows red
@@ -396,33 +457,52 @@ The **ADD BAR** button allows controllers to place a variety of fixed bars anywh
 - Restart OzStrips
 - Check system resources
 
----
+### Alert and Warning Issues
+**Problem**: Orange backgrounds or yellow borders on strips
 
-## 📖 Quick Reference
+**Solutions**:
+- **Orange SSR Code**: Check aircraft is squawking correct code
+- **Orange SID Field**: Remove SID from VFR aircraft
+- **Orange Route Field**: Check route compliance
+- **Yellow SID Border**: Normal - SID has transition
+- **Red Highlights**: Check for crossing or critical issues
 
-### Essential Keyboard Shortcuts
-- **Enter**: SID trigger (move to next bay)
-- **Tab**: Cock strip (mark as ready)
-- **F**: Flip-flop strip type
-- **X**: Mark as crossing
-- **Backspace**: Remove strip/bar
+![Workflow Examples](images/ozstripsworkflowacd.png)
 
-### Strip Colors
-- **Blue**: Departure aircraft
-- **Yellow**: Arrival aircraft
-- **Pink**: Local aircraft
-
-### Recommended Workflow
-1. Use **SID triggering** for standard progression
-2. Use **pick-and-drop** only when necessary
-3. Use **keyboard shortcuts** for efficiency
-4. Monitor **alerts and warnings** on strips
-
-### Getting Help
-- Check the [VATPAC OzStrips Guide](https://sops.vatpac.org/client/towerstrips/) for operational procedures
-- Review the [Reference Documentation](../reference/) for detailed information
-- Contact the development team for technical issues
+*Example workflow for aerodrome control operations*
 
 ---
 
-*For additional help, visit the [OzStrips Documentation](https://maxrumsey.xyz/OzStrips/) or the [VATPAC OzStrips Guide](https://sops.vatpac.org/client/towerstrips/).* 
+## 🆘 Getting Help
+
+### Quick Help
+- **Hover over any field** to see what it does
+- **Press F1** in OzStrips for context-sensitive help
+- **Check the status bar** for current information
+
+### Documentation
+- **VATPAC OzStrips Guide**: Operational procedures
+- **Reference Documentation**: Detailed technical information
+- **This Guide**: User-friendly learning material
+
+### Support
+- **Contact the development team** for technical issues
+- **VATPAC Forums** for community support
+- **VATSIM Forums** for general questions
+
+---
+
+## 🎉 Congratulations!
+
+You now know enough to start using OzStrips effectively. Remember:
+
+1. **Start simple** - Use SID triggering for most strip movements
+2. **Learn gradually** - You don't need to know everything at once
+3. **Practice regularly** - The more you use it, the more natural it becomes
+4. **Ask for help** - The community is there to support you
+
+**Happy controlling!** 🛩️
+
+---
+
+*For detailed reference information, see the [Complete Reference Guide](../reference/) or visit the [VATPAC OzStrips Guide](https://sops.vatpac.org/client/towerstrips/).* 
