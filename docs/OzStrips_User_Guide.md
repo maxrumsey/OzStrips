@@ -164,6 +164,40 @@ Strips can be moved in between strip bays by clicking on their callsign, and cli
 | **Runway** | Aircraft on runway, ready for takeoff |
 | **Departures** | Aircraft airborne, handed off to departures |
 
+### Workflow Examples
+
+#### ACD (Aerodrome Control) Workflow
+![ACD Workflow](images/ozstripsworkflowacd.png)
+
+*Typical workflow for aerodrome control operations*
+
+#### ADC (Approach Departure Control) Workflow  
+![ADC Workflow](images/ozstripsworkflowadc.png)
+
+*Workflow for approach and departure control*
+
+#### SMC (Surface Movement Control) Workflow
+![SMC Workflow](images/ozstripsworkflowsmc.png)
+
+*Surface movement control workflow*
+
+### Error Examples
+
+#### Bad Level Assignment
+![Bad Level](images/ozstripsbadlevel.png)
+
+*Example of incorrect level assignment*
+
+#### Bad Route Assignment
+![Bad Route](images/ozstripsbadroute.png)
+
+*Example of incorrect route assignment*
+
+#### VFR SID Issues
+![VFR SID](images/ozstripsvfrsid.png)
+
+*Common VFR SID assignment errors*
+
 ### Local Flights
 Pink local strips denote aircraft whose planned operation remains entirely on the ADC frequency (they will not be passed to Departures or leave ADC's jurisdiction).
 
@@ -196,6 +230,33 @@ By default, the height of each strip bay is fixed, however using the **Smart Res
 
 ### Custom Bars
 The **ADD BAR** button allows controllers to place a variety of fixed bars anywhere on the stripboard, reflecting status changes and allowing additional queues to be built.
+
+### Advanced Features
+
+#### Assigned Heading
+![Assigned Heading](images/ozstripsassignedheading.png)
+
+*Setting assigned headings for aircraft*
+
+#### Radar SID
+![Radar SID](images/ozstripsradarsid.png)
+
+*Radar SID assignment interface*
+
+#### SID Transition
+![SID Transition](images/ozstripssidtransition.png)
+
+*SID transition management*
+
+#### Squawk Code Assignment
+![Squawk Assignment](images/ozstripssquawk.png)
+
+*Squawk code assignment interface*
+
+#### Coordinator Interface
+![Coordinator](images/ozstripscoordinator.png)
+
+*Coordinator interface for multi-position operations*
 
 ### View Modes
 Choose the appropriate view mode for your controller position:
