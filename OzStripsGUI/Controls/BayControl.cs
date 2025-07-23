@@ -11,6 +11,10 @@ public partial class BayControl : UserControl
     private readonly Bay _ownerBay;
     private readonly BayManager _bayManager;
     private int _stripHeight;
+    private int _stripBoardHeight;
+
+    private int? _desiredScrollAmount;
+    private Strip? _pickedStrip;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BayControl"/> class.
@@ -42,17 +46,20 @@ public partial class BayControl : UserControl
     /// </summary>
     public void ConfigureScroll()
     {
+        // todo: run set val during this if strip is picked.
         _stripHeight = Bay.GetStripHeight();
-
         var child = ChildPanel.Controls[0];
         var parent = ChildPanel.Parent;
+
+        _stripBoardHeight = parent.Height - panel2.Height;
+
 
         ChildPanel.VerticalScroll.SmallChange = _stripHeight;
         ChildPanel.VerticalScroll.Maximum = _ownerBay.GetRequestedHeight();
         ChildPanel.VerticalScroll.Minimum = 0;
 
 
-        if (child.Height + 40 > parent.Height)
+        if (child.Height > _stripBoardHeight)
         {
             ChildPanel.VerticalScroll.Visible = true;
         }
@@ -62,21 +69,45 @@ public partial class BayControl : UserControl
         }
     }
 
+    public void SetPicked(Strip? strip)
+    {
+        if (strip is null)
+        {
+            _desiredScrollAmount = null;
+            _pickedStrip = null;
+            ChildPanel.VerticalScroll.Enabled = true;
+        }
+        else
+        {
+            _pickedStrip = strip;
+            _desiredScrollAmount = GetPickedStripPosition() - ChildPanel.VerticalScroll.Value;
+
+            if (_desiredScrollAmount < 0)
+            {
+                _desiredScrollAmount = 0;
+            }
+
+            if (_desiredScrollAmount > _stripBoardHeight - _stripHeight)
+            {
+                _desiredScrollAmount = _stripBoardHeight - _stripHeight;
+            }
+
+            SetScrollValue(0);
+
+            ChildPanel.VerticalScroll.Enabled = false;
+        }
+    }
+
     private new void MouseWheel(object sender, MouseEventArgs e)
     {
-        return;
+        SetScrollValue(ChildPanel.VerticalScroll.Value);
     }
 
     private new void Scroll(object sender, ScrollEventArgs e)
     {
         var val = e.NewValue;
 
-        if (val < 0)
-        {
-            val = 0;
-        }
-
-        ChildPanel.VerticalScroll.Value = val;
+        SetScrollValue(val);
     }
 
     private void ResizeStripBoard(object sender, EventArgs e)
@@ -101,7 +132,26 @@ public partial class BayControl : UserControl
 
     private void SetScrollValue(int val)
     {
+        if (_pickedStrip is not null && _desiredScrollAmount is not null)
+        {
+            val = GetPickedStripPosition() - (int)_desiredScrollAmount;
+        }
+
+        if (val < 0)
+        {
+            val = 0;
+        }
+
         ChildPanel.VerticalScroll.Value = val;
-        ChildPanel.PerformLayout();
+    }
+
+    private int GetPickedStripPosition()
+    {
+        if (_pickedStrip is not null)
+        {
+            return _ownerBay.GetStripPosition(_pickedStrip);
+        }
+
+        return 0;
     }
 }

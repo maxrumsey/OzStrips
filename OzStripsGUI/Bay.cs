@@ -409,6 +409,13 @@ public class Bay : System.IDisposable
     public int GetRequestedHeight() => (int)(_bayRenderController.GetHeightPreScale() * BayRenderController.Scale);
 
     /// <summary>
+    /// Gets the strip position for a specific strip.
+    /// </summary>
+    /// <param name="strip">Selected strip.</param>
+    /// <returns>Position (px).</returns>
+    public int GetStripPosition(Strip strip) => (int)(_bayRenderController.GetStripPosPreScale(strip) * BayRenderController.Scale);
+
+    /// <summary>
     /// Adds a new divider.
     /// </summary>
     /// <param name="force">If the division should be forced.</param>

@@ -287,10 +287,13 @@ public class BayManager
         RemovePicked(false, true);
         PickedStripItem = item;
         PickedBay = bay;
+
         item.RenderedStripItem?.MarkPicked(true);
 
         if (item.Type == StripItemType.STRIP)
         {
+            bay.ChildPanel.SetPicked(item.StripController);
+
             var rTrack = RDP.RadarTracks.FirstOrDefault(x => x.ActualAircraft.Callsign == item.StripController?.FDR.Callsign);
             var groundTrack = MMI.FindTrack(rTrack);
             var fdrTrack = MMI.FindTrack(item.StripController?.FDR);
@@ -364,9 +367,11 @@ public class BayManager
     {
         if (force || !OzStripsSettings.Default.KeepStripPicked)
         {
+            PickedBay?.ChildPanel.SetPicked(null);
+
+
             PickedStripItem?.RenderedStripItem?.MarkPicked(false);
             PickedStripItem = null;
-
             if (sendToVatsys)
             {
                 MMI.SelectOrDeselectGroundTrack(MMI.SelectedGroundTrack);

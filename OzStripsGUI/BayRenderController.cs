@@ -90,6 +90,31 @@ internal class BayRenderController(Bay bay) : IDisposable
         return y;
     }
 
+    public int GetStripPosPreScale(Strip strip)
+    {
+        var y = 0;
+        var list = Bay.Strips.ToList();
+        list.Reverse();
+        foreach (var item in list)
+        {
+            if (item.Type == Gui.StripItemType.STRIP)
+            {
+                if (item.StripController == strip)
+                {
+                    return y;
+                }
+
+                y += StripHeight;
+            }
+            else
+            {
+                y += BarHeight;
+            }
+        }
+
+        return y;
+    }
+
     public void Redraw()
     {
         SkControl?.Refresh();
