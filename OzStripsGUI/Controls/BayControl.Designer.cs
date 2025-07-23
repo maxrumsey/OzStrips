@@ -54,7 +54,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Controls
             // 
             // pl_main
             // 
-            this.pl_main.AutoScroll = true;
             this.pl_main.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pl_main.Location = new System.Drawing.Point(0, 36);
             this.pl_main.Name = "pl_main";

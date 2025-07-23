@@ -124,6 +124,12 @@ public class Bay : System.IDisposable
     }
 
     /// <summary>
+    /// Gets the scaled height of a strip.
+    /// </summary>
+    /// <returns>Height (px).</returns>
+    public static int GetStripHeight() => (int)(BayRenderController.StripHeight * BayRenderController.Scale);
+
+    /// <summary>
     /// The number of queues items.
     /// </summary>
     /// <returns>The number.</returns>

@@ -10,6 +10,7 @@ public partial class BayControl : UserControl
 {
     private readonly Bay _ownerBay;
     private readonly BayManager _bayManager;
+    private int _stripHeight;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BayControl"/> class.
@@ -22,10 +23,35 @@ public partial class BayControl : UserControl
         InitializeComponent();
         lb_bay_name.Text = name;
         ChildPanel = pl_main;
-        pl_main.VerticalScroll.Visible = true;
-
+        ChildPanel.VerticalScroll.Enabled = true;
         _bayManager = bm;
         _ownerBay = bay;
+
+        ChildPanel.Resize += ResizeStripBoard;
+        ChildPanel.Scroll += Scroll;
+        ChildPanel.MouseWheel += MouseWheel;
+    }
+
+    private void MouseWheel(object sender, MouseEventArgs e)
+    {
+        return;
+    }
+
+    private new void Scroll(object sender, ScrollEventArgs e)
+    {
+        var val = e.NewValue;
+
+        if (val < 0)
+        {
+            val = 0;
+        }
+
+        ChildPanel.VerticalScroll.Value = val;
+    }
+
+    private void ResizeStripBoard(object sender, EventArgs e)
+    {
+        ConfigureScroll();
     }
 
     /// <summary>
@@ -46,5 +72,33 @@ public partial class BayControl : UserControl
     private void ButtonDivClicked(object sender, EventArgs e)
     {
         _ownerBay.AddDivider(false);
+    }
+
+    private void SetScrollValue(int val)
+    {
+        ChildPanel.VerticalScroll.Value = val;
+        ChildPanel.PerformLayout();
+    }
+
+    private void ConfigureScroll()
+    {
+        _stripHeight = Bay.GetStripHeight();
+
+        var child = ChildPanel.Controls[0];
+        var parent = ChildPanel.Parent;
+
+        ChildPanel.VerticalScroll.SmallChange = _stripHeight;
+        ChildPanel.VerticalScroll.Maximum = _ownerBay.GetRequestedHeight();
+        ChildPanel.VerticalScroll.Minimum = 0;
+
+
+        if (child.Height + 40 > parent.Height)
+        {
+            ChildPanel.VerticalScroll.Visible = true;
+        }
+        else
+        {
+            ChildPanel.VerticalScroll.Visible = false;
+        }
     }
 }
