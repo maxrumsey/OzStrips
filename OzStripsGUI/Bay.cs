@@ -296,11 +296,12 @@ public class Bay : System.IDisposable
     }
 
     /// <summary>
-    /// Orders the strips.
+    /// Resizes the bay.
     /// </summary>
     public void ResizeBay()
     {
         _bayRenderController.SetHeight();
+        ChildPanel.ConfigureScroll();
     }
 
     /// <summary>

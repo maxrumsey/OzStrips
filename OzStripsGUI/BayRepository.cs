@@ -305,7 +305,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             panel.ResumeLayout();
         }
 
-        ResizeStripBays(); // prevents issues from scroll bars appearing.
+        ResizeStripBays(); // prevents issues from scroll bars appearing. TODO: fix this properly
     }
 
     /// <summary>
@@ -394,6 +394,11 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
         foreach (var bay in Bays)
         {
             bay.ChildPanel.ResumeLayout();
+        }
+
+        foreach (var bay in Bays)
+        {
+            bay.ChildPanel.ConfigureScroll();
         }
     }
 

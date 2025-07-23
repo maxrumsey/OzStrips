@@ -388,7 +388,7 @@ public class BayManager
     }
 
     /// <summary>
-    /// Adds a strip.
+    /// Adds a strip to the relevant bays. If required, saves the strip and resizes the bays.
     /// </summary>
     /// <param name="strip">The strip to add.</param>
     /// <param name="save">If the strip should be saved to the server.</param>
@@ -420,7 +420,7 @@ public class BayManager
     }
 
     /// <summary>
-    /// Updates the bay from the controller.
+    /// Runs update function on relevant bays when a strip is moved.
     /// </summary>
     /// <param name="strip">The strip controller.</param>
     /// Called by inhibits, moving strips, sid triggers, server pos updates.

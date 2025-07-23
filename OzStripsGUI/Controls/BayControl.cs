@@ -32,7 +32,37 @@ public partial class BayControl : UserControl
         ChildPanel.MouseWheel += MouseWheel;
     }
 
-    private void MouseWheel(object sender, MouseEventArgs e)
+    /// <summary>
+    /// Gets the child panel.
+    /// </summary>
+    public Panel ChildPanel { get; }
+
+    /// <summary>
+    /// Configures the scroll bar after a resize.
+    /// </summary>
+    public void ConfigureScroll()
+    {
+        _stripHeight = Bay.GetStripHeight();
+
+        var child = ChildPanel.Controls[0];
+        var parent = ChildPanel.Parent;
+
+        ChildPanel.VerticalScroll.SmallChange = _stripHeight;
+        ChildPanel.VerticalScroll.Maximum = _ownerBay.GetRequestedHeight();
+        ChildPanel.VerticalScroll.Minimum = 0;
+
+
+        if (child.Height + 40 > parent.Height)
+        {
+            ChildPanel.VerticalScroll.Visible = true;
+        }
+        else
+        {
+            ChildPanel.VerticalScroll.Visible = false;
+        }
+    }
+
+    private new void MouseWheel(object sender, MouseEventArgs e)
     {
         return;
     }
@@ -54,11 +84,6 @@ public partial class BayControl : UserControl
         ConfigureScroll();
     }
 
-    /// <summary>
-    /// Gets the child panel.
-    /// </summary>
-    public Panel ChildPanel { get; }
-
     private void LabelBayNameClicked(object sender, EventArgs e)
     {
         _bayManager.DropStrip(_ownerBay);
@@ -78,27 +103,5 @@ public partial class BayControl : UserControl
     {
         ChildPanel.VerticalScroll.Value = val;
         ChildPanel.PerformLayout();
-    }
-
-    private void ConfigureScroll()
-    {
-        _stripHeight = Bay.GetStripHeight();
-
-        var child = ChildPanel.Controls[0];
-        var parent = ChildPanel.Parent;
-
-        ChildPanel.VerticalScroll.SmallChange = _stripHeight;
-        ChildPanel.VerticalScroll.Maximum = _ownerBay.GetRequestedHeight();
-        ChildPanel.VerticalScroll.Minimum = 0;
-
-
-        if (child.Height + 40 > parent.Height)
-        {
-            ChildPanel.VerticalScroll.Visible = true;
-        }
-        else
-        {
-            ChildPanel.VerticalScroll.Visible = false;
-        }
     }
 }
