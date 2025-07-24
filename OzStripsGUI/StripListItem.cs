@@ -11,7 +11,7 @@ public class StripListItem
     /// <summary>
     /// Gets or sets the strip controller.
     /// </summary>
-    public Strip? StripController { get; set; }
+    public Strip? Strip { get; set; }
 
     /// <summary>
     /// Gets or sets the strip item type.
@@ -38,7 +38,7 @@ public class StripListItem
     {
         if (Type == StripItemType.STRIP)
         {
-            return StripController?.ToString() ?? string.Empty;
+            return Strip?.ToString() ?? string.Empty;
         }
         else
         {
@@ -59,7 +59,7 @@ public class StripListItem
         }
 
         var item = (StripListItem)obj;
-        if (item.StripController == StripController &&
+        if (item.Strip == Strip &&
             item.Type == Type &&
             item.BarText == BarText &&
             item.Style == Style)

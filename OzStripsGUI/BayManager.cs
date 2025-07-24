@@ -35,13 +35,13 @@ public class BayManager
     /// <summary>
     /// Gets the picked controller.
     /// </summary>
-    public Strip? PickedController
+    public Strip? PickedStrip
     {
         get
         {
             if (PickedStripItem is not null && PickedStripItem.Type == StripItemType.STRIP)
             {
-                return PickedStripItem.StripController;
+                return PickedStripItem.Strip;
             }
 
             return null;
@@ -146,7 +146,7 @@ public class BayManager
     /// </summary>
     public void SidTrigger()
     {
-        PickedController?.SIDTrigger();
+        PickedStrip?.SIDTrigger();
     }
 
     /// <summary>
@@ -154,7 +154,7 @@ public class BayManager
     /// </summary>
     public void CockStrip()
     {
-        PickedController?.CockStrip();
+        PickedStrip?.CockStrip();
     }
 
     /// <summary>
@@ -162,11 +162,11 @@ public class BayManager
     /// </summary>
     public void Inhibit()
     {
-        if (PickedController != null)
+        if (PickedStrip != null)
         {
-            PickedController.CurrentBay = StripBay.BAY_DEAD;
-            PickedController.SyncStrip();
-            UpdateBay(PickedController);
+            PickedStrip.CurrentBay = StripBay.BAY_DEAD;
+            PickedStrip.SyncStrip();
+            UpdateBay(PickedStrip);
             RemovePicked(true, true);
         }
         else if (PickedBay is not null && PickedStripItem is not null && PickedStripItem.Type != StripItemType.STRIP)
@@ -181,9 +181,9 @@ public class BayManager
     /// <param name="strip">Strip to open PDC form for. Null if use picked controller.</param>
     public void SendPDC(Strip? strip = null)
     {
-        if (PickedController != null && strip == null)
+        if (PickedStrip != null && strip == null)
         {
-            MMI.OpenCPDLCWindow(PickedController.FDR, null, CPDLC.MessageCategories.FirstOrDefault(m => m.Name == "PDC"));
+            MMI.OpenCPDLCWindow(PickedStrip.FDR, null, CPDLC.MessageCategories.FirstOrDefault(m => m.Name == "PDC"));
             RemovePicked(true);
         }
         else if (strip != null)
@@ -197,10 +197,10 @@ public class BayManager
     /// </summary>
     public void CrossStrip()
     {
-        if (PickedController != null)
+        if (PickedStrip != null)
         {
-            PickedController.Crossing = !PickedController.Crossing;
-            PickedController.Controller?.SetCross();
+            PickedStrip.Crossing = !PickedStrip.Crossing;
+            PickedStrip.Controller?.SetCross();
             RemovePicked(true);
         }
     }
@@ -210,9 +210,9 @@ public class BayManager
     /// </summary>
     public void FlipFlopStrip()
     {
-        if (PickedController != null)
+        if (PickedStrip != null)
         {
-            PickedController.FlipFlop();
+            PickedStrip.FlipFlop();
             RemovePicked(true);
         }
     }
@@ -223,19 +223,19 @@ public class BayManager
     /// <param name="bay">The bay.</param>
     public void DropStrip(Bay bay)
     {
-        if (PickedController != null)
+        if (PickedStrip != null)
         {
             var newBay = bay.BayTypes.FirstOrDefault();
-            if (newBay == PickedController.CurrentBay)
+            if (newBay == PickedStrip.CurrentBay)
             {
                 return;
             }
 
-            PickedController.CurrentBay = newBay;
-            PickedController.SyncStrip();
-            UpdateBay(PickedController);
+            PickedStrip.CurrentBay = newBay;
+            PickedStrip.SyncStrip();
+            UpdateBay(PickedStrip);
 
-            PickedStripItem = bay.GetListItem(PickedController);
+            PickedStripItem = bay.GetListItem(PickedStrip);
 
             RemovePicked(true);
         }
@@ -292,11 +292,11 @@ public class BayManager
 
         if (item.Type == StripItemType.STRIP)
         {
-            bay.ChildPanel.SetPicked(item.StripController);
+            bay.ChildPanel.SetPicked(item.Strip);
 
-            var rTrack = RDP.RadarTracks.FirstOrDefault(x => x.ActualAircraft.Callsign == item.StripController?.FDR.Callsign);
+            var rTrack = RDP.RadarTracks.FirstOrDefault(x => x.ActualAircraft.Callsign == item.Strip?.FDR.Callsign);
             var groundTrack = MMI.FindTrack(rTrack);
-            var fdrTrack = MMI.FindTrack(item.StripController?.FDR);
+            var fdrTrack = MMI.FindTrack(item.Strip?.FDR);
 
             if (fdrTrack is not null && MMI.SelectedTrack != fdrTrack)
             {
@@ -349,7 +349,7 @@ public class BayManager
                 RemovePicked(false, true);
                 PickedStripItem = new()
                 {
-                    StripController = foundSC,
+                    Strip = foundSC,
                 };
             }
         }
@@ -410,6 +410,11 @@ public class BayManager
             if (bay.ResponsibleFor(strip.CurrentBay))
             {
                 bay.AddStrip(strip, inhibitreorders);
+
+                if (PickedStrip == strip)
+                {
+                    bay.ChildPanel.SetPicked(strip);
+                }
             }
         }
 
@@ -436,6 +441,11 @@ public class BayManager
             if (bay.OwnsStrip(strip))
             {
                 bay.RemoveStrip(strip);
+
+                if (PickedStrip == strip)
+                {
+                    bay.ChildPanel.SetPicked(null);
+                }
             }
         }
 
@@ -545,9 +555,9 @@ public class BayManager
     {
         try
         {
-            if (PickedController != null)
+            if (PickedStrip != null)
             {
-                BayRepository.FindBay(PickedController)?.QueueUp();
+                BayRepository.FindBay(PickedStrip)?.QueueUp();
             }
         }
         catch (Exception ex)

@@ -99,7 +99,7 @@ internal class BayRenderController(Bay bay) : IDisposable
         {
             if (item.Type == Gui.StripItemType.STRIP)
             {
-                if (item.StripController == strip)
+                if (item.Strip == strip)
                 {
                     return y;
                 }
@@ -157,7 +157,7 @@ internal class BayRenderController(Bay bay) : IDisposable
 
                 if (stripView is not null)
                 {
-                    var strip = Bay.Strips[i]?.StripController;
+                    var strip = Bay.Strips[i]?.Strip;
                     var cocked = false;
                     if (strip?.CockLevel == 1)
                     {
@@ -171,7 +171,7 @@ internal class BayRenderController(Bay bay) : IDisposable
                     }
                     catch (Exception ex)
                     {
-                        Util.LogError(ex, $"Ozstrips Renderer - Strip {Bay.Strips[i]?.StripController?.FDR.Callsign}");
+                        Util.LogError(ex, $"Ozstrips Renderer - Strip {Bay.Strips[i]?.Strip?.FDR.Callsign}");
                     }
                 }
 

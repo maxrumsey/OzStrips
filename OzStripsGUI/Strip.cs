@@ -812,7 +812,7 @@ public sealed class Strip
     /// </summary>
     public void TogglePick()
     {
-        if (_bayManager.PickedController == this)
+        if (_bayManager.PickedStrip == this)
         {
             _bayManager.RemovePicked(true, true);
         }

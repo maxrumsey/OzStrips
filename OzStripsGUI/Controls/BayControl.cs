@@ -48,6 +48,12 @@ public partial class BayControl : UserControl
     {
         // todo: run set val during this if strip is picked.
         _stripHeight = Bay.GetStripHeight();
+
+        if (ChildPanel.Controls.Count == 0)
+        {
+            return;
+        }
+
         var child = ChildPanel.Controls[0];
         var parent = ChildPanel.Parent;
 

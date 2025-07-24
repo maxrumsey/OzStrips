@@ -107,8 +107,8 @@ public class Bay : System.IDisposable
         {
             switch (item.Type)
             {
-                case StripItemType.STRIP when item.StripController is not null:
-                    childList.Add(item.StripController.FDR.Callsign);
+                case StripItemType.STRIP when item.Strip is not null:
+                    childList.Add(item.Strip.FDR.Callsign);
                     break;
                 case StripItemType.QUEUEBAR:
                     childList.Add("\a"); // indicates q-bar
@@ -172,7 +172,7 @@ public class Bay : System.IDisposable
         var found = false;
         foreach (var item in Strips)
         {
-            if (item.StripController == controller)
+            if (item.Strip == controller)
             {
                 found = true;
             }
@@ -190,7 +190,7 @@ public class Bay : System.IDisposable
     {
         if (remove)
         {
-            Strips.RemoveAll(item => item.StripController == controller);
+            Strips.RemoveAll(item => item.Strip == controller);
         }
 
         ResizeBay();
@@ -210,9 +210,9 @@ public class Bay : System.IDisposable
     /// </summary>
     public void WipeStrips()
     {
-        foreach (var strip in Strips.Where(x => x.StripController is not null))
+        foreach (var strip in Strips.Where(x => x.Strip is not null))
         {
-            RemoveStrip(strip.StripController!, false);
+            RemoveStrip(strip.Strip!, false);
         }
 
         Strips.Clear();
@@ -229,7 +229,7 @@ public class Bay : System.IDisposable
     {
         var strip = new StripListItem
         {
-            StripController = stripController,
+            Strip = stripController,
             Type = StripItemType.STRIP,
             RenderedStripItem = new StripView(stripController, _bayRenderController),
         };
@@ -241,7 +241,7 @@ public class Bay : System.IDisposable
                 var abovetheBar = new List<StripListItem>() { strip };
                 for (var i = Strips.Count - 1; i >= 0; i--)
                 {
-                    if (Strips[i].Type == StripItemType.STRIP && Strips[i].StripController is not null)
+                    if (Strips[i].Type == StripItemType.STRIP && Strips[i].Strip is not null)
                     {
                         abovetheBar.Add(Strips[i]);
                         Strips.Remove(Strips[i]);
@@ -253,7 +253,7 @@ public class Bay : System.IDisposable
                 }
 
     #pragma warning disable CS8602 // Dereference of a possibly null reference.
-                abovetheBar = abovetheBar.OrderByDescending(x => x.StripController.FDR.Callsign).ToList();
+                abovetheBar = abovetheBar.OrderByDescending(x => x.Strip.FDR.Callsign).ToList();
     #pragma warning restore CS8602 // Dereference of a possibly null reference.
 
                 Strips.AddRange(abovetheBar);
@@ -288,7 +288,7 @@ public class Bay : System.IDisposable
         {
             if (s.Type == StripItemType.STRIP)
             {
-                s.StripController?.UpdateFDR();
+                s.Strip?.UpdateFDR();
             }
         }
 
@@ -462,10 +462,10 @@ public class Bay : System.IDisposable
     /// </summary>
     public void QueueUp()
     {
-        if (_bayManager.PickedController != null && OwnsStrip(_bayManager.PickedController))
+        if (_bayManager.PickedStrip != null && OwnsStrip(_bayManager.PickedStrip))
         {
             AddDivider(true, false);
-            var item = Strips.Find(a => a?.StripController == _bayManager.PickedController);
+            var item = Strips.Find(a => a?.Strip == _bayManager.PickedStrip);
             ChangeStripPositionAbs(item, DivPosition);
             _bayManager.RemovePicked(true);
             _socketConnection.SyncBay(this);
@@ -490,7 +490,7 @@ public class Bay : System.IDisposable
             {
                 returnedItem = stripListItem;
             }
-            else if (stripListItem.Type == StripItemType.STRIP && stripListItem.StripController?.FDR.Callsign == code)
+            else if (stripListItem.Type == StripItemType.STRIP && stripListItem.Strip?.FDR.Callsign == code)
             {
                 returnedItem = stripListItem;
             }
@@ -535,7 +535,7 @@ public class Bay : System.IDisposable
         StripListItem? returnedItem = null;
         foreach (var stripListItem in Strips)
         {
-            if (stripListItem.Type == StripItemType.STRIP && stripListItem.StripController == strip)
+            if (stripListItem.Type == StripItemType.STRIP && stripListItem.Strip == strip)
             {
                 returnedItem = stripListItem;
             }
