@@ -250,13 +250,13 @@ public partial class MainForm : Form
     /// <summary>
     /// Sets the selected track from vatSys.
     /// </summary>
-    /// <param name="fdr">Selected FDR.</param>
+    /// <param name="callsign">Selected Callsign.</param>
     /// <param name="ground">Whether or not the track is a ground track.</param>
-    public void SetSelectedTrack(string? fdr, bool ground)
+    public void SetSelectedTrack(string? callsign, bool ground)
     {
         try
         {
-            _bayManager.SetPickedCallsign(fdr, ground);
+            _bayManager.SetPickedCallsign(callsign, ground);
         }
         catch (Exception ex)
         {

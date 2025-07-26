@@ -86,32 +86,39 @@ public class BayManager
     /// Sets the picked callsign, and if deselecting a track, deselects the corresponding air/ground track.
     /// </summary>
     /// <param name="callsign">Aircraft callsign.</param>
-    /// <param name="ground">Whether or not the track is a ground track.</param>
-    public void SetPickedCallsign(string callsign, bool ground)
+    /// <param name="originatedFromGround">Whether or not the track is a ground track.</param>
+    public void SetPickedCallsign(string callsign, bool originatedFromGround)
     {
         if (callsign is not null)
         {
             var sc = StripRepository.GetController(callsign);
             if (sc is not null)
             {
-                SetPickedFromFDR(sc.FDR);
+                SetPickedStripFromVatSys(sc);
             }
         }
         else
         {
-            /*
-             * Spaghetti.
-             */
-            if (ground && MMI.SelectedTrack != null)
-            {
-                MMI.SelectOrDeselectTrack(MMI.SelectedTrack);
-            }
-            else if (!ground && MMI.SelectedGroundTrack != null)
-            {
-                MMI.SelectOrDeselectGroundTrack(MMI.SelectedGroundTrack);
-            }
-
+            // This is a vatSys track being deselected.
+            DeSelectAllVatSysTracks(originatedFromGround);
             RemovePicked(false, true);
+        }
+    }
+
+    /// <summary>
+    /// Deselects all vatSys tracks.
+    /// </summary>
+    /// <param name="originatedFromGround">Whether this originated from deselection of a ground track.</param>
+    public void DeSelectAllVatSysTracks(bool originatedFromGround)
+    {
+        // todo: is passing originator type necessary?
+        if (originatedFromGround && MMI.SelectedTrack != null)
+        {
+            MMI.SelectOrDeselectTrack(MMI.SelectedTrack);
+        }
+        else if (!originatedFromGround && MMI.SelectedGroundTrack != null)
+        {
+            MMI.SelectOrDeselectGroundTrack(MMI.SelectedGroundTrack);
         }
     }
 
@@ -294,19 +301,28 @@ public class BayManager
         {
             bay.ChildPanel.SetPicked(item.Strip);
 
-            var rTrack = RDP.RadarTracks.FirstOrDefault(x => x.ActualAircraft.Callsign == item.Strip?.FDR.Callsign);
-            var groundTrack = MMI.FindTrack(rTrack);
-            var fdrTrack = MMI.FindTrack(item.Strip?.FDR);
+            SelectVatSysTracks(item.Strip);
+        }
+    }
 
-            if (fdrTrack is not null && MMI.SelectedTrack != fdrTrack)
-            {
-                MMI.SelectOrDeselectTrack(fdrTrack);
-            }
+    /// <summary>
+    /// Sets relevant vatSys selected tracks, when we select an actual strip item
+    /// </summary>
+    /// <param name="strip">Strip we are setting tracks to.</param>
+    public void SelectVatSysTracks(Strip? strip)
+    {
+        var rTrack = RDP.RadarTracks.FirstOrDefault(x => x.ActualAircraft.Callsign == strip?.FDR.Callsign);
+        var groundTrack = MMI.FindTrack(rTrack);
+        var fdrTrack = MMI.FindTrack(strip?.FDR);
 
-            if (groundTrack is not null && MMI.SelectedGroundTrack != groundTrack)
-            {
-                MMI.SelectOrDeselectGroundTrack(groundTrack);
-            }
+        if (fdrTrack is not null && MMI.SelectedTrack != fdrTrack)
+        {
+            MMI.SelectOrDeselectTrack(fdrTrack);
+        }
+
+        if (groundTrack is not null && MMI.SelectedGroundTrack != groundTrack)
+        {
+            MMI.SelectOrDeselectGroundTrack(groundTrack);
         }
     }
 
@@ -331,25 +347,20 @@ public class BayManager
     /// Sets a controller to be picked, from an FDR.
     /// </summary>
     /// <param name="fdr">The fdr.</param>
-    public void SetPickedFromFDR(FDR? fdr)
+    public void SetPickedStripFromVatSys(Strip? strip)
     {
-        if (fdr is not null)
+        if (strip is not null)
         {
-            Strip? foundSC = null;
-            foreach (var controller in StripRepository.Strips)
+            if (!SetPickedStripClass(strip))
             {
-                if (controller.FDR.Callsign == fdr.Callsign)
-                {
-                    foundSC = controller;
-                }
-            }
+                /*
+                 * Strip is inhibited.
+                 */
 
-            if (foundSC is not null && !SetPickedStripItem(foundSC))
-            {
                 RemovePicked(false, true);
                 PickedStripItem = new()
                 {
-                    Strip = foundSC,
+                    Strip = strip,
                 };
             }
         }
@@ -362,7 +373,7 @@ public class BayManager
     /// <summary>
     /// Sets the picked controller to be empty.
     /// </summary>
-    /// <param name="force">Whether or not to respect the remove-pick-after action setting.</param>
+    /// <param name="force">Override user preference on retaining picked strips.</param>
     public void RemovePicked(bool sendToVatsys = false, bool force = false)
     {
         if (force || !OzStripsSettings.Default.KeepStripPicked)
@@ -591,7 +602,7 @@ public class BayManager
     /// </summary>
     /// <param name="strip">The strip item.</param>
     /// <returns>Whether or not the bay was found.</returns>
-    public bool SetPickedStripItem(Strip strip, bool sendToVatsys = false)
+    public bool SetPickedStripClass(Strip strip, bool sendToVatsys = false)
     {
         foreach (var bay in BayRepository.Bays)
         {
