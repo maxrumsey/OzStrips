@@ -20,17 +20,17 @@ public class StripRepository
     public List<Strip> Strips { get; } = [];
 
     /// <summary>
-    /// Looks up controller by name.
+    /// Looks up strip by callsign.
     /// </summary>
-    /// <param name="name">The aircraft callsign.</param>
+    /// <param name="callsign">The aircraft callsign.</param>
     /// <returns>The aircraft's FDR.</returns>
-    public Strip? GetController(string name)
+    public Strip? GetStrip(string callsign)
     {
-        foreach (var controller in Strips)
+        foreach (var strip in Strips)
         {
-            if (controller.FDR.Callsign == name)
+            if (strip.FDR.Callsign == callsign)
             {
-                return controller;
+                return strip;
             }
         }
 
@@ -42,13 +42,13 @@ public class StripRepository
     /// </summary>
     /// <param name="key">Strip key.</param>
     /// <returns>Strip or null.</returns>
-    public Strip? GetController(StripKey key)
+    public Strip? GetStrip(StripKey key)
     {
-        foreach (var controller in Strips)
+        foreach (var strip in Strips)
         {
-            if (controller.StripKey.Matches(key))
+            if (strip.StripKey.Matches(key))
             {
-                return controller;
+                return strip;
             }
         }
 
@@ -101,7 +101,7 @@ public class StripRepository
     }
 
     /// <summary>
-    /// Receives a SC DTO object, updates relevant SC.
+    /// Receives a Strip DTO object, updates relevant Strip.
     /// </summary>
     /// <param name="stripDTO">The strip controller data.</param>
     /// <param name="bayManager">The bay manager.</param>

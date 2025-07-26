@@ -87,11 +87,11 @@ public class BayManager
     /// </summary>
     /// <param name="callsign">Aircraft callsign.</param>
     /// <param name="originatedFromGround">Whether or not the track is a ground track.</param>
-    public void SetPickedCallsignFromVatsys(string callsign, bool originatedFromGround)
+    public void SetPickedCallsignFromVatsys(string? callsign, bool originatedFromGround)
     {
         if (callsign is not null)
         {
-            var sc = StripRepository.GetController(callsign);
+            var sc = StripRepository.GetStrip(callsign);
             if (sc is not null)
             {
                 SetPickedStripFromVatSys(sc);
@@ -306,7 +306,7 @@ public class BayManager
     }
 
     /// <summary>
-    /// Sets relevant vatSys selected tracks, when we select an actual strip item
+    /// Sets relevant vatSys selected tracks, when we select an actual strip item.
     /// </summary>
     /// <param name="strip">Strip we are setting vatsys tracks to.</param>
     public void SelectVatSysTracks(Strip? strip)
@@ -346,7 +346,7 @@ public class BayManager
     /// <summary>
     /// Sets a controller to be picked, from an FDR.
     /// </summary>
-    /// <param name="fdr">The fdr.</param>
+    /// <param name="strip">The strip.</param>
     public void SetPickedStripFromVatSys(Strip? strip)
     {
         if (strip is not null)
@@ -387,7 +387,6 @@ public class BayManager
         if (force || !OzStripsSettings.Default.KeepStripPicked)
         {
             PickedBay?.ChildPanel.SetPicked(null);
-
 
             PickedStripItem?.RenderedStripItem?.MarkPicked(false);
             PickedStripItem = null;
@@ -626,7 +625,6 @@ public class BayManager
                 bay.DeleteBar(bar);
                 return true;
             }
-
         }
         catch (Exception ex)
         {
@@ -641,7 +639,7 @@ public class BayManager
     /// </summary>
     /// <param name="strip">The strip item.</param>
     /// <returns>Whether or not the bay was found.</returns>
-    public bool SetPickedStripClass(Strip strip, bool sendToVatsys = false)
+    public bool SetPickedStripClass(Strip strip)
     {
         foreach (var bay in BayRepository.Bays)
         {

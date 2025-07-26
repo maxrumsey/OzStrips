@@ -117,7 +117,7 @@ public sealed class SocketConn : IDisposable
 
                 if (mainForm.Visible)
                 {
-                    var sc = _bayManager.StripRepository.GetController(key);
+                    var sc = _bayManager.StripRepository.GetStrip(key);
 
                     if (sc is not null)
                     {
