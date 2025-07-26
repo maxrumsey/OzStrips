@@ -589,14 +589,14 @@ public class BayManager
     /// <summary>
     /// Creates the specified bar.
     /// </summary>
-    /// <param name="baystring">Bay name.</param>
+    /// <param name="bayString">Bay name.</param>
     /// <param name="type">Type of bay.</param>
     /// <param name="text">Text on bar.</param>
-    public void AddBar(string baystring, int type, string text)
+    public void AddBar(string bayString, int type, string text)
     {
         try
         {
-            var bay = BayRepository.Bays.Find(x => x.Name == baystring);
+            var bay = BayRepository.Bays.Find(x => x.Name == bayString);
 
             bay?.AddBar(type, text);
         }
@@ -604,6 +604,36 @@ public class BayManager
         {
             Util.LogError(ex);
         }
+    }
+
+    /// <summary>
+    /// Deletes a bar by params. Returns true if found.
+    /// </summary>
+    /// <param name="bayString">Bay name.</param>
+    /// <param name="type">Type of bay.</param>
+    /// <param name="text">Text on bar.</param>
+    /// <returns>Whether or not the bar was found.</returns>
+    public bool DeleteBarByParams(string bayString, int type, string text)
+    {
+        try
+        {
+            var bay = BayRepository.Bays.Find(x => x.Name == bayString);
+
+            var bar = bay?.Strips.FirstOrDefault(x => x.BarText == text && x.Type == StripItemType.BAR && x.Style == type);
+
+            if (bay is not null && bar is not null)
+            {
+                bay.DeleteBar(bar);
+                return true;
+            }
+
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+        }
+
+        return false;
     }
 
     /// <summary>
