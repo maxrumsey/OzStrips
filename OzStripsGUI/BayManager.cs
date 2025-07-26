@@ -87,7 +87,7 @@ public class BayManager
     /// </summary>
     /// <param name="callsign">Aircraft callsign.</param>
     /// <param name="originatedFromGround">Whether or not the track is a ground track.</param>
-    public void SetPickedCallsign(string callsign, bool originatedFromGround)
+    public void SetPickedCallsignFromVatsys(string callsign, bool originatedFromGround)
     {
         if (callsign is not null)
         {
@@ -288,8 +288,8 @@ public class BayManager
     /// Sets a strip item to be picked.
     /// </summary>
     /// <param name="item">The strip item.</param>
-    /// <param name="bay">The bay the item is from.</param>
-    public void SetPickedStripItem(StripListItem item, bool sendToVatsys = false, Bay? bay = null)
+    /// <param name="bay">The bay the item is from, or null if this is an inhibited strip..</param>
+    public void SetPickedStripItem(StripListItem item, Bay? bay = null)
     {
         RemovePicked(false, true);
         PickedStripItem = item;
@@ -297,9 +297,9 @@ public class BayManager
 
         item.RenderedStripItem?.MarkPicked(true);
 
-        if (item.Type == StripItemType.STRIP)
+        if (item.Type == StripItemType.STRIP && item.Strip is not null)
         {
-            bay.ChildPanel.SetPicked(item.Strip);
+            bay?.ChildPanel.SetPicked(item.Strip);
 
             SelectVatSysTracks(item.Strip);
         }
@@ -308,7 +308,7 @@ public class BayManager
     /// <summary>
     /// Sets relevant vatSys selected tracks, when we select an actual strip item
     /// </summary>
-    /// <param name="strip">Strip we are setting tracks to.</param>
+    /// <param name="strip">Strip we are setting vatsys tracks to.</param>
     public void SelectVatSysTracks(Strip? strip)
     {
         var rTrack = RDP.RadarTracks.FirstOrDefault(x => x.ActualAircraft.Callsign == strip?.FDR.Callsign);
@@ -331,15 +331,15 @@ public class BayManager
     /// </summary>
     /// <param name="item">The strip item.</param>
     /// <param name="bay">The specified bay.</param>
-    public void TogglePicked(StripListItem item, bool sendToVatsys = false, Bay? bay = null)
+    public void TogglePickedStripItem(StripListItem item, Bay? bay = null)
     {
         if (PickedStripItem == item)
         {
-            RemovePicked(sendToVatsys, true);
+            RemovePicked(true, true);
         }
         else
         {
-            SetPickedStripItem(item, sendToVatsys, bay);
+            SetPickedStripItem(item, bay);
         }
     }
 
@@ -351,18 +351,25 @@ public class BayManager
     {
         if (strip is not null)
         {
-            if (!SetPickedStripClass(strip))
+            // Is this a duplicate or follow-up event from vatsys?
+            // i.e. Did we just set the strip within vatsys.
+            if (PickedStrip == strip)
             {
-                /*
-                 * Strip is inhibited.
-                 */
-
-                RemovePicked(false, true);
-                PickedStripItem = new()
-                {
-                    Strip = strip,
-                };
+                return;
             }
+
+            if (!SetPickedStripClass(strip))
+                {
+                    /*
+                     * Strip is inhibited.
+                     */
+
+                    RemovePicked(false, true);
+                    PickedStripItem = new()
+                    {
+                        Strip = strip,
+                    };
+                }
         }
         else
         {
@@ -373,6 +380,7 @@ public class BayManager
     /// <summary>
     /// Sets the picked controller to be empty.
     /// </summary>
+    /// <param name="sendToVatsys">Whether or not to update vatSys tracks.</param>
     /// <param name="force">Override user preference on retaining picked strips.</param>
     public void RemovePicked(bool sendToVatsys = false, bool force = false)
     {
@@ -383,6 +391,7 @@ public class BayManager
 
             PickedStripItem?.RenderedStripItem?.MarkPicked(false);
             PickedStripItem = null;
+
             if (sendToVatsys)
             {
                 MMI.SelectOrDeselectGroundTrack(MMI.SelectedGroundTrack);
@@ -609,7 +618,7 @@ public class BayManager
             var item = bay.GetListItem(strip);
             if (item is not null)
             {
-                SetPickedStripItem(item, sendToVatsys, bay);
+                SetPickedStripItem(item, bay);
                 return true;
             }
         }

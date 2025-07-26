@@ -256,7 +256,7 @@ public partial class MainForm : Form
     {
         try
         {
-            _bayManager.SetPickedCallsign(callsign, ground);
+            _bayManager.SetPickedCallsignFromVatsys(callsign, ground);
         }
         catch (Exception ex)
         {
