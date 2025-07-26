@@ -366,7 +366,12 @@ public partial class MainForm : Form
         }
         else if (keyData == (Keys.X | Keys.Alt))
         {
-            _bayManager.AddBar("Runway", 3, "XXX CROSSING XXX");
+            // If we didnt't delete a crossing bar, add one.
+            if (!_bayManager.DeleteBarByParams("Runway", 3, "XXX CROSSING XXX"))
+            {
+                _bayManager.AddBar("Runway", 3, "XXX CROSSING XXX");
+            }
+
             return true;
         }
 
