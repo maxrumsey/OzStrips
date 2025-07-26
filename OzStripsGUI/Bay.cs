@@ -119,7 +119,27 @@ public class Bay : System.IDisposable
             }
         }
 
+        // Inhibit sending of items above the queue bar in the PREACTIVE bay.
+        if (bay.BayTypes.Contains(StripBay.BAY_PREA))
+        {
+            var belowTheQueueBar = new List<string>();
+
+            foreach (var bayEl in childList)
+            {
+                if (bayEl == "\a")
+                {
+                    childList = belowTheQueueBar;
+                    break;
+                }
+                else
+                {
+                    belowTheQueueBar.Add(bayEl);
+                }
+            }
+        }
+
         bayDTO.list = childList;
+
         return bayDTO;
     }
 
