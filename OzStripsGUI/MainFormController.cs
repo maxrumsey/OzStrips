@@ -1,12 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
+using MaxRumsey.OzStripsPlugin.Gui.Controls;
 
 namespace MaxRumsey.OzStripsPlugin.Gui
 
 public class MainFormController
 {
+    private FormWindowState _lastState = FormWindowState.Minimized;
+    private bool _postresizechecked = true;
+
     private MainForm _mainForm;
     private readonly Timer _timer;
     private readonly BayManager _bayManager;
@@ -119,7 +124,7 @@ public class MainFormController
             {
                 _bayManager.SetAerodrome(name, _socketConn);
                 _socketConn.SetAerodrome();
-                lb_ad.Text = name;
+                _mainForm.AerodromeLabel.Text = name;
                 SetATISCode("Z");
             }
         }
@@ -167,8 +172,8 @@ public class MainFormController
         if (metar != _metar)
         {
             _metar = metar;
-            tt_metar.RemoveAll();
-            tt_metar.SetToolTip(lb_ad, metar);
+            _mainForm.MetarToolTip.RemoveAll();
+            _mainForm.MetarToolTip.SetToolTip(_mainForm.AerodromeLabel, metar);
         }
     }
 
@@ -177,7 +182,7 @@ public class MainFormController
     /// </summary>
     public void SetConnStatus()
     {
-        pl_stat.BackColor = _socketConn.Connected ? Color.Green : Color.OrangeRed;
+        _mainForm.StatusPanel.BackColor = _socketConn.Connected ? Color.Green : Color.OrangeRed;
     }
 
     /// <summary>
@@ -335,5 +340,230 @@ public class MainFormController
         _bayManager.ForceRerender();
 
         return null;
+    }
+
+    /// <summary>
+    /// Sets the ATIS code. Called from SocketConn.
+    /// </summary>
+    /// <param name="code">The ATIS code.</param>
+    public void SetATISCode(string code)
+    {
+        _mainForm.ATISLabel.Text = code;
+    }
+
+    /*
+ * GUI Below
+ */
+
+    private void UpdateTimer(object sender, EventArgs e)
+    {
+        if (!_mainForm.Visible)
+        {
+            return;
+        }
+
+        if (!_postresizechecked)
+        {
+            _postresizechecked = true;
+            _bayManager.BayRepository.Resize();
+        }
+
+        if (!_mainForm.IsDisposed)
+        {
+            _mainForm.Invoke(() =>
+            {
+                _mainForm.TimerTextBox.Text = DateTime.UtcNow.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
+                _bayManager.ForceRerender();
+            });
+        }
+    }
+
+    private void MainFormSizeChanged(object sender, EventArgs e)
+    {
+        _postresizechecked = false;
+        _bayManager?.BayRepository.Resize();
+        SetControlBarScrollBar();
+    }
+
+    private void AddAerodrome(string name)
+    {
+        _aerodromes.Add(name);
+
+        var toolStripMenuItem = new ToolStripMenuItem
+        {
+            Text = name,
+        };
+        toolStripMenuItem.Click += (sender, e) => SetAerodrome(name);
+        _mainForm.AerodromeListToolStrip.DropDownItems.Add(toolStripMenuItem);
+    }
+
+    private void Bt_inhibit_Click(object sender, EventArgs e)
+    {
+        _bayManager.Inhibit();
+    }
+
+    private void ACDToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        _bayManager.BayRepository.SetLayout(ACDToolStripMenuItem_Click);
+        _bayManager.BayRepository.WipeBays();
+        _bayManager.BayRepository.BayNum = 3;
+        _ = new Bay([StripBay.BAY_PREA], _bayManager, _socketConn, "Preactive", 0);
+        _ = new Bay([StripBay.BAY_CLEARED], _bayManager, _socketConn, "Cleared", 1);
+        _ = new Bay([StripBay.BAY_PUSHED], _bayManager, _socketConn, "Pushback", 2);
+        _bayManager.BayRepository.Resize();
+        _bayManager.BayRepository.ReloadStrips(_socketConn);
+    }
+
+    private void SMCToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        _bayManager.BayRepository.SetLayout(SMCToolStripMenuItem_Click);
+        _bayManager.BayRepository.WipeBays();
+        _bayManager.BayRepository.BayNum = 5;
+        _ = new Bay([StripBay.BAY_CLEARED], _bayManager, _socketConn, "Cleared", 0);
+        _ = new Bay([StripBay.BAY_PUSHED], _bayManager, _socketConn, "Pushback", 0);
+        _ = new Bay([StripBay.BAY_TAXI], _bayManager, _socketConn, "Taxi", 1);
+        _ = new Bay([StripBay.BAY_HOLDSHORT], _bayManager, _socketConn, "Holding Point", 2);
+        _ = new Bay([StripBay.BAY_RUNWAY], _bayManager, _socketConn, "Runway", 2);
+        _bayManager.BayRepository.Resize();
+        _bayManager.BayRepository.ReloadStrips(_socketConn);
+    }
+
+    private void SMCACDToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        _bayManager.BayRepository.SetLayout(SMCACDToolStripMenuItem_Click);
+        _bayManager.BayRepository.WipeBays();
+        _bayManager.BayRepository.BayNum = 6;
+        _ = new Bay([StripBay.BAY_PREA], _bayManager, _socketConn, "Preactive", 0);
+        _ = new Bay([StripBay.BAY_CLEARED], _bayManager, _socketConn, "Cleared", 0);
+        _ = new Bay([StripBay.BAY_PUSHED], _bayManager, _socketConn, "Pushback", 0);
+        _ = new Bay([StripBay.BAY_TAXI], _bayManager, _socketConn, "Taxi", 1);
+        _ = new Bay([StripBay.BAY_HOLDSHORT], _bayManager, _socketConn, "Holding Point", 2);
+        _ = new Bay([StripBay.BAY_RUNWAY], _bayManager, _socketConn, "Runway", 2);
+        _bayManager.BayRepository.Resize();
+        _bayManager.BayRepository.ReloadStrips(_socketConn);
+    }
+
+    private void ADCToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        _bayManager.BayRepository.SetLayout(ADCToolStripMenuItem_Click);
+        _bayManager.BayRepository.WipeBays();
+        _bayManager.BayRepository.BayNum = 4;
+        _ = new Bay([StripBay.BAY_HOLDSHORT], _bayManager, _socketConn, "Holding Point", 0);
+        _ = new Bay([StripBay.BAY_RUNWAY], _bayManager, _socketConn, "Runway", 1);
+        _ = new Bay([StripBay.BAY_OUT], _bayManager, _socketConn, "Departed", 2);
+        _ = new Bay([StripBay.BAY_ARRIVAL], _bayManager, _socketConn, "Arrivals", 2);
+        _bayManager.BayRepository.Resize();
+        _bayManager.BayRepository.ReloadStrips(_socketConn);
+    }
+
+    private void AllToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        _bayManager.BayRepository.SetLayout(AllToolStripMenuItem_Click);
+        _bayManager.BayRepository.WipeBays();
+        _bayManager.BayRepository.BayNum = 8;
+        _ = new Bay([StripBay.BAY_PREA], _bayManager, _socketConn, "Preactive", 0);
+        _ = new Bay([StripBay.BAY_CLEARED], _bayManager, _socketConn, "Cleared", 0);
+        _ = new Bay([StripBay.BAY_PUSHED], _bayManager, _socketConn, "Pushback", 1);
+        _ = new Bay([StripBay.BAY_TAXI], _bayManager, _socketConn, "Taxi", 1);
+        _ = new Bay([StripBay.BAY_HOLDSHORT], _bayManager, _socketConn, "Holding Point", 1);
+        _ = new Bay([StripBay.BAY_RUNWAY], _bayManager, _socketConn, "Runway", 2);
+        _ = new Bay([StripBay.BAY_OUT], _bayManager, _socketConn, "Departed", 2);
+        _ = new Bay([StripBay.BAY_ARRIVAL], _bayManager, _socketConn, "Arrivals", 2);
+        _bayManager.BayRepository.Resize();
+        _bayManager.BayRepository.ReloadStrips(_socketConn);
+    }
+
+    private void ADCSMCToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        _bayManager.BayRepository.SetLayout(ADCSMCToolStripMenuItem_Click);
+        _bayManager.BayRepository.WipeBays();
+        _bayManager.BayRepository.BayNum = 7;
+        _ = new Bay([StripBay.BAY_CLEARED], _bayManager, _socketConn, "Cleared", 0);
+        _ = new Bay([StripBay.BAY_PUSHED], _bayManager, _socketConn, "Pushback", 0);
+        _ = new Bay([StripBay.BAY_TAXI], _bayManager, _socketConn, "Taxi", 1);
+        _ = new Bay([StripBay.BAY_HOLDSHORT], _bayManager, _socketConn, "Holding Point", 1);
+        _ = new Bay([StripBay.BAY_RUNWAY], _bayManager, _socketConn, "Runway", 2);
+        _ = new Bay([StripBay.BAY_OUT], _bayManager, _socketConn, "Departed", 2);
+        _ = new Bay([StripBay.BAY_ARRIVAL], _bayManager, _socketConn, "Arrivals", 2);
+        _bayManager.BayRepository.Resize();
+        _bayManager.BayRepository.ReloadStrips(_socketConn);
+    }
+
+    public void Bt_cross_Click(object sender, EventArgs e)
+    {
+        _bayManager.CrossStrip();
+    }
+
+    // socket.io log
+    public void ToolStripMenuItem1_Click(object sender, EventArgs e)
+    {
+        var modalChild = new MsgListDebug(_socketConn);
+        var bm = new BaseModal(modalChild, "Msg List");
+        bm.Show(_mainForm);
+    }
+
+    public void MainForm_Load(object sender, EventArgs e)
+    {
+        SetConnStatus();
+        _mainForm.SetSmartResizeCheckBox();
+    }
+
+    public void AerodromeSelectorKeyDown(object sender, KeyPressEventArgs e)
+    {
+        if (_bayManager != null && e.KeyChar == Convert.ToChar(Keys.Enter, CultureInfo.InvariantCulture))
+        {
+            SetAerodrome(toolStripTextBox1.Text.ToUpper(CultureInfo.InvariantCulture));
+            e.Handled = true;
+        }
+    }
+
+    public void BarCreatorClick(object sender, EventArgs e)
+    {
+        var modalChild = new BarCreator(_bayManager);
+        var bm = new BaseModal(modalChild, "Add Bar");
+        bm.ReturnEvent += modalChild.ModalReturned;
+        bm.Show(_mainForm);
+    }
+
+    public void MainForm_Resize(object sender, EventArgs e)
+    {
+        if (_mainForm.WindowState != _lastState)
+        {
+            _lastState = _mainForm.WindowState;
+            _postresizechecked = false;
+            _bayManager?.BayRepository.Resize();
+            _mainForm.SetControlBarScrollBar();
+        }
+    }
+
+    public void SetSmartResizeColumnMode(int cols)
+    {
+        Util.SetEnvVar("SmartResize", cols);
+        _mainForm.SetSmartResizeCheckBox();
+        _bayManager.BayRepository.ReloadStrips(_socketConn);
+    }
+
+    public void FlipFlopStrip(object sender, EventArgs e)
+    {
+        _bayManager.FlipFlopStrip();
+    }
+
+    /// <summary>
+    /// Opens the settings window.
+    /// </summary>
+    /// <param name="sender">Sender.</param>
+    /// <param name="e">Args.</param>
+    public void ShowSettings(object sender, EventArgs e)
+    {
+        var modalChild = new SettingsWindowControl(_socketConn, _aerodromes);
+        var bm = new BaseModal(modalChild, "OzStrips Settings");
+        bm.ReturnEvent += modalChild.ModalReturned;
+        bm.Show(_mainForm);
+    }
+
+    public void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+    {
+        _socketConn.Close();
+        _socketConn.Dispose();
     }
 }
