@@ -94,7 +94,7 @@ public partial class QuickSearch : UserControl
         {
             if (strip.FDR.Callsign.Contains(tb_callsign.Text.ToUpper(CultureInfo.InvariantCulture)))
             {
-                Aircrafts.Add(new AircraftList { _strip = strip });
+                Aircrafts.Add(new AircraftList(strip));
             }
         }
 

@@ -46,6 +46,7 @@ public partial class BaseModal : Form
         }
 
         Close();
+        MainForm.MainFormInstance?.Focus();
     }
 
     /// <inheritdoc/>
