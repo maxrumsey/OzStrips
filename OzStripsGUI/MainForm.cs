@@ -321,7 +321,7 @@ public partial class MainForm : Form
                 return;
             }
 
-            var strip = _bayManager.StripRepository.GetController(args.UpdatedPilot.Callsign);
+            var strip = _bayManager.StripRepository.GetStrip(args.UpdatedPilot.Callsign);
             if (strip is not null)
             {
                 _bayManager.BayRepository.DeleteStrip(strip);

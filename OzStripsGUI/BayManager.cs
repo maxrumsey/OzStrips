@@ -78,8 +78,17 @@ public class BayManager
     /// </summary>
     public Bay? PickedBay
     {
-        get;
-        internal set;
+        get
+        {
+            var strip = PickedStripItem?.Strip;
+
+            if (strip is not null)
+            {
+                return BayRepository.FindBay(strip);
+            }
+
+            return null;
+        }
     }
 
     /// <summary>
@@ -99,6 +108,11 @@ public class BayManager
         }
         else
         {
+            if (PickedStrip == null)
+            {
+                return;
+            }
+
             // This is a vatSys track being deselected.
             DeSelectAllVatSysTracks(originatedFromGround);
             RemovePicked(false, true);
@@ -293,7 +307,6 @@ public class BayManager
     {
         RemovePicked(false, true);
         PickedStripItem = item;
-        PickedBay = bay;
 
         item.RenderedStripItem?.MarkPicked(true);
 
@@ -430,6 +443,7 @@ public class BayManager
             {
                 bay.AddStrip(strip, inhibitreorders);
 
+                // Lock bay scrollbars if this strip is picked.
                 if (PickedStrip == strip)
                 {
                     bay.ChildPanel.SetPicked(strip);
@@ -461,6 +475,7 @@ public class BayManager
             {
                 bay.RemoveStrip(strip);
 
+                // De-lock bay scrollbars.
                 if (PickedStrip == strip)
                 {
                     bay.ChildPanel.SetPicked(null);
