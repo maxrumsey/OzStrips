@@ -347,6 +347,20 @@ public partial class MainForm : Form
     }
 
     /// <summary>
+    /// Opens the settings window.
+    /// </summary>
+    /// <param name="sender">Sender.</param>
+    /// <param name="e">Args.</param>
+    public void ShowQuickSearch()
+    {
+        var modalChild = new QuickSearch(_bayManager);
+        var bm = new BaseModal(modalChild, "Quick Search");
+        modalChild.BaseModal = bm;
+        bm.ReturnEvent += modalChild.ModalReturned;
+        bm.Show(MainForm.MainFormInstance);
+    }
+
+    /// <summary>
     /// Overrides keypress event to capture all keypresses.
     /// </summary>
     /// <param name="msg">Sender.</param>
@@ -374,42 +388,48 @@ public partial class MainForm : Form
 
             return true;
         }
+        else if (keyData == (Keys.F | Keys.Control))
+        {
+            ShowQuickSearch();
+
+            return true;
+        }
 
         switch (keyData)
-        {
-            case Keys.Up:
-                _bayManager.PositionKey(1);
-                return true;
-            case Keys.Down:
-                _bayManager.PositionKey(-1);
-                return true;
-            case Keys.Space:
-                _bayManager.QueueUp();
-                return true;
-            case Keys.Enter:
-                _bayManager.SidTrigger();
-                return true;
-            case Keys.Tab:
-                _bayManager.CockStrip();
-                return true;
-            case Keys.OemOpenBrackets:
-                MoveLateralAerodrome(-1);
-                return true;
-            case Keys.OemCloseBrackets:
-                MoveLateralAerodrome(1);
-                return true;
-            case Keys.Back:
-                _bayManager.Inhibit();
-                return true;
-            case Keys.X:
-                _bayManager.CrossStrip();
-                return true;
-            case Keys.F:
-                _bayManager.FlipFlopStrip();
-                return true;
-            default:
-                break;
-        }
+            {
+                case Keys.Up:
+                    _bayManager.PositionKey(1);
+                    return true;
+                case Keys.Down:
+                    _bayManager.PositionKey(-1);
+                    return true;
+                case Keys.Space:
+                    _bayManager.QueueUp();
+                    return true;
+                case Keys.Enter:
+                    _bayManager.SidTrigger();
+                    return true;
+                case Keys.Tab:
+                    _bayManager.CockStrip();
+                    return true;
+                case Keys.OemOpenBrackets:
+                    MoveLateralAerodrome(-1);
+                    return true;
+                case Keys.OemCloseBrackets:
+                    MoveLateralAerodrome(1);
+                    return true;
+                case Keys.Back:
+                    _bayManager.Inhibit();
+                    return true;
+                case Keys.X:
+                    _bayManager.CrossStrip();
+                    return true;
+                case Keys.F:
+                    _bayManager.FlipFlopStrip();
+                    return true;
+                default:
+                    break;
+            }
 
         _bayManager.ForceRerender();
 

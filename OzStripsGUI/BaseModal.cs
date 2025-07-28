@@ -26,6 +26,7 @@ public partial class BaseModal : Form
 
         Text = text;
         BringToFront();
+        Focus();
     }
 
     /// <summary>

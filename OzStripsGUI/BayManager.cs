@@ -103,7 +103,7 @@ public class BayManager
             var sc = StripRepository.GetStrip(callsign);
             if (sc is not null)
             {
-                SetPickedStripFromVatSys(sc);
+                SetPickedStripFromExternal(sc);
             }
         }
         else
@@ -360,7 +360,7 @@ public class BayManager
     /// Sets a controller to be picked, from an FDR.
     /// </summary>
     /// <param name="strip">The strip.</param>
-    public void SetPickedStripFromVatSys(Strip? strip)
+    public void SetPickedStripFromExternal(Strip? strip)
     {
         if (strip is not null)
         {

@@ -59,11 +59,9 @@ public partial class BayControl : UserControl
 
         _stripBoardHeight = parent.Height - panel2.Height;
 
-
         ChildPanel.VerticalScroll.SmallChange = _stripHeight;
         ChildPanel.VerticalScroll.Maximum = _ownerBay.GetRequestedHeight();
         ChildPanel.VerticalScroll.Minimum = 0;
-
 
         if (child.Height > _stripBoardHeight)
         {
@@ -75,6 +73,10 @@ public partial class BayControl : UserControl
         }
     }
 
+    /// <summary>
+    /// Sets the picked strip.
+    /// </summary>
+    /// <param name="strip">Picked strip.</param>
     public void SetPicked(Strip? strip)
     {
         if (strip is null)
