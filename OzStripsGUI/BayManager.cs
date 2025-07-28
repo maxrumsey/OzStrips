@@ -92,6 +92,44 @@ public class BayManager
     }
 
     /// <summary>
+    /// Deselects all vatSys tracks.
+    /// </summary>
+    /// <param name="originatedFromGround">Whether this originated from deselection of a ground track.</param>
+    public static void DeSelectAllVatSysTracks(bool originatedFromGround)
+    {
+        // todo: is passing originator type necessary?
+        if (originatedFromGround && MMI.SelectedTrack != null)
+        {
+            MMI.SelectOrDeselectTrack(MMI.SelectedTrack);
+        }
+        else if (!originatedFromGround && MMI.SelectedGroundTrack != null)
+        {
+            MMI.SelectOrDeselectGroundTrack(MMI.SelectedGroundTrack);
+        }
+    }
+
+    /// <summary>
+    /// Sets relevant vatSys selected tracks, when we select an actual strip item.
+    /// </summary>
+    /// <param name="strip">Strip we are setting vatsys tracks to.</param>
+    public static void SelectVatSysTracks(Strip? strip)
+    {
+        var rTrack = RDP.RadarTracks.FirstOrDefault(x => x.ActualAircraft.Callsign == strip?.FDR.Callsign);
+        var groundTrack = MMI.FindTrack(rTrack);
+        var fdrTrack = MMI.FindTrack(strip?.FDR);
+
+        if (fdrTrack is not null && MMI.SelectedTrack != fdrTrack)
+        {
+            MMI.SelectOrDeselectTrack(fdrTrack);
+        }
+
+        if (groundTrack is not null && MMI.SelectedGroundTrack != groundTrack)
+        {
+            MMI.SelectOrDeselectGroundTrack(groundTrack);
+        }
+    }
+
+    /// <summary>
     /// Sets the picked callsign, and if deselecting a track, deselects the corresponding air/ground track.
     /// </summary>
     /// <param name="callsign">Aircraft callsign.</param>
@@ -116,23 +154,6 @@ public class BayManager
             // This is a vatSys track being deselected.
             DeSelectAllVatSysTracks(originatedFromGround);
             RemovePicked(false, true);
-        }
-    }
-
-    /// <summary>
-    /// Deselects all vatSys tracks.
-    /// </summary>
-    /// <param name="originatedFromGround">Whether this originated from deselection of a ground track.</param>
-    public void DeSelectAllVatSysTracks(bool originatedFromGround)
-    {
-        // todo: is passing originator type necessary?
-        if (originatedFromGround && MMI.SelectedTrack != null)
-        {
-            MMI.SelectOrDeselectTrack(MMI.SelectedTrack);
-        }
-        else if (!originatedFromGround && MMI.SelectedGroundTrack != null)
-        {
-            MMI.SelectOrDeselectGroundTrack(MMI.SelectedGroundTrack);
         }
     }
 
@@ -315,27 +336,6 @@ public class BayManager
             bay?.ChildPanel.SetPicked(item.Strip);
 
             SelectVatSysTracks(item.Strip);
-        }
-    }
-
-    /// <summary>
-    /// Sets relevant vatSys selected tracks, when we select an actual strip item.
-    /// </summary>
-    /// <param name="strip">Strip we are setting vatsys tracks to.</param>
-    public void SelectVatSysTracks(Strip? strip)
-    {
-        var rTrack = RDP.RadarTracks.FirstOrDefault(x => x.ActualAircraft.Callsign == strip?.FDR.Callsign);
-        var groundTrack = MMI.FindTrack(rTrack);
-        var fdrTrack = MMI.FindTrack(strip?.FDR);
-
-        if (fdrTrack is not null && MMI.SelectedTrack != fdrTrack)
-        {
-            MMI.SelectOrDeselectTrack(fdrTrack);
-        }
-
-        if (groundTrack is not null && MMI.SelectedGroundTrack != groundTrack)
-        {
-            MMI.SelectOrDeselectGroundTrack(groundTrack);
         }
     }
 

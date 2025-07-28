@@ -92,14 +92,6 @@ public class StripRepository
         return CreateStrip(fdr, bayManager, socketConn, inhibitReorders);
     }
 
-    private static Strip CreateStrip(FDR fdr, BayManager bayManager, SocketConn socketConn, bool inhibitReorders = false)
-    {
-        var stripController = new Strip(fdr, bayManager, socketConn);
-        bayManager.AddStrip(stripController, true, inhibitReorders);
-        stripController.FetchStripData();
-        return stripController;
-    }
-
     /// <summary>
     /// Receives a Strip DTO object, updates relevant Strip.
     /// </summary>
@@ -196,5 +188,13 @@ public class StripRepository
         }
 
         socketConn.SendStripStatus(null, acid);
+    }
+
+    private static Strip CreateStrip(FDR fdr, BayManager bayManager, SocketConn socketConn, bool inhibitReorders = false)
+    {
+        var stripController = new Strip(fdr, bayManager, socketConn);
+        bayManager.AddStrip(stripController, true, inhibitReorders);
+        stripController.FetchStripData();
+        return stripController;
     }
 }

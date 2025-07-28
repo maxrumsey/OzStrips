@@ -349,8 +349,6 @@ public partial class MainForm : Form
     /// <summary>
     /// Opens the settings window.
     /// </summary>
-    /// <param name="sender">Sender.</param>
-    /// <param name="e">Args.</param>
     public void ShowQuickSearch()
     {
         var modalChild = new QuickSearch(_bayManager);
