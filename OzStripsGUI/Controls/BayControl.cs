@@ -162,4 +162,9 @@ public partial class BayControl : UserControl
 
         return 0;
     }
+
+    private void PanelMouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
+    {
+        Focus();
+    }
 }

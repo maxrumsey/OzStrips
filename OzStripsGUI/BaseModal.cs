@@ -26,6 +26,15 @@ public partial class BaseModal : Form
 
         Text = text;
         BringToFront();
+
+        Focus();
+
+        _child.MouseMove += MouseMoved;
+        MouseMove += MouseMoved;
+    }
+
+    private void MouseMoved(object sender, MouseEventArgs e)
+    {
         Focus();
     }
 
