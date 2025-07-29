@@ -122,12 +122,25 @@ public partial class QuickSearch : UserControl
         switch (e.KeyData)
         {
             case Keys.Enter:
+            case Keys.Space:
 
                 BaseModal?.ExitModal(true);
 
                 break;
             case Keys.Escape:
                 BaseModal?.ExitModal();
+
+                break;
+            case Keys.Up:
+                MoveSelection(-1);
+                e.Handled = true;
+
+                break;
+
+            case Keys.Down:
+                MoveSelection(1);
+                e.Handled = true;
+
                 break;
         }
     }
@@ -135,5 +148,29 @@ public partial class QuickSearch : UserControl
     private new void DoubleClick(object sender, DataGridViewCellMouseEventArgs e)
     {
         BaseModal?.ExitModal(true);
+    }
+
+    private void MoveSelection(int dir)
+    {
+        var selIndex = dataGridView1.SelectedRows.Count > 0
+            ? dataGridView1.SelectedRows[0].Index
+            : -1;
+
+        if (selIndex != -1)
+        {
+            dataGridView1.Rows[selIndex].Selected = false;
+
+            selIndex += dir;
+
+            if (selIndex < 0)
+            {
+                selIndex = 0;
+            }
+            else if (selIndex >= dataGridView1.Rows.Count)
+            {
+                selIndex = dataGridView1.Rows.Count - 1;
+            }
+            dataGridView1.Rows[selIndex].Selected = true;
+        }
     }
 }
