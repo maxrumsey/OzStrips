@@ -30,7 +30,7 @@ public sealed class SocketConn : IDisposable
     /// </summary>
     /// <param name="bayManager">The bay manager.</param>
     /// <param name="mainForm">The main form instance.</param>
-    public SocketConn(BayManager bayManager, MainForm mainForm)
+    public SocketConn(BayManager bayManager, MainFormController mainForm)
     {
         _connection = new HubConnectionBuilder()
             .WithUrl(OzStripsConfig.socketioaddr + "OzStripsHub")
@@ -78,7 +78,7 @@ public sealed class SocketConn : IDisposable
         {
             if (MainFormValid && code is not null)
             {
-                MainForm.MainFormInstance?.Invoke(() => MainForm.MainFormInstance.SetATISCode(code));
+                mainForm.Invoke(() => mainForm.SetATISCode(code));
             }
         });
 
@@ -88,7 +88,7 @@ public sealed class SocketConn : IDisposable
         {
             if (MainFormValid && metar is not null)
             {
-                 MainForm.MainFormInstance?.Invoke(() => MainForm.MainFormInstance.SetMetar(metar));
+                mainForm.Invoke(() => mainForm.SetMetar(metar));
             }
         });
 
@@ -369,7 +369,7 @@ public sealed class SocketConn : IDisposable
         }
 
         await SetAerodrome();
-        if (_connection.State == HubConnectionState.Disconnected && MainForm.ReadyForConnection is not null && MainForm.ReadyForConnection == true)
+        if (_connection.State == HubConnectionState.Disconnected && MainFormController.ReadyForConnection)
         {
             Connect();
         }
@@ -491,7 +491,7 @@ public sealed class SocketConn : IDisposable
 
             if (result == DialogResult.Yes)
             {
-                MainForm.MainFormInstance?.ShowSettings(this, new());
+                MainFormController.Instance?.ShowSettings(this, new());
             }
 
             return false;
@@ -518,7 +518,7 @@ public sealed class SocketConn : IDisposable
 
             if (MainFormValid)
             {
-                MainForm.MainFormInstance?.Invoke(() => MainForm.MainFormInstance.SetConnStatus());
+                MainFormController.Instance?.Invoke(() => MainFormController.Instance.SetConnStatus());
             }
 
             _bayManager.StripRepository.MarkAllStripsAsAwaitingRoutes();
@@ -538,7 +538,7 @@ public sealed class SocketConn : IDisposable
         Connected = false;
         if (MainFormValid)
         {
-            MainForm.MainFormInstance?.Invoke(() => MainForm.MainFormInstance.SetConnStatus());
+            MainFormController.Instance?.Invoke(() => MainFormController.Instance.SetConnStatus());
         }
 
         if (error is not null)

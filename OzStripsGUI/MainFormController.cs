@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.Gui.Controls;
 
-namespace MaxRumsey.OzStripsPlugin.Gui
+namespace MaxRumsey.OzStripsPlugin.Gui;
 
-public class MainFormController
+public class MainFormController : IDisposable
 {
     private FormWindowState _lastState = FormWindowState.Minimized;
     private bool _postresizechecked = true;
@@ -41,7 +42,7 @@ public class MainFormController
         _timer.Tick += UpdateTimer;
         _timer.Start();
 
-        _bayManager = new(flp_main, AllToolStripMenuItem_Click);
+        _bayManager = new(form.MainFLP, AllToolStripMenuItem_Click);
         _socketConn = new(_bayManager, this);
 
         AddAerodrome("YBBN");
@@ -69,11 +70,11 @@ public class MainFormController
     {
         _aerodromes.Clear();
 
-        foreach (var item in ts_ad.DropDownItems.OfType<ToolStripItem>().ToArray())
+        foreach (var item in _mainForm.AerodromeListToolStrip.DropDownItems.OfType<ToolStripItem>().ToArray())
         {
             if (item.Tag is null)
             {
-                ts_ad.DropDownItems.Remove(item);
+                _mainForm.AerodromeListToolStrip.DropDownItems.Remove(item);
             }
         }
 
@@ -382,7 +383,7 @@ public class MainFormController
     {
         _postresizechecked = false;
         _bayManager?.BayRepository.Resize();
-        SetControlBarScrollBar();
+        _mainForm.SetControlBarScrollBar();
     }
 
     private void AddAerodrome(string name)
@@ -512,7 +513,8 @@ public class MainFormController
     {
         if (_bayManager != null && e.KeyChar == Convert.ToChar(Keys.Enter, CultureInfo.InvariantCulture))
         {
-            SetAerodrome(toolStripTextBox1.Text.ToUpper(CultureInfo.InvariantCulture));
+            SetAerodrome(_mainForm.EnteredAerodrome.ToUpper(CultureInfo.InvariantCulture));
+
             e.Handled = true;
         }
     }
@@ -566,4 +568,25 @@ public class MainFormController
         _socketConn.Close();
         _socketConn.Dispose();
     }
+
+    public void Dispose()
+    {
+        _timer?.Dispose();
+        IsDisposed = true;
+    }
+
+    public object Invoke(Action act)
+    {
+        return _mainForm.Invoke(act);
+    }
+
+    public bool Visible
+    {
+        get
+        {
+            return _mainForm.Visible;
+        }
+    }
+
+    public bool IsDisposed { get; private set; }
 }

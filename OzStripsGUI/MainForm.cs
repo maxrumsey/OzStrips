@@ -55,6 +55,10 @@ public partial class MainForm : Form
 
     public ToolStripMenuItem AerodromeListToolStrip => ts_ad;
 
+    public string EnteredAerodrome => toolStripTextBox1.Text;
+
+    public FlowLayoutPanel MainFLP => flp_main;
+
     /// <inheritdoc/>
     protected override CreateParams CreateParams
     {
@@ -74,7 +78,7 @@ public partial class MainForm : Form
     /// <returns>Handled.</returns>
     protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
     {
-        return _mainFormController.ProcessCmdKey(msg, keyData) ?? base.ProcessCmdKey(ref msg, keyData);
+        return _mainFormController.ProcessCmdKey(ref msg, keyData) ?? base.ProcessCmdKey(ref msg, keyData);
     }
 
     private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
