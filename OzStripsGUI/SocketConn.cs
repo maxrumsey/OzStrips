@@ -488,6 +488,7 @@ public sealed class SocketConn : IDisposable
     {
         if (!Network.IsOfficialServer && Server == Servers.VATSIM)
         {
+            // TODO: make sure settings isn't already open.
             var result = Util.ShowQuestionBox("Connection to OzStrips main server detected while connected to the Sweatbox.\n\n" +
                 "Would you like to go to Settings and set Sweatbox mode?");
 
