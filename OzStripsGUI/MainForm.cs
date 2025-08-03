@@ -14,6 +14,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui;
 /// <summary>
 /// The main application form.
 /// </summary>
+/// All but the most basic of logic is abstracted to MainFormController
 public partial class MainForm : Form
 {
     private MainFormController _mainFormController;

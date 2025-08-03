@@ -572,7 +572,6 @@ public class MainFormController : IDisposable
     public void Dispose()
     {
         _timer?.Dispose();
-        IsDisposed = true;
     }
 
     public object Invoke(Action act)
@@ -588,5 +587,19 @@ public class MainFormController : IDisposable
         }
     }
 
-    public bool IsDisposed { get; private set; }
+    public bool IsDisposed
+    {
+        get
+        {
+            return _mainForm.IsDisposed;
+        }
+    }
+
+    public IntPtr Handle
+    {
+        get
+        {
+            return _mainForm.Handle;
+        }
+    }
 }

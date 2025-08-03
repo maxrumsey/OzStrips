@@ -89,7 +89,7 @@ public partial class SettingsWindowControl : UserControl
 
         Util.SetEnvVar("AlphaSortPrea", cb_preasort.Checked);
 
-        MainForm.MainFormInstance?.ForceResize();
+        MainFormController.Instance?.ForceResize();
     }
 
     private void SBButtonClick(object sender, EventArgs e)
@@ -119,7 +119,7 @@ public partial class SettingsWindowControl : UserControl
             lb_ads.Items.Add(tb_ad.Text.ToUpper(CultureInfo.InvariantCulture));
             tb_ad.Text = string.Empty;
 
-            MainForm.MainFormInstance?.SetAerodromeList(lb_ads.Items.OfType<string>().ToList());
+            MainFormController.Instance?.SetAerodromeList(lb_ads.Items.OfType<string>().ToList());
         }
     }
 
@@ -128,7 +128,7 @@ public partial class SettingsWindowControl : UserControl
         if (lb_ads.SelectedIndex != -1)
         {
             lb_ads.Items.RemoveAt(lb_ads.SelectedIndex);
-            MainForm.MainFormInstance?.SetAerodromeList(lb_ads.Items.OfType<string>().ToList());
+            MainFormController.Instance?.SetAerodromeList(lb_ads.Items.OfType<string>().ToList());
         }
     }
 

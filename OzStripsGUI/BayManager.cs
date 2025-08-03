@@ -248,7 +248,7 @@ public class BayManager
         }
         else
         {
-            MainForm.MainFormInstance?.ForceStrip(null, null);
+            MainFormController.Instance?.ForceStrip(null, null);
         }
     }
 
@@ -268,10 +268,9 @@ public class BayManager
             StripRepository.UpdateFDR(fdr, this, socketConn, true);
         }
 
-        var instance = MainForm.MainFormInstance;
-        if (instance?.IsDisposed == false)
+        if (MainFormController.Instance?.IsDisposed == false)
         {
-            LockWindowUpdate(instance.Handle);
+            LockWindowUpdate(MainFormController.Instance.Handle);
 
             foreach (var bay in BayRepository.Bays)
             {
