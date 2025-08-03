@@ -137,7 +137,7 @@ public sealed class SocketConn : IDisposable
         {
             if (MainFormValid && acid is not null)
             {
-                mainform.Invoke(() => _bayManager.StripRepository.GetStripStatus(acid, this));
+                mainForm.Invoke(() => _bayManager.StripRepository.GetStripStatus(acid, this));
             }
         });
 
