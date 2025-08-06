@@ -46,7 +46,6 @@ public partial class BayControl : UserControl
     /// </summary>
     public void ConfigureScroll()
     {
-        // todo: run set val during this if strip is picked.
         _stripHeight = Bay.GetStripHeight();
 
         if (ChildPanel.Controls.Count == 0)
@@ -70,6 +69,11 @@ public partial class BayControl : UserControl
         else
         {
             ChildPanel.VerticalScroll.Visible = false;
+        }
+
+        if (_pickedStrip is not null)
+        {
+            SetScrollValue(0);
         }
     }
 
@@ -143,6 +147,11 @@ public partial class BayControl : UserControl
         if (_pickedStrip is not null && _desiredScrollAmount is not null)
         {
             val = GetPickedStripPosition() - (int)_desiredScrollAmount;
+
+            if (val > ChildPanel.VerticalScroll.Maximum)
+            {
+                val = ChildPanel.VerticalScroll.Maximum;
+            }
         }
 
         if (val < 0)
