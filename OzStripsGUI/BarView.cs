@@ -40,7 +40,7 @@ internal class BarView(BayRenderController bayRC) : IRenderedStripItem
             return;
         }
 
-        _bayRenderController.Bay.BayManager.TogglePicked(Item, true, _bayRenderController.Bay);
+        _bayRenderController.Bay.BayManager.TogglePickedStripItem(Item, _bayRenderController.Bay);
     }
 
     public void MarkPicked(bool picked)

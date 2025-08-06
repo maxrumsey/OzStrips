@@ -416,7 +416,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
         switch (element.Value)
         {
             case StripElements.Values.ACID:
-                if (_bayRenderController.Bay.BayManager.PickedController == _strip)
+                if (_bayRenderController.Bay.BayManager.PickedStrip == _strip)
                 {
                     return SKColors.Silver;
                 }

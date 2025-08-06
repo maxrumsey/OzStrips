@@ -28,7 +28,6 @@
         {
             this.gp_main = new System.Windows.Forms.GroupBox();
             this.gb_int = new System.Windows.Forms.GroupBox();
-            this.cb_preasort = new System.Windows.Forms.CheckBox();
             this.cb_keeppicked = new System.Windows.Forms.CheckBox();
             this.llb_keyboard = new System.Windows.Forms.LinkLabel();
             this.gb_ads = new System.Windows.Forms.GroupBox();
@@ -51,6 +50,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.rb_ozstrips = new System.Windows.Forms.RadioButton();
             this.rb_vatsys = new System.Windows.Forms.RadioButton();
+            this.cb_preasort = new System.Windows.Forms.CheckBox();
             this.gp_main.SuspendLayout();
             this.gb_int.SuspendLayout();
             this.gb_ads.SuspendLayout();
@@ -85,17 +85,6 @@
             this.gb_int.TabIndex = 6;
             this.gb_int.TabStop = false;
             this.gb_int.Text = "Strip Interaction";
-            // 
-            // cb_preasort
-            // 
-            this.cb_preasort.AutoSize = true;
-            this.cb_preasort.Enabled = false;
-            this.cb_preasort.Location = new System.Drawing.Point(7, 38);
-            this.cb_preasort.Name = "cb_preasort";
-            this.cb_preasort.Size = new System.Drawing.Size(188, 17);
-            this.cb_preasort.TabIndex = 1;
-            this.cb_preasort.Text = "Alphabetically sort preactive strips.";
-            this.cb_preasort.UseVisualStyleBackColor = true;
             // 
             // cb_keeppicked
             // 
@@ -330,6 +319,16 @@
             this.rb_vatsys.TabStop = true;
             this.rb_vatsys.Text = "vatSys Popup";
             this.rb_vatsys.UseVisualStyleBackColor = true;
+            // 
+            // cb_preasort
+            // 
+            this.cb_preasort.AutoSize = true;
+            this.cb_preasort.Location = new System.Drawing.Point(7, 38);
+            this.cb_preasort.Name = "cb_preasort";
+            this.cb_preasort.Size = new System.Drawing.Size(188, 17);
+            this.cb_preasort.TabIndex = 1;
+            this.cb_preasort.Text = "Alphabetically sort preactive strips.";
+            this.cb_preasort.UseVisualStyleBackColor = true;
             // 
             // SettingsWindowControl
             // 

@@ -51,16 +51,17 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Controls
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(481, 350);
             this.panel1.TabIndex = 0;
+            this.panel1.MouseMove += new(PanelMouseMove);
             // 
             // pl_main
             // 
-            this.pl_main.AutoScroll = true;
             this.pl_main.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pl_main.Location = new System.Drawing.Point(0, 36);
             this.pl_main.Name = "pl_main";
             this.pl_main.Size = new System.Drawing.Size(481, 314);
             this.pl_main.TabIndex = 1;
             this.pl_main.Click += new System.EventHandler(this.LabelBayNameClicked);
+            this.pl_main.MouseMove += new(PanelMouseMove);
             // 
             // panel2
             // 
@@ -73,6 +74,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Controls
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(481, 36);
             this.panel2.TabIndex = 0;
+            this.panel2.MouseMove += new(PanelMouseMove);
             // 
             // bt_div
             // 

@@ -35,13 +35,13 @@ public class BayManager
     /// <summary>
     /// Gets the picked controller.
     /// </summary>
-    public Strip? PickedController
+    public Strip? PickedStrip
     {
         get
         {
             if (PickedStripItem is not null && PickedStripItem.Type == StripItemType.STRIP)
             {
-                return PickedStripItem.StripController;
+                return PickedStripItem.Strip;
             }
 
             return null;
@@ -78,39 +78,81 @@ public class BayManager
     /// </summary>
     public Bay? PickedBay
     {
-        get;
-        internal set;
+        get
+        {
+            var strip = PickedStripItem?.Strip;
+
+            if (strip is not null)
+            {
+                return BayRepository.FindBay(strip);
+            }
+
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Deselects all vatSys tracks.
+    /// </summary>
+    /// <param name="originatedFromGround">Whether this originated from deselection of a ground track.</param>
+    public static void DeSelectAllVatSysTracks(bool originatedFromGround)
+    {
+        // todo: is passing originator type necessary?
+        if (originatedFromGround && MMI.SelectedTrack != null)
+        {
+            MMI.SelectOrDeselectTrack(MMI.SelectedTrack);
+        }
+        else if (!originatedFromGround && MMI.SelectedGroundTrack != null)
+        {
+            MMI.SelectOrDeselectGroundTrack(MMI.SelectedGroundTrack);
+        }
+    }
+
+    /// <summary>
+    /// Sets relevant vatSys selected tracks, when we select an actual strip item.
+    /// </summary>
+    /// <param name="strip">Strip we are setting vatsys tracks to.</param>
+    public static void SelectVatSysTracks(Strip? strip)
+    {
+        var rTrack = RDP.RadarTracks.FirstOrDefault(x => x.ActualAircraft.Callsign == strip?.FDR.Callsign);
+        var groundTrack = MMI.FindTrack(rTrack);
+        var fdrTrack = MMI.FindTrack(strip?.FDR);
+
+        if (fdrTrack is not null && MMI.SelectedTrack != fdrTrack)
+        {
+            MMI.SelectOrDeselectTrack(fdrTrack);
+        }
+
+        if (groundTrack is not null && MMI.SelectedGroundTrack != groundTrack)
+        {
+            MMI.SelectOrDeselectGroundTrack(groundTrack);
+        }
     }
 
     /// <summary>
     /// Sets the picked callsign, and if deselecting a track, deselects the corresponding air/ground track.
     /// </summary>
     /// <param name="callsign">Aircraft callsign.</param>
-    /// <param name="ground">Whether or not the track is a ground track.</param>
-    public void SetPickedCallsign(string callsign, bool ground)
+    /// <param name="originatedFromGround">Whether or not the track is a ground track.</param>
+    public void SetPickedCallsignFromVatsys(string? callsign, bool originatedFromGround)
     {
         if (callsign is not null)
         {
-            var sc = StripRepository.GetController(callsign);
+            var sc = StripRepository.GetStrip(callsign);
             if (sc is not null)
             {
-                SetPickedFromFDR(sc.FDR);
+                SetPickedStripFromExternal(sc);
             }
         }
         else
         {
-            /*
-             * Spaghetti.
-             */
-            if (ground && MMI.SelectedTrack != null)
+            if (PickedStrip == null)
             {
-                MMI.SelectOrDeselectTrack(MMI.SelectedTrack);
-            }
-            else if (!ground && MMI.SelectedGroundTrack != null)
-            {
-                MMI.SelectOrDeselectGroundTrack(MMI.SelectedGroundTrack);
+                return;
             }
 
+            // This is a vatSys track being deselected.
+            DeSelectAllVatSysTracks(originatedFromGround);
             RemovePicked(false, true);
         }
     }
@@ -146,7 +188,7 @@ public class BayManager
     /// </summary>
     public void SidTrigger()
     {
-        PickedController?.SIDTrigger();
+        PickedStrip?.SIDTrigger();
     }
 
     /// <summary>
@@ -154,7 +196,7 @@ public class BayManager
     /// </summary>
     public void CockStrip()
     {
-        PickedController?.CockStrip();
+        PickedStrip?.CockStrip();
     }
 
     /// <summary>
@@ -162,11 +204,11 @@ public class BayManager
     /// </summary>
     public void Inhibit()
     {
-        if (PickedController != null)
+        if (PickedStrip != null)
         {
-            PickedController.CurrentBay = StripBay.BAY_DEAD;
-            PickedController.SyncStrip();
-            UpdateBay(PickedController);
+            PickedStrip.CurrentBay = StripBay.BAY_DEAD;
+            PickedStrip.SyncStrip();
+            UpdateBay(PickedStrip);
             RemovePicked(true, true);
         }
         else if (PickedBay is not null && PickedStripItem is not null && PickedStripItem.Type != StripItemType.STRIP)
@@ -181,9 +223,9 @@ public class BayManager
     /// <param name="strip">Strip to open PDC form for. Null if use picked controller.</param>
     public void SendPDC(Strip? strip = null)
     {
-        if (PickedController != null && strip == null)
+        if (PickedStrip != null && strip == null)
         {
-            MMI.OpenCPDLCWindow(PickedController.FDR, null, CPDLC.MessageCategories.FirstOrDefault(m => m.Name == "PDC"));
+            MMI.OpenCPDLCWindow(PickedStrip.FDR, null, CPDLC.MessageCategories.FirstOrDefault(m => m.Name == "PDC"));
             RemovePicked(true);
         }
         else if (strip != null)
@@ -197,10 +239,10 @@ public class BayManager
     /// </summary>
     public void CrossStrip()
     {
-        if (PickedController != null)
+        if (PickedStrip != null)
         {
-            PickedController.Crossing = !PickedController.Crossing;
-            PickedController.Controller?.SetCross();
+            PickedStrip.Crossing = !PickedStrip.Crossing;
+            PickedStrip.Controller?.SetCross();
             RemovePicked(true);
         }
     }
@@ -210,9 +252,9 @@ public class BayManager
     /// </summary>
     public void FlipFlopStrip()
     {
-        if (PickedController != null)
+        if (PickedStrip != null)
         {
-            PickedController.FlipFlop();
+            PickedStrip.FlipFlop();
             RemovePicked(true);
         }
     }
@@ -223,19 +265,19 @@ public class BayManager
     /// <param name="bay">The bay.</param>
     public void DropStrip(Bay bay)
     {
-        if (PickedController != null)
+        if (PickedStrip != null)
         {
             var newBay = bay.BayTypes.FirstOrDefault();
-            if (newBay == PickedController.CurrentBay)
+            if (newBay == PickedStrip.CurrentBay)
             {
                 return;
             }
 
-            PickedController.CurrentBay = newBay;
-            PickedController.SyncStrip();
-            UpdateBay(PickedController);
+            PickedStrip.CurrentBay = newBay;
+            PickedStrip.SyncStrip();
+            UpdateBay(PickedStrip);
 
-            PickedStripItem = bay.GetListItem(PickedController);
+            PickedStripItem = bay.GetListItem(PickedStrip);
 
             RemovePicked(true);
         }
@@ -281,29 +323,19 @@ public class BayManager
     /// Sets a strip item to be picked.
     /// </summary>
     /// <param name="item">The strip item.</param>
-    /// <param name="bay">The bay the item is from.</param>
-    public void SetPickedStripItem(StripListItem item, bool sendToVatsys = false, Bay? bay = null)
+    /// <param name="bay">The bay the item is from, or null if this is an inhibited strip..</param>
+    public void SetPickedStripItem(StripListItem item, Bay? bay = null)
     {
         RemovePicked(false, true);
         PickedStripItem = item;
-        PickedBay = bay;
+
         item.RenderedStripItem?.MarkPicked(true);
 
-        if (item.Type == StripItemType.STRIP)
+        if (item.Type == StripItemType.STRIP && item.Strip is not null)
         {
-            var rTrack = RDP.RadarTracks.FirstOrDefault(x => x.ActualAircraft.Callsign == item.StripController?.FDR.Callsign);
-            var groundTrack = MMI.FindTrack(rTrack);
-            var fdrTrack = MMI.FindTrack(item.StripController?.FDR);
+            bay?.ChildPanel.SetPicked(item.Strip);
 
-            if (fdrTrack is not null && MMI.SelectedTrack != fdrTrack)
-            {
-                MMI.SelectOrDeselectTrack(fdrTrack);
-            }
-
-            if (groundTrack is not null && MMI.SelectedGroundTrack != groundTrack)
-            {
-                MMI.SelectOrDeselectGroundTrack(groundTrack);
-            }
+            SelectVatSysTracks(item.Strip);
         }
     }
 
@@ -312,43 +344,45 @@ public class BayManager
     /// </summary>
     /// <param name="item">The strip item.</param>
     /// <param name="bay">The specified bay.</param>
-    public void TogglePicked(StripListItem item, bool sendToVatsys = false, Bay? bay = null)
+    public void TogglePickedStripItem(StripListItem item, Bay? bay = null)
     {
         if (PickedStripItem == item)
         {
-            RemovePicked(sendToVatsys, true);
+            RemovePicked(true, true);
         }
         else
         {
-            SetPickedStripItem(item, sendToVatsys, bay);
+            SetPickedStripItem(item, bay);
         }
     }
 
     /// <summary>
     /// Sets a controller to be picked, from an FDR.
     /// </summary>
-    /// <param name="fdr">The fdr.</param>
-    public void SetPickedFromFDR(FDR? fdr)
+    /// <param name="strip">The strip.</param>
+    public void SetPickedStripFromExternal(Strip? strip)
     {
-        if (fdr is not null)
+        if (strip is not null)
         {
-            Strip? foundSC = null;
-            foreach (var controller in StripRepository.Strips)
+            // Is this a duplicate or follow-up event from vatsys?
+            // i.e. Did we just set the strip within vatsys.
+            if (PickedStrip == strip)
             {
-                if (controller.FDR.Callsign == fdr.Callsign)
-                {
-                    foundSC = controller;
-                }
+                return;
             }
 
-            if (foundSC is not null && !SetPickedStripItem(foundSC))
-            {
-                RemovePicked(false, true);
-                PickedStripItem = new()
+            if (!SetPickedStripClass(strip))
                 {
-                    StripController = foundSC,
-                };
-            }
+                    /*
+                     * Strip is inhibited.
+                     */
+
+                    RemovePicked(false, true);
+                    PickedStripItem = new()
+                    {
+                        Strip = strip,
+                    };
+                }
         }
         else
         {
@@ -359,11 +393,14 @@ public class BayManager
     /// <summary>
     /// Sets the picked controller to be empty.
     /// </summary>
-    /// <param name="force">Whether or not to respect the remove-pick-after action setting.</param>
+    /// <param name="sendToVatsys">Whether or not to update vatSys tracks.</param>
+    /// <param name="force">Override user preference on retaining picked strips.</param>
     public void RemovePicked(bool sendToVatsys = false, bool force = false)
     {
         if (force || !OzStripsSettings.Default.KeepStripPicked)
         {
+            PickedBay?.ChildPanel.SetPicked(null);
+
             PickedStripItem?.RenderedStripItem?.MarkPicked(false);
             PickedStripItem = null;
 
@@ -388,7 +425,7 @@ public class BayManager
     }
 
     /// <summary>
-    /// Adds a strip.
+    /// Adds a strip to the relevant bays. If required, saves the strip and resizes the bays.
     /// </summary>
     /// <param name="strip">The strip to add.</param>
     /// <param name="save">If the strip should be saved to the server.</param>
@@ -405,6 +442,12 @@ public class BayManager
             if (bay.ResponsibleFor(strip.CurrentBay))
             {
                 bay.AddStrip(strip, inhibitreorders);
+
+                // Lock bay scrollbars if this strip is picked.
+                if (PickedStrip == strip)
+                {
+                    bay.ChildPanel.SetPicked(strip);
+                }
             }
         }
 
@@ -420,7 +463,7 @@ public class BayManager
     }
 
     /// <summary>
-    /// Updates the bay from the controller.
+    /// Runs update function on relevant bays when a strip is moved.
     /// </summary>
     /// <param name="strip">The strip controller.</param>
     /// Called by inhibits, moving strips, sid triggers, server pos updates.
@@ -431,6 +474,12 @@ public class BayManager
             if (bay.OwnsStrip(strip))
             {
                 bay.RemoveStrip(strip);
+
+                // De-lock bay scrollbars.
+                if (PickedStrip == strip)
+                {
+                    bay.ChildPanel.SetPicked(null);
+                }
             }
         }
 
@@ -540,9 +589,9 @@ public class BayManager
     {
         try
         {
-            if (PickedController != null)
+            if (PickedStrip != null)
             {
-                BayRepository.FindBay(PickedController)?.QueueUp();
+                BayRepository.FindBay(PickedStrip)?.QueueUp();
             }
         }
         catch (Exception ex)
@@ -554,14 +603,14 @@ public class BayManager
     /// <summary>
     /// Creates the specified bar.
     /// </summary>
-    /// <param name="baystring">Bay name.</param>
+    /// <param name="bayString">Bay name.</param>
     /// <param name="type">Type of bay.</param>
     /// <param name="text">Text on bar.</param>
-    public void AddBar(string baystring, int type, string text)
+    public void AddBar(string bayString, int type, string text)
     {
         try
         {
-            var bay = BayRepository.Bays.Find(x => x.Name == baystring);
+            var bay = BayRepository.Bays.Find(x => x.Name == bayString);
 
             bay?.AddBar(type, text);
         }
@@ -572,18 +621,47 @@ public class BayManager
     }
 
     /// <summary>
+    /// Deletes a bar by params. Returns true if found.
+    /// </summary>
+    /// <param name="bayString">Bay name.</param>
+    /// <param name="type">Type of bay.</param>
+    /// <param name="text">Text on bar.</param>
+    /// <returns>Whether or not the bar was found.</returns>
+    public bool DeleteBarByParams(string bayString, int type, string text)
+    {
+        try
+        {
+            var bay = BayRepository.Bays.Find(x => x.Name == bayString);
+
+            var bar = bay?.Strips.FirstOrDefault(x => x.BarText == text && x.Type == StripItemType.BAR && x.Style == type);
+
+            if (bay is not null && bar is not null)
+            {
+                bay.DeleteBar(bar);
+                return true;
+            }
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// Sets the picked strip item.
     /// </summary>
     /// <param name="strip">The strip item.</param>
     /// <returns>Whether or not the bay was found.</returns>
-    public bool SetPickedStripItem(Strip strip, bool sendToVatsys = false)
+    public bool SetPickedStripClass(Strip strip)
     {
         foreach (var bay in BayRepository.Bays)
         {
             var item = bay.GetListItem(strip);
             if (item is not null)
             {
-                SetPickedStripItem(item, sendToVatsys, bay);
+                SetPickedStripItem(item, bay);
                 return true;
             }
         }

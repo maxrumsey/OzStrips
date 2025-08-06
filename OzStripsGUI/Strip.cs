@@ -367,7 +367,7 @@ public sealed class Strip
             var wpt = string.Empty;
 
             // Procedural SIDs
-            if (FDR.SID != null && FDR.SID.Name.Length > 3)
+            if (FDR.SID?.Name.Length > 3)
             {
                 /*
                  * Don't Match:
@@ -511,6 +511,7 @@ public sealed class Strip
             var rtrack = GetRadarTrack();
             var ssrCodeCorrect = rtrack?.ActualAircraft.TransponderCode == FDR.AssignedSSRCode;
             var modec = rtrack?.ActualAircraft.TransponderModeC;
+
             // Probably a cleaner way to do this, but I am lazy and it is 2AM.
             if (FDR.AircraftType == "A388")
             {
@@ -664,10 +665,11 @@ public sealed class Strip
     /// <summary>
     /// Check if adep or ades changed.
     /// </summary>
-    /// <param name="_fdr">New FDR.</param>
-    public bool ADESADEPPairChanged(FDR _fdr)
+    /// <param name="fdr">New FDR.</param>
+    /// <returns>Whether or not a change is detected.</returns>
+    public bool ADESADEPPairChanged(FDR fdr)
     {
-        var adPair = _fdr.DepAirport + _fdr.DesAirport;
+        var adPair = fdr.DepAirport + fdr.DesAirport;
         return adPair != OriginalAerodromePair;
     }
 
@@ -812,13 +814,13 @@ public sealed class Strip
     /// </summary>
     public void TogglePick()
     {
-        if (_bayManager.PickedController == this)
+        if (_bayManager.PickedStrip == this)
         {
             _bayManager.RemovePicked(true, true);
         }
         else
         {
-            _bayManager.SetPickedStripItem(this);
+            _bayManager.SetPickedStripClass(this);
         }
     }
 
@@ -884,7 +886,7 @@ public sealed class Strip
         try
         {
             var radarTracks = RDP.RadarTracks
-                .Where(radarTrack => radarTrack?.ActualAircraft?.Callsign?.Equals(FDR.Callsign) == true)
+                .Where(radarTrack => radarTrack?.ActualAircraft?.Callsign == FDR.Callsign)
                 .ToList();
             return radarTracks.Count > 0 ? radarTracks[0] : null;
         }
@@ -960,16 +962,15 @@ public sealed class Strip
                 }
             }
 
-
             if (routeArr.Count < 3)
             {
                 return "\0";
             }
 
             /*
-                * Remove first and last waypoint
-                * (Will validate based on airways only)
-                */
+             * Remove first and last waypoint
+             * (Will validate based on airways only)
+             */
             if (routeArr.Count < 3)
             {
                 return "\0";
@@ -994,7 +995,7 @@ public sealed class Strip
 
                 if (i + 2 < routeArr.Count && element == routeArr[i + 2])
                 {
-                    i += 1;
+                    i++;
                     continue;
                 }
 

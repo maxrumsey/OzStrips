@@ -43,6 +43,9 @@
         <Compile Update="BayRenderController.cs">
           <SubType>Component</SubType>
         </Compile>
+        <Compile Update="Controls\QuickSearch.cs">
+          <SubType>UserControl</SubType>
+        </Compile>
         <Compile Update="Controls\NoScrollPanel.cs">
           <SubType>Component</SubType>
         </Compile>

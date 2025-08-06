@@ -117,7 +117,7 @@ public sealed class SocketConn : IDisposable
 
                 if (mainForm.Visible)
                 {
-                    var sc = _bayManager.StripRepository.GetController(key);
+                    var sc = _bayManager.StripRepository.GetStrip(key);
 
                     if (sc is not null)
                     {
@@ -151,7 +151,7 @@ public sealed class SocketConn : IDisposable
                 _versionShown = true;
                 if (mainForm.Visible)
                 {
-                    mainForm.Invoke(() => Util.ShowInfoBox("New Update Available: " + appversion));
+                    // mainForm.Invoke(() => Util.ShowInfoBox("New Update Available: " + appversion));
                 }
             }
         });

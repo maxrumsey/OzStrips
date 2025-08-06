@@ -53,10 +53,17 @@ internal class BayRenderController(Bay bay) : IDisposable
         SkControl.Name = "StripBoard";
         SkControl.BackColor = Color.Wheat;
         SkControl.Dock = DockStyle.Top;
+
+        // SkControl.MouseMove += MouseMoved;
         Bay.ChildPanel.ChildPanel.Controls.Add(SkControl);
         SkControl.Show();
 
         ToolTip = new ToolTip();
+    }
+
+    private void MouseMoved(object sender, MouseEventArgs e)
+    {
+        SkControl?.Focus();
     }
 
     public void SetHeight()
@@ -79,6 +86,31 @@ internal class BayRenderController(Bay bay) : IDisposable
         {
             if (item.Type == Gui.StripItemType.STRIP)
             {
+                y += StripHeight;
+            }
+            else
+            {
+                y += BarHeight;
+            }
+        }
+
+        return y;
+    }
+
+    public int GetStripPosPreScale(Strip strip)
+    {
+        var y = 0;
+        var list = Bay.Strips.ToList();
+        list.Reverse();
+        foreach (var item in list)
+        {
+            if (item.Type == Gui.StripItemType.STRIP)
+            {
+                if (item.Strip == strip)
+                {
+                    return y;
+                }
+
                 y += StripHeight;
             }
             else
@@ -132,7 +164,7 @@ internal class BayRenderController(Bay bay) : IDisposable
 
                 if (stripView is not null)
                 {
-                    var strip = Bay.Strips[i]?.StripController;
+                    var strip = Bay.Strips[i]?.Strip;
                     var cocked = false;
                     if (strip?.CockLevel == 1)
                     {
@@ -146,7 +178,7 @@ internal class BayRenderController(Bay bay) : IDisposable
                     }
                     catch (Exception ex)
                     {
-                        Util.LogError(ex, $"Ozstrips Renderer - Strip {Bay.Strips[i]?.StripController?.FDR.Callsign}");
+                        Util.LogError(ex, $"Ozstrips Renderer - Strip {Bay.Strips[i]?.Strip?.FDR.Callsign}");
                     }
                 }
 

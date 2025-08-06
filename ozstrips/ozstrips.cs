@@ -133,7 +133,7 @@ public sealed class OzStrips : IPlugin, IDisposable
                 return;
             }
 
-            Errors.Add(new("A new version of the plugin is available."), "OzStrips");
+            // Errors.Add(new("A new version of the plugin is available."), "OzStrips");
         }
         catch
         {

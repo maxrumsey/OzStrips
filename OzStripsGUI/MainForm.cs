@@ -250,13 +250,13 @@ public partial class MainForm : Form
     /// <summary>
     /// Sets the selected track from vatSys.
     /// </summary>
-    /// <param name="fdr">Selected FDR.</param>
+    /// <param name="callsign">Selected Callsign.</param>
     /// <param name="ground">Whether or not the track is a ground track.</param>
-    public void SetSelectedTrack(string? fdr, bool ground)
+    public void SetSelectedTrack(string? callsign, bool ground)
     {
         try
         {
-            _bayManager.SetPickedCallsign(fdr, ground);
+            _bayManager.SetPickedCallsignFromVatsys(callsign, ground);
         }
         catch (Exception ex)
         {
@@ -321,7 +321,7 @@ public partial class MainForm : Form
                 return;
             }
 
-            var strip = _bayManager.StripRepository.GetController(args.UpdatedPilot.Callsign);
+            var strip = _bayManager.StripRepository.GetStrip(args.UpdatedPilot.Callsign);
             if (strip is not null)
             {
                 _bayManager.BayRepository.DeleteStrip(strip);
@@ -347,6 +347,18 @@ public partial class MainForm : Form
     }
 
     /// <summary>
+    /// Opens the settings window.
+    /// </summary>
+    public void ShowQuickSearch()
+    {
+        var modalChild = new QuickSearch(_bayManager);
+        var bm = new BaseModal(modalChild, "Quick Search");
+        modalChild.BaseModal = bm;
+        bm.ReturnEvent += modalChild.ModalReturned;
+        bm.Show(MainForm.MainFormInstance);
+    }
+
+    /// <summary>
     /// Overrides keypress event to capture all keypresses.
     /// </summary>
     /// <param name="msg">Sender.</param>
@@ -366,45 +378,56 @@ public partial class MainForm : Form
         }
         else if (keyData == (Keys.X | Keys.Alt))
         {
-            _bayManager.AddBar("Runway", 3, "XXX CROSSING XXX");
+            // If we didnt't delete a crossing bar, add one.
+            if (!_bayManager.DeleteBarByParams("Runway", 3, "XXX CROSSING XXX"))
+            {
+                _bayManager.AddBar("Runway", 3, "XXX CROSSING XXX");
+            }
+
+            return true;
+        }
+        else if (keyData == (Keys.F | Keys.Control))
+        {
+            ShowQuickSearch();
+
             return true;
         }
 
         switch (keyData)
-        {
-            case Keys.Up:
-                _bayManager.PositionKey(1);
-                return true;
-            case Keys.Down:
-                _bayManager.PositionKey(-1);
-                return true;
-            case Keys.Space:
-                _bayManager.QueueUp();
-                return true;
-            case Keys.Enter:
-                _bayManager.SidTrigger();
-                return true;
-            case Keys.Tab:
-                _bayManager.CockStrip();
-                return true;
-            case Keys.OemOpenBrackets:
-                MoveLateralAerodrome(-1);
-                return true;
-            case Keys.OemCloseBrackets:
-                MoveLateralAerodrome(1);
-                return true;
-            case Keys.Back:
-                _bayManager.Inhibit();
-                return true;
-            case Keys.X:
-                _bayManager.CrossStrip();
-                return true;
-            case Keys.F:
-                _bayManager.FlipFlopStrip();
-                return true;
-            default:
-                break;
-        }
+            {
+                case Keys.Up:
+                    _bayManager.PositionKey(1);
+                    return true;
+                case Keys.Down:
+                    _bayManager.PositionKey(-1);
+                    return true;
+                case Keys.Space:
+                    _bayManager.QueueUp();
+                    return true;
+                case Keys.Enter:
+                    _bayManager.SidTrigger();
+                    return true;
+                case Keys.Tab:
+                    _bayManager.CockStrip();
+                    return true;
+                case Keys.OemOpenBrackets:
+                    MoveLateralAerodrome(-1);
+                    return true;
+                case Keys.OemCloseBrackets:
+                    MoveLateralAerodrome(1);
+                    return true;
+                case Keys.Back:
+                    _bayManager.Inhibit();
+                    return true;
+                case Keys.X:
+                    _bayManager.CrossStrip();
+                    return true;
+                case Keys.F:
+                    _bayManager.FlipFlopStrip();
+                    return true;
+                default:
+                    break;
+            }
 
         _bayManager.ForceRerender();
 
