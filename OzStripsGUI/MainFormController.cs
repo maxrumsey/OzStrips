@@ -46,6 +46,16 @@ public class MainFormController : IDisposable
         _bayManager = new(form.MainFLP, AllToolStripMenuItem_Click);
         _socketConn = new(_bayManager, this);
 
+        if (_readyForConnection)
+        {
+            _socketConn.Connect();
+        }
+
+        _bayManager.BayRepository.Resize();
+    }
+
+    public void LoadAerodromeList()
+    {
         AddAerodrome("YBBN");
         AddAerodrome("YBCG");
         AddAerodrome("YBSU");
@@ -54,13 +64,6 @@ public class MainFormController : IDisposable
         AddAerodrome("YPPH");
         AddAerodrome("YSCB");
         AddAerodrome("YSSY");
-
-        if (_readyForConnection)
-        {
-            _socketConn.Connect();
-        }
-
-        _bayManager.BayRepository.Resize();
     }
 
     /// <summary>

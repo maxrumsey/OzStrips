@@ -27,8 +27,9 @@ public partial class MainForm : Form
     {
         MainFormInstance = this;
         _mainFormController = new(this, readyForConnection);
-
         InitializeComponent();
+
+        _mainFormController.LoadAerodromeList();
 
         Util.SetAndReturnDLLVar();
     }
