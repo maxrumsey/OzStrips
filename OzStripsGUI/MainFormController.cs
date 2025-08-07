@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.Gui.Controls;
+using vatsys;
 
 namespace MaxRumsey.OzStripsPlugin.Gui;
 
@@ -352,10 +353,6 @@ public class MainFormController : IDisposable
         _mainForm.ATISLabel.Text = code;
     }
 
-    /*
- * GUI Below
- */
-
     private void UpdateTimer(object sender, EventArgs e)
     {
         if (!_mainForm.Visible)
@@ -379,14 +376,14 @@ public class MainFormController : IDisposable
         }
     }
 
-    private void MainFormSizeChanged(object sender, EventArgs e)
+    internal void MainFormSizeChanged(object sender, EventArgs e)
     {
         _postresizechecked = false;
         _bayManager?.BayRepository.Resize();
         _mainForm.SetControlBarScrollBar();
     }
 
-    private void AddAerodrome(string name)
+    internal void AddAerodrome(string name)
     {
         _aerodromes.Add(name);
 
@@ -398,12 +395,12 @@ public class MainFormController : IDisposable
         _mainForm.AerodromeListToolStrip.DropDownItems.Add(toolStripMenuItem);
     }
 
-    private void Bt_inhibit_Click(object sender, EventArgs e)
+    internal void Bt_inhibit_Click(object sender, EventArgs e)
     {
         _bayManager.Inhibit();
     }
 
-    private void ACDToolStripMenuItem_Click(object sender, EventArgs e)
+    internal void ACDToolStripMenuItem_Click(object sender, EventArgs e)
     {
         _bayManager.BayRepository.SetLayout(ACDToolStripMenuItem_Click);
         _bayManager.BayRepository.WipeBays();
@@ -415,7 +412,7 @@ public class MainFormController : IDisposable
         _bayManager.BayRepository.ReloadStrips(_socketConn);
     }
 
-    private void SMCToolStripMenuItem_Click(object sender, EventArgs e)
+    internal void SMCToolStripMenuItem_Click(object sender, EventArgs e)
     {
         _bayManager.BayRepository.SetLayout(SMCToolStripMenuItem_Click);
         _bayManager.BayRepository.WipeBays();
@@ -429,7 +426,7 @@ public class MainFormController : IDisposable
         _bayManager.BayRepository.ReloadStrips(_socketConn);
     }
 
-    private void SMCACDToolStripMenuItem_Click(object sender, EventArgs e)
+    internal void SMCACDToolStripMenuItem_Click(object sender, EventArgs e)
     {
         _bayManager.BayRepository.SetLayout(SMCACDToolStripMenuItem_Click);
         _bayManager.BayRepository.WipeBays();
@@ -444,7 +441,7 @@ public class MainFormController : IDisposable
         _bayManager.BayRepository.ReloadStrips(_socketConn);
     }
 
-    private void ADCToolStripMenuItem_Click(object sender, EventArgs e)
+    internal void ADCToolStripMenuItem_Click(object sender, EventArgs e)
     {
         _bayManager.BayRepository.SetLayout(ADCToolStripMenuItem_Click);
         _bayManager.BayRepository.WipeBays();
@@ -457,7 +454,7 @@ public class MainFormController : IDisposable
         _bayManager.BayRepository.ReloadStrips(_socketConn);
     }
 
-    private void AllToolStripMenuItem_Click(object sender, EventArgs e)
+    internal void AllToolStripMenuItem_Click(object sender, EventArgs e)
     {
         _bayManager.BayRepository.SetLayout(AllToolStripMenuItem_Click);
         _bayManager.BayRepository.WipeBays();
@@ -474,7 +471,7 @@ public class MainFormController : IDisposable
         _bayManager.BayRepository.ReloadStrips(_socketConn);
     }
 
-    private void ADCSMCToolStripMenuItem_Click(object sender, EventArgs e)
+    internal void ADCSMCToolStripMenuItem_Click(object sender, EventArgs e)
     {
         _bayManager.BayRepository.SetLayout(ADCSMCToolStripMenuItem_Click);
         _bayManager.BayRepository.WipeBays();
@@ -496,7 +493,7 @@ public class MainFormController : IDisposable
     }
 
     // socket.io log
-    public void ToolStripMenuItem1_Click(object sender, EventArgs e)
+    public void ShowMessageList_Click(object sender, EventArgs e)
     {
         var modalChild = new MsgListDebug(_socketConn);
         var bm = new BaseModal(modalChild, "Msg List");

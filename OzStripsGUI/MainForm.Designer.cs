@@ -116,7 +116,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.bt_flip.TabStop = false;
             this.bt_flip.Text = "FLIP FLOP";
             this.bt_flip.UseVisualStyleBackColor = false;
-            this.bt_flip.Click += new System.EventHandler(this.FlipFlopStrip);
+            this.bt_flip.Click += new System.EventHandler(this._mainFormController.FlipFlopStrip);
             // 
             // bt_bar
             // 
@@ -131,7 +131,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.bt_bar.TabStop = false;
             this.bt_bar.Text = "ADD BAR";
             this.bt_bar.UseVisualStyleBackColor = false;
-            this.bt_bar.Click += new System.EventHandler(this.BarCreatorClick);
+            this.bt_bar.Click += new System.EventHandler(this._mainFormController.BarCreatorClick);
             // 
             // pl_atis
             // 
@@ -168,7 +168,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.bt_cross.TabStop = false;
             this.bt_cross.Text = "XX CROSS XX";
             this.bt_cross.UseVisualStyleBackColor = false;
-            this.bt_cross.Click += new System.EventHandler(this.Bt_cross_Click);
+            this.bt_cross.Click += new System.EventHandler(this._mainFormController.Bt_cross_Click);
             // 
             // bt_inhibit
             // 
@@ -183,7 +183,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.bt_inhibit.TabStop = false;
             this.bt_inhibit.Text = "INHIBIT";
             this.bt_inhibit.UseVisualStyleBackColor = false;
-            this.bt_inhibit.Click += new System.EventHandler(this.Bt_inhibit_Click);
+            this.bt_inhibit.Click += new System.EventHandler(this._mainFormController.Bt_inhibit_Click);
             // 
             // pl_ad
             // 
@@ -288,7 +288,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.toolStripTextBox1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolStripTextBox1.Name = "toolStripTextBox1";
             this.toolStripTextBox1.Size = new System.Drawing.Size(100, 23);
-            this.toolStripTextBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.AerodromeSelectorKeyDown);
+            this.toolStripTextBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this._mainFormController.AerodromeSelectorKeyDown);
             // 
             // toolStripSeparator1
             // 
@@ -317,7 +317,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.aCDToolStripMenuItem.Name = "aCDToolStripMenuItem";
             this.aCDToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.aCDToolStripMenuItem.Text = "ACD";
-            this.aCDToolStripMenuItem.Click += new System.EventHandler(this.ACDToolStripMenuItem_Click);
+            this.aCDToolStripMenuItem.Click += new System.EventHandler(this._mainFormController.ACDToolStripMenuItem_Click);
             // 
             // sMCToolStripMenuItem
             // 
@@ -325,7 +325,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.sMCToolStripMenuItem.Name = "sMCToolStripMenuItem";
             this.sMCToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.sMCToolStripMenuItem.Text = "SMC";
-            this.sMCToolStripMenuItem.Click += new System.EventHandler(this.SMCToolStripMenuItem_Click);
+            this.sMCToolStripMenuItem.Click += new System.EventHandler(this._mainFormController.SMCToolStripMenuItem_Click);
             // 
             // sMCACDToolStripMenuItem
             // 
@@ -333,7 +333,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.sMCACDToolStripMenuItem.Name = "sMCACDToolStripMenuItem";
             this.sMCACDToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.sMCACDToolStripMenuItem.Text = "SMC+ACD";
-            this.sMCACDToolStripMenuItem.Click += new System.EventHandler(this.SMCACDToolStripMenuItem_Click);
+            this.sMCACDToolStripMenuItem.Click += new System.EventHandler(this._mainFormController.SMCACDToolStripMenuItem_Click);
             // 
             // aDCToolStripMenuItem
             // 
@@ -341,7 +341,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.aDCToolStripMenuItem.Name = "aDCToolStripMenuItem";
             this.aDCToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.aDCToolStripMenuItem.Text = "ADC";
-            this.aDCToolStripMenuItem.Click += new System.EventHandler(this.ADCToolStripMenuItem_Click);
+            this.aDCToolStripMenuItem.Click += new System.EventHandler(this._mainFormController.ADCToolStripMenuItem_Click);
             // 
             // aDCSMCToolStripMenuItem
             // 
@@ -349,7 +349,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.aDCSMCToolStripMenuItem.Name = "aDCSMCToolStripMenuItem";
             this.aDCSMCToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.aDCSMCToolStripMenuItem.Text = "ADC+SMC";
-            this.aDCSMCToolStripMenuItem.Click += new System.EventHandler(this.ADCSMCToolStripMenuItem_Click);
+            this.aDCSMCToolStripMenuItem.Click += new System.EventHandler(this._mainFormController.ADCSMCToolStripMenuItem_Click);
             // 
             // allToolStripMenuItem
             // 
@@ -357,7 +357,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.allToolStripMenuItem.Name = "allToolStripMenuItem";
             this.allToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.allToolStripMenuItem.Text = "All";
-            this.allToolStripMenuItem.Click += new System.EventHandler(this.AllToolStripMenuItem_Click);
+            this.allToolStripMenuItem.Click += new System.EventHandler(this._mainFormController.AllToolStripMenuItem_Click);
             // 
             // debugToolStripMenuItem
             // 
@@ -376,7 +376,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(164, 22);
             this.toolStripMenuItem1.Text = "SignalR Log";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.ToolStripMenuItem1_Click);
+            this.toolStripMenuItem1.Click += new System.EventHandler(this._mainFormController.ShowMessageList_Click);
             // 
             // reloadStripToolStripMenuItem
             // 
@@ -439,7 +439,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
-            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.ShowSettings);
+            this.settingsToolStripMenuItem.Click += new System.EventHandler(this._mainFormController.ShowSettings);
             // 
             // viewToolStripMenuItem
             // 
@@ -520,10 +520,10 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "OzStrips";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
-            this.Load += new System.EventHandler(this.MainForm_Load);
-            this.ResizeEnd += new System.EventHandler(this.MainFormSizeChanged);
-            this.Resize += new System.EventHandler(this.MainForm_Resize);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this._mainFormController.MainForm_FormClosed);
+            this.Load += new System.EventHandler(this._mainFormController.MainForm_Load);
+            this.ResizeEnd += new System.EventHandler(this._mainFormController.MainFormSizeChanged);
+            this.Resize += new System.EventHandler(this._mainFormController.MainForm_Resize);
             this.pl_controlbar.ResumeLayout(false);
             this.pl_controlbar.PerformLayout();
             this.pl_atis.ResumeLayout(false);

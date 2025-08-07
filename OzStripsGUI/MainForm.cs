@@ -60,6 +60,14 @@ public partial class MainForm : Form
 
     public FlowLayoutPanel MainFLP => flp_main;
 
+    public MainFormController Controller
+    {
+        get
+        {
+            return _mainFormController;
+        }
+    }
+
     /// <inheritdoc/>
     protected override CreateParams CreateParams
     {

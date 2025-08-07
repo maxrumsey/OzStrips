@@ -79,7 +79,7 @@ public sealed class OzStrips : IPlugin, IDisposable
     {
         if (_gui?.IsHandleCreated == true)
         {
-            MMI.InvokeOnGUI(() => _gui.UpdateFDR(updated));
+            MMI.InvokeOnGUI(() => _gui.Controller.UpdateFDR(updated));
         }
     }
 
@@ -179,7 +179,7 @@ public sealed class OzStrips : IPlugin, IDisposable
     {
         if (e.Removed && _gui?.IsDisposed == false)
         {
-            MMI.InvokeOnGUI(() => _gui.HandleDisconnect(e));
+            MMI.InvokeOnGUI(() => _gui.Controller.HandleDisconnect(e));
         }
     }
 
@@ -204,7 +204,7 @@ public sealed class OzStrips : IPlugin, IDisposable
         _readyForConnection = true;
         if (_gui?.IsHandleCreated == true)
         {
-            MMI.InvokeOnGUI(() => _gui.MarkConnectionReadiness(_readyForConnection));
+            MMI.InvokeOnGUI(() => _gui.Controller.MarkConnectionReadiness(_readyForConnection));
         }
     }
 
@@ -223,8 +223,8 @@ public sealed class OzStrips : IPlugin, IDisposable
 
         if (_gui?.IsHandleCreated == true)
         {
-            MMI.InvokeOnGUI(() => _gui.DisconnectVATSIM());
-            _gui.MarkConnectionReadiness(_readyForConnection);
+            MMI.InvokeOnGUI(() => _gui.Controller.DisconnectVATSIM());
+            _gui.Controller.MarkConnectionReadiness(_readyForConnection);
         }
     }
 
@@ -283,11 +283,11 @@ public sealed class OzStrips : IPlugin, IDisposable
 
         if (_gui?.IsDisposed == false && fdr is not null)
         {
-            MMI.InvokeOnGUI(() => _gui.SetSelectedTrack(fdr.Callsign, false));
+            MMI.InvokeOnGUI(() => _gui.Controller.SetSelectedTrack(fdr.Callsign, false));
         }
         else if (_gui?.IsDisposed == false)
         {
-            MMI.InvokeOnGUI(() => _gui.SetSelectedTrack(null, false));
+            MMI.InvokeOnGUI(() => _gui.Controller.SetSelectedTrack(null, false));
         }
     }
 
@@ -300,11 +300,11 @@ public sealed class OzStrips : IPlugin, IDisposable
     {
         if (_gui?.IsDisposed == false && MMI.SelectedGroundTrack is not null)
         {
-            MMI.InvokeOnGUI(() => _gui.SetSelectedTrack(MMI.SelectedGroundTrack.GetPilot().Callsign, true));
+            MMI.InvokeOnGUI(() => _gui.Controller.SetSelectedTrack(MMI.SelectedGroundTrack.GetPilot().Callsign, true));
         }
         else if (_gui?.IsDisposed == false)
         {
-            MMI.InvokeOnGUI(() => _gui.SetSelectedTrack(null, true));
+            MMI.InvokeOnGUI(() => _gui.Controller.SetSelectedTrack(null, true));
         }
     }
 }
