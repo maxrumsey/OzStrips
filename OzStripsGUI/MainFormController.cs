@@ -16,8 +16,8 @@ public class MainFormController : IDisposable
 
     private MainForm _mainForm;
     private readonly Timer _timer;
-    private readonly BayManager _bayManager;
-    private readonly SocketConn _socketConn;
+    private BayManager _bayManager;
+    private SocketConn _socketConn;
     private readonly List<string> _aerodromes = [];
     private string _metar = string.Empty;
     private bool _readyForConnection;
@@ -29,7 +29,9 @@ public class MainFormController : IDisposable
     /// </summary>
     public static bool ReadyForConnection => Instance?._readyForConnection ?? false;
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     public MainFormController(MainForm form, bool readyToConnect)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     {
         Instance = this;
         _mainForm = form;
@@ -43,18 +45,9 @@ public class MainFormController : IDisposable
         _timer.Tick += UpdateTimer;
         _timer.Start();
 
-        _bayManager = new(form.MainFLP, AllToolStripMenuItem_Click);
-        _socketConn = new(_bayManager, this);
-
-        if (_readyForConnection)
-        {
-            _socketConn.Connect();
-        }
-
-        _bayManager.BayRepository.Resize();
     }
 
-    public void LoadAerodromeList()
+    public void Initialize()
     {
         AddAerodrome("YBBN");
         AddAerodrome("YBCG");
@@ -64,6 +57,16 @@ public class MainFormController : IDisposable
         AddAerodrome("YPPH");
         AddAerodrome("YSCB");
         AddAerodrome("YSSY");
+
+        _bayManager = new(_mainForm.MainFLP, AllToolStripMenuItem_Click);
+        _socketConn = new(_bayManager, this);
+
+        if (_readyForConnection)
+        {
+            _socketConn.Connect();
+        }
+
+        _bayManager.BayRepository.Resize();
     }
 
     /// <summary>
