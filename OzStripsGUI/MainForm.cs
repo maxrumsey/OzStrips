@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.Gui.Controls;
+using MaxRumsey.OzStripsPlugin.Gui.DTO;
 using MaxRumsey.OzStripsPlugin.Gui.Properties;
 using vatsys;
 

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.Gui;
+using MaxRumsey.OzStripsPlugin.Gui.DTO;
 using MaxRumsey.OzStripsPlugin.Gui.Properties;
 using SkiaSharp;
 using SkiaSharp.Views.Desktop;

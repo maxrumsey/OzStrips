@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
+using MaxRumsey.OzStripsPlugin.Gui.DTO;
 using SkiaSharp;
 using vatsys;
 
