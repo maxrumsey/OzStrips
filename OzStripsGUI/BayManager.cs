@@ -109,7 +109,7 @@ public class BayManager
     /// Deselects all vatSys tracks.
     /// </summary>
     /// <param name="originatedFromGround">Whether this originated from deselection of a ground track.</param>
-    public void DeSelectAllVatSysTracks(bool originatedFromGround)
+    public static void DeSelectAllVatSysTracks(bool originatedFromGround)
     {
         // todo: is passing originator type necessary?
         if (originatedFromGround && MMI.SelectedTrack != null)
@@ -308,7 +308,7 @@ public class BayManager
     /// Sets relevant vatSys selected tracks, when we select an actual strip item.
     /// </summary>
     /// <param name="strip">Strip we are setting vatsys tracks to.</param>
-    public void SelectVatSysTracks(Strip? strip)
+    public static void SelectVatSysTracks(Strip? strip)
     {
         var rTrack = RDP.RadarTracks.FirstOrDefault(x => x.ActualAircraft.Callsign == strip?.FDR.Callsign);
         var groundTrack = MMI.FindTrack(rTrack);
