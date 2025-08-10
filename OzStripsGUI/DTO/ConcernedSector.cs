@@ -18,8 +18,10 @@ namespace MaxRumsey.OzStripsPlugin.Gui.DTO;
 public class ConcernedSector
 {
     [XmlArray("Aerodromes")]
+    [XmlArrayItem("Aerodrome")]
     public string[] Aerodromes;
 
     [XmlArray("Positions")]
+    [XmlArrayItem("Position")]
     public string[] Positions;
 }

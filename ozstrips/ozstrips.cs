@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.Gui;
+using MaxRumsey.OzStripsPlugin.Gui.DTO;
 using Newtonsoft.Json;
 using vatsys;
 using vatsys.Plugin;
@@ -25,6 +26,7 @@ public sealed class OzStrips : IPlugin, IDisposable
     private static readonly HttpClient _httpClient = new();
     private static readonly Version _version = new(OzStripsConfig.version);
     private readonly CustomToolStripMenuItem _ozStripsOpener;
+    private readonly AerodromeManager _aerodromeManager;
     private MainForm? _gui;
 
     private System.Timers.Timer? _connectionTimer;
@@ -53,6 +55,7 @@ public sealed class OzStrips : IPlugin, IDisposable
             Util.LogError(ex);
         }
 
+        _aerodromeManager = new();
         Network.Connected += Connected;
         Network.Disconnected += Disconnected;
         _ozStripsOpener = new(CustomToolStripMenuItemWindowType.Main, CustomToolStripMenuItemCategory.Windows, new ToolStripMenuItem("OzStrips"));
@@ -246,7 +249,7 @@ public sealed class OzStrips : IPlugin, IDisposable
     {
         if (_gui?.IsDisposed != false)
         {
-            _gui = new(_readyForConnection);
+            _gui = new(_readyForConnection, _aerodromeManager);
         }
         else if (_gui.Visible)
         {

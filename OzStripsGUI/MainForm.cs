@@ -24,9 +24,10 @@ public partial class MainForm : Form
     /// Initializes a new instance of the <see cref="MainForm"/> class.
     /// </summary>
     /// <param name="readyForConnection">Whether the client can establish a server connection.</param>
-    public MainForm(bool readyForConnection)
+    public MainForm(bool readyForConnection, AerodromeManager aerodromeManager)
     {
         MainFormInstance = this;
+        AerodromeManager = aerodromeManager;
         _mainFormController = new(this, readyForConnection);
 
         InitializeComponent();
@@ -61,6 +62,8 @@ public partial class MainForm : Form
     public string EnteredAerodrome => toolStripTextBox1.Text;
 
     public FlowLayoutPanel MainFLP => flp_main;
+
+    public AerodromeManager AerodromeManager { get; private set; }
 
     public MainFormController Controller
     {

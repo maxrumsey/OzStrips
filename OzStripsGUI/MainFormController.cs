@@ -70,25 +70,12 @@ public class MainFormController : IDisposable
     }
 
     /// <summary>
-    /// Gets or sets the list of aerodromes.
+    /// Gets or sets the custom list of aerodromes.
     /// </summary>
     /// <param name="value">The list of aerodromes.</param>
-    public void SetAerodromeList(List<string> value)
+    public void SetcustomAerodromeList(List<string> value)
     {
-        _aerodromes.Clear();
-
-        foreach (var item in _mainForm.AerodromeListToolStrip.DropDownItems.OfType<ToolStripItem>().ToArray())
-        {
-            if (item.Tag is null)
-            {
-                _mainForm.AerodromeListToolStrip.DropDownItems.Remove(item);
-            }
-        }
-
-        foreach (var item in value)
-        {
-            AddAerodrome(item);
-        }
+        _mainForm.AerodromeManager.ManuallySetAerodromes = value;
     }
 
     /// <summary>

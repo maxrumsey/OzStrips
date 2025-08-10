@@ -119,7 +119,7 @@ public partial class SettingsWindowControl : UserControl
             lb_ads.Items.Add(tb_ad.Text.ToUpper(CultureInfo.InvariantCulture));
             tb_ad.Text = string.Empty;
 
-            MainFormController.Instance?.SetAerodromeList(lb_ads.Items.OfType<string>().ToList());
+            MainFormController.Instance?.SetcustomAerodromeList(lb_ads.Items.OfType<string>().ToList());
         }
     }
 
@@ -128,7 +128,7 @@ public partial class SettingsWindowControl : UserControl
         if (lb_ads.SelectedIndex != -1)
         {
             lb_ads.Items.RemoveAt(lb_ads.SelectedIndex);
-            MainFormController.Instance?.SetAerodromeList(lb_ads.Items.OfType<string>().ToList());
+            MainFormController.Instance?.SetcustomAerodromeList(lb_ads.Items.OfType<string>().ToList());
         }
     }
 

@@ -46,4 +46,24 @@ public class AerodromeSettings
 
         return null;
     }
+
+    internal static string GetADSettingsPath()
+    {
+        // This is hacky but it's the easiest way to get the prof dir.
+        // Unless I'm missing something obvious.
+        if (vatsys.Profile.Loaded)
+        {
+            var shortNameObject = typeof(vatsys.Profile).GetField("shortName", BindingFlags.Static | BindingFlags.NonPublic);
+            var shortName = (string)shortNameObject.GetValue((object) shortNameObject);
+
+            return Path.Combine(Helpers.GetFilesFolder(), "Profiles", shortName, "Plugins\\AerodromeSettings.xml");
+        }
+
+        return string.Empty;
+    }
+
+    public static AerodromeSettings? Load()
+    {
+        return AerodromeSettings.Deserialize(GetADSettingsPath());
+    }
 }
