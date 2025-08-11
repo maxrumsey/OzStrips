@@ -14,6 +14,18 @@ namespace MaxRumsey.OzStripsPlugin.Gui;
 /// </summary>
 public class AerodromeManager
 {
+    private readonly List<string> _defaultAerodromes = new()
+    {
+        "YBBN",
+        "YBCG",
+        "YBSU",
+        "YMML",
+        "YPPH",
+        "YSSY",
+        "YPAD",
+        "YPDN",
+    };
+
     private List<string> _manualAerodromes = new();
 
     public string? AutoOpenAerodrome;
@@ -29,8 +41,8 @@ public class AerodromeManager
 
         set
         {
-            AerodromeListChanged(this, EventArgs.Empty);
             _manualAerodromes = value;
+            AerodromeListChanged(this, EventArgs.Empty);
         }
     }
 
@@ -50,6 +62,13 @@ public class AerodromeManager
                 completeList.Add(AutoOpenAerodrome);
             }
 
+            if (completeList.Count == 0)
+            {
+                completeList.AddRange(_defaultAerodromes);
+            }
+
+            completeList.Sort();
+
             return completeList;
         }
     }
@@ -60,52 +79,60 @@ public class AerodromeManager
         MMI.SectorsControlledChanged += SectorsChanged;
 
         Settings = AerodromeSettings.Load();
+
+        // todo: properly configure primepos/sectors on launch.
     }
 
     private void SectorsChanged(object sender, EventArgs e)
     {
-        var sectorList = new List<Sector>();
-        ConcernedAerodromes.Clear();
-
-        // Generate list of all sectors.
-        foreach (var topLevelSector in MMI.SectorsControlled.ToList())
+        MainFormController.Instance?.Invoke(() =>
         {
-            RecurseSectors(sectorList, topLevelSector);
-        }
+            var sectorList = new List<Sector>();
+            ConcernedAerodromes.Clear();
 
-        foreach (var sector in sectorList)
-        {
-            // Match to concernedsectors
-            var concernedSectors = Settings?.ConcernedSectors
-                .Where(x => x.Positions.Contains(sector.Name))
-                .ToList();
-
-            if (concernedSectors is null)
+            // Generate list of all sectors.
+            foreach (var topLevelSector in MMI.SectorsControlled.ToList())
             {
-                continue;
+                RecurseSectors(sectorList, topLevelSector);
             }
 
-            // Add concerned aerodromes.
-            foreach (var concernedSector in concernedSectors)
+            foreach (var sector in sectorList)
             {
-                ConcernedAerodromes.AddRange(concernedSector.Aerodromes);
+                // Match to concernedsectors
+                var concernedSectors = Settings?.ConcernedSectors
+                    .Where(x => x.Positions.Contains(sector.Name))
+                    .ToList();
+
+                if (concernedSectors is null)
+                {
+                    continue;
+                }
+
+                // Add concerned aerodromes.
+                foreach (var concernedSector in concernedSectors)
+                {
+                    ConcernedAerodromes.AddRange(concernedSector.Aerodromes);
+                }
             }
-        }
 
-        ConcernedAerodromes = ConcernedAerodromes.Distinct().ToList();
+            ConcernedAerodromes = ConcernedAerodromes.Distinct().ToList();
 
-        AerodromeListChanged(this, new());
+            AerodromeListChanged?.Invoke(this, new());
+        });
     }
 
     private void PrimePositionChanged(object sender, EventArgs e)
     {
-        var posName = MMI.PrimePosition.Name;
+        MainFormController.Instance?.Invoke(() =>
+        {
+            var posName = MMI.PrimePosition.Name;
 
-        var res = Settings?.AutoOpens.FirstOrDefault(x => x.Position == posName);
+            var res = Settings?.AutoOpens.FirstOrDefault(x => x.Position == posName);
 
-        AutoOpenAerodrome = res?.Aerodrome;
+            AutoOpenAerodrome = res?.Aerodrome;
 
-        AerodromeListChanged(this, new());
+            AerodromeListChanged?.Invoke(this, new());
+        });
     }
 
     private static void RecurseSectors(List<Sector> sectorList, Sector currentSector)
@@ -114,6 +141,13 @@ public class AerodromeManager
 
         foreach (var child in currentSector.SubSectors)
         {
+            // TODO: look for all dupes
+            if (child.Name == currentSector.Name)
+            {
+                // AIS error
+                continue;
+            }
+
             RecurseSectors(sectorList, child);
         }
     }

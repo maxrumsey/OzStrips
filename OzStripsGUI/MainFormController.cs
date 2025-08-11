@@ -49,14 +49,7 @@ public class MainFormController : IDisposable
 
     public void Initialize()
     {
-        AddAerodrome("YBBN");
-        AddAerodrome("YBCG");
-        AddAerodrome("YBSU");
-        AddAerodrome("YMEN");
-        AddAerodrome("YMML");
-        AddAerodrome("YPPH");
-        AddAerodrome("YSCB");
-        AddAerodrome("YSSY");
+        AerodromeListChanged(this, EventArgs.Empty);
 
         _bayManager = new(_mainForm.MainFLP, AllToolStripMenuItem_Click);
         _socketConn = new(_bayManager, this);
@@ -67,13 +60,14 @@ public class MainFormController : IDisposable
         }
 
         _bayManager.BayRepository.Resize();
+        _mainForm.AerodromeManager.AerodromeListChanged += AerodromeListChanged;
     }
 
     /// <summary>
     /// Gets or sets the custom list of aerodromes.
     /// </summary>
     /// <param name="value">The list of aerodromes.</param>
-    public void SetcustomAerodromeList(List<string> value)
+    public void SetCustomAerodromeList(List<string> value)
     {
         _mainForm.AerodromeManager.ManuallySetAerodromes = value;
     }
@@ -136,26 +130,26 @@ public class MainFormController : IDisposable
     public void MoveLateralAerodrome(int direction)
     {
         var index = 0;
-        for (var i = 0; i < _aerodromes.Count; i++)
+        for (var i = 0; i < _mainForm.AerodromeManager.AerodromeList.Count; i++)
         {
-            if (_aerodromes[i] == _bayManager.AerodromeName)
+            if (_mainForm.AerodromeManager.AerodromeList[i] == _bayManager.AerodromeName)
             {
                 index = i;
             }
         }
 
         index += direction;
-        if (index >= _aerodromes.Count)
+        if (index >= _mainForm.AerodromeManager.AerodromeList.Count)
         {
             index = 0;
         }
 
         if (index < 0)
         {
-            index = _aerodromes.Count - 1;
+            index = _mainForm.AerodromeManager.AerodromeList.Count - 1;
         }
 
-        SetAerodrome(_aerodromes[index]);
+        SetAerodrome(_mainForm.AerodromeManager.AerodromeList[index]);
     }
 
     /// <summary>
@@ -378,12 +372,11 @@ public class MainFormController : IDisposable
 
     internal void AddAerodrome(string name)
     {
-        _aerodromes.Add(name);
-
         var toolStripMenuItem = new ToolStripMenuItem
         {
             Text = name,
         };
+
         toolStripMenuItem.Click += (sender, e) => SetAerodrome(name);
         _mainForm.AerodromeListToolStrip.DropDownItems.Add(toolStripMenuItem);
     }
@@ -547,7 +540,7 @@ public class MainFormController : IDisposable
     /// <param name="e">Args.</param>
     public void ShowSettings(object sender, EventArgs e)
     {
-        var modalChild = new SettingsWindowControl(_socketConn, _aerodromes);
+        var modalChild = new SettingsWindowControl(_socketConn, _mainForm.AerodromeManager.ManuallySetAerodromes);
         var bm = new BaseModal(modalChild, "OzStrips Settings");
         bm.ReturnEvent += modalChild.ModalReturned;
         bm.Show(_mainForm);
@@ -562,6 +555,23 @@ public class MainFormController : IDisposable
     public void Dispose()
     {
         _timer?.Dispose();
+        _mainForm.AerodromeManager.AerodromeListChanged -= AerodromeListChanged;
+    }
+
+    private void AerodromeListChanged(object sender, EventArgs e)
+    {
+        foreach (var item in _mainForm.AerodromeListToolStrip.DropDownItems.OfType<ToolStripItem>().ToArray())
+        {
+            if (item.Tag is null)
+            {
+                _mainForm.AerodromeListToolStrip.DropDownItems.Remove(item);
+            }
+        }
+
+        foreach (var item in _mainForm.AerodromeManager.AerodromeList)
+        {
+            AddAerodrome(item);
+        }
     }
 
     public object Invoke(Action act)
