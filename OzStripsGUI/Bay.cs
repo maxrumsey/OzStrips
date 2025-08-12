@@ -123,18 +123,23 @@ public class Bay : System.IDisposable
         if (bay.BayTypes.Contains(StripBay.BAY_PREA))
         {
             var belowTheQueueBar = new List<string>();
+            var found = false;
 
             foreach (var bayEl in childList)
             {
+                belowTheQueueBar.Add(bayEl);
                 if (bayEl == "\a")
                 {
                     childList = belowTheQueueBar;
+                    found = true;
                     break;
                 }
-                else
-                {
-                    belowTheQueueBar.Add(bayEl);
-                }
+            }
+
+            // If no queue bar, don't sync any PREA changes.
+            if (!found)
+            {
+                childList.Clear();
             }
         }
 
@@ -256,7 +261,7 @@ public class Bay : System.IDisposable
 
         try
         {
-            if (BayTypes.Contains(StripBay.BAY_PREA) && false) // OzStripsSettings.Default.AlphaSortPrea)
+            if (BayTypes.Contains(StripBay.BAY_PREA) && OzStripsSettings.Default.AlphaSortPrea)
             {
                 var abovetheBar = new List<StripListItem>() { strip };
                 for (var i = Strips.Count - 1; i >= 0; i--)

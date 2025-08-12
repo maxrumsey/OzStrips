@@ -1,4 +1,13 @@
 # Changelog
+## v0.6.1
+### Features
+- When strip is picked, bay scrollbar is locked to always show the strip.
+- Added QuickSearch window (Ctr+F) to search for strips.
+- Pressing Alt-X again will remove a "XXX CROSS XXX" bar.
+- Reenabled auto-sort of PREA strips option.
+
+### Bugfixes
+- Rewrote pick/depick code to prevent needless interaction with vatSys, and reduce complexity.
 ## v0.6.0
 ### Features
 - Added Local / Circuit strip type (pink).
@@ -6,6 +15,7 @@
 - Added "CIRCUIT AREA RELEASED" bar.
 - Inhibited strip coordination for local strips.
 - Made Sweatbox Error message less annoying.
+- Putting a strip into the PREA bay deactivates it, allowing changes.
 
 ### Bugfixes
 - On a strip refile, data is properly refreshed.

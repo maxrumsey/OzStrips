@@ -46,7 +46,6 @@ public partial class BayControl : UserControl
     /// </summary>
     public void ConfigureScroll()
     {
-        // todo: run set val during this if strip is picked.
         _stripHeight = Bay.GetStripHeight();
 
         if (ChildPanel.Controls.Count == 0)
@@ -59,11 +58,9 @@ public partial class BayControl : UserControl
 
         _stripBoardHeight = parent.Height - panel2.Height;
 
-
         ChildPanel.VerticalScroll.SmallChange = _stripHeight;
         ChildPanel.VerticalScroll.Maximum = _ownerBay.GetRequestedHeight();
         ChildPanel.VerticalScroll.Minimum = 0;
-
 
         if (child.Height > _stripBoardHeight)
         {
@@ -73,8 +70,17 @@ public partial class BayControl : UserControl
         {
             ChildPanel.VerticalScroll.Visible = false;
         }
+
+        if (_pickedStrip is not null)
+        {
+            SetScrollValue(0);
+        }
     }
 
+    /// <summary>
+    /// Sets the picked strip.
+    /// </summary>
+    /// <param name="strip">Picked strip.</param>
     public void SetPicked(Strip? strip)
     {
         if (strip is null)
@@ -141,6 +147,11 @@ public partial class BayControl : UserControl
         if (_pickedStrip is not null && _desiredScrollAmount is not null)
         {
             val = GetPickedStripPosition() - (int)_desiredScrollAmount;
+
+            if (val > ChildPanel.VerticalScroll.Maximum)
+            {
+                val = ChildPanel.VerticalScroll.Maximum;
+            }
         }
 
         if (val < 0)
@@ -159,5 +170,10 @@ public partial class BayControl : UserControl
         }
 
         return 0;
+    }
+
+    private void PanelMouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
+    {
+        // Focus();
     }
 }

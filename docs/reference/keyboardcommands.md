@@ -10,6 +10,7 @@
 | Tab | Cock a strip. |
 | X | Mark a strip as crossing. |
 | Alt-X | Create a crossing bar in the runway field. |
+| F | Flip-flop a strip |
 | Backspace | Remove a selected strip / bar |
 | Enter | SID Trigger a strip - move it to the next bay. |
 | \[ | Move to the previous aerodrome in the list. |

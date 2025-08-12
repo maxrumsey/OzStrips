@@ -30,11 +30,9 @@ Displays the aerodrome name.
 Hover over this to see the aerodrome metar.
 ### Inhibit Button
 With a strip picked, select this button to remove the strip from your stripboard.
-### Force Strip Button
-Select a track on your Air ASD in vatSys, or with a strip selected in your vatSYS strip list, and press "FOR STP" to place it into your top-left strip bay.
 ### Cross Button
 Pick a strip and press this button to add crossing highlights for situational awareness.
-### PDC Button
-Pick a strip and press this button to open the vatSYS PDC Window.
 ### Add Bar Button
 Adds a custom menu bar.
+### Flip-Flop
+Flip-flops a strip with the same destination and departure aerodrome between Departure, Local and Arrival modes.

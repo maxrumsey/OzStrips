@@ -5,7 +5,7 @@
 </figure>
 
 ## Strip Colours
-Departure strips are blue, while arrival strips are yellow.
+Departure strips are blue, while arrival strips are yellow. Local strips, which are pink, are for aircraft conducting circuits. Aircraft that have planned to arrive and depart from your aerodrome (by their ADEP and ADES) can be toggled between Departure, Local and Arrival strips. This is triggered using the flip-flop button in the Control Bar, or by designating (picking) the strip and pressing "F".
 
 ## Strip Posting
 You will only see strips for aircraft that have requested planned an ADES or ADEP of your aerodrome. Aircraft doing circuit work at your aerodrome, but not arriving or departing there will not have a strip.

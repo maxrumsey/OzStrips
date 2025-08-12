@@ -153,7 +153,7 @@ public sealed class SocketConn : IDisposable
                 _versionShown = true;
                 if (mainForm.Visible)
                 {
-                    mainForm.Invoke(() => Util.ShowInfoBox("New Update Available: " + appversion));
+                    // mainForm.Invoke(() => Util.ShowInfoBox("New Update Available: " + appversion));
                 }
             }
         });

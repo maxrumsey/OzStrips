@@ -54,10 +54,17 @@ internal class BayRenderController(Bay bay) : IDisposable
         SkControl.Name = "StripBoard";
         SkControl.BackColor = Color.Wheat;
         SkControl.Dock = DockStyle.Top;
+
+        // SkControl.MouseMove += MouseMoved;
         Bay.ChildPanel.ChildPanel.Controls.Add(SkControl);
         SkControl.Show();
 
         ToolTip = new ToolTip();
+    }
+
+    private void MouseMoved(object sender, MouseEventArgs e)
+    {
+        SkControl?.Focus();
     }
 
     public void SetHeight()

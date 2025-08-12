@@ -49,7 +49,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
         public int SmartResize {
             get {
                 return ((int)(this["SmartResize"]));
@@ -61,7 +61,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool KeepStripPicked {
             get {
                 return ((bool)(this["KeepStripPicked"]));
