@@ -85,31 +85,6 @@ public partial class MainForm : Form
     }
 
     /// <summary>
-    /// Opens the settings window.
-    /// </summary>
-    /// <param name="sender">Sender.</param>
-    /// <param name="e">Args.</param>
-    public void ShowSettings(object sender, EventArgs e)
-    {
-        var modalChild = new SettingsWindowControl(_socketConn, _aerodromes);
-        var bm = new BaseModal(modalChild, "OzStrips Settings");
-        bm.ReturnEvent += modalChild.ModalReturned;
-        bm.Show(MainForm.MainFormInstance);
-    }
-
-    /// <summary>
-    /// Opens the settings window.
-    /// </summary>
-    public void ShowQuickSearch()
-    {
-        var modalChild = new QuickSearch(_bayManager);
-        var bm = new BaseModal(modalChild, "Quick Search");
-        modalChild.BaseModal = bm;
-        bm.ReturnEvent += modalChild.ModalReturned;
-        bm.Show(MainForm.MainFormInstance);
-    }
-
-    /// <summary>
     /// Overrides keypress event to capture all keypresses.
     /// </summary>
     /// <param name="msg">Sender.</param>
