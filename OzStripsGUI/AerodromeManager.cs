@@ -178,6 +178,12 @@ public class AerodromeManager
                 continue;
             }
 
+            if (sectorList.Any(x => x.Name == child.Name))
+            {
+                // Weird multi level circular reference.
+                continue;
+            }
+
             RecurseSectors(sectorList, child);
         }
     }
