@@ -52,6 +52,8 @@ public class AerodromeManager
 
     public event EventHandler AerodromeListChanged;
 
+    public event EventHandler OpenGUI;
+
     public List<string> AerodromeList
     {
         get
@@ -81,14 +83,17 @@ public class AerodromeManager
         MMI.SectorsControlledChanged += SectorsChanged;
 
         Settings = AerodromeSettings.Load();
+    }
 
+    public void Initialize()
+    {
         PrimePositionChanged(this, EventArgs.Empty);
         SectorsChanged(this, EventArgs.Empty);
     }
 
     private void SectorsChanged(object sender, EventArgs e)
     {
-        MainFormController.Instance?.Invoke(() =>
+        MMI.InvokeOnGUI(() =>
         {
             var sectorList = new List<Sector>();
             ConcernedAerodromes.Clear();
@@ -126,7 +131,7 @@ public class AerodromeManager
 
     private void PrimePositionChanged(object sender, EventArgs e)
     {
-        MainFormController.Instance?.Invoke(() =>
+        MMI.InvokeOnGUI(() =>
         {
             var posName = MMI.PrimePosition.Name;
 
@@ -135,6 +140,11 @@ public class AerodromeManager
             AutoOpenAerodrome = res?.Aerodrome;
 
             AerodromeListChanged?.Invoke(this, new());
+
+            if (AutoOpenAerodrome != null && AllowAutoOpen)
+            {
+                OpenGUI?.Invoke(this, EventArgs.Empty);
+            }
         });
     }
 

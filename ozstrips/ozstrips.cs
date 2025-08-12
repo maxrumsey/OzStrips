@@ -56,6 +56,8 @@ public sealed class OzStrips : IPlugin, IDisposable
         }
 
         _aerodromeManager = new();
+        _aerodromeManager.OpenGUI += OpenGUI;
+
         Network.Connected += Connected;
         Network.Disconnected += Disconnected;
         _ozStripsOpener = new(CustomToolStripMenuItemWindowType.Main, CustomToolStripMenuItemCategory.Windows, new ToolStripMenuItem("OzStrips"));
@@ -68,17 +70,7 @@ public sealed class OzStrips : IPlugin, IDisposable
 
         AppDomain.CurrentDomain.UnhandledException += ErrorHandler;
 
-        try
-        {
-            if (_aerodromeManager.AutoOpenAerodrome != null && _aerodromeManager.AllowAutoOpen)
-            {
-                OpenGUI(this, EventArgs.Empty);
-            }
-        }
-        catch (Exception ex)
-        {
-            Util.LogError(ex, "OzStrips Error Reporter");
-        }
+        _aerodromeManager.Initialize();
     }
 
     /// <summary>
