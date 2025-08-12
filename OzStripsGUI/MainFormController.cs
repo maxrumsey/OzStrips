@@ -18,7 +18,6 @@ public class MainFormController : IDisposable
     private readonly Timer _timer;
     private BayManager _bayManager;
     private SocketConn _socketConn;
-    private readonly List<string> _aerodromes = [];
     private string _metar = string.Empty;
     private bool _readyForConnection;
 
@@ -552,7 +551,7 @@ public class MainFormController : IDisposable
         _socketConn.Dispose();
         _mainForm.AerodromeManager.PreviouslyClosed = true;
     }
-    
+
     public void Dispose()
     {
         _timer?.Dispose();
