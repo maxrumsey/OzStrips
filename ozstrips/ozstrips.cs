@@ -67,6 +67,18 @@ public sealed class OzStrips : IPlugin, IDisposable
         _ = CheckVersion();
 
         AppDomain.CurrentDomain.UnhandledException += ErrorHandler;
+
+        try
+        {
+            if (_aerodromeManager.AutoOpenAerodrome != null && _aerodromeManager.AllowAutoOpen)
+            {
+                OpenGUI(this, EventArgs.Empty);
+            }
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex, "OzStrips Error Reporter");
+        }
     }
 
     /// <summary>

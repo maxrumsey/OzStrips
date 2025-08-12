@@ -32,6 +32,8 @@ public class AerodromeManager
 
     public List<string> ConcernedAerodromes = new();
 
+    public bool AllowAutoOpen { get; set; } = true;
+
     public List<string> ManuallySetAerodromes
     {
         get
@@ -80,7 +82,8 @@ public class AerodromeManager
 
         Settings = AerodromeSettings.Load();
 
-        // todo: properly configure primepos/sectors on launch.
+        PrimePositionChanged(this, EventArgs.Empty);
+        SectorsChanged(this, EventArgs.Empty);
     }
 
     private void SectorsChanged(object sender, EventArgs e)
