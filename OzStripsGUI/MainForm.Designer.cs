@@ -75,6 +75,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.colDisabledToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flp_main = new NoScrollFLP();
             this.tt_metar = new System.Windows.Forms.ToolTip(this.components);
+            this.reloadAerodromeListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pl_controlbar.SuspendLayout();
             this.pl_atis.SuspendLayout();
             this.pl_ad.SuspendLayout();
@@ -359,11 +360,13 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.allToolStripMenuItem.Text = "All";
             this.allToolStripMenuItem.Click += new System.EventHandler(this._mainFormController.AllToolStripMenuItem_Click);
             // 
+            // 
             // debugToolStripMenuItem
             // 
             this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem1,
-            this.reloadStripToolStripMenuItem});
+            this.reloadStripToolStripMenuItem,
+            this.reloadAerodromeListToolStripMenuItem});
             this.debugToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.debugToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
@@ -374,14 +377,14 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             // 
             this.toolStripMenuItem1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(164, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(228, 22);
             this.toolStripMenuItem1.Text = "SignalR Log";
             this.toolStripMenuItem1.Click += new System.EventHandler(this._mainFormController.ShowMessageList_Click);
             // 
             // reloadStripToolStripMenuItem
             // 
             this.reloadStripToolStripMenuItem.Name = "reloadStripToolStripMenuItem";
-            this.reloadStripToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.reloadStripToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
             this.reloadStripToolStripMenuItem.Text = "ReloadStrip";
             this.reloadStripToolStripMenuItem.Click += new System.EventHandler(this.ReloadStripItem);
             // 
@@ -505,6 +508,9 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             // tt_metar
             // 
             this.tt_metar.ToolTipTitle = "METAR";
+            this.reloadAerodromeListToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
+            this.reloadAerodromeListToolStripMenuItem.Text = "ReloadAerodromeList";
+            this.reloadAerodromeListToolStripMenuItem.Click += new System.EventHandler(this.ReloadAerodromes);
             // 
             // MainForm
             // 
@@ -581,5 +587,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
         private ToolStripMenuItem oneColumnToolStripMenuItem;
         private ToolStripMenuItem colDisabledToolStripMenuItem;
         private Button bt_flip;
+        private ToolStripMenuItem reloadAerodromeListToolStripMenuItem;
     }
 }

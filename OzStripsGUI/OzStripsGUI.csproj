@@ -91,6 +91,9 @@
         </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
+      <None Update="AerodromeSettings.xml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
       <None Update="libSkiaSharp.dylib">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>

@@ -15,19 +15,9 @@ namespace MaxRumsey.OzStripsPlugin.Gui;
 /// </summary>
 public class AerodromeManager
 {
-    private readonly List<string> _defaultAerodromes = new()
-    {
-        "YBBN",
-        "YBCG",
-        "YBSU",
-        "YMML",
-        "YPPH",
-        "YSSY",
-        "YPAD",
-        "YPDN",
-    };
+    private List<string> _defaultAerodromes = new();
 
-    private List<string> _manualAerodromes = new();
+    private List<string> _manuallySetAerodromes = new();
 
     public bool PreviouslyClosed;
 
@@ -55,12 +45,12 @@ public class AerodromeManager
     {
         get
         {
-            return _manualAerodromes;
+            return _manuallySetAerodromes;
         }
 
         set
         {
-            _manualAerodromes = value;
+            _manuallySetAerodromes = value;
             AerodromeListChanged(this, EventArgs.Empty);
         }
     }
@@ -99,7 +89,7 @@ public class AerodromeManager
         MMI.PrimePositonChanged += PrimePositionChanged;
         MMI.SectorsControlledChanged += SectorsChanged;
 
-        Settings = AerodromeSettings.Load();
+        LoadSettings();
     }
 
     public void Initialize()
@@ -108,12 +98,24 @@ public class AerodromeManager
         SectorsChanged(this, EventArgs.Empty);
     }
 
+    public void LoadSettings()
+    {
+        Settings = AerodromeSettings.Load();
+
+        _defaultAerodromes = Settings?.DefaultAerodromes?.ToList() ?? new List<string>();
+    }
+
     private void SectorsChanged(object sender, EventArgs e)
     {
         MMI.InvokeOnGUI(() =>
         {
             var sectorList = new List<Sector>();
             ConcernedAerodromes.Clear();
+
+            if (MMI.SectorsControlled == null)
+            {
+                return;
+            }
 
             // Generate list of all sectors.
             foreach (var topLevelSector in MMI.SectorsControlled.ToList())
@@ -150,7 +152,7 @@ public class AerodromeManager
     {
         MMI.InvokeOnGUI(() =>
         {
-            var posName = MMI.PrimePosition.Name;
+            var posName = MMI.PrimePosition?.Name;
 
             var res = Settings?.AutoOpens.FirstOrDefault(x => x.Position == posName);
 

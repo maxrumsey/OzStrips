@@ -151,6 +151,11 @@ public partial class MainForm : Form
         StripElementList.Load();
     }
 
+    private void ReloadAerodromes(object sender, EventArgs e)
+    {
+        AerodromeManager.LoadSettings();
+    }
+
     private void ColDisabledToolStripMenuItem_Click(object sender, EventArgs e)
     {
         _mainFormController.SetSmartResizeColumnMode(0);

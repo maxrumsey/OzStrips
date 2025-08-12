@@ -22,10 +22,14 @@ public class AerodromeSettings
     /// Gets or sets a list of concerned positions.
     /// </summary>
     [XmlArray("ConcernedSectors")]
-    public ConcernedSector[] ConcernedSectors;
+    public ConcernedSector[]? ConcernedSectors;
 
     [XmlArray("AutoOpens")]
-    public AutoOpen[] AutoOpens;
+    public AutoOpen[]? AutoOpens;
+
+    [XmlArray("DefaultAerodromes")]
+    [XmlArrayItem("Aerodrome")]
+    public string[]? DefaultAerodromes;
 
     internal static AerodromeSettings? Deserialize(string path)
     {
@@ -64,6 +68,21 @@ public class AerodromeSettings
 
     public static AerodromeSettings? Load()
     {
-        return AerodromeSettings.Deserialize(GetADSettingsPath());
+        var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\AerodromeSettings.xml");
+        var baseSettings = AerodromeSettings.Deserialize(path);
+
+        var overwrite = AerodromeSettings.Deserialize(GetADSettingsPath());
+
+        if (baseSettings == null || overwrite == null)
+        {
+            return overwrite;
+        }
+
+        // Overwrite the base settings with the profile settings.
+        baseSettings.ConcernedSectors = overwrite.ConcernedSectors ?? baseSettings.ConcernedSectors;
+        baseSettings.AutoOpens = overwrite.AutoOpens ?? baseSettings.AutoOpens;
+        baseSettings.DefaultAerodromes = overwrite.DefaultAerodromes ?? baseSettings.DefaultAerodromes;
+
+        return baseSettings;
     }
 }

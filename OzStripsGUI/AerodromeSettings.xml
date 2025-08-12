@@ -1,0 +1,12 @@
+<AerodromeSettings>
+    <DefaultAerodromes>
+		<Aerodrome>YMML</Aerodrome>
+		<Aerodrome>YBBN</Aerodrome>
+		<Aerodrome>YBCG</Aerodrome>
+		<Aerodrome>YBSU</Aerodrome>
+		<Aerodrome>YPPH</Aerodrome>
+		<Aerodrome>YSSY</Aerodrome>
+		<Aerodrome>YPAD</Aerodrome>
+		<Aerodrome>YPDN</Aerodrome>
+	</DefaultAerodromes>
+</AerodromeSettings>
