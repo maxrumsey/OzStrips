@@ -49,4 +49,9 @@ public enum StripBay
     /// Indicates the strip for an arriving aircraft, pending a landing clearance.
     /// </summary>
     BAY_ARRIVAL,
+
+    /// <summary>
+    /// Indicates the strip for an aircraft that is in the circuit.
+    /// </summary>
+    BAY_CIRCUIT,
 }

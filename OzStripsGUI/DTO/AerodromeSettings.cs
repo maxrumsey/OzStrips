@@ -33,6 +33,12 @@ public class AerodromeSettings
 
     public bool InhibitVersionCheck;
 
+    [XmlElement("Bay")]
+    public BayDefinition Bay;
+
+    [XmlElement("Layout")]
+    public LayoutDefinition Layout;
+
     internal static AerodromeSettings? Deserialize(string path)
     {
         try
