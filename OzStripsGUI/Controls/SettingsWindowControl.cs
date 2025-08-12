@@ -16,6 +16,13 @@ public partial class SettingsWindowControl : UserControl
 {
     private readonly SocketConn _socket;
 
+    private readonly List<string> _autoOpenOptions = new()
+    {
+        "Once per session",
+        "Always",
+        "Never",
+    };
+
     /// <summary>
     /// Initializes a new instance of the <see cref="SettingsWindowControl"/> class.
     /// </summary>
@@ -66,6 +73,13 @@ public partial class SettingsWindowControl : UserControl
         cb_preasort.Checked = OzStripsSettings.Default.AlphaSortPrea;
 
         tb_scale.Value = (int)(100f * OzStripsSettings.Default.StripScale);
+
+        foreach (var option in _autoOpenOptions)
+        {
+            cb_open.Items.Add(option);
+        }
+
+        cb_open.SelectedIndex = OzStripsSettings.Default.AutoOpenBehaviour;
     }
 
     /// <summary>
@@ -88,6 +102,8 @@ public partial class SettingsWindowControl : UserControl
         Util.SetEnvVar("KeepStripPicked", cb_keeppicked.Checked);
 
         Util.SetEnvVar("AlphaSortPrea", cb_preasort.Checked);
+
+        Util.SetEnvVar("AutoOpenBehaviour", cb_open.SelectedIndex);
 
         MainFormController.Instance?.ForceResize();
     }

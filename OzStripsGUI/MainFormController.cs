@@ -550,6 +550,7 @@ public class MainFormController : IDisposable
     {
         _socketConn.Close();
         _socketConn.Dispose();
+        _mainForm.AerodromeManager.PreviouslyClosed = true;
     }
 
     public void Dispose()

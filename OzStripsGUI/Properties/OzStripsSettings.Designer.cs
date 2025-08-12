@@ -12,7 +12,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.11.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.13.0.0")]
     internal sealed partial class OzStripsSettings : global::System.Configuration.ApplicationSettingsBase {
         
         private static OzStripsSettings defaultInstance = ((OzStripsSettings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new OzStripsSettings())));
@@ -80,6 +80,18 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Properties {
             }
             set {
                 this["AlphaSortPrea"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int AutoOpenBehaviour {
+            get {
+                return ((int)(this["AutoOpenBehaviour"]));
+            }
+            set {
+                this["AutoOpenBehaviour"] = value;
             }
         }
     }

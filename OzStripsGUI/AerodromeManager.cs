@@ -1,4 +1,5 @@
 ﻿using MaxRumsey.OzStripsPlugin.Gui.DTO;
+using MaxRumsey.OzStripsPlugin.Gui.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,11 +29,27 @@ public class AerodromeManager
 
     private List<string> _manualAerodromes = new();
 
+    public bool PreviouslyClosed;
+
     public string? AutoOpenAerodrome;
 
     public List<string> ConcernedAerodromes = new();
 
-    public bool AllowAutoOpen { get; set; } = true;
+    public bool AllowAutoOpen
+    {
+        get
+        {
+            var mode = (AutoOpenModes)OzStripsSettings.Default.AutoOpenBehaviour;
+
+            return mode switch
+            {
+                AutoOpenModes.Always => true,
+                AutoOpenModes.OncePerSession => !PreviouslyClosed,
+                AutoOpenModes.Never => false,
+                _ => false,
+            };
+        }
+    }
 
     public List<string> ManuallySetAerodromes
     {
@@ -163,5 +180,12 @@ public class AerodromeManager
 
             RecurseSectors(sectorList, child);
         }
+    }
+
+    public enum AutoOpenModes
+    {
+        OncePerSession,
+        Always,
+        Never
     }
 }
