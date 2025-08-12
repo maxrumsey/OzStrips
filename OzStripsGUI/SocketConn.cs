@@ -148,7 +148,7 @@ public sealed class SocketConn : IDisposable
                 return;
             }
 
-            if (!_versionShown && appversion != OzStripsConfig.version)
+            if (!_versionShown && appversion != OzStripsConfig.version && !AerodromeManager.InhibitVersionCheck)
             {
                 _versionShown = true;
                 if (mainForm.Visible)

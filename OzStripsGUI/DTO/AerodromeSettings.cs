@@ -31,6 +31,8 @@ public class AerodromeSettings
     [XmlArrayItem("Aerodrome")]
     public string[]? DefaultAerodromes;
 
+    public bool InhibitVersionCheck;
+
     internal static AerodromeSettings? Deserialize(string path)
     {
         try
@@ -82,6 +84,7 @@ public class AerodromeSettings
         baseSettings.ConcernedSectors = overwrite.ConcernedSectors ?? baseSettings.ConcernedSectors;
         baseSettings.AutoOpens = overwrite.AutoOpens ?? baseSettings.AutoOpens;
         baseSettings.DefaultAerodromes = overwrite.DefaultAerodromes ?? baseSettings.DefaultAerodromes;
+        baseSettings.InhibitVersionCheck = overwrite.InhibitVersionCheck || baseSettings.InhibitVersionCheck;
 
         return baseSettings;
     }

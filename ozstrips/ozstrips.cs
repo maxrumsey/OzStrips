@@ -66,11 +66,12 @@ public sealed class OzStrips : IPlugin, IDisposable
         MMI.SelectedTrackChanged += SelectedAirTrackChanged;
         MMI.SelectedGroundTrackChanged += SelectedGroundTrackChanged;
         Network.OnlinePilotsChanged += Network_OnlinePilotsChanged;
-        _ = CheckVersion();
 
         AppDomain.CurrentDomain.UnhandledException += ErrorHandler;
 
         _aerodromeManager.Initialize();
+
+        _ = CheckVersion();
     }
 
     /// <summary>
@@ -136,6 +137,11 @@ public sealed class OzStrips : IPlugin, IDisposable
             }
 
             if (version.Major == _version.Major && version.Minor == _version.Minor && version.Build == _version.Build)
+            {
+                return;
+            }
+
+            if (AerodromeManager.InhibitVersionCheck)
             {
                 return;
             }

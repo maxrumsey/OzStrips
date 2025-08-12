@@ -25,6 +25,8 @@ public class AerodromeManager
 
     public List<string> ConcernedAerodromes = new();
 
+    public static bool InhibitVersionCheck;
+
     public bool AllowAutoOpen
     {
         get
