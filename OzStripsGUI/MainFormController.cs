@@ -49,8 +49,6 @@ public class MainFormController : IDisposable
 
     public void Initialize()
     {
-        AerodromeListChanged(this, EventArgs.Empty);
-
         _bayManager = new(_mainForm.MainFLP, AllToolStripMenuItem_Click);
         _socketConn = new(_bayManager, this);
 
@@ -58,6 +56,8 @@ public class MainFormController : IDisposable
         {
             _socketConn.Connect();
         }
+
+        AerodromeListChanged(this, EventArgs.Empty);
 
         _bayManager.BayRepository.Resize();
         _mainForm.AerodromeManager.AerodromeListChanged += AerodromeListChanged;
@@ -552,7 +552,7 @@ public class MainFormController : IDisposable
         _socketConn.Dispose();
         _mainForm.AerodromeManager.PreviouslyClosed = true;
     }
-
+    
     public void Dispose()
     {
         _timer?.Dispose();
@@ -572,6 +572,19 @@ public class MainFormController : IDisposable
         foreach (var item in _mainForm.AerodromeManager.AerodromeList)
         {
             AddAerodrome(item);
+        }
+
+        if (_mainForm.AerodromeManager.AutoOpenAerodrome != null &&
+            _bayManager?.AerodromeName != _mainForm.AerodromeManager.AutoOpenAerodrome)
+        {
+            try
+            {
+                SetAerodrome(_mainForm.AerodromeManager.AutoOpenAerodrome);
+            }
+            catch (Exception ex)
+            {
+                Util.LogError(ex);
+            }
         }
     }
 
