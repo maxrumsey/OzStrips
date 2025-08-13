@@ -19,6 +19,8 @@ public class AerodromeManager
 
     private List<string> _manuallySetAerodromes = new();
 
+    private string _previousAerodromeType = string.Empty;
+
     public bool PreviouslyClosed;
 
     public string? AutoOpenAerodrome;
@@ -88,6 +90,11 @@ public class AerodromeManager
         }
     }
 
+    public string GetAerodromeType(string aerodrome)
+    {
+        return Settings?.AerodromeLists.FirstOrDefault(x => x.Aerodromes.Contains(aerodrome))?.Type ?? string.Empty;
+    }
+
     public AerodromeManager()
     {
         MMI.PrimePositonChanged += PrimePositionChanged;
@@ -100,6 +107,17 @@ public class AerodromeManager
     {
         PrimePositionChanged(this, EventArgs.Empty);
         SectorsChanged(this, EventArgs.Empty);
+    }
+
+    public void AerodromeChanged(string aerodrome)
+    {
+        var type = GetAerodromeType(aerodrome);
+
+        if (type != _previousAerodromeType)
+        {
+            _previousAerodromeType = type;
+            ViewListChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     public List<LayoutDefinition> ReturnLayouts(string filter)

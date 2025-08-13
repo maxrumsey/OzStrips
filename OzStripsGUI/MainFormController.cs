@@ -79,7 +79,7 @@ public class MainFormController : IDisposable
     {
         _mainForm.ViewListToolStrip.DropDownItems.Clear();
 
-        var layouts = _mainForm.AerodromeManager.ReturnLayouts(string.Empty);
+        var layouts = _mainForm.AerodromeManager.ReturnLayouts(_mainForm.AerodromeManager.GetAerodromeType(_bayManager.AerodromeName));
 
         foreach (var layout in layouts)
         {
@@ -121,6 +121,12 @@ public class MainFormController : IDisposable
             };
 
             _mainForm.ViewListToolStrip.DropDownItems.Add(toolStripMenuItem);
+        }
+
+        // If bayrepo initialised, than directly call the layout func
+        if (_bayManager.BayRepository.BayNum > 0)
+        {
+            _defaultLayout?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -176,6 +182,7 @@ public class MainFormController : IDisposable
                 _socketConn.SetAerodrome();
                 _mainForm.AerodromeLabel.Text = name;
                 SetATISCode("Z");
+                _mainForm.AerodromeManager.AerodromeChanged(name);
             }
         }
         catch (Exception ex)

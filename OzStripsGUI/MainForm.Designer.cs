@@ -284,6 +284,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.toolStripTextBox1.Name = "toolStripTextBox1";
             this.toolStripTextBox1.Size = new System.Drawing.Size(100, 23);
             this.toolStripTextBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this._mainFormController.AerodromeSelectorKeyDown);
+            this.toolStripTextBox1.Tag = "permanent";
             // 
             // toolStripSeparator1
             // 
