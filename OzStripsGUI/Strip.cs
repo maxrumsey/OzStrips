@@ -801,7 +801,36 @@ public sealed class Strip
                 return;
         }
 
-        if (stripBayResultDict.TryGetValue(CurrentBay, out var nextBay))
+        var nextBay = CurrentBay;
+        var nextBayFound = false;
+        var currentStripBay = _bayManager.BayRepository.FindBay(this);
+
+        if (currentStripBay == null)
+        {
+            return;
+        }
+
+        while (!nextBayFound)
+        {
+            if (stripBayResultDict.TryGetValue(nextBay, out var probedNextBay))
+            {
+                nextBay = probedNextBay;
+                var proposedNewBay = _bayManager.BayRepository.Bays.FirstOrDefault(x => x.BayTypes.Contains(probedNextBay));
+
+                // SIDTriggering into a not-loaded stripbay (or into BAY_DEAD),
+                if (proposedNewBay is null)
+                {
+                    break;
+                }
+
+                if (proposedNewBay != currentStripBay)
+                {
+                    nextBayFound = true;
+                }
+            }
+        }
+
+        if (nextBay != CurrentBay)
         {
             CurrentBay = nextBay;
             _bayManager.UpdateBay(this);
