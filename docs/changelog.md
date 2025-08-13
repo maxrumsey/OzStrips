@@ -1,4 +1,13 @@
 # Changelog
+## v0.6.2
+### Features
+- OzStrips automatically manages the list of aerodromes in the selection window, considering Position / Sectors selected.
+- Added auto-open feature when moving to a tower position.
+
+### Misc changes
+- Refactored GUI supporting code out of the MainForm class. General cleanup.
+- Rewrote global aerodrome state management.
+- Added ability to customise bay layouts.
 ## v0.6.1
 ### Features
 - When strip is picked, bay scrollbar is locked to always show the strip.
