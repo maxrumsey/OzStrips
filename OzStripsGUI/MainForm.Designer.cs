@@ -51,12 +51,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.ts_mode = new System.Windows.Forms.ToolStripMenuItem();
-            this.aCDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sMCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sMCACDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aDCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aDCSMCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.allToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.reloadStripToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -299,66 +293,11 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             // 
             // ts_mode
             // 
-            this.ts_mode.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.aCDToolStripMenuItem,
-            this.sMCToolStripMenuItem,
-            this.sMCACDToolStripMenuItem,
-            this.aDCToolStripMenuItem,
-            this.aDCSMCToolStripMenuItem,
-            this.allToolStripMenuItem});
             this.ts_mode.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ts_mode.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.ts_mode.Name = "ts_mode";
             this.ts_mode.Size = new System.Drawing.Size(92, 21);
             this.ts_mode.Text = "View Mode";
-            // 
-            // aCDToolStripMenuItem
-            // 
-            this.aCDToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.aCDToolStripMenuItem.Name = "aCDToolStripMenuItem";
-            this.aCDToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
-            this.aCDToolStripMenuItem.Text = "ACD";
-            this.aCDToolStripMenuItem.Click += new System.EventHandler(this._mainFormController.ACDToolStripMenuItem_Click);
-            // 
-            // sMCToolStripMenuItem
-            // 
-            this.sMCToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.sMCToolStripMenuItem.Name = "sMCToolStripMenuItem";
-            this.sMCToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
-            this.sMCToolStripMenuItem.Text = "SMC";
-            this.sMCToolStripMenuItem.Click += new System.EventHandler(this._mainFormController.SMCToolStripMenuItem_Click);
-            // 
-            // sMCACDToolStripMenuItem
-            // 
-            this.sMCACDToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.sMCACDToolStripMenuItem.Name = "sMCACDToolStripMenuItem";
-            this.sMCACDToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
-            this.sMCACDToolStripMenuItem.Text = "SMC+ACD";
-            this.sMCACDToolStripMenuItem.Click += new System.EventHandler(this._mainFormController.SMCACDToolStripMenuItem_Click);
-            // 
-            // aDCToolStripMenuItem
-            // 
-            this.aDCToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.aDCToolStripMenuItem.Name = "aDCToolStripMenuItem";
-            this.aDCToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
-            this.aDCToolStripMenuItem.Text = "ADC";
-            this.aDCToolStripMenuItem.Click += new System.EventHandler(this._mainFormController.ADCToolStripMenuItem_Click);
-            // 
-            // aDCSMCToolStripMenuItem
-            // 
-            this.aDCSMCToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.aDCSMCToolStripMenuItem.Name = "aDCSMCToolStripMenuItem";
-            this.aDCSMCToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
-            this.aDCSMCToolStripMenuItem.Text = "ADC+SMC";
-            this.aDCSMCToolStripMenuItem.Click += new System.EventHandler(this._mainFormController.ADCSMCToolStripMenuItem_Click);
-            // 
-            // allToolStripMenuItem
-            // 
-            this.allToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.allToolStripMenuItem.Name = "allToolStripMenuItem";
-            this.allToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
-            this.allToolStripMenuItem.Text = "All";
-            this.allToolStripMenuItem.Click += new System.EventHandler(this._mainFormController.AllToolStripMenuItem_Click);
             // 
             // 
             // debugToolStripMenuItem
@@ -555,12 +494,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
         private System.Windows.Forms.Label lb_ad;
         private System.Windows.Forms.Button bt_inhibit;
         private System.Windows.Forms.ToolStripMenuItem ts_mode;
-        private System.Windows.Forms.ToolStripMenuItem aCDToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem sMCToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem sMCACDToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem aDCToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem allToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem aDCSMCToolStripMenuItem;
         private System.Windows.Forms.Button bt_cross;
         private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
