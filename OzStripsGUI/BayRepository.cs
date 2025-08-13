@@ -15,13 +15,13 @@ namespace MaxRumsey.OzStripsPlugin.Gui;
 /// <summary>
 /// Holds all individual bays.
 /// </summary>
-public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layoutMethod, BayManager sender)
+public class BayRepository(FlowLayoutPanel main, BayManager sender)
 {
     private readonly List<FlowLayoutPanel> _flpVerticalBoards = [];
 
     private readonly BayManager _bayManager = sender;
 
-    private Action<object, EventArgs> _currentLayout = layoutMethod;
+    private Action<object, EventArgs>? _currentLayout;
 
     private int _currentLayoutIndex;
 
@@ -250,7 +250,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
 
         if (triggerRelayout)
         {
-            _currentLayout(this, EventArgs.Empty);
+            _currentLayout?.Invoke(this, EventArgs.Empty);
             return;
         }
 
@@ -260,7 +260,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             AddVertBoard();
             AddVertBoard();
             _currentLayoutIndex = 3;
-            _currentLayout(this, EventArgs.Empty);
+            _currentLayout?.Invoke(this, EventArgs.Empty);
         }
 
         ResizeStripBays();
@@ -272,7 +272,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             ClearVertBoards();
             AddVertBoard();
             _currentLayoutIndex = 1;
-            _currentLayout(this, EventArgs.Empty);
+            _currentLayout?.Invoke(this, EventArgs.Empty);
             return;
         }
         else if (main.Size.Width > 840 && main.Size.Width <= 1250 && _currentLayoutIndex != 2)
@@ -281,7 +281,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             AddVertBoard();
             AddVertBoard();
             _currentLayoutIndex = 2;
-            _currentLayout(this, EventArgs.Empty);
+            _currentLayout?.Invoke(this, EventArgs.Empty);
             return;
         }
         else if (main.Size.Width > 1250 && _currentLayoutIndex != 3)
@@ -291,7 +291,7 @@ public class BayRepository(FlowLayoutPanel main, Action<object, EventArgs> layou
             AddVertBoard();
             AddVertBoard();
             _currentLayoutIndex = 3;
-            _currentLayout(this, EventArgs.Empty);
+            _currentLayout?.Invoke(this, EventArgs.Empty);
             return;
         }
 

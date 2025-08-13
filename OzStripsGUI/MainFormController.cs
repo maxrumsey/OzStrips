@@ -1,10 +1,11 @@
+using MaxRumsey.OzStripsPlugin.Gui.Controls;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
-using MaxRumsey.OzStripsPlugin.Gui.Controls;
+using System.Xml.Linq;
 using vatsys;
 
 namespace MaxRumsey.OzStripsPlugin.Gui;
@@ -20,7 +21,7 @@ public class MainFormController : IDisposable
     private SocketConn _socketConn;
     private string _metar = string.Empty;
     private bool _readyForConnection;
-
+    private Action<object, EventArgs>? _defaultLayout;
     public static MainFormController? Instance { get; private set; }
 
     /// <summary>
@@ -48,8 +49,20 @@ public class MainFormController : IDisposable
 
     public void Initialize()
     {
-        _bayManager = new(_mainForm.MainFLP, AllToolStripMenuItem_Click);
+        _bayManager = new(_mainForm.MainFLP);
         _socketConn = new(_bayManager, this);
+
+        _mainForm.AerodromeManager.ViewListChanged += ViewListChanged;
+        ViewListChanged(this, EventArgs.Empty);
+
+        if (_defaultLayout is not null)
+        {
+            _bayManager.BayRepository.SetLayout(_defaultLayout);
+        }
+        else
+        {
+            throw new Exception("Default layout was not set. This means the config did not load correctly!");
+        }
 
         if (_readyForConnection)
         {
@@ -60,6 +73,55 @@ public class MainFormController : IDisposable
 
         _bayManager.BayRepository.Resize();
         _mainForm.AerodromeManager.AerodromeListChanged += AerodromeListChanged;
+    }
+
+    private void ViewListChanged(object sender, EventArgs e)
+    {
+        _mainForm.ViewListToolStrip.DropDownItems.Clear();
+
+        var layouts = _mainForm.AerodromeManager.ReturnLayouts(string.Empty);
+
+        foreach (var layout in layouts)
+        {
+            var toolStripMenuItem = new ToolStripMenuItem
+            {
+                Text = layout.Name,
+            };
+
+            var action = (object sender, EventArgs e) =>
+            {
+                _bayManager.BayRepository.WipeBays();
+                _bayManager.BayRepository.BayNum = layout.Elements.Length;
+
+                foreach (var element in layout.Elements)
+                {
+                    if (element.Bay is null)
+                    {
+                        continue;
+                    }
+
+                    _ = new Bay(element.Bay.Types.ToList(), _bayManager, _socketConn, element.Name, element.Column);
+                }
+
+                _bayManager.BayRepository.Resize();
+                _bayManager.BayRepository.ReloadStrips(_socketConn);
+            };
+
+            if (layout.Name == "All")
+            {
+                _defaultLayout = action;
+            }
+
+            toolStripMenuItem.Click += (sender, e) =>
+            {
+                _bayManager.BayRepository.SetLayout(action);
+
+                // there are better ways of doing this!
+                action(sender, e);
+            };
+
+            _mainForm.ViewListToolStrip.DropDownItems.Add(toolStripMenuItem);
+        }
     }
 
     /// <summary>

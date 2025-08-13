@@ -16,4 +16,5 @@ public class LayoutElement
     [XmlAttribute("Column")]
     public int Column;
 
+    internal BayDefinition? Bay;
 }

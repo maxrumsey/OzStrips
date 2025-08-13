@@ -11,7 +11,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui.DTO;
 public class BayType
 {
     [XmlAttribute("Type")]
-    public string Type;
+    public string Type = string.Empty;
 
     [XmlElement("Bay")]
     public BayDefinition[] Bays;

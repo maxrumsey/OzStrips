@@ -27,9 +27,9 @@ public class BayManager
     /// </summary>
     /// <param name="main">The flow layout for the bay.</param>
     /// <param name="layoutMethod">The current layout caller.</param>
-    public BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMethod)
+    public BayManager(FlowLayoutPanel main)
     {
-        BayRepository = new(main, layoutMethod, this);
+        BayRepository = new(main, this);
     }
 
     /// <summary>

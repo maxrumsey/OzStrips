@@ -63,6 +63,8 @@ public class AerodromeManager
 
     public event EventHandler OpenGUI;
 
+    public event EventHandler ViewListChanged;
+
     public List<string> AerodromeList
     {
         get
@@ -98,6 +100,32 @@ public class AerodromeManager
     {
         PrimePositionChanged(this, EventArgs.Empty);
         SectorsChanged(this, EventArgs.Empty);
+    }
+
+    public List<LayoutDefinition> ReturnLayouts(string filter)
+    {
+        if (Settings is null || Settings.Layouts is null)
+        {
+            throw new Exception("Unable to access layouts.");
+        }
+
+        var layouts = Settings.Layouts.Where(x => x.Type == filter).ToList();
+        var bays = Settings.Bays.FirstOrDefault(x => x.Type == filter);
+
+        if (layouts.Count == 0 || bays is null)
+        {
+            throw new Exception($"No layouts or bays of type {filter} found.");
+        }
+
+        foreach (var layout in layouts)
+        {
+            foreach (var element in layout.Elements)
+            {
+                element.Bay = bays.Bays.FirstOrDefault(x => x.Name == element.Name);
+            }
+        }
+
+        return layouts;
     }
 
     public void LoadSettings()

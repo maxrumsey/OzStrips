@@ -18,5 +18,4 @@ public class BayDefinition
 
     [XmlElement("Type")]
     public StripBay[] Types;
-
 }

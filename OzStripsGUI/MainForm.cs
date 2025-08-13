@@ -59,6 +59,8 @@ public partial class MainForm : Form
 
     public ToolStripMenuItem AerodromeListToolStrip => ts_ad;
 
+    public ToolStripMenuItem ViewListToolStrip => ts_mode;
+
     public string EnteredAerodrome => toolStripTextBox1.Text;
 
     public FlowLayoutPanel MainFLP => flp_main;
