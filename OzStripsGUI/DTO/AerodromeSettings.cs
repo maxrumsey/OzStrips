@@ -33,11 +33,12 @@ public class AerodromeSettings
 
     public bool InhibitVersionCheck;
 
-    [XmlElement("Bay")]
-    public BayDefinition Bay;
+    [XmlArray("BayTypes")]
+    public BayType[] Bays;
 
-    [XmlElement("Layout")]
-    public LayoutDefinition Layout;
+    [XmlArray("LayoutDefinitions")]
+    [XmlArrayItem("LayoutDefinition")]
+    public LayoutDefinition[] Layouts;
 
     internal static AerodromeSettings? Deserialize(string path)
     {
@@ -91,6 +92,8 @@ public class AerodromeSettings
         baseSettings.AutoOpens = overwrite.AutoOpens ?? baseSettings.AutoOpens;
         baseSettings.DefaultAerodromes = overwrite.DefaultAerodromes ?? baseSettings.DefaultAerodromes;
         baseSettings.InhibitVersionCheck = overwrite.InhibitVersionCheck || baseSettings.InhibitVersionCheck;
+        baseSettings.Layouts = overwrite.Layouts ?? baseSettings.Layouts;
+        baseSettings.Bays = overwrite.Bays ?? baseSettings.Bays;
 
         return baseSettings;
     }

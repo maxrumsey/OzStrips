@@ -7,15 +7,12 @@ using System.Xml.Serialization;
 
 namespace MaxRumsey.OzStripsPlugin.Gui.DTO;
 
-[XmlRoot("Layout")]
-public record LayoutDefinition
+[XmlRoot("BayType")]
+public class BayType
 {
-    [XmlAttribute("Name")]
-    public string Name;
-
-    [XmlElement("Element")]
-    public LayoutElement[] Elements;
-
     [XmlAttribute("Type")]
-    public string Type = string.Empty;
+    public string Type;
+
+    [XmlElement("Bay")]
+    public BayDefinition[] Bays;
 }
