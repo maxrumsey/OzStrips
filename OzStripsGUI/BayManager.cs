@@ -80,11 +80,9 @@ public class BayManager
     {
         get
         {
-            var strip = PickedStripItem?.Strip;
-
-            if (strip is not null)
+            if (PickedStripItem is not null)
             {
-                return BayRepository.FindBay(strip);
+                return BayRepository.FindBay(PickedStripItem);
             }
 
             return null;
