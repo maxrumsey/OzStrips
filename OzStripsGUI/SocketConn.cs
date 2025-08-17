@@ -165,6 +165,11 @@ public sealed class SocketConn : IDisposable
                 mainForm.Invoke(() => Util.ShowWarnBox(message));
             }
         });
+
+        _connection.On<AerodromeState>("AerodromeStateUpdate", (AerodromeState state) =>
+        {
+            return;
+        });
     }
 
     /// <summary>

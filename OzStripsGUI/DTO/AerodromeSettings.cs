@@ -49,7 +49,14 @@ public class AerodromeSettings
         try
         {
             var serializer = new XmlSerializer(typeof(AerodromeSettings));
+
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+
             var fs = new FileStream(path, FileMode.Open, FileAccess.Read);
+
             AerodromeSettings element;
 
             element = (AerodromeSettings)serializer.Deserialize(fs);
@@ -86,13 +93,17 @@ public class AerodromeSettings
 
         var overwrite = AerodromeSettings.Deserialize(GetADSettingsPath());
 
-        if (baseSettings == null || overwrite == null)
+        if (baseSettings == null)
         {
             return overwrite;
         }
+        else if (overwrite == null)
+        {
+            return baseSettings;
+        }
 
-        // Overwrite the base settings with the profile settings.
-        baseSettings.ConcernedSectors = overwrite.ConcernedSectors ?? baseSettings.ConcernedSectors;
+            // Overwrite the base settings with the profile settings.
+            baseSettings.ConcernedSectors = overwrite.ConcernedSectors ?? baseSettings.ConcernedSectors;
         baseSettings.AutoOpens = overwrite.AutoOpens ?? baseSettings.AutoOpens;
         baseSettings.DefaultAerodromes = overwrite.DefaultAerodromes ?? baseSettings.DefaultAerodromes;
         baseSettings.InhibitVersionCheck = overwrite.InhibitVersionCheck || baseSettings.InhibitVersionCheck;

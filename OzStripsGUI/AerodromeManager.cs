@@ -174,7 +174,7 @@ public class AerodromeManager
             foreach (var sector in sectorList)
             {
                 // Match to concernedsectors
-                var concernedSectors = Settings?.ConcernedSectors
+                var concernedSectors = Settings?.ConcernedSectors?
                     .Where(x => x.Positions.Contains(sector.Name))
                     .ToList();
 
@@ -202,7 +202,7 @@ public class AerodromeManager
         {
             var posName = MMI.PrimePosition?.Name;
 
-            var res = Settings?.AutoOpens.FirstOrDefault(x => x.Position == posName);
+            var res = Settings?.AutoOpens?.FirstOrDefault(x => x.Position == posName);
 
             AutoOpenAerodrome = res?.Aerodrome;
 
