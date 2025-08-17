@@ -19,6 +19,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui;
 public partial class MainForm : Form
 {
     private MainFormController _mainFormController;
+    private NoScrollFLP _flpMain;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MainForm"/> class.
@@ -31,6 +32,7 @@ public partial class MainForm : Form
         _mainFormController = new(this, readyForConnection);
 
         InitializeComponent();
+        CreateMainFLP();
         _mainFormController.Initialize();
 
         Util.SetAndReturnDLLVar();
@@ -63,7 +65,7 @@ public partial class MainForm : Form
 
     public string EnteredAerodrome => toolStripTextBox1.Text;
 
-    public FlowLayoutPanel MainFLP => flp_main;
+    public FlowLayoutPanel MainFLP => _flpMain;
 
     public AerodromeManager AerodromeManager { get; private set; }
 
@@ -176,6 +178,24 @@ public partial class MainForm : Form
     private void ThreeColumnsToolStripMenuItem_Click(object sender, EventArgs e)
     {
         _mainFormController.SetSmartResizeColumnMode(3);
+    }
+
+    private void CreateMainFLP()
+    {
+        // Try to prevent designer auto-deletion.
+        _flpMain = new();
+        _flpMain.AutoScroll = true;
+        _flpMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
+        _flpMain.Dock = System.Windows.Forms.DockStyle.Fill;
+        _flpMain.Location = new System.Drawing.Point(0, 25);
+        _flpMain.Margin = new System.Windows.Forms.Padding(0);
+        _flpMain.Name = "flp_main";
+        _flpMain.Size = new System.Drawing.Size(1784, 891);
+        _flpMain.TabIndex = 2;
+        _flpMain.WrapContents = false;
+
+        Controls.Add(_flpMain);
+        Controls.SetChildIndex(_flpMain, 0);
     }
 
     public void SetControlBarScrollBar()

@@ -67,7 +67,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.twoColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.oneColumnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colDisabledToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.flp_main = new NoScrollFLP();
             this.tt_metar = new System.Windows.Forms.ToolTip(this.components);
             this.reloadAerodromeListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pl_controlbar.SuspendLayout();
@@ -433,18 +432,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.colDisabledToolStripMenuItem.Text = "Disabled";
             this.colDisabledToolStripMenuItem.Click += new System.EventHandler(this.ColDisabledToolStripMenuItem_Click);
             // 
-            // flp_main
-            // 
-            this.flp_main.AutoScroll = true;
-            this.flp_main.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
-            this.flp_main.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flp_main.Location = new System.Drawing.Point(0, 25);
-            this.flp_main.Margin = new System.Windows.Forms.Padding(0);
-            this.flp_main.Name = "flp_main";
-            this.flp_main.Size = new System.Drawing.Size(1784, 891);
-            this.flp_main.TabIndex = 2;
-            this.flp_main.WrapContents = false;
-            // 
             // tt_metar
             // 
             this.tt_metar.ToolTipTitle = "METAR";
@@ -458,7 +445,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gray;
             this.ClientSize = new System.Drawing.Size(1784, 961);
-            this.Controls.Add(this.flp_main);
             this.Controls.Add(this.pl_controlbar);
             this.Controls.Add(this.menuStrip1);
             this.DoubleBuffered = true;
@@ -490,7 +476,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
         private System.Windows.Forms.Panel pl_stat;
         private System.Windows.Forms.Label lb_stat;
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private NoScrollFLP flp_main;
         private System.Windows.Forms.Panel pl_ad;
         private System.Windows.Forms.Label lb_ad;
         private System.Windows.Forms.Button bt_inhibit;
