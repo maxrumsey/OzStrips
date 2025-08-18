@@ -51,12 +51,14 @@
       <Element Name="Taxi" Column="1"/>
       <Element Name="Holding Point" Column="1"/>
       <Element Name="Runway" Column="2"/>
+      <Element Name="Circuit" Column="2"/>
       <Element Name="Departed" Column="2"/>
       <Element Name="Arrivals" Column="2"/>
     </LayoutDefinition>
     <LayoutDefinition Name="ADC">
       <Element Name="Holding Point" Column="0"/>
       <Element Name="Runway" Column="1"/>
+      <Element Name="Circuit" Column="1"/>
       <Element Name="Departed" Column="2"/>
       <Element Name="Arrivals" Column="2"/>
     </LayoutDefinition>
