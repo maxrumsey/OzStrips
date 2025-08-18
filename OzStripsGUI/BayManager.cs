@@ -302,6 +302,13 @@ public class BayManager
     public void SetAerodrome(string name, SocketConn socketConn)
     {
         AerodromeName = name;
+
+        // todo: remove circuit bay if enabled.
+        AerodromeState = new()
+        {
+            AerodromeCode = name,
+        };
+
         WipeStrips();
         StripRepository.Strips.Clear();
 
