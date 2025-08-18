@@ -168,9 +168,15 @@ public sealed class SocketConn : IDisposable
 
         _connection.On<AerodromeState>("AerodromeStateUpdate", (AerodromeState state) =>
         {
-            return;
+            if (state.AerodromeCode == _bayManager.AerodromeName && state.AerodromeCode.Length > 0)
+            {
+                _bayManager.AerodromeState = state;
+                mainForm.Invoke(() => AerodromeStateChanged?.Invoke(this, EventArgs.Empty));
+            }
         });
     }
+
+    public event EventHandler AerodromeStateChanged;
 
     /// <summary>
     /// Available server types.
@@ -329,6 +335,15 @@ public sealed class SocketConn : IDisposable
         if (CanSendDTO)
         {
             _connection.InvokeAsync("BayChange", bayDTO);
+        }
+    }
+
+    public void RequestCircuit(bool status)
+    {
+        AddMessage("c:RequestCircuit: " + status);
+        if (CanSendDTO)
+        {
+            _connection.InvokeAsync("UpdateCircuitMode", status);
         }
     }
 

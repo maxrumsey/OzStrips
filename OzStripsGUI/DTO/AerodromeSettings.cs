@@ -95,6 +95,11 @@ public class AerodromeSettings
 
         if (baseSettings == null)
         {
+            if (overwrite == null)
+            {
+                throw new Exception("AerodromeSettings.xml was not found or corrupted.");
+            }
+
             return overwrite;
         }
         else if (overwrite == null)
@@ -102,8 +107,8 @@ public class AerodromeSettings
             return baseSettings;
         }
 
-            // Overwrite the base settings with the profile settings.
-            baseSettings.ConcernedSectors = overwrite.ConcernedSectors ?? baseSettings.ConcernedSectors;
+        // Overwrite the base settings with the profile settings.
+        baseSettings.ConcernedSectors = overwrite.ConcernedSectors ?? baseSettings.ConcernedSectors;
         baseSettings.AutoOpens = overwrite.AutoOpens ?? baseSettings.AutoOpens;
         baseSettings.DefaultAerodromes = overwrite.DefaultAerodromes ?? baseSettings.DefaultAerodromes;
         baseSettings.InhibitVersionCheck = overwrite.InhibitVersionCheck || baseSettings.InhibitVersionCheck;

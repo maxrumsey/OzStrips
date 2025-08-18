@@ -73,6 +73,15 @@ public class BayManager
     /// </summary>
     public string AerodromeName { get; set; } = "????";
 
+    public AerodromeState AerodromeState { get; set; } = new AerodromeState
+    {
+        AerodromeCode = "????",
+        CircuitActive = false,
+        Connections = new List<string>(),
+    };
+
+    public bool CircuitActive { get; set; }
+
     /// <summary>
     /// Gets the bay the current picked striplistitem is from.
     /// </summary>

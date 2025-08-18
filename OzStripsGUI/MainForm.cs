@@ -221,6 +221,7 @@ public partial class MainForm : Form
         toolStripTextBox1.KeyPress += _mainFormController.AerodromeSelectorKeyDown;
         toolStripMenuItem1.Click += _mainFormController.ShowMessageList_Click;
         settingsToolStripMenuItem.Click += _mainFormController.ShowSettings;
+        ts_toggleCircuit.Click += _mainFormController.ToggleCircuitBay;
 
         FormClosed += _mainFormController.MainForm_FormClosed;
         Load += _mainFormController.MainForm_Load;

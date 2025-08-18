@@ -22,6 +22,7 @@ public class MainFormController : IDisposable
     private string _metar = string.Empty;
     private bool _readyForConnection;
     private Action<object, EventArgs>? _defaultLayout;
+
     public static MainFormController? Instance { get; private set; }
 
     /// <summary>
@@ -52,6 +53,8 @@ public class MainFormController : IDisposable
         _bayManager = new(_mainForm.MainFLP);
         _socketConn = new(_bayManager, this);
 
+        _socketConn.AerodromeStateChanged += AerodromeStateChanged;
+
         _mainForm.AerodromeManager.ViewListChanged += ViewListChanged;
         ViewListChanged(this, EventArgs.Empty);
 
@@ -75,6 +78,15 @@ public class MainFormController : IDisposable
         _mainForm.AerodromeManager.AerodromeListChanged += AerodromeListChanged;
     }
 
+    private void AerodromeStateChanged(object sender, EventArgs e)
+    {
+        if (_bayManager.CircuitActive != _bayManager.AerodromeState.CircuitActive)
+        {
+            _bayManager.CircuitActive = _bayManager.AerodromeState.CircuitActive;
+            ViewListChanged(this, EventArgs.Empty);
+        }
+    }
+
     private void ViewListChanged(object sender, EventArgs e)
     {
         _mainForm.ViewListToolStrip.DropDownItems.Clear();
@@ -95,12 +107,22 @@ public class MainFormController : IDisposable
 
                 foreach (var element in layout.Elements)
                 {
-                    if (element.Bay is null)
+                    // If this is the circuit bay and we don't have it enabled.
+                    if (element.Bay is null ||
+                        (element.Bay.Circuit && !_bayManager.CircuitActive))
                     {
                         continue;
                     }
 
-                    _ = new Bay(element.Bay.Types.ToList(), _bayManager, _socketConn, element.Name, element.Column);
+                    var types = element.Bay.Types.ToList();
+
+                    // If circuit mode is enabled, don't have duplicate circuit bays
+                    if (_bayManager.CircuitActive && !element.Bay.Circuit)
+                    {
+                        types.Remove(StripBay.BAY_CIRCUIT);
+                    }
+
+                    _ = new Bay(types, _bayManager, _socketConn, element.Name, element.Column);
                 }
 
                 _bayManager.BayRepository.Resize();
@@ -458,6 +480,11 @@ public class MainFormController : IDisposable
     internal void Bt_inhibit_Click(object sender, EventArgs e)
     {
         _bayManager.Inhibit();
+    }
+
+    internal void ToggleCircuitBay(object sender, EventArgs e)
+    {
+        _socketConn.RequestCircuit(!_bayManager.CircuitActive);
     }
 
     public void Bt_cross_Click(object sender, EventArgs e)

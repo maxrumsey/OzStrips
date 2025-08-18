@@ -21,6 +21,7 @@
       <Element Name="Taxi" Column="1"/>
       <Element Name="Holding Point" Column="1"/>
       <Element Name="Runway" Column="2"/>
+      <Element Name="Circuit" Column="2"/>
       <Element Name="Departed" Column="2"/>
       <Element Name="Arrivals" Column="2"/>
     </LayoutDefinition>
@@ -83,6 +84,10 @@
       </Bay>
       <Bay Name="Departed">
         <Type>BAY_OUT</Type>
+        <Type>BAY_CIRCUIT</Type>
+      </Bay>
+      <Bay Name="Circuit" Circuit="true">
+        <Type>BAY_CIRCUIT</Type>
       </Bay>
       <Bay Name="Arrivals">
         <Type>BAY_ARRIVAL</Type>

@@ -553,8 +553,7 @@ public sealed class Strip
         { StripBay.BAY_CLEARED, StripBay.BAY_PUSHED },
         { StripBay.BAY_PUSHED, StripBay.BAY_TAXI },
         { StripBay.BAY_TAXI, StripBay.BAY_HOLDSHORT },
-        { StripBay.BAY_ARRIVAL, StripBay.BAY_RUNWAY },
-        { StripBay.BAY_RUNWAY, StripBay.BAY_ARRIVAL },
+        { StripBay.BAY_RUNWAY, StripBay.BAY_CIRCUIT },
     };
 
     /// <summary>
@@ -827,6 +826,10 @@ public sealed class Strip
                 {
                     nextBayFound = true;
                 }
+            }
+            else
+            {
+                break;
             }
         }
 
