@@ -22,7 +22,9 @@ Press the aircraft type to open the FDR Window, and press "Deactivate". Alternat
 Click on the aircraft's destination.
 
 ## What should I do with aircraft doing circuits?
-If they haven't created a flight plan, create a flight plan for them, so that they will have a squawk code. They should appear in your Arrivals or Preactive bay, but if they don't, click on their **vatSys strip** and press "FOR STP" in OzStrips. If they still don't appear, check to make sure that either the ADES or ADEP airport is your selected airport.
+If they haven't created a flight plan, create a flight plan for them, so that they will have a squawk code. They should appear in your Preactive bay, but if they don't, click on their **Ground Target** or **vatSys Strip** and click on the bay you want them to go into within OzStrips. If they still don't appear, check to make sure that either the ADES or ADEP airport is your selected airport.
+
+A Circuit bay can be toggled on using the Option within the **View** tool bar button.
 
 ## Another aerodrome controller is not using OzStrips, what should I do?
 If a position (SMC, ADC or ACD) is not using OzStrips, you will need to ensure your current view includes theirs. 
