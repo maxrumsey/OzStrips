@@ -54,6 +54,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.reloadStripToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reloadAerodromeListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gitHubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,7 +69,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.oneColumnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colDisabledToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tt_metar = new System.Windows.Forms.ToolTip(this.components);
-            this.reloadAerodromeListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pl_controlbar.SuspendLayout();
             this.pl_atis.SuspendLayout();
             this.pl_ad.SuspendLayout();
@@ -110,7 +110,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.bt_flip.TabStop = false;
             this.bt_flip.Text = "FLIP FLOP";
             this.bt_flip.UseVisualStyleBackColor = false;
-            this.bt_flip.Click += new System.EventHandler(this._mainFormController.FlipFlopStrip);
             // 
             // bt_bar
             // 
@@ -125,7 +124,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.bt_bar.TabStop = false;
             this.bt_bar.Text = "ADD BAR";
             this.bt_bar.UseVisualStyleBackColor = false;
-            this.bt_bar.Click += new System.EventHandler(this._mainFormController.BarCreatorClick);
             // 
             // pl_atis
             // 
@@ -162,7 +160,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.bt_cross.TabStop = false;
             this.bt_cross.Text = "XX CROSS XX";
             this.bt_cross.UseVisualStyleBackColor = false;
-            this.bt_cross.Click += new System.EventHandler(this._mainFormController.Bt_cross_Click);
             // 
             // bt_inhibit
             // 
@@ -177,7 +174,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.bt_inhibit.TabStop = false;
             this.bt_inhibit.Text = "INHIBIT";
             this.bt_inhibit.UseVisualStyleBackColor = false;
-            this.bt_inhibit.Click += new System.EventHandler(this._mainFormController.Bt_inhibit_Click);
             // 
             // pl_ad
             // 
@@ -282,7 +278,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.toolStripTextBox1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolStripTextBox1.Name = "toolStripTextBox1";
             this.toolStripTextBox1.Size = new System.Drawing.Size(100, 23);
-            this.toolStripTextBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this._mainFormController.AerodromeSelectorKeyDown);
             this.toolStripTextBox1.Tag = "permanent";
             // 
             // toolStripSeparator1
@@ -298,7 +293,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.ts_mode.Name = "ts_mode";
             this.ts_mode.Size = new System.Drawing.Size(92, 21);
             this.ts_mode.Text = "View Mode";
-            // 
             // 
             // debugToolStripMenuItem
             // 
@@ -318,7 +312,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(228, 22);
             this.toolStripMenuItem1.Text = "SignalR Log";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this._mainFormController.ShowMessageList_Click);
             // 
             // reloadStripToolStripMenuItem
             // 
@@ -326,6 +319,13 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.reloadStripToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
             this.reloadStripToolStripMenuItem.Text = "ReloadStrip";
             this.reloadStripToolStripMenuItem.Click += new System.EventHandler(this.ReloadStripItem);
+            // 
+            // reloadAerodromeListToolStripMenuItem
+            // 
+            this.reloadAerodromeListToolStripMenuItem.Name = "reloadAerodromeListToolStripMenuItem";
+            this.reloadAerodromeListToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
+            this.reloadAerodromeListToolStripMenuItem.Text = "ReloadAerodromeList";
+            this.reloadAerodromeListToolStripMenuItem.Click += new System.EventHandler(this.ReloadAerodromes);
             // 
             // aboutToolStripMenuItem
             // 
@@ -381,7 +381,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
-            this.settingsToolStripMenuItem.Click += new System.EventHandler(this._mainFormController.ShowSettings);
             // 
             // viewToolStripMenuItem
             // 
@@ -435,9 +434,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             // tt_metar
             // 
             this.tt_metar.ToolTipTitle = "METAR";
-            this.reloadAerodromeListToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
-            this.reloadAerodromeListToolStripMenuItem.Text = "ReloadAerodromeList";
-            this.reloadAerodromeListToolStripMenuItem.Click += new System.EventHandler(this.ReloadAerodromes);
             // 
             // MainForm
             // 
@@ -452,10 +448,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "OzStrips";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this._mainFormController.MainForm_FormClosed);
-            this.Load += new System.EventHandler(this._mainFormController.MainForm_Load);
-            this.ResizeEnd += new System.EventHandler(this._mainFormController.MainFormSizeChanged);
-            this.Resize += new System.EventHandler(this._mainFormController.MainForm_Resize);
             this.pl_controlbar.ResumeLayout(false);
             this.pl_controlbar.PerformLayout();
             this.pl_atis.ResumeLayout(false);

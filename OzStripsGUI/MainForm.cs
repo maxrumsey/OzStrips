@@ -32,6 +32,8 @@ public partial class MainForm : Form
         _mainFormController = new(this, readyForConnection);
 
         InitializeComponent();
+        InitialiseEvents();
+
         CreateMainFLP();
         _mainFormController.Initialize();
 
@@ -208,5 +210,21 @@ public partial class MainForm : Form
         }
 
         pl_controlbar.Padding = new Padding(0, 0, 0, margin);
+    }
+
+    private void InitialiseEvents()
+    {
+        bt_flip.Click += _mainFormController.FlipFlopStrip;
+        bt_bar.Click += _mainFormController.BarCreatorClick;
+        bt_cross.Click += _mainFormController.Bt_cross_Click;
+        bt_inhibit.Click += _mainFormController.Bt_inhibit_Click;
+        toolStripTextBox1.KeyPress += _mainFormController.AerodromeSelectorKeyDown;
+        toolStripMenuItem1.Click += _mainFormController.ShowMessageList_Click;
+        settingsToolStripMenuItem.Click += _mainFormController.ShowSettings;
+
+        FormClosed += _mainFormController.MainForm_FormClosed;
+        Load += _mainFormController.MainForm_Load;
+        ResizeEnd += _mainFormController.MainFormSizeChanged;
+        Resize += _mainFormController.MainForm_Resize;
     }
 }
