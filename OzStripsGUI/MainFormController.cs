@@ -14,6 +14,7 @@ public class MainFormController : IDisposable
 {
     private FormWindowState _lastState = FormWindowState.Minimized;
     private bool _postresizechecked = true;
+    private string _clientsOnline = string.Empty;
 
     private MainForm _mainForm;
     private readonly Timer _timer;
@@ -80,6 +81,8 @@ public class MainFormController : IDisposable
 
     private void AerodromeStateChanged(object sender, EventArgs e)
     {
+        SetClientList(_bayManager.AerodromeState.Connections);
+        _mainForm.StatusPanel.Invalidate();
         if (_bayManager.CircuitActive != _bayManager.AerodromeState.CircuitActive)
         {
             _bayManager.CircuitActive = _bayManager.AerodromeState.CircuitActive;
@@ -257,11 +260,30 @@ public class MainFormController : IDisposable
     }
 
     /// <summary>
+    /// Sets the list of online clients. Called from SocketConn.
+    /// </summary>
+    /// <param name="clients">The list of clients.</param>
+    public void SetClientList(List<string> clients)
+    {
+        clients = clients.ToList();
+        clients.Sort();
+        clients.Remove(Network.Callsign);
+        var str = String.Join("\n", clients);
+
+        if (str != _clientsOnline)
+        {
+            _clientsOnline = str;
+            _mainForm.ClientsToolTip.RemoveAll();
+            _mainForm.ClientsToolTip.SetToolTip(_mainForm.StatusPanel, str);
+        }
+    }
+
+    /// <summary>
     /// Sets the connection status, green is connected, orange/red if not.
     /// </summary>
     public void SetConnStatus()
     {
-        _mainForm.StatusPanel.BackColor = _socketConn.Connected ? Color.Green : Color.OrangeRed;
+        _mainForm.StatusPanel.Invalidate();
     }
 
     /// <summary>
@@ -552,6 +574,25 @@ public class MainFormController : IDisposable
         Util.SetEnvVar("SmartResize", cols);
         _mainForm.SetSmartResizeCheckBox();
         _bayManager.BayRepository.ReloadStrips(_socketConn);
+    }
+
+    public void ConnStatusPaint(object sender, PaintEventArgs e)
+    {
+        var borderWidth = 5;
+        var g = e.Graphics;
+        g.Clear(Color.Purple);
+        var coreBrush = new SolidBrush(_socketConn.Connected ? Color.Green : Color.OrangeRed);
+
+        var outerBrush = new SolidBrush(_bayManager.AerodromeState.Connections?.Count > 1 ? Color.Blue : coreBrush.Color);
+
+        var textBrush = new SolidBrush(Color.Black);
+        var font = new Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold);
+
+        g.FillRectangle(outerBrush, e.ClipRectangle);
+
+        g.FillRectangle(coreBrush, e.ClipRectangle.X + borderWidth, e.ClipRectangle.Y + borderWidth, e.ClipRectangle.Width - (borderWidth * 2), e.ClipRectangle.Height - (borderWidth * 2));
+
+        g.DrawString("CONN STAT", font, textBrush, e.ClipRectangle, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center});
     }
 
     public void FlipFlopStrip(object sender, EventArgs e)

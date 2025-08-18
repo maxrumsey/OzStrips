@@ -55,6 +55,8 @@ public partial class MainForm : Form
 
     public ToolTip MetarToolTip => tt_metar;
 
+    public ToolTip ClientsToolTip => tt_clients;
+
     public Panel StatusPanel => pl_stat;
 
     public Label ATISLabel => lb_atis;
@@ -222,7 +224,7 @@ public partial class MainForm : Form
         toolStripMenuItem1.Click += _mainFormController.ShowMessageList_Click;
         settingsToolStripMenuItem.Click += _mainFormController.ShowSettings;
         ts_toggleCircuit.Click += _mainFormController.ToggleCircuitBay;
-
+        pl_stat.Paint += _mainFormController.ConnStatusPaint;
         FormClosed += _mainFormController.MainForm_FormClosed;
         Load += _mainFormController.MainForm_Load;
         ResizeEnd += _mainFormController.MainFormSizeChanged;

@@ -558,11 +558,15 @@ public sealed class SocketConn : IDisposable
 
     private async Task ConnectionLost(Exception? error)
     {
-        Connected = false;
-        if (MainFormValid)
+        if (Connected && MainFormValid)
         {
+            // prevent spamming of this func.
+            Connected = false;
             _mainForm.Invoke(() => _mainForm.SetConnStatus());
         }
+
+        Connected = false;
+
 
         if (error is not null)
         {

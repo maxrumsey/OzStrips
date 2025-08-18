@@ -43,7 +43,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.pl_ad = new System.Windows.Forms.Panel();
             this.lb_ad = new System.Windows.Forms.Label();
             this.pl_stat = new System.Windows.Forms.Panel();
-            this.lb_stat = new System.Windows.Forms.Label();
             this.tb_Time = new System.Windows.Forms.TextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.ts_ad = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,6 +56,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.twoColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.oneColumnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colDisabledToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ts_toggleCircuit = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gitHubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -69,11 +69,10 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.reloadStripToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reloadAerodromeListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tt_metar = new System.Windows.Forms.ToolTip(this.components);
-            this.ts_toggleCircuit = new System.Windows.Forms.ToolStripMenuItem();
+            this.tt_clients = new System.Windows.Forms.ToolTip(this.components);
             this.pl_controlbar.SuspendLayout();
             this.pl_atis.SuspendLayout();
             this.pl_ad.SuspendLayout();
-            this.pl_stat.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -201,26 +200,11 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             // pl_stat
             // 
             this.pl_stat.BackColor = System.Drawing.Color.OrangeRed;
-            this.pl_stat.Controls.Add(this.lb_stat);
             this.pl_stat.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pl_stat.Location = new System.Drawing.Point(4, 3);
             this.pl_stat.Name = "pl_stat";
             this.pl_stat.Size = new System.Drawing.Size(96, 37);
             this.pl_stat.TabIndex = 1;
-            // 
-            // lb_stat
-            // 
-            this.lb_stat.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lb_stat.AutoSize = true;
-            this.lb_stat.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_stat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.lb_stat.Location = new System.Drawing.Point(7, 11);
-            this.lb_stat.Name = "lb_stat";
-            this.lb_stat.Size = new System.Drawing.Size(80, 17);
-            this.lb_stat.TabIndex = 0;
-            this.lb_stat.Text = "CONN STAT";
             // 
             // tb_Time
             // 
@@ -342,6 +326,12 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.colDisabledToolStripMenuItem.Text = "Disabled";
             this.colDisabledToolStripMenuItem.Click += new System.EventHandler(this.ColDisabledToolStripMenuItem_Click);
             // 
+            // ts_toggleCircuit
+            // 
+            this.ts_toggleCircuit.Name = "ts_toggleCircuit";
+            this.ts_toggleCircuit.Size = new System.Drawing.Size(220, 22);
+            this.ts_toggleCircuit.Text = "Toggle Circuit Bay";
+            // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -432,11 +422,9 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             // 
             this.tt_metar.ToolTipTitle = "METAR";
             // 
-            // ts_toggleCircuit
+            // tt_clients
             // 
-            this.ts_toggleCircuit.Name = "ts_toggleCircuit";
-            this.ts_toggleCircuit.Size = new System.Drawing.Size(220, 22);
-            this.ts_toggleCircuit.Text = "Toggle Circuit Bay";
+            this.tt_clients.ToolTipTitle = "Online Clients";
             // 
             // MainForm
             // 
@@ -455,8 +443,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.pl_controlbar.PerformLayout();
             this.pl_atis.ResumeLayout(false);
             this.pl_ad.ResumeLayout(false);
-            this.pl_stat.ResumeLayout(false);
-            this.pl_stat.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -469,7 +455,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
         private System.Windows.Forms.Panel pl_controlbar;
         private System.Windows.Forms.TextBox tb_Time;
         private System.Windows.Forms.Panel pl_stat;
-        private System.Windows.Forms.Label lb_stat;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.Panel pl_ad;
         private System.Windows.Forms.Label lb_ad;
@@ -503,5 +488,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
         private Button bt_flip;
         private ToolStripMenuItem reloadAerodromeListToolStripMenuItem;
         private ToolStripMenuItem ts_toggleCircuit;
+        private ToolTip tt_clients;
     }
 }
