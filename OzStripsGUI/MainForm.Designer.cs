@@ -50,7 +50,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.modifyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.ts_mode = new System.Windows.Forms.ToolStripMenuItem();
             this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.reloadStripToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,6 +62,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ts_mode = new System.Windows.Forms.ToolStripMenuItem();
             this.smartResizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.threeColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.twoColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -242,11 +242,9 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.menuStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ts_ad,
-            this.ts_mode,
-            this.debugToolStripMenuItem,
-            this.aboutToolStripMenuItem,
-            this.helpToolStripMenuItem,
-            this.viewToolStripMenuItem});
+            this.viewToolStripMenuItem,
+            this.settingsToolStripMenuItem,
+            this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1784, 25);
@@ -285,14 +283,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(157, 6);
             this.toolStripSeparator1.Tag = "permanent";
-            // 
-            // ts_mode
-            // 
-            this.ts_mode.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ts_mode.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.ts_mode.Name = "ts_mode";
-            this.ts_mode.Size = new System.Drawing.Size(92, 21);
-            this.ts_mode.Text = "View Mode";
             // 
             // debugToolStripMenuItem
             // 
@@ -342,13 +332,14 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.gitHubToolStripMenuItem,
             this.documentationToolStripMenuItem,
             this.changelogToolStripMenuItem,
+            this.aboutToolStripMenuItem,
             this.toolStripSeparator2,
-            this.settingsToolStripMenuItem});
+            this.debugToolStripMenuItem});
             this.helpToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.helpToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(52, 21);
-            this.helpToolStripMenuItem.Text = "Help";
+            this.helpToolStripMenuItem.Text = "Info";
             // 
             // gitHubToolStripMenuItem
             // 
@@ -379,18 +370,29 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.settingsToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             // 
             // viewToolStripMenuItem
             // 
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ts_mode,
             this.smartResizeToolStripMenuItem});
             this.viewToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.viewToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(52, 21);
             this.viewToolStripMenuItem.Text = "View";
+            // 
+            // ts_mode
+            // 
+            this.ts_mode.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ts_mode.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
+            this.ts_mode.Name = "ts_mode";
+            this.ts_mode.Size = new System.Drawing.Size(180, 22);
+            this.ts_mode.Text = "View Mode";
             // 
             // smartResizeToolStripMenuItem
             // 
@@ -400,7 +402,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.oneColumnToolStripMenuItem,
             this.colDisabledToolStripMenuItem});
             this.smartResizeToolStripMenuItem.Name = "smartResizeToolStripMenuItem";
-            this.smartResizeToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.smartResizeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.smartResizeToolStripMenuItem.Text = "Smart Resize";
             // 
             // threeColumnsToolStripMenuItem
