@@ -290,15 +290,12 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.toolStripMenuItem1,
             this.reloadStripToolStripMenuItem,
             this.reloadAerodromeListToolStripMenuItem});
-            this.debugToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.debugToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
             this.debugToolStripMenuItem.Size = new System.Drawing.Size(60, 21);
             this.debugToolStripMenuItem.Text = "Debug";
             // 
             // toolStripMenuItem1
             // 
-            this.toolStripMenuItem1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(228, 22);
             this.toolStripMenuItem1.Text = "SignalR Log";
@@ -319,8 +316,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             // 
             // aboutToolStripMenuItem
             // 
-            this.aboutToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.aboutToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(60, 21);
             this.aboutToolStripMenuItem.Text = "About";
@@ -388,8 +383,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             // 
             // ts_mode
             // 
-            this.ts_mode.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ts_mode.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.ts_mode.Name = "ts_mode";
             this.ts_mode.Size = new System.Drawing.Size(180, 22);
             this.ts_mode.Text = "View Mode";
