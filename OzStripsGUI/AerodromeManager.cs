@@ -101,6 +101,7 @@ public class AerodromeManager
         MMI.SectorsControlledChanged += SectorsChanged;
 
         LoadSettings();
+        InhibitVersionCheck = Settings?.InhibitVersionCheck ?? false;
     }
 
     public void Initialize()
