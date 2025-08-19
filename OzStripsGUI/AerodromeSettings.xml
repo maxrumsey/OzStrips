@@ -17,10 +17,10 @@
     <LayoutDefinition Name="All">
       <Element Name="Preactive" Column="0"/>
       <Element Name="Cleared" Column="0"/>
-      <Element Name="Pushback" Column="1"/>
+      <Element Name="Pushback" Column="0"/>
       <Element Name="Taxi" Column="1"/>
       <Element Name="Holding Point" Column="1"/>
-      <Element Name="Runway" Column="2"/>
+      <Element Name="Runway" Column="1"/>
       <Element Name="Circuit" Column="2"/>
       <Element Name="Departed" Column="2"/>
       <Element Name="Arrivals" Column="2"/>
@@ -50,7 +50,7 @@
       <Element Name="Pushback" Column="0"/>
       <Element Name="Taxi" Column="1"/>
       <Element Name="Holding Point" Column="1"/>
-      <Element Name="Runway" Column="2"/>
+      <Element Name="Runway" Column="1"/>
       <Element Name="Circuit" Column="2"/>
       <Element Name="Departed" Column="2"/>
       <Element Name="Arrivals" Column="2"/>
