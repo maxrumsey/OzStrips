@@ -28,9 +28,12 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
     private int _bayAmount;
 
     /// <summary>
-    /// Gets or sets the number of total bays possible.
+    /// Gets the number of total bays possible.
     /// </summary>
-    public int BayNum { get; set; }
+    public int BayNum
+    {
+        get => Bays.Count;
+    }
 
     /// <summary>
     /// Gets the list of bays.
@@ -240,8 +243,8 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
     /// <summary>
     /// Resizes the control.
     /// </summary>
-    /// <param name="triggerRelayout">Whether or not to trigger a relayout of bays.</param>
-    public void Resize(bool triggerRelayout = false)
+    /// <param name="triggerRelayout">Whether or not to force a relayout of bays.</param>
+    public void ConfigureAndSizeFLPs(bool triggerRelayout = false)
     {
         if (main == null)
         {
@@ -263,6 +266,7 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
             _currentLayout?.Invoke(this, EventArgs.Empty);
         }
 
+        // Places a vertical scroll bar if needed.
         ResizeStripBays();
 
         var y_main = main.Size.Height;
@@ -295,7 +299,12 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
             return;
         }
 
-        var x_each = (main.Size.Width - (main.VerticalScroll.Visible ? 17 : 0)) / _currentLayoutIndex;
+        // See if we need a horizontal scroll bar.
+        main.PerformLayout();
+
+        var vertScrollVisible = main.VerticalScroll.Visible;
+
+        var x_each = (main.Size.Width - (vertScrollVisible ? 17 : 0)) / _currentLayoutIndex;
 
         foreach (var panel in _flpVerticalBoards)
         {
@@ -313,14 +322,17 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
     /// </summary>
     public void ResizeStripBays()
     {
+        // If no FLPs exist
         if (_currentLayoutIndex == 0)
         {
             return;
         }
 
         var smartResize = OzStripsSettings.Default.SmartResize >= _currentLayoutIndex;
+
         var yMain = main.Size.Height;
         var xEach = (main.Size.Width - (main.VerticalScroll.Visible ? 17 : 0)) / _currentLayoutIndex;
+
         var allocatedSpace = new int[_currentLayoutIndex];
 
         foreach (var bay in Bays)
@@ -335,18 +347,23 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
 
             var height = (yMain - 4) / childnum;
 
-            var smartResizeMaxHeight = smartResize ? 70 : 300;
-            if (height < smartResizeMaxHeight)
+            var minBayHeight = smartResize ? 70 : 200;
+
+            // if height less than this, set to this.
+            if (height < minBayHeight)
             {
-                height = smartResizeMaxHeight;
+                height = minBayHeight;
             }
 
             var reqheight = bay.GetRequestedHeight();
 
             if (smartResize && reqheight > 0)
             {
+                // 36 = header height.
                 height = 36 + reqheight;
 
+                // taking up more than half the FLP height? cut it down.
+                // rest of space will be allocated during additional space allocation.
                 if (height > (yMain - 4) / 2)
                 {
                     height = (yMain - 4) / 2;
@@ -363,31 +380,34 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
 
         var max = allocatedSpace.Max();
 
-        if (smartResize)
+        /*
+         * To avoid ugly situations where one FLP is much larger than the others, reallocate the remaining space.
+         */
+        for (var i = 0; i < _currentLayoutIndex; i++)
         {
-            for (var i = 0; i < _currentLayoutIndex; i++)
+            // Remaining space allowed to allocate to ensure uniformity.
+            var remaining = (max > yMain ? max : yMain) - 4 - allocatedSpace[i];
+
+            // If we have overallocated? or no bays exist.
+            if (remaining <= 0 || _flpVerticalBoards[i].Controls.Count == 0)
             {
-                var remaining = (max > yMain ? max : yMain) - 4 - allocatedSpace[i];
+                continue;
+            }
 
-                if (remaining <= 0 || _flpVerticalBoards[i].Controls.Count == 0)
-                {
-                    continue;
-                }
+            var each = remaining / _flpVerticalBoards[i].Controls.Count;
 
-                var each = remaining / _flpVerticalBoards[i].Controls.Count;
+            // Divvy up remaining space.
+            foreach (var bay in Bays.Where(x => x.VerticalBoardNumber == i))
+            {
+                bay.ChildPanel.Size = new System.Drawing.Size(xEach - 4, bay.ChildPanel.Size.Height + each);
+                remaining -= each;
+            }
 
-                foreach (var bay in Bays.Where(x => x.VerticalBoardNumber == i))
-                {
-                    bay.ChildPanel.Size = new System.Drawing.Size(xEach - 4, bay.ChildPanel.Size.Height + each);
-                    remaining -= each;
-                }
+            var last_bay = Bays.Find(x => x.VerticalBoardNumber == i);
 
-                var last_bay = Bays.Find(x => x.VerticalBoardNumber == i);
-
-                if (last_bay is not null)
-                {
-                    last_bay.ChildPanel.Size = new System.Drawing.Size(xEach - 4, last_bay.ChildPanel.Size.Height + remaining);
-                }
+            if (last_bay is not null)
+            {
+                last_bay.ChildPanel.Size = new System.Drawing.Size(xEach - 4, last_bay.ChildPanel.Size.Height + remaining);
             }
         }
 

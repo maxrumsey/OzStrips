@@ -75,7 +75,7 @@ public class MainFormController : IDisposable
 
         AerodromeListChanged(this, EventArgs.Empty);
 
-        _bayManager.BayRepository.Resize();
+        _bayManager.BayRepository.ConfigureAndSizeFLPs();
         _mainForm.AerodromeManager.AerodromeListChanged += AerodromeListChanged;
     }
 
@@ -106,7 +106,6 @@ public class MainFormController : IDisposable
             var action = (object sender, EventArgs e) =>
             {
                 _bayManager.BayRepository.WipeBays();
-                _bayManager.BayRepository.BayNum = layout.Elements.Length;
 
                 foreach (var element in layout.Elements)
                 {
@@ -128,7 +127,7 @@ public class MainFormController : IDisposable
                     _ = new Bay(types, _bayManager, _socketConn, element.Name, element.Column);
                 }
 
-                _bayManager.BayRepository.Resize();
+                _bayManager.BayRepository.ConfigureAndSizeFLPs();
                 _bayManager.BayRepository.ReloadStrips(_socketConn);
             };
 
@@ -189,8 +188,8 @@ public class MainFormController : IDisposable
     /// </summary>
     public void ForceResize()
     {
-        _bayManager.BayRepository.Resize(true);
-        _bayManager.BayRepository.Resize(); // double resize to take into account addition / subtraction of scroll bars.
+        _bayManager.BayRepository.ConfigureAndSizeFLPs(true);
+        _bayManager.BayRepository.ConfigureAndSizeFLPs(); // double resize to take into account addition / subtraction of scroll bars.
     }
 
     /// <summary>
@@ -468,7 +467,7 @@ public class MainFormController : IDisposable
         if (!_postresizechecked)
         {
             _postresizechecked = true;
-            _bayManager.BayRepository.Resize();
+            _bayManager.BayRepository.ConfigureAndSizeFLPs();
         }
 
         if (!_mainForm.IsDisposed)
@@ -484,7 +483,7 @@ public class MainFormController : IDisposable
     internal void MainFormSizeChanged(object sender, EventArgs e)
     {
         _postresizechecked = false;
-        _bayManager?.BayRepository.Resize();
+        _bayManager?.BayRepository.ConfigureAndSizeFLPs();
         _mainForm.SetControlBarScrollBar();
     }
 
@@ -564,7 +563,7 @@ public class MainFormController : IDisposable
         {
             _lastState = _mainForm.WindowState;
             _postresizechecked = false;
-            _bayManager?.BayRepository.Resize();
+            _bayManager?.BayRepository.ConfigureAndSizeFLPs();
             _mainForm.SetControlBarScrollBar();
         }
     }
