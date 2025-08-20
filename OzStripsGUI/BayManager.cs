@@ -299,11 +299,16 @@ public class BayManager
     /// </summary>
     /// <param name="name">The name of the aerodrome.</param>
     /// <param name="socketConn">The socket connection.</param>
-    public void SetAerodrome(string name, SocketConn socketConn)
+    public void PurgeDataAndSetNewAerodrome(string name, SocketConn socketConn)
     {
         AerodromeName = name;
 
-        // todo: remove circuit bay if enabled.
+        if (CircuitActive)
+        {
+            CircuitActive = false;
+            BayRepository.ConfigureAndSizeFLPs(true);
+        }
+
         AerodromeState = new()
         {
             AerodromeCode = name,

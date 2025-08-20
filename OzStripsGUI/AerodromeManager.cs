@@ -110,7 +110,7 @@ public class AerodromeManager
         SectorsChanged(this, EventArgs.Empty);
     }
 
-    public void AerodromeChanged(string aerodrome)
+    public void ConfigureAerodromeListForNewAerodrome(string aerodrome)
     {
         var type = GetAerodromeType(aerodrome);
 
