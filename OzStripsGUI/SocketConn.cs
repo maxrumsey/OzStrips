@@ -565,15 +565,16 @@ public sealed class SocketConn : IDisposable
             _mainForm.Invoke(() => _mainForm.SetConnStatus());
         }
 
+        // This exists on the off chance we are connected but main form is not valid.
         Connected = false;
-
 
         if (error is not null)
         {
             AddMessage("server conn lost - " + error.Message);
         }
 
-        if (_connection.State == HubConnectionState.Disconnected)
+        // Don't try to connect if we are not connected to the network.
+        if (_connection.State == HubConnectionState.Disconnected && Network.IsConnected)
         {
             await Connect();
         }
