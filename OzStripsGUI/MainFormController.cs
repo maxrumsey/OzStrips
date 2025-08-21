@@ -619,8 +619,6 @@ public class MainFormController : IDisposable
 
     public void MainForm_FormClosed(object sender, FormClosedEventArgs e)
     {
-        _socketConn.Close();
-        _socketConn.Dispose();
         _mainForm.AerodromeManager.PreviouslyClosed = true;
     }
 
