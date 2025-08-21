@@ -462,6 +462,26 @@ public class MainFormController : IDisposable
         _mainForm.ATISLabel.Text = code;
     }
 
+    public static List<BaseModal> GetOpenModals()
+    {
+        var list = new List<BaseModal>();
+
+        foreach (var form in Application.OpenForms)
+        {
+            if (form is BaseModal modal)
+            {
+                list.Add(modal);
+            }
+        }
+
+        return list;
+    }
+
+    public static bool IsSettingsOpen()
+    {
+        return GetOpenModals().Any(x => x.Child is SettingsWindowControl);
+    }
+
     private void UpdateTimer(object sender, EventArgs e)
     {
         if (!_mainForm.Visible)
@@ -611,6 +631,11 @@ public class MainFormController : IDisposable
     /// <param name="e">Args.</param>
     public void ShowSettings(object sender, EventArgs e)
     {
+        if (IsSettingsOpen())
+        {
+            return;
+        }
+
         var modalChild = new SettingsWindowControl(_socketConn, _mainForm.AerodromeManager.ManuallySetAerodromes);
         var bm = new BaseModal(modalChild, "OzStrips Settings");
         bm.ReturnEvent += modalChild.ModalReturned;
