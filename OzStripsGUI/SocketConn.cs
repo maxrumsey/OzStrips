@@ -558,7 +558,12 @@ public sealed class SocketConn : IDisposable
 
     private async Task ConnectionLost(Exception? error)
     {
-        if (Connected && MainFormValid)
+        if (_isDisposed)
+        {
+            return;
+        }
+
+        if (Connected)
         {
             // prevent spamming of this func.
             Connected = false;

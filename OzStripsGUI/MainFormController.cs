@@ -79,6 +79,11 @@ public class MainFormController : IDisposable
         _mainForm.AerodromeManager.AerodromeListChanged += AerodromeListChanged;
     }
 
+    public void FormClosing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+        Dispose();
+    }
+
     private void AerodromeStateChanged(object sender, EventArgs e)
     {
         SetClientList(_bayManager.AerodromeState.Connections);
@@ -623,6 +628,7 @@ public class MainFormController : IDisposable
     {
         _timer?.Dispose();
         _mainForm.AerodromeManager.AerodromeListChanged -= AerodromeListChanged;
+        _socketConn.Dispose();
     }
 
     private void AerodromeListChanged(object sender, EventArgs e)
