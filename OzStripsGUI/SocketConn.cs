@@ -351,7 +351,7 @@ public sealed class SocketConn : IDisposable
     /// Sets the aerodrome based on the bay manager.
     /// </summary>
     /// <returns>Task.</returns>
-    public async Task SetAerodrome()
+    public async Task SubscribeToAerodrome()
     {
         _freshClient = true;
         _oneMinTimer = new()
@@ -390,7 +390,7 @@ public sealed class SocketConn : IDisposable
             return;
         }
 
-        await SetAerodrome();
+        await SubscribeToAerodrome();
         if (_connection.State == HubConnectionState.Disconnected && MainFormController.ReadyForConnection)
         {
             Connect();
@@ -537,7 +537,7 @@ public sealed class SocketConn : IDisposable
         if (Network.IsConnected)
         {
             Connected = true;
-            await SetAerodrome();
+            await SubscribeToAerodrome();
 
             if (MainFormValid)
             {
@@ -568,6 +568,9 @@ public sealed class SocketConn : IDisposable
             // prevent spamming of this func.
             Connected = false;
             _mainForm.Invoke(() => _mainForm.SetConnStatus());
+
+            // Delete circuit bay, once.
+            MMI.InvokeOnGUI(() => _mainForm.SetAerodrome(_bayManager.AerodromeName));
         }
 
         // This exists on the off chance we are connected but main form is not valid.

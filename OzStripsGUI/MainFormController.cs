@@ -207,11 +207,11 @@ public class MainFormController : IDisposable
         {
             if (_bayManager != null)
             {
-                _bayManager.SetAerodrome(name, _socketConn);
-                _socketConn.SetAerodrome();
+                _bayManager.PurgeDataAndSetNewAerodrome(name, _socketConn);
+                _socketConn.SubscribeToAerodrome();
                 _mainForm.AerodromeLabel.Text = name;
                 SetATISCode("Z");
-                _mainForm.AerodromeManager.AerodromeChanged(name);
+                _mainForm.AerodromeManager.ConfigureAerodromeListForNewAerodrome(name);
             }
         }
         catch (Exception ex)
