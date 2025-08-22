@@ -5,11 +5,21 @@
 - Added auto-open feature when moving to a tower position.
 - Added toggle-able Circuit bay.
 - Added ability to see online controllers.
+- OzStrips grabs focus on mouse entering the form in a more smart manner.
+
+### Bugfixes
+- Prevent issues with multiple modals showing up at once.
+- Made SmartResized=Fisabled a lot more functional.
+- Various performance improvements on resize / aerodrome change etc.
+- Prevent improper socket client behaviour when we disconnect from VATSIM.
+
 ### Misc changes
 - Refactored GUI supporting code out of the MainForm class. General cleanup.
 - Rewrote global aerodrome state management.
 - Added ability to customise bay layouts.
 - Refreshed menu strip view options.
+- Various cleanups of how aerodrome changes are managed.
+- Version checking / warning can be disabled by profile.
 
 ## v0.6.1
 ### Features
