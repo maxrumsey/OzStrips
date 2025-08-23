@@ -40,6 +40,12 @@ internal class BarView(BayRenderController bayRC) : IRenderedStripItem
             return;
         }
 
+        if (MainFormController.ControlHeld)
+        {
+            _bayRenderController.Bay.BayManager.DropStripBelow(Item);
+            return;
+        }
+
         _bayRenderController.Bay.BayManager.TogglePickedStripItem(Item, _bayRenderController.Bay);
     }
 

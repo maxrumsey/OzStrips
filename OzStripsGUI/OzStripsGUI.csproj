@@ -2,6 +2,7 @@
     <PropertyGroup>
         <TargetFrameworks>net481</TargetFrameworks>
         <UseWindowsForms>true</UseWindowsForms>
+        <UseWPF>true</UseWPF>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
         <EmbeddedResourceUseDependentUponConvention>true</EmbeddedResourceUseDependentUponConvention>
         <PlatformTarget>x86</PlatformTarget>

@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Security.Policy;
 using System.Windows.Forms;
+using System.Windows.Input;
 using System.Xml.Linq;
 using vatsys;
 
@@ -30,6 +32,8 @@ public class MainFormController : IDisposable
     /// Gets whether or not a connection can be made to the server.
     /// </summary>
     public static bool ReadyForConnection => Instance?._readyForConnection ?? false;
+
+    public static bool ControlHeld => Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     public MainFormController(MainForm form, bool readyToConnect)

@@ -294,6 +294,25 @@ public class BayManager
         }
     }
 
+    public void DropStripBelow(StripListItem targetItem)
+    {
+        var newBay = BayRepository.FindBay(targetItem);
+
+        if (newBay is null || PickedStrip is null)
+        {
+            return;
+        }
+
+        var strip = PickedStrip;
+        var position = newBay.Strips.FindIndex(x => x == targetItem);
+
+        DropStrip(newBay);
+
+        var stripListItem = newBay.GetListItem(strip);
+
+        newBay.ChangeStripPositionAbs(stripListItem, position);
+    }
+
     /// <summary>
     /// Sets the aerodrome. Reinitialises various classes.
     /// </summary>
