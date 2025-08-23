@@ -62,6 +62,24 @@
       <Element Name="Departed" Column="2"/>
       <Element Name="Arrivals" Column="2"/>
     </LayoutDefinition>
+    <!-- METRO D -->
+    <LayoutDefinition Name="All" Type="D">
+      <Element Name="Preactive" Column="0"/>
+      <Element Name="Taxi" Column="0"/>
+      <Element Name="Holding Point" Column="1"/>
+      <Element Name="Runway" Column="1"/>
+      <Element Name="Circuit" Column="2"/>
+      <Element Name="Arrivals" Column="2"/>
+    </LayoutDefinition>
+    <!-- PROC -->
+    <LayoutDefinition Name="All" Type="Proc">
+      <Element Name="Preactive" Column="0"/>
+      <Element Name="Taxi" Column="0"/>
+      <Element Name="Holding Point" Column="1"/>
+      <Element Name="Runway" Column="1"/>
+      <Element Name="Active" Column="2"/>
+      <Element Name="Pending Arrivals" Column="2"/>
+    </LayoutDefinition>
   </LayoutDefinitions>
   <BayTypes>
     <!-- RADAR TOWER / DEFAULT -->
@@ -95,10 +113,79 @@
         <Type>BAY_ARRIVAL</Type>
       </Bay>
     </BayType>
+    <!-- METROD -->
+    <BayType Type="D">
+      <Bay Name="Preactive">
+        <Type>BAY_PREA</Type>
+      </Bay>
+      <Bay Name="Taxi">
+        <Type>BAY_CLEARED</Type>
+        <Type>BAY_PUSHED</Type>
+        <Type>BAY_TAXI</Type>
+      </Bay>
+      <Bay Name="Holding Point">
+        <Type>BAY_HOLDSHORT</Type>
+      </Bay>
+      <Bay Name="Runway">
+        <Type>BAY_RUNWAY</Type>
+      </Bay>
+      <Bay Name="Circuit">
+        <Type>BAY_CIRCUIT</Type>
+        <Type>BAY_OUT</Type>
+      </Bay>
+      <Bay Name="Arrivals">
+        <Type>BAY_ARRIVAL</Type>
+      </Bay>
+    </BayType>
+    <!-- RADAR TOWER / DEFAULT -->
+    <BayType Type="Proc">
+      <Bay Name="Preactive">
+        <Type>BAY_PREA</Type>
+      </Bay>
+      <Bay Name="Taxi">
+        <Type>BAY_CLEARED</Type>
+        <Type>BAY_PUSHED</Type>
+        <Type>BAY_TAXI</Type>
+      </Bay>
+      <Bay Name="Holding Point">
+        <Type>BAY_HOLDSHORT</Type>
+      </Bay>
+      <Bay Name="Runway">
+        <Type>BAY_RUNWAY</Type>
+      </Bay>
+      <Bay Name="Active">
+        <Type>BAY_CIRCUIT</Type>
+        <Type>BAY_OUT</Type>
+      </Bay>
+      <Bay Name="Pending Arrivals">
+        <Type>BAY_ARRIVAL</Type>
+      </Bay>
+    </BayType>
   </BayTypes>
   <AerodromeLists>
-    <AerodromeList Type="MetroD">
+    <AerodromeList Type="D">
+      <Aerodrome>YBAF</Aerodrome>
+      <Aerodrome>YMAV</Aerodrome>
+      <Aerodrome>YSBK</Aerodrome>
+      <Aerodrome>YSCN</Aerodrome>
+      <Aerodrome>YMHB</Aerodrome>
+      <Aerodrome>YPJT</Aerodrome>
+      <Aerodrome>YMLT</Aerodrome>
+      <Aerodrome>YBMK</Aerodrome>
+      <Aerodrome>YPPF</Aerodrome>
+      <Aerodrome>YBRK</Aerodrome>
       <Aerodrome>YMMB</Aerodrome>
+    </AerodromeList>
+    <AerodromeList Type="Proc">
+      <Aerodrome>YMAY</Aerodrome>
+      <Aerodrome>YBAS</Aerodrome>
+      <Aerodrome>YBRM</Aerodrome>
+      <Aerodrome>YCFS</Aerodrome>
+      <Aerodrome>YBHM</Aerodrome>
+      <Aerodrome>YPKA</Aerodrome>
+      <Aerodrome>YBSU</Aerodrome>
+      <Aerodrome>YSTW</Aerodrome>
+      <Aerodrome>YPWR</Aerodrome>
     </AerodromeList>
   </AerodromeLists>
 </AerodromeSettings>

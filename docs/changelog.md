@@ -6,12 +6,14 @@
 - Added toggle-able Circuit bay.
 - Added ability to see online controllers.
 - OzStrips grabs focus on mouse entering the form in a more smart manner.
+- Added ability to Ctrl-Click a strip to move it under a bar.
 
 ### Bugfixes
 - Prevent issues with multiple modals showing up at once.
 - Made SmartResized=Fisabled a lot more functional.
 - Various performance improvements on resize / aerodrome change etc.
 - Prevent improper socket client behaviour when we disconnect from VATSIM.
+- Fixed bug where strip could be accidentally forced when trying to drop a bar.
 
 ### Misc changes
 - Refactored GUI supporting code out of the MainForm class. General cleanup.

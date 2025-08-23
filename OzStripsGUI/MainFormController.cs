@@ -104,6 +104,9 @@ public class MainFormController : IDisposable
         _mainForm.ViewListToolStrip.DropDownItems.Clear();
 
         var layouts = _mainForm.AerodromeManager.ReturnLayouts(_mainForm.AerodromeManager.GetAerodromeType(_bayManager.AerodromeName));
+        var bays = layouts.First(x => x.Name == "All").Elements.Select(x => x.Bay);
+
+        var circuitBayDefined = bays.Any(x => x.Circuit);
 
         foreach (var layout in layouts)
         {
@@ -128,7 +131,7 @@ public class MainFormController : IDisposable
                     var types = element.Bay.Types.ToList();
 
                     // If circuit mode is enabled, don't have duplicate circuit bays
-                    if (_bayManager.CircuitActive && !element.Bay.Circuit)
+                    if (_bayManager.CircuitActive && !element.Bay.Circuit && circuitBayDefined)
                     {
                         types.Remove(StripBay.BAY_CIRCUIT);
                     }
