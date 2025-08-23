@@ -389,6 +389,13 @@ public class BayManager
         }
         else
         {
+            // Prevent circumstance where strip remains picked when picking a bar.
+            // Hacky. :(
+            if (PickedStripItem != null)
+            {
+                RemovePicked(true, true);
+            }
+
             SetPickedStripItem(item, bay);
         }
     }
