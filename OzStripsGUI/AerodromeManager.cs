@@ -85,6 +85,7 @@ public class AerodromeManager
             }
 
             completeList.Sort();
+            completeList = completeList.Distinct().ToList();
 
             return completeList;
         }
