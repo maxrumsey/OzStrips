@@ -57,6 +57,8 @@ public partial class MainForm : Form
 
     public ToolTip ClientsToolTip => tt_clients;
 
+    public ToolStripMenuItem ToggleCircuitToolStrip => ts_toggleCircuit;
+
     public Panel StatusPanel => pl_stat;
 
     public Label ATISLabel => lb_atis;

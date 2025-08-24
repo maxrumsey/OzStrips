@@ -183,6 +183,7 @@ public class MainFormController : IDisposable
     {
         try
         {
+            SetCircuitToolStripStatus();
             _readyForConnection = readyForConnection;
             if (_readyForConnection)
             {
@@ -215,6 +216,7 @@ public class MainFormController : IDisposable
             if (_bayManager != null)
             {
                 _bayManager.PurgeDataAndSetNewAerodrome(name, _socketConn);
+                SetCircuitToolStripStatus();
                 _socketConn.SubscribeToAerodrome();
                 _mainForm.AerodromeLabel.Text = name;
                 SetATISCode("Z");
@@ -605,6 +607,14 @@ public class MainFormController : IDisposable
         Util.SetEnvVar("SmartResize", cols);
         _mainForm.SetSmartResizeCheckBox();
         _bayManager.BayRepository.ReloadStrips(_socketConn);
+    }
+
+    public void SetCircuitToolStripStatus()
+    {
+        var isRadarTower = String.IsNullOrEmpty(_mainForm.AerodromeManager.GetAerodromeType(_bayManager.AerodromeName));
+        var canSend = _socketConn.HaveSendPerms;
+
+        _mainForm.ToggleCircuitToolStrip.Enabled = isRadarTower && canSend;
     }
 
     public void ConnStatusPaint(object sender, PaintEventArgs e)

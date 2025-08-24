@@ -219,6 +219,14 @@ public sealed class SocketConn : IDisposable
     /// </summary>
     public bool Connected { get; set; }
 
+    public bool HaveSendPerms
+    {
+        get
+        {
+            return Network.Me.IsRealATC || _isDebug;
+        }
+    }
+
     private static bool MainFormValid => MainFormController.Instance?.IsDisposed == false && MainFormController.Instance.Visible;
 
     /// <summary>
