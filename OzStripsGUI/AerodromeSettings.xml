@@ -74,8 +74,23 @@
     <!-- PROC -->
     <LayoutDefinition Name="All" Type="Proc">
       <Element Name="Preactive" Column="0"/>
-      <Element Name="Taxi" Column="0"/>
+      <Element Name="Cleared" Column="0"/>
+      <Element Name="Taxi" Column="1"/>
       <Element Name="Holding Point" Column="1"/>
+      <Element Name="Runway" Column="1"/>
+      <Element Name="Active" Column="2"/>
+      <Element Name="Pending Arrivals" Column="2"/>
+    </LayoutDefinition>
+    <LayoutDefinition Name="SMC" Type="Proc">
+      <Element Name="Preactive" Column="0"/>
+      <Element Name="Cleared" Column="0"/>
+      <Element Name="Taxi" Column="1"/>
+      <Element Name="Holding Point" Column="2"/>
+      <Element Name="Runway" Column="2"/>
+    </LayoutDefinition>
+    <LayoutDefinition Name="ADC" Type="Proc">
+      <Element Name="Taxi" Column="0"/>
+      <Element Name="Holding Point" Column="0"/>
       <Element Name="Runway" Column="1"/>
       <Element Name="Active" Column="2"/>
       <Element Name="Pending Arrivals" Column="2"/>
@@ -137,13 +152,15 @@
         <Type>BAY_ARRIVAL</Type>
       </Bay>
     </BayType>
-    <!-- RADAR TOWER / DEFAULT -->
+    <!-- PROC -->
     <BayType Type="Proc">
       <Bay Name="Preactive">
         <Type>BAY_PREA</Type>
       </Bay>
-      <Bay Name="Taxi">
+      <Bay Name="Cleared">
         <Type>BAY_CLEARED</Type>
+      </Bay>
+      <Bay Name="Taxi">
         <Type>BAY_PUSHED</Type>
         <Type>BAY_TAXI</Type>
       </Bay>
