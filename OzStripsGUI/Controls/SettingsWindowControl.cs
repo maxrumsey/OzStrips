@@ -79,7 +79,7 @@ public partial class SettingsWindowControl : UserControl
             cb_open.Items.Add(option);
         }
 
-        cb_open.SelectedIndex = OzStripsSettings.Default.AutoOpenBehaviour;
+        cb_open.SelectedIndex = OzStripsSettings.Default.AutoOpenBehaviour > -1 ? OzStripsSettings.Default.AutoOpenBehaviour : 0;
     }
 
     /// <summary>
