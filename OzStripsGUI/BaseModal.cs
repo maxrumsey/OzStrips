@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace MaxRumsey.OzStripsPlugin.Gui;
+namespace MaxRumsey.OzStripsPlugin.GUI;
 
 /// <summary>
 /// A base modal form.

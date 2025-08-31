@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MaxRumsey.OzStripsPlugin.Gui {
+namespace MaxRumsey.OzStripsPlugin.GUI {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MaxRumsey.OzStripsPlugin.Gui.OzStripsConfig", typeof(OzStripsConfig).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MaxRumsey.OzStripsPlugin.GUI.OzStripsConfig", typeof(OzStripsConfig).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

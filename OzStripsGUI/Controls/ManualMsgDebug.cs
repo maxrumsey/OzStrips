@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.Windows.Forms;
 
-using MaxRumsey.OzStripsPlugin.Gui.DTO;
+using MaxRumsey.OzStripsPlugin.GUI.DTO;
 
-namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
+namespace MaxRumsey.OzStripsPlugin.GUI.Controls;
 
 /// <summary>
 /// Send the user a manual message.

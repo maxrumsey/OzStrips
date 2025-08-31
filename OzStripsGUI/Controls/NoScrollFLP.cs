@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
+namespace MaxRumsey.OzStripsPlugin.GUI.Controls;
 
 /// <summary>
 /// A FlowLayoutPanel that does not scroll when it loses and regains focus.

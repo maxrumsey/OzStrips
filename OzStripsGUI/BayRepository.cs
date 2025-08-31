@@ -6,11 +6,11 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MaxRumsey.OzStripsPlugin.Gui.DTO;
-using MaxRumsey.OzStripsPlugin.Gui.Properties;
+using MaxRumsey.OzStripsPlugin.GUI.DTO;
+using MaxRumsey.OzStripsPlugin.GUI.Properties;
 using vatsys;
 
-namespace MaxRumsey.OzStripsPlugin.Gui;
+namespace MaxRumsey.OzStripsPlugin.GUI;
 
 /// <summary>
 /// Holds all individual bays.

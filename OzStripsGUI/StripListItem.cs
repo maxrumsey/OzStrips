@@ -1,7 +1,7 @@
-﻿using MaxRumsey.OzStripsPlugin.Gui.Controls;
+﻿using MaxRumsey.OzStripsPlugin.GUI.Controls;
 using static vatsys.FDP2;
 
-namespace MaxRumsey.OzStripsPlugin.Gui;
+namespace MaxRumsey.OzStripsPlugin.GUI;
 
 /// <summary>
 /// A strip list item.

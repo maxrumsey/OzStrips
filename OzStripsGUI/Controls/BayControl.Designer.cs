@@ -1,7 +1,7 @@
 ﻿
-using MaxRumsey.OzStripsPlugin.Gui.Controls;
+using MaxRumsey.OzStripsPlugin.GUI.Controls;
 
-namespace MaxRumsey.OzStripsPlugin.Gui.Controls
+namespace MaxRumsey.OzStripsPlugin.GUI.Controls
 {
     partial class BayControl
     {

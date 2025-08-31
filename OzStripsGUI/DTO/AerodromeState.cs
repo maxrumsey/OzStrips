@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MaxRumsey.OzStripsPlugin.Gui.DTO
+namespace MaxRumsey.OzStripsPlugin.GUI.DTO
 {
     public class AerodromeState
     {

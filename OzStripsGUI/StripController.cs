@@ -5,12 +5,12 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
-using MaxRumsey.OzStripsPlugin.Gui.Controls;
+using MaxRumsey.OzStripsPlugin.GUI.Controls;
 using SkiaSharp;
 using vatsys;
 using static vatsys.FDP2;
 
-namespace MaxRumsey.OzStripsPlugin.Gui;
+namespace MaxRumsey.OzStripsPlugin.GUI;
 
 /// <summary>
 /// Controls strip UI elements and actions.

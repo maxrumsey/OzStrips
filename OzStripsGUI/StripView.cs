@@ -4,11 +4,11 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
-using MaxRumsey.OzStripsPlugin.Gui.DTO;
+using MaxRumsey.OzStripsPlugin.GUI.DTO;
 using SkiaSharp;
 using vatsys;
 
-namespace MaxRumsey.OzStripsPlugin.Gui;
+namespace MaxRumsey.OzStripsPlugin.GUI;
 
 internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStripItem
 {

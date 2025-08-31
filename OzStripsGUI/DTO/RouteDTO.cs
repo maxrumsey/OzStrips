@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace MaxRumsey.OzStripsPlugin.Gui.DTO;
+namespace MaxRumsey.OzStripsPlugin.GUI.DTO;
 
 /// <summary>
 /// Represents the route returned from ERSA FPR for a specific city pair.

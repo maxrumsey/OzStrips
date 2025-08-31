@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
+namespace MaxRumsey.OzStripsPlugin.GUI.Controls;
 
 /// <summary>
 /// A control representing a bay.

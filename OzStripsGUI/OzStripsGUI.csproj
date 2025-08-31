@@ -6,7 +6,7 @@
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
         <EmbeddedResourceUseDependentUponConvention>true</EmbeddedResourceUseDependentUponConvention>
         <PlatformTarget>x86</PlatformTarget>
-        <RootNamespace>MaxRumsey.OzStripsPlugin.Gui</RootNamespace>
+        <RootNamespace>MaxRumsey.OzStripsPlugin.GUI</RootNamespace>
         <ApplicationIcon>ozstrips.ico</ApplicationIcon>
         <CefSharpBuildAction>Content</CefSharpBuildAction>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>

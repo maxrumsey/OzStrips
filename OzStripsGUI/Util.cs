@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using Newtonsoft.Json;
 using vatsys;
 
-namespace MaxRumsey.OzStripsPlugin.Gui;
+namespace MaxRumsey.OzStripsPlugin.GUI;
 
 /// <summary>
 /// Contains various helper methods.

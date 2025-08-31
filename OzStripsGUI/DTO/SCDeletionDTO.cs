@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace MaxRumsey.OzStripsPlugin.Gui.DTO;
+namespace MaxRumsey.OzStripsPlugin.GUI.DTO;
 
 /// <summary>
 /// Represents a controller strip with various operational details.

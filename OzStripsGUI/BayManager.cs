@@ -5,14 +5,14 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using MaxRumsey.OzStripsPlugin.Gui.DTO;
-using MaxRumsey.OzStripsPlugin.Gui.Properties;
+using MaxRumsey.OzStripsPlugin.GUI.DTO;
+using MaxRumsey.OzStripsPlugin.GUI.Properties;
 using OpenTK.Graphics.ES11;
 using vatsys;
 using static vatsys.FDP2;
 
 // todo: separate GUI components into separate class
-namespace MaxRumsey.OzStripsPlugin.Gui;
+namespace MaxRumsey.OzStripsPlugin.GUI;
 
 /// <summary>
 /// Handles the bays.

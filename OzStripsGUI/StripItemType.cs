@@ -1,4 +1,4 @@
-﻿namespace MaxRumsey.OzStripsPlugin.Gui;
+﻿namespace MaxRumsey.OzStripsPlugin.GUI;
 
 /// <summary>
 /// Defines the types of items that can be associated with a controller strip in air traffic control simulations.

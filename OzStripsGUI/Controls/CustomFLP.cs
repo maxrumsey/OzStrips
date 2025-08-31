@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
+namespace MaxRumsey.OzStripsPlugin.GUI.Controls;
 
 /// <summary>
 /// A custom flow layout panel.

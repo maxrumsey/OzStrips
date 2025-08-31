@@ -1,4 +1,4 @@
-﻿namespace MaxRumsey.OzStripsPlugin.Gui.Controls
+﻿namespace MaxRumsey.OzStripsPlugin.GUI.Controls
 {
     partial class ManualMsgDebug
     {

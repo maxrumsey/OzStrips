@@ -5,14 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MaxRumsey.OzStripsPlugin.Gui;
-using MaxRumsey.OzStripsPlugin.Gui.DTO;
-using MaxRumsey.OzStripsPlugin.Gui.Properties;
+using MaxRumsey.OzStripsPlugin.GUI;
+using MaxRumsey.OzStripsPlugin.GUI.DTO;
+using MaxRumsey.OzStripsPlugin.GUI.Properties;
 using SkiaSharp;
 using SkiaSharp.Views.Desktop;
 using vatsys;
 
-namespace MaxRumsey.OzStripsPlugin.Gui;
+namespace MaxRumsey.OzStripsPlugin.GUI;
 
 internal class BayRenderController(Bay bay) : IDisposable
 {
@@ -88,7 +88,7 @@ internal class BayRenderController(Bay bay) : IDisposable
 
         foreach (var item in Bay.Strips)
         {
-            if (item.Type == Gui.StripItemType.STRIP)
+            if (item.Type == GUI.StripItemType.STRIP)
             {
                 y += StripHeight;
             }
@@ -108,7 +108,7 @@ internal class BayRenderController(Bay bay) : IDisposable
         list.Reverse();
         foreach (var item in list)
         {
-            if (item.Type == Gui.StripItemType.STRIP)
+            if (item.Type == GUI.StripItemType.STRIP)
             {
                 if (item.Strip == strip)
                 {
@@ -150,12 +150,12 @@ internal class BayRenderController(Bay bay) : IDisposable
             var y = 0;
             for (var i = total; i >= 0; i--)
             {
-                if (Bay.Strips[i].Type == Gui.StripItemType.QUEUEBAR && Bay.Strips[i].BarText is not null)
+                if (Bay.Strips[i].Type == GUI.StripItemType.QUEUEBAR && Bay.Strips[i].BarText is not null)
                 {
                     var count = 0;
                     for (var j = i; j >= 0; j--)
                     {
-                        if (Bay.Strips[j].Type == Gui.StripItemType.STRIP)
+                        if (Bay.Strips[j].Type == GUI.StripItemType.STRIP)
                         {
                             count++;
                         }
@@ -186,7 +186,7 @@ internal class BayRenderController(Bay bay) : IDisposable
                     }
                 }
 
-                y += Bay.Strips[i].Type == Gui.StripItemType.STRIP ? StripHeight : BarHeight;
+                y += Bay.Strips[i].Type == GUI.StripItemType.STRIP ? StripHeight : BarHeight;
             }
 
             canvas.Flush();
@@ -237,7 +237,7 @@ internal class BayRenderController(Bay bay) : IDisposable
         for (var i = total; i >= 0; i--)
         {
             var y_offset = BarHeight;
-            if (Bay.Strips[i].Type == Gui.StripItemType.STRIP)
+            if (Bay.Strips[i].Type == GUI.StripItemType.STRIP)
             {
                 y_offset = StripHeight;
             }

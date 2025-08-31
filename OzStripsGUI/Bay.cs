@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.InteropServices;
-using MaxRumsey.OzStripsPlugin.Gui.Controls;
-using MaxRumsey.OzStripsPlugin.Gui.DTO;
-using MaxRumsey.OzStripsPlugin.Gui.Properties;
+using MaxRumsey.OzStripsPlugin.GUI.Controls;
+using MaxRumsey.OzStripsPlugin.GUI.DTO;
+using MaxRumsey.OzStripsPlugin.GUI.Properties;
 using Microsoft.SqlServer.Server;
 using static vatsys.FDP2;
 
-namespace MaxRumsey.OzStripsPlugin.Gui;
+namespace MaxRumsey.OzStripsPlugin.GUI;
 
 /// <summary>
 /// A bay.

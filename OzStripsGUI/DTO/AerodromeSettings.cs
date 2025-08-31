@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using vatsys;
 
-namespace MaxRumsey.OzStripsPlugin.Gui.DTO;
+namespace MaxRumsey.OzStripsPlugin.GUI.DTO;
 
 /// <summary>
 /// Represents an object carrying the aerodrome settings.

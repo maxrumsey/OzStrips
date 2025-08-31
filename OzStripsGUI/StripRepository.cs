@@ -4,10 +4,10 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MaxRumsey.OzStripsPlugin.Gui.DTO;
+using MaxRumsey.OzStripsPlugin.GUI.DTO;
 using static vatsys.FDP2;
 
-namespace MaxRumsey.OzStripsPlugin.Gui;
+namespace MaxRumsey.OzStripsPlugin.GUI;
 
 /// <summary>
 /// Accounts for all strip models.

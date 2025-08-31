@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 using vatsys;
 
-namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
+namespace MaxRumsey.OzStripsPlugin.GUI.Controls;
 
 /// <summary>
 /// A altitude and heading control.

@@ -1,5 +1,5 @@
-﻿using MaxRumsey.OzStripsPlugin.Gui.DTO;
-using MaxRumsey.OzStripsPlugin.Gui.Properties;
+﻿using MaxRumsey.OzStripsPlugin.GUI.DTO;
+using MaxRumsey.OzStripsPlugin.GUI.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using vatsys;
 using static vatsys.SectorsVolumes;
 
-namespace MaxRumsey.OzStripsPlugin.Gui;
+namespace MaxRumsey.OzStripsPlugin.GUI;
 
 /// <summary>
 /// Manages aerodromes immaediately available in the selection list.

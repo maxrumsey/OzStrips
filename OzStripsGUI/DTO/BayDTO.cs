@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace MaxRumsey.OzStripsPlugin.Gui.DTO;
+namespace MaxRumsey.OzStripsPlugin.GUI.DTO;
 
 /// <summary>
 /// Represents the bay configuration with a list of strips.

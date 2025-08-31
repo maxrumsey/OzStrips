@@ -1,4 +1,4 @@
-using MaxRumsey.OzStripsPlugin.Gui.Controls;
+using MaxRumsey.OzStripsPlugin.GUI.Controls;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -10,7 +10,7 @@ using System.Windows.Input;
 using System.Xml.Linq;
 using vatsys;
 
-namespace MaxRumsey.OzStripsPlugin.Gui;
+namespace MaxRumsey.OzStripsPlugin.GUI;
 
 public class MainFormController : IDisposable
 {

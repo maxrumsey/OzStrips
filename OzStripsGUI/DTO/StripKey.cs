@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MaxRumsey.OzStripsPlugin.Gui.DTO;
+namespace MaxRumsey.OzStripsPlugin.GUI.DTO;
 
 /// <summary>
 /// key for a strip, used to identify it uniquely.

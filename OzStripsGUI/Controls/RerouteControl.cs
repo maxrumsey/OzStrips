@@ -4,10 +4,10 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MaxRumsey.OzStripsPlugin.Gui.DTO;
+using MaxRumsey.OzStripsPlugin.GUI.DTO;
 using vatsys;
 
-namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
+namespace MaxRumsey.OzStripsPlugin.GUI.Controls;
 
 /// <summary>
 /// A altitude and heading control.

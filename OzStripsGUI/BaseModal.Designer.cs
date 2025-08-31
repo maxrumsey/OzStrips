@@ -1,4 +1,4 @@
-﻿namespace MaxRumsey.OzStripsPlugin.Gui
+﻿namespace MaxRumsey.OzStripsPlugin.GUI
 {
     partial class BaseModal
     {

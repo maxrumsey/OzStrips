@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using SkiaSharp;
 
-namespace MaxRumsey.OzStripsPlugin.Gui;
+namespace MaxRumsey.OzStripsPlugin.GUI;
 
 /// <summary>
 /// Represents a rendered item that appears in a strip bay.

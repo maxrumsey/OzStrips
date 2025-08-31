@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
-using MaxRumsey.OzStripsPlugin.Gui.DTO;
+using MaxRumsey.OzStripsPlugin.GUI.DTO;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
 using vatsys;
-using static MaxRumsey.OzStripsPlugin.Gui.SocketConn;
+using static MaxRumsey.OzStripsPlugin.GUI.SocketConn;
 
-namespace MaxRumsey.OzStripsPlugin.Gui;
+namespace MaxRumsey.OzStripsPlugin.GUI;
 
 /// <summary>
 /// Handles communications by the sockets.

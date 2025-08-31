@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace MaxRumsey.OzStripsPlugin.Gui.Controls;
+namespace MaxRumsey.OzStripsPlugin.GUI.Controls;
 
 /// <summary>
 /// A about dialog showing copyright and version info.

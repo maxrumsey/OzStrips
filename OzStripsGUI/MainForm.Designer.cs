@@ -1,7 +1,7 @@
-﻿using MaxRumsey.OzStripsPlugin.Gui.Controls;
+﻿using MaxRumsey.OzStripsPlugin.GUI.Controls;
 using System.Windows.Forms;
 
-namespace MaxRumsey.OzStripsPlugin.Gui
+namespace MaxRumsey.OzStripsPlugin.GUI
 {
     partial class MainForm
     {

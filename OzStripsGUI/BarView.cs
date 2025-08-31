@@ -13,7 +13,7 @@ using vatsys;
 using static System.Net.Mime.MediaTypeNames;
 using static vatsys.FDP2;
 
-namespace MaxRumsey.OzStripsPlugin.Gui;
+namespace MaxRumsey.OzStripsPlugin.GUI;
 
 internal class BarView(BayRenderController bayRC) : IRenderedStripItem
 {
