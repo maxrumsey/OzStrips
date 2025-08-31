@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 using vatsys;
 using vatsys.Plugin;
 
-namespace MaxRumsey.OzStripsPlugin;
+namespace MaxRumsey.OzStripsPlugin.GUI;
 
 /// <summary>
 /// The main VatSys plugin implementation.

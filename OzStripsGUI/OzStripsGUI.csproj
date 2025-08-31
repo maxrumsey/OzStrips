@@ -10,7 +10,11 @@
         <ApplicationIcon>ozstrips.ico</ApplicationIcon>
         <CefSharpBuildAction>Content</CefSharpBuildAction>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+        <BaseOutputPath>$(MSBuildProgramFiles32)\vatSys\bin\Plugins\</BaseOutputPath>
+        <OutputPath>$(HOMEPATH)\Documents\vatSys Files\Profiles\Australia\Plugins\OzStrips\</OutputPath>
         <Platforms>AnyCPU</Platforms>
+      <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+      <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net472|AnyCPU'">
       <Optimize>False</Optimize>
@@ -95,6 +99,9 @@
     </ItemGroup>
     <ItemGroup>
       <None Update="AerodromeSettings.xml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="libSkiaSharp.adll">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="libSkiaSharp.dylib">
