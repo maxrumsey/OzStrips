@@ -166,26 +166,27 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
             return;
         }
 
-        if (_currentLayoutIndex != 3) // Less than 3 cols.
+        /*
+         * If less than 3 cols are present,
+         * lay out left-right, top to bottom.
+         */
+        if (_currentLayoutIndex != 3)
         {
-            /*
-             * Layout left to right, top to bottom.
-             * verticalBoardNumber = _bayAmount % _currentLayoutIndex;
-             */
+            var bayNums = _flpVerticalBoards.Select(x => x.Controls.Count).ToArray();
 
-            /*
-             * Lay out top to bottom., left to right.
-             */
-            var maxBaysPerCol = Math.Ceiling((float)BayNum / _currentLayoutIndex); // Max number of bays per col. Doesn't take into account realistic size of bay.
-            verticalBoardNumber = _currentLayoutIndex - 1;
-            for (var i = 0; i < _flpVerticalBoards.Count; i++)
+            if (bayNums is null)
             {
-                if (_flpVerticalBoards[i].Controls.Count < maxBaysPerCol)
-                {
-                    verticalBoardNumber = i;
-                    break;
-                }
+                throw new Exception("BayNums was null.");
             }
+
+            var index = Array.IndexOf(bayNums, bayNums.Min());
+
+            if (index < 0)
+            {
+                index = 0;
+            }
+
+            verticalBoardNumber = index;
         }
 
         bay.VerticalBoardNumber = verticalBoardNumber;
