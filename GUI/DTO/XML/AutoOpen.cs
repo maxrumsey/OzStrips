@@ -7,19 +7,17 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
-namespace MaxRumsey.OzStripsPlugin.GUI.DTO;
+namespace MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
 
 /// <summary>
 /// Represents items in XML FIle.
 /// </summary>
 [Serializable]
-[XmlRoot("AerodromeList")]
+[XmlRoot("AutoOpen")]
 
-public class AerodromeList
+public class AutoOpen
 {
-    [XmlAttribute("Type")]
-    public string Type;
+    public string Aerodrome;
 
-    [XmlElement("Aerodrome")]
-    public string[] Aerodromes;
+    public string Position;
 }

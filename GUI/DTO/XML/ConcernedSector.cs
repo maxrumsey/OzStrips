@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
-namespace MaxRumsey.OzStripsPlugin.GUI.DTO;
+namespace MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
 
 /// <summary>
 /// Represents items in XML FIle.

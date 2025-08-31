@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using MaxRumsey.OzStripsPlugin.GUI.Controls;
 using MaxRumsey.OzStripsPlugin.GUI.DTO;
 using MaxRumsey.OzStripsPlugin.GUI.Properties;
+using MaxRumsey.OzStripsPlugin.GUI.Shared;
 using Microsoft.SqlServer.Server;
 using static vatsys.FDP2;
 

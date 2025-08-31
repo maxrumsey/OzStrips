@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace MaxRumsey.OzStripsPlugin.GUI.DTO;
+namespace MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
 
 [XmlRoot("BayType")]
 public class BayType

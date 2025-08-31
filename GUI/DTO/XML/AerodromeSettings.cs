@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using vatsys;
 
-namespace MaxRumsey.OzStripsPlugin.GUI.DTO;
+namespace MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
 
 /// <summary>
 /// Represents an object carrying the aerodrome settings.
@@ -75,10 +75,10 @@ public class AerodromeSettings
     {
         // This is hacky but it's the easiest way to get the prof dir.
         // Unless I'm missing something obvious.
-        if (vatsys.Profile.Loaded)
+        if (Profile.Loaded)
         {
-            var shortNameObject = typeof(vatsys.Profile).GetField("shortName", BindingFlags.Static | BindingFlags.NonPublic);
-            var shortName = (string)shortNameObject.GetValue((object) shortNameObject);
+            var shortNameObject = typeof(Profile).GetField("shortName", BindingFlags.Static | BindingFlags.NonPublic);
+            var shortName = (string)shortNameObject.GetValue( shortNameObject);
 
             return Path.Combine(Helpers.GetFilesFolder(), "Profiles", shortName, "Plugins\\AerodromeSettings.xml");
         }
@@ -89,9 +89,9 @@ public class AerodromeSettings
     public static AerodromeSettings? Load()
     {
         var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\AerodromeSettings.xml");
-        var baseSettings = AerodromeSettings.Deserialize(path);
+        var baseSettings = Deserialize(path);
 
-        var overwrite = AerodromeSettings.Deserialize(GetADSettingsPath());
+        var overwrite = Deserialize(GetADSettingsPath());
 
         if (baseSettings == null)
         {

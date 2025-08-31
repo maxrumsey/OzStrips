@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.GUI.DTO;
 using MaxRumsey.OzStripsPlugin.GUI.Properties;
+using MaxRumsey.OzStripsPlugin.GUI.Shared;
 using OpenTK.Graphics.ES11;
 using vatsys;
 using static vatsys.FDP2;

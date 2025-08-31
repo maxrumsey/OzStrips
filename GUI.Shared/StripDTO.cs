@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace MaxRumsey.OzStripsPlugin.GUI.DTO;
+namespace MaxRumsey.OzStripsPlugin.GUI.Shared;
 
 #pragma warning disable SA1300 // Element should begin with upper-case letter
 #pragma warning disable SA1623 // Property summary documentation should match accessors
@@ -10,6 +10,8 @@ namespace MaxRumsey.OzStripsPlugin.GUI.DTO;
 /// </summary>
 public class StripDTO
 {
+    private readonly DateTime _modified = DateTime.Now;
+
     /// <summary>
     /// Gets or sets the bay information for the strip.
     /// </summary>
@@ -67,10 +69,15 @@ public class StripDTO
     /// <summary>
     /// Gets or sets the strip key which uniquely identifies the strip.
     /// </summary>
-    public StripKey StripKey { get; set; }
+    public StripKey StripKey { get; set; } = new();
 
     /// <summary>
     /// Gets or sets the strip overriden type.
     /// </summary>
     public StripType OverrideStripType { get; set; } = StripType.UNKNOWN;
+
+    /// <summary>
+    /// Gets  when the DTO was created.
+    /// </summary>
+    public DateTime Modified { get => _modified; }
 }

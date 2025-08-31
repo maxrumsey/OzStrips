@@ -4,9 +4,11 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.GUI.DTO;
+using MaxRumsey.OzStripsPlugin.GUI.Shared;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
 using vatsys;
+using static MaxRumsey.OzStripsPlugin.GUI.Shared.ConnectionMetadataDTO;
 using static MaxRumsey.OzStripsPlugin.GUI.SocketConn;
 
 namespace MaxRumsey.OzStripsPlugin.GUI;
@@ -177,32 +179,6 @@ public sealed class SocketConn : IDisposable
     }
 
     public event EventHandler AerodromeStateChanged;
-
-    /// <summary>
-    /// Available server types.
-    /// </summary>
-    public enum Servers
-    {
-        /// <summary>
-        /// Default connection.
-        /// </summary>
-        VATSIM,
-
-        /// <summary>
-        /// Sweatbox 1.
-        /// </summary>
-        SWEATBOX1,
-
-        /// <summary>
-        /// Sweatbox 2.
-        /// </summary>
-        SWEATBOX2,
-
-        /// <summary>
-        /// Sweatbox 3.
-        /// </summary>
-        SWEATBOX3,
-    }
 
     /// <summary>
     /// Gets the messages, used for debugging.

@@ -1,4 +1,4 @@
-﻿namespace MaxRumsey.OzStripsPlugin.GUI;
+﻿namespace MaxRumsey.OzStripsPlugin.GUI.Shared;
 
 /// <summary>
 /// Defines the various statuses of a strip bay in OzStrips.

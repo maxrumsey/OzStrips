@@ -1,11 +1,12 @@
-﻿using System;
+﻿using MaxRumsey.OzStripsPlugin.GUI.Shared;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace MaxRumsey.OzStripsPlugin.GUI.DTO;
+namespace MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
 
 [XmlRoot("Bay")]
 public class BayDefinition

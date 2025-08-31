@@ -1,4 +1,4 @@
-﻿namespace MaxRumsey.OzStripsPlugin.GUI;
+﻿namespace MaxRumsey.OzStripsPlugin.GUI.Shared;
 
 /// <summary>
 /// Defines the types of air traffic operations for controller strips, distinguishing between arrivals, departures, and unspecified types.

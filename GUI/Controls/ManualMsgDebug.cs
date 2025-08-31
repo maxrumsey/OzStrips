@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Windows.Forms;
 
 using MaxRumsey.OzStripsPlugin.GUI.DTO;
+using MaxRumsey.OzStripsPlugin.GUI.Shared;
 
 namespace MaxRumsey.OzStripsPlugin.GUI.Controls;
 

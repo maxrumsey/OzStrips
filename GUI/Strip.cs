@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.GUI.Controls;
 using MaxRumsey.OzStripsPlugin.GUI.DTO;
 using MaxRumsey.OzStripsPlugin.GUI.Properties;
+using MaxRumsey.OzStripsPlugin.GUI.Shared;
 using vatsys;
 
 using static vatsys.FDP2;

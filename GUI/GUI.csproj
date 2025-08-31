@@ -78,6 +78,9 @@
     <Content Include="ozstrips.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GUI.Shared\GUI.Shared.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System.Net.Http" />
     <Reference Include="$(VatSysDir)\bin\vatSys.exe ">
       <Private>False</Private>

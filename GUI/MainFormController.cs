@@ -1,4 +1,5 @@
 using MaxRumsey.OzStripsPlugin.GUI.Controls;
+using MaxRumsey.OzStripsPlugin.GUI.Shared;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
