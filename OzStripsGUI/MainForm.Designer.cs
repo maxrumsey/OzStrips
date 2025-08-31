@@ -43,42 +43,36 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.pl_ad = new System.Windows.Forms.Panel();
             this.lb_ad = new System.Windows.Forms.Label();
             this.pl_stat = new System.Windows.Forms.Panel();
-            this.lb_stat = new System.Windows.Forms.Label();
             this.tb_Time = new System.Windows.Forms.TextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.ts_ad = new System.Windows.Forms.ToolStripMenuItem();
             this.modifyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.ts_mode = new System.Windows.Forms.ToolStripMenuItem();
-            this.aCDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sMCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sMCACDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aDCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aDCSMCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.allToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.reloadStripToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.gitHubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.documentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.changelogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ts_mode = new System.Windows.Forms.ToolStripMenuItem();
             this.smartResizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.threeColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.twoColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.oneColumnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colDisabledToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.flp_main = new NoScrollFLP();
+            this.ts_toggleCircuit = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gitHubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.documentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.changelogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.reloadStripToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reloadAerodromeListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tt_metar = new System.Windows.Forms.ToolTip(this.components);
+            this.tt_clients = new System.Windows.Forms.ToolTip(this.components);
             this.pl_controlbar.SuspendLayout();
             this.pl_atis.SuspendLayout();
             this.pl_ad.SuspendLayout();
-            this.pl_stat.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -116,7 +110,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.bt_flip.TabStop = false;
             this.bt_flip.Text = "FLIP FLOP";
             this.bt_flip.UseVisualStyleBackColor = false;
-            this.bt_flip.Click += new System.EventHandler(this.FlipFlopStrip);
             // 
             // bt_bar
             // 
@@ -131,7 +124,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.bt_bar.TabStop = false;
             this.bt_bar.Text = "ADD BAR";
             this.bt_bar.UseVisualStyleBackColor = false;
-            this.bt_bar.Click += new System.EventHandler(this.BarCreatorClick);
             // 
             // pl_atis
             // 
@@ -168,7 +160,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.bt_cross.TabStop = false;
             this.bt_cross.Text = "XX CROSS XX";
             this.bt_cross.UseVisualStyleBackColor = false;
-            this.bt_cross.Click += new System.EventHandler(this.Bt_cross_Click);
             // 
             // bt_inhibit
             // 
@@ -183,7 +174,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.bt_inhibit.TabStop = false;
             this.bt_inhibit.Text = "INHIBIT";
             this.bt_inhibit.UseVisualStyleBackColor = false;
-            this.bt_inhibit.Click += new System.EventHandler(this.Bt_inhibit_Click);
             // 
             // pl_ad
             // 
@@ -210,26 +200,11 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             // pl_stat
             // 
             this.pl_stat.BackColor = System.Drawing.Color.OrangeRed;
-            this.pl_stat.Controls.Add(this.lb_stat);
             this.pl_stat.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pl_stat.Location = new System.Drawing.Point(4, 3);
             this.pl_stat.Name = "pl_stat";
             this.pl_stat.Size = new System.Drawing.Size(96, 37);
             this.pl_stat.TabIndex = 1;
-            // 
-            // lb_stat
-            // 
-            this.lb_stat.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lb_stat.AutoSize = true;
-            this.lb_stat.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_stat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.lb_stat.Location = new System.Drawing.Point(7, 11);
-            this.lb_stat.Name = "lb_stat";
-            this.lb_stat.Size = new System.Drawing.Size(80, 17);
-            this.lb_stat.TabIndex = 0;
-            this.lb_stat.Text = "CONN STAT";
             // 
             // tb_Time
             // 
@@ -252,11 +227,9 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.menuStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ts_ad,
-            this.ts_mode,
-            this.debugToolStripMenuItem,
-            this.aboutToolStripMenuItem,
-            this.helpToolStripMenuItem,
-            this.viewToolStripMenuItem});
+            this.viewToolStripMenuItem,
+            this.settingsToolStripMenuItem,
+            this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1784, 25);
@@ -288,7 +261,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.toolStripTextBox1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolStripTextBox1.Name = "toolStripTextBox1";
             this.toolStripTextBox1.Size = new System.Drawing.Size(100, 23);
-            this.toolStripTextBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.AerodromeSelectorKeyDown);
+            this.toolStripTextBox1.Tag = "permanent";
             // 
             // toolStripSeparator1
             // 
@@ -296,160 +269,23 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.toolStripSeparator1.Size = new System.Drawing.Size(157, 6);
             this.toolStripSeparator1.Tag = "permanent";
             // 
-            // ts_mode
-            // 
-            this.ts_mode.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.aCDToolStripMenuItem,
-            this.sMCToolStripMenuItem,
-            this.sMCACDToolStripMenuItem,
-            this.aDCToolStripMenuItem,
-            this.aDCSMCToolStripMenuItem,
-            this.allToolStripMenuItem});
-            this.ts_mode.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ts_mode.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.ts_mode.Name = "ts_mode";
-            this.ts_mode.Size = new System.Drawing.Size(92, 21);
-            this.ts_mode.Text = "View Mode";
-            // 
-            // aCDToolStripMenuItem
-            // 
-            this.aCDToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.aCDToolStripMenuItem.Name = "aCDToolStripMenuItem";
-            this.aCDToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
-            this.aCDToolStripMenuItem.Text = "ACD";
-            this.aCDToolStripMenuItem.Click += new System.EventHandler(this.ACDToolStripMenuItem_Click);
-            // 
-            // sMCToolStripMenuItem
-            // 
-            this.sMCToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.sMCToolStripMenuItem.Name = "sMCToolStripMenuItem";
-            this.sMCToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
-            this.sMCToolStripMenuItem.Text = "SMC";
-            this.sMCToolStripMenuItem.Click += new System.EventHandler(this.SMCToolStripMenuItem_Click);
-            // 
-            // sMCACDToolStripMenuItem
-            // 
-            this.sMCACDToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.sMCACDToolStripMenuItem.Name = "sMCACDToolStripMenuItem";
-            this.sMCACDToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
-            this.sMCACDToolStripMenuItem.Text = "SMC+ACD";
-            this.sMCACDToolStripMenuItem.Click += new System.EventHandler(this.SMCACDToolStripMenuItem_Click);
-            // 
-            // aDCToolStripMenuItem
-            // 
-            this.aDCToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.aDCToolStripMenuItem.Name = "aDCToolStripMenuItem";
-            this.aDCToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
-            this.aDCToolStripMenuItem.Text = "ADC";
-            this.aDCToolStripMenuItem.Click += new System.EventHandler(this.ADCToolStripMenuItem_Click);
-            // 
-            // aDCSMCToolStripMenuItem
-            // 
-            this.aDCSMCToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.aDCSMCToolStripMenuItem.Name = "aDCSMCToolStripMenuItem";
-            this.aDCSMCToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
-            this.aDCSMCToolStripMenuItem.Text = "ADC+SMC";
-            this.aDCSMCToolStripMenuItem.Click += new System.EventHandler(this.ADCSMCToolStripMenuItem_Click);
-            // 
-            // allToolStripMenuItem
-            // 
-            this.allToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.allToolStripMenuItem.Name = "allToolStripMenuItem";
-            this.allToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
-            this.allToolStripMenuItem.Text = "All";
-            this.allToolStripMenuItem.Click += new System.EventHandler(this.AllToolStripMenuItem_Click);
-            // 
-            // debugToolStripMenuItem
-            // 
-            this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem1,
-            this.reloadStripToolStripMenuItem});
-            this.debugToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.debugToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
-            this.debugToolStripMenuItem.Size = new System.Drawing.Size(60, 21);
-            this.debugToolStripMenuItem.Text = "Debug";
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(164, 22);
-            this.toolStripMenuItem1.Text = "SignalR Log";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.ToolStripMenuItem1_Click);
-            // 
-            // reloadStripToolStripMenuItem
-            // 
-            this.reloadStripToolStripMenuItem.Name = "reloadStripToolStripMenuItem";
-            this.reloadStripToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
-            this.reloadStripToolStripMenuItem.Text = "ReloadStrip";
-            this.reloadStripToolStripMenuItem.Click += new System.EventHandler(this.ReloadStripItem);
-            // 
-            // aboutToolStripMenuItem
-            // 
-            this.aboutToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.aboutToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(60, 21);
-            this.aboutToolStripMenuItem.Text = "About";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
-            // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.gitHubToolStripMenuItem,
-            this.documentationToolStripMenuItem,
-            this.changelogToolStripMenuItem,
-            this.toolStripSeparator2,
-            this.settingsToolStripMenuItem});
-            this.helpToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.helpToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(52, 21);
-            this.helpToolStripMenuItem.Text = "Help";
-            // 
-            // gitHubToolStripMenuItem
-            // 
-            this.gitHubToolStripMenuItem.Name = "gitHubToolStripMenuItem";
-            this.gitHubToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.gitHubToolStripMenuItem.Text = "GitHub";
-            this.gitHubToolStripMenuItem.Click += new System.EventHandler(this.GitHubToolStripMenuItem_Click);
-            // 
-            // documentationToolStripMenuItem
-            // 
-            this.documentationToolStripMenuItem.Name = "documentationToolStripMenuItem";
-            this.documentationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.documentationToolStripMenuItem.Text = "Documentation";
-            this.documentationToolStripMenuItem.Click += new System.EventHandler(this.DocumentationToolStripMenuItem_Click);
-            // 
-            // changelogToolStripMenuItem
-            // 
-            this.changelogToolStripMenuItem.Name = "changelogToolStripMenuItem";
-            this.changelogToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.changelogToolStripMenuItem.Text = "Changelog";
-            this.changelogToolStripMenuItem.Click += new System.EventHandler(this.ChangelogToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
-            // 
-            // settingsToolStripMenuItem
-            // 
-            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.settingsToolStripMenuItem.Text = "Settings";
-            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.ShowSettings);
-            // 
             // viewToolStripMenuItem
             // 
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.smartResizeToolStripMenuItem});
+            this.ts_mode,
+            this.smartResizeToolStripMenuItem,
+            this.ts_toggleCircuit});
             this.viewToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.viewToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(52, 21);
             this.viewToolStripMenuItem.Text = "View";
+            // 
+            // ts_mode
+            // 
+            this.ts_mode.Name = "ts_mode";
+            this.ts_mode.Size = new System.Drawing.Size(220, 22);
+            this.ts_mode.Text = "View Mode";
             // 
             // smartResizeToolStripMenuItem
             // 
@@ -459,7 +295,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.oneColumnToolStripMenuItem,
             this.colDisabledToolStripMenuItem});
             this.smartResizeToolStripMenuItem.Name = "smartResizeToolStripMenuItem";
-            this.smartResizeToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.smartResizeToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
             this.smartResizeToolStripMenuItem.Text = "Smart Resize";
             // 
             // threeColumnsToolStripMenuItem
@@ -490,21 +326,105 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.colDisabledToolStripMenuItem.Text = "Disabled";
             this.colDisabledToolStripMenuItem.Click += new System.EventHandler(this.ColDisabledToolStripMenuItem_Click);
             // 
-            // flp_main
+            // ts_toggleCircuit
             // 
-            this.flp_main.AutoScroll = true;
-            this.flp_main.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
-            this.flp_main.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flp_main.Location = new System.Drawing.Point(0, 25);
-            this.flp_main.Margin = new System.Windows.Forms.Padding(0);
-            this.flp_main.Name = "flp_main";
-            this.flp_main.Size = new System.Drawing.Size(1784, 891);
-            this.flp_main.TabIndex = 2;
-            this.flp_main.WrapContents = false;
+            this.ts_toggleCircuit.Name = "ts_toggleCircuit";
+            this.ts_toggleCircuit.Size = new System.Drawing.Size(220, 22);
+            this.ts_toggleCircuit.Text = "Toggle Circuit Bay";
+            // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.settingsToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(84, 21);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.gitHubToolStripMenuItem,
+            this.documentationToolStripMenuItem,
+            this.changelogToolStripMenuItem,
+            this.aboutToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.debugToolStripMenuItem});
+            this.helpToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.helpToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(52, 21);
+            this.helpToolStripMenuItem.Text = "Info";
+            // 
+            // gitHubToolStripMenuItem
+            // 
+            this.gitHubToolStripMenuItem.Name = "gitHubToolStripMenuItem";
+            this.gitHubToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gitHubToolStripMenuItem.Text = "GitHub";
+            this.gitHubToolStripMenuItem.Click += new System.EventHandler(this.GitHubToolStripMenuItem_Click);
+            // 
+            // documentationToolStripMenuItem
+            // 
+            this.documentationToolStripMenuItem.Name = "documentationToolStripMenuItem";
+            this.documentationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.documentationToolStripMenuItem.Text = "Documentation";
+            this.documentationToolStripMenuItem.Click += new System.EventHandler(this.DocumentationToolStripMenuItem_Click);
+            // 
+            // changelogToolStripMenuItem
+            // 
+            this.changelogToolStripMenuItem.Name = "changelogToolStripMenuItem";
+            this.changelogToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.changelogToolStripMenuItem.Text = "Changelog";
+            this.changelogToolStripMenuItem.Click += new System.EventHandler(this.ChangelogToolStripMenuItem_Click);
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            // 
+            // debugToolStripMenuItem
+            // 
+            this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem1,
+            this.reloadStripToolStripMenuItem,
+            this.reloadAerodromeListToolStripMenuItem});
+            this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
+            this.debugToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.debugToolStripMenuItem.Text = "Debug";
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(228, 22);
+            this.toolStripMenuItem1.Text = "SignalR Log";
+            // 
+            // reloadStripToolStripMenuItem
+            // 
+            this.reloadStripToolStripMenuItem.Name = "reloadStripToolStripMenuItem";
+            this.reloadStripToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
+            this.reloadStripToolStripMenuItem.Text = "ReloadStrip";
+            this.reloadStripToolStripMenuItem.Click += new System.EventHandler(this.ReloadStripItem);
+            // 
+            // reloadAerodromeListToolStripMenuItem
+            // 
+            this.reloadAerodromeListToolStripMenuItem.Name = "reloadAerodromeListToolStripMenuItem";
+            this.reloadAerodromeListToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
+            this.reloadAerodromeListToolStripMenuItem.Text = "ReloadAerodromeList";
+            this.reloadAerodromeListToolStripMenuItem.Click += new System.EventHandler(this.ReloadAerodromes);
             // 
             // tt_metar
             // 
             this.tt_metar.ToolTipTitle = "METAR";
+            // 
+            // tt_clients
+            // 
+            this.tt_clients.ToolTipTitle = "Online Clients";
             // 
             // MainForm
             // 
@@ -512,7 +432,6 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gray;
             this.ClientSize = new System.Drawing.Size(1784, 961);
-            this.Controls.Add(this.flp_main);
             this.Controls.Add(this.pl_controlbar);
             this.Controls.Add(this.menuStrip1);
             this.DoubleBuffered = true;
@@ -520,16 +439,10 @@ namespace MaxRumsey.OzStripsPlugin.Gui
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "OzStrips";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
-            this.Load += new System.EventHandler(this.MainForm_Load);
-            this.ResizeEnd += new System.EventHandler(this.MainFormSizeChanged);
-            this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.pl_controlbar.ResumeLayout(false);
             this.pl_controlbar.PerformLayout();
             this.pl_atis.ResumeLayout(false);
             this.pl_ad.ResumeLayout(false);
-            this.pl_stat.ResumeLayout(false);
-            this.pl_stat.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -542,19 +455,11 @@ namespace MaxRumsey.OzStripsPlugin.Gui
         private System.Windows.Forms.Panel pl_controlbar;
         private System.Windows.Forms.TextBox tb_Time;
         private System.Windows.Forms.Panel pl_stat;
-        private System.Windows.Forms.Label lb_stat;
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private NoScrollFLP flp_main;
         private System.Windows.Forms.Panel pl_ad;
         private System.Windows.Forms.Label lb_ad;
         private System.Windows.Forms.Button bt_inhibit;
         private System.Windows.Forms.ToolStripMenuItem ts_mode;
-        private System.Windows.Forms.ToolStripMenuItem aCDToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem sMCToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem sMCACDToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem aDCToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem allToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem aDCSMCToolStripMenuItem;
         private System.Windows.Forms.Button bt_cross;
         private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
@@ -581,5 +486,8 @@ namespace MaxRumsey.OzStripsPlugin.Gui
         private ToolStripMenuItem oneColumnToolStripMenuItem;
         private ToolStripMenuItem colDisabledToolStripMenuItem;
         private Button bt_flip;
+        private ToolStripMenuItem reloadAerodromeListToolStripMenuItem;
+        private ToolStripMenuItem ts_toggleCircuit;
+        private ToolTip tt_clients;
     }
 }

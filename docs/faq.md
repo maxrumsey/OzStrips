@@ -7,21 +7,24 @@ It takes roughly 10 seconds to connect, as OzStrips waits for vatSys to have dow
 ## How do I order strips vertically?
 Click on the aircraft's callsign and press your arrow keys.
 
-## What do the FOR STP and INHI buttons do?
-Select an aircraft's strip **in vatSYS**, and press FOR STP, the aircraft's strip will appear in your top left bay, provided the aircraft is going to or from your aerodrome, and is within a suitable range. 
-
-Pick an aircraft's strip **in OzStrips** and press INHI, the strip will disappear. To get the strip back, follow the steps above.
+## What does the INHI button do?
+Pick an aircraft's strip **in OzStrips** and press INHI, the strip will disappear. To get the strip back, press Ctrl-F to select the strip from the quick search window, select the radar target on the ground radar, or select the strip / coupled tag within vatSys. Finally, click into the bay you want the strip to appear in.
 
 ## When will the strip become Coordinated / Blue in vatSYS?
 When you activate the Take Off Timer, or move the strip into the Cleared bay.
 
 *Note: You can not change the aircraft's CFL, SID, or RWY at this point.*
 
+## How do I un-lock / un-coordinate a strip?
+Press the aircraft type to open the FDR Window, and press "Deactivate". Alternatively, drop the strip back into the Preactive bay.
+
 ## How do I open the vatSYS Flight Plan Window?
 Click on the aircraft's destination.
 
 ## What should I do with aircraft doing circuits?
-If they haven't created a flight plan, create a flight plan for them, so that they will have a squawk code. They should appear in your Arrivals or Preactive bay, but if they don't, click on their **vatSys strip** and press "FOR STP" in OzStrips. If they still don't appear, check to make sure that either the ADES or ADEP airport is your selected airport.
+If they haven't created a flight plan, create a flight plan for them, so that they will have a squawk code. They should appear in your Preactive bay, but if they don't, click on their **Ground Target** or **vatSys Strip** and click on the bay you want them to go into within OzStrips. If they still don't appear, check to make sure that either the ADES or ADEP airport is your selected airport.
+
+A Circuit bay can be toggled on using the Option within the **View** tool bar button.
 
 ## Another aerodrome controller is not using OzStrips, what should I do?
 If a position (SMC, ADC or ACD) is not using OzStrips, you will need to ensure your current view includes theirs. 

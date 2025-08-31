@@ -16,6 +16,7 @@ namespace MaxRumsey.OzStripsPlugin.Gui;
 /// </summary>
 public sealed class SocketConn : IDisposable
 {
+    private readonly MainFormController _mainForm;
     private readonly HubConnection _connection;
     private readonly BayManager _bayManager;
     private readonly bool _isDebug = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
@@ -30,7 +31,7 @@ public sealed class SocketConn : IDisposable
     /// </summary>
     /// <param name="bayManager">The bay manager.</param>
     /// <param name="mainForm">The main form instance.</param>
-    public SocketConn(BayManager bayManager, MainForm mainForm)
+    public SocketConn(BayManager bayManager, MainFormController mainForm)
     {
         _connection = new HubConnectionBuilder()
             .WithUrl(OzStripsConfig.socketioaddr + "OzStripsHub")
@@ -38,6 +39,7 @@ public sealed class SocketConn : IDisposable
             .Build();
 
         _bayManager = bayManager;
+        _mainForm = mainForm;
 
         _connection.Closed += async (error) => await ConnectionLost(error);
 
@@ -78,7 +80,7 @@ public sealed class SocketConn : IDisposable
         {
             if (MainFormValid && code is not null)
             {
-                MainForm.MainFormInstance?.Invoke(() => MainForm.MainFormInstance.SetATISCode(code));
+                mainForm.Invoke(() => mainForm.SetATISCode(code));
             }
         });
 
@@ -88,7 +90,7 @@ public sealed class SocketConn : IDisposable
         {
             if (MainFormValid && metar is not null)
             {
-                 MainForm.MainFormInstance?.Invoke(() => MainForm.MainFormInstance.SetMetar(metar));
+                mainForm.Invoke(() => mainForm.SetMetar(metar));
             }
         });
 
@@ -135,7 +137,7 @@ public sealed class SocketConn : IDisposable
         {
             if (MainFormValid && acid is not null)
             {
-                MainForm.MainFormInstance?.Invoke(() => _bayManager.StripRepository.GetStripStatus(acid, this));
+                mainForm.Invoke(() => _bayManager.StripRepository.GetStripStatus(acid, this));
             }
         });
 
@@ -146,12 +148,12 @@ public sealed class SocketConn : IDisposable
                 return;
             }
 
-            if (!_versionShown && appversion != OzStripsConfig.version)
+            if (!_versionShown && appversion != OzStripsConfig.version && !AerodromeManager.InhibitVersionCheck)
             {
                 _versionShown = true;
                 if (mainForm.Visible)
                 {
-                    // mainForm.Invoke(() => Util.ShowInfoBox("New Update Available: " + appversion));
+                    mainForm.Invoke(() => Util.ShowInfoBox("New Update Available: " + appversion));
                 }
             }
         });
@@ -163,7 +165,18 @@ public sealed class SocketConn : IDisposable
                 mainForm.Invoke(() => Util.ShowWarnBox(message));
             }
         });
+
+        _connection.On<AerodromeState>("AerodromeStateUpdate", (AerodromeState state) =>
+        {
+            if (state.AerodromeCode == _bayManager.AerodromeName && state.AerodromeCode.Length > 0)
+            {
+                _bayManager.AerodromeState = state;
+                mainForm.Invoke(() => AerodromeStateChanged?.Invoke(this, EventArgs.Empty));
+            }
+        });
     }
+
+    public event EventHandler AerodromeStateChanged;
 
     /// <summary>
     /// Available server types.
@@ -206,7 +219,15 @@ public sealed class SocketConn : IDisposable
     /// </summary>
     public bool Connected { get; set; }
 
-    private static bool MainFormValid => MainForm.MainFormInstance?.IsDisposed == false && MainForm.MainFormInstance.Visible;
+    public bool HaveSendPerms
+    {
+        get
+        {
+            return Network.Me.IsRealATC || _isDebug;
+        }
+    }
+
+    private static bool MainFormValid => MainFormController.Instance?.IsDisposed == false && MainFormController.Instance.Visible;
 
     /// <summary>
     /// Gets a value indicating whether the user has permission to send data to server.
@@ -325,11 +346,20 @@ public sealed class SocketConn : IDisposable
         }
     }
 
+    public void RequestCircuit(bool status)
+    {
+        AddMessage("c:RequestCircuit: " + status);
+        if (CanSendDTO)
+        {
+            _connection.InvokeAsync("UpdateCircuitMode", status);
+        }
+    }
+
     /// <summary>
     /// Sets the aerodrome based on the bay manager.
     /// </summary>
     /// <returns>Task.</returns>
-    public async Task SetAerodrome()
+    public async Task SubscribeToAerodrome()
     {
         _freshClient = true;
         _oneMinTimer = new()
@@ -368,8 +398,8 @@ public sealed class SocketConn : IDisposable
             return;
         }
 
-        await SetAerodrome();
-        if (_connection.State == HubConnectionState.Disconnected && MainForm.ReadyForConnection is not null && MainForm.ReadyForConnection == true)
+        await SubscribeToAerodrome();
+        if (_connection.State == HubConnectionState.Disconnected && MainFormController.ReadyForConnection)
         {
             Connect();
         }
@@ -403,7 +433,7 @@ public sealed class SocketConn : IDisposable
     /// <returns>Task.</returns>
     public async Task Connect()
     {
-        MMI.InvokeOnGUI(() => MainForm.MainFormInstance?.SetAerodrome(_bayManager.AerodromeName));
+        MMI.InvokeOnGUI(() => _mainForm.SetAerodrome(_bayManager.AerodromeName));
 
         if (!CanConnectToCurrentServer())
         {
@@ -486,12 +516,13 @@ public sealed class SocketConn : IDisposable
     {
         if (!Network.IsOfficialServer && Server == Servers.VATSIM)
         {
+            // TODO: make sure settings isn't already open.
             var result = Util.ShowQuestionBox("Connection to OzStrips main server detected while connected to the Sweatbox.\n\n" +
                 "Would you like to go to Settings and set Sweatbox mode?");
 
             if (result == DialogResult.Yes)
             {
-                MainForm.MainFormInstance?.ShowSettings(this, new());
+                _mainForm.ShowSettings(this, new());
             }
 
             return false;
@@ -514,11 +545,11 @@ public sealed class SocketConn : IDisposable
         if (Network.IsConnected)
         {
             Connected = true;
-            await SetAerodrome();
+            await SubscribeToAerodrome();
 
             if (MainFormValid)
             {
-                MainForm.MainFormInstance?.Invoke(() => MainForm.MainFormInstance.SetConnStatus());
+                _mainForm.Invoke(() => _mainForm.SetConnStatus());
             }
 
             _bayManager.StripRepository.MarkAllStripsAsAwaitingRoutes();
@@ -535,18 +566,31 @@ public sealed class SocketConn : IDisposable
 
     private async Task ConnectionLost(Exception? error)
     {
-        Connected = false;
-        if (MainFormValid)
+        if (_isDisposed)
         {
-            MainForm.MainFormInstance?.Invoke(() => MainForm.MainFormInstance.SetConnStatus());
+            return;
         }
+
+        if (Connected)
+        {
+            // prevent spamming of this func.
+            Connected = false;
+            _mainForm.Invoke(() => _mainForm.SetConnStatus());
+
+            // Delete circuit bay, once.
+            MMI.InvokeOnGUI(() => _mainForm.SetAerodrome(_bayManager.AerodromeName));
+        }
+
+        // This exists on the off chance we are connected but main form is not valid.
+        Connected = false;
 
         if (error is not null)
         {
             AddMessage("server conn lost - " + error.Message);
         }
 
-        if (_connection.State == HubConnectionState.Disconnected)
+        // Don't try to connect if we are not connected to the network.
+        if (_connection.State == HubConnectionState.Disconnected && Network.IsConnected)
         {
             await Connect();
         }

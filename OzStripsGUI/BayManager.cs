@@ -27,9 +27,9 @@ public class BayManager
     /// </summary>
     /// <param name="main">The flow layout for the bay.</param>
     /// <param name="layoutMethod">The current layout caller.</param>
-    public BayManager(FlowLayoutPanel main, Action<object, EventArgs> layoutMethod)
+    public BayManager(FlowLayoutPanel main)
     {
-        BayRepository = new(main, layoutMethod, this);
+        BayRepository = new(main, this);
     }
 
     /// <summary>
@@ -73,6 +73,15 @@ public class BayManager
     /// </summary>
     public string AerodromeName { get; set; } = "????";
 
+    public AerodromeState AerodromeState { get; set; } = new AerodromeState
+    {
+        AerodromeCode = "????",
+        CircuitActive = false,
+        Connections = new List<string>(),
+    };
+
+    public bool CircuitActive { get; set; }
+
     /// <summary>
     /// Gets the bay the current picked striplistitem is from.
     /// </summary>
@@ -80,11 +89,9 @@ public class BayManager
     {
         get
         {
-            var strip = PickedStripItem?.Strip;
-
-            if (strip is not null)
+            if (PickedStripItem is not null)
             {
-                return BayRepository.FindBay(strip);
+                return BayRepository.FindBay(PickedStripItem);
             }
 
             return null;
@@ -283,8 +290,27 @@ public class BayManager
         }
         else
         {
-            MainForm.MainFormInstance?.ForceStrip(null, null);
+            MainFormController.Instance?.ForceStrip(null, null);
         }
+    }
+
+    public void DropStripBelow(StripListItem targetItem)
+    {
+        var newBay = BayRepository.FindBay(targetItem);
+
+        if (newBay is null || PickedStrip is null)
+        {
+            return;
+        }
+
+        var strip = PickedStrip;
+        var position = newBay.Strips.FindIndex(x => x == targetItem);
+
+        DropStrip(newBay);
+
+        var stripListItem = newBay.GetListItem(strip);
+
+        newBay.ChangeStripPositionAbs(stripListItem, position);
     }
 
     /// <summary>
@@ -292,9 +318,21 @@ public class BayManager
     /// </summary>
     /// <param name="name">The name of the aerodrome.</param>
     /// <param name="socketConn">The socket connection.</param>
-    public void SetAerodrome(string name, SocketConn socketConn)
+    public void PurgeDataAndSetNewAerodrome(string name, SocketConn socketConn)
     {
         AerodromeName = name;
+
+        if (CircuitActive)
+        {
+            CircuitActive = false;
+            BayRepository.ConfigureAndSizeFLPs(true);
+        }
+
+        AerodromeState = new()
+        {
+            AerodromeCode = name,
+        };
+
         WipeStrips();
         StripRepository.Strips.Clear();
 
@@ -303,10 +341,9 @@ public class BayManager
             StripRepository.UpdateFDR(fdr, this, socketConn, true);
         }
 
-        var instance = MainForm.MainFormInstance;
-        if (instance?.IsDisposed == false)
+        if (MainFormController.Instance?.IsDisposed == false)
         {
-            LockWindowUpdate(instance.Handle);
+            LockWindowUpdate(MainFormController.Instance.Handle);
 
             foreach (var bay in BayRepository.Bays)
             {
@@ -352,6 +389,13 @@ public class BayManager
         }
         else
         {
+            // Prevent circumstance where strip remains picked when picking a bar.
+            // Hacky. :(
+            if (PickedStripItem != null)
+            {
+                RemovePicked(true, true);
+            }
+
             SetPickedStripItem(item, bay);
         }
     }

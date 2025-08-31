@@ -1,4 +1,28 @@
 # Changelog
+## v0.6.2
+### Features
+- OzStrips automatically manages the list of aerodromes in the selection window, considering Position / Sectors selected.
+- Added auto-open feature when moving to a tower position.
+- Added toggle-able Circuit bay.
+- Added ability to see online controllers.
+- OzStrips grabs focus on mouse entering the form in a more smart manner.
+- Added ability to Ctrl-Click a strip to move it under or up and over a bar.
+
+### Bugfixes
+- Prevent issues with multiple modals showing up at once.
+- Made SmartResized=Disabled a lot more functional.
+- Various performance improvements on resize / aerodrome change etc.
+- Prevent improper socket client behaviour when we disconnect from VATSIM.
+- Fixed bug where strip could be accidentally forced when trying to drop a bar.
+
+### Misc changes
+- Refactored GUI supporting code out of the MainForm class. General cleanup.
+- Rewrote global aerodrome state management.
+- Added ability to customise bay layouts.
+- Refreshed menu strip view options.
+- Various cleanups of how aerodrome changes are managed.
+- Version checking / warning can be disabled by profile.
+
 ## v0.6.1
 ### Features
 - When strip is picked, bay scrollbar is locked to always show the strip.

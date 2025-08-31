@@ -6,12 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.Gui;
+using MaxRumsey.OzStripsPlugin.Gui.DTO;
 using MaxRumsey.OzStripsPlugin.Gui.Properties;
 using SkiaSharp;
 using SkiaSharp.Views.Desktop;
 using vatsys;
 
-namespace MaxRumsey.OzStripsPlugin;
+namespace MaxRumsey.OzStripsPlugin.Gui;
 
 internal class BayRenderController(Bay bay) : IDisposable
 {
@@ -54,7 +55,7 @@ internal class BayRenderController(Bay bay) : IDisposable
         SkControl.BackColor = Color.Wheat;
         SkControl.Dock = DockStyle.Top;
 
-        // SkControl.MouseMove += MouseMoved;
+        SkControl.MouseMove += MouseMoved;
         Bay.ChildPanel.ChildPanel.Controls.Add(SkControl);
         SkControl.Show();
 
@@ -63,7 +64,10 @@ internal class BayRenderController(Bay bay) : IDisposable
 
     private void MouseMoved(object sender, MouseEventArgs e)
     {
-        SkControl?.Focus();
+        if (MainFormController.GetOpenModals().Count == 0)
+        {
+            SkControl?.Focus();
+        }
     }
 
     public void SetHeight()

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.Gui;
+using MaxRumsey.OzStripsPlugin.Gui.DTO;
 using Newtonsoft.Json;
 using vatsys;
 using vatsys.Plugin;
@@ -25,6 +26,7 @@ public sealed class OzStrips : IPlugin, IDisposable
     private static readonly HttpClient _httpClient = new();
     private static readonly Version _version = new(OzStripsConfig.version);
     private readonly CustomToolStripMenuItem _ozStripsOpener;
+    private readonly AerodromeManager _aerodromeManager;
     private MainForm? _gui;
 
     private System.Timers.Timer? _connectionTimer;
@@ -53,6 +55,9 @@ public sealed class OzStrips : IPlugin, IDisposable
             Util.LogError(ex);
         }
 
+        _aerodromeManager = new();
+        _aerodromeManager.OpenGUI += OpenGUI;
+
         Network.Connected += Connected;
         Network.Disconnected += Disconnected;
         _ozStripsOpener = new(CustomToolStripMenuItemWindowType.Main, CustomToolStripMenuItemCategory.Windows, new ToolStripMenuItem("OzStrips"));
@@ -61,9 +66,12 @@ public sealed class OzStrips : IPlugin, IDisposable
         MMI.SelectedTrackChanged += SelectedAirTrackChanged;
         MMI.SelectedGroundTrackChanged += SelectedGroundTrackChanged;
         Network.OnlinePilotsChanged += Network_OnlinePilotsChanged;
-        _ = CheckVersion();
 
         AppDomain.CurrentDomain.UnhandledException += ErrorHandler;
+
+        _aerodromeManager.Initialize();
+
+        _ = CheckVersion();
     }
 
     /// <summary>
@@ -79,7 +87,7 @@ public sealed class OzStrips : IPlugin, IDisposable
     {
         if (_gui?.IsHandleCreated == true)
         {
-            MMI.InvokeOnGUI(() => _gui.UpdateFDR(updated));
+            MMI.InvokeOnGUI(() => _gui.Controller.UpdateFDR(updated));
         }
     }
 
@@ -133,7 +141,12 @@ public sealed class OzStrips : IPlugin, IDisposable
                 return;
             }
 
-            // Errors.Add(new("A new version of the plugin is available."), "OzStrips");
+            if (AerodromeManager.InhibitVersionCheck)
+            {
+                return;
+            }
+
+            Errors.Add(new("A new version of the plugin is available."), "OzStrips");
         }
         catch
         {
@@ -179,7 +192,7 @@ public sealed class OzStrips : IPlugin, IDisposable
     {
         if (e.Removed && _gui?.IsDisposed == false)
         {
-            MMI.InvokeOnGUI(() => _gui.HandleDisconnect(e));
+            MMI.InvokeOnGUI(() => _gui.Controller.HandleDisconnect(e));
         }
     }
 
@@ -204,7 +217,7 @@ public sealed class OzStrips : IPlugin, IDisposable
         _readyForConnection = true;
         if (_gui?.IsHandleCreated == true)
         {
-            MMI.InvokeOnGUI(() => _gui.MarkConnectionReadiness(_readyForConnection));
+            MMI.InvokeOnGUI(() => _gui.Controller.MarkConnectionReadiness(_readyForConnection));
         }
     }
 
@@ -223,8 +236,8 @@ public sealed class OzStrips : IPlugin, IDisposable
 
         if (_gui?.IsHandleCreated == true)
         {
-            MMI.InvokeOnGUI(() => _gui.DisconnectVATSIM());
-            _gui.MarkConnectionReadiness(_readyForConnection);
+            MMI.InvokeOnGUI(() => _gui.Controller.DisconnectVATSIM());
+            _gui.Controller.MarkConnectionReadiness(_readyForConnection);
         }
     }
 
@@ -246,7 +259,7 @@ public sealed class OzStrips : IPlugin, IDisposable
     {
         if (_gui?.IsDisposed != false)
         {
-            _gui = new(_readyForConnection);
+            _gui = new(_readyForConnection, _aerodromeManager);
         }
         else if (_gui.Visible)
         {
@@ -283,11 +296,11 @@ public sealed class OzStrips : IPlugin, IDisposable
 
         if (_gui?.IsDisposed == false && fdr is not null)
         {
-            MMI.InvokeOnGUI(() => _gui.SetSelectedTrack(fdr.Callsign, false));
+            MMI.InvokeOnGUI(() => _gui.Controller.SetSelectedTrack(fdr.Callsign, false));
         }
         else if (_gui?.IsDisposed == false)
         {
-            MMI.InvokeOnGUI(() => _gui.SetSelectedTrack(null, false));
+            MMI.InvokeOnGUI(() => _gui.Controller.SetSelectedTrack(null, false));
         }
     }
 
@@ -300,11 +313,11 @@ public sealed class OzStrips : IPlugin, IDisposable
     {
         if (_gui?.IsDisposed == false && MMI.SelectedGroundTrack is not null)
         {
-            MMI.InvokeOnGUI(() => _gui.SetSelectedTrack(MMI.SelectedGroundTrack.GetPilot().Callsign, true));
+            MMI.InvokeOnGUI(() => _gui.Controller.SetSelectedTrack(MMI.SelectedGroundTrack.GetPilot().Callsign, true));
         }
         else if (_gui?.IsDisposed == false)
         {
-            MMI.InvokeOnGUI(() => _gui.SetSelectedTrack(null, true));
+            MMI.InvokeOnGUI(() => _gui.Controller.SetSelectedTrack(null, true));
         }
     }
 }

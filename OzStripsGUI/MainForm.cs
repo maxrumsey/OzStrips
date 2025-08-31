@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.Gui.Controls;
+using MaxRumsey.OzStripsPlugin.Gui.DTO;
 using MaxRumsey.OzStripsPlugin.Gui.Properties;
 using vatsys;
 
@@ -14,67 +15,29 @@ namespace MaxRumsey.OzStripsPlugin.Gui;
 /// <summary>
 /// The main application form.
 /// </summary>
+/// All but the most basic of logic is abstracted to MainFormController
 public partial class MainForm : Form
 {
-    private readonly Timer _timer;
-    private readonly BayManager _bayManager;
-    private readonly SocketConn _socketConn;
-    private readonly List<string> _aerodromes = [];
-    private string _metar = string.Empty;
-
-    private FormWindowState _lastState = FormWindowState.Minimized;
-
-    private bool _readyForConnection;
-    private bool _postresizechecked = true;
+    private MainFormController _mainFormController;
+    private NoScrollFLP _flpMain;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MainForm"/> class.
     /// </summary>
     /// <param name="readyForConnection">Whether the client can establish a server connection.</param>
-    public MainForm(bool readyForConnection)
+    public MainForm(bool readyForConnection, AerodromeManager aerodromeManager)
     {
-        _readyForConnection = readyForConnection;
         MainFormInstance = this;
+        AerodromeManager = aerodromeManager;
+        _mainFormController = new(this, readyForConnection);
 
         InitializeComponent();
-        _timer = new()
-        {
-            Interval = 100,
-        };
+        InitialiseEvents();
+
+        CreateMainFLP();
+        _mainFormController.Initialize();
 
         Util.SetAndReturnDLLVar();
-
-        _timer.Tick += UpdateTimer;
-        _timer.Start();
-
-        _bayManager = new(flp_main, AllToolStripMenuItem_Click);
-        _socketConn = new(_bayManager, this);
-
-        AddAerodrome("YBBN");
-        AddAerodrome("YBCG");
-        AddAerodrome("YBSU");
-        AddAerodrome("YMEN");
-        AddAerodrome("YMML");
-        AddAerodrome("YPPH");
-        AddAerodrome("YSCB");
-        AddAerodrome("YSSY");
-
-        if (_readyForConnection)
-        {
-            _socketConn.Connect();
-        }
-
-        _bayManager.BayRepository.Resize();
-
-        if (IsDebug)
-        {
-            var toolStripMenuItem = new ToolStripMenuItem
-            {
-                Text = "Manual Comm",
-            };
-            toolStripMenuItem.Click += (_, _) => OpenManDebug();
-            debugToolStripMenuItem.DropDownItems.Add(toolStripMenuItem);
-        }
     }
 
     /// <summary>
@@ -88,10 +51,37 @@ public partial class MainForm : Form
     public static bool IsDebug =>
         !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
 
-    /// <summary>
-    /// Gets whether or not a connection can be made to the server.
-    /// </summary>
-    public static bool? ReadyForConnection => MainForm.MainFormInstance?._readyForConnection;
+    public Label AerodromeLabel => lb_ad;
+
+    public ToolTip MetarToolTip => tt_metar;
+
+    public ToolTip ClientsToolTip => tt_clients;
+
+    public ToolStripMenuItem ToggleCircuitToolStrip => ts_toggleCircuit;
+
+    public Panel StatusPanel => pl_stat;
+
+    public Label ATISLabel => lb_atis;
+
+    public TextBox TimerTextBox => tb_Time;
+
+    public ToolStripMenuItem AerodromeListToolStrip => ts_ad;
+
+    public ToolStripMenuItem ViewListToolStrip => ts_mode;
+
+    public string EnteredAerodrome => toolStripTextBox1.Text;
+
+    public FlowLayoutPanel MainFLP => _flpMain;
+
+    public AerodromeManager AerodromeManager { get; private set; }
+
+    public MainFormController Controller
+    {
+        get
+        {
+            return _mainFormController;
+        }
+    }
 
     /// <inheritdoc/>
     protected override CreateParams CreateParams
@@ -105,260 +95,6 @@ public partial class MainForm : Form
     }
 
     /// <summary>
-    /// Gets or sets the list of aerodromes.
-    /// </summary>
-    /// <param name="value">The list of aerodromes.</param>
-    public void SetAerodromeList(List<string> value)
-    {
-        _aerodromes.Clear();
-
-        foreach (var item in ts_ad.DropDownItems.OfType<ToolStripItem>().ToArray())
-        {
-            if (item.Tag is null)
-            {
-                ts_ad.DropDownItems.Remove(item);
-            }
-        }
-
-        foreach (var item in value)
-        {
-            AddAerodrome(item);
-        }
-    }
-
-    /// <summary>
-    /// Marks whether or not a connection is ready to be established to the server.
-    /// </summary>
-    /// <param name="readyForConnection">Whether or not a connection can be made.</param>
-    public void MarkConnectionReadiness(bool readyForConnection)
-    {
-        try
-        {
-            _readyForConnection = readyForConnection;
-            if (_readyForConnection)
-            {
-                _socketConn.Connect();
-            }
-        }
-        catch (Exception ex)
-        {
-            Util.LogError(ex);
-        }
-    }
-
-    /// <summary>
-    /// Forces a resize event to redraw stripbays.
-    /// </summary>
-    public void ForceResize()
-    {
-        _bayManager.BayRepository.Resize(true);
-        _bayManager.BayRepository.Resize(); // double resize to take into account addition / subtraction of scroll bars.
-    }
-
-    /// <summary>
-    /// Sets the current aerodrome. Called by the GUI, and subsequently calls SetAerodrome() for various managers.
-    /// </summary>
-    /// <param name="name">The aerodrome name.</param>
-    public void SetAerodrome(string name)
-    {
-        try
-        {
-            if (_bayManager != null)
-            {
-                _bayManager.SetAerodrome(name, _socketConn);
-                _socketConn.SetAerodrome();
-                lb_ad.Text = name;
-                SetATISCode("Z");
-            }
-        }
-        catch (Exception ex)
-        {
-            Util.LogError(ex);
-        }
-    }
-
-    /// <summary>
-    /// Moves to the next/previous aerodrome.
-    /// </summary>
-    /// <param name="direction">Direction to move in.</param>
-    public void MoveLateralAerodrome(int direction)
-    {
-        var index = 0;
-        for (var i = 0; i < _aerodromes.Count; i++)
-        {
-            if (_aerodromes[i] == _bayManager.AerodromeName)
-            {
-                index = i;
-            }
-        }
-
-        index += direction;
-        if (index >= _aerodromes.Count)
-        {
-            index = 0;
-        }
-
-        if (index < 0)
-        {
-            index = _aerodromes.Count - 1;
-        }
-
-        SetAerodrome(_aerodromes[index]);
-    }
-
-    /// <summary>
-    /// Sets the METAR information. Called from SocketConn.
-    /// </summary>
-    /// <param name="metar">The METAR.</param>
-    public void SetMetar(string metar)
-    {
-        if (metar != _metar)
-        {
-            _metar = metar;
-            tt_metar.RemoveAll();
-            tt_metar.SetToolTip(lb_ad, metar);
-        }
-    }
-
-    /// <summary>
-    /// Sets the ATIS code. Called from SocketConn.
-    /// </summary>
-    /// <param name="code">The ATIS code.</param>
-    public void SetATISCode(string code)
-    {
-        lb_atis.Text = code;
-    }
-
-    /// <summary>
-    /// Opens the Manual MSG debug menu.
-    /// </summary>
-    public void OpenManDebug()
-    {
-        var modalChild = new ManualMsgDebug(_bayManager);
-        var bm = new BaseModal(modalChild, "Manual Message Editor");
-        bm.Show(this);
-    }
-
-    /// <summary>
-    /// Sets the connection status, green is connected, orange/red if not.
-    /// </summary>
-    public void SetConnStatus()
-    {
-        pl_stat.BackColor = _socketConn.Connected ? Color.Green : Color.OrangeRed;
-    }
-
-    /// <summary>
-    /// Sets the selected track from vatSys.
-    /// </summary>
-    /// <param name="callsign">Selected Callsign.</param>
-    /// <param name="ground">Whether or not the track is a ground track.</param>
-    public void SetSelectedTrack(string? callsign, bool ground)
-    {
-        try
-        {
-            _bayManager.SetPickedCallsignFromVatsys(callsign, ground);
-        }
-        catch (Exception ex)
-        {
-            Util.LogError(ex);
-        }
-    }
-
-    /// <summary>
-    /// Disconnects from VATSIM.
-    /// </summary>
-    public void DisconnectVATSIM()
-    {
-        try
-        {
-            _bayManager.WipeStrips();
-            _bayManager.StripRepository.Strips.Clear();
-            _socketConn.Disconnect();
-        }
-        catch (Exception ex)
-        {
-            Util.LogError(ex);
-        }
-    }
-
-    /// <summary>
-    /// Forces a strip.
-    /// </summary>
-    /// <param name="sender">Sending object.</param>
-    /// <param name="e">EventArgs.</param>
-    public void ForceStrip(object? sender, EventArgs? e)
-    {
-        _bayManager.ForceStrip(_socketConn);
-    }
-
-    /// <summary>
-    /// Updates the flight data record.
-    /// </summary>
-    /// <param name="fdr">The flgiht data record.</param>
-    /// <remarks>Triggered from Connector plugin.</remarks>
-    public void UpdateFDR(FDP2.FDR fdr)
-    {
-        try
-        {
-            _bayManager.StripRepository.UpdateFDR(fdr, _bayManager, _socketConn);
-        }
-        catch (Exception ex)
-        {
-            Util.LogError(ex);
-        }
-    }
-
-    /// <summary>
-    /// Handles a pilot disconnecting from vatSys.
-    /// </summary>
-    /// <param name="args">Event arguments.</param>
-    public void HandleDisconnect(Network.PilotUpdateEventArgs args)
-    {
-        try
-        {
-            if (!args.Removed || args.UpdatedPilot is null)
-            {
-                return;
-            }
-
-            var strip = _bayManager.StripRepository.GetStrip(args.UpdatedPilot.Callsign);
-            if (strip is not null)
-            {
-                _bayManager.BayRepository.DeleteStrip(strip);
-            }
-        }
-        catch (Exception ex)
-        {
-            Util.LogError(ex);
-        }
-    }
-
-    /// <summary>
-    /// Opens the settings window.
-    /// </summary>
-    /// <param name="sender">Sender.</param>
-    /// <param name="e">Args.</param>
-    public void ShowSettings(object sender, EventArgs e)
-    {
-        var modalChild = new SettingsWindowControl(_socketConn, _aerodromes);
-        var bm = new BaseModal(modalChild, "OzStrips Settings");
-        bm.ReturnEvent += modalChild.ModalReturned;
-        bm.Show(MainForm.MainFormInstance);
-    }
-
-    /// <summary>
-    /// Opens the settings window.
-    /// </summary>
-    public void ShowQuickSearch()
-    {
-        var modalChild = new QuickSearch(_bayManager);
-        var bm = new BaseModal(modalChild, "Quick Search");
-        modalChild.BaseModal = bm;
-        bm.ReturnEvent += modalChild.ModalReturned;
-        bm.Show(MainForm.MainFormInstance);
-    }
-
-    /// <summary>
     /// Overrides keypress event to capture all keypresses.
     /// </summary>
     /// <param name="msg">Sender.</param>
@@ -366,223 +102,7 @@ public partial class MainForm : Form
     /// <returns>Handled.</returns>
     protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
     {
-        if (keyData == (Keys.Up | Keys.Control))
-        {
-            _bayManager.PositionToNextBar(1);
-            return true;
-        }
-        else if (keyData == (Keys.Down | Keys.Control))
-        {
-            _bayManager.PositionToNextBar(-1);
-            return true;
-        }
-        else if (keyData == (Keys.X | Keys.Alt))
-        {
-            // If we didnt't delete a crossing bar, add one.
-            if (!_bayManager.DeleteBarByParams("Runway", 3, "XXX CROSSING XXX"))
-            {
-                _bayManager.AddBar("Runway", 3, "XXX CROSSING XXX");
-            }
-
-            return true;
-        }
-        else if (keyData == (Keys.F | Keys.Control))
-        {
-            ShowQuickSearch();
-
-            return true;
-        }
-
-        switch (keyData)
-            {
-                case Keys.Up:
-                    _bayManager.PositionKey(1);
-                    return true;
-                case Keys.Down:
-                    _bayManager.PositionKey(-1);
-                    return true;
-                case Keys.Space:
-                    _bayManager.QueueUp();
-                    return true;
-                case Keys.Enter:
-                    _bayManager.SidTrigger();
-                    return true;
-                case Keys.Tab:
-                    _bayManager.CockStrip();
-                    return true;
-                case Keys.OemOpenBrackets:
-                    MoveLateralAerodrome(-1);
-                    return true;
-                case Keys.OemCloseBrackets:
-                    MoveLateralAerodrome(1);
-                    return true;
-                case Keys.Back:
-                    _bayManager.Inhibit();
-                    return true;
-                case Keys.X:
-                    _bayManager.CrossStrip();
-                    return true;
-                case Keys.F:
-                    _bayManager.FlipFlopStrip();
-                    return true;
-                default:
-                    break;
-            }
-
-        _bayManager.ForceRerender();
-
-        return base.ProcessCmdKey(ref msg, keyData);
-    }
-
-    /*
-     * GUI Below
-     */
-
-    private void UpdateTimer(object sender, EventArgs e)
-    {
-        if (!Visible)
-        {
-            return;
-        }
-
-        if (!_postresizechecked)
-        {
-            _postresizechecked = true;
-            _bayManager.BayRepository.Resize();
-        }
-
-        if (!IsDisposed)
-        {
-            Invoke(() =>
-            {
-                tb_Time.Text = DateTime.UtcNow.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
-                _bayManager.ForceRerender();
-            });
-        }
-    }
-
-    private void MainFormSizeChanged(object sender, EventArgs e)
-    {
-        _postresizechecked = false;
-        _bayManager?.BayRepository.Resize();
-        SetControlBarScrollBar();
-    }
-
-    private void AddAerodrome(string name)
-    {
-        _aerodromes.Add(name);
-
-        var toolStripMenuItem = new ToolStripMenuItem
-        {
-            Text = name,
-        };
-        toolStripMenuItem.Click += (sender, e) => SetAerodrome(name);
-        ts_ad.DropDownItems.Add(toolStripMenuItem);
-    }
-
-    private void Bt_inhibit_Click(object sender, EventArgs e)
-    {
-        _bayManager.Inhibit();
-    }
-
-    private void ACDToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-        _bayManager.BayRepository.SetLayout(ACDToolStripMenuItem_Click);
-        _bayManager.BayRepository.WipeBays();
-        _bayManager.BayRepository.BayNum = 3;
-        _ = new Bay([StripBay.BAY_PREA], _bayManager, _socketConn, "Preactive", 0);
-        _ = new Bay([StripBay.BAY_CLEARED], _bayManager, _socketConn, "Cleared", 1);
-        _ = new Bay([StripBay.BAY_PUSHED], _bayManager, _socketConn, "Pushback", 2);
-        _bayManager.BayRepository.Resize();
-        _bayManager.BayRepository.ReloadStrips(_socketConn);
-    }
-
-    private void SMCToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-        _bayManager.BayRepository.SetLayout(SMCToolStripMenuItem_Click);
-        _bayManager.BayRepository.WipeBays();
-        _bayManager.BayRepository.BayNum = 5;
-        _ = new Bay([StripBay.BAY_CLEARED], _bayManager, _socketConn, "Cleared", 0);
-        _ = new Bay([StripBay.BAY_PUSHED], _bayManager, _socketConn, "Pushback", 0);
-        _ = new Bay([StripBay.BAY_TAXI], _bayManager, _socketConn, "Taxi", 1);
-        _ = new Bay([StripBay.BAY_HOLDSHORT], _bayManager, _socketConn, "Holding Point", 2);
-        _ = new Bay([StripBay.BAY_RUNWAY], _bayManager, _socketConn, "Runway", 2);
-        _bayManager.BayRepository.Resize();
-        _bayManager.BayRepository.ReloadStrips(_socketConn);
-    }
-
-    private void SMCACDToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-        _bayManager.BayRepository.SetLayout(SMCACDToolStripMenuItem_Click);
-        _bayManager.BayRepository.WipeBays();
-        _bayManager.BayRepository.BayNum = 6;
-        _ = new Bay([StripBay.BAY_PREA], _bayManager, _socketConn, "Preactive", 0);
-        _ = new Bay([StripBay.BAY_CLEARED], _bayManager, _socketConn, "Cleared", 0);
-        _ = new Bay([StripBay.BAY_PUSHED], _bayManager, _socketConn, "Pushback", 0);
-        _ = new Bay([StripBay.BAY_TAXI], _bayManager, _socketConn, "Taxi", 1);
-        _ = new Bay([StripBay.BAY_HOLDSHORT], _bayManager, _socketConn, "Holding Point", 2);
-        _ = new Bay([StripBay.BAY_RUNWAY], _bayManager, _socketConn, "Runway", 2);
-        _bayManager.BayRepository.Resize();
-        _bayManager.BayRepository.ReloadStrips(_socketConn);
-    }
-
-    private void ADCToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-        _bayManager.BayRepository.SetLayout(ADCToolStripMenuItem_Click);
-        _bayManager.BayRepository.WipeBays();
-        _bayManager.BayRepository.BayNum = 4;
-        _ = new Bay([StripBay.BAY_HOLDSHORT], _bayManager, _socketConn, "Holding Point", 0);
-        _ = new Bay([StripBay.BAY_RUNWAY], _bayManager, _socketConn, "Runway", 1);
-        _ = new Bay([StripBay.BAY_OUT], _bayManager, _socketConn, "Departed", 2);
-        _ = new Bay([StripBay.BAY_ARRIVAL], _bayManager, _socketConn, "Arrivals", 2);
-        _bayManager.BayRepository.Resize();
-        _bayManager.BayRepository.ReloadStrips(_socketConn);
-    }
-
-    private void AllToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-        _bayManager.BayRepository.SetLayout(AllToolStripMenuItem_Click);
-        _bayManager.BayRepository.WipeBays();
-        _bayManager.BayRepository.BayNum = 8;
-        _ = new Bay([StripBay.BAY_PREA], _bayManager, _socketConn, "Preactive", 0);
-        _ = new Bay([StripBay.BAY_CLEARED], _bayManager, _socketConn, "Cleared", 0);
-        _ = new Bay([StripBay.BAY_PUSHED], _bayManager, _socketConn, "Pushback", 1);
-        _ = new Bay([StripBay.BAY_TAXI], _bayManager, _socketConn, "Taxi", 1);
-        _ = new Bay([StripBay.BAY_HOLDSHORT], _bayManager, _socketConn, "Holding Point", 1);
-        _ = new Bay([StripBay.BAY_RUNWAY], _bayManager, _socketConn, "Runway", 2);
-        _ = new Bay([StripBay.BAY_OUT], _bayManager, _socketConn, "Departed", 2);
-        _ = new Bay([StripBay.BAY_ARRIVAL], _bayManager, _socketConn, "Arrivals", 2);
-        _bayManager.BayRepository.Resize();
-        _bayManager.BayRepository.ReloadStrips(_socketConn);
-    }
-
-    private void ADCSMCToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-        _bayManager.BayRepository.SetLayout(ADCSMCToolStripMenuItem_Click);
-        _bayManager.BayRepository.WipeBays();
-        _bayManager.BayRepository.BayNum = 7;
-        _ = new Bay([StripBay.BAY_CLEARED], _bayManager, _socketConn, "Cleared", 0);
-        _ = new Bay([StripBay.BAY_PUSHED], _bayManager, _socketConn, "Pushback", 0);
-        _ = new Bay([StripBay.BAY_TAXI], _bayManager, _socketConn, "Taxi", 1);
-        _ = new Bay([StripBay.BAY_HOLDSHORT], _bayManager, _socketConn, "Holding Point", 1);
-        _ = new Bay([StripBay.BAY_RUNWAY], _bayManager, _socketConn, "Runway", 2);
-        _ = new Bay([StripBay.BAY_OUT], _bayManager, _socketConn, "Departed", 2);
-        _ = new Bay([StripBay.BAY_ARRIVAL], _bayManager, _socketConn, "Arrivals", 2);
-        _bayManager.BayRepository.Resize();
-        _bayManager.BayRepository.ReloadStrips(_socketConn);
-    }
-
-    private void Bt_cross_Click(object sender, EventArgs e)
-    {
-        _bayManager.CrossStrip();
-    }
-
-    // socket.io log
-    private void ToolStripMenuItem1_Click(object sender, EventArgs e)
-    {
-        var modalChild = new MsgListDebug(_socketConn);
-        var bm = new BaseModal(modalChild, "Msg List");
-        bm.Show(this);
+        return _mainFormController.ProcessCmdKey(ref msg, keyData) ?? base.ProcessCmdKey(ref msg, keyData);
     }
 
     private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -590,17 +110,6 @@ public partial class MainForm : Form
         var modalChild = new About();
         var bm = new BaseModal(modalChild, "About OzStrips");
         bm.Show(this);
-    }
-
-    private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
-    {
-        _socketConn.Close();
-        _socketConn.Dispose();
-    }
-
-    private void Bt_pdc_Click(object sender, EventArgs e)
-    {
-        _bayManager.SendPDC();
     }
 
     private void GitHubToolStripMenuItem_Click(object sender, EventArgs e)
@@ -618,7 +127,7 @@ public partial class MainForm : Form
         System.Diagnostics.Process.Start("https://maxrumsey.xyz/OzStrips/changelog");
     }
 
-    private void SetSmartResizeCheckBox()
+    public void SetSmartResizeCheckBox()
     {
         colDisabledToolStripMenuItem.Checked = false;
         oneColumnToolStripMenuItem.Checked = false;
@@ -642,24 +151,9 @@ public partial class MainForm : Form
         }
     }
 
-    private void MainForm_Load(object sender, EventArgs e)
-    {
-        SetConnStatus();
-        SetSmartResizeCheckBox();
-    }
-
     private void ModifyButtonClicked(object sender, EventArgs e)
     {
-        ShowSettings(this, EventArgs.Empty);
-    }
-
-    private void AerodromeSelectorKeyDown(object sender, KeyPressEventArgs e)
-    {
-        if (_bayManager != null && e.KeyChar == Convert.ToChar(Keys.Enter, CultureInfo.InvariantCulture))
-        {
-            SetAerodrome(toolStripTextBox1.Text.ToUpper(CultureInfo.InvariantCulture));
-            e.Handled = true;
-        }
+        _mainFormController.ShowSettings(this, EventArgs.Empty);
     }
 
     private void ReloadStripItem(object sender, EventArgs e)
@@ -667,53 +161,50 @@ public partial class MainForm : Form
         StripElementList.Load();
     }
 
-    private void BarCreatorClick(object sender, EventArgs e)
+    private void ReloadAerodromes(object sender, EventArgs e)
     {
-        var modalChild = new BarCreator(_bayManager);
-        var bm = new BaseModal(modalChild, "Add Bar");
-        bm.ReturnEvent += modalChild.ModalReturned;
-        bm.Show(this);
-    }
-
-    private void MainForm_Resize(object sender, EventArgs e)
-    {
-        if (WindowState != _lastState)
-        {
-            _lastState = WindowState;
-            _postresizechecked = false;
-            _bayManager?.BayRepository.Resize();
-            SetControlBarScrollBar();
-        }
+        AerodromeManager.LoadSettings();
     }
 
     private void ColDisabledToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        SetSmartResizeColumnMode(0);
+        _mainFormController.SetSmartResizeColumnMode(0);
     }
 
     private void OneColumnToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        SetSmartResizeColumnMode(1);
+        _mainFormController.SetSmartResizeColumnMode(1);
     }
 
     private void TwoColumnsToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        SetSmartResizeColumnMode(2);
+        _mainFormController.SetSmartResizeColumnMode(2);
     }
 
     private void ThreeColumnsToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        SetSmartResizeColumnMode(3);
+        _mainFormController.SetSmartResizeColumnMode(3);
     }
 
-    private void SetSmartResizeColumnMode(int cols)
+    private void CreateMainFLP()
     {
-        Util.SetEnvVar("SmartResize", cols);
-        SetSmartResizeCheckBox();
-        _bayManager.BayRepository.ReloadStrips(_socketConn);
+        // Try to prevent designer auto-deletion.
+        _flpMain = new();
+        _flpMain.AutoScroll = true;
+        _flpMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
+        _flpMain.Dock = System.Windows.Forms.DockStyle.Fill;
+        _flpMain.Location = new System.Drawing.Point(0, 25);
+        _flpMain.Margin = new System.Windows.Forms.Padding(0);
+        _flpMain.Name = "flp_main";
+        _flpMain.Size = new System.Drawing.Size(1784, 891);
+        _flpMain.TabIndex = 2;
+        _flpMain.WrapContents = false;
+
+        Controls.Add(_flpMain);
+        Controls.SetChildIndex(_flpMain, 0);
     }
 
-    private void SetControlBarScrollBar()
+    public void SetControlBarScrollBar()
     {
         var margin = 0;
 
@@ -725,8 +216,21 @@ public partial class MainForm : Form
         pl_controlbar.Padding = new Padding(0, 0, 0, margin);
     }
 
-    private void FlipFlopStrip(object sender, EventArgs e)
+    private void InitialiseEvents()
     {
-        _bayManager.FlipFlopStrip();
+        bt_flip.Click += _mainFormController.FlipFlopStrip;
+        bt_bar.Click += _mainFormController.BarCreatorClick;
+        bt_cross.Click += _mainFormController.Bt_cross_Click;
+        bt_inhibit.Click += _mainFormController.Bt_inhibit_Click;
+        toolStripTextBox1.KeyPress += _mainFormController.AerodromeSelectorKeyDown;
+        toolStripMenuItem1.Click += _mainFormController.ShowMessageList_Click;
+        settingsToolStripMenuItem.Click += _mainFormController.ShowSettings;
+        ts_toggleCircuit.Click += _mainFormController.ToggleCircuitBay;
+        pl_stat.Paint += _mainFormController.ConnStatusPaint;
+        FormClosed += _mainFormController.MainForm_FormClosed;
+        Load += _mainFormController.MainForm_Load;
+        ResizeEnd += _mainFormController.MainFormSizeChanged;
+        Resize += _mainFormController.MainForm_Resize;
+        Closing += _mainFormController.FormClosing;
     }
 }

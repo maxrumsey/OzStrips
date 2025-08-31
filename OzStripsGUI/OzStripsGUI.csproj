@@ -2,6 +2,7 @@
     <PropertyGroup>
         <TargetFrameworks>net481</TargetFrameworks>
         <UseWindowsForms>true</UseWindowsForms>
+        <UseWPF>true</UseWPF>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
         <EmbeddedResourceUseDependentUponConvention>true</EmbeddedResourceUseDependentUponConvention>
         <PlatformTarget>x86</PlatformTarget>
@@ -93,6 +94,9 @@
         </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
+      <None Update="AerodromeSettings.xml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
       <None Update="libSkiaSharp.dylib">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>

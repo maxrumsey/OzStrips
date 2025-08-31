@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
+using MaxRumsey.OzStripsPlugin.Gui.DTO;
 using SkiaSharp;
 using vatsys;
 
@@ -275,6 +277,12 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 _strip.SIDTrigger();
                 break;
             case StripElements.Actions.PICK:
+                if (MainFormController.ControlHeld)
+                {
+                    _bayRenderController.Bay.BayManager.DropStripBelow(_bayRenderController.Bay.Strips.First(x => x?.Strip == _strip));
+                    break;
+                }
+
                 _strip.TogglePick();
                 break;
             case StripElements.Actions.ASSIGN_SSR:

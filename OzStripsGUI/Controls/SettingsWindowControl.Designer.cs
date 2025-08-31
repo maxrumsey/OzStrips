@@ -27,7 +27,11 @@
         private void InitializeComponent()
         {
             this.gp_main = new System.Windows.Forms.GroupBox();
+            this.gb_open = new System.Windows.Forms.GroupBox();
+            this.cb_open = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.gb_int = new System.Windows.Forms.GroupBox();
+            this.cb_preasort = new System.Windows.Forms.CheckBox();
             this.cb_keeppicked = new System.Windows.Forms.CheckBox();
             this.llb_keyboard = new System.Windows.Forms.LinkLabel();
             this.gb_ads = new System.Windows.Forms.GroupBox();
@@ -50,8 +54,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.rb_ozstrips = new System.Windows.Forms.RadioButton();
             this.rb_vatsys = new System.Windows.Forms.RadioButton();
-            this.cb_preasort = new System.Windows.Forms.CheckBox();
             this.gp_main.SuspendLayout();
+            this.gb_open.SuspendLayout();
             this.gb_int.SuspendLayout();
             this.gb_ads.SuspendLayout();
             this.gb_server.SuspendLayout();
@@ -62,6 +66,7 @@
             // 
             // gp_main
             // 
+            this.gp_main.Controls.Add(this.gb_open);
             this.gp_main.Controls.Add(this.gb_int);
             this.gp_main.Controls.Add(this.llb_keyboard);
             this.gp_main.Controls.Add(this.gb_ads);
@@ -70,10 +75,38 @@
             this.gp_main.Controls.Add(this.gb_popup);
             this.gp_main.Location = new System.Drawing.Point(4, 4);
             this.gp_main.Name = "gp_main";
-            this.gp_main.Size = new System.Drawing.Size(469, 355);
+            this.gp_main.Size = new System.Drawing.Size(469, 373);
             this.gp_main.TabIndex = 0;
             this.gp_main.TabStop = false;
             this.gp_main.Text = "Settings";
+            // 
+            // gb_open
+            // 
+            this.gb_open.Controls.Add(this.cb_open);
+            this.gb_open.Controls.Add(this.label5);
+            this.gb_open.Location = new System.Drawing.Point(8, 256);
+            this.gb_open.Name = "gb_open";
+            this.gb_open.Size = new System.Drawing.Size(222, 93);
+            this.gb_open.TabIndex = 3;
+            this.gb_open.TabStop = false;
+            this.gb_open.Text = "Opening Behaviour";
+            // 
+            // cb_open
+            // 
+            this.cb_open.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_open.FormattingEnabled = true;
+            this.cb_open.Location = new System.Drawing.Point(10, 63);
+            this.cb_open.Name = "cb_open";
+            this.cb_open.Size = new System.Drawing.Size(145, 21);
+            this.cb_open.TabIndex = 3;
+            // 
+            // label5
+            // 
+            this.label5.Location = new System.Drawing.Point(7, 20);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(209, 40);
+            this.label5.TabIndex = 2;
+            this.label5.Text = "Should OzStrips auto-open on launch or position switch?";
             // 
             // gb_int
             // 
@@ -85,6 +118,16 @@
             this.gb_int.TabIndex = 6;
             this.gb_int.TabStop = false;
             this.gb_int.Text = "Strip Interaction";
+            // 
+            // cb_preasort
+            // 
+            this.cb_preasort.AutoSize = true;
+            this.cb_preasort.Location = new System.Drawing.Point(7, 38);
+            this.cb_preasort.Name = "cb_preasort";
+            this.cb_preasort.Size = new System.Drawing.Size(188, 17);
+            this.cb_preasort.TabIndex = 1;
+            this.cb_preasort.Text = "Alphabetically sort preactive strips.";
+            this.cb_preasort.UseVisualStyleBackColor = true;
             // 
             // cb_keeppicked
             // 
@@ -99,7 +142,7 @@
             // llb_keyboard
             // 
             this.llb_keyboard.AutoSize = true;
-            this.llb_keyboard.Location = new System.Drawing.Point(14, 257);
+            this.llb_keyboard.Location = new System.Drawing.Point(233, 352);
             this.llb_keyboard.Name = "llb_keyboard";
             this.llb_keyboard.Size = new System.Drawing.Size(107, 13);
             this.llb_keyboard.TabIndex = 3;
@@ -119,7 +162,7 @@
             this.gb_ads.Size = new System.Drawing.Size(227, 151);
             this.gb_ads.TabIndex = 2;
             this.gb_ads.TabStop = false;
-            this.gb_ads.Text = "Aerodromes";
+            this.gb_ads.Text = "Custom Aerodromes";
             // 
             // bt_add
             // 
@@ -320,23 +363,14 @@
             this.rb_vatsys.Text = "vatSys Popup";
             this.rb_vatsys.UseVisualStyleBackColor = true;
             // 
-            // cb_preasort
-            // 
-            this.cb_preasort.AutoSize = true;
-            this.cb_preasort.Location = new System.Drawing.Point(7, 38);
-            this.cb_preasort.Name = "cb_preasort";
-            this.cb_preasort.Size = new System.Drawing.Size(188, 17);
-            this.cb_preasort.TabIndex = 1;
-            this.cb_preasort.Text = "Alphabetically sort preactive strips.";
-            this.cb_preasort.UseVisualStyleBackColor = true;
-            // 
             // SettingsWindowControl
             // 
             this.Controls.Add(this.gp_main);
             this.Name = "SettingsWindowControl";
-            this.Size = new System.Drawing.Size(476, 363);
+            this.Size = new System.Drawing.Size(476, 384);
             this.gp_main.ResumeLayout(false);
             this.gp_main.PerformLayout();
+            this.gb_open.ResumeLayout(false);
             this.gb_int.ResumeLayout(false);
             this.gb_int.PerformLayout();
             this.gb_ads.ResumeLayout(false);
@@ -377,5 +411,8 @@
         private System.Windows.Forms.GroupBox gb_int;
         private System.Windows.Forms.CheckBox cb_keeppicked;
         private System.Windows.Forms.CheckBox cb_preasort;
+        private System.Windows.Forms.GroupBox gb_open;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox cb_open;
     }
 }

@@ -82,5 +82,17 @@ namespace MaxRumsey.OzStripsPlugin.Gui.Properties {
                 this["AlphaSortPrea"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int AutoOpenBehaviour {
+            get {
+                return ((int)(this["AutoOpenBehaviour"]));
+            }
+            set {
+                this["AutoOpenBehaviour"] = value;
+            }
+        }
     }
 }
