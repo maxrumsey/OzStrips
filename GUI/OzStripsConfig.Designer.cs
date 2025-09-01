@@ -70,7 +70,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://ozstripsserver.maxrumsey.xyz/.
+        ///   Looks up a localized string similar to http://localhost:5153/.
         /// </summary>
         public static string socketioaddr {
             get {

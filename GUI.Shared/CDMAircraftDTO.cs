@@ -11,9 +11,18 @@ namespace MaxRumsey.OzStripsPlugin.GUI.Shared;
 /// </summary>
 public class CDMAircraftDTO
 {
+    /// <summary>
+    /// Gets or sets the strip key.
+    /// </summary>
     public StripKey Key { get; set; } = new();
 
+    /// <summary>
+    /// Gets or sets the assigned runway.
+    /// </summary>
     public string RWY { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Gets or sets the slot type.
+    /// </summary>
     public CDMSlotTypes SlotType { get; set; } = CDMSlotTypes.NORMAL;
 }
