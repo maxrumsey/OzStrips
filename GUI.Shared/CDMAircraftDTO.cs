@@ -25,4 +25,9 @@ public class CDMAircraftDTO
     /// Gets or sets the slot type.
     /// </summary>
     public CDMSlotTypes SlotType { get; set; } = CDMSlotTypes.NORMAL;
+
+    /// <summary>
+    /// Gets or sets the current CDM State.
+    /// </summary>
+    public CDMState State { get; set; } = CDMState.PREACTIVE;
 }
