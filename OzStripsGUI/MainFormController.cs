@@ -61,6 +61,7 @@ public class MainFormController : IDisposable
         _socketConn.AerodromeStateChanged += AerodromeStateChanged;
 
         _mainForm.AerodromeManager.ViewListChanged += ViewListChanged;
+        AerodromeListChanged(this, EventArgs.Empty);
         ViewListChanged(this, EventArgs.Empty);
 
         if (_defaultLayout is not null)
@@ -77,7 +78,6 @@ public class MainFormController : IDisposable
             _socketConn.Connect();
         }
 
-        AerodromeListChanged(this, EventArgs.Empty);
 
         _bayManager.BayRepository.ConfigureAndSizeFLPs();
         _mainForm.AerodromeManager.AerodromeListChanged += AerodromeListChanged;
