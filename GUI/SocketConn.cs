@@ -254,6 +254,25 @@ public sealed class SocketConn : IDisposable
     }
 
     /// <summary>
+    /// Sends a CDM update to the server.
+    /// </summary>
+    /// <param name="strip">Strip.</param>
+    /// <param name="state">Current state.</param>
+    public void SendCDMUpdate(Strip strip, CDMState state)
+    {
+        var dto = new CDMAircraftDTO()
+        {
+            Key = strip.StripKey,
+            State = state,
+        };
+
+        if (CanSendDTO)
+        {
+            _connection.InvokeAsync("UplinkCDMChange", dto);
+        }
+    }
+
+    /// <summary>
     /// Requests routes for a given sc.
     /// </summary>
     /// <param name="sc">The strip controller.</param>

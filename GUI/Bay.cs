@@ -346,8 +346,7 @@ public class Bay : System.IDisposable
             return;
         }
 
-        Strips.RemoveAt(originalPosition);
-        Strips.Insert(newPosition, stripItem);
+        MoveStripToPosition(item, newPosition);
         ResizeBay();
         _socketConnection.SyncBay(this);
     }
@@ -364,10 +363,28 @@ public class Bay : System.IDisposable
             return;
         }
 
-        Strips.Remove(item);
-        Strips.Insert(abspos, item);
+        MoveStripToPosition(item, abspos);
         ResizeBay();
         _socketConnection.SyncBay(this);
+    }
+
+    public bool MoveStripToPosition(StripListItem item, int index)
+    {
+        Strips.Remove(item);
+        Strips.Insert(index, item);
+
+        if (BayTypes.Contains(StripBay.BAY_CLEARED) && item.Strip is not null)
+        {
+            var queueBarIndex = Strips.FindIndex(a => a.Type == StripItemType.QUEUEBAR);
+            if (queueBarIndex != -1 && index < queueBarIndex)
+            {
+                // send CDM update
+
+                _socketConnection.SendCDMUpdate(item.Strip, CDMState.ACTIVE);
+            }
+        }
+
+        return true;
     }
 
     /// <summary>
