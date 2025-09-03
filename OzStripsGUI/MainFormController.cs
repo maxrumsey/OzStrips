@@ -160,10 +160,12 @@ public class MainFormController : IDisposable
         }
 
         // If bayrepo initialised, than directly call the layout func
-        if (_bayManager.BayRepository.BayNum > 0)
+        if (!_bayManager.BayRepository.Initialised)
         {
-            _defaultLayout?.Invoke(this, EventArgs.Empty);
+            _bayManager.BayRepository.ConfigureAndSizeFLPs();
         }
+
+        _defaultLayout?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>
