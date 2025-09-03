@@ -27,7 +27,7 @@ public enum CDMState
     PUSHED = 30,
 
     /// <summary>
-    /// An aircraft that has departed.
+    /// An aircraft that has departed, or expired.
     /// </summary>
-    DEPARTED = 40,
+    COMPLETE = 40,
 }
