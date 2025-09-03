@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
@@ -75,6 +76,7 @@ public sealed class SocketConn : IDisposable
             if (!_freshClient)
             {
                 await SendCache();
+                await SendCDM();
             }
         });
 
@@ -412,6 +414,52 @@ public sealed class SocketConn : IDisposable
         {
             await _connection.InvokeAsync("StripCache", cacheDTO);
         }
+    }
+
+    /// <summary>
+    /// Uplinks all CDM-active aircraft to the server.
+    /// </summary>
+    /// <returns>Task.</returns>
+    public async Task SendCDMFull()
+    {
+        var clearedBay = _bayManager.BayRepository.Bays.First(x => x.BayTypes.Contains(StripBay.BAY_CLEARED));
+
+        var activeStrips = new List<Strip>();
+        var pushedStrips = _bayManager.StripRepository.Strips.Where(x => x.CurrentBay is >= StripBay.BAY_PUSHED and <= StripBay.BAY_RUNWAY);
+
+        var barFound = false;
+
+        foreach (var strip in clearedBay.Strips)
+        {
+            if (strip.Type == StripItemType.QUEUEBAR)
+            {
+                barFound = true;
+                break;
+            }
+            else if (strip.Type == StripItemType.STRIP)
+            {
+                activeStrips.Add(strip.Strip!);
+            }
+        }
+
+        if (!barFound)
+        {
+            activeStrips.Clear();
+        }
+
+        var cdmDTOs = pushedStrips.Select(x => new CDMAircraftDTO()
+        {
+            Key = x.StripKey,
+            State = CDMState.PUSHED,
+        }).ToList();
+
+        cdmDTOs.AddRange(activeStrips.Select(x => new CDMAircraftDTO()
+        {
+            Key = x.StripKey,
+            State = CDMState.ACTIVE,
+        }));
+
+        await _connection.SendAsync("UplinkFullCDM", cdmDTOs);
     }
 
     /// <summary>
