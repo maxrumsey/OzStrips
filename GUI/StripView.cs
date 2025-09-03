@@ -456,6 +456,11 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 if ((element.Value == StripElements.Values.EOBT) &&
                     _strip.CDMResult is not null)
                 {
+                    if (_strip.ReadyToPush)
+                    {
+                        return SKColors.Green;
+                    }
+
                     return SKColors.LightGray;
                 }
 

@@ -74,6 +74,17 @@ public sealed class Strip
     }
 
     /// <summary>
+    /// Gets a value indicating whether or not push is allowed according to CDM rules.
+    /// </summary>
+    public bool ReadyToPush
+    {
+        get
+        {
+            return CDMResult?.TSAT <= DateTime.Now.Subtract(TimeSpan.FromMinutes(1));
+        }
+    }
+
+    /// <summary>
     /// Gets or sets the valid routes.
     /// </summary>
     public RouteDTO[]? ValidRoutes { get; set; }
