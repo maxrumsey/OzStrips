@@ -50,7 +50,7 @@ public class MainFormController : IDisposable
 
         _timer.Tick += UpdateTimer;
         _timer.Start();
-
+        _mainForm.AerodromeManager.InitialiseOnNewWindow();
     }
 
     public void Initialize()
@@ -664,6 +664,11 @@ public class MainFormController : IDisposable
     public void MainForm_FormClosed(object sender, FormClosedEventArgs e)
     {
         _mainForm.AerodromeManager.PreviouslyClosed = true;
+    }
+
+    public void MainForm_Move(object sender, EventArgs e)
+    {
+        _mainForm.StatusPanel.Invalidate();
     }
 
     public void Dispose()

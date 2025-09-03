@@ -232,5 +232,6 @@ public partial class MainForm : Form
         ResizeEnd += _mainFormController.MainFormSizeChanged;
         Resize += _mainFormController.MainForm_Resize;
         Closing += _mainFormController.FormClosing;
+        Move += _mainFormController.MainForm_Move;
     }
 }
