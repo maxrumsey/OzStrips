@@ -76,7 +76,7 @@ public sealed class SocketConn : IDisposable
             if (!_freshClient)
             {
                 await SendCache();
-                await SendCDM();
+                await SendCDMFull();
             }
         });
 
