@@ -63,6 +63,17 @@ public sealed class Strip
     public DateTime? TakeOffTime { get; set; }
 
     /// <summary>
+    /// Gets the existing CDMResultDTO for this aircraft.
+    /// </summary>
+    public CDMResultDTO? CDMResult
+    {
+        get
+        {
+            return _bayManager.AerodromeState.CDMResults.Find(x => x.Aircraft.Key.Matches(StripKey));
+        }
+    }
+
+    /// <summary>
     /// Gets or sets the valid routes.
     /// </summary>
     public RouteDTO[]? ValidRoutes { get; set; }
@@ -284,6 +295,11 @@ public sealed class Strip
     {
         get
         {
+            if (CDMResult is not null)
+            {
+                return CDMResult.TSAT.ToString("HHmm", CultureInfo.InvariantCulture);
+            }
+
             if (StripType == StripType.DEPARTURE && FDR.ATD == DateTime.MaxValue)
             {
                 return FDR.ETD.ToString("HHmm", CultureInfo.InvariantCulture);

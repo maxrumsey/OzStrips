@@ -453,6 +453,12 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                     return SKColors.Orange;
                 }
 
+                if ((element.Value == StripElements.Values.EOBT) &&
+                    _strip.CDMResult is not null)
+                {
+                    return SKColors.LightGray;
+                }
+
                 if (_strip.CockLevel == 1)
                 {
                     return SKColors.Cyan;
@@ -468,8 +474,8 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 }
 
                 /*
-                 * HDG unassigned to radar sid in rwy bay.
-                 */
+                    * HDG unassigned to radar sid in rwy bay.
+                    */
                 if (element.Value == StripElements.Values.HDG &&
                     _strip.CurrentBay >= StripBay.BAY_HOLDSHORT &&
                     string.IsNullOrEmpty(_strip.HDG) &&
