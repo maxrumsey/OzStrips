@@ -80,7 +80,7 @@ public sealed class Strip
     {
         get
         {
-            return CDMResult?.TSAT <= DateTime.Now.Subtract(TimeSpan.FromMinutes(1));
+            return CDMResult?.TSAT <= DateTime.Now.Add(TimeSpan.FromMinutes(1));
         }
     }
 
@@ -308,7 +308,7 @@ public sealed class Strip
         {
             if (CDMResult is not null)
             {
-                return CDMResult.TSAT.ToString("HHmm", CultureInfo.InvariantCulture);
+                return CDMResult.TSAT.ToUniversalTime().ToString("HHmm", CultureInfo.InvariantCulture);
             }
 
             if (StripType == StripType.DEPARTURE && FDR.ATD == DateTime.MaxValue)
