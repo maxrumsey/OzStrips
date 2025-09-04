@@ -726,7 +726,7 @@ public sealed class Strip
         }
 
         // FIN, SUS or INCT FDRs
-        if (FDR.State < FDR.FDRStates.STATE_PREACTIVE && StripType == StripType.DEPARTURE)
+        if (FDR.State < FDR.FDRStates.STATE_PREACTIVE && DefaultStripType == StripType.DEPARTURE)
         {
             return false;
         }
