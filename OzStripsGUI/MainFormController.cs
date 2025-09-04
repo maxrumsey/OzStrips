@@ -50,7 +50,7 @@ public class MainFormController : IDisposable
 
         _timer.Tick += UpdateTimer;
         _timer.Start();
-
+        _mainForm.AerodromeManager.InitialiseOnNewWindow();
     }
 
     public void Initialize()
@@ -61,6 +61,7 @@ public class MainFormController : IDisposable
         _socketConn.AerodromeStateChanged += AerodromeStateChanged;
 
         _mainForm.AerodromeManager.ViewListChanged += ViewListChanged;
+        AerodromeListChanged(this, EventArgs.Empty);
         ViewListChanged(this, EventArgs.Empty);
 
         if (_defaultLayout is not null)
@@ -77,7 +78,6 @@ public class MainFormController : IDisposable
             _socketConn.Connect();
         }
 
-        AerodromeListChanged(this, EventArgs.Empty);
 
         _bayManager.BayRepository.ConfigureAndSizeFLPs();
         _mainForm.AerodromeManager.AerodromeListChanged += AerodromeListChanged;
@@ -160,10 +160,12 @@ public class MainFormController : IDisposable
         }
 
         // If bayrepo initialised, than directly call the layout func
-        if (_bayManager.BayRepository.BayNum > 0)
+        if (!_bayManager.BayRepository.Initialised)
         {
-            _defaultLayout?.Invoke(this, EventArgs.Empty);
+            _bayManager.BayRepository.ConfigureAndSizeFLPs();
         }
+
+        _defaultLayout?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>
@@ -662,6 +664,11 @@ public class MainFormController : IDisposable
     public void MainForm_FormClosed(object sender, FormClosedEventArgs e)
     {
         _mainForm.AerodromeManager.PreviouslyClosed = true;
+    }
+
+    public void MainForm_Move(object sender, EventArgs e)
+    {
+        _mainForm.StatusPanel.Invalidate();
     }
 
     public void Dispose()
