@@ -354,7 +354,17 @@ public class MainFormController : IDisposable
     {
         try
         {
-            _bayManager.StripRepository.UpdateFDR(fdr, _bayManager, _socketConn);
+            var strip = _bayManager.StripRepository.UpdateFDR(fdr, _bayManager, _socketConn);
+
+            var pilot = Network.GetOnlinePilots.Find(x => x.Callsign == fdr.Callsign);
+
+            // Not sure how well this will work...
+            // maybe move to radar track update?
+            // only send for CDM relevant aircraft?
+            if (strip is not null && pilot is not null && pilot.GroundSpeed > 50)
+            {
+                _socketConn.SendCDMUpdate(strip, CDMState.COMPLETE);
+            }
         }
         catch (Exception ex)
         {
