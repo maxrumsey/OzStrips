@@ -459,7 +459,7 @@ public sealed class SocketConn : IDisposable
             State = CDMState.ACTIVE,
         }));
 
-        await _connection.SendAsync("UplinkFullCDM", cdmDTOs);
+        await _connection.SendAsync("UplinkFullCDMState", cdmDTOs);
     }
 
     /// <summary>
