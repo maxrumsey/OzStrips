@@ -65,6 +65,7 @@ public sealed class Strip
     /// <summary>
     /// Gets the existing CDMResultDTO for this aircraft.
     /// </summary>
+    /// If CDM not enabled, returns null.
     public CDMResultDTO? CDMResult
     {
         get
