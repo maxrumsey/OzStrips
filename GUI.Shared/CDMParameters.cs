@@ -15,4 +15,9 @@ public class CDMParameters
     /// Gets or sets the default DAR.
     /// </summary>
     public TimeSpan? DefaultRate { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether CDM is enabled.
+    /// </summary>
+    public bool? Enabled { get; set; }
 }

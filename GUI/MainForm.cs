@@ -226,6 +226,7 @@ public partial class MainForm : Form
         toolStripMenuItem1.Click += _mainFormController.ShowMessageList_Click;
         settingsToolStripMenuItem.Click += _mainFormController.ShowSettings;
         ts_toggleCircuit.Click += _mainFormController.ToggleCircuitBay;
+        toggleCDMToolStripMenuItem.Click += _mainFormController.ToggleCDM;
         pl_stat.Paint += _mainFormController.ConnStatusPaint;
         FormClosed += _mainFormController.MainForm_FormClosed;
         Load += _mainFormController.MainForm_Load;

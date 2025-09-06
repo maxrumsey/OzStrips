@@ -553,6 +553,21 @@ public class MainFormController : IDisposable
         _socketConn.RequestCircuit(!_bayManager.CircuitActive);
     }
 
+    internal void ToggleCDM(object sender, EventArgs e)
+    {
+        if (_bayManager.AerodromeState.AerodromeCode == _bayManager.AerodromeName)
+        {
+            var param = new CDMParameters()
+            {
+                Enabled = !(_bayManager.AerodromeState.CDMParameters.Enabled ?? false),
+            };
+
+            _socketConn.SendCDMParameters(param);
+        }
+
+
+    }
+
     public void Bt_cross_Click(object sender, EventArgs e)
     {
         _bayManager.CrossStrip();

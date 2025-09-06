@@ -70,6 +70,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.reloadAerodromeListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tt_metar = new System.Windows.Forms.ToolTip(this.components);
             this.tt_clients = new System.Windows.Forms.ToolTip(this.components);
+            this.toggleCDMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pl_controlbar.SuspendLayout();
             this.pl_atis.SuspendLayout();
             this.pl_ad.SuspendLayout();
@@ -251,7 +252,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             // modifyToolStripMenuItem
             // 
             this.modifyToolStripMenuItem.Name = "modifyToolStripMenuItem";
-            this.modifyToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.modifyToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.modifyToolStripMenuItem.Tag = "permanent";
             this.modifyToolStripMenuItem.Text = "Modify";
             this.modifyToolStripMenuItem.Click += new System.EventHandler(this.ModifyButtonClicked);
@@ -266,7 +267,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(157, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             this.toolStripSeparator1.Tag = "permanent";
             // 
             // viewToolStripMenuItem
@@ -274,7 +275,8 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ts_mode,
             this.smartResizeToolStripMenuItem,
-            this.ts_toggleCircuit});
+            this.ts_toggleCircuit,
+            this.toggleCDMToolStripMenuItem});
             this.viewToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.viewToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
@@ -426,6 +428,12 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             // 
             this.tt_clients.ToolTipTitle = "Online Clients";
             // 
+            // toggleCDMToolStripMenuItem
+            // 
+            this.toggleCDMToolStripMenuItem.Name = "toggleCDMToolStripMenuItem";
+            this.toggleCDMToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+            this.toggleCDMToolStripMenuItem.Text = "Toggle CDM";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -489,5 +497,6 @@ namespace MaxRumsey.OzStripsPlugin.GUI
         private ToolStripMenuItem reloadAerodromeListToolStripMenuItem;
         private ToolStripMenuItem ts_toggleCircuit;
         private ToolTip tt_clients;
+        private ToolStripMenuItem toggleCDMToolStripMenuItem;
     }
 }

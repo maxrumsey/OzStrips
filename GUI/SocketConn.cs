@@ -346,12 +346,29 @@ public sealed class SocketConn : IDisposable
         }
     }
 
+    /// <summary>
+    /// Sends circuit activity status to the server.
+    /// </summary>
+    /// <param name="status">Circuit enabled.</param>
     public void RequestCircuit(bool status)
     {
         AddMessage("c:RequestCircuit: " + status);
         if (CanSendDTO)
         {
             _connection.InvokeAsync("UpdateCircuitMode", status);
+        }
+    }
+
+    /// <summary>
+    /// Sends new CDM parameters to the server.
+    /// </summary>
+    /// <param name="param">CDM Parameters.</param>
+    public void SendCDMParameters(CDMParameters param)
+    {
+        AddMessage("c:ChangeCDMParameters: " + param);
+        if (CanSendDTO)
+        {
+            _connection.InvokeAsync("ChangeCDMParameters", param);
         }
     }
 

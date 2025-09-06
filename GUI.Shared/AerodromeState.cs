@@ -26,5 +26,10 @@ namespace MaxRumsey.OzStripsPlugin.GUI.Shared
         /// Gets or sets the list of CDM elements sent from server.
         /// </summary>
         public List<CDMResultDTO> CDMResults { get; set; } = new();
+
+        /// <summary>
+        /// Gets or sets the CDM parameters for this aerodrome.
+        /// </summary>
+        public CDMParameters CDMParameters { get; set; } = new();
     }
 }
