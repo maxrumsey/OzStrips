@@ -69,7 +69,7 @@ public sealed class Strip
     {
         get
         {
-            return _bayManager.AerodromeState.CDMResults.Find(x => x.Aircraft.Key.Matches(StripKey));
+            return _bayManager.AerodromeState.CDMParameters?.Enabled == true ? _bayManager.AerodromeState.CDMResults.Find(x => x.Aircraft.Key.Matches(StripKey)) : null;
         }
     }
 
