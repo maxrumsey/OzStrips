@@ -75,8 +75,11 @@ public sealed class SocketConn : IDisposable
             AddMessage("s:UpdateCache: ");
             if (!_freshClient)
             {
-                await SendCache();
-                await SendCDMFull();
+                MMI.InvokeOnGUI(async () =>
+                {
+                    await SendCache();
+                    await SendCDMFull();
+                });
             }
         });
 
@@ -426,6 +429,12 @@ public sealed class SocketConn : IDisposable
 
         var activeStrips = new List<Strip>();
         var pushedStrips = _bayManager.StripRepository.Strips.Where(x => x.CurrentBay is >= StripBay.BAY_PUSHED and <= StripBay.BAY_RUNWAY);
+        var depStrips = _bayManager.StripRepository.Strips.Where(x =>
+        {
+            var pilot = Network.GetOnlinePilots.Find(y => y.Callsign == x.FDR.Callsign);
+
+            return pilot is not null && pilot.GroundSpeed > 50;
+        });
 
         var barFound = false;
 
@@ -457,6 +466,12 @@ public sealed class SocketConn : IDisposable
         {
             Key = x.StripKey,
             State = CDMState.ACTIVE,
+        }));
+
+        cdmDTOs.AddRange(depStrips.Select(x => new CDMAircraftDTO()
+        {
+            Key = x.StripKey,
+            State = CDMState.COMPLETE,
         }));
 
         await _connection.SendAsync("UplinkFullCDMState", cdmDTOs);
