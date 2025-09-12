@@ -274,7 +274,7 @@ public sealed class SocketConn : IDisposable
         var list = new CDMAircraftList();
         list.CheckAndAddAircraft(dto);
 
-        if (CanSendDTO)
+        if (CanSendDTO && list.Count > 0)
         {
             _connection.InvokeAsync("UplinkCDMAircraft", list);
         }
@@ -494,7 +494,7 @@ public sealed class SocketConn : IDisposable
             State = CDMState.COMPLETE,
         }).ToList());
 
-        await _connection.SendAsync("UplinkCDMAircaft", cdmDTOs as List<CDMAircraftDTO>);
+        await _connection.SendAsync("UplinkCDMAircaft", cdmDTOs);
     }
 
     /// <summary>
