@@ -271,9 +271,12 @@ public sealed class SocketConn : IDisposable
             State = state,
         };
 
+        var list = new CDMAircraftList();
+        list.CheckAndAddAircraft(dto);
+
         if (CanSendDTO)
         {
-            _connection.InvokeAsync("UplinkCDMChange", dto);
+            _connection.InvokeAsync("UplinkCDMAircraft", list);
         }
     }
 
@@ -473,25 +476,25 @@ public sealed class SocketConn : IDisposable
             activeStrips.Clear();
         }
 
-        var cdmDTOs = pushedStrips.Select(x => new CDMAircraftDTO()
+        var cdmDTOs = new CDMAircraftList(pushedStrips.Select(x => new CDMAircraftDTO()
         {
             Key = x.StripKey,
             State = CDMState.PUSHED,
-        }).ToList();
+        }).ToList());
 
-        cdmDTOs.AddRange(activeStrips.Select(x => new CDMAircraftDTO()
+        cdmDTOs.OverwriteAndAddAiraftList(activeStrips.Select(x => new CDMAircraftDTO()
         {
             Key = x.StripKey,
             State = CDMState.ACTIVE,
-        }));
+        }).ToList());
 
-        cdmDTOs.AddRange(depStrips.Select(x => new CDMAircraftDTO()
+        cdmDTOs.OverwriteAndAddAiraftList(depStrips.Select(x => new CDMAircraftDTO()
         {
             Key = x.StripKey,
             State = CDMState.COMPLETE,
-        }));
+        }).ToList());
 
-        await _connection.SendAsync("UplinkFullCDMState", cdmDTOs);
+        await _connection.SendAsync("UplinkCDMAircaft", cdmDTOs as List<CDMAircraftDTO>);
     }
 
     /// <summary>
