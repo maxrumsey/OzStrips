@@ -11,16 +11,16 @@ namespace MaxRumsey.OzStripsPlugin.GUI;
 
 internal class CDMAircraftList : List<CDMAircraftDTO>
 {
-    public CDMAircraftList(List<CDMAircraftDTO> aircraft)
+    public CDMAircraftList(List<CDMAircraftDTO> aircraft, BayManager bm)
     {
-        OverwriteAndAddAiraftList(aircraft);
+        OverwriteAndAddAiraftList(aircraft, bm);
     }
 
     public CDMAircraftList()
     {
     }
 
-    public void OverwriteAndAddAiraftList(List<CDMAircraftDTO> newList)
+    public void OverwriteAndAddAiraftList(List<CDMAircraftDTO> newList, BayManager bm)
     {
         foreach (var aircraft in newList)
         {
@@ -30,15 +30,15 @@ internal class CDMAircraftList : List<CDMAircraftDTO>
             // If there's no "superior" aircraft in the list, add us.
             if (!Exists(x => x.Key.Matches(aircraft.Key) && x.State > aircraft.State))
             {
-                CheckAndAddAircraft(aircraft);
+                CheckAndAddAircraft(aircraft, bm);
             }
         }
     }
 
-    public void CheckAndAddAircraft(CDMAircraftDTO aircraft)
+    public void CheckAndAddAircraft(CDMAircraftDTO aircraft, BayManager bm)
     {
         var onlinePilot = Network.GetOnlinePilots.Find(x => x.Callsign == aircraft.Key.Callsign);
-        if (onlinePilot == null)
+        if (onlinePilot == null || bm.AerodromeName != aircraft.Key.ADEP)
         {
             return;
         }
