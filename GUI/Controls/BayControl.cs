@@ -13,6 +13,8 @@ public partial class BayControl : UserControl
     private int _stripHeight;
     private int _stripBoardHeight;
 
+    private CDMStatsRenderController? _cdmRenderController;
+
     private int? _desiredScrollAmount;
     private Strip? _pickedStrip;
 
@@ -22,9 +24,20 @@ public partial class BayControl : UserControl
     /// <param name="bm">The bay manager.</param>
     /// <param name="name">The bay name.</param>
     /// <param name="bay">The bay.</param>
-    public BayControl(BayManager bm, string name, Bay bay)
+    /// <param name="cdmDisplay">Whether or not CDM stats are displayed in this bay.</param>
+    public BayControl(BayManager bm, string name, Bay bay, bool cdmDisplay)
     {
         InitializeComponent();
+
+        if (cdmDisplay)
+        {
+            bt_queue.Dispose();
+            bt_div.Dispose();
+            Controls.Remove(bt_queue);
+            Controls.Remove(bt_div);
+            _cdmRenderController = new CDMStatsRenderController(bm, topPanel);
+        }
+
         lb_bay_name.Text = name;
         ChildPanel = pl_main;
         ChildPanel.VerticalScroll.Enabled = true;
@@ -56,7 +69,7 @@ public partial class BayControl : UserControl
         var child = ChildPanel.Controls[0];
         var parent = ChildPanel.Parent;
 
-        _stripBoardHeight = parent.Height - panel2.Height;
+        _stripBoardHeight = parent.Height - topPanel.Height;
 
         ChildPanel.VerticalScroll.SmallChange = _stripHeight;
         ChildPanel.VerticalScroll.Maximum = _ownerBay.GetRequestedHeight();

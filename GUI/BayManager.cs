@@ -511,8 +511,9 @@ public class BayManager
     /// Runs update function on relevant bays when a strip is moved.
     /// </summary>
     /// <param name="strip">The strip controller.</param>
+    /// <param name="serverInitiated">Whether or not the server iniated this move.</param>
     /// Called by inhibits, moving strips, sid triggers, server pos updates.
-    public void UpdateBay(Strip strip)
+    public void UpdateBay(Strip strip, bool serverInitiated = false)
     {
         foreach (var bay in BayRepository.Bays)
         {
@@ -537,6 +538,16 @@ public class BayManager
         else if (strip.CurrentBay == StripBay.BAY_PREA)
         {
             strip.DeactivateStrip();
+        }
+
+        if (!serverInitiated)
+        {
+            CDMState? state = SharedCDMConstants.BAY_STATE_MAP.ContainsKey(strip.CurrentBay) ? SharedCDMConstants.BAY_STATE_MAP[strip.CurrentBay] : null;
+
+            if (state is not null)
+            {
+                strip.SendCDMMessage((CDMState)state);
+            }
         }
     }
 

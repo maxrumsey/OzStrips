@@ -710,6 +710,15 @@ public sealed class Strip
     }
 
     /// <summary>
+    /// Sends a CDM update to the server about this strip.
+    /// </summary>
+    /// <param name="state">CDM state.</param>
+    public void SendCDMMessage(CDMState state)
+    {
+        _socketConn.SendCDMUpdate(this, state);
+    }
+
+    /// <summary>
     /// Determines whether or not a SC is still valid (or should be kept alive).
     /// </summary>
     /// <returns>Valid SC.</returns>

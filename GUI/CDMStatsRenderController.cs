@@ -1,0 +1,96 @@
+﻿using MaxRumsey.OzStripsPlugin.GUI;
+using MaxRumsey.OzStripsPlugin.GUI.DTO;
+using MaxRumsey.OzStripsPlugin.GUI.Properties;
+using SkiaSharp;
+using SkiaSharp.Views.Desktop;
+using System;
+using System.Buffers.Text;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using vatsys;
+
+namespace MaxRumsey.OzStripsPlugin.GUI;
+
+internal class CDMStatsRenderController
+{
+    private readonly BayManager _bayManager;
+
+    private const int WIDTH = 200;
+    private const int HEIGHT = 34;
+    private const int FONTSIZE = 15;
+
+    private int WidthEach => RatePeriods.Length > 0 ? WIDTH / RatePeriods.Length : WIDTH;
+
+    private int[] RatePeriods => _bayManager.AerodromeState.CDMStatistics.CDMRates.Keys.ToArray();
+
+    public CDMStatsRenderController(BayManager bayManager, Control parent)
+    {
+        var parentsize = parent.Size;
+        _bayManager = bayManager;
+
+        SkControl = new()
+        {
+            Size = new System.Drawing.Size(WIDTH, HEIGHT),
+            Location = new System.Drawing.Point(parentsize.Width - WIDTH - 1, 1),
+            Anchor = AnchorStyles.Right | AnchorStyles.Top,
+        };
+        SkControl.PaintSurface += Paint;
+        SkControl.Name = "CDMStats";
+        SkControl.BackColor = Color.Black;
+
+        SkControl.Show();
+        parent.Controls.Add(SkControl);
+        SkControl.BringToFront();
+    }
+
+    public SKControl SkControl { get; private set; }
+
+
+    private void Paint(object sender, SKPaintSurfaceEventArgs e)
+    {
+        try
+        {
+            var textPaint = new SKPaint()
+            {
+                Color = SKColors.White,
+                IsAntialias = true,
+                Style = SKPaintStyle.StrokeAndFill,
+            };
+
+            var canvas = e.Surface.Canvas;
+
+            // make sure the canvas is blank
+            canvas.Clear(SKColors.Green);
+
+            var font = new SKFont(SKTypeface.FromFamilyName("Segoe UI", 700, 5, SKFontStyleSlant.Upright), FONTSIZE);
+
+            var offset = 0;
+            foreach (var period in RatePeriods)
+            {
+                var backPaint = new SKPaint()
+                {
+                    Style = SKPaintStyle.StrokeAndFill,
+                    Color = SKColors.AliceBlue,
+                };
+
+                var textLoc = new SKPoint(offset + (WidthEach / 2), (FONTSIZE + HEIGHT) / 2);
+
+                canvas.DrawRect(offset, 0, WidthEach, HEIGHT, backPaint);
+
+                canvas.DrawText("10/10", textLoc, SKTextAlign.Center, font, textPaint);
+
+                offset += WidthEach;
+            }
+
+            canvas.Flush();
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex, "Ozstrips Renderer");
+        }
+    }
+}

@@ -45,6 +45,9 @@
         <PackageReference Include="System.Text.Json" Version="9.0.0-rc.2.24473.5" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Update="CDMStatsRenderController.cs">
+          <SubType>Component</SubType>
+        </Compile>
         <Compile Update="BayRenderController.cs">
           <SubType>Component</SubType>
         </Compile>

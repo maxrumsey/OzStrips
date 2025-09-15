@@ -31,5 +31,10 @@ namespace MaxRumsey.OzStripsPlugin.GUI.Shared
         /// Gets or sets the CDM parameters for this aerodrome.
         /// </summary>
         public CDMParameters CDMParameters { get; set; } = new();
+
+        /// <summary>
+        /// Gets or sets the relevant CDM statistics.
+        /// </summary>
+        public CDMStatistics CDMStatistics { get; set; } = new();
     }
 }

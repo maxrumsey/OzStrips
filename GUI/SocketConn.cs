@@ -269,6 +269,7 @@ public sealed class SocketConn : IDisposable
         {
             Key = strip.StripKey,
             State = state,
+            RWY = strip.RWY,
         };
 
         var list = new CDMAircraftList();
@@ -481,6 +482,7 @@ public sealed class SocketConn : IDisposable
         {
             Key = x.StripKey,
             State = CDMState.PUSHED,
+            RWY = x.RWY,
         }).ToList(),
         _bayManager);
 
@@ -489,6 +491,7 @@ public sealed class SocketConn : IDisposable
         {
             Key = x.StripKey,
             State = CDMState.ACTIVE,
+            RWY = x.RWY,
         }).ToList(),
         _bayManager);
 
@@ -497,6 +500,7 @@ public sealed class SocketConn : IDisposable
         {
             Key = x.StripKey,
             State = CDMState.COMPLETE,
+            RWY = x.RWY,
         }).ToList(),
         _bayManager);
 

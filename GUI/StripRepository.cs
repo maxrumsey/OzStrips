@@ -129,7 +129,7 @@ public class StripRepository
                     strip.OverrideStripType = stripDTO.OverrideStripType;
                     if (changeBay)
                     {
-                        bayManager.UpdateBay(strip); /* prevent unessesscary reshufles
+                        bayManager.UpdateBay(strip, true); /* prevent unessesscary reshufles
                         * now that we render using skiasharp, is this necessary?
                         * yes, will prevent needless skiacabvas height changes.
                         */

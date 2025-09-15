@@ -17,6 +17,9 @@ public class BayDefinition
     [XmlAttribute("Circuit")]
     public bool Circuit;
 
+    [XmlAttribute("CDMDisplay")]
+    public bool CDMDisplay;
+
     [XmlElement("Type")]
     public StripBay[] Types;
 }

@@ -107,7 +107,7 @@ public class MainFormController : IDisposable
         var layouts = _mainForm.AerodromeManager.ReturnLayouts(_mainForm.AerodromeManager.GetAerodromeType(_bayManager.AerodromeName));
         var bays = layouts.First(x => x.Name == "All").Elements.Select(x => x.Bay);
 
-        var circuitBayDefined = bays.Any(x => x.Circuit);
+        var circuitBayDefined = bays.Any(x => x?.Circuit == true);
 
         foreach (var layout in layouts)
         {
@@ -137,7 +137,7 @@ public class MainFormController : IDisposable
                         types.Remove(StripBay.BAY_CIRCUIT);
                     }
 
-                    _ = new Bay(types, _bayManager, _socketConn, element.Name, element.Column);
+                    _ = new Bay(types, _bayManager, _socketConn, element.Name, element.Column, element.Bay.CDMDisplay);
                 }
 
                 _bayManager.BayRepository.ConfigureAndSizeFLPs();

@@ -31,27 +31,27 @@ namespace MaxRumsey.OzStripsPlugin.GUI.Controls
         /// </summary>
         private void InitializeComponent()
         {
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.basePanel = new System.Windows.Forms.Panel();
             this.pl_main = new NoScrollPanel();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.topPanel = new System.Windows.Forms.Panel();
             this.bt_div = new System.Windows.Forms.Button();
             this.bt_queue = new System.Windows.Forms.Button();
             this.lb_bay_name = new System.Windows.Forms.Label();
-            this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
+            this.basePanel.SuspendLayout();
+            this.topPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.panel1.Controls.Add(this.pl_main);
-            this.panel1.Controls.Add(this.panel2);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(481, 350);
-            this.panel1.TabIndex = 0;
-            this.panel1.MouseMove += new(PanelMouseMove);
+            this.basePanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.basePanel.Controls.Add(this.pl_main);
+            this.basePanel.Controls.Add(this.topPanel);
+            this.basePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.basePanel.Location = new System.Drawing.Point(0, 0);
+            this.basePanel.Name = "panel1";
+            this.basePanel.Size = new System.Drawing.Size(481, 350);
+            this.basePanel.TabIndex = 0;
+            this.basePanel.MouseMove += new(PanelMouseMove);
             // 
             // pl_main
             // 
@@ -65,16 +65,16 @@ namespace MaxRumsey.OzStripsPlugin.GUI.Controls
             // 
             // panel2
             // 
-            this.panel2.BackColor = System.Drawing.Color.Black;
-            this.panel2.Controls.Add(this.bt_div);
-            this.panel2.Controls.Add(this.bt_queue);
-            this.panel2.Controls.Add(this.lb_bay_name);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(0, 0);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(481, 36);
-            this.panel2.TabIndex = 0;
-            this.panel2.MouseMove += new(PanelMouseMove);
+            this.topPanel.BackColor = System.Drawing.Color.Black;
+            this.topPanel.Controls.Add(this.bt_div);
+            this.topPanel.Controls.Add(this.bt_queue);
+            this.topPanel.Controls.Add(this.lb_bay_name);
+            this.topPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.topPanel.Location = new System.Drawing.Point(0, 0);
+            this.topPanel.Name = "panel2";
+            this.topPanel.Size = new System.Drawing.Size(481, 36);
+            this.topPanel.TabIndex = 0;
+            this.topPanel.MouseMove += new(PanelMouseMove);
             // 
             // bt_div
             // 
@@ -125,21 +125,21 @@ namespace MaxRumsey.OzStripsPlugin.GUI.Controls
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.basePanel);
             this.Margin = new System.Windows.Forms.Padding(0);
             this.MinimumSize = new System.Drawing.Size(0, 50);
             this.Name = "BayControl";
             this.Size = new System.Drawing.Size(481, 350);
-            this.panel1.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
+            this.basePanel.ResumeLayout(false);
+            this.topPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel basePanel;
+        private System.Windows.Forms.Panel topPanel;
         private System.Windows.Forms.Label lb_bay_name;
         private System.Windows.Forms.Button bt_queue;
         private System.Windows.Forms.Button bt_div;
