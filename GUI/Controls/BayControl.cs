@@ -10,10 +10,10 @@ public partial class BayControl : UserControl
 {
     private readonly Bay _ownerBay;
     private readonly BayManager _bayManager;
+    private readonly CDMStatsRenderController? _cdmRenderController;
+
     private int _stripHeight;
     private int _stripBoardHeight;
-
-    private CDMStatsRenderController? _cdmRenderController;
 
     private int? _desiredScrollAmount;
     private Strip? _pickedStrip;

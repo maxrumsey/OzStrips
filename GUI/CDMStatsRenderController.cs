@@ -1,6 +1,7 @@
 ﻿using MaxRumsey.OzStripsPlugin.GUI;
 using MaxRumsey.OzStripsPlugin.GUI.DTO;
 using MaxRumsey.OzStripsPlugin.GUI.Properties;
+using OpenTK.Platform.Windows;
 using SkiaSharp;
 using SkiaSharp.Views.Desktop;
 using System;
@@ -15,7 +16,7 @@ using vatsys;
 
 namespace MaxRumsey.OzStripsPlugin.GUI;
 
-internal class CDMStatsRenderController
+internal class CDMStatsRenderController : IDisposable
 {
     private readonly BayManager _bayManager;
 
@@ -23,14 +24,16 @@ internal class CDMStatsRenderController
     private const int HEIGHT = 34;
     private const int FONTSIZE = 15;
 
-    private int WidthEach => RatePeriods.Length > 0 ? WIDTH / RatePeriods.Length : WIDTH;
-
-    private int[] RatePeriods => _bayManager.AerodromeState.CDMStatistics.CDMRates.Keys.ToArray();
+    private readonly Timer _renderTimer;
 
     public CDMStatsRenderController(BayManager bayManager, Control parent)
     {
         var parentsize = parent.Size;
         _bayManager = bayManager;
+        _renderTimer = new();
+        _renderTimer.Tick += RerenderTriggered;
+        _renderTimer.Interval = 1000;
+        _renderTimer.Start();
 
         SkControl = new()
         {
@@ -49,6 +52,19 @@ internal class CDMStatsRenderController
 
     public SKControl SkControl { get; private set; }
 
+    private int WidthEach => RatePeriods.Length > 0 ? WIDTH / RatePeriods.Length : WIDTH;
+
+    private int[] RatePeriods => _bayManager.AerodromeState.CDMStatistics.CDMRates.Keys.ToArray();
+
+    public void Dispose()
+    {
+        _renderTimer.Dispose();
+    }
+
+    private void RerenderTriggered(object sender, EventArgs e)
+    {
+        SkControl?.Invalidate();
+    }
 
     private void Paint(object sender, SKPaintSurfaceEventArgs e)
     {
@@ -64,7 +80,13 @@ internal class CDMStatsRenderController
             var canvas = e.Surface.Canvas;
 
             // make sure the canvas is blank
-            canvas.Clear(SKColors.Green);
+            canvas.Clear(SKColors.Black);
+
+            if (_bayManager.AerodromeState.CDMParameters?.Enabled != true)
+            {
+                canvas.Flush();
+                return;
+            }
 
             var font = new SKFont(SKTypeface.FromFamilyName("Segoe UI", 700, 5, SKFontStyleSlant.Upright), FONTSIZE);
 
