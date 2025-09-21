@@ -249,6 +249,19 @@ public class StripController
         bm.Show(MainForm.MainFormInstance);
     }
 
+    public void OpenCDM()
+    {
+        if (Strip.CDMResult is null)
+        {
+            return;
+        }
+
+        var modalChild = new CDMAircraftControl(Strip.CDMResult);
+        var bm = new BaseModal(modalChild, "CDM Details :: " + Strip.FDR.Callsign);
+
+        bm.Show(MainForm.MainFormInstance);
+    }
+
     /// <summary>
     /// Opens the SID window.
     /// </summary>

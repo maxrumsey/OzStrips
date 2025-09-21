@@ -117,16 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="apiversion" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="cdmsite" xml:space="preserve">
-    <value>http://localhost:5173/ops/</value>
-  </data>
-  <data name="socketioaddr" xml:space="preserve">
-    <value>http://localhost:5153/</value>
-  </data>
-  <data name="version" xml:space="preserve">
-    <value>0.6.2</value>
-  </data>
+  <metadata name="lb_items.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
 </root>

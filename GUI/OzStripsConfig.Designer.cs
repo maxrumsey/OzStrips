@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MaxRumsey.OzStripsPlugin.GUI {
+namespace MaxRumsey.OzStripsPlugin.Gui {
     using System;
     
     
@@ -66,6 +66,15 @@ namespace MaxRumsey.OzStripsPlugin.GUI {
         public static string apiversion {
             get {
                 return ResourceManager.GetString("apiversion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to http://localhost:5173/ops/.
+        /// </summary>
+        public static string cdmsite {
+            get {
+                return ResourceManager.GetString("cdmsite", resourceCulture);
             }
         }
         

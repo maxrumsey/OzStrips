@@ -61,6 +61,7 @@ public static class StripElements
         SET_TOT,
         OPEN_PDC,
         OPEN_PM,
+        OPEN_CDM,
     }
 
     public enum HoverActions

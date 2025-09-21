@@ -316,6 +316,9 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             case StripElements.Actions.OPEN_REROUTE:
                 _strip.Controller.OpenRerouteMenu();
                 break;
+            case StripElements.Actions.OPEN_CDM:
+                _strip.Controller.OpenCDM();
+                break;
             case StripElements.Actions.SET_READY:
                 _strip.Controller.ToggleReady();
                 break;
