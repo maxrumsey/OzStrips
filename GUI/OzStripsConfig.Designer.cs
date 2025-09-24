@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MaxRumsey.OzStripsPlugin.Gui {
+namespace MaxRumsey.OzStripsPlugin.GUI {
     using System;
     
     

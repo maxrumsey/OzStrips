@@ -100,7 +100,7 @@
         <EmbeddedResource Update="OzStripsConfig.resx">
             <Generator>PublicResXFileCodeGenerator</Generator>
             <LastGenOutput>OzStripsConfig.Designer.cs</LastGenOutput>
-            <CustomToolNamespace>MaxRumsey.OzStripsPlugin.Gui</CustomToolNamespace>
+            <CustomToolNamespace>MaxRumsey.OzStripsPlugin.GUI</CustomToolNamespace>
         </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
@@ -119,6 +119,6 @@
       </None>
       <None Update="Strip.xml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
+      </None> 
     </ItemGroup>
 </Project>

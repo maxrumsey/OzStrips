@@ -347,7 +347,7 @@ public class Bay : System.IDisposable
             return;
         }
 
-        MoveStripToPosition(item, newPosition);
+        ClientInitiatedStripMove(item, newPosition);
         ResizeBay();
         _socketConnection.SyncBay(this);
     }
@@ -364,12 +364,17 @@ public class Bay : System.IDisposable
             return;
         }
 
-        MoveStripToPosition(item, abspos);
+        ClientInitiatedStripMove(item, abspos);
         ResizeBay();
         _socketConnection.SyncBay(this);
     }
 
-    public bool MoveStripToPosition(StripListItem item, int index)
+    /// <summary>
+    /// Moves strip to new position, when iniated by the user, and sends a CDM update if relevant.
+    /// </summary>
+    /// <param name="item">Strip item.</param>
+    /// <param name="index">Index to move it to.</param>
+    public void ClientInitiatedStripMove(StripListItem item, int index)
     {
         Strips.Remove(item);
         Strips.Insert(index, item);
@@ -384,8 +389,6 @@ public class Bay : System.IDisposable
                 _socketConnection.SendCDMUpdate(item.Strip, CDMState.ACTIVE);
             }
         }
-
-        return true;
     }
 
     /// <summary>
