@@ -14,30 +14,30 @@ public enum CDMSlotTypes
     /// <summary>
     /// Max priority.
     /// </summary>
-    PRIORITY = 100,
+    PRIORITY,
 
     /// <summary>
     /// Aircraft waiting for a long time.
     /// </summary>
-    LONGWAIT = 80,
+    LONGWAIT,
 
     /// <summary>
     /// Aircraft with booked slots.
     /// </summary>
-    BOOKED = 50,
+    BOOKED,
 
     /// <summary>
     /// Aircraft with prebooked slots, but not "in the system" yet.
     /// </summary>
-    PREBOOKED = 50,
+    PREBOOKED,
 
     /// <summary>
     /// Normal aircraft.
     /// </summary>
-    NORMAL = 30,
+    NORMAL,
 
     /// <summary>
     /// Early with a slot.
     /// </summary>
-    EARLY_NONCOMPLIANT = 30,
+    EARLY_NONCOMPLIANT,
 }
