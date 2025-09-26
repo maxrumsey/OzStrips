@@ -30,4 +30,9 @@ public class CDMResultDTO
     /// Gets or sets the final computed slot type.
     /// </summary>
     public CDMSlotTypes FinalSlotType { get; set; } = CDMSlotTypes.NORMAL;
+
+    /// <summary>
+    /// Gets or sets a valid and correlated slot.
+    /// </summary>
+    public CDMSlotDTO? Slot { get; set; }
 }
