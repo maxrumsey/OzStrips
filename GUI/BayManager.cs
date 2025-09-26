@@ -531,17 +531,17 @@ public class BayManager
 
         AddStrip(strip);
 
-        if (strip.CurrentBay >= StripBay.BAY_CLEARED)
-        {
-            strip.CoordinateStrip();
-        }
-        else if (strip.CurrentBay == StripBay.BAY_PREA)
-        {
-            strip.DeactivateStrip();
-        }
-
         if (!serverInitiated)
         {
+            if (strip.CurrentBay >= StripBay.BAY_CLEARED)
+            {
+                strip.CoordinateStrip();
+            }
+            else if (strip.CurrentBay == StripBay.BAY_PREA)
+            {
+                strip.DeactivateStrip();
+            }
+
             CDMState? state = SharedCDMConstants.BAY_STATE_MAP.ContainsKey(strip.CurrentBay) ? SharedCDMConstants.BAY_STATE_MAP[strip.CurrentBay] : null;
 
             if (state is not null)
