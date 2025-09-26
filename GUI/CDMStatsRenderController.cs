@@ -1,6 +1,7 @@
 ﻿using MaxRumsey.OzStripsPlugin.GUI;
 using MaxRumsey.OzStripsPlugin.GUI.DTO;
 using MaxRumsey.OzStripsPlugin.GUI.Properties;
+using OpenTK.Graphics.OpenGL;
 using OpenTK.Platform.Windows;
 using SkiaSharp;
 using SkiaSharp.Views.Desktop;
@@ -101,11 +102,16 @@ internal class CDMStatsRenderController : IDisposable
 
                 var textLoc = new SKPoint(offset + (WidthEach / 2), (FONTSIZE + HEIGHT) / 2);
 
-                canvas.DrawRect(offset, 0, WidthEach, HEIGHT, backPaint);
-
                 var actual = _bayManager.AerodromeState.CDMStatistics.CDMRates[period];
                 var depRate = 60 / ((float)(_bayManager.AerodromeState.CDMParameters.DefaultRate ?? TimeSpan.FromMinutes(2)).TotalMinutes);
                 var goalAmount = (int)(depRate * (period / 60f));
+
+                var discrepancy = actual - goalAmount;
+
+                var colour = GetColour(discrepancy);
+
+                backPaint.Color = colour;
+                canvas.DrawRect(offset, 0, WidthEach, HEIGHT, backPaint);
 
                 canvas.DrawText($"{period}m: {actual}/{goalAmount}", textLoc, SKTextAlign.Center, font, textPaint);
 
@@ -117,6 +123,35 @@ internal class CDMStatsRenderController : IDisposable
         catch (Exception ex)
         {
             Util.LogError(ex, "Ozstrips Renderer");
+        }
+    }
+
+    /// <summary>
+    /// Gets the background colour.
+    /// </summary>
+    /// <param name="discrepancy">Number of aircraft over/under goal.</param>
+    /// <returns>Colour.</returns>
+    private static SKColor GetColour(int discrepancy)
+    {
+        if (discrepancy == 0)
+        {
+            return SKColors.Green;
+        }
+        else if (discrepancy is > 0 and <= 2)
+        {
+            return SKColors.OrangeRed;
+        }
+        else if (discrepancy >= 3)
+        {
+            return SKColors.Red;
+        }
+        else if (discrepancy is < 0 and >= -2)
+        {
+            return SKColors.Blue;
+        }
+        else
+        {
+            return SKColors.Purple;
         }
     }
 }

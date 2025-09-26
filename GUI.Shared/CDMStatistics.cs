@@ -14,7 +14,7 @@ public class CDMStatistics
     /// <summary>
     /// Gets or sets a dictionary containg actual CDM dep rates.
     /// </summary>
-    public Dictionary<int, float> CDMRates { get; set; } = new()
+    public Dictionary<int, int> CDMRates { get; set; } = new()
     {
         { 5, 5 },
         { 15, 15 },
