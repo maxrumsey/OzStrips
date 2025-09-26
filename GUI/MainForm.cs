@@ -71,6 +71,8 @@ public partial class MainForm : Form
 
     public string EnteredAerodrome => toolStripTextBox1.Text;
 
+    public ToolStripTextBox CDMRateTextBox => cdmTextBox;
+
     public FlowLayoutPanel MainFLP => _flpMain;
 
     public AerodromeManager AerodromeManager { get; private set; }
@@ -224,7 +226,8 @@ public partial class MainForm : Form
         bt_inhibit.Click += _mainFormController.Bt_inhibit_Click;
         toolStripTextBox1.KeyPress += _mainFormController.AerodromeSelectorKeyDown;
         toolStripMenuItem1.Click += _mainFormController.ShowMessageList_Click;
-        settingsToolStripMenuItem.Click += _mainFormController.ShowSettings;
+        settingsWindowToolStripMenuItem.Click += _mainFormController.ShowSettings;
+        cdmTextBox.KeyPress += _mainFormController.CDMRateKeyDown;
         ts_toggleCircuit.Click += _mainFormController.ToggleCircuitBay;
         toggleCDMToolStripMenuItem.Click += _mainFormController.ToggleCDM;
         pl_stat.Paint += _mainFormController.ConnStatusPaint;

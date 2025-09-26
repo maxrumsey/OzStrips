@@ -57,6 +57,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.oneColumnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colDisabledToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_toggleCircuit = new System.Windows.Forms.ToolStripMenuItem();
+            this.toggleCDMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gitHubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -70,7 +71,10 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.reloadAerodromeListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tt_metar = new System.Windows.Forms.ToolTip(this.components);
             this.tt_clients = new System.Windows.Forms.ToolTip(this.components);
-            this.toggleCDMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.cDMRateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cdmTextBox = new System.Windows.Forms.ToolStripTextBox();
             this.pl_controlbar.SuspendLayout();
             this.pl_atis.SuspendLayout();
             this.pl_ad.SuspendLayout();
@@ -252,7 +256,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             // modifyToolStripMenuItem
             // 
             this.modifyToolStripMenuItem.Name = "modifyToolStripMenuItem";
-            this.modifyToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.modifyToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.modifyToolStripMenuItem.Tag = "permanent";
             this.modifyToolStripMenuItem.Text = "Modify";
             this.modifyToolStripMenuItem.Click += new System.EventHandler(this.ModifyButtonClicked);
@@ -267,7 +271,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(157, 6);
             this.toolStripSeparator1.Tag = "permanent";
             // 
             // viewToolStripMenuItem
@@ -334,8 +338,19 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.ts_toggleCircuit.Size = new System.Drawing.Size(220, 22);
             this.ts_toggleCircuit.Text = "Toggle Circuit Bay";
             // 
+            // toggleCDMToolStripMenuItem
+            // 
+            this.toggleCDMToolStripMenuItem.Name = "toggleCDMToolStripMenuItem";
+            this.toggleCDMToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+            this.toggleCDMToolStripMenuItem.Text = "Toggle CDM";
+            // 
             // settingsToolStripMenuItem
             // 
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.settingsWindowToolStripMenuItem,
+            this.toolStripSeparator3,
+            this.cDMRateToolStripMenuItem,
+            this.cdmTextBox});
             this.settingsToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.settingsToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
@@ -428,11 +443,29 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             // 
             this.tt_clients.ToolTipTitle = "Online Clients";
             // 
-            // toggleCDMToolStripMenuItem
+            // settingsWindowToolStripMenuItem
             // 
-            this.toggleCDMToolStripMenuItem.Name = "toggleCDMToolStripMenuItem";
-            this.toggleCDMToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
-            this.toggleCDMToolStripMenuItem.Text = "Toggle CDM";
+            this.settingsWindowToolStripMenuItem.Name = "settingsWindowToolStripMenuItem";
+            this.settingsWindowToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.settingsWindowToolStripMenuItem.Text = "Settings Window";
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(193, 6);
+            // 
+            // cDMRateToolStripMenuItem
+            // 
+            this.cDMRateToolStripMenuItem.Enabled = false;
+            this.cDMRateToolStripMenuItem.Name = "cDMRateToolStripMenuItem";
+            this.cDMRateToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.cDMRateToolStripMenuItem.Text = "CDM Rate";
+            // 
+            // cdmTextBox
+            // 
+            this.cdmTextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.cdmTextBox.Name = "cdmTextBox";
+            this.cdmTextBox.Size = new System.Drawing.Size(100, 23);
             // 
             // MainForm
             // 
@@ -498,5 +531,9 @@ namespace MaxRumsey.OzStripsPlugin.GUI
         private ToolStripMenuItem ts_toggleCircuit;
         private ToolTip tt_clients;
         private ToolStripMenuItem toggleCDMToolStripMenuItem;
+        private ToolStripMenuItem settingsWindowToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator3;
+        private ToolStripMenuItem cDMRateToolStripMenuItem;
+        private ToolStripTextBox cdmTextBox;
     }
 }

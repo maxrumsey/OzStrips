@@ -98,6 +98,8 @@ public class MainFormController : IDisposable
             _bayManager.CircuitActive = _bayManager.AerodromeState.CircuitActive;
             ViewListChanged(this, EventArgs.Empty);
         }
+
+        ResetCDMRateTextBox();
     }
 
     private void ViewListChanged(object sender, EventArgs e)
@@ -607,6 +609,44 @@ public class MainFormController : IDisposable
 
             e.Handled = true;
         }
+    }
+
+    public void CDMRateKeyDown(object sender, KeyPressEventArgs e)
+    {
+        try
+        {
+            if (_bayManager != null && e.KeyChar == Convert.ToChar(Keys.Enter, CultureInfo.InvariantCulture))
+            {
+                var success = int.TryParse(_mainForm.CDMRateTextBox.Text, out var rate);
+
+                if (!success || rate is <= 0 or >= 99)
+                {
+                    ResetCDMRateTextBox();
+                    return;
+                }
+
+                var period = TimeSpan.FromMinutes(60f / rate);
+
+                _socketConn.SendCDMParameters(new()
+                {
+                    DefaultRate = period,
+                });
+
+                e.Handled = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+        }
+    }
+
+    public void ResetCDMRateTextBox()
+    {
+        var period = _bayManager.AerodromeState.CDMParameters.DefaultRate ?? TimeSpan.FromMinutes(2);
+        var rate = (int)(60 / period.TotalMinutes);
+
+        _mainForm.CDMRateTextBox.Text = rate.ToString(CultureInfo.InvariantCulture);
     }
 
     public void BarCreatorClick(object sender, EventArgs e)
