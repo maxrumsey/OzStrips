@@ -469,6 +469,11 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                         return SKColors.Green;
                     }
 
+                    if (_strip.CDMResult.Slot is not null)
+                    {
+                        return SKColors.Pink;
+                    }
+
                     return SKColors.LightGray;
                 }
 

@@ -24,6 +24,15 @@ public partial class CDMAircraftControl : UserControl
     {
         InitializeComponent();
 
+        var slotPTOT = cdmDTO.Slot?.PTOT;
+
+        var slotText = "##:##Z";
+
+        if (slotPTOT is not null && slotPTOT != DateTime.MaxValue)
+        {
+            slotText = GetUserFriendlyDateTime(slotPTOT.Value);
+        }
+
         lb_acid.Text += cdmDTO.Aircraft.Key.Callsign;
 
         lb_items.Items.Add($"CTOT: {GetUserFriendlyDateTime(cdmDTO.CTOT)}");
@@ -33,7 +42,7 @@ public partial class CDMAircraftControl : UserControl
         lb_items.Items.Add($"TOBT: {GetUserFriendlyDateTime(cdmDTO.Aircraft.TOBT)}");
         lb_items.Items.Add($"AOBT: {GetUserFriendlyDateTime(cdmDTO.Aircraft.AOBT)}");
         lb_items.Items.Add($"ATOT: {GetUserFriendlyDateTime(cdmDTO.Aircraft.ATOT)}");
-        lb_items.Items.Add($"SLOT EOBT: {"##:##Z"}");
+        lb_items.Items.Add($"SLOT EOBT: {slotText}");
         lb_items.Items.Add("------------");
         lb_items.Items.Add($"State: {cdmDTO.Aircraft.State.ToString()}");
         lb_items.Items.Add($"Current Priority: {cdmDTO.Aircraft.SlotType.ToString()}");
