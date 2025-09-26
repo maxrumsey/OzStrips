@@ -20,7 +20,7 @@ internal class CDMStatsRenderController : IDisposable
 {
     private readonly BayManager _bayManager;
 
-    private const int WIDTH = 200;
+    private const int WIDTH = 400;
     private const int HEIGHT = 34;
     private const int FONTSIZE = 15;
 
@@ -96,14 +96,18 @@ internal class CDMStatsRenderController : IDisposable
                 var backPaint = new SKPaint()
                 {
                     Style = SKPaintStyle.StrokeAndFill,
-                    Color = SKColors.AliceBlue,
+                    Color = SKColors.Red,
                 };
 
                 var textLoc = new SKPoint(offset + (WidthEach / 2), (FONTSIZE + HEIGHT) / 2);
 
                 canvas.DrawRect(offset, 0, WidthEach, HEIGHT, backPaint);
 
-                canvas.DrawText("10/10", textLoc, SKTextAlign.Center, font, textPaint);
+                var actual = _bayManager.AerodromeState.CDMStatistics.CDMRates[period];
+                var depRate = 60 / ((float)(_bayManager.AerodromeState.CDMParameters.DefaultRate ?? TimeSpan.FromMinutes(2)).TotalMinutes);
+                var goalAmount = (int)(depRate * (period / 60f));
+
+                canvas.DrawText($"{period}m: {actual}/{goalAmount}", textLoc, SKTextAlign.Center, font, textPaint);
 
                 offset += WidthEach;
             }

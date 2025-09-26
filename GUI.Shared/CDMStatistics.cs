@@ -20,4 +20,9 @@ public class CDMStatistics
         { 15, 15 },
         { 30, 30 },
     };
+
+    /// <summary>
+    /// Gets or sets a list of relevant CDM Departures.
+    /// </summary>
+    public List<CDMDepartureDTO> Departures { get; set; } = new();
 }
