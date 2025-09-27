@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Security.Policy;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -204,8 +205,15 @@ public class MainFormController : IDisposable
     /// </summary>
     public void ForceResize()
     {
-        _bayManager.BayRepository.ConfigureAndSizeFLPs(true);
-        _bayManager.BayRepository.ConfigureAndSizeFLPs(); // double resize to take into account addition / subtraction of scroll bars.
+        try
+        {
+            _bayManager.BayRepository.ConfigureAndSizeFLPs(true);
+            _bayManager.BayRepository.ConfigureAndSizeFLPs(); // double resize to take into account addition / subtraction of scroll bars.
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+        }
     }
 
     /// <summary>
@@ -407,34 +415,36 @@ public class MainFormController : IDisposable
     /// <returns>Handled.</returns>
     public bool? ProcessCmdKey(ref Message msg, Keys keyData)
     {
-        if (keyData == (Keys.Up | Keys.Control))
+        try
         {
-            _bayManager.PositionToNextBar(1);
-            return true;
-        }
-        else if (keyData == (Keys.Down | Keys.Control))
-        {
-            _bayManager.PositionToNextBar(-1);
-            return true;
-        }
-        else if (keyData == (Keys.X | Keys.Alt))
-        {
-            // If we didnt't delete a crossing bar, add one.
-            if (!_bayManager.DeleteBarByParams("Runway", 3, "XXX CROSSING XXX"))
+            if (keyData == (Keys.Up | Keys.Control))
             {
-                _bayManager.AddBar("Runway", 3, "XXX CROSSING XXX");
+                _bayManager.PositionToNextBar(1);
+                return true;
+            }
+            else if (keyData == (Keys.Down | Keys.Control))
+            {
+                _bayManager.PositionToNextBar(-1);
+                return true;
+            }
+            else if (keyData == (Keys.X | Keys.Alt))
+            {
+                // If we didnt't delete a crossing bar, add one.
+                if (!_bayManager.DeleteBarByParams("Runway", 3, "XXX CROSSING XXX"))
+                {
+                    _bayManager.AddBar("Runway", 3, "XXX CROSSING XXX");
+                }
+
+                return true;
+            }
+            else if (keyData == (Keys.F | Keys.Control))
+            {
+                ShowQuickSearch();
+
+                return true;
             }
 
-            return true;
-        }
-        else if (keyData == (Keys.F | Keys.Control))
-        {
-            ShowQuickSearch();
-
-            return true;
-        }
-
-        switch (keyData)
+            switch (keyData)
             {
                 case Keys.Up:
                     _bayManager.PositionKey(1);
@@ -470,7 +480,12 @@ public class MainFormController : IDisposable
                     break;
             }
 
-        _bayManager.ForceRerender();
+            _bayManager.ForceRerender();
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+        }
 
         return null;
     }
@@ -506,32 +521,46 @@ public class MainFormController : IDisposable
 
     private void UpdateTimer(object sender, EventArgs e)
     {
-        if (!_mainForm.Visible)
+        try
         {
-            return;
-        }
-
-        if (!_postresizechecked)
-        {
-            _postresizechecked = true;
-            _bayManager.BayRepository.ConfigureAndSizeFLPs();
-        }
-
-        if (!_mainForm.IsDisposed)
-        {
-            _mainForm.Invoke(() =>
+            if (!_mainForm.Visible)
             {
-                _mainForm.TimerTextBox.Text = DateTime.UtcNow.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
-                _bayManager.ForceRerender();
-            });
+                return;
+            }
+
+            if (!_postresizechecked)
+            {
+                _postresizechecked = true;
+                _bayManager.BayRepository.ConfigureAndSizeFLPs();
+            }
+
+            if (!_mainForm.IsDisposed)
+            {
+                _mainForm.Invoke(() =>
+                {
+                    _mainForm.TimerTextBox.Text = DateTime.UtcNow.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
+                    _bayManager.ForceRerender();
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
         }
     }
 
     internal void MainFormSizeChanged(object sender, EventArgs e)
     {
-        _postresizechecked = false;
-        _bayManager?.BayRepository.ConfigureAndSizeFLPs();
-        _mainForm.SetControlBarScrollBar();
+        try
+        {
+            _postresizechecked = false;
+            _bayManager?.BayRepository.ConfigureAndSizeFLPs();
+            _mainForm.SetControlBarScrollBar();
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+        }
     }
 
     internal void AddAerodrome(string name)
@@ -552,22 +581,34 @@ public class MainFormController : IDisposable
 
     internal void ToggleCircuitBay(object sender, EventArgs e)
     {
-        _socketConn.RequestCircuit(!_bayManager.CircuitActive);
+        try
+        {
+            _socketConn.RequestCircuit(!_bayManager.CircuitActive);
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+        }
     }
 
     internal void ToggleCDM(object sender, EventArgs e)
     {
-        if (_bayManager.AerodromeState.AerodromeCode == _bayManager.AerodromeName)
+        try
         {
-            var param = new CDMParameters()
+            if (_bayManager.AerodromeState.AerodromeCode == _bayManager.AerodromeName)
             {
-                Enabled = !(_bayManager.AerodromeState.CDMParameters.Enabled ?? false),
-            };
+                var param = new CDMParameters()
+                {
+                    Enabled = !(_bayManager.AerodromeState.CDMParameters.Enabled ?? false),
+                };
 
-            _socketConn.SendCDMParameters(param);
+                _socketConn.SendCDMParameters(param);
+            }
         }
-
-
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+        }
     }
 
     public void Bt_cross_Click(object sender, EventArgs e)
