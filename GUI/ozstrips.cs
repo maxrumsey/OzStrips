@@ -10,6 +10,7 @@ using System.Timers;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.GUI;
 using MaxRumsey.OzStripsPlugin.GUI.DTO;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 using vatsys;
 using vatsys.Plugin;
@@ -54,6 +55,8 @@ public sealed class OzStrips : IPlugin, IDisposable
         {
             Util.LogError(ex);
         }
+
+        EnsureDpiAwareness();
 
         _aerodromeManager = new();
         _aerodromeManager.OpenGUI += OpenGUI;
@@ -318,6 +321,82 @@ public sealed class OzStrips : IPlugin, IDisposable
         else if (_gui?.IsDisposed == false)
         {
             MMI.InvokeOnGUI(() => _gui.Controller.SetSelectedTrack(null, true));
+        }
+    }
+
+    // Thanks Eoin!
+    private void EnsureDpiAwareness()
+    {
+        try
+        {
+            var vatSysPath = GetVatSysExecutablePath();
+            if (vatSysPath == null)
+            {
+                return;
+            }
+
+            const string registryPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers";
+            const string dpiValue = "DPIUNAWARE";
+
+            using var key = Registry.CurrentUser.OpenSubKey(registryPath, writable: false);
+            var existingValue = key?.GetValue(vatSysPath) as string;
+
+            // If already set, exit early
+            if (existingValue != null && existingValue.Contains(dpiValue))
+            {
+                return;
+            }
+
+            // Set the registry key
+            using var writableKey = Registry.CurrentUser.OpenSubKey(registryPath, writable: true)
+                ?? Registry.CurrentUser.CreateSubKey(registryPath);
+
+            writableKey.SetValue(vatSysPath, dpiValue, RegistryValueKind.String);
+
+            // Restart vatSys to apply the DPI setting
+            RestartVatSys();
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex, Name);
+        }
+    }
+
+    private void RestartVatSys()
+    {
+        try
+        {
+            var vatSysPath = GetVatSysExecutablePath();
+            if (vatSysPath != null)
+            {
+                System.Diagnostics.Process.Start(vatSysPath);
+                Environment.Exit(0);
+            }
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex, Name);
+        }
+    }
+
+    private static string? GetVatSysExecutablePath()
+    {
+        try
+        {
+            using var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\WOW6432Node\Sawbe\vatSys");
+            var installPath = key?.GetValue("Path") as string;
+
+            if (string.IsNullOrEmpty(installPath))
+            {
+                return null;
+            }
+
+            var exePath = Path.Combine(installPath, "bin", "vatSys.exe");
+            return File.Exists(exePath) ? exePath : null;
+        }
+        catch
+        {
+            return null;
         }
     }
 }
