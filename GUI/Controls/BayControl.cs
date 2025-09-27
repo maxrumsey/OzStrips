@@ -25,7 +25,8 @@ public partial class BayControl : UserControl
     /// <param name="name">The bay name.</param>
     /// <param name="bay">The bay.</param>
     /// <param name="cdmDisplay">Whether or not CDM stats are displayed in this bay.</param>
-    public BayControl(BayManager bm, string name, Bay bay, bool cdmDisplay)
+    /// <param name="socketConn">Socket connection.</param>
+    public BayControl(BayManager bm, string name, Bay bay, bool cdmDisplay, SocketConn socketConn)
     {
         InitializeComponent();
 
@@ -35,7 +36,7 @@ public partial class BayControl : UserControl
             bt_div.Dispose();
             Controls.Remove(bt_queue);
             Controls.Remove(bt_div);
-            _cdmRenderController = new CDMStatsRenderController(bm, topPanel);
+            _cdmRenderController = new CDMStatsRenderController(bm, topPanel, socketConn);
         }
 
         lb_bay_name.Text = name;
