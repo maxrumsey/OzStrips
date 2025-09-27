@@ -16,13 +16,19 @@ namespace MaxRumsey.OzStripsPlugin.GUI.Controls;
 /// </summary>
 public partial class CDMAircraftControl : UserControl
 {
+    private readonly string _adCode;
+    private readonly string _callsign;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="CDMAircraftControl"/> class.
     /// </summary>
     /// <param name="cdmDTO">CDM DTO object.</param>
-    public CDMAircraftControl(CDMResultDTO cdmDTO)
+    public CDMAircraftControl(CDMResultDTO cdmDTO, string adCode)
     {
         InitializeComponent();
+
+        _adCode = adCode;
+        _callsign = cdmDTO.Aircraft.Key.Callsign;
 
         var slotPTOT = cdmDTO.Slot?.PTOT;
 
@@ -59,5 +65,10 @@ public partial class CDMAircraftControl : UserControl
         {
             return "##:##Z";
         }
+    }
+
+    private void OpenWebDash(object sender, EventArgs e)
+    {
+        System.Diagnostics.Process.Start($"{OzStripsConfig.cdmsite}{_adCode}/{_callsign}");
     }
 }

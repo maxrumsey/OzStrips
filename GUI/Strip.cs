@@ -121,6 +121,17 @@ public sealed class Strip
     public string ParentAerodrome { get; }
 
     /// <summary>
+    /// Gets the current server code.
+    /// </summary>
+    public ConnectionMetadataDTO.Servers Server
+    {
+        get
+        {
+            return _socketConn.Server;
+        }
+    }
+
+    /// <summary>
     /// Gets the strip view controller.
     /// </summary>
     public StripController Controller { get; }

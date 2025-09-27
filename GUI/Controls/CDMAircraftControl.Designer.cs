@@ -30,6 +30,7 @@ partial class CDMAircraftControl
     {
             this.lb_acid = new System.Windows.Forms.Label();
             this.lb_items = new System.Windows.Forms.ListBox();
+            this.bt_web = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lb_acid
@@ -51,14 +52,25 @@ partial class CDMAircraftControl
             this.lb_items.Size = new System.Drawing.Size(236, 186);
             this.lb_items.TabIndex = 1;
             // 
+            // bt_web
+            // 
+            this.bt_web.Location = new System.Drawing.Point(17, 231);
+            this.bt_web.Name = "bt_web";
+            this.bt_web.Size = new System.Drawing.Size(75, 23);
+            this.bt_web.TabIndex = 2;
+            this.bt_web.Text = "View More";
+            this.bt_web.UseVisualStyleBackColor = true;
+            this.bt_web.Click += new System.EventHandler(this.OpenWebDash);
+            // 
             // CDMAircraftControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.bt_web);
             this.Controls.Add(this.lb_items);
             this.Controls.Add(this.lb_acid);
             this.Name = "CDMAircraftControl";
-            this.Size = new System.Drawing.Size(269, 242);
+            this.Size = new System.Drawing.Size(269, 263);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -68,4 +80,5 @@ partial class CDMAircraftControl
 
     private System.Windows.Forms.Label lb_acid;
     private System.Windows.Forms.ListBox lb_items;
+    private System.Windows.Forms.Button bt_web;
 }
