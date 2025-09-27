@@ -70,7 +70,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://localhost:5173/ops/.
+        ///   Looks up a localized string similar to https://cdm.maxrumsey.xyz/ops/.
         /// </summary>
         public static string cdmsite {
             get {
@@ -88,7 +88,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 0.6.3.
+        ///   Looks up a localized string similar to 0.7.0.
         /// </summary>
         public static string version {
             get {
