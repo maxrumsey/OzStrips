@@ -42,6 +42,11 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
     public List<Bay> Bays { get; } = [];
 
     /// <summary>
+    /// Gets a value indicating whether the FLPs have been initalised.
+    /// </summary>
+    public bool Initialised => _flpVerticalBoards.Count > 0;
+
+    /// <summary>
     /// Updates the bay based on the bay data.
     /// </summary>
     /// <param name="bayDTO">The bay data.</param>
