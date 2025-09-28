@@ -173,7 +173,7 @@ public sealed class Strip
             return new StripKey()
             {
                 Callsign = FDR.Callsign,
-                VatsimID = Network.GetOnlinePilots.Find(x => x?.Callsign == FDR.Callsign)?.ID ?? string.Empty,
+                VatsimID = string.Empty,
                 ADEP = FDR.DepAirport,
                 ADES = FDR.DesAirport,
             };

@@ -39,7 +39,6 @@ public class StripKey
     public bool Matches(StripKey other)
     {
         return Callsign == other.Callsign &&
-            VatsimID == other.VatsimID &&
             ADEP == other.ADEP &&
             ADES == other.ADES;
     }
