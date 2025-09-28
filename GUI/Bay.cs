@@ -38,7 +38,7 @@ public class Bay : System.IDisposable
         _socketConnection = socketConn;
         Name = name;
         VerticalBoardNumber = vertBoardNum;
-        ChildPanel = new(bayManager, name, this, CDMDisplay);
+        ChildPanel = new(bayManager, name, this, CDMDisplay, socketConn);
 
         _bayRenderController = new BayRenderController(this);
 

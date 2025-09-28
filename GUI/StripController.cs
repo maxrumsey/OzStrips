@@ -256,7 +256,7 @@ public class StripController
             return;
         }
 
-        var modalChild = new CDMAircraftControl(Strip.CDMResult);
+        var modalChild = new CDMAircraftControl(Strip.CDMResult, Strip.ParentAerodrome + Strip.Server);
         var bm = new BaseModal(modalChild, "CDM Details :: " + Strip.FDR.Callsign);
 
         bm.Show(MainForm.MainFormInstance);

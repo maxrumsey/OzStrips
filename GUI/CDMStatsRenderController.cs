@@ -20,15 +20,18 @@ namespace MaxRumsey.OzStripsPlugin.GUI;
 internal class CDMStatsRenderController : IDisposable
 {
     private readonly BayManager _bayManager;
-
+    private readonly SocketConn _socketConn;
     private const int WIDTH = 400;
     private const int HEIGHT = 34;
     private const int FONTSIZE = 15;
 
     private readonly Timer _renderTimer;
 
-    public CDMStatsRenderController(BayManager bayManager, Control parent)
+    public CDMStatsRenderController(BayManager bayManager, Control parent, SocketConn socketConn)
     {
+        socketConn.AerodromeStateChanged += StateChanged;
+        _socketConn = socketConn;
+
         var parentsize = parent.Size;
         _bayManager = bayManager;
         _renderTimer = new();
@@ -60,6 +63,12 @@ internal class CDMStatsRenderController : IDisposable
     public void Dispose()
     {
         _renderTimer.Dispose();
+        _socketConn.AerodromeStateChanged -= StateChanged;
+    }
+
+    private void StateChanged(object sender, EventArgs e)
+    {
+        MMI.InvokeOnGUI(SkControl.Invalidate);
     }
 
     private void RerenderTriggered(object sender, EventArgs e)
