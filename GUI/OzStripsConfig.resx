@@ -124,7 +124,7 @@
     <value>https://cdm.maxrumsey.xyz/ops/</value>
   </data>
   <data name="socketioaddr" xml:space="preserve">
-    <value>http://localhost:5153/</value>
+    <value>https://ozstripsserver.maxrumsey.xyz/</value>
   </data>
   <data name="version" xml:space="preserve">
     <value>0.7.0</value>
