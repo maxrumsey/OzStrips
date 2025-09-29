@@ -62,9 +62,9 @@ public class MainFormController : IDisposable
 
         _socketConn.AerodromeStateChanged += AerodromeStateChanged;
 
-        _mainForm.AerodromeManager.ViewListChanged += ViewListChanged;
+        _mainForm.AerodromeManager.ViewListChanged += AerodromeTypeChanged;
         AerodromeListChanged(this, EventArgs.Empty);
-        ViewListChanged(this, EventArgs.Empty);
+        AerodromeTypeChanged(this, EventArgs.Empty);
 
         if (_defaultLayout is not null)
         {
@@ -97,13 +97,13 @@ public class MainFormController : IDisposable
         if (_bayManager.CircuitActive != _bayManager.AerodromeState.CircuitActive)
         {
             _bayManager.CircuitActive = _bayManager.AerodromeState.CircuitActive;
-            ViewListChanged(this, EventArgs.Empty);
+            AerodromeTypeChanged(this, EventArgs.Empty);
         }
 
         ResetCDMRateTextBox();
     }
 
-    private void ViewListChanged(object sender, EventArgs e)
+    private void AerodromeTypeChanged(object sender, EventArgs e)
     {
         _mainForm.ViewListToolStrip.DropDownItems.Clear();
 
@@ -170,6 +170,7 @@ public class MainFormController : IDisposable
         }
 
         _defaultLayout?.Invoke(this, EventArgs.Empty);
+        _mainForm.Focus();
     }
 
     /// <summary>
