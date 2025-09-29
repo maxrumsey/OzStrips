@@ -596,6 +596,6 @@ public class Bay : System.IDisposable
     /// </summary>
     public void Dispose()
     {
-        throw new System.NotImplementedException();
+        ChildPanel.Dispose();
     }
 }

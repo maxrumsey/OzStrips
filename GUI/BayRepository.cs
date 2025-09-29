@@ -435,6 +435,12 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
     public void WipeBays()
     {
         _bayAmount = 0;
+
+        foreach (var bay in Bays)
+        {
+            bay.Dispose();
+        }
+
         Bays.Clear();
         foreach (var flpVerticalBoard in _flpVerticalBoards)
         {

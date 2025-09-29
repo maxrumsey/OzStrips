@@ -48,6 +48,12 @@ public partial class BayControl : UserControl
         ChildPanel.Resize += ResizeStripBoard;
         ChildPanel.Scroll += Scroll;
         ChildPanel.MouseWheel += MouseWheel;
+        Disposed += OnDisposed;
+    }
+
+    private void OnDisposed(object sender, EventArgs e)
+    {
+        _cdmRenderController?.Dispose();
     }
 
     /// <summary>
