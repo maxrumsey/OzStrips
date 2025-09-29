@@ -466,7 +466,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
                     if (_strip.ReadyToPush)
                     {
-                        return SKColors.Green;
+                        return SKColors.LimeGreen;
                     }
 
                     if (_strip.CDMResult.Slot is not null)
@@ -505,7 +505,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
                 break;
             case StripElements.Values.SID:
-                var sidcolour = SKColors.Green;
+                var sidcolour = SKColors.LimeGreen;
 
                 if (_strip.VFRSIDAssigned)
                 {
