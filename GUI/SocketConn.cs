@@ -54,9 +54,9 @@ public sealed class SocketConn : IDisposable
         {
             AddMessage("s:StripUpdate: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
 
-            if (mainForm.Visible && scDTO is not null)
+            if (scDTO is not null)
             {
-                mainForm.Invoke(() => _bayManager.StripRepository.UpdateStripData(scDTO, bayManager));
+                InvokeOnGUI(() => _bayManager.StripRepository.UpdateStripData(scDTO, bayManager));
             }
         });
 
@@ -64,9 +64,9 @@ public sealed class SocketConn : IDisposable
         {
             AddMessage("s:StripCache: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
 
-            if (mainForm.Visible && scDTO is not null && _freshClient)
+            if (scDTO is not null && _freshClient)
             {
-                mainForm.Invoke(() => _bayManager.StripRepository.LoadCache(scDTO, bayManager, this));
+                InvokeOnGUI(() => _bayManager.StripRepository.LoadCache(scDTO, bayManager, this));
             }
         });
 
@@ -75,7 +75,7 @@ public sealed class SocketConn : IDisposable
             AddMessage("s:UpdateCache: ");
             if (!_freshClient)
             {
-                MMI.InvokeOnGUI(async () =>
+                InvokeOnGUI(async () =>
                 {
                     await SendCache();
                     await SendCDMFull();
@@ -85,9 +85,9 @@ public sealed class SocketConn : IDisposable
 
         _connection.On<string?>("Atis", (string? code) =>
         {
-            if (MainFormValid && code is not null)
+            if (code is not null)
             {
-                mainForm.Invoke(() => mainForm.SetATISCode(code));
+                InvokeOnGUI(() => mainForm.SetATISCode(code));
             }
         });
 
@@ -95,9 +95,9 @@ public sealed class SocketConn : IDisposable
 
         _connection.On<string?>("Metar", (string? metar) =>
         {
-            if (MainFormValid && metar is not null)
+            if (metar is not null)
             {
-                mainForm.Invoke(() => mainForm.SetMetar(metar));
+                InvokeOnGUI(() => mainForm.SetMetar(metar));
             }
         });
 
@@ -105,9 +105,9 @@ public sealed class SocketConn : IDisposable
         {
             AddMessage("s:BayUpdate: " + System.Text.Json.JsonSerializer.Serialize(bayDTO));
 
-            if (mainForm.Visible && bayDTO is not null)
+            if (bayDTO is not null)
             {
-                mainForm.Invoke(() => bayManager.BayRepository.UpdateOrder(bayDTO));
+                InvokeOnGUI(() => bayManager.BayRepository.UpdateOrder(bayDTO));
             }
         });
 
@@ -124,7 +124,7 @@ public sealed class SocketConn : IDisposable
             {
                 AddMessage("s:Routes: " + System.Text.Json.JsonSerializer.Serialize(routes));
 
-                if (mainForm.Visible)
+                if (MainFormValid)
                 {
                     var sc = _bayManager.StripRepository.GetStrip(key);
 
@@ -142,9 +142,9 @@ public sealed class SocketConn : IDisposable
 
         _connection.On<string?>("GetStripStatus", (string? acid) =>
         {
-            if (MainFormValid && acid is not null)
+            if (acid is not null)
             {
-                mainForm.Invoke(() => _bayManager.StripRepository.GetStripStatus(acid, this));
+                InvokeOnGUI(() => _bayManager.StripRepository.GetStripStatus(acid, this));
             }
         });
 
@@ -158,18 +158,15 @@ public sealed class SocketConn : IDisposable
             if (!_versionShown && appversion != OzStripsConfig.version && !AerodromeManager.InhibitVersionCheck)
             {
                 _versionShown = true;
-                if (mainForm.Visible)
-                {
-                    mainForm.Invoke(() => Util.ShowInfoBox("New Update Available: " + appversion));
-                }
+                InvokeOnGUI(() => Util.ShowInfoBox("New Update Available: " + appversion));
             }
         });
 
         _connection.On<string?>("Message", (string? message) =>
         {
-            if (!mainForm.IsDisposed && message is not null)
+            if (message is not null)
             {
-                mainForm.Invoke(() => Util.ShowWarnBox(message));
+                InvokeOnGUI(() => Util.ShowWarnBox(message));
             }
         });
 
@@ -178,7 +175,7 @@ public sealed class SocketConn : IDisposable
             if (state.AerodromeCode == _bayManager.AerodromeName && state.AerodromeCode.Length > 0)
             {
                 _bayManager.AerodromeState = state;
-                mainForm.Invoke(() => AerodromeStateChanged?.Invoke(this, EventArgs.Empty));
+                InvokeOnGUI(() => AerodromeStateChanged?.Invoke(this, EventArgs.Empty));
             }
         });
     }
@@ -624,6 +621,24 @@ public sealed class SocketConn : IDisposable
         lock (Messages)
         {
             Messages.Add(message);
+        }
+    }
+
+    private void InvokeOnGUI(Action action)
+    {
+        if (MainFormValid)
+        {
+            _mainForm.Invoke(() =>
+            {
+                try
+                {
+                    action();
+                }
+                catch (Exception ex)
+                {
+                    Util.LogError(ex);
+                }
+            });
         }
     }
 
