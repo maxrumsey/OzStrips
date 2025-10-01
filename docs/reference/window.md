@@ -18,6 +18,8 @@ If you aren't connected to VATSIM, or connected as an observer, this function wo
 
 ### Settings
 The Settings window is accessed through this button.
+#### CDM
+The CDM departure rate can be entered in this window as a "X deps / hour" value.
 ### Info
 Help Pages, the About Window, and Debug settings can be accessed through this dropdown.
 

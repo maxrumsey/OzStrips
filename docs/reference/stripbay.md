@@ -15,3 +15,5 @@ To move a strip between bays, you can either ["SID trigger" the strip](strips.md
 
 It is recommended to move strips using the SID trigger, rather than picking and dropping, as this can lead to strips going into bays they really shouldn't be going into if you misclick.
 
+### Ctrl-click
+By clicking a strip and control-clicking on another strip or bar, within the same or different bay, you can move the strip above or below the other bay item.

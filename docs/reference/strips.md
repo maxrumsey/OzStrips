@@ -16,7 +16,7 @@ You will only see strips for aircraft that have requested planned an ADES or ADE
 | Number | Content | Left Click | Right Click | Possible Alert / Alarm |
 |---------|-------------|--------------| ----------- | -- |
 | **1** | **Bay Number** | Edit Bay Number | |
-| **2** | **Filed Off Blocks Time** | Cock Strip | |
+| **2** | **EOBT or CDM Time** | Cock Strip | Open CDM info window |
 | **3** | **Aircraft Type** | Open Flightplan | |
 | **4** | **Wake Turbulence Category** | | |
 | **5** | **Destination** | Open Flightplan | |

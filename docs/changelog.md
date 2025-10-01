@@ -10,6 +10,7 @@
 - Fixed some disposal issues.
 - Only coordinate strips if a change we made - prevent squawk assignment race condition?
 - Made local strips not autodelete on FDR finishing.
+- Fixed GUI scaling issue - (thanks Eoin!)
 
 ### Server changes
 - CDM changes to server.
