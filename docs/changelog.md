@@ -1,4 +1,29 @@
 # Changelog
+## v0.7.0
+### Features
+- Added CDM.
+- Changed strip colour to a nicer green.
+
+### Bugfixes
+- Fixed issue with change aerodrome keybinds not being repeatable when changing between tower modes due to control deletion.
+- Made error handling a bit more elegant.
+- Fixed some disposal issues.
+- Only coordinate strips if a change we made - prevent squawk assignment race condition?
+- Made local strips not autodelete on FDR finishing.
+
+### Server changes
+- CDM changes to server.
+- Server backs up and restores state after restarts.
+
+### Misc changes
+- Changed assembly name to "GUI" and "GUI.Shared"
+- Added CDM website: https://cdm.maxrumsey.xyz
+
+## v0.6.3
+### Bugfixes
+- Fixed issue with alt-tower modes not opening on launch.
+- Fixed some graphical issues with the ConnStat panel
+- Changed focus behaviour to be a little more tolerable.
 ## v0.6.2
 ### Features
 - OzStrips automatically manages the list of aerodromes in the selection window, considering Position / Sectors selected.
