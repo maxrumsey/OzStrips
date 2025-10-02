@@ -320,6 +320,11 @@ public sealed class Strip
         {
             if (CDMResult is not null)
             {
+                if (CDMResult.Aircraft.State != CDMState.ACTIVE)
+                {
+                    return string.Empty;
+                }
+
                 return CDMResult.TSAT.ToUniversalTime().ToString("HHmm", CultureInfo.InvariantCulture);
             }
 
