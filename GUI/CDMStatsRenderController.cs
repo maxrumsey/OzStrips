@@ -67,7 +67,17 @@ internal class CDMStatsRenderController : IDisposable
 
     private void StateChanged(object sender, EventArgs e)
     {
-        MMI.InvokeOnGUI(SkControl.Invalidate);
+        MMI.InvokeOnGUI(() =>
+        {
+            try
+            {
+                SkControl.Invalidate();
+            }
+            catch (Exception ex)
+            {
+                Util.LogError(ex, "CDMStatsRenderController StateChanged");
+            }
+        });
     }
 
     private void RerenderTriggered(object sender, EventArgs e)

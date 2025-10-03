@@ -77,8 +77,15 @@ public sealed class SocketConn : IDisposable
             {
                 InvokeOnGUI(async () =>
                 {
-                    await SendCache();
-                    await SendCDMFull();
+                    try
+                    {
+                        await SendCache();
+                        await SendCDMFull();
+                    }
+                    catch (Exception ex)
+                    {
+                        Util.LogError(ex);
+                    }
                 });
             }
         });
@@ -443,7 +450,7 @@ public sealed class SocketConn : IDisposable
     /// <returns>Task.</returns>
     public async Task SendCDMFull()
     {
-        var clearedBay = _bayManager.BayRepository.Bays.First(x => x.BayTypes.Contains(StripBay.BAY_CLEARED));
+        var clearedBay = _bayManager.BayRepository.Bays.FirstOrDefault(x => x.BayTypes.Contains(StripBay.BAY_CLEARED));
 
         var activeStrips = new List<Strip>();
         var pushedStrips = _bayManager.StripRepository.Strips.Where(x => x.CurrentBay is >= StripBay.BAY_PUSHED and <= StripBay.BAY_RUNWAY);
@@ -454,24 +461,27 @@ public sealed class SocketConn : IDisposable
             return pilot is not null && pilot.GroundSpeed > 50;
         });
 
-        var barFound = false;
-
-        foreach (var strip in clearedBay.Strips)
+        if (clearedBay is not null)
         {
-            if (strip.Type == StripItemType.QUEUEBAR)
-            {
-                barFound = true;
-                break;
-            }
-            else if (strip.Type == StripItemType.STRIP)
-            {
-                activeStrips.Add(strip.Strip!);
-            }
-        }
+            var barFound = false;
 
-        if (!barFound)
-        {
-            activeStrips.Clear();
+            foreach (var strip in clearedBay.Strips)
+            {
+                if (strip.Type == StripItemType.QUEUEBAR)
+                {
+                    barFound = true;
+                    break;
+                }
+                else if (strip.Type == StripItemType.STRIP)
+                {
+                    activeStrips.Add(strip.Strip!);
+                }
+            }
+
+            if (!barFound)
+            {
+                activeStrips.Clear();
+            }
         }
 
         var cdmDTOs = new CDMAircraftList(
