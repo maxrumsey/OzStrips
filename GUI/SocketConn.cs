@@ -90,6 +90,25 @@ public sealed class SocketConn : IDisposable
             }
         });
 
+        _connection.On("SendCDM", [], async _ =>
+        {
+            AddMessage("s:SendCDM: ");
+            if (!_freshClient)
+            {
+                InvokeOnGUI(async () =>
+                {
+                    try
+                    {
+                        await SendCDMFull();
+                    }
+                    catch (Exception ex)
+                    {
+                        Util.LogError(ex);
+                    }
+                });
+            }
+        });
+
         _connection.On<string?>("Atis", (string? code) =>
         {
             if (code is not null)
