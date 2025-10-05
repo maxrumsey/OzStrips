@@ -177,7 +177,7 @@ public sealed class OzStrips : IPlugin, IDisposable
         }
         catch (Exception ex)
         {
-            Errors.Add(ex, "OzStrips Error Reporter")
+            Errors.Add(ex, "OzStrips Error Reporter");
         }
     }
 
