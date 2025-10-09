@@ -1,4 +1,8 @@
 # Changelog
+## v0.7.1
+### Bugfixes
+- Fixed crash caused by server initiated messaging when in ADC view mode.
+- Fixed Dep Mon clipping over Bay label.
 ## v0.7.0
 ### Features
 - Added CDM.
