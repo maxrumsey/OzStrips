@@ -55,11 +55,6 @@ public class BayManager
     public StripListItem? PickedStripItem { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether or not WF mode is activated.
-    /// </summary>
-    public bool WorldFlightMode { get; set; }
-
-    /// <summary>
     /// Gets the strip repository.
     /// </summary>
     public StripRepository StripRepository { get; } = new StripRepository();

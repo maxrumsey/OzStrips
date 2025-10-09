@@ -117,8 +117,6 @@ public sealed class SocketConn : IDisposable
             }
         });
 
-        _connection.On("ActivateWorldFlightMode", () => _bayManager.WorldFlightMode = true);
-
         _connection.On<string?>("Metar", (string? metar) =>
         {
             if (metar is not null)

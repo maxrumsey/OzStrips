@@ -432,7 +432,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 {
                     return SKColors.Silver;
                 }
-                else if (_strip.FDR.Remarks.ToLower(CultureInfo.InvariantCulture).Contains("state") && _bayRenderController.Bay.BayManager.WorldFlightMode)
+                else if (_bayRenderController.Bay.BayManager.AerodromeState.WorldFlightTeams.Contains(_strip.FDR.Callsign))
                 {
                     return SKColors.Yellow;
                 }
