@@ -20,7 +20,6 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
     private bool ShowSSRError
     {
         get
-
         {
             return !_strip.SquawkCorrect && _strip.CurrentBay >= StripBay.BAY_TAXI && _strip.StripType == StripType.DEPARTURE;
         }
@@ -57,6 +56,11 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
         foreach (var element in stripelementlist)
         {
+            if (element is null)
+            {
+                continue;
+            }
+
             var elpaint = new SKPaint()
             {
                 Color = SKColors.Black,
@@ -76,12 +80,13 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 Style = SKPaintStyle.StrokeAndFill,
             };
 
-            var highlightPaint = element?.Value == StripElements.Values.SID ? new SKPaint()
+            var highlightPaint = element.Value == StripElements.Values.SID ? new SKPaint()
             {
                 Color = SKColors.Yellow,
                 Style = SKPaintStyle.Stroke,
                 StrokeWidth = 2,
-            } : null;
+            }
+            : null;
 
             var baseX = ElementOrigin.X + element.X;
             var baseY = ElementOrigin.Y + element.Y;
@@ -231,12 +236,13 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                     break;
                 case StripElements.HoverActions.SID_TRIGGER:
                     var transExists = _strip.SIDTransition?.Length > 0;
-                    if (_bayRenderController.HoveredItem != StripElements.HoverActions.SID_TRIGGER && 
+                    if (_bayRenderController.HoveredItem != StripElements.HoverActions.SID_TRIGGER &&
                         (transExists || _strip.VFRSIDAssigned))
                     {
                         _bayRenderController.HoveredItem = StripElements.HoverActions.SID_TRIGGER;
                         _bayRenderController.ToolTip.Show((transExists ? _strip.SIDTransition + " Transition\n" : string.Empty) + (_strip.VFRSIDAssigned ? "VFR Aircraft issued a SID." : string.Empty), _bayRenderController.SkControl, e);
                     }
+
                     break;
             }
         }
@@ -552,24 +558,13 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
     {
         var color = SKColor.Empty;
 
-        switch (_strip.StripType)
+        color = _strip.StripType switch
         {
-            case StripType.ARRIVAL:
-                color = SKColor.Parse("ffffa0"); // Light yellow for arrivals
-                break;
-            case StripType.DEPARTURE:
-                color = SKColor.Parse("c1e6f2"); // Light blue for departures
-                break;
-            case StripType.LOCAL:
-                color = SKColor.Parse("e6aedd"); // Light purple for local
-                break;
-            case StripType.UNKNOWN:
-            default:
-                color = SKColor.Parse("404040"); // Default gray for unknown
-                break;
-        }
-
-
+            StripType.ARRIVAL => SKColor.Parse("ffffa0"), // Light yellow for arrivals
+            StripType.DEPARTURE => SKColor.Parse("c1e6f2"), // Light blue for departures
+            StripType.LOCAL => SKColor.Parse("e6aedd"), // Light purple for local
+            _ => SKColor.Parse("404040"), // Default gray for unknown
+        };
         var paint = new SKPaint()
         {
             Color = color,

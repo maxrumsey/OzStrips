@@ -27,7 +27,6 @@ public class BayManager
     /// Initializes a new instance of the <see cref="BayManager"/> class.
     /// </summary>
     /// <param name="main">The flow layout for the bay.</param>
-    /// <param name="layoutMethod">The current layout caller.</param>
     public BayManager(FlowLayoutPanel main)
     {
         BayRepository = new(main, this);
@@ -69,6 +68,9 @@ public class BayManager
     /// </summary>
     public string AerodromeName { get; set; } = "????";
 
+    /// <summary>
+    /// Gets or sets the current AerodromeState.
+    /// </summary>
     public AerodromeState AerodromeState { get; set; } = new AerodromeState
     {
         AerodromeCode = "????",
@@ -76,6 +78,9 @@ public class BayManager
         Connections = new List<string>(),
     };
 
+    /// <summary>
+    /// Gets or sets a value indicating whether the circuit bay is active.
+    /// </summary>
     public bool CircuitActive { get; set; }
 
     /// <summary>
@@ -290,6 +295,11 @@ public class BayManager
         }
     }
 
+    /// <summary>
+    /// Drops the selected strip below the target strip.
+    /// </summary>
+    /// <param name="targetItem">The target item to drop below.</param>
+    /// <exception cref="Exception">Strip insertion failed.</exception>
     public void DropStripBelow(StripListItem targetItem)
     {
         var newBay = BayRepository.FindBay(targetItem);
@@ -304,7 +314,7 @@ public class BayManager
 
         DropStrip(newBay);
 
-        var stripListItem = newBay.GetListItem(strip);
+        var stripListItem = newBay.GetListItem(strip) ?? throw new Exception("Could not find strip within new bay after moving it.");
 
         newBay.ChangeStripPositionAbs(stripListItem, position);
     }

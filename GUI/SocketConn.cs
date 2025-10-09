@@ -80,7 +80,6 @@ public sealed class SocketConn : IDisposable
                     try
                     {
                         await SendCache();
-                        await SendCDMFull();
                     }
                     catch (Exception ex)
                     {
@@ -88,9 +87,11 @@ public sealed class SocketConn : IDisposable
                     }
                 });
             }
+
+            return Task.CompletedTask;
         });
 
-        _connection.On("SendCDM", [], async _ =>
+        _connection.On("SendCDM", [], async (_) =>
         {
             AddMessage("s:SendCDM: ");
             if (!_freshClient)
@@ -107,6 +108,8 @@ public sealed class SocketConn : IDisposable
                     }
                 });
             }
+
+            return Task.CompletedTask;
         });
 
         _connection.On<string?>("Atis", (string? code) =>
@@ -204,7 +207,10 @@ public sealed class SocketConn : IDisposable
         });
     }
 
-    public event EventHandler AerodromeStateChanged;
+    /// <summary>
+    /// An event called when the aerodrome state changes.
+    /// </summary>
+    public event EventHandler? AerodromeStateChanged;
 
     /// <summary>
     /// Gets the messages, used for debugging.
@@ -221,6 +227,9 @@ public sealed class SocketConn : IDisposable
     /// </summary>
     public bool Connected { get; set; }
 
+    /// <summary>
+    /// Gets a value indicating whether we should be able to send strip and bay updates to the server.
+    /// </summary>
     public bool HaveSendPerms
     {
         get

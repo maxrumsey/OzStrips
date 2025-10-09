@@ -222,7 +222,7 @@ public partial class MainForm : Form
     {
         bt_flip.Click += _mainFormController.FlipFlopStrip;
         bt_bar.Click += _mainFormController.BarCreatorClick;
-        bt_cross.Click += _mainFormController.Bt_cross_Click;
+        bt_cross.Click += _mainFormController.CrossButton_Click;
         bt_inhibit.Click += _mainFormController.Bt_inhibit_Click;
         toolStripTextBox1.KeyPress += _mainFormController.AerodromeSelectorKeyDown;
         toolStripMenuItem1.Click += _mainFormController.ShowMessageList_Click;
