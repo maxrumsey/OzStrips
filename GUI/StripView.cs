@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.GUI.DTO;
+using MaxRumsey.OzStripsPlugin.GUI.Properties;
 using MaxRumsey.OzStripsPlugin.GUI.Shared;
 using SkiaSharp;
 using vatsys;
@@ -437,6 +438,11 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 if (_bayRenderController.Bay.BayManager.PickedStrip == _strip)
                 {
                     return SKColors.Silver;
+                }
+                else if (_bayRenderController.Bay.BayManager.LastTransmitManager.LastReceivedFrom == _strip.FDR.Callsign &&
+                    OzStripsSettings.Default.ShowLastTransmit)
+                {
+                    return SKColors.LightCyan;
                 }
                 else if (_bayRenderController.Bay.BayManager.AerodromeState.WorldFlightTeams.Contains(_strip.FDR.Callsign))
                 {

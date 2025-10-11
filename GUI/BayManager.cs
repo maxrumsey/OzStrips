@@ -69,6 +69,11 @@ public class BayManager
     public string AerodromeName { get; set; } = "????";
 
     /// <summary>
+    /// Gets or sets the last transmit manager.
+    /// </summary>
+    public LastTransmitManager LastTransmitManager { get; set; } = new();
+
+    /// <summary>
     /// Gets or sets the current AerodromeState.
     /// </summary>
     public AerodromeState AerodromeState { get; set; } = new AerodromeState
