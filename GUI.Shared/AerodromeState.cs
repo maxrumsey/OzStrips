@@ -46,5 +46,10 @@ namespace MaxRumsey.OzStripsPlugin.GUI.Shared
         /// Gets or sets an array of world flight teams.
         /// </summary>
         public string[] WorldFlightTeams { get; set; } = [];
+
+        /// <summary>
+        /// Gets or sets an array of aircraft planned to an invalid destination.
+        /// </summary>
+        public string[] InvalidDestinationAircraft { get; set; } = [];
     }
 }
