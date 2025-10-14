@@ -133,7 +133,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             crossPaint.Color = crossPaint.Color.WithAlpha(128);
 
             canvas.DrawLine(ElementOrigin.X, ElementOrigin.Y, ElementOrigin.X + BayRenderController.StripWidth, ElementOrigin.Y + BayRenderController.StripHeight - (2 * _padding), crossPaint);
-            canvas.DrawText("BAD DEST", new SKPoint(ElementOrigin.X + (BayRenderController.StripWidth / 2), ElementOrigin.Y + ((fontsize + BayRenderController.StripHeight) / 2)), SKTextAlign.Center, new SKFont(typeface, fontsize), textpaint);
+            canvas.DrawText("NO SLOT", new SKPoint(ElementOrigin.X + (BayRenderController.StripWidth / 2), ElementOrigin.Y + ((fontsize + BayRenderController.StripHeight) / 2)), SKTextAlign.Center, new SKFont(typeface, fontsize), textpaint);
         }
     }
 
