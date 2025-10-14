@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Buffers.Text;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Media;
 using MaxRumsey.OzStripsPlugin.GUI.DTO;
 using MaxRumsey.OzStripsPlugin.GUI.Properties;
 using MaxRumsey.OzStripsPlugin.GUI.Shared;
 using SkiaSharp;
 using vatsys;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MaxRumsey.OzStripsPlugin.GUI;
 
@@ -106,6 +109,31 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             }
 
             canvas.DrawText(text, new SKPoint(baseX + (element.W / 2), baseY + ((fontsize + element.H) / 2)), SKTextAlign.Center, new SKFont(typeface, fontsize), textpaint);
+        }
+
+        if (_bayRenderController.Bay.BayManager.AerodromeState.InvalidDestinationAircraft.Contains(_strip.FDR.Callsign))
+        {
+            var crossPaint = new SKPaint()
+            {
+                Color = SKColors.Red,
+                Style = SKPaintStyle.Stroke,
+                IsAntialias = true,
+            };
+
+            var textpaint = new SKPaint()
+            {
+                Color = SKColors.Red,
+                Style = SKPaintStyle.StrokeAndFill,
+                IsAntialias = true,
+            };
+
+            var typeface = SKTypeface.FromFamilyName("Segoe UI", 700, 5, SKFontStyleSlant.Upright);
+            var fontsize = 30;
+            textpaint.Color = textpaint.Color.WithAlpha(96);
+            crossPaint.Color = crossPaint.Color.WithAlpha(128);
+
+            canvas.DrawLine(ElementOrigin.X, ElementOrigin.Y, ElementOrigin.X + BayRenderController.StripWidth, ElementOrigin.Y + BayRenderController.StripHeight - (2 * _padding), crossPaint);
+            canvas.DrawText("BAD DEST", new SKPoint(ElementOrigin.X + (BayRenderController.StripWidth / 2), ElementOrigin.Y + ((fontsize + BayRenderController.StripHeight) / 2)), SKTextAlign.Center, new SKFont(typeface, fontsize), textpaint);
         }
     }
 
