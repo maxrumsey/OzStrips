@@ -12,15 +12,12 @@ namespace MaxRumsey.OzStripsPlugin.GUI.Shared;
 /// </summary>
 public class CDMAerodromeConfig
 {
+    private DateTime _lastModified = DateTime.Now;
+
     /// <summary>
     /// Gets or sets the aerodrome code.
     /// </summary>
     public string? AerodromeCode { get; set; } = null!;
-
-    /// <summary>
-    /// Gets or sets the base airport departure rate.
-    /// </summary>
-    public int BaseADR { get; set; } = 30;
 
     /// <summary>
     /// Gets or sets a value indicating whether plugin initiated changes are currently locked.
@@ -41,4 +38,13 @@ public class CDMAerodromeConfig
     /// Gets or sets a list of whitelisted ADESes.
     /// </summary>
     public List<string> WhitelistedAerodromes { get; set; } = [];
+
+    /// <summary>
+    /// Gets or sets when this record was last modified.
+    /// </summary>
+    public DateTime LastModified
+    {
+        get => _lastModified;
+        set => _lastModified = DateTime.Now;
+    }
 }

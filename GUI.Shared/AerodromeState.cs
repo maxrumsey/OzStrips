@@ -51,5 +51,10 @@ namespace MaxRumsey.OzStripsPlugin.GUI.Shared
         /// Gets or sets an array of aircraft planned to an invalid destination.
         /// </summary>
         public string[] InvalidDestinationAircraft { get; set; } = [];
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the CDM rate is currently locked.
+        /// </summary>
+        public bool CDMRateLocked { get; set; }
     }
 }
