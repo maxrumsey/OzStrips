@@ -746,6 +746,8 @@ public class MainFormController : IDisposable
         var rate = (int)(60 / period.TotalMinutes);
 
         _mainForm.CDMRateTextBox.Text = rate.ToString(CultureInfo.InvariantCulture);
+
+        _mainForm.CDMRateTextBox.Enabled = !_bayManager.AerodromeState.CDMRateLocked;
     }
 
     /// <summary>
