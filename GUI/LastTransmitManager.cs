@@ -15,7 +15,7 @@ public class LastTransmitManager
     private readonly List<VSCSFrequency> _monitoredFrequencies = [];
 
     /// <summary>
-    /// The callsign of the aircraft that last transmitted.
+    /// Gets or sets the callsign of the aircraft that last transmitted.
     /// </summary>
     public string LastReceivedFrom { get; set; } = string.Empty;
 
@@ -46,6 +46,13 @@ public class LastTransmitManager
 
     private void FreqReceived(object src, EventArgs e)
     {
-        LastReceivedFrom = (src as VSCSFrequency)?.ReceivingCallsigns.FirstOrDefault() ?? LastReceivedFrom;
+        var callsign = (src as VSCSFrequency)?.ReceivingCallsigns.FirstOrDefault() ?? LastReceivedFrom;
+
+        // Don't match ATC.
+        // e.g: SY_GND, ML-BLA_CTR
+        if (!callsign.Contains('_'))
+        {
+            LastReceivedFrom = callsign;
+        }
     }
 }

@@ -470,7 +470,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 else if (_bayRenderController.Bay.BayManager.LastTransmitManager.LastReceivedFrom == _strip.FDR.Callsign &&
                     OzStripsSettings.Default.ShowLastTransmit)
                 {
-                    return SKColors.LightCyan;
+                    return SKColors.Lime;
                 }
                 else if (_bayRenderController.Bay.BayManager.AerodromeState.WorldFlightTeams.Contains(_strip.FDR.Callsign))
                 {
