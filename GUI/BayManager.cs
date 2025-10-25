@@ -273,6 +273,27 @@ public class BayManager
     }
 
     /// <summary>
+    /// Picks the strip of the aircraft that transmitted last.
+    /// </summary>
+    public void PickLastTransmit()
+    {
+        if (string.IsNullOrEmpty(LastTransmitManager.LastReceivedFrom) ||
+            PickedStrip?.FDR.Callsign == LastTransmitManager.LastReceivedFrom)
+        {
+            return;
+        }
+
+        foreach (var strip in StripRepository.Strips)
+        {
+            if (strip.FDR.Callsign == LastTransmitManager.LastReceivedFrom)
+            {
+                SetPickedStripClass(strip);
+                return;
+            }
+        }
+    }
+
+    /// <summary>
     /// Drop the strip to the specified bay.
     /// </summary>
     /// <param name="bay">The bay.</param>

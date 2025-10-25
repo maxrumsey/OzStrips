@@ -24,7 +24,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
     private readonly int _padding = 2;
     private readonly byte _lastTransmitAlpha = 64;
 
-    private static bool LastTransmitModifier => Keyboard.IsKeyDown(Key.T);
+    private static bool LastTransmitModifier => Keyboard.IsKeyDown(Key.W);
 
     private bool ShowSSRError
     {

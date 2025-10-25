@@ -497,6 +497,9 @@ public class MainFormController : IDisposable
                 case Keys.F:
                     _bayManager.FlipFlopStrip();
                     return true;
+                case Keys.T:
+                    _bayManager.PickLastTransmit();
+                    return true;
                 default:
                     break;
             }
