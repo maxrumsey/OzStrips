@@ -91,6 +91,33 @@ public sealed class SocketConn : IDisposable
             return Task.CompletedTask;
         });
 
+        _connection.On("UpdateBays", [], async _ =>
+        {
+            AddMessage("s:UpdateBays: ");
+            if (!_freshClient)
+            {
+                InvokeOnGUI(async () =>
+                {
+                    try
+                    {
+                        foreach (var bay in bayManager.BayRepository.Bays)
+                        {
+                            if (bay is not null)
+                            {
+                                SyncBay(bay);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Util.LogError(ex);
+                    }
+                });
+            }
+
+            return Task.CompletedTask;
+        });
+
         _connection.On("SendCDM", [], async (_) =>
         {
             AddMessage("s:SendCDM: ");
