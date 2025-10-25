@@ -5,10 +5,12 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Input;
 using System.Windows.Media;
 using MaxRumsey.OzStripsPlugin.GUI.DTO;
 using MaxRumsey.OzStripsPlugin.GUI.Properties;
 using MaxRumsey.OzStripsPlugin.GUI.Shared;
+using OpenTK.Graphics;
 using SkiaSharp;
 using vatsys;
 using static System.Net.Mime.MediaTypeNames;
@@ -20,6 +22,9 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
     private readonly Strip _strip = strip;
     private readonly BayRenderController _bayRenderController = bayRC;
     private readonly int _padding = 2;
+    private readonly byte _lastTransmitAlpha = 64;
+
+    private static bool LastTransmitModifier => Keyboard.IsKeyDown(Key.T);
 
     private bool ShowSSRError
     {
@@ -77,6 +82,11 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 Style = SKPaintStyle.StrokeAndFill,
                 IsAntialias = true,
             };
+
+            if (LastTransmitModifier && _bayRenderController.Bay.BayManager.LastTransmitManager.LastReceivedFrom != _strip.FDR.Callsign)
+            {
+                textpaint.Color = textpaint.Color.WithAlpha(_lastTransmitAlpha);
+            }
 
             var basepaint = new SKPaint()
             {
@@ -142,7 +152,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
         _strip.SetHMIPicked(picked);
     }
 
-    public void HandleClick(MouseEventArgs e)
+    public void HandleClick(System.Windows.Forms.MouseEventArgs e)
     {
         var stripelementlist = StripElementList.Instance?.List;
         if (stripelementlist is null)
@@ -599,6 +609,12 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             StripType.LOCAL => SKColor.Parse("e6aedd"), // Light purple for local
             _ => SKColor.Parse("404040"), // Default gray for unknown
         };
+
+        if (LastTransmitModifier && _bayRenderController.Bay.BayManager.LastTransmitManager.LastReceivedFrom != _strip.FDR.Callsign)
+        {
+            color = color.WithAlpha(_lastTransmitAlpha);
+        }
+
         var paint = new SKPaint()
         {
             Color = color,
