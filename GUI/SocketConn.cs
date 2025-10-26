@@ -564,7 +564,10 @@ public sealed class SocketConn : IDisposable
         }).ToList(),
         _bayManager);
 
-        await _connection.SendAsync("UplinkCDMAircraft", cdmDTOs);
+        if (CanSendDTO)
+        {
+            await _connection.SendAsync("UplinkCDMAircraft", cdmDTOs);
+        }
     }
 
     /// <summary>
