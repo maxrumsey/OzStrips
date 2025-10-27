@@ -21,7 +21,7 @@ internal class CDMStatsRenderController : IDisposable
 {
     private readonly BayManager _bayManager;
     private readonly SocketConn _socketConn;
-    private const int WIDTH = 400;
+    private const int WIDTH = 300;
     private const int HEIGHT = 34;
     private const int FONTSIZE = 15;
 
@@ -51,7 +51,6 @@ internal class CDMStatsRenderController : IDisposable
 
         SkControl.Show();
         parent.Controls.Add(SkControl);
-        SkControl.BringToFront();
     }
 
     public SKControl SkControl { get; private set; }
@@ -68,7 +67,17 @@ internal class CDMStatsRenderController : IDisposable
 
     private void StateChanged(object sender, EventArgs e)
     {
-        MMI.InvokeOnGUI(SkControl.Invalidate);
+        MMI.InvokeOnGUI(() =>
+        {
+            try
+            {
+                SkControl.Invalidate();
+            }
+            catch (Exception ex)
+            {
+                Util.LogError(ex, "CDMStatsRenderController StateChanged");
+            }
+        });
     }
 
     private void RerenderTriggered(object sender, EventArgs e)

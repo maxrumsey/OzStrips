@@ -1,13 +1,19 @@
 ﻿using System;
+using System.Buffers.Text;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Input;
+using System.Windows.Media;
 using MaxRumsey.OzStripsPlugin.GUI.DTO;
+using MaxRumsey.OzStripsPlugin.GUI.Properties;
 using MaxRumsey.OzStripsPlugin.GUI.Shared;
+using OpenTK.Graphics;
 using SkiaSharp;
 using vatsys;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MaxRumsey.OzStripsPlugin.GUI;
 
@@ -16,11 +22,13 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
     private readonly Strip _strip = strip;
     private readonly BayRenderController _bayRenderController = bayRC;
     private readonly int _padding = 2;
+    private readonly byte _lastTransmitAlpha = 64;
+
+    private static bool LastTransmitModifier => Keyboard.IsKeyDown(Key.W);
 
     private bool ShowSSRError
     {
         get
-
         {
             return !_strip.SquawkCorrect && _strip.CurrentBay >= StripBay.BAY_TAXI && _strip.StripType == StripType.DEPARTURE;
         }
@@ -57,6 +65,11 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
         foreach (var element in stripelementlist)
         {
+            if (element is null)
+            {
+                continue;
+            }
+
             var elpaint = new SKPaint()
             {
                 Color = SKColors.Black,
@@ -70,18 +83,24 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 IsAntialias = true,
             };
 
+            if (LastTransmitModifier && _bayRenderController.Bay.BayManager.LastTransmitManager.LastReceivedFrom != _strip.FDR.Callsign)
+            {
+                textpaint.Color = textpaint.Color.WithAlpha(_lastTransmitAlpha);
+            }
+
             var basepaint = new SKPaint()
             {
                 Color = GetElementBackColour(element),
                 Style = SKPaintStyle.StrokeAndFill,
             };
 
-            var highlightPaint = element?.Value == StripElements.Values.SID ? new SKPaint()
+            var highlightPaint = element.Value == StripElements.Values.SID ? new SKPaint()
             {
                 Color = SKColors.Yellow,
                 Style = SKPaintStyle.Stroke,
                 StrokeWidth = 2,
-            } : null;
+            }
+            : null;
 
             var baseX = ElementOrigin.X + element.X;
             var baseY = ElementOrigin.Y + element.Y;
@@ -101,6 +120,31 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
             canvas.DrawText(text, new SKPoint(baseX + (element.W / 2), baseY + ((fontsize + element.H) / 2)), SKTextAlign.Center, new SKFont(typeface, fontsize), textpaint);
         }
+
+        if (_bayRenderController.Bay.BayManager.AerodromeState.InvalidDestinationAircraft.Contains(_strip.FDR.Callsign))
+        {
+            var crossPaint = new SKPaint()
+            {
+                Color = SKColors.Red,
+                Style = SKPaintStyle.Stroke,
+                IsAntialias = true,
+            };
+
+            var textpaint = new SKPaint()
+            {
+                Color = SKColors.Red,
+                Style = SKPaintStyle.StrokeAndFill,
+                IsAntialias = true,
+            };
+
+            var typeface = SKTypeface.FromFamilyName("Segoe UI", 700, 5, SKFontStyleSlant.Upright);
+            var fontsize = 30;
+            textpaint.Color = textpaint.Color.WithAlpha(96);
+            crossPaint.Color = crossPaint.Color.WithAlpha(128);
+
+            canvas.DrawLine(ElementOrigin.X, ElementOrigin.Y, ElementOrigin.X + BayRenderController.StripWidth, ElementOrigin.Y + BayRenderController.StripHeight - (2 * _padding), crossPaint);
+            canvas.DrawText("NO SLOT", new SKPoint(ElementOrigin.X + (BayRenderController.StripWidth / 2), ElementOrigin.Y + ((fontsize + BayRenderController.StripHeight) / 2)), SKTextAlign.Center, new SKFont(typeface, fontsize), textpaint);
+        }
     }
 
     public void MarkPicked(bool picked)
@@ -108,7 +152,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
         _strip.SetHMIPicked(picked);
     }
 
-    public void HandleClick(MouseEventArgs e)
+    public void HandleClick(System.Windows.Forms.MouseEventArgs e)
     {
         var stripelementlist = StripElementList.Instance?.List;
         if (stripelementlist is null)
@@ -231,12 +275,13 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                     break;
                 case StripElements.HoverActions.SID_TRIGGER:
                     var transExists = _strip.SIDTransition?.Length > 0;
-                    if (_bayRenderController.HoveredItem != StripElements.HoverActions.SID_TRIGGER && 
+                    if (_bayRenderController.HoveredItem != StripElements.HoverActions.SID_TRIGGER &&
                         (transExists || _strip.VFRSIDAssigned))
                     {
                         _bayRenderController.HoveredItem = StripElements.HoverActions.SID_TRIGGER;
                         _bayRenderController.ToolTip.Show((transExists ? _strip.SIDTransition + " Transition\n" : string.Empty) + (_strip.VFRSIDAssigned ? "VFR Aircraft issued a SID." : string.Empty), _bayRenderController.SkControl, e);
                     }
+
                     break;
             }
         }
@@ -432,7 +477,12 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 {
                     return SKColors.Silver;
                 }
-                else if (_strip.FDR.Remarks.ToLower(CultureInfo.InvariantCulture).Contains("state") && _bayRenderController.Bay.BayManager.WorldFlightMode)
+                else if (_bayRenderController.Bay.BayManager.LastTransmitManager.LastReceivedFrom == _strip.FDR.Callsign &&
+                    OzStripsSettings.Default.ShowLastTransmit)
+                {
+                    return SKColors.Lime;
+                }
+                else if (_bayRenderController.Bay.BayManager.AerodromeState.WorldFlightTeams.Contains(_strip.FDR.Callsign))
                 {
                     return SKColors.Yellow;
                 }
@@ -552,23 +602,18 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
     {
         var color = SKColor.Empty;
 
-        switch (_strip.StripType)
+        color = _strip.StripType switch
         {
-            case StripType.ARRIVAL:
-                color = SKColor.Parse("ffffa0"); // Light yellow for arrivals
-                break;
-            case StripType.DEPARTURE:
-                color = SKColor.Parse("c1e6f2"); // Light blue for departures
-                break;
-            case StripType.LOCAL:
-                color = SKColor.Parse("e6aedd"); // Light purple for local
-                break;
-            case StripType.UNKNOWN:
-            default:
-                color = SKColor.Parse("404040"); // Default gray for unknown
-                break;
-        }
+            StripType.ARRIVAL => SKColor.Parse("ffffa0"), // Light yellow for arrivals
+            StripType.DEPARTURE => SKColor.Parse("c1e6f2"), // Light blue for departures
+            StripType.LOCAL => SKColor.Parse("e6aedd"), // Light purple for local
+            _ => SKColor.Parse("404040"), // Default gray for unknown
+        };
 
+        if (LastTransmitModifier && _bayRenderController.Bay.BayManager.LastTransmitManager.LastReceivedFrom != _strip.FDR.Callsign)
+        {
+            color = color.WithAlpha(_lastTransmitAlpha);
+        }
 
         var paint = new SKPaint()
         {

@@ -158,21 +158,26 @@ public sealed class OzStrips : IPlugin, IDisposable
 
     private static async Task SendCrash()
     {
-      if (File.Exists(Helpers.GetFilesFolder() + "ozstrips_log.txt"))
+        try
         {
-            var str = File.ReadAllText(Helpers.GetFilesFolder() + "ozstrips_log.txt");
-#pragma warning disable CA1862 // Use the 'StringComparison' method overloads to perform case-insensitive string comparisons
-            if (str.ToLower(CultureInfo.InvariantCulture).Contains("ozstrips"))
+            if (File.Exists(Helpers.GetFilesFolder() + "ozstrips_log.txt"))
             {
-                var data = new Dictionary<string, string>
+                var str = File.ReadAllText(Helpers.GetFilesFolder() + "ozstrips_log.txt");
+                if (str.ToLower(CultureInfo.InvariantCulture).Contains("ozstrips"))
+                {
+                    var data = new Dictionary<string, string>
                 {
                     { "error", str },
                 };
-                File.Delete(Helpers.GetFilesFolder() + "ozstrips_log.txt");
-                var uri = (OzStripsConfig.socketioaddr + "/crash").Replace("//", "/").Replace(":/", "://");
-                _ = await _httpClient.PostAsync(uri, new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json")).ConfigureAwait(false);
+                    File.Delete(Helpers.GetFilesFolder() + "ozstrips_log.txt");
+                    var uri = (OzStripsConfig.socketioaddr + "/crash").Replace("//", "/").Replace(":/", "://");
+                    _ = await _httpClient.PostAsync(uri, new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json")).ConfigureAwait(false);
                 }
-#pragma warning restore CA1862 // Use the 'StringComparison' method overloads to perform case-insensitive string comparisons
+            }
+        }
+        catch (Exception ex)
+        {
+            Errors.Add(ex, "OzStrips Error Reporter");
         }
     }
 

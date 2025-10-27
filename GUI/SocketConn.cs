@@ -77,10 +77,66 @@ public sealed class SocketConn : IDisposable
             {
                 InvokeOnGUI(async () =>
                 {
-                    await SendCache();
-                    await SendCDMFull();
+                    try
+                    {
+                        await SendCache();
+                    }
+                    catch (Exception ex)
+                    {
+                        Util.LogError(ex);
+                    }
                 });
             }
+
+            return Task.CompletedTask;
+        });
+
+        _connection.On("UpdateBays", [], async _ =>
+        {
+            AddMessage("s:UpdateBays: ");
+            if (!_freshClient)
+            {
+                InvokeOnGUI(async () =>
+                {
+                    try
+                    {
+                        foreach (var bay in bayManager.BayRepository.Bays)
+                        {
+                            if (bay is not null)
+                            {
+                                SyncBay(bay);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Util.LogError(ex);
+                    }
+                });
+            }
+
+            return Task.CompletedTask;
+        });
+
+        _connection.On("SendCDM", [], async (_) =>
+        {
+            AddMessage("s:SendCDM: ");
+            if (!_freshClient)
+            {
+                InvokeOnGUI(async () =>
+                {
+                    try
+                    {
+                        await SendCDMFull();
+                    }
+                    catch (Exception ex)
+                    {
+                        Util.LogError(ex);
+                    }
+                });
+            }
+
+            return Task.CompletedTask;
         });
 
         _connection.On<string?>("Atis", (string? code) =>
@@ -90,8 +146,6 @@ public sealed class SocketConn : IDisposable
                 InvokeOnGUI(() => mainForm.SetATISCode(code));
             }
         });
-
-        _connection.On("ActivateWorldFlightMode", () => _bayManager.WorldFlightMode = true);
 
         _connection.On<string?>("Metar", (string? metar) =>
         {
@@ -180,7 +234,10 @@ public sealed class SocketConn : IDisposable
         });
     }
 
-    public event EventHandler AerodromeStateChanged;
+    /// <summary>
+    /// An event called when the aerodrome state changes.
+    /// </summary>
+    public event EventHandler? AerodromeStateChanged;
 
     /// <summary>
     /// Gets the messages, used for debugging.
@@ -197,6 +254,9 @@ public sealed class SocketConn : IDisposable
     /// </summary>
     public bool Connected { get; set; }
 
+    /// <summary>
+    /// Gets a value indicating whether we should be able to send strip and bay updates to the server.
+    /// </summary>
     public bool HaveSendPerms
     {
         get
@@ -443,7 +503,7 @@ public sealed class SocketConn : IDisposable
     /// <returns>Task.</returns>
     public async Task SendCDMFull()
     {
-        var clearedBay = _bayManager.BayRepository.Bays.First(x => x.BayTypes.Contains(StripBay.BAY_CLEARED));
+        var clearedBay = _bayManager.BayRepository.Bays.FirstOrDefault(x => x.BayTypes.Contains(StripBay.BAY_CLEARED));
 
         var activeStrips = new List<Strip>();
         var pushedStrips = _bayManager.StripRepository.Strips.Where(x => x.CurrentBay is >= StripBay.BAY_PUSHED and <= StripBay.BAY_RUNWAY);
@@ -454,24 +514,27 @@ public sealed class SocketConn : IDisposable
             return pilot is not null && pilot.GroundSpeed > 50;
         });
 
-        var barFound = false;
-
-        foreach (var strip in clearedBay.Strips)
+        if (clearedBay is not null)
         {
-            if (strip.Type == StripItemType.QUEUEBAR)
-            {
-                barFound = true;
-                break;
-            }
-            else if (strip.Type == StripItemType.STRIP)
-            {
-                activeStrips.Add(strip.Strip!);
-            }
-        }
+            var barFound = false;
 
-        if (!barFound)
-        {
-            activeStrips.Clear();
+            foreach (var strip in clearedBay.Strips)
+            {
+                if (strip.Type == StripItemType.QUEUEBAR)
+                {
+                    barFound = true;
+                    break;
+                }
+                else if (strip.Type == StripItemType.STRIP)
+                {
+                    activeStrips.Add(strip.Strip!);
+                }
+            }
+
+            if (!barFound)
+            {
+                activeStrips.Clear();
+            }
         }
 
         var cdmDTOs = new CDMAircraftList(
@@ -501,7 +564,10 @@ public sealed class SocketConn : IDisposable
         }).ToList(),
         _bayManager);
 
-        await _connection.SendAsync("UplinkCDMAircraft", cdmDTOs);
+        if (CanSendDTO)
+        {
+            await _connection.SendAsync("UplinkCDMAircraft", cdmDTOs);
+        }
     }
 
     /// <summary>

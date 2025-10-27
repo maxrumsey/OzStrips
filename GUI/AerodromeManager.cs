@@ -165,42 +165,49 @@ public class AerodromeManager
     {
         MMI.InvokeOnGUI(() =>
         {
-            var sectorList = new List<Sector>();
-            ConcernedAerodromes.Clear();
-
-            if (MMI.SectorsControlled == null)
+            try
             {
-                return;
-            }
+                var sectorList = new List<Sector>();
+                ConcernedAerodromes.Clear();
 
-            // Generate list of all sectors.
-            foreach (var topLevelSector in MMI.SectorsControlled.ToList())
-            {
-                RecurseSectors(sectorList, topLevelSector);
-            }
-
-            foreach (var sector in sectorList)
-            {
-                // Match to concernedsectors
-                var concernedSectors = Settings?.ConcernedSectors?
-                    .Where(x => x.Positions.Contains(sector.Name))
-                    .ToList();
-
-                if (concernedSectors is null)
+                if (MMI.SectorsControlled == null)
                 {
-                    continue;
+                    return;
                 }
 
-                // Add concerned aerodromes.
-                foreach (var concernedSector in concernedSectors)
+                // Generate list of all sectors.
+                foreach (var topLevelSector in MMI.SectorsControlled.ToList())
                 {
-                    ConcernedAerodromes.AddRange(concernedSector.Aerodromes);
+                    RecurseSectors(sectorList, topLevelSector);
                 }
+
+                foreach (var sector in sectorList)
+                {
+                    // Match to concernedsectors
+                    var concernedSectors = Settings?.ConcernedSectors?
+                        .Where(x => x.Positions.Contains(sector.Name))
+                        .ToList();
+
+                    if (concernedSectors is null)
+                    {
+                        continue;
+                    }
+
+                    // Add concerned aerodromes.
+                    foreach (var concernedSector in concernedSectors)
+                    {
+                        ConcernedAerodromes.AddRange(concernedSector.Aerodromes);
+                    }
+                }
+
+                ConcernedAerodromes = ConcernedAerodromes.Distinct().ToList();
+
+                AerodromeListChanged?.Invoke(this, new());
             }
-
-            ConcernedAerodromes = ConcernedAerodromes.Distinct().ToList();
-
-            AerodromeListChanged?.Invoke(this, new());
+            catch (Exception ex)
+            {
+                Util.LogError(ex, "OzStrips");
+            }
         });
     }
 
@@ -208,18 +215,26 @@ public class AerodromeManager
     {
         MMI.InvokeOnGUI(() =>
         {
-            var posName = MMI.PrimePosition?.Name;
-
-            var res = Settings?.AutoOpens?.FirstOrDefault(x => x.Position == posName);
-
-            AutoOpenAerodrome = res?.Aerodrome;
-
-            AerodromeListChanged?.Invoke(this, new());
-
-            if (AutoOpenAerodrome != null && AllowAutoOpen)
+            try
             {
-                OpenGUI?.Invoke(this, EventArgs.Empty);
+                var posName = MMI.PrimePosition?.Name;
+
+                var res = Settings?.AutoOpens?.FirstOrDefault(x => x.Position == posName);
+
+                AutoOpenAerodrome = res?.Aerodrome;
+
+                AerodromeListChanged?.Invoke(this, new());
+
+                if (AutoOpenAerodrome != null && AllowAutoOpen)
+                {
+                    OpenGUI?.Invoke(this, EventArgs.Empty);
+                }
             }
+            catch (Exception ex)
+            {
+                Util.LogError(ex, "OzStrips");
+            }
+
         });
     }
 

@@ -1,26 +1,26 @@
-using MaxRumsey.OzStripsPlugin.GUI.Controls;
-using MaxRumsey.OzStripsPlugin.GUI.Shared;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Security.Policy;
 using System.Windows.Forms;
 using System.Windows.Input;
-using System.Xml.Linq;
+using MaxRumsey.OzStripsPlugin.GUI.Controls;
+using MaxRumsey.OzStripsPlugin.GUI.Shared;
 using vatsys;
 
 namespace MaxRumsey.OzStripsPlugin.GUI;
 
+/// <summary>
+/// ViewModel equivalent for the MainForm.
+/// </summary>
 public class MainFormController : IDisposable
 {
     private FormWindowState _lastState = FormWindowState.Minimized;
     private bool _postresizechecked = true;
     private string _clientsOnline = string.Empty;
 
-    private MainForm _mainForm;
+    private readonly MainForm _mainForm;
     private readonly Timer _timer;
     private BayManager _bayManager;
     private SocketConn _socketConn;
@@ -28,15 +28,26 @@ public class MainFormController : IDisposable
     private bool _readyForConnection;
     private Action<object, EventArgs>? _defaultLayout;
 
+    /// <summary>
+    /// Gets the current instance of the MainForm controller.
+    /// </summary>
     public static MainFormController? Instance { get; private set; }
 
     /// <summary>
-    /// Gets whether or not a connection can be made to the server.
+    /// Gets a value indicating whether or not a connection can be made to the server.
     /// </summary>
     public static bool ReadyForConnection => Instance?._readyForConnection ?? false;
 
+    /// <summary>
+    /// Gets a value indicating whether or not the control key is being held down.
+    /// </summary>
     public static bool ControlHeld => Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MainFormController"/> class.
+    /// </summary>
+    /// <param name="form">MainForm element.</param>
+    /// <param name="readyToConnect">Whether or not we are ready to initiate a connection.</param>
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     public MainFormController(MainForm form, bool readyToConnect)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
@@ -55,6 +66,10 @@ public class MainFormController : IDisposable
         _mainForm.AerodromeManager.InitialiseOnNewWindow();
     }
 
+    /// <summary>
+    /// Initialises the class.
+    /// </summary>
+    /// <exception cref="Exception">Returned exception.</exception>
     public void Initialize()
     {
         _bayManager = new(_mainForm.MainFLP);
@@ -80,11 +95,15 @@ public class MainFormController : IDisposable
             _socketConn.Connect();
         }
 
-
         _bayManager.BayRepository.ConfigureAndSizeFLPs();
         _mainForm.AerodromeManager.AerodromeListChanged += AerodromeListChanged;
     }
 
+    /// <summary>
+    /// Disposes everything when the main form closes.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">Eventargs.</param>
     public void FormClosing(object sender, System.ComponentModel.CancelEventArgs e)
     {
         Dispose();
@@ -295,7 +314,7 @@ public class MainFormController : IDisposable
         clients = clients.ToList();
         clients.Sort();
         clients.Remove(Network.Callsign);
-        var str = String.Join("\n", clients);
+        var str = string.Join("\n", clients);
 
         if (str != _clientsOnline)
         {
@@ -329,7 +348,6 @@ public class MainFormController : IDisposable
             Util.LogError(ex);
         }
     }
-
 
     /// <summary>
     /// Disconnects from VATSIM.
@@ -479,6 +497,9 @@ public class MainFormController : IDisposable
                 case Keys.F:
                     _bayManager.FlipFlopStrip();
                     return true;
+                case Keys.T:
+                    _bayManager.PickLastTransmit();
+                    return true;
                 default:
                     break;
             }
@@ -502,6 +523,10 @@ public class MainFormController : IDisposable
         _mainForm.ATISLabel.Text = code;
     }
 
+    /// <summary>
+    /// Gets a list of open modals.
+    /// </summary>
+    /// <returns>Open modals.</returns>
     public static List<BaseModal> GetOpenModals()
     {
         var list = new List<BaseModal>();
@@ -517,9 +542,15 @@ public class MainFormController : IDisposable
         return list;
     }
 
-    public static bool IsSettingsOpen()
+    /// <summary>
+    /// Gets a value indicating whether or not the settings window is open.
+    /// </summary>
+    public static bool IsSettingsOpen
     {
-        return GetOpenModals().Any(x => x.Child is SettingsWindowControl);
+        get
+        {
+            return GetOpenModals().Any(x => x.Child is SettingsWindowControl);
+        }
     }
 
     private void UpdateTimer(object sender, EventArgs e)
@@ -614,12 +645,21 @@ public class MainFormController : IDisposable
         }
     }
 
-    public void Bt_cross_Click(object sender, EventArgs e)
+    /// <summary>
+    /// Crosses the selected strip.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">Eventargs.</param>
+    public void CrossButton_Click(object sender, EventArgs e)
     {
         _bayManager.CrossStrip();
     }
 
-    // socket.io log
+    /// <summary>
+    /// Shows the SignalR message log.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">Eventargs.</param>
     public void ShowMessageList_Click(object sender, EventArgs e)
     {
         var modalChild = new MsgListDebug(_socketConn);
@@ -639,12 +679,22 @@ public class MainFormController : IDisposable
         bm.Show(MainForm.MainFormInstance);
     }
 
+    /// <summary>
+    /// Called when the main form loads.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">Eventargs.</param>
     public void MainForm_Load(object sender, EventArgs e)
     {
         SetConnStatus();
         _mainForm.SetSmartResizeCheckBox();
     }
 
+    /// <summary>
+    /// Called when a character is inserted into the aerodrome selector.
+    /// </summary>
+    /// <param name="sender">The ender.</param>
+    /// <param name="e">Eventargs.</param>
     public void AerodromeSelectorKeyDown(object sender, KeyPressEventArgs e)
     {
         if (_bayManager != null && e.KeyChar == Convert.ToChar(Keys.Enter, CultureInfo.InvariantCulture))
@@ -655,6 +705,11 @@ public class MainFormController : IDisposable
         }
     }
 
+    /// <summary>
+    /// Called when an element is entered into the CDMRate text box.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">Event args.</param>
     public void CDMRateKeyDown(object sender, KeyPressEventArgs e)
     {
         try
@@ -685,14 +740,24 @@ public class MainFormController : IDisposable
         }
     }
 
+    /// <summary>
+    /// Resets the CDM rate text box to what the server has defined.
+    /// </summary>
     public void ResetCDMRateTextBox()
     {
         var period = _bayManager.AerodromeState.CDMParameters.DefaultRate ?? TimeSpan.FromMinutes(2);
         var rate = (int)(60 / period.TotalMinutes);
 
         _mainForm.CDMRateTextBox.Text = rate.ToString(CultureInfo.InvariantCulture);
+
+        _mainForm.CDMRateTextBox.Enabled = !_bayManager.AerodromeState.CDMRateLocked;
     }
 
+    /// <summary>
+    /// Opens the bar creator window.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">Eventargs.</param>
     public void BarCreatorClick(object sender, EventArgs e)
     {
         var modalChild = new BarCreator(_bayManager);
@@ -701,6 +766,11 @@ public class MainFormController : IDisposable
         bm.Show(_mainForm);
     }
 
+    /// <summary>
+    /// Called when the main form resizes.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">Eventargs.</param>
     public void MainForm_Resize(object sender, EventArgs e)
     {
         if (_mainForm.WindowState != _lastState)
@@ -712,6 +782,10 @@ public class MainFormController : IDisposable
         }
     }
 
+    /// <summary>
+    /// Saves the smart resize column mode, and calls a relayout.
+    /// </summary>
+    /// <param name="cols">Amount of cols to set it to.</param>
     public void SetSmartResizeColumnMode(int cols)
     {
         Util.SetEnvVar("SmartResize", cols);
@@ -719,14 +793,22 @@ public class MainFormController : IDisposable
         _bayManager.BayRepository.ReloadStrips(_socketConn);
     }
 
+    /// <summary>
+    /// Enables or disables the set circuit tool strip based on connection and aerodrome type.
+    /// </summary>
     public void SetCircuitToolStripStatus()
     {
-        var isRadarTower = String.IsNullOrEmpty(_mainForm.AerodromeManager.GetAerodromeType(_bayManager.AerodromeName));
+        var isRadarTower = string.IsNullOrEmpty(_mainForm.AerodromeManager.GetAerodromeType(_bayManager.AerodromeName));
         var canSend = _socketConn.HaveSendPerms;
 
         _mainForm.ToggleCircuitToolStrip.Enabled = isRadarTower && canSend;
     }
 
+    /// <summary>
+    /// Paints the connection status box.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">Eventargs.</param>
     public void ConnStatusPaint(object sender, PaintEventArgs e)
     {
         var borderWidth = 5;
@@ -743,9 +825,14 @@ public class MainFormController : IDisposable
 
         g.FillRectangle(coreBrush, e.ClipRectangle.X + borderWidth, e.ClipRectangle.Y + borderWidth, e.ClipRectangle.Width - (borderWidth * 2), e.ClipRectangle.Height - (borderWidth * 2));
 
-        g.DrawString("CONN STAT", font, textBrush, e.ClipRectangle, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center});
+        g.DrawString("CONN STAT", font, textBrush, e.ClipRectangle, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
     }
 
+    /// <summary>
+    /// Flip-flops the selected strip.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">Eventargs.</param>
     public void FlipFlopStrip(object sender, EventArgs e)
     {
         _bayManager.FlipFlopStrip();
@@ -758,7 +845,7 @@ public class MainFormController : IDisposable
     /// <param name="e">Args.</param>
     public void ShowSettings(object sender, EventArgs e)
     {
-        if (IsSettingsOpen())
+        if (IsSettingsOpen)
         {
             return;
         }
@@ -769,16 +856,29 @@ public class MainFormController : IDisposable
         bm.Show(_mainForm);
     }
 
+    /// <summary>
+    /// Called when the main form closes.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">Event args.</param>
     public void MainForm_FormClosed(object sender, FormClosedEventArgs e)
     {
         _mainForm.AerodromeManager.PreviouslyClosed = true;
     }
 
+    /// <summary>
+    /// Called when the main form moves.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">Eventargs.</param>
     public void MainForm_Move(object sender, EventArgs e)
     {
         _mainForm.StatusPanel.Invalidate();
     }
 
+    /// <summary>
+    /// Disposes all required elements.
+    /// </summary>
     public void Dispose()
     {
         _timer?.Dispose();
@@ -815,11 +915,19 @@ public class MainFormController : IDisposable
         }
     }
 
+    /// <summary>
+    /// Invokes an action on the main form.
+    /// </summary>
+    /// <param name="act">The action to invoke.</param>
+    /// <returns>Returning value of the action.</returns>
     public object Invoke(Action act)
     {
         return _mainForm.Invoke(act);
     }
 
+    /// <summary>
+    /// Gets a value indicating whether the main form is visible.
+    /// </summary>
     public bool Visible
     {
         get
@@ -828,6 +936,9 @@ public class MainFormController : IDisposable
         }
     }
 
+    /// <summary>
+    /// Gets a value indicating whether the main form is disposed.
+    /// </summary>
     public bool IsDisposed
     {
         get
@@ -836,6 +947,9 @@ public class MainFormController : IDisposable
         }
     }
 
+    /// <summary>
+    /// Gets the current main form handle.
+    /// </summary>
     public IntPtr Handle
     {
         get
