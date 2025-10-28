@@ -7,12 +7,16 @@ on:
     tags:
       - v*
 jobs:
-  build:
-    uses: ./.github/workflows/dotnet.yml
   publish:
     runs-on: windows-latest    
     
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Build Plugin
+        uses: ./.github/workflows/dotnet.yml
       - name: Archive Release
         uses: thedoctor0/zip-release@0.7.6
         with:
