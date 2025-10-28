@@ -16,7 +16,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Build Plugin
-        uses: ./.github/workflows/dotnet.yml
+        uses: ./.github/workflows/dotnet
       - name: Archive Release
         uses: thedoctor0/zip-release@0.7.6
         with:
