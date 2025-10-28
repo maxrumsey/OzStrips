@@ -10,6 +10,7 @@ jobs:
   fetch:
     uses: maxrumsey/OzStrips/.github/workflows/dotnet.yml@master
   publish:
+    needs: fetch
     runs-on: windows-latest
     steps:
       - name: Archive Release
