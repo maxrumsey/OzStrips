@@ -56,4 +56,4 @@ jobs:
       if: ${{ startsWith(github.ref, 'refs/tags/') }}
       with:
         artifacts: "${{ runner.temp }}\build\release.zip"
-
+        token: ${{ secrets.GITHUB_TOKEN }}
