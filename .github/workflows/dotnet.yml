@@ -18,5 +18,5 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      -name: "Build"
-       uses: ./.github/actions/build
+      - name: "Build"
+        uses: ./.github/actions/build
