@@ -49,6 +49,7 @@ jobs:
       if: ${{ startsWith(github.ref, 'refs/tags/') }}
       uses: thedoctor0/zip-release@0.7.6
       with:
+        directory: build
         filename: 'release.zip'
         exclusions: 'x86/* x64/* arm64/*'
     - uses: ncipollo/release-action@v1
