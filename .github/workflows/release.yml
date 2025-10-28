@@ -8,15 +8,14 @@ on:
       - v*
 jobs:
   publish:
-    runs-on: windows-latest    
-    
+    runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Build Plugin
-        uses: ./.github/workflows/dotnet.yml
+        uses: maxrumsey/OzStrips/.github/workflows/dotnet.yml@master
       - name: Archive Release
         uses: thedoctor0/zip-release@0.7.6
         with:
