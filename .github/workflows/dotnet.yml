@@ -5,9 +5,12 @@ name: Pull Request and Pushes
 
 on:
   push:
-    branches: [ "master", "main" ]
+    branches:
+      - master
   pull_request:
-    branches: [ "master", "main" ]
+    branches:
+      - master
+  workflow_call:
 
 jobs:
   build:
@@ -27,7 +30,7 @@ jobs:
 
     # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v2        
+      uses: microsoft/setup-msbuild@v2
 
     - name: Restore dependencies
       run: dotnet restore
@@ -40,7 +43,4 @@ jobs:
         msiexec /a vatSysSetup.msi /qb TARGETDIR=${{ runner.temp }}\vatsys
 
     - name: Build
-      run: msbuild /t:build /m /v:minimal /p:VatSysDir='${{ runner.temp }}\vatsys'
-
-    #- name: Test
-    #  run: dotnet test --no-build --verbosity normal
+      run: msbuild /t:build /m /v:minimal /p:"VatSysDir=${{ runner.temp }}\vatsys;OutDir=build"
