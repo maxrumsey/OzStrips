@@ -8,10 +8,11 @@ on:
       - v*
 jobs:
   build:
-    runs-on: windows-latest
+    uses: ./.github/workflows/dotnet.yml
+  publish:
+    runs-on: windows-latest    
+    
     steps:
-      - name: Build Plugin
-        uses: ./.github/workflows/dotnet.yml
       - name: Archive Release
         uses: thedoctor0/zip-release@0.7.6
         with:
