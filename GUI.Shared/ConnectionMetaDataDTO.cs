@@ -61,9 +61,4 @@ public record ConnectionMetadataDTO
     /// Gets or sets the user callsign.
     /// </summary>
     public string Callsign { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Gets or sets the VATSIM ID of the user.
-    /// </summary>
-    public string VatsimID { get; set; } = string.Empty;
 }
