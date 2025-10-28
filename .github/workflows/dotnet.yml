@@ -18,29 +18,5 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-
-    # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
-    - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v2
-
-    - name: Restore dependencies
-      run: dotnet restore
-
-    - name: Download and install vatsys
-      run: |
-        curl https://vatsys.sawbe.com/downloads/vatSysSetup.zip -o vatsys.zip
-        7z x vatsys.zip
-        mkdir ${{ runner.temp }}\vatsys
-        msiexec /a vatSysSetup.msi /qb TARGETDIR=${{ runner.temp }}\vatsys
-
-    - name: Build
-      run: msbuild /t:build /m /v:minimal /p:"VatSysDir=${{ runner.temp }}\vatsys;OutDir=build"
+      -name: "Build"
+       uses: ./.github/actions/build
