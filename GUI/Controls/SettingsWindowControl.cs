@@ -72,6 +72,7 @@ public partial class SettingsWindowControl : UserControl
 
         cb_keeppicked.Checked = OzStripsSettings.Default.KeepStripPicked;
         cb_preasort.Checked = OzStripsSettings.Default.AlphaSortPrea;
+        cb_lasttransmit.Checked = OzStripsSettings.Default.ShowLastTransmit;
 
         tb_scale.Value = (int)(100f * OzStripsSettings.Default.StripScale);
 
@@ -105,6 +106,8 @@ public partial class SettingsWindowControl : UserControl
         Util.SetEnvVar("AlphaSortPrea", cb_preasort.Checked);
 
         Util.SetEnvVar("AutoOpenBehaviour", cb_open.SelectedIndex);
+
+        Util.SetEnvVar("ShowLastTransmit", cb_lasttransmit.Checked);
 
         MainFormController.Instance?.ForceResize();
     }

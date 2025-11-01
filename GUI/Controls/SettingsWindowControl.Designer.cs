@@ -54,6 +54,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.rb_ozstrips = new System.Windows.Forms.RadioButton();
             this.rb_vatsys = new System.Windows.Forms.RadioButton();
+            this.cb_lasttransmit = new System.Windows.Forms.CheckBox();
             this.gp_main.SuspendLayout();
             this.gb_open.SuspendLayout();
             this.gb_int.SuspendLayout();
@@ -68,7 +69,6 @@
             // 
             this.gp_main.Controls.Add(this.gb_open);
             this.gp_main.Controls.Add(this.gb_int);
-            this.gp_main.Controls.Add(this.llb_keyboard);
             this.gp_main.Controls.Add(this.gb_ads);
             this.gp_main.Controls.Add(this.gb_server);
             this.gp_main.Controls.Add(this.gb_scale);
@@ -110,11 +110,12 @@
             // 
             // gb_int
             // 
+            this.gb_int.Controls.Add(this.cb_lasttransmit);
             this.gb_int.Controls.Add(this.cb_preasort);
             this.gb_int.Controls.Add(this.cb_keeppicked);
             this.gb_int.Location = new System.Drawing.Point(236, 285);
             this.gb_int.Name = "gb_int";
-            this.gb_int.Size = new System.Drawing.Size(227, 64);
+            this.gb_int.Size = new System.Drawing.Size(227, 82);
             this.gb_int.TabIndex = 6;
             this.gb_int.TabStop = false;
             this.gb_int.Text = "Strip Interaction";
@@ -142,7 +143,7 @@
             // llb_keyboard
             // 
             this.llb_keyboard.AutoSize = true;
-            this.llb_keyboard.Location = new System.Drawing.Point(233, 352);
+            this.llb_keyboard.Location = new System.Drawing.Point(237, 380);
             this.llb_keyboard.Name = "llb_keyboard";
             this.llb_keyboard.Size = new System.Drawing.Size(107, 13);
             this.llb_keyboard.TabIndex = 3;
@@ -363,13 +364,23 @@
             this.rb_vatsys.Text = "vatSys Popup";
             this.rb_vatsys.UseVisualStyleBackColor = true;
             // 
+            // cb_lasttransmit
+            // 
+            this.cb_lasttransmit.AutoSize = true;
+            this.cb_lasttransmit.Location = new System.Drawing.Point(7, 57);
+            this.cb_lasttransmit.Name = "cb_lasttransmit";
+            this.cb_lasttransmit.Size = new System.Drawing.Size(180, 17);
+            this.cb_lasttransmit.TabIndex = 2;
+            this.cb_lasttransmit.Text = "Highlight last transmitting aircraft.";
+            this.cb_lasttransmit.UseVisualStyleBackColor = true;
+            // 
             // SettingsWindowControl
             // 
             this.Controls.Add(this.gp_main);
+            this.Controls.Add(this.llb_keyboard);
             this.Name = "SettingsWindowControl";
-            this.Size = new System.Drawing.Size(476, 384);
+            this.Size = new System.Drawing.Size(476, 403);
             this.gp_main.ResumeLayout(false);
-            this.gp_main.PerformLayout();
             this.gb_open.ResumeLayout(false);
             this.gb_int.ResumeLayout(false);
             this.gb_int.PerformLayout();
@@ -383,6 +394,7 @@
             this.gb_popup.ResumeLayout(false);
             this.gb_popup.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -414,5 +426,6 @@
         private System.Windows.Forms.GroupBox gb_open;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox cb_open;
+        private System.Windows.Forms.CheckBox cb_lasttransmit;
     }
 }

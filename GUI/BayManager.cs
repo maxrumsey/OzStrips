@@ -27,7 +27,6 @@ public class BayManager
     /// Initializes a new instance of the <see cref="BayManager"/> class.
     /// </summary>
     /// <param name="main">The flow layout for the bay.</param>
-    /// <param name="layoutMethod">The current layout caller.</param>
     public BayManager(FlowLayoutPanel main)
     {
         BayRepository = new(main, this);
@@ -55,11 +54,6 @@ public class BayManager
     public StripListItem? PickedStripItem { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether or not WF mode is activated.
-    /// </summary>
-    public bool WorldFlightMode { get; set; }
-
-    /// <summary>
     /// Gets the strip repository.
     /// </summary>
     public StripRepository StripRepository { get; } = new StripRepository();
@@ -74,6 +68,14 @@ public class BayManager
     /// </summary>
     public string AerodromeName { get; set; } = "????";
 
+    /// <summary>
+    /// Gets or sets the last transmit manager.
+    /// </summary>
+    public LastTransmitManager LastTransmitManager { get; set; } = new();
+
+    /// <summary>
+    /// Gets or sets the current AerodromeState.
+    /// </summary>
     public AerodromeState AerodromeState { get; set; } = new AerodromeState
     {
         AerodromeCode = "????",
@@ -81,6 +83,9 @@ public class BayManager
         Connections = new List<string>(),
     };
 
+    /// <summary>
+    /// Gets or sets a value indicating whether the circuit bay is active.
+    /// </summary>
     public bool CircuitActive { get; set; }
 
     /// <summary>
@@ -268,6 +273,27 @@ public class BayManager
     }
 
     /// <summary>
+    /// Picks the strip of the aircraft that transmitted last.
+    /// </summary>
+    public void PickLastTransmit()
+    {
+        if (string.IsNullOrEmpty(LastTransmitManager.LastReceivedFrom) ||
+            PickedStrip?.FDR.Callsign == LastTransmitManager.LastReceivedFrom)
+        {
+            return;
+        }
+
+        foreach (var strip in StripRepository.Strips)
+        {
+            if (strip.FDR.Callsign == LastTransmitManager.LastReceivedFrom)
+            {
+                SetPickedStripClass(strip);
+                return;
+            }
+        }
+    }
+
+    /// <summary>
     /// Drop the strip to the specified bay.
     /// </summary>
     /// <param name="bay">The bay.</param>
@@ -295,6 +321,11 @@ public class BayManager
         }
     }
 
+    /// <summary>
+    /// Drops the selected strip below the target strip.
+    /// </summary>
+    /// <param name="targetItem">The target item to drop below.</param>
+    /// <exception cref="Exception">Strip insertion failed.</exception>
     public void DropStripBelow(StripListItem targetItem)
     {
         var newBay = BayRepository.FindBay(targetItem);
@@ -309,7 +340,7 @@ public class BayManager
 
         DropStrip(newBay);
 
-        var stripListItem = newBay.GetListItem(strip);
+        var stripListItem = newBay.GetListItem(strip) ?? throw new Exception("Could not find strip within new bay after moving it.");
 
         newBay.ChangeStripPositionAbs(stripListItem, position);
     }

@@ -15,4 +15,6 @@
 | Backspace | Remove a selected strip / bar. |
 | Enter | SID Trigger a strip - move it to the next bay. |
 | \[ | Move to the previous aerodrome in the list. |
-| \] | Move to the next aerodrome in the list.
+| \] | Move to the next aerodrome in the list. |
+| W | Highlight only the aircraft that transmitted last. |
+| T | Pick the aircraft that transmitted last. |

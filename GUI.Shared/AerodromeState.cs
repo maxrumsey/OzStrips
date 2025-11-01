@@ -36,5 +36,25 @@ namespace MaxRumsey.OzStripsPlugin.GUI.Shared
         /// Gets or sets the relevant CDM statistics.
         /// </summary>
         public CDMStatistics CDMStatistics { get; set; } = new();
+
+        /// <summary>
+        /// Gets or sets a value indicating whether WorldFlightMode is active.
+        /// </summary>
+        public bool WorldFlightActive { get; set; }
+
+        /// <summary>
+        /// Gets or sets an array of world flight teams.
+        /// </summary>
+        public string[] WorldFlightTeams { get; set; } = [];
+
+        /// <summary>
+        /// Gets or sets an array of aircraft planned to an invalid destination.
+        /// </summary>
+        public string[] InvalidDestinationAircraft { get; set; } = [];
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the CDM rate is currently locked.
+        /// </summary>
+        public bool CDMRateLocked { get; set; }
     }
 }

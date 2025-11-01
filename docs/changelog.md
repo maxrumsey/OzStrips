@@ -1,8 +1,21 @@
 # Changelog
+## v0.7.2
+### Features
+- Added last transmit highlight feature.
+- Added ability to highlight aircraft without WF slots.
+### Bugfixes
+Nill.
+### Misc changes
+- Renaming / changing of some server DTO properties.
+- CDM Rate can be locked when enabled on the server.
+### Server changes
+- Added ability to have ADES specific CDM departure rates.
+
 ## v0.7.1
 ### Bugfixes
-- Fixed crash caused by server initiated messaging when in ADC view mode.
-- Fixed Dep Mon clipping over Bay label.
+- Fixed crash caused by server-refresh messages.
+- Changed how DepMon is displayed within the runway bay.
+
 ## v0.7.0
 ### Features
 - Added CDM.
