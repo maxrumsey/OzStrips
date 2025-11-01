@@ -56,5 +56,10 @@ namespace MaxRumsey.OzStripsPlugin.GUI.Shared
         /// Gets or sets a value indicating whether the CDM rate is currently locked.
         /// </summary>
         public bool CDMRateLocked { get; set; }
+
+        /// <summary>
+        /// Gets or sets an array of PDC requests.
+        /// </summary>
+        public PDCRequest[] PDCRequests { get; set; } = [];
     }
 }
