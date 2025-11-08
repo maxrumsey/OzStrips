@@ -10,8 +10,6 @@ namespace MaxRumsey.OzStripsPlugin.GUI.Shared;
 /// </summary>
 public class StripDTO
 {
-    private readonly DateTime _modified = DateTime.Now;
-
     /// <summary>
     /// Gets or sets the bay information for the strip.
     /// </summary>
@@ -61,7 +59,7 @@ public class StripDTO
     public string remark { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets a value indicating the ready status associated with the strip.
+    /// Gets or sets a value indicating whether the aircraft is ready for departure.
     /// </summary>
     [JsonPropertyName("ready")]
     public bool ready { get; set; }
@@ -77,7 +75,7 @@ public class StripDTO
     public StripType OverrideStripType { get; set; } = StripType.UNKNOWN;
 
     /// <summary>
-    /// Gets  when the DTO was created.
+    /// Gets or sets PDC flags.
     /// </summary>
-    public DateTime Modified { get => _modified; }
+    public PDCRequest.PDCFlags? PDCFlags { get; set; }
 }
