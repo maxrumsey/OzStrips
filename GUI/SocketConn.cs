@@ -228,6 +228,7 @@ public sealed class SocketConn : IDisposable
         {
             if (state.AerodromeCode == _bayManager.AerodromeName && state.AerodromeCode.Length > 0)
             {
+                AddMessage("s:State: " + System.Text.Json.JsonSerializer.Serialize(state));
                 _bayManager.AerodromeState = state;
                 InvokeOnGUI(() => AerodromeStateChanged?.Invoke(this, EventArgs.Empty));
             }

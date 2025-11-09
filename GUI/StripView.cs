@@ -497,6 +497,26 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             case StripElements.Values.PDC_INDICATOR:
             case StripElements.Values.TYPE:
             case StripElements.Values.SSR:
+                if (element.Value == StripElements.Values.PDC_INDICATOR && _strip.StripType != StripType.ARRIVAL)
+                {
+                    var requestedPDC = _bayRenderController.Bay.BayManager.AerodromeState.PDCRequests.Where(x => x.Callsign == _strip.FDR.Callsign).FirstOrDefault();
+
+                    if (requestedPDC is not null && requestedPDC.Flags.HasFlag(PDCRequest.PDCFlags.REQUESTED))
+                    {
+                        if (DateTime.Now.Second % 2 == 0)
+                        {
+                            return SKColors.White;
+                        }
+
+                        return SKColors.Yellow;
+                    }
+
+                    if (_strip.PDCSent)
+                    {
+                        return SKColors.LimeGreen;
+                    }
+                }
+
                 /*
                 * Incorrect SSR Code & Mode C alert
                 */

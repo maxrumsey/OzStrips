@@ -121,6 +121,11 @@ public sealed class Strip
     public string ParentAerodrome { get; }
 
     /// <summary>
+    /// Gets or sets a value indicating whether or not a Hoppies PDC has been sent.
+    /// </summary>
+    public bool PDCSent { get; set; }
+
+    /// <summary>
     /// Gets the current server code.
     /// </summary>
     public ConnectionMetadataDTO.Servers Server
