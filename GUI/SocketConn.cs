@@ -367,6 +367,21 @@ public sealed class SocketConn : IDisposable
     }
 
     /// <summary>
+    /// Sends a Hoppies PDC to the server.
+    /// </summary>
+    /// <param name="strip">Strip.</param>
+    /// <param name="text">PDC text.</param>
+    public void SendPDC(Strip strip, string text)
+    {
+        AddMessage("c:SendPDC: " + strip.FDR.Callsign);
+
+        if (CanSendDTO)
+        {
+            _connection.InvokeAsync("SendPDC", (StripDTO)strip, text);
+        }
+    }
+
+    /// <summary>
     /// Requests bay order data from server.
     /// </summary>
     /// <param name="force">Whether or not to force fetching of bay data.</param>

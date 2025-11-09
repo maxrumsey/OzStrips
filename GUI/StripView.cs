@@ -374,7 +374,11 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 _strip.CockStrip();
                 break;
             case StripElements.Actions.OPEN_PDC:
-                _bayRenderController.Bay.BayManager.SendPDC(_strip);
+                if (_strip.PDCRequest is not null && _strip.PDCRequest.Flags.HasFlag(PDCRequest.PDCFlags.REQUESTED))
+                {
+                    _strip.Controller.OpenPDC();
+                }
+                _bayRenderController.Bay.BayManager.SendVatsysPDC(_strip);
                 break;
             case StripElements.Actions.OPEN_PM:
                 MMI.OpenPMWindow(_strip.FDR.Callsign);

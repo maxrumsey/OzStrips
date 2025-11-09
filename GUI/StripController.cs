@@ -290,6 +290,22 @@ public class StripController
         bm.Show(MainForm.MainFormInstance);
     }
 
+    public void OpenPDCWindow()
+    {
+        var modalChild = new PDCControl(Strip);
+        var bm = new BaseModal(modalChild, "PDC :: " + Strip.FDR.Callsign);
+
+        bm.ReturnEvent += PDCReturned;
+        bm.Show(MainForm.MainFormInstance);
+    }
+
+    private void PDCReturned(object sender, ModalReturnArgs e)
+    {
+        var control = (PDCControl)e.Child;
+
+        _ = Strip.SendPDC(control.PDCText);
+    }
+
     /// <summary>
     /// Assigns a squawk.
     /// </summary>

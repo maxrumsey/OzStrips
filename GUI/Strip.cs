@@ -289,6 +289,11 @@ public sealed class Strip
     public string Gate { get; set; } = string.Empty;
 
     /// <summary>
+    /// Gets the PDC request for this strip, if applicable.
+    /// </summary>
+    public PDCRequest? PDCRequest => _bayManager.AerodromeState.PDCRequests.FirstOrDefault(x => x.Callsign == FDR.Callsign);
+
+    /// <summary>
     /// Gets or sets the heading.
     /// </summary>
     public string HDG
@@ -728,6 +733,15 @@ public sealed class Strip
     public void SendDeleteMessage()
     {
         _socketConn.SyncDeletion(this);
+    }
+
+    /// <summary>
+    /// Sends a Hoppies PDC to the server.
+    /// </summary>
+    /// <param name="text">PDC content.</param>
+    public void SendPDC(string text)
+    {
+        _socketConn.SendPDC(this, text);
     }
 
     /// <summary>

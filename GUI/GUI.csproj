@@ -57,6 +57,9 @@
         <Compile Update="Controls\NoScrollPanel.cs">
           <SubType>Component</SubType>
         </Compile>
+        <Compile Update="Controls\PDCControl.cs">
+          <SubType>UserControl</SubType>
+        </Compile>
         <Compile Update="Controls\SettingsWindowControl.cs">
           <SubType>UserControl</SubType>
         </Compile>

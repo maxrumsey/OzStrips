@@ -234,7 +234,7 @@ public class BayManager
     /// Send the PDC.
     /// </summary>
     /// <param name="strip">Strip to open PDC form for. Null if use picked controller.</param>
-    public void SendPDC(Strip? strip = null)
+    public void SendVatsysPDC(Strip? strip = null)
     {
         if (PickedStrip != null && strip == null)
         {
