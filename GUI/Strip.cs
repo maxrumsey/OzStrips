@@ -147,6 +147,11 @@ public sealed class Strip
     public FDR FDR { get; internal set; }
 
     /// <summary>
+    /// Gets or sets the PDC flags.
+    /// </summary>
+    public PDCRequest.PDCFlags? PDCFlags { get; set; }
+
+    /// <summary>
     /// Gets or sets the current strip bay.
     /// </summary>
     public StripBay CurrentBay { get; set; }
@@ -629,6 +634,7 @@ public sealed class Strip
             ready = sc.Ready,
             StripKey = sc.StripKey,
             OverrideStripType = sc.OverrideStripType,
+            PDCFlags = sc.PDCFlags,
         };
 
         return scDTO;

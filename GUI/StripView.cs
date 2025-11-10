@@ -374,9 +374,16 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 _strip.CockStrip();
                 break;
             case StripElements.Actions.OPEN_PDC:
-                if (_strip.PDCRequest is not null && _strip.PDCRequest.Flags.HasFlag(PDCRequest.PDCFlags.REQUESTED))
+                if (_strip.PDCRequest?.Flags.HasFlag(PDCRequest.PDCFlags.REQUESTED) == true)
                 {
+                    if (!_strip.PDCRequest.Flags.HasFlag(PDCRequest.PDCFlags.ACKNOWLEDGED))
+                    {
+                        _strip.PDCFlags |= PDCRequest.PDCFlags.ACKNOWLEDGED;
+                        _strip.SyncStrip();
+                    }
+
                     _strip.Controller.OpenPDCWindow();
+                    break;
                 }
 
                 _strip.Controller.OpenVatSysPDCWindow();
@@ -516,7 +523,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                         return SKColors.Yellow;
                     }
 
-                    if (_strip.PDCSent)
+                    if (_strip.PDCFlags?.HasFlag(PDCRequest.PDCFlags.SENT) == true)
                     {
                         return SKColors.LimeGreen;
                     }

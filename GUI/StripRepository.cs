@@ -127,7 +127,7 @@ public class StripRepository
                     strip.Controller?.SetCross(false);
                     strip.Ready = stripDTO.ready;
                     strip.OverrideStripType = stripDTO.OverrideStripType;
-                    strip.PDCSent = stripDTO.PDCFlags?.HasFlag(PDCRequest.PDCFlags.SENT) ?? strip.PDCSent;
+                    strip.PDCFlags = stripDTO.PDCFlags;
 
                     if (changeBay)
                     {
