@@ -231,23 +231,6 @@ public class BayManager
     }
 
     /// <summary>
-    /// Send the PDC.
-    /// </summary>
-    /// <param name="strip">Strip to open PDC form for. Null if use picked controller.</param>
-    public void SendVatsysPDC(Strip? strip = null)
-    {
-        if (PickedStrip != null && strip == null)
-        {
-            MMI.OpenCPDLCWindow(PickedStrip.FDR, null, CPDLC.MessageCategories.FirstOrDefault(m => m.Name == "PDC"));
-            RemovePicked(true);
-        }
-        else if (strip != null)
-        {
-            MMI.OpenCPDLCWindow(strip.FDR, null, CPDLC.MessageCategories.FirstOrDefault(m => m.Name == "PDC"));
-        }
-    }
-
-    /// <summary>
     /// Toggles crossing highlight on a strip.
     /// </summary>
     public void CrossStrip()

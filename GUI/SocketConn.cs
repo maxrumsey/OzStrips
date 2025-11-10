@@ -371,13 +371,13 @@ public sealed class SocketConn : IDisposable
     /// </summary>
     /// <param name="strip">Strip.</param>
     /// <param name="text">PDC text.</param>
-    public void SendPDC(Strip strip, string text)
+    public async Task SendPDC(Strip strip, string text)
     {
         AddMessage("c:SendPDC: " + strip.FDR.Callsign);
 
         if (CanSendDTO)
         {
-            _connection.InvokeAsync("SendPDC", (StripDTO)strip, text);
+            await _connection.InvokeAsync("SendPDC", (StripDTO)strip, text);
         }
     }
 

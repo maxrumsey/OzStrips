@@ -15,12 +15,14 @@ namespace MaxRumsey.OzStripsPlugin.GUI.Controls;
 /// </summary>
 public partial class PDCControl : UserControl
 {
+    private readonly Strip _strip;
     /// <summary>
     /// Initializes a new instance of the <see cref="PDCControl"/> class.
     /// </summary>
     /// <param name="controller">The strip.</param>
     public PDCControl(Strip controller)
     {
+        _strip = controller;
         InitializeComponent();
         lb_title.Text += $" {controller.FDR.Callsign}";
 
@@ -29,10 +31,21 @@ public partial class PDCControl : UserControl
     }
 
     /// <summary>
+    /// Gets or sets the base modal.
+    /// </summary>
+    public BaseModal? BaseModal { get; set; }
+
+    /// <summary>
     /// Gets the PDC text.
     /// </summary>
     public string PDCText
     {
         get => tb_pdc.Text;
+    }
+
+    private void OpenVatsysPDC(object sender, EventArgs e)
+    {
+        BaseModal?.ExitModal(false);
+        _strip.Controller.OpenVatSysPDCWindow();
     }
 }

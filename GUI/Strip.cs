@@ -739,9 +739,16 @@ public sealed class Strip
     /// Sends a Hoppies PDC to the server.
     /// </summary>
     /// <param name="text">PDC content.</param>
-    public void SendPDC(string text)
+    public async void SendPDC(string text)
     {
-        _socketConn.SendPDC(this, text);
+        try
+        {
+            await _socketConn.SendPDC(this, text);
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+        }
     }
 
     /// <summary>

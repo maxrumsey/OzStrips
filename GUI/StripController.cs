@@ -290,6 +290,9 @@ public class StripController
         bm.Show(MainForm.MainFormInstance);
     }
 
+    /// <summary>
+    /// Opens the Hoppies PDC window.
+    /// </summary>
     public void OpenPDCWindow()
     {
         var modalChild = new PDCControl(Strip);
@@ -303,7 +306,15 @@ public class StripController
     {
         var control = (PDCControl)e.Child;
 
-        _ = Strip.SendPDC(control.PDCText);
+        Strip.SendPDC(control.PDCText);
+    }
+
+    /// <summary>
+    /// Opens the VatSys PDC window.
+    /// </summary>
+    public void OpenVatSysPDCWindow()
+    {
+        MMI.OpenCPDLCWindow(FDR, null, CPDLC.MessageCategories.FirstOrDefault(x => x.Name == "PDC"));
     }
 
     /// <summary>
