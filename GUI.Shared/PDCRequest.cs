@@ -19,24 +19,29 @@ public class PDCRequest
     public enum PDCFlags
     {
         /// <summary>
+        /// No data.
+        /// </summary>
+        NULL = 0,
+
+        /// <summary>
         /// Callsign is connected to Hoppies.
         /// </summary>
-        ONLINE,
+        ONLINE = 1,
 
         /// <summary>
         /// PDC request has been received.
         /// </summary>
-        REQUESTED,
+        REQUESTED = 2,
 
         /// <summary>
         /// PDC request has been acknowledged.
         /// </summary>
-        ACKNOWLEDGED,
+        ACKNOWLEDGED = 4,
 
         /// <summary>
         /// PDC has been sent.
         /// </summary>
-        SENT,
+        SENT = 8,
     }
 
     /// <summary>

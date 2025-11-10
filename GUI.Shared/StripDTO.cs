@@ -77,5 +77,5 @@ public class StripDTO
     /// <summary>
     /// Gets or sets PDC flags.
     /// </summary>
-    public PDCRequest.PDCFlags? PDCFlags { get; set; }
+    public PDCRequest.PDCFlags PDCFlags { get; set; }
 }

@@ -511,21 +511,21 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             case StripElements.Values.SSR:
                 if (element.Value == StripElements.Values.PDC_INDICATOR && _strip.StripType != StripType.ARRIVAL)
                 {
-                    var requestedPDC = _bayRenderController.Bay.BayManager.AerodromeState.PDCRequests.Where(x => x.Callsign == _strip.FDR.Callsign).FirstOrDefault();
+                    var requestedPDC = _strip.PDCRequest;
+
+                    if (_strip.PDCFlags.HasFlag(PDCRequest.PDCFlags.SENT))
+                    {
+                        return SKColors.LimeGreen;
+                    }
 
                     if (requestedPDC is not null && requestedPDC.Flags.HasFlag(PDCRequest.PDCFlags.REQUESTED))
                     {
-                        if (DateTime.Now.Second % 2 == 0)
+                        if (DateTime.Now.Second % 2 == 0 && !_strip.PDCFlags.HasFlag(PDCRequest.PDCFlags.ACKNOWLEDGED))
                         {
                             return SKColors.White;
                         }
 
                         return SKColors.Yellow;
-                    }
-
-                    if (_strip.PDCFlags?.HasFlag(PDCRequest.PDCFlags.SENT) == true)
-                    {
-                        return SKColors.LimeGreen;
                     }
                 }
 

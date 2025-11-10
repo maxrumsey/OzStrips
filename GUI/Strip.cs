@@ -149,7 +149,7 @@ public sealed class Strip
     /// <summary>
     /// Gets or sets the PDC flags.
     /// </summary>
-    public PDCRequest.PDCFlags? PDCFlags { get; set; }
+    public PDCRequest.PDCFlags PDCFlags { get; set; }
 
     /// <summary>
     /// Gets or sets the current strip bay.
