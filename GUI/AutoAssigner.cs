@@ -110,6 +110,11 @@ internal class AutoAssigner
 
     internal bool CompliesWithCondition(RuleCondition rule, AssignmentResult result, Strip strip, bool matchAsTrue = true)
     {
+        if (!string.IsNullOrEmpty(rule.IsJet) && Performance.GetPerformanceData(strip.FDR.AircraftTypeAndWake)?.IsJet != matchAsTrue)
+        {
+            return false;
+        }
+
         if (rule.Runway.Count > 0 && rule.Runway.Contains(result.Runway) != matchAsTrue)
         {
             return false;

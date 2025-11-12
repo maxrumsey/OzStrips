@@ -35,4 +35,10 @@ public class RuleCondition
     /// </summary>
     [YamlMember(Alias = "SID")]
     public List<string> SID { get; set; } = [];
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the aircraft should be a jet.
+    /// </summary>
+    [YamlMember(Alias = "jet")]
+    public string IsJet { get; set; } = string.Empty;
 }
