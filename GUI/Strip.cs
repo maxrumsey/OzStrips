@@ -787,7 +787,7 @@ public sealed class Strip
 
             if (!string.IsNullOrEmpty(result.CFL))
             {
-                CFL = result.CFL;
+                CFL = int.Parse(RFL, CultureInfo.InvariantCulture) < int.Parse(result.CFL, CultureInfo.InvariantCulture) ? RFL : result.CFL;
             }
 
             Remark = AutoAssigner.DetermineDepFreq(result.Departures);
@@ -796,6 +796,8 @@ public sealed class Strip
             {
                 SID = result.SID;
             }
+
+            Controller.AssignSSR();
         }
         catch (Exception ex)
         {
