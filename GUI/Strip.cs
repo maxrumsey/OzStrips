@@ -785,6 +785,11 @@ public sealed class Strip
                 RWY = result.Runway;
             }
 
+            if (!string.IsNullOrEmpty(SID) && FDR.FlightRules == "V")
+            {
+                SetSID(FDR, null);
+            }
+
             if (!string.IsNullOrEmpty(result.CFL))
             {
                 CFL = int.Parse(RFL, CultureInfo.InvariantCulture) < int.Parse(result.CFL, CultureInfo.InvariantCulture) ? RFL : result.CFL;
