@@ -61,5 +61,10 @@ namespace MaxRumsey.OzStripsPlugin.GUI.Shared
         /// Gets or sets an array of PDC requests.
         /// </summary>
         public PDCRequest[] PDCRequests { get; set; } = [];
+
+        /// <summary>
+        /// Gets or sets the current ATIS contents.
+        /// </summary>
+        public string ATIS { get; set; } = string.Empty;
     }
 }

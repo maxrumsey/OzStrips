@@ -73,14 +73,19 @@ public class AerodromeSettings
 
     internal static string GetADSettingsPath()
     {
+        return Path.Combine(GetPluginsDirectory(), "AerodromeSettings.xml");
+    }
+
+    internal static string GetPluginsDirectory()
+    {
         // This is hacky but it's the easiest way to get the prof dir.
         // Unless I'm missing something obvious.
         if (Profile.Loaded)
         {
             var shortNameObject = typeof(Profile).GetField("shortName", BindingFlags.Static | BindingFlags.NonPublic);
-            var shortName = (string)shortNameObject.GetValue( shortNameObject);
+            var shortName = (string)shortNameObject.GetValue(shortNameObject);
 
-            return Path.Combine(Helpers.GetFilesFolder(), "Profiles", shortName, "Plugins\\AerodromeSettings.xml");
+            return Path.Combine(Helpers.GetFilesFolder(), "Profiles", shortName, "Plugins");
         }
 
         return string.Empty;

@@ -237,5 +237,6 @@ public partial class MainForm : Form
         Resize += _mainFormController.MainForm_Resize;
         Closing += _mainFormController.FormClosing;
         Move += _mainFormController.MainForm_Move;
+        overrideATISToolStripMenuItem.Click += _mainFormController.OverrideATISClick;
     }
 }

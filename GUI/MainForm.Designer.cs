@@ -59,6 +59,10 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.ts_toggleCircuit = new System.Windows.Forms.ToolStripMenuItem();
             this.toggleCDMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.cDMRateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cdmTextBox = new System.Windows.Forms.ToolStripTextBox();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gitHubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.documentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,10 +75,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.reloadAerodromeListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tt_metar = new System.Windows.Forms.ToolTip(this.components);
             this.tt_clients = new System.Windows.Forms.ToolTip(this.components);
-            this.settingsWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.cDMRateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cdmTextBox = new System.Windows.Forms.ToolStripTextBox();
+            this.overrideATISToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pl_controlbar.SuspendLayout();
             this.pl_atis.SuspendLayout();
             this.pl_ad.SuspendLayout();
@@ -357,6 +358,30 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(84, 21);
             this.settingsToolStripMenuItem.Text = "Settings";
             // 
+            // settingsWindowToolStripMenuItem
+            // 
+            this.settingsWindowToolStripMenuItem.Name = "settingsWindowToolStripMenuItem";
+            this.settingsWindowToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.settingsWindowToolStripMenuItem.Text = "Settings Window";
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(193, 6);
+            // 
+            // cDMRateToolStripMenuItem
+            // 
+            this.cDMRateToolStripMenuItem.Enabled = false;
+            this.cDMRateToolStripMenuItem.Name = "cDMRateToolStripMenuItem";
+            this.cDMRateToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.cDMRateToolStripMenuItem.Text = "CDM Rate";
+            // 
+            // cdmTextBox
+            // 
+            this.cdmTextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.cdmTextBox.Name = "cdmTextBox";
+            this.cdmTextBox.Size = new System.Drawing.Size(100, 23);
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -410,7 +435,8 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem1,
             this.reloadStripToolStripMenuItem,
-            this.reloadAerodromeListToolStripMenuItem});
+            this.reloadAerodromeListToolStripMenuItem,
+            this.overrideATISToolStripMenuItem});
             this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
             this.debugToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.debugToolStripMenuItem.Text = "Debug";
@@ -443,29 +469,11 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             // 
             this.tt_clients.ToolTipTitle = "Online Clients";
             // 
-            // settingsWindowToolStripMenuItem
+            // overrideATISToolStripMenuItem
             // 
-            this.settingsWindowToolStripMenuItem.Name = "settingsWindowToolStripMenuItem";
-            this.settingsWindowToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.settingsWindowToolStripMenuItem.Text = "Settings Window";
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(193, 6);
-            // 
-            // cDMRateToolStripMenuItem
-            // 
-            this.cDMRateToolStripMenuItem.Enabled = false;
-            this.cDMRateToolStripMenuItem.Name = "cDMRateToolStripMenuItem";
-            this.cDMRateToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.cDMRateToolStripMenuItem.Text = "CDM Rate";
-            // 
-            // cdmTextBox
-            // 
-            this.cdmTextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.cdmTextBox.Name = "cdmTextBox";
-            this.cdmTextBox.Size = new System.Drawing.Size(100, 23);
+            this.overrideATISToolStripMenuItem.Name = "overrideATISToolStripMenuItem";
+            this.overrideATISToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
+            this.overrideATISToolStripMenuItem.Text = "Override ATIS";
             // 
             // MainForm
             // 
@@ -535,5 +543,6 @@ namespace MaxRumsey.OzStripsPlugin.GUI
         private ToolStripSeparator toolStripSeparator3;
         private ToolStripMenuItem cDMRateToolStripMenuItem;
         private ToolStripTextBox cdmTextBox;
+        private ToolStripMenuItem overrideATISToolStripMenuItem;
     }
 }

@@ -500,6 +500,9 @@ public class MainFormController : IDisposable
                 case Keys.T:
                     _bayManager.PickLastTransmit();
                     return true;
+                case Keys.Z:
+                    _bayManager.FillStrip();
+                    return true;
                 default:
                     break;
             }
@@ -665,6 +668,26 @@ public class MainFormController : IDisposable
         var modalChild = new MsgListDebug(_socketConn);
         var bm = new BaseModal(modalChild, "Msg List");
         bm.Show(_mainForm);
+    }
+
+    /// <summary>
+    /// Opens the ATIS override window.
+    /// </summary>
+    /// <param name="sender">Sender.</param>
+    /// <param name="e">EventArgs.</param>
+    public void OverrideATISClick(object sender, EventArgs e)
+    {
+        var modalChild = new DebugSetATIS();
+        var bm = new BaseModal(modalChild, "Override ATIS Code");
+        bm.ReturnEvent += SaveAmendedAtis;
+        bm.Show(_mainForm);
+    }
+
+    private void SaveAmendedAtis(object sender, ModalReturnArgs e)
+    {
+        var control = ((BaseModal)sender).Child as DebugSetATIS;
+
+        _bayManager.AerodromeState.ATIS = control?.ATISText ?? string.Empty;
     }
 
     /// <summary>

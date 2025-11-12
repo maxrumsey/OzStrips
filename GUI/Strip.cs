@@ -767,6 +767,46 @@ public sealed class Strip
     }
 
     /// <summary>
+    /// Determines what to autofill, and autofills what is required.
+    /// </summary>
+    public void FillStrip()
+    {
+        if (_bayManager.AutoAssigner is null || _bayManager.AerodromeState.ATIS is null)
+        {
+            return;
+        }
+
+        try
+        {
+            var result = _bayManager.AutoAssigner.DetermineResult(this);
+
+            if (!string.IsNullOrEmpty(result.Runway) && string.IsNullOrEmpty(RWY))
+            {
+                RWY = result.Runway;
+            }
+
+            if (!string.IsNullOrEmpty(result.CFL))
+            {
+                CFL = result.CFL;
+            }
+
+            if (result.Departures.Count > 0)
+            {
+                Remark = result.Departures[0];
+            }
+
+            if (!string.IsNullOrEmpty(result.SID))
+            {
+                SID = result.SID;
+            }
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+        }
+    }
+
+    /// <summary>
     /// Determines whether or not a SC is still valid (or should be kept alive).
     /// </summary>
     /// <returns>Valid SC.</returns>

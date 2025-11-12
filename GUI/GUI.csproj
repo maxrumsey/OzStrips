@@ -51,6 +51,9 @@
         <Compile Update="BayRenderController.cs">
           <SubType>Component</SubType>
         </Compile>
+        <Compile Update="Controls\DebugSetATIS.cs">
+          <SubType>UserControl</SubType>
+        </Compile>
         <Compile Update="Controls\QuickSearch.cs">
           <SubType>UserControl</SubType>
         </Compile>

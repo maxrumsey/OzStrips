@@ -33,6 +33,11 @@ public class BayManager
     }
 
     /// <summary>
+    /// Gets or sets the loaded autoassigner.
+    /// </summary>
+    internal AutoAssigner? AutoAssigner { get; set; }
+
+    /// <summary>
     /// Gets the picked controller.
     /// </summary>
     public Strip? PickedStrip
@@ -256,6 +261,14 @@ public class BayManager
     }
 
     /// <summary>
+    /// Autofills picked strip data.
+    /// </summary>
+    public void FillStrip()
+    {
+        PickedStrip?.FillStrip();
+    }
+
+    /// <summary>
     /// Picks the strip of the aircraft that transmitted last.
     /// </summary>
     public void PickLastTransmit()
@@ -336,6 +349,8 @@ public class BayManager
     public void PurgeDataAndSetNewAerodrome(string name, SocketConn socketConn)
     {
         AerodromeName = name;
+
+        AutoAssigner = new(this);
 
         if (CircuitActive)
         {
