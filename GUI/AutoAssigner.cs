@@ -37,7 +37,7 @@ internal class AutoAssigner
         try
         {
             var deserializer = new DeserializerBuilder()
-            .IgnoreUnmatchedProperties().Build();
+            .Build();
 
             var path = Path.Combine(filePrefix, $"{_aerodrome}.yml");
 

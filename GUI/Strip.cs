@@ -790,7 +790,10 @@ public sealed class Strip
                 CFL = int.Parse(RFL, CultureInfo.InvariantCulture) < int.Parse(result.CFL, CultureInfo.InvariantCulture) ? RFL : result.CFL;
             }
 
-            Remark = AutoAssigner.DetermineDepFreq(result.Departures);
+            if (result.Departures.Count > 0)
+            {
+                Remark = AutoAssigner.DetermineDepFreq(result.Departures);
+            }
 
             if (!string.IsNullOrEmpty(result.SID))
             {
