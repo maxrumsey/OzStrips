@@ -790,10 +790,7 @@ public sealed class Strip
                 CFL = result.CFL;
             }
 
-            if (result.Departures.Count > 0)
-            {
-                Remark = result.Departures[0];
-            }
+            Remark = AutoAssigner.DetermineDepFreq(result.Departures);
 
             if (!string.IsNullOrEmpty(result.SID))
             {

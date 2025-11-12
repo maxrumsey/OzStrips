@@ -194,4 +194,20 @@ internal class AutoAssigner
 
         return string.Empty;
     }
+
+    public static string DetermineDepFreq(List<string> freqs)
+    {
+        var atc = Network.GetOnlineATCs;
+        var allFreqs = atc.SelectMany(x => x.Frequencies ?? []).Select(x => Conversions.FSDFrequencyToString(x)).ToArray() ?? [];
+
+        foreach (var freq in freqs)
+        {
+            if (allFreqs.Contains(freq))
+            {
+                return freq;
+            }
+        }
+
+        return "122.8";
+    }
 }
