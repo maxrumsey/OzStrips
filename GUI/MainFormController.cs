@@ -500,7 +500,7 @@ public class MainFormController : IDisposable
                 case Keys.T:
                     _bayManager.PickLastTransmit();
                     return true;
-                case Keys.Z:
+                case Keys.A:
                     _bayManager.FillStrip();
                     return true;
                 default:
