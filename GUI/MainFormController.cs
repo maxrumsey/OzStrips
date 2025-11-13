@@ -584,6 +584,31 @@ public class MainFormController : IDisposable
         {
             Util.LogError(ex);
         }
+
+        try
+        {
+            var openPDCs = _bayManager.AerodromeState.PDCRequests.Count(x =>
+            {
+                var strip = _bayManager.StripRepository.GetStrip(x.Callsign);
+
+                if (strip is null)
+                {
+                    return false;
+                }
+
+                return x.Flags.HasFlag(PDCRequest.PDCFlags.REQUESTED) && !strip.PDCFlags.HasFlag(PDCRequest.PDCFlags.SENT);
+            });
+
+            var autoFillAvailable = _bayManager.AutoAssigner?.IsFunctional ?? false;
+
+            _mainForm.OpenPDCs.Text = $"Open PDCs: {openPDCs}";
+            _mainForm.OpenPDCs.BackColor = openPDCs > 0 ? Color.LightBlue : Color.Transparent;
+            _mainForm.AutoFillAvailable.BackColor = autoFillAvailable ? Color.LightGreen : Color.Red;
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+        }
     }
 
     internal void MainFormSizeChanged(object sender, EventArgs e)

@@ -269,4 +269,6 @@ internal class AutoAssigner
 
         return "122.8";
     }
+
+    public bool IsFunctional => _assignmentRules.Count > 0 && !string.IsNullOrEmpty(_bayManager.AerodromeState.ATIS);
 }

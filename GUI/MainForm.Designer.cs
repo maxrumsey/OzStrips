@@ -73,9 +73,11 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.reloadStripToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reloadAerodromeListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.overrideATISToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openPDCsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoFillUnavailableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tt_metar = new System.Windows.Forms.ToolTip(this.components);
             this.tt_clients = new System.Windows.Forms.ToolTip(this.components);
-            this.overrideATISToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pl_controlbar.SuspendLayout();
             this.pl_atis.SuspendLayout();
             this.pl_ad.SuspendLayout();
@@ -235,7 +237,9 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.ts_ad,
             this.viewToolStripMenuItem,
             this.settingsToolStripMenuItem,
-            this.helpToolStripMenuItem});
+            this.helpToolStripMenuItem,
+            this.openPDCsToolStripMenuItem,
+            this.autoFillUnavailableToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1784, 25);
@@ -461,6 +465,28 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.reloadAerodromeListToolStripMenuItem.Text = "ReloadAerodromeList";
             this.reloadAerodromeListToolStripMenuItem.Click += new System.EventHandler(this.ReloadAerodromes);
             // 
+            // overrideATISToolStripMenuItem
+            // 
+            this.overrideATISToolStripMenuItem.Name = "overrideATISToolStripMenuItem";
+            this.overrideATISToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
+            this.overrideATISToolStripMenuItem.Text = "Override ATIS";
+            // 
+            // openPDCsToolStripMenuItem
+            // 
+            this.openPDCsToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.openPDCsToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
+            this.openPDCsToolStripMenuItem.Name = "openPDCsToolStripMenuItem";
+            this.openPDCsToolStripMenuItem.Size = new System.Drawing.Size(116, 21);
+            this.openPDCsToolStripMenuItem.Text = "Open PDCs: 0";
+            // 
+            // autoFillUnavailableToolStripMenuItem
+            // 
+            this.autoFillUnavailableToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.autoFillUnavailableToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
+            this.autoFillUnavailableToolStripMenuItem.Name = "autoFillUnavailableToolStripMenuItem";
+            this.autoFillUnavailableToolStripMenuItem.Size = new System.Drawing.Size(140, 21);
+            this.autoFillUnavailableToolStripMenuItem.Text = "AutoFill Status";
+            // 
             // tt_metar
             // 
             this.tt_metar.ToolTipTitle = "METAR";
@@ -468,12 +494,6 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             // tt_clients
             // 
             this.tt_clients.ToolTipTitle = "Online Clients";
-            // 
-            // overrideATISToolStripMenuItem
-            // 
-            this.overrideATISToolStripMenuItem.Name = "overrideATISToolStripMenuItem";
-            this.overrideATISToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
-            this.overrideATISToolStripMenuItem.Text = "Override ATIS";
             // 
             // MainForm
             // 
@@ -544,5 +564,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
         private ToolStripMenuItem cDMRateToolStripMenuItem;
         private ToolStripTextBox cdmTextBox;
         private ToolStripMenuItem overrideATISToolStripMenuItem;
+        private ToolStripMenuItem openPDCsToolStripMenuItem;
+        private ToolStripMenuItem autoFillUnavailableToolStripMenuItem;
     }
 }

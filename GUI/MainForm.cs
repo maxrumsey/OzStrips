@@ -69,6 +69,10 @@ public partial class MainForm : Form
 
     public ToolStripMenuItem ViewListToolStrip => ts_mode;
 
+    public ToolStripMenuItem OpenPDCs => openPDCsToolStripMenuItem;
+
+    public ToolStripMenuItem AutoFillAvailable => autoFillUnavailableToolStripMenuItem;
+
     public string EnteredAerodrome => toolStripTextBox1.Text;
 
     public ToolStripTextBox CDMRateTextBox => cdmTextBox;
