@@ -9,6 +9,7 @@ using System.Windows.Automation;
 using MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
 using MaxRumsey.OzStripsPlugin.GUI.Shared;
 using vatsys;
+using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -54,6 +55,10 @@ internal class AutoAssigner
             }
 
             _assignmentRules.AddRange(deserializer.Deserialize<List<AssignmentRule>>(yaml) ?? []);
+        }
+        catch (YamlException ex)
+        {
+            Util.ShowErrorBox($"Failed to serialize. Error at line {ex.Start.Index}");
         }
         catch (Exception ex)
         {
@@ -143,8 +148,13 @@ internal class AutoAssigner
             return false;
         }
 
-        if (rule.AtisDepRunway.Count > 0 && !string.IsNullOrEmpty(_bayManager.AerodromeState.ATIS))
+        if (rule.AtisDepRunway.Count > 0)
         {
+            if (string.IsNullOrEmpty(_bayManager.AerodromeState.ATIS))
+            {
+                return false;
+            }
+
             var unmatchedRunways = rule.AtisDepRunway.ToList();
 
             var matches = _depRegex.Matches(_bayManager.AerodromeState.ATIS);
@@ -166,6 +176,50 @@ internal class AutoAssigner
                 {
                     return false;
                 }
+            }
+        }
+
+        if (rule.Radials.Count > 0)
+        {
+            var matched = false;
+
+            foreach (var radial in rule.Radials)
+            {
+                var stringRadials = radial.Split('-');
+
+                if (stringRadials.Length != 2)
+                {
+                    continue;
+                }
+
+                int[] bearings = [0, 360];
+
+                foreach (var stringRadial in stringRadials)
+                {
+                    if (int.TryParse(stringRadial, out var bearing))
+                    {
+                        bearings[Array.IndexOf(stringRadials, stringRadial)] = bearing;
+                    }
+                }
+
+                var depRadial = strip.OutboundRadial;
+
+                if (depRadial == -1)
+                {
+                    continue;
+                }
+
+                var inRange = depRadial >= bearings[0] && depRadial <= bearings[1];
+
+                if (inRange)
+                {
+                    matched = true;
+                }
+            }
+
+            if (matched != matchAsTrue)
+            {
+                return false;
             }
         }
 

@@ -41,4 +41,10 @@ public class RuleCondition
     /// </summary>
     [YamlMember(Alias = "jet")]
     public string IsJet { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets a list of radials, where at least one must match the planned departure radial.
+    /// </summary>
+    [YamlMember(Alias = "radials")]
+    public List<string> Radials { get; set; } = [];
 }

@@ -501,6 +501,28 @@ public sealed class Strip
     }
 
     /// <summary>
+    /// Gets the outbound radial.
+    /// </summary>
+    public int OutboundRadial
+    {
+        get
+        {
+            var firstWpt = FDR.ParsedRoute.FirstOrDefault()?.Intersection;
+
+            Util.DifferingAerodromeWaypoints.TryGetValue(FDR.DepAirport, out var falseFlagWaypoint);
+
+            // Only match legit WPTs, non-airports, and non GPS / random coords.
+            var firstLegitWaypoint = FDR.ParsedRoute.FirstOrDefault(x => x.Type == FDR.ExtractedRoute.Segment.SegmentTypes.WAYPOINT && x.Intersection.Type != Airspace2.Intersection.Types.Airport && !x.Intersection.Name.Any(char.IsDigit) && x.Intersection.Name != falseFlagWaypoint)?.Intersection;
+            if (firstWpt is null || firstLegitWaypoint is null)
+            {
+                return -1;
+            }
+
+            return (int)Conversions.CalculateTrack(firstWpt.LatLong, firstLegitWaypoint.LatLong);
+        }
+    }
+
+    /// <summary>
     /// Gets or sets the SID.
     /// </summary>
     public string SID
