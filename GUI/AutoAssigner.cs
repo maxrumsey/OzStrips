@@ -22,7 +22,7 @@ internal class AutoAssigner
     private readonly List<AssignmentRule> _assignmentRules = [];
 
     // Thank you ChatGPT.
-    private readonly Regex _depRegex = new(@"(?i)\bRWY[:\s]*((?:(?=[^.,\n]*\b(?:DEPS?|DEPARTURES?|ARRS?\s+AND\s+DEPS?|ALL\s+OTHER\s+DEPS?))[^.,\n]+)|(?:(?![^.,\n]*\bFOR\s+ARRS?\b)[^.,\n]+))(?:(?:[^.,\n]*?(?<Runway>\d{2}[LCR]?))+)");
+    private readonly Regex _depRegex = new(@"(?i)\b\[?RWY\]?[:\s]*((?:(?=[^.,\n]*\b(?:DEPS?|DEPARTURES?|ARRS?\s+AND\s+DEPS?|ALL\s+OTHER\s+DEPS?))[^.,\n]+)|(?:(?![^.,\n]*\bFOR\s+ARRS?\b)[^.,\n]+))(?:(?:[^.,\n]*?(?<Runway>\d{2}[LCR]?))+)");
     private readonly Regex _rwyNameRegex = new(@"(\d{2}[LRC]?)");
 
     internal AutoAssigner(BayManager bayManager)

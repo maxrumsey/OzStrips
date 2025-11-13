@@ -601,7 +601,7 @@ public class MainFormController : IDisposable
 
             var autoFillAvailable = _bayManager.AutoAssigner?.IsFunctional ?? false;
 
-            _mainForm.OpenPDCs.Text = $"Open PDCs: {openPDCs}";
+            _mainForm.OpenPDCs.Text = $"Pending PDCs: {openPDCs}";
             _mainForm.OpenPDCs.BackColor = openPDCs > 0 ? Color.LightBlue : Color.Transparent;
             _mainForm.AutoFillAvailable.BackColor = autoFillAvailable ? Color.LightGreen : Color.Red;
         }

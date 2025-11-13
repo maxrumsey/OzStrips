@@ -476,8 +476,8 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.openPDCsToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.openPDCsToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.openPDCsToolStripMenuItem.Name = "openPDCsToolStripMenuItem";
-            this.openPDCsToolStripMenuItem.Size = new System.Drawing.Size(116, 21);
-            this.openPDCsToolStripMenuItem.Text = "Open PDCs: 0";
+            this.openPDCsToolStripMenuItem.Size = new System.Drawing.Size(140, 21);
+            this.openPDCsToolStripMenuItem.Text = "Pending PDCs: 0";
             // 
             // autoFillUnavailableToolStripMenuItem
             // 
