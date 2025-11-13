@@ -422,7 +422,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             case StripElements.Values.FRUL:
                 return _strip.FDR.FlightRules;
             case StripElements.Values.PDC_INDICATOR:
-                return _strip.FDR.PDCSent ? "P" : string.Empty;
+                return _strip.FDR.PDCSent || _strip.PDCFlags.HasFlag(PDCRequest.PDCFlags.SENT) ? "P" : string.Empty;
             case StripElements.Values.TYPE:
                 return _strip.FDR.AircraftType;
             case StripElements.Values.WTC:
@@ -513,12 +513,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 {
                     var requestedPDC = _strip.PDCRequest;
 
-                    if (_strip.PDCFlags.HasFlag(PDCRequest.PDCFlags.SENT))
-                    {
-                        return SKColors.LimeGreen;
-                    }
-
-                    if (requestedPDC is not null && requestedPDC.Flags.HasFlag(PDCRequest.PDCFlags.REQUESTED))
+                    if (requestedPDC is not null && requestedPDC.Flags.HasFlag(PDCRequest.PDCFlags.REQUESTED) && !_strip.PDCFlags.HasFlag(PDCRequest.PDCFlags.SENT))
                     {
                         if (DateTime.Now.Second % 2 == 0 && !_strip.PDCFlags.HasFlag(PDCRequest.PDCFlags.ACKNOWLEDGED))
                         {
