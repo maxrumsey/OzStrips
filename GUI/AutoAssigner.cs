@@ -202,14 +202,14 @@ internal class AutoAssigner
                     }
                 }
 
-                var depRadial = strip.OutboundRadial;
+                var depRadial = TrueToMagnetic(strip.OutboundRadial, _aerodrome);
 
                 if (depRadial == -1)
                 {
                     continue;
                 }
 
-                var inRange = depRadial >= bearings[0] && depRadial <= bearings[1];
+                var inRange = depRadial >= bearings[0] && depRadial < bearings[1];
 
                 if (inRange)
                 {
@@ -252,6 +252,13 @@ internal class AutoAssigner
         }
 
         return string.Empty;
+    }
+
+    public static int TrueToMagnetic(int trueBearing, string aerodrome)
+    {
+        var correction = LogicalPositions.Positions.FirstOrDefault(x => x.Name == aerodrome)?.MagneticVariation ?? 0;
+
+        return (int)(trueBearing + correction);
     }
 
     public static string DetermineDepFreq(List<string> freqs)
