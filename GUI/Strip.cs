@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-
+using System.Windows.Forms.VisualStyles;
 using MaxRumsey.OzStripsPlugin.GUI.Controls;
 using MaxRumsey.OzStripsPlugin.GUI.DTO;
 using MaxRumsey.OzStripsPlugin.GUI.Properties;
@@ -133,6 +133,17 @@ public sealed class Strip
         get
         {
             return _socketConn.Server;
+        }
+    }
+
+    /// <summary>
+    /// Gets possible departure frequencies for this strip.
+    /// </summary>
+    public string[] PossibleDepFreqs
+    {
+        get
+        {
+            return _bayManager.AutoAssigner?.DeterminePossibleDepartureFrequencies(this) ?? [];
         }
     }
 
@@ -266,6 +277,11 @@ public sealed class Strip
     /// Gets or sets the clearance.
     /// </summary>
     public string CLX { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the set departure frequency.
+    /// </summary>
+    public string DepartureFrequency { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the remarks.
@@ -657,6 +673,7 @@ public sealed class Strip
             StripKey = sc.StripKey,
             OverrideStripType = sc.OverrideStripType,
             PDCFlags = sc.PDCFlags,
+            DepartureFrequency = sc.DepartureFrequency,
         };
 
         return scDTO;
@@ -819,7 +836,7 @@ public sealed class Strip
 
             if (result.Departures.Count > 0)
             {
-                Remark = AutoAssigner.DetermineDepFreq(result.Departures);
+                DepartureFrequency = AutoAssigner.DetermineDepFreq(result.Departures);
             }
 
             if (!string.IsNullOrEmpty(result.SID))
@@ -828,6 +845,7 @@ public sealed class Strip
             }
 
             Controller.AssignSSR();
+            SyncStrip();
         }
         catch (Exception ex)
         {

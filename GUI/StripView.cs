@@ -433,6 +433,8 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 return _strip.Ready ? "RDY" : string.Empty;
             case StripElements.Values.CLX:
                 return _strip.CLX;
+            case StripElements.Values.DEPFREQ:
+                return _strip.DepartureFrequency;
             case StripElements.Values.SID:
                 return _strip.SID;
             case StripElements.Values.FIRST_WPT:
@@ -571,7 +573,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 /*
                     * HDG unassigned to radar sid in rwy bay.
                     */
-                if (element.Value == StripElements.Values.HDG &&
+                if (element.Value == StripElements.Values.GLOP &&
                     _strip.CurrentBay >= StripBay.BAY_HOLDSHORT &&
                     string.IsNullOrEmpty(_strip.HDG) &&
                     _strip.SID.Length == 3 &&

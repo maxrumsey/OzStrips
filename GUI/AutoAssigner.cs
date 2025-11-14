@@ -66,6 +66,23 @@ internal class AutoAssigner
         }
     }
 
+    public string[] DeterminePossibleDepartureFrequencies(Strip strip)
+    {
+        var deps = DetermineResult(strip).Departures ?? [];
+
+        foreach (var freq in deps.ToArray())
+        {
+            if (!IsDepartureFreqAvailable(freq))
+            {
+                deps.Remove(freq);
+            }
+        }
+
+        deps.Add("122.8");
+
+        return [.. deps];
+    }
+
     internal AssignmentResult DetermineResult(Strip strip)
     {
         var result = new AssignmentResult(strip.RWY);
@@ -261,14 +278,20 @@ internal class AutoAssigner
         return (int)(trueBearing + correction);
     }
 
-    public static string DetermineDepFreq(List<string> freqs)
+    public static bool IsDepartureFreqAvailable(string freq)
     {
         var atc = Network.GetOnlineATCs;
         var allFreqs = atc.SelectMany(x => x.Frequencies ?? []).Select(x => Conversions.FSDFrequencyToString(x)).ToArray() ?? [];
 
+        return allFreqs.Contains(freq);
+    }
+
+    public static string DetermineDepFreq(List<string> freqs)
+    {
+
         foreach (var freq in freqs)
         {
-            if (allFreqs.Contains(freq))
+            if (IsDepartureFreqAvailable(freq))
             {
                 return freq;
             }

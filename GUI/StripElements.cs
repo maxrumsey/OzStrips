@@ -37,6 +37,7 @@ public static class StripElements
         RWY,
         WTC,
         ROUTE,
+        DEPFREQ,
     }
 
     public enum Actions

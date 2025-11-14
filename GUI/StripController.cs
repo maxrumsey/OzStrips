@@ -479,7 +479,7 @@ public class StripController
                 Strip.CFL = control.Alt;
             }
 
-            Strip.HDG = control.Hdg;
+            Strip.DepartureFrequency = control.DepFreq;
             if (!string.IsNullOrEmpty(control.Runway) && Strip.RWY != control.Runway)
             {
                 Strip.RWY = control.Runway;
