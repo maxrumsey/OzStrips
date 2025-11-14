@@ -562,7 +562,7 @@ public sealed class Strip
         set
         {
             var found = false;
-            foreach (var possibleSID in FDR.DepartureRunway.SIDs)
+            foreach (var possibleSID in FDR.DepartureRunway?.SIDs ?? [])
             {
                 if (possibleSID.sidStar.Name == value)
                 {
@@ -810,7 +810,7 @@ public sealed class Strip
     /// </summary>
     public void FillStrip()
     {
-        if (_bayManager.AutoAssigner is null || _bayManager.AerodromeState.ATIS is null)
+        if (_bayManager.AutoAssigner is null || _bayManager.AerodromeState.ATIS is null || DefaultStripType == StripType.ARRIVAL)
         {
             return;
         }

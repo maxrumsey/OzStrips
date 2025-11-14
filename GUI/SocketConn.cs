@@ -485,17 +485,24 @@ public sealed class SocketConn : IDisposable
     /// <param name="type">Server connection type.</param>
     public async void SetServerType(Servers type)
     {
-        Server = type;
-
-        if (!CanConnectToCurrentServer())
+        try
         {
-            return;
+            Server = type;
+
+            if (!CanConnectToCurrentServer())
+            {
+                return;
+            }
+
+            await SubscribeToAerodrome();
+            if (_connection.State == HubConnectionState.Disconnected && MainFormController.ReadyForConnection)
+            {
+                await Connect();
+            }
         }
-
-        await SubscribeToAerodrome();
-        if (_connection.State == HubConnectionState.Disconnected && MainFormController.ReadyForConnection)
+        catch (Exception ex)
         {
-            Connect();
+            Util.LogError(ex);
         }
     }
 
