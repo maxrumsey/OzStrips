@@ -44,6 +44,10 @@ public class AerodromeSettings
     [XmlArrayItem("AerodromeList")]
     public AerodromeList[]? AerodromeLists;
 
+    public string? PDCFormat;
+
+    public string? AerodromeAutoFillLocation;
+
     internal static AerodromeSettings? Deserialize(string path)
     {
         try
@@ -120,6 +124,8 @@ public class AerodromeSettings
         baseSettings.Layouts = overwrite.Layouts ?? baseSettings.Layouts;
         baseSettings.Bays = overwrite.Bays ?? baseSettings.Bays;
         baseSettings.AerodromeLists = overwrite.AerodromeLists ?? baseSettings.AerodromeLists;
+        baseSettings.AerodromeAutoFillLocation = overwrite.AerodromeAutoFillLocation ?? baseSettings.AerodromeAutoFillLocation;
+        baseSettings.PDCFormat = overwrite.PDCFormat ?? baseSettings.PDCFormat;
 
         return baseSettings;
     }

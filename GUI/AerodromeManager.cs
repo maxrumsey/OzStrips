@@ -30,6 +30,10 @@ public class AerodromeManager
 
     public static bool InhibitVersionCheck;
 
+    public static string AerodromeAutoFillLocation = string.Empty;
+
+    public static string PDCFormat = string.Empty;
+
     public bool AllowAutoOpen
     {
         get
@@ -159,6 +163,8 @@ public class AerodromeManager
         Settings = AerodromeSettings.Load();
 
         _defaultAerodromes = Settings?.DefaultAerodromes?.ToList() ?? new List<string>();
+        AerodromeAutoFillLocation = Settings?.AerodromeAutoFillLocation ?? string.Empty;
+        PDCFormat = Settings?.PDCFormat ?? string.Empty;
     }
 
     private void SectorsChanged(object sender, EventArgs e)

@@ -16,6 +16,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI.Controls;
 public partial class PDCControl : UserControl
 {
     private readonly Strip _strip;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="PDCControl"/> class.
     /// </summary>
@@ -26,8 +27,18 @@ public partial class PDCControl : UserControl
         InitializeComponent();
         lb_title.Text += $" {controller.FDR.Callsign}";
 
-        tb_pdc.Text = $"PDC for {controller.FDR.Callsign}." +
-                      $"Climb via SID to @A090@";
+        foreach (var freq in Network.Me?.Frequencies?.Where(x => x != 99998).ToArray() ?? [])
+        {
+            var freqString = Conversions.FSDFrequencyToString(freq);
+            cb_delivery.Items.Add(freqString);
+        }
+
+        if (cb_delivery.Items.Count > 0)
+        {
+            cb_delivery.SelectedIndex = 0;
+        }
+
+        LayoutPDC();
     }
 
     /// <summary>
@@ -40,12 +51,69 @@ public partial class PDCControl : UserControl
     /// </summary>
     public string PDCText
     {
-        get => tb_pdc.Text;
+        get => tb_pdc.Text.Replace("\r", string.Empty).Replace("\n", ". ");
     }
 
     private void OpenVatsysPDC(object sender, EventArgs e)
     {
         BaseModal?.ExitModal(false);
         _strip.Controller.OpenVatSysPDCWindow();
+    }
+
+    private void LayoutPDC()
+    {
+        var trans = string.Empty;
+        if (!string.IsNullOrEmpty(_strip.SIDTransition))
+        {
+            trans = $"{_strip.SIDTransition}:TRAN";
+        }
+
+        if (!int.TryParse(_strip.CFL, out var cfl))
+        {
+            cfl = 0;
+        }
+
+        cfl *= 100;
+        var ssr = (_strip.FDR.AssignedSSRCode == -1) ? "XXXX" : Convert.ToString(_strip.FDR.AssignedSSRCode, 8).PadLeft(4, '0');
+
+        var format = AerodromeManager.PDCFormat
+        .Replace("\n", "\r\n")
+        .Replace("{CALLSIGN}", _strip.FDR.Callsign)
+        .Replace("{TYPE}", _strip.FDR.AircraftType)
+        .Replace("{ADEP}", _strip.FDR.DepAirport)
+        .Replace("{ETD}", _strip.FDR.ETD.ToString("HHmm", CultureInfo.InvariantCulture))
+        .Replace("{ADES}", _strip.FDR.DesAirport)
+        .Replace("{RWY}", _strip.RWY)
+        .Replace("{SID}", _strip.SID)
+        .Replace("{TRANS}", trans)
+        .Replace("{ROUTE}", _strip.FDR.Route)
+        .Replace("{CFL}", cfl.ToString(CultureInfo.InvariantCulture))
+        .Replace("{FREQ}", _strip.DepartureFrequency)
+        .Replace("{SQUAWK}", ssr)
+        .Replace("{READBACK}", cb_delivery.Text);
+
+        var error = string.Empty;
+
+        if (ssr == "XXXX" ||
+            cfl == 0 ||
+            string.IsNullOrEmpty(_strip.SID) ||
+            string.IsNullOrEmpty(_strip.RWY) ||
+            string.IsNullOrEmpty(_strip.DepartureFrequency))
+        {
+            error = "Error: All PDC elements could not be filled.";
+        }
+
+        label1.Text = error;
+        tb_pdc.Text = format;
+    }
+
+    private void ResetButtonClicked(object sender, EventArgs e)
+    {
+        LayoutPDC();
+    }
+
+    private void cb_delivery_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        LayoutPDC();
     }
 }

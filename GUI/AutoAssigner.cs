@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -30,7 +31,7 @@ internal class AutoAssigner
         _bayManager = bayManager;
         _aerodrome = bayManager.AerodromeName;
 
-        LoadData(AerodromeSettings.GetPluginsDirectory());
+        LoadData(AerodromeManager.AerodromeAutoFillLocation);
     }
 
     internal void LoadData(string filePrefix)
@@ -40,7 +41,7 @@ internal class AutoAssigner
             var deserializer = new DeserializerBuilder()
             .Build();
 
-            var path = Path.Combine(filePrefix, $"{_aerodrome}.yml");
+            var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), filePrefix, $"{_aerodrome}.yml");
 
             if (!File.Exists(path))
             {

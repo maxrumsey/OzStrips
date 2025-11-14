@@ -31,6 +31,9 @@
             this.lb_title = new System.Windows.Forms.Label();
             this.tb_pdc = new System.Windows.Forms.TextBox();
             this.bt_vatsyspdc = new System.Windows.Forms.Button();
+            this.cb_delivery = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lb_title
@@ -44,6 +47,7 @@
             // 
             // tb_pdc
             // 
+            this.tb_pdc.AcceptsReturn = true;
             this.tb_pdc.Location = new System.Drawing.Point(3, 19);
             this.tb_pdc.Multiline = true;
             this.tb_pdc.Name = "tb_pdc";
@@ -60,15 +64,48 @@
             this.bt_vatsyspdc.UseVisualStyleBackColor = true;
             this.bt_vatsyspdc.Click += new System.EventHandler(this.OpenVatsysPDC);
             // 
+            // cb_delivery
+            // 
+            this.cb_delivery.FormattingEnabled = true;
+            this.cb_delivery.Location = new System.Drawing.Point(182, 284);
+            this.cb_delivery.Name = "cb_delivery";
+            this.cb_delivery.Size = new System.Drawing.Size(82, 21);
+            this.cb_delivery.TabIndex = 3;
+            this.cb_delivery.Text = "DELIVERY";
+            this.cb_delivery.SelectedIndexChanged += new System.EventHandler(this.cb_delivery_SelectedIndexChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.Color.Red;
+            this.label1.Location = new System.Drawing.Point(3, 311);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(32, 13);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Error:";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(270, 283);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(133, 23);
+            this.button1.TabIndex = 5;
+            this.button1.Text = "Reset";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.ResetButtonClicked);
+            // 
             // PDCControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.cb_delivery);
             this.Controls.Add(this.bt_vatsyspdc);
             this.Controls.Add(this.lb_title);
             this.Controls.Add(this.tb_pdc);
             this.Name = "PDCControl";
-            this.Size = new System.Drawing.Size(409, 309);
+            this.Size = new System.Drawing.Size(409, 327);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -78,5 +115,8 @@
         private System.Windows.Forms.TextBox tb_pdc;
         private System.Windows.Forms.Label lb_title;
         private System.Windows.Forms.Button bt_vatsyspdc;
+        private System.Windows.Forms.ComboBox cb_delivery;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button button1;
     }
 }
