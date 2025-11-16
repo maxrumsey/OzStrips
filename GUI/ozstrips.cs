@@ -75,6 +75,19 @@ public sealed class OzStrips : IPlugin, IDisposable
         _aerodromeManager.Initialize();
 
         _ = CheckVersion();
+
+        var pdcWatcher = new CustomToolStripMenuItem(CustomToolStripMenuItemWindowType.Main, CustomToolStripMenuItemCategory.Tools, new ToolStripMenuItem("Pending PDCs"));
+
+        pdcWatcher.Item.Click += (s, e) =>
+        {
+            MMI.InvokeOnGUI(() =>
+            {
+                var pdcForm = new PDCWatcher();
+                pdcForm.Show(Application.OpenForms["MainForm"]);
+            });
+        };
+
+        MMI.AddCustomMenuItem(pdcWatcher);
     }
 
     /// <summary>
