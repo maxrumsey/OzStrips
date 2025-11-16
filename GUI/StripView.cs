@@ -536,13 +536,9 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 }
 
                 if ((element.Value == StripElements.Values.EOBT) &&
-                    _strip.CDMResult is not null)
+                    _strip.CDMResult is not null &&
+                    _strip.CDMResult.Aircraft.State != CDMState.PUSHED)
                 {
-                    if (_strip.CDMResult.Aircraft.State == CDMState.PUSHED)
-                    {
-                        return SKColors.Yellow;
-                    }
-
                     if (_strip.ReadyToPush)
                     {
                         return SKColors.LimeGreen;
