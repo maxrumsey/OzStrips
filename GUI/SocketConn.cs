@@ -241,6 +241,11 @@ public sealed class SocketConn : IDisposable
     public event EventHandler? AerodromeStateChanged;
 
     /// <summary>
+    /// An event called when the server type changes.
+    /// </summary>
+    public event EventHandler ServerTypeChanged;
+
+    /// <summary>
     /// Gets the messages, used for debugging.
     /// </summary>
     public List<string> Messages { get; } = [];
@@ -488,6 +493,7 @@ public sealed class SocketConn : IDisposable
         try
         {
             Server = type;
+            ServerTypeChanged?.Invoke(this, EventArgs.Empty);
 
             if (!CanConnectToCurrentServer())
             {

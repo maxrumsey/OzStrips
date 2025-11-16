@@ -19,6 +19,7 @@ public class MainFormController : IDisposable
     private FormWindowState _lastState = FormWindowState.Minimized;
     private bool _postresizechecked = true;
     private string _clientsOnline = string.Empty;
+    private string _layoutName = "All";
 
     private readonly MainForm _mainForm;
     private readonly Timer _timer;
@@ -75,6 +76,8 @@ public class MainFormController : IDisposable
         _bayManager = new(_mainForm.MainFLP);
         _socketConn = new(_bayManager, this);
 
+        _socketConn.ServerTypeChanged += ServerTypeChanged;
+
         _socketConn.AerodromeStateChanged += AerodromeStateChanged;
 
         _mainForm.AerodromeManager.ViewListChanged += AerodromeTypeChanged;
@@ -92,11 +95,24 @@ public class MainFormController : IDisposable
 
         if (_readyForConnection)
         {
-            _socketConn.Connect();
+            _ = _socketConn.Connect();
         }
 
         _bayManager.BayRepository.ConfigureAndSizeFLPs();
         _mainForm.AerodromeManager.AerodromeListChanged += AerodromeListChanged;
+    }
+
+    private void ServerTypeChanged(object sender, EventArgs e)
+    {
+        SetTitle();
+    }
+
+    /// <summary>
+    /// Sets the title text.
+    /// </summary>
+    public void SetTitle()
+    {
+        _mainForm.Title = $"OzStrips :: {_bayManager.AerodromeName}-{_socketConn.Server} :: {_layoutName}";
     }
 
     /// <summary>
@@ -164,6 +180,8 @@ public class MainFormController : IDisposable
 
                 _bayManager.BayRepository.ConfigureAndSizeFLPs();
                 _bayManager.BayRepository.ReloadStrips(_socketConn);
+                _layoutName = layout.Name;
+                SetTitle();
             };
 
             if (layout.Name == "All")
@@ -255,6 +273,7 @@ public class MainFormController : IDisposable
                 _mainForm.AerodromeLabel.Text = name;
                 SetATISCode("Z");
                 _mainForm.AerodromeManager.ConfigureAerodromeListForNewAerodrome(name);
+                SetTitle();
             }
         }
         catch (Exception ex)

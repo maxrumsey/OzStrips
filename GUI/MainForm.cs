@@ -18,13 +18,14 @@ namespace MaxRumsey.OzStripsPlugin.GUI;
 /// All but the most basic of logic is abstracted to MainFormController
 public partial class MainForm : Form
 {
-    private MainFormController _mainFormController;
+    private readonly MainFormController _mainFormController;
     private NoScrollFLP _flpMain;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MainForm"/> class.
     /// </summary>
     /// <param name="readyForConnection">Whether the client can establish a server connection.</param>
+    /// <param name="aerodromeManager">The Aerodrome Manager</param>
     public MainForm(bool readyForConnection, AerodromeManager aerodromeManager)
     {
         MainFormInstance = this;
@@ -51,35 +52,92 @@ public partial class MainForm : Form
     public static bool IsDebug =>
         !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
 
+    /// <summary>
+    /// Gets the aerodrome code label.
+    /// </summary>
     public Label AerodromeLabel => lb_ad;
 
+    /// <summary>
+    /// Gets the metar tool tip.
+    /// </summary>
     public ToolTip MetarToolTip => tt_metar;
 
+    /// <summary>
+    /// Gets the clients tool tip.
+    /// </summary>
     public ToolTip ClientsToolTip => tt_clients;
 
+    /// <summary>
+    /// Gets the toggle circuit menu item.
+    /// </summary>
     public ToolStripMenuItem ToggleCircuitToolStrip => ts_toggleCircuit;
 
+    /// <summary>
+    /// Gets the Conn Stat Panel.
+    /// </summary>
     public Panel StatusPanel => pl_stat;
 
+    /// <summary>
+    /// Gets the ATIS label.
+    /// </summary>
     public Label ATISLabel => lb_atis;
 
+    /// <summary>
+    /// Gets the timer text box.
+    /// </summary>
     public TextBox TimerTextBox => tb_Time;
 
+    /// <summary>
+    /// Gets the aerodrome list menu item.
+    /// </summary>
     public ToolStripMenuItem AerodromeListToolStrip => ts_ad;
 
+    /// <summary>
+    /// Gets the view list menu item.
+    /// </summary>
     public ToolStripMenuItem ViewListToolStrip => ts_mode;
 
+    /// <summary>
+    /// Gets the open PDCs menu item.
+    /// </summary>
     public ToolStripMenuItem OpenPDCs => openPDCsToolStripMenuItem;
 
+    /// <summary>
+    /// Gets the autofill available menu item.
+    /// </summary>
     public ToolStripMenuItem AutoFillAvailable => autoFillUnavailableToolStripMenuItem;
 
+    /// <summary>
+    /// Gets the entered aerodrome code in the menuitem text box.
+    /// </summary>
     public string EnteredAerodrome => toolStripTextBox1.Text;
 
+    /// <summary>
+    /// Gets the CDM rate text box.
+    /// </summary>
     public ToolStripTextBox CDMRateTextBox => cdmTextBox;
 
+    /// <summary>
+    /// Gets the main flow layout panel.
+    /// </summary>
     public FlowLayoutPanel MainFLP => _flpMain;
 
+    /// <summary>
+    /// Gets the aerodrome manager.
+    /// </summary>
     public AerodromeManager AerodromeManager { get; private set; }
+
+    /// <summary>
+    /// Gets or sets the title of the main form.
+    /// </summary>
+    public string Title
+    {
+        get => Text;
+        set
+        {
+            Text = value;
+        }
+    }
 
     public MainFormController Controller
     {
