@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using MaxRumsey.OzStripsPlugin.GUI.DTO;
 using MaxRumsey.OzStripsPlugin.GUI.Shared;
 using Microsoft.AspNetCore.SignalR;
@@ -233,6 +235,15 @@ public sealed class SocketConn : IDisposable
                 InvokeOnGUI(() => AerodromeStateChanged?.Invoke(this, EventArgs.Empty));
             }
         });
+
+        _connection.On<string[]?>("NewPDC", (string[]? pdcs) =>
+        {
+            AddMessage($"s:NewPDC: {JsonSerializer.Serialize(pdcs)}");
+            if (pdcs is not null && pdcs.Length > 0)
+            {
+                InvokeOnGUI(() => NewPDCsReceived?.Invoke(this, pdcs));
+            }
+        });
     }
 
     /// <summary>
@@ -243,7 +254,12 @@ public sealed class SocketConn : IDisposable
     /// <summary>
     /// An event called when the server type changes.
     /// </summary>
-    public event EventHandler ServerTypeChanged;
+    public event EventHandler? ServerTypeChanged;
+
+    /// <summary>
+    /// An event called when new PDCs are received from server.
+    /// </summary>
+    public event EventHandler<string[]>? NewPDCsReceived;
 
     /// <summary>
     /// Gets the messages, used for debugging.

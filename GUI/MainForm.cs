@@ -63,6 +63,11 @@ public partial class MainForm : Form
     public ToolTip MetarToolTip => tt_metar;
 
     /// <summary>
+    /// Gets the PDC sound menu item.
+    /// </summary>
+    public ToolStripMenuItem PDCSoundMenuItem => tt_pdcsound;
+
+    /// <summary>
     /// Gets the clients tool tip.
     /// </summary>
     public ToolTip ClientsToolTip => tt_clients;
@@ -300,5 +305,6 @@ public partial class MainForm : Form
         Closing += _mainFormController.FormClosing;
         Move += _mainFormController.MainForm_Move;
         overrideATISToolStripMenuItem.Click += _mainFormController.OverrideATISClick;
+        tt_pdcsound.Click += _mainFormController.PDCSoundToggle;
     }
 }

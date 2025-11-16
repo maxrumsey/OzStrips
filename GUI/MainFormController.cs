@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Media;
+using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
 using MaxRumsey.OzStripsPlugin.GUI.Controls;
@@ -27,6 +30,7 @@ public class MainFormController : IDisposable
     private SocketConn _socketConn;
     private string _metar = string.Empty;
     private bool _readyForConnection;
+    private bool _permitPDCSound = true;
     private Action<object, EventArgs>? _defaultLayout;
 
     /// <summary>
@@ -79,6 +83,7 @@ public class MainFormController : IDisposable
         _socketConn.ServerTypeChanged += ServerTypeChanged;
 
         _socketConn.AerodromeStateChanged += AerodromeStateChanged;
+        _socketConn.NewPDCsReceived += NewPDCsReceived;
 
         _mainForm.AerodromeManager.ViewListChanged += AerodromeTypeChanged;
         AerodromeListChanged(this, EventArgs.Empty);
@@ -100,6 +105,26 @@ public class MainFormController : IDisposable
 
         _bayManager.BayRepository.ConfigureAndSizeFLPs();
         _mainForm.AerodromeManager.AerodromeListChanged += AerodromeListChanged;
+    }
+
+    private void NewPDCsReceived(object sender, string[] e)
+    {
+        // If these callsigns don't correspond to real aircraft
+        if (!e.Any(x => _bayManager.StripRepository.GetStrip(x) is not null) || !_permitPDCSound)
+        {
+            return;
+        }
+
+        try
+        {
+            using var stream = new MemoryStream(OzStripsConfig.NewPDC);
+            using var player = new SoundPlayer(stream);
+            player.Play();
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+        }
     }
 
     private void ServerTypeChanged(object sender, EventArgs e)
@@ -666,6 +691,19 @@ public class MainFormController : IDisposable
         try
         {
             _socketConn.RequestCircuit(!_bayManager.CircuitActive);
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+        }
+    }
+
+    internal void PDCSoundToggle(object sender, EventArgs e)
+    {
+        try
+        {
+            _permitPDCSound = !_permitPDCSound;
+            _mainForm.PDCSoundMenuItem.Checked = _permitPDCSound;
         }
         catch (Exception ex)
         {
