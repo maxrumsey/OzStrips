@@ -629,6 +629,7 @@ public sealed class Strip
         { StripBay.BAY_CLEARED, StripBay.BAY_PUSHED },
         { StripBay.BAY_PUSHED, StripBay.BAY_TAXI },
         { StripBay.BAY_TAXI, StripBay.BAY_HOLDSHORT },
+        { StripBay.BAY_HOLDSHORT, StripBay.BAY_RUNWAY },
         { StripBay.BAY_RUNWAY, StripBay.BAY_OUT },
         { StripBay.BAY_OUT, StripBay.BAY_DEAD },
     };
@@ -640,6 +641,8 @@ public sealed class Strip
     {
         { StripBay.BAY_TAXI, StripBay.BAY_DEAD },
         { StripBay.BAY_RUNWAY, StripBay.BAY_TAXI },
+        { StripBay.BAY_ARRIVAL, StripBay.BAY_RUNWAY },
+        { StripBay.BAY_CIRCUIT, StripBay.BAY_RUNWAY },
     };
 
     /// <summary>
@@ -651,7 +654,9 @@ public sealed class Strip
         { StripBay.BAY_CLEARED, StripBay.BAY_PUSHED },
         { StripBay.BAY_PUSHED, StripBay.BAY_TAXI },
         { StripBay.BAY_TAXI, StripBay.BAY_HOLDSHORT },
+        { StripBay.BAY_HOLDSHORT, StripBay.BAY_RUNWAY },
         { StripBay.BAY_RUNWAY, StripBay.BAY_CIRCUIT },
+        { StripBay.BAY_CIRCUIT, StripBay.BAY_RUNWAY },
     };
 
     /// <summary>
