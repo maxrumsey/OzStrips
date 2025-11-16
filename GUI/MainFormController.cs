@@ -168,6 +168,7 @@ public class MainFormController : IDisposable
 
             if (layout.Name == "All")
             {
+                _bayManager.BayRepository.SetLayout(action);
                 _defaultLayout = action;
             }
 
