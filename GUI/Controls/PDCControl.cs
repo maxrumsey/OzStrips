@@ -65,7 +65,7 @@ public partial class PDCControl : UserControl
         var trans = string.Empty;
         if (!string.IsNullOrEmpty(_strip.SIDTransition))
         {
-            trans = $"{_strip.SIDTransition}:TRAN";
+            trans = $"{CPDLCify(_strip.SIDTransition!)}:TRAN";
         }
 
         if (!int.TryParse(_strip.CFL, out var cfl))
@@ -82,14 +82,14 @@ public partial class PDCControl : UserControl
         .Replace("{TYPE}", _strip.FDR.AircraftType)
         .Replace("{ADEP}", _strip.FDR.DepAirport)
         .Replace("{ETD}", _strip.FDR.ETD.ToString("HHmm", CultureInfo.InvariantCulture))
-        .Replace("{ADES}", _strip.FDR.DesAirport)
-        .Replace("{RWY}", _strip.RWY)
-        .Replace("{SID}", _strip.SID)
+        .Replace("{ADES}", CPDLCify(_strip.FDR.DesAirport))
+        .Replace("{RWY}", CPDLCify(_strip.RWY))
+        .Replace("{SID}", CPDLCify(_strip.SID))
         .Replace("{TRANS}", trans)
         .Replace("{ROUTE}", _strip.FDR.Route)
-        .Replace("{CFL}", cfl.ToString(CultureInfo.InvariantCulture))
-        .Replace("{FREQ}", _strip.DepartureFrequency)
-        .Replace("{SQUAWK}", ssr)
+        .Replace("{CFL}", CPDLCify(cfl.ToString(CultureInfo.InvariantCulture)))
+        .Replace("{FREQ}", CPDLCify(_strip.DepartureFrequency))
+        .Replace("{SQUAWK}", CPDLCify(ssr))
         .Replace("{READBACK}", cb_delivery.Text);
 
         var error = string.Empty;
@@ -115,5 +115,10 @@ public partial class PDCControl : UserControl
     private void cb_delivery_SelectedIndexChanged(object sender, EventArgs e)
     {
         LayoutPDC();
+    }
+
+    private static string CPDLCify(string input)
+    {
+        return $"@{input}@";
     }
 }
