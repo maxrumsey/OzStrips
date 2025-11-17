@@ -137,6 +137,11 @@ internal class AutoAssigner
             return false;
         }
 
+        if (!string.IsNullOrEmpty(rule.VFR) && (strip.FDR.FlightRules == "V") != matchAsTrue)
+        {
+            return false;
+        }
+
         if (rule.Runway.Count > 0 && rule.Runway.Contains(result.Runway) != matchAsTrue)
         {
             return false;

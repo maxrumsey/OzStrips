@@ -43,6 +43,12 @@ public class RuleCondition
     public string IsJet { get; set; } = string.Empty;
 
     /// <summary>
+    /// Gets or sets a value indicating whether the aircraft is vfr
+    /// </summary>
+    [YamlMember(Alias = "VFR")]
+    public string VFR { get; set; } = string.Empty;
+
+    /// <summary>
     /// Gets or sets a list of radials, where at least one must match the planned departure radial.
     /// </summary>
     [YamlMember(Alias = "radials")]
