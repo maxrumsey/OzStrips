@@ -51,7 +51,7 @@ public partial class PDCControl : UserControl
     /// </summary>
     public string PDCText
     {
-        get => tb_pdc.Text.Replace("\r", string.Empty).Replace("\n", ". ");
+        get => tb_pdc.Text.Replace("\r", string.Empty).Replace("\n", ". ").Replace("{", string.Empty).Replace("}", string.Empty);
     }
 
     private void OpenVatsysPDC(object sender, EventArgs e)
