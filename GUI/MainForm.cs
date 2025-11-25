@@ -19,7 +19,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI;
 public partial class MainForm : Form
 {
     private readonly MainFormController _mainFormController;
-    private NoScrollFLP _flpMain;
+    private NoScrollFLP _flpMain = null!;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MainForm"/> class.
@@ -284,6 +284,20 @@ public partial class MainForm : Form
 
         pl_controlbar.Padding = new Padding(0, 0, 0, margin);
     }
+
+    /// <summary>
+    /// Gets a strip from FDR.
+    /// </summary>
+    /// <param name="fdr">Flight Data Record.</param>
+    /// <returns>Strip, if found.</returns>
+    public Strip? GetStripByFDR(FDP2.FDR fdr) => _mainFormController.GetStripByFDR(fdr);
+
+    /// <summary>
+    /// Opens the defined input field.
+    /// </summary>
+    /// <param name="strip">Strip,</param>
+    /// <param name="type">Label name.</param>
+    public static void OpenWindow(Strip strip, string type) => MainFormController.OpenWindow(strip, type);
 
     private void InitialiseEvents()
     {

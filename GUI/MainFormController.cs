@@ -601,6 +601,29 @@ public class MainFormController : IDisposable
         }
     }
 
+    /// <summary>
+    /// Opens the defined input field.
+    /// </summary>
+    /// <param name="strip">Strip,</param>
+    /// <param name="type">Label name.</param>
+    public static void OpenWindow(Strip strip, string type)
+    {
+        switch (type)
+        {
+            case "OZSTRIPS_BAY":
+                strip.Controller.OpenCLXBayModal("std");
+                break;
+            case "OZSTRIPS_CLX":
+                strip.Controller.OpenCLXBayModal("clx");
+                break;
+            case "OZSTRIPS_REMARKS":
+                strip.Controller.OpenCLXBayModal("remark");
+                break;
+            default:
+                break;
+        }
+    }
+
     private void UpdateTimer(object sender, EventArgs e)
     {
         try
@@ -942,6 +965,16 @@ public class MainFormController : IDisposable
     public void FlipFlopStrip(object sender, EventArgs e)
     {
         _bayManager.FlipFlopStrip();
+    }
+
+    /// <summary>
+    /// Gets a strip correlated for an FDR.
+    /// </summary>
+    /// <param name="fdr">FDR.</param>
+    /// <returns>Strip if found.</returns>
+    public Strip? GetStripByFDR(FDP2.FDR fdr)
+    {
+        return _bayManager.StripRepository.GetStrip(fdr.Callsign);
     }
 
     /// <summary>
