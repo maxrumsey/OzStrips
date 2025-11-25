@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using MaxRumsey.OzStripsPlugin.GUI.DTO;
 using MaxRumsey.OzStripsPlugin.GUI.Shared;
 using Microsoft.AspNetCore.SignalR;
@@ -228,8 +230,18 @@ public sealed class SocketConn : IDisposable
         {
             if (state.AerodromeCode == _bayManager.AerodromeName && state.AerodromeCode.Length > 0)
             {
+                AddMessage("s:State: " + System.Text.Json.JsonSerializer.Serialize(state));
                 _bayManager.AerodromeState = state;
                 InvokeOnGUI(() => AerodromeStateChanged?.Invoke(this, EventArgs.Empty));
+            }
+        });
+
+        _connection.On<string[]?>("NewPDC", (string[]? pdcs) =>
+        {
+            AddMessage($"s:NewPDC: {JsonSerializer.Serialize(pdcs)}");
+            if (pdcs is not null && pdcs.Length > 0)
+            {
+                InvokeOnGUI(() => NewPDCsReceived?.Invoke(this, pdcs));
             }
         });
     }
@@ -238,6 +250,16 @@ public sealed class SocketConn : IDisposable
     /// An event called when the aerodrome state changes.
     /// </summary>
     public event EventHandler? AerodromeStateChanged;
+
+    /// <summary>
+    /// An event called when the server type changes.
+    /// </summary>
+    public event EventHandler? ServerTypeChanged;
+
+    /// <summary>
+    /// An event called when new PDCs are received from server.
+    /// </summary>
+    public event EventHandler<string[]>? NewPDCsReceived;
 
     /// <summary>
     /// Gets the messages, used for debugging.
@@ -366,6 +388,21 @@ public sealed class SocketConn : IDisposable
     }
 
     /// <summary>
+    /// Sends a Hoppies PDC to the server.
+    /// </summary>
+    /// <param name="strip">Strip.</param>
+    /// <param name="text">PDC text.</param>
+    public async Task SendPDC(Strip strip, string text)
+    {
+        AddMessage("c:SendPDC: " + strip.FDR.Callsign);
+
+        if (CanSendDTO)
+        {
+            await _connection.InvokeAsync("SendPDC", (StripDTO)strip, text);
+        }
+    }
+
+    /// <summary>
     /// Requests bay order data from server.
     /// </summary>
     /// <param name="force">Whether or not to force fetching of bay data.</param>
@@ -469,17 +506,25 @@ public sealed class SocketConn : IDisposable
     /// <param name="type">Server connection type.</param>
     public async void SetServerType(Servers type)
     {
-        Server = type;
-
-        if (!CanConnectToCurrentServer())
+        try
         {
-            return;
+            Server = type;
+            ServerTypeChanged?.Invoke(this, EventArgs.Empty);
+
+            if (!CanConnectToCurrentServer())
+            {
+                return;
+            }
+
+            await SubscribeToAerodrome();
+            if (_connection.State == HubConnectionState.Disconnected && MainFormController.ReadyForConnection)
+            {
+                await Connect();
+            }
         }
-
-        await SubscribeToAerodrome();
-        if (_connection.State == HubConnectionState.Disconnected && MainFormController.ReadyForConnection)
+        catch (Exception ex)
         {
-            Connect();
+            Util.LogError(ex);
         }
     }
 

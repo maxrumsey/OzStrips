@@ -1,4 +1,22 @@
 # Changelog
+## v0.8.0
+### Features
+- Added strip autofill feature.
+- Added Hoppies PDC send & receive functionality.
+- Added departure frequency box.
+- Added ability to define vatsys label items from ozstrips elements.
+
+### Bugfixes
+- Fixed bug where resizing the stripboard when at a non-radar tower would revert the bays to the radar tower format.
+
+### Misc changes
+- Removed highlighting of CDM aircraft in the Pushback state.
+- Allowed SID Triggering onto the runway.
+- Title text changes based on View Mode, Server & Aerodrome Code.
+
+### Server changes
+- Fixed bug where ATIS Codes would only be distributed to users connected to the Sweatbox, and not the other way around (VATSIM only).
+
 ## v0.7.2
 ### Features
 - Added last transmit highlight feature.

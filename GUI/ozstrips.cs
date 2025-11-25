@@ -21,7 +21,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI;
 /// The main VatSys plugin implementation.
 /// </summary>
 [Export(typeof(IPlugin))]
-public sealed class OzStrips : IPlugin, IDisposable
+public sealed class OzStrips : IPlugin, IDisposable, ILabelPlugin
 {
     private const string _versionUrl = "https://raw.githubusercontent.com/maxrumsey/OzStrips/master/Version.json";
     private static readonly HttpClient _httpClient = new();
@@ -75,6 +75,19 @@ public sealed class OzStrips : IPlugin, IDisposable
         _aerodromeManager.Initialize();
 
         _ = CheckVersion();
+
+        var pdcWatcher = new CustomToolStripMenuItem(CustomToolStripMenuItemWindowType.Main, CustomToolStripMenuItemCategory.Tools, new ToolStripMenuItem("Pending PDCs"));
+
+        pdcWatcher.Item.Click += (s, e) =>
+        {
+            MMI.InvokeOnGUI(() =>
+            {
+                var pdcForm = new PDCWatcher();
+                pdcForm.Show(Application.OpenForms["MainForm"]);
+            });
+        };
+
+        MMI.AddCustomMenuItem(pdcWatcher);
     }
 
     /// <summary>
@@ -403,5 +416,85 @@ public sealed class OzStrips : IPlugin, IDisposable
         {
             return null;
         }
+    }
+
+    /// <summary>
+    /// Gets the custom label item.
+    /// </summary>
+    /// <param name="itemType">Item type.</param>
+    /// <param name="track">Track.</param>
+    /// <param name="flightDataRecord">FDR.</param>
+    /// <param name="radarTrack">RadarTrack.</param>
+    /// <returns>Custom label item.</returns>
+    public CustomLabelItem? GetCustomLabelItem(string itemType, Track track, FDP2.FDR flightDataRecord, RDP.RadarTrack radarTrack)
+    {
+        try
+        {
+            var strip = _gui?.GetStripByFDR(flightDataRecord);
+            if (strip == null)
+            {
+                return null;
+            }
+
+            var item = new CustomLabelItem()
+            {
+                Type = itemType,
+                OnMouseClick = _ =>
+                {
+                    try
+                    {
+                        MainForm.OpenWindow(strip, itemType);
+                    }
+                    catch (Exception ex)
+                    {
+                        Util.LogError(ex);
+                    }
+                },
+            };
+
+            switch (itemType)
+            {
+                case "OZSTRIPS_BAY":
+                    item.Text = strip.Gate;
+                    break;
+                case "OZSTRIPS_REMARKS":
+                    item.Text = strip.Remark;
+                    break;
+                case "OZSTRIPS_CLX":
+                    item.Text = strip.CLX;
+                    break;
+                default:
+                    return null;
+            }
+
+            item.Text = string.IsNullOrEmpty(item.Text) ? "      " : item.Text;
+
+            return item;
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Gets the ASD track custom colour.
+    /// </summary>
+    /// <param name="track">Aircraft track</param>
+    /// <returns>Null.</returns>
+    public CustomColour? SelectASDTrackColour(Track track)
+    {
+        return null;
+    }
+
+    /// <summary>
+    /// Gets ground track custom colour.
+    /// </summary>
+    /// <param name="track">Aircraft track.</param>
+    /// <returns>Null.</returns>
+    public CustomColour? SelectGroundTrackColour(Track track)
+    {
+        return null;
     }
 }

@@ -33,6 +33,11 @@ public class BayManager
     }
 
     /// <summary>
+    /// Gets or sets the loaded autoassigner.
+    /// </summary>
+    internal AutoAssigner? AutoAssigner { get; set; }
+
+    /// <summary>
     /// Gets the picked controller.
     /// </summary>
     public Strip? PickedStrip
@@ -231,23 +236,6 @@ public class BayManager
     }
 
     /// <summary>
-    /// Send the PDC.
-    /// </summary>
-    /// <param name="strip">Strip to open PDC form for. Null if use picked controller.</param>
-    public void SendPDC(Strip? strip = null)
-    {
-        if (PickedStrip != null && strip == null)
-        {
-            MMI.OpenCPDLCWindow(PickedStrip.FDR, null, CPDLC.MessageCategories.FirstOrDefault(m => m.Name == "PDC"));
-            RemovePicked(true);
-        }
-        else if (strip != null)
-        {
-            MMI.OpenCPDLCWindow(strip.FDR, null, CPDLC.MessageCategories.FirstOrDefault(m => m.Name == "PDC"));
-        }
-    }
-
-    /// <summary>
     /// Toggles crossing highlight on a strip.
     /// </summary>
     public void CrossStrip()
@@ -270,6 +258,14 @@ public class BayManager
             PickedStrip.FlipFlop();
             RemovePicked(true);
         }
+    }
+
+    /// <summary>
+    /// Autofills picked strip data.
+    /// </summary>
+    public void FillStrip()
+    {
+        PickedStrip?.FillStrip();
     }
 
     /// <summary>
@@ -353,6 +349,8 @@ public class BayManager
     public void PurgeDataAndSetNewAerodrome(string name, SocketConn socketConn)
     {
         AerodromeName = name;
+
+        AutoAssigner = new(this);
 
         if (CircuitActive)
         {

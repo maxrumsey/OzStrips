@@ -18,13 +18,14 @@ namespace MaxRumsey.OzStripsPlugin.GUI;
 /// All but the most basic of logic is abstracted to MainFormController
 public partial class MainForm : Form
 {
-    private MainFormController _mainFormController;
-    private NoScrollFLP _flpMain;
+    private readonly MainFormController _mainFormController;
+    private NoScrollFLP _flpMain = null!;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MainForm"/> class.
     /// </summary>
     /// <param name="readyForConnection">Whether the client can establish a server connection.</param>
+    /// <param name="aerodromeManager">The Aerodrome Manager</param>
     public MainForm(bool readyForConnection, AerodromeManager aerodromeManager)
     {
         MainFormInstance = this;
@@ -51,31 +52,97 @@ public partial class MainForm : Form
     public static bool IsDebug =>
         !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
 
+    /// <summary>
+    /// Gets the aerodrome code label.
+    /// </summary>
     public Label AerodromeLabel => lb_ad;
 
+    /// <summary>
+    /// Gets the metar tool tip.
+    /// </summary>
     public ToolTip MetarToolTip => tt_metar;
 
+    /// <summary>
+    /// Gets the PDC sound menu item.
+    /// </summary>
+    public ToolStripMenuItem PDCSoundMenuItem => tt_pdcsound;
+
+    /// <summary>
+    /// Gets the clients tool tip.
+    /// </summary>
     public ToolTip ClientsToolTip => tt_clients;
 
+    /// <summary>
+    /// Gets the toggle circuit menu item.
+    /// </summary>
     public ToolStripMenuItem ToggleCircuitToolStrip => ts_toggleCircuit;
 
+    /// <summary>
+    /// Gets the Conn Stat Panel.
+    /// </summary>
     public Panel StatusPanel => pl_stat;
 
+    /// <summary>
+    /// Gets the ATIS label.
+    /// </summary>
     public Label ATISLabel => lb_atis;
 
+    /// <summary>
+    /// Gets the timer text box.
+    /// </summary>
     public TextBox TimerTextBox => tb_Time;
 
+    /// <summary>
+    /// Gets the aerodrome list menu item.
+    /// </summary>
     public ToolStripMenuItem AerodromeListToolStrip => ts_ad;
 
+    /// <summary>
+    /// Gets the view list menu item.
+    /// </summary>
     public ToolStripMenuItem ViewListToolStrip => ts_mode;
 
+    /// <summary>
+    /// Gets the open PDCs menu item.
+    /// </summary>
+    public ToolStripMenuItem OpenPDCs => openPDCsToolStripMenuItem;
+
+    /// <summary>
+    /// Gets the autofill available menu item.
+    /// </summary>
+    public ToolStripMenuItem AutoFillAvailable => autoFillUnavailableToolStripMenuItem;
+
+    /// <summary>
+    /// Gets the entered aerodrome code in the menuitem text box.
+    /// </summary>
     public string EnteredAerodrome => toolStripTextBox1.Text;
 
+    /// <summary>
+    /// Gets the CDM rate text box.
+    /// </summary>
     public ToolStripTextBox CDMRateTextBox => cdmTextBox;
 
+    /// <summary>
+    /// Gets the main flow layout panel.
+    /// </summary>
     public FlowLayoutPanel MainFLP => _flpMain;
 
+    /// <summary>
+    /// Gets the aerodrome manager.
+    /// </summary>
     public AerodromeManager AerodromeManager { get; private set; }
+
+    /// <summary>
+    /// Gets or sets the title of the main form.
+    /// </summary>
+    public string Title
+    {
+        get => Text;
+        set
+        {
+            Text = value;
+        }
+    }
 
     public MainFormController Controller
     {
@@ -218,6 +285,20 @@ public partial class MainForm : Form
         pl_controlbar.Padding = new Padding(0, 0, 0, margin);
     }
 
+    /// <summary>
+    /// Gets a strip from FDR.
+    /// </summary>
+    /// <param name="fdr">Flight Data Record.</param>
+    /// <returns>Strip, if found.</returns>
+    public Strip? GetStripByFDR(FDP2.FDR fdr) => _mainFormController.GetStripByFDR(fdr);
+
+    /// <summary>
+    /// Opens the defined input field.
+    /// </summary>
+    /// <param name="strip">Strip,</param>
+    /// <param name="type">Label name.</param>
+    public static void OpenWindow(Strip strip, string type) => MainFormController.OpenWindow(strip, type);
+
     private void InitialiseEvents()
     {
         bt_flip.Click += _mainFormController.FlipFlopStrip;
@@ -237,5 +318,7 @@ public partial class MainForm : Form
         Resize += _mainFormController.MainForm_Resize;
         Closing += _mainFormController.FormClosing;
         Move += _mainFormController.MainForm_Move;
+        overrideATISToolStripMenuItem.Click += _mainFormController.OverrideATISClick;
+        tt_pdcsound.Click += _mainFormController.PDCSoundToggle;
     }
 }

@@ -44,6 +44,10 @@ public class AerodromeSettings
     [XmlArrayItem("AerodromeList")]
     public AerodromeList[]? AerodromeLists;
 
+    public string? PDCFormat;
+
+    public string? AerodromeAutoFillLocation;
+
     internal static AerodromeSettings? Deserialize(string path)
     {
         try
@@ -73,14 +77,19 @@ public class AerodromeSettings
 
     internal static string GetADSettingsPath()
     {
+        return Path.Combine(GetPluginsDirectory(), "AerodromeSettings.xml");
+    }
+
+    internal static string GetPluginsDirectory()
+    {
         // This is hacky but it's the easiest way to get the prof dir.
         // Unless I'm missing something obvious.
         if (Profile.Loaded)
         {
             var shortNameObject = typeof(Profile).GetField("shortName", BindingFlags.Static | BindingFlags.NonPublic);
-            var shortName = (string)shortNameObject.GetValue( shortNameObject);
+            var shortName = (string)shortNameObject.GetValue(shortNameObject);
 
-            return Path.Combine(Helpers.GetFilesFolder(), "Profiles", shortName, "Plugins\\AerodromeSettings.xml");
+            return Path.Combine(Helpers.GetFilesFolder(), "Profiles", shortName, "Plugins");
         }
 
         return string.Empty;
@@ -115,6 +124,8 @@ public class AerodromeSettings
         baseSettings.Layouts = overwrite.Layouts ?? baseSettings.Layouts;
         baseSettings.Bays = overwrite.Bays ?? baseSettings.Bays;
         baseSettings.AerodromeLists = overwrite.AerodromeLists ?? baseSettings.AerodromeLists;
+        baseSettings.AerodromeAutoFillLocation = overwrite.AerodromeAutoFillLocation ?? baseSettings.AerodromeAutoFillLocation;
+        baseSettings.PDCFormat = overwrite.PDCFormat ?? baseSettings.PDCFormat;
 
         return baseSettings;
     }

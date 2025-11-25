@@ -41,7 +41,10 @@ public partial class AltHdgControl : UserControl
             cb_alt.Text = controller.CFL;
         }
 
-        tb_hdg.Text = controller.HDG; // todo: add some sort of parsing for this
+        cb_depfreq.Text = controller.DepartureFrequency;
+
+        cb_depfreq.Items.AddRange(controller.PossibleDepFreqs);
+
         _fullyLoaded = true;
         cb_runway.Text = controller.RWY;
         cb_sid.Text = controller.SID;
@@ -53,7 +56,7 @@ public partial class AltHdgControl : UserControl
     /// <summary>
     /// Gets the heading.
     /// </summary>
-    public string Hdg => tb_hdg.Text;
+    public string DepFreq => cb_depfreq.Text;
 
     /// <summary>
     /// Gets the altitude.
@@ -83,70 +86,6 @@ public partial class AltHdgControl : UserControl
     private void ClearAltitudeButtonClicked(object sender, EventArgs e)
     {
         tb_alt.Text = string.Empty;
-    }
-
-    private void ClearHeadingButtonClicked(object sender, EventArgs e)
-    {
-        tb_hdg.Text = string.Empty;
-    }
-
-    private void AddHdgVal(int amt)
-    {
-        var amount = amt.ToString(CultureInfo.InvariantCulture);
-        if (tb_hdg.Text.Length < 3)
-        {
-            tb_hdg.Text += amount;
-        }
-    }
-
-    private void Button7Clicked(object sender, EventArgs e)
-    {
-        AddHdgVal(7);
-    }
-
-    private void ButtonZeroClicked(object sender, EventArgs e)
-    {
-        AddHdgVal(0);
-    }
-
-    private void Button1Clicked(object sender, EventArgs e)
-    {
-        AddHdgVal(1);
-    }
-
-    private void Button2Clicked(object sender, EventArgs e)
-    {
-        AddHdgVal(2);
-    }
-
-    private void Button3Clicked(object sender, EventArgs e)
-    {
-        AddHdgVal(3);
-    }
-
-    private void Button4Clicked(object sender, EventArgs e)
-    {
-        AddHdgVal(4);
-    }
-
-    private void Button5Clicked(object sender, EventArgs e)
-    {
-        AddHdgVal(5);
-    }
-
-    private void Button6Clicked(object sender, EventArgs e)
-    {
-        AddHdgVal(6);
-    }
-
-    private void Button8Clicked(object sender, EventArgs e)
-    {
-        AddHdgVal(8);
-    }
-
-    private void Button9Clicked(object sender, EventArgs e)
-    {
-        AddHdgVal(9);
     }
 
     private async void ComboRwySelectedChanged(object sender, EventArgs e)
@@ -205,9 +144,6 @@ public partial class AltHdgControl : UserControl
 
         switch (_callingLabel)
         {
-            case "hdg":
-                ActiveControl = tb_hdg;
-                break;
             case "cfl":
                 ActiveControl = tb_alt;
                 break;

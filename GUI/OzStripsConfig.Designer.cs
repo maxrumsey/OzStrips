@@ -79,6 +79,16 @@ namespace MaxRumsey.OzStripsPlugin.GUI {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] NewPDC {
+            get {
+                object obj = ResourceManager.GetObject("NewPDC", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://ozstripsserver.maxrumsey.xyz/.
         /// </summary>
         public static string socketioaddr {
@@ -88,7 +98,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 0.7.2.
+        ///   Looks up a localized string similar to 0.8.0.
         /// </summary>
         public static string version {
             get {

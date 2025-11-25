@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Media;
+using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
 using MaxRumsey.OzStripsPlugin.GUI.Controls;
@@ -19,6 +22,7 @@ public class MainFormController : IDisposable
     private FormWindowState _lastState = FormWindowState.Minimized;
     private bool _postresizechecked = true;
     private string _clientsOnline = string.Empty;
+    private string _layoutName = "All";
 
     private readonly MainForm _mainForm;
     private readonly Timer _timer;
@@ -26,6 +30,7 @@ public class MainFormController : IDisposable
     private SocketConn _socketConn;
     private string _metar = string.Empty;
     private bool _readyForConnection;
+    private bool _permitPDCSound = true;
     private Action<object, EventArgs>? _defaultLayout;
 
     /// <summary>
@@ -75,7 +80,10 @@ public class MainFormController : IDisposable
         _bayManager = new(_mainForm.MainFLP);
         _socketConn = new(_bayManager, this);
 
+        _socketConn.ServerTypeChanged += ServerTypeChanged;
+
         _socketConn.AerodromeStateChanged += AerodromeStateChanged;
+        _socketConn.NewPDCsReceived += NewPDCsReceived;
 
         _mainForm.AerodromeManager.ViewListChanged += AerodromeTypeChanged;
         AerodromeListChanged(this, EventArgs.Empty);
@@ -92,11 +100,44 @@ public class MainFormController : IDisposable
 
         if (_readyForConnection)
         {
-            _socketConn.Connect();
+            _ = _socketConn.Connect();
         }
 
         _bayManager.BayRepository.ConfigureAndSizeFLPs();
         _mainForm.AerodromeManager.AerodromeListChanged += AerodromeListChanged;
+    }
+
+    private void NewPDCsReceived(object sender, string[] e)
+    {
+        // If these callsigns don't correspond to real aircraft
+        if (!e.Any(x => _bayManager.StripRepository.GetStrip(x) is not null) || !_permitPDCSound)
+        {
+            return;
+        }
+
+        try
+        {
+            using var stream = new MemoryStream(OzStripsConfig.NewPDC);
+            using var player = new SoundPlayer(stream);
+            player.Play();
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+        }
+    }
+
+    private void ServerTypeChanged(object sender, EventArgs e)
+    {
+        SetTitle();
+    }
+
+    /// <summary>
+    /// Sets the title text.
+    /// </summary>
+    public void SetTitle()
+    {
+        _mainForm.Title = $"OzStrips :: {_bayManager.AerodromeName}-{_socketConn.Server} :: {_layoutName}";
     }
 
     /// <summary>
@@ -164,10 +205,13 @@ public class MainFormController : IDisposable
 
                 _bayManager.BayRepository.ConfigureAndSizeFLPs();
                 _bayManager.BayRepository.ReloadStrips(_socketConn);
+                _layoutName = layout.Name;
+                SetTitle();
             };
 
             if (layout.Name == "All")
             {
+                _bayManager.BayRepository.SetLayout(action);
                 _defaultLayout = action;
             }
 
@@ -254,6 +298,7 @@ public class MainFormController : IDisposable
                 _mainForm.AerodromeLabel.Text = name;
                 SetATISCode("Z");
                 _mainForm.AerodromeManager.ConfigureAerodromeListForNewAerodrome(name);
+                SetTitle();
             }
         }
         catch (Exception ex)
@@ -500,6 +545,9 @@ public class MainFormController : IDisposable
                 case Keys.T:
                     _bayManager.PickLastTransmit();
                     return true;
+                case Keys.A:
+                    _bayManager.FillStrip();
+                    return true;
                 default:
                     break;
             }
@@ -553,6 +601,29 @@ public class MainFormController : IDisposable
         }
     }
 
+    /// <summary>
+    /// Opens the defined input field.
+    /// </summary>
+    /// <param name="strip">Strip,</param>
+    /// <param name="type">Label name.</param>
+    public static void OpenWindow(Strip strip, string type)
+    {
+        switch (type)
+        {
+            case "OZSTRIPS_BAY":
+                strip.Controller.OpenCLXBayModal("std");
+                break;
+            case "OZSTRIPS_CLX":
+                strip.Controller.OpenCLXBayModal("clx");
+                break;
+            case "OZSTRIPS_REMARKS":
+                strip.Controller.OpenCLXBayModal("remark");
+                break;
+            default:
+                break;
+        }
+    }
+
     private void UpdateTimer(object sender, EventArgs e)
     {
         try
@@ -576,6 +647,31 @@ public class MainFormController : IDisposable
                     _bayManager.ForceRerender();
                 });
             }
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+        }
+
+        try
+        {
+            var openPDCs = _bayManager.AerodromeState.PDCRequests.Count(x =>
+            {
+                var strip = _bayManager.StripRepository.GetStrip(x.Callsign);
+
+                if (strip is null)
+                {
+                    return false;
+                }
+
+                return x.Flags.HasFlag(PDCRequest.PDCFlags.REQUESTED) && !strip.PDCFlags.HasFlag(PDCRequest.PDCFlags.SENT);
+            });
+
+            var autoFillAvailable = _bayManager.AutoAssigner?.IsFunctional ?? false;
+
+            _mainForm.OpenPDCs.Text = $"Pending PDCs: {openPDCs}";
+            _mainForm.OpenPDCs.BackColor = openPDCs > 0 ? Color.LightBlue : Color.Transparent;
+            _mainForm.AutoFillAvailable.BackColor = autoFillAvailable ? Color.LightGreen : Color.Red;
         }
         catch (Exception ex)
         {
@@ -625,6 +721,19 @@ public class MainFormController : IDisposable
         }
     }
 
+    internal void PDCSoundToggle(object sender, EventArgs e)
+    {
+        try
+        {
+            _permitPDCSound = !_permitPDCSound;
+            _mainForm.PDCSoundMenuItem.Checked = _permitPDCSound;
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+        }
+    }
+
     internal void ToggleCDM(object sender, EventArgs e)
     {
         try
@@ -665,6 +774,26 @@ public class MainFormController : IDisposable
         var modalChild = new MsgListDebug(_socketConn);
         var bm = new BaseModal(modalChild, "Msg List");
         bm.Show(_mainForm);
+    }
+
+    /// <summary>
+    /// Opens the ATIS override window.
+    /// </summary>
+    /// <param name="sender">Sender.</param>
+    /// <param name="e">EventArgs.</param>
+    public void OverrideATISClick(object sender, EventArgs e)
+    {
+        var modalChild = new DebugSetATIS();
+        var bm = new BaseModal(modalChild, "Override ATIS Code");
+        bm.ReturnEvent += SaveAmendedAtis;
+        bm.Show(_mainForm);
+    }
+
+    private void SaveAmendedAtis(object sender, ModalReturnArgs e)
+    {
+        var control = ((BaseModal)sender).Child as DebugSetATIS;
+
+        _bayManager.AerodromeState.ATIS = control?.ATISText ?? string.Empty;
     }
 
     /// <summary>
@@ -836,6 +965,16 @@ public class MainFormController : IDisposable
     public void FlipFlopStrip(object sender, EventArgs e)
     {
         _bayManager.FlipFlopStrip();
+    }
+
+    /// <summary>
+    /// Gets a strip correlated for an FDR.
+    /// </summary>
+    /// <param name="fdr">FDR.</param>
+    /// <returns>Strip if found.</returns>
+    public Strip? GetStripByFDR(FDP2.FDR fdr)
+    {
+        return _bayManager.StripRepository.GetStrip(fdr.Callsign);
     }
 
     /// <summary>

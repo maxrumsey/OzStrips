@@ -117,20 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="apiversion" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="cdmsite" xml:space="preserve">
-    <value>https://cdm.maxrumsey.xyz/ops/</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="NewPDC" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\NewPDC.wav;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="socketioaddr" xml:space="preserve">
-    <value>https://ozstripsserver.maxrumsey.xyz/</value>
-  </data>
-  <data name="version" xml:space="preserve">
-    <value>0.8.0</value>
-  </data>
 </root>

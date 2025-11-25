@@ -374,7 +374,19 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 _strip.CockStrip();
                 break;
             case StripElements.Actions.OPEN_PDC:
-                _bayRenderController.Bay.BayManager.SendPDC(_strip);
+                if (_strip.PDCRequest?.Flags.HasFlag(PDCRequest.PDCFlags.REQUESTED) == true && _strip.StripType != StripType.ARRIVAL)
+                {
+                    if (!_strip.PDCRequest.Flags.HasFlag(PDCRequest.PDCFlags.ACKNOWLEDGED))
+                    {
+                        _strip.PDCFlags |= PDCRequest.PDCFlags.ACKNOWLEDGED;
+                        _strip.SyncStrip();
+                    }
+
+                    _strip.Controller.OpenPDCWindow();
+                    break;
+                }
+
+                _strip.Controller.OpenVatSysPDCWindow();
                 break;
             case StripElements.Actions.OPEN_PM:
                 MMI.OpenPMWindow(_strip.FDR.Callsign);
@@ -410,7 +422,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             case StripElements.Values.FRUL:
                 return _strip.FDR.FlightRules;
             case StripElements.Values.PDC_INDICATOR:
-                return _strip.FDR.PDCSent ? "P" : string.Empty;
+                return _strip.FDR.PDCSent || _strip.PDCFlags.HasFlag(PDCRequest.PDCFlags.SENT) ? "P" : string.Empty;
             case StripElements.Values.TYPE:
                 return _strip.FDR.AircraftType;
             case StripElements.Values.WTC:
@@ -421,6 +433,8 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 return _strip.Ready ? "RDY" : string.Empty;
             case StripElements.Values.CLX:
                 return _strip.CLX;
+            case StripElements.Values.DEPFREQ:
+                return _strip.DepartureFrequency;
             case StripElements.Values.SID:
                 return _strip.SID;
             case StripElements.Values.FIRST_WPT:
@@ -497,6 +511,21 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             case StripElements.Values.PDC_INDICATOR:
             case StripElements.Values.TYPE:
             case StripElements.Values.SSR:
+                if (element.Value == StripElements.Values.PDC_INDICATOR && _strip.StripType != StripType.ARRIVAL)
+                {
+                    var requestedPDC = _strip.PDCRequest;
+
+                    if (requestedPDC is not null && requestedPDC.Flags.HasFlag(PDCRequest.PDCFlags.REQUESTED) && !_strip.PDCFlags.HasFlag(PDCRequest.PDCFlags.SENT))
+                    {
+                        if (DateTime.Now.Second % 2 == 0 && !_strip.PDCFlags.HasFlag(PDCRequest.PDCFlags.ACKNOWLEDGED))
+                        {
+                            return SKColors.White;
+                        }
+
+                        return SKColors.Yellow;
+                    }
+                }
+
                 /*
                 * Incorrect SSR Code & Mode C alert
                 */
@@ -507,13 +536,9 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 }
 
                 if ((element.Value == StripElements.Values.EOBT) &&
-                    _strip.CDMResult is not null)
+                    _strip.CDMResult is not null &&
+                    _strip.CDMResult.Aircraft.State != CDMState.PUSHED)
                 {
-                    if (_strip.CDMResult.Aircraft.State == CDMState.PUSHED)
-                    {
-                        return SKColors.Yellow;
-                    }
-
                     if (_strip.ReadyToPush)
                     {
                         return SKColors.LimeGreen;
@@ -544,7 +569,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 /*
                     * HDG unassigned to radar sid in rwy bay.
                     */
-                if (element.Value == StripElements.Values.HDG &&
+                if (element.Value == StripElements.Values.GLOP &&
                     _strip.CurrentBay >= StripBay.BAY_HOLDSHORT &&
                     string.IsNullOrEmpty(_strip.HDG) &&
                     _strip.SID.Length == 3 &&

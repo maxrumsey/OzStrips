@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-
+using System.Windows.Forms.VisualStyles;
 using MaxRumsey.OzStripsPlugin.GUI.Controls;
 using MaxRumsey.OzStripsPlugin.GUI.DTO;
 using MaxRumsey.OzStripsPlugin.GUI.Properties;
@@ -121,6 +121,11 @@ public sealed class Strip
     public string ParentAerodrome { get; }
 
     /// <summary>
+    /// Gets or sets a value indicating whether or not a Hoppies PDC has been sent.
+    /// </summary>
+    public bool PDCSent { get; set; }
+
+    /// <summary>
     /// Gets the current server code.
     /// </summary>
     public ConnectionMetadataDTO.Servers Server
@@ -128,6 +133,17 @@ public sealed class Strip
         get
         {
             return _socketConn.Server;
+        }
+    }
+
+    /// <summary>
+    /// Gets possible departure frequencies for this strip.
+    /// </summary>
+    public string[] PossibleDepFreqs
+    {
+        get
+        {
+            return _bayManager.AutoAssigner?.DeterminePossibleDepartureFrequencies(this) ?? [];
         }
     }
 
@@ -140,6 +156,11 @@ public sealed class Strip
     /// Gets the flight data record.
     /// </summary>
     public FDR FDR { get; internal set; }
+
+    /// <summary>
+    /// Gets or sets the PDC flags.
+    /// </summary>
+    public PDCRequest.PDCFlags PDCFlags { get; set; }
 
     /// <summary>
     /// Gets or sets the current strip bay.
@@ -258,6 +279,11 @@ public sealed class Strip
     public string CLX { get; set; } = string.Empty;
 
     /// <summary>
+    /// Gets or sets the set departure frequency.
+    /// </summary>
+    public string DepartureFrequency { get; set; } = string.Empty;
+
+    /// <summary>
     /// Gets or sets the remarks.
     /// </summary>
     public string Remark { get; set; } = string.Empty;
@@ -282,6 +308,11 @@ public sealed class Strip
     /// Gets or sets the gate.
     /// </summary>
     public string Gate { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets the PDC request for this strip, if applicable.
+    /// </summary>
+    public PDCRequest? PDCRequest => _bayManager.AerodromeState.PDCRequests.FirstOrDefault(x => x.Callsign == FDR.Callsign);
 
     /// <summary>
     /// Gets or sets the heading.
@@ -486,6 +517,28 @@ public sealed class Strip
     }
 
     /// <summary>
+    /// Gets the outbound radial.
+    /// </summary>
+    public int OutboundRadial
+    {
+        get
+        {
+            var firstWpt = FDR.ParsedRoute.FirstOrDefault()?.Intersection;
+
+            Util.DifferingAerodromeWaypoints.TryGetValue(FDR.DepAirport, out var falseFlagWaypoint);
+
+            // Only match legit WPTs, non-airports, and non GPS / random coords.
+            var firstLegitWaypoint = FDR.ParsedRoute.FirstOrDefault(x => x.Type == FDR.ExtractedRoute.Segment.SegmentTypes.WAYPOINT && x.Intersection.Type != Airspace2.Intersection.Types.Airport && !x.Intersection.Name.Any(char.IsDigit) && x.Intersection.Name != falseFlagWaypoint)?.Intersection;
+            if (firstWpt is null || firstLegitWaypoint is null)
+            {
+                return -1;
+            }
+
+            return (int)Conversions.CalculateTrack(firstWpt.LatLong, firstLegitWaypoint.LatLong);
+        }
+    }
+
+    /// <summary>
     /// Gets or sets the SID.
     /// </summary>
     public string SID
@@ -509,7 +562,7 @@ public sealed class Strip
         set
         {
             var found = false;
-            foreach (var possibleSID in FDR.DepartureRunway.SIDs)
+            foreach (var possibleSID in FDR.DepartureRunway?.SIDs ?? [])
             {
                 if (possibleSID.sidStar.Name == value)
                 {
@@ -576,6 +629,7 @@ public sealed class Strip
         { StripBay.BAY_CLEARED, StripBay.BAY_PUSHED },
         { StripBay.BAY_PUSHED, StripBay.BAY_TAXI },
         { StripBay.BAY_TAXI, StripBay.BAY_HOLDSHORT },
+        { StripBay.BAY_HOLDSHORT, StripBay.BAY_RUNWAY },
         { StripBay.BAY_RUNWAY, StripBay.BAY_OUT },
         { StripBay.BAY_OUT, StripBay.BAY_DEAD },
     };
@@ -587,6 +641,8 @@ public sealed class Strip
     {
         { StripBay.BAY_TAXI, StripBay.BAY_DEAD },
         { StripBay.BAY_RUNWAY, StripBay.BAY_TAXI },
+        { StripBay.BAY_ARRIVAL, StripBay.BAY_RUNWAY },
+        { StripBay.BAY_CIRCUIT, StripBay.BAY_RUNWAY },
     };
 
     /// <summary>
@@ -598,7 +654,9 @@ public sealed class Strip
         { StripBay.BAY_CLEARED, StripBay.BAY_PUSHED },
         { StripBay.BAY_PUSHED, StripBay.BAY_TAXI },
         { StripBay.BAY_TAXI, StripBay.BAY_HOLDSHORT },
+        { StripBay.BAY_HOLDSHORT, StripBay.BAY_RUNWAY },
         { StripBay.BAY_RUNWAY, StripBay.BAY_CIRCUIT },
+        { StripBay.BAY_CIRCUIT, StripBay.BAY_RUNWAY },
     };
 
     /// <summary>
@@ -619,6 +677,8 @@ public sealed class Strip
             ready = sc.Ready,
             StripKey = sc.StripKey,
             OverrideStripType = sc.OverrideStripType,
+            PDCFlags = sc.PDCFlags,
+            DepartureFrequency = sc.DepartureFrequency,
         };
 
         return scDTO;
@@ -726,12 +786,76 @@ public sealed class Strip
     }
 
     /// <summary>
+    /// Sends a Hoppies PDC to the server.
+    /// </summary>
+    /// <param name="text">PDC content.</param>
+    public async void SendPDC(string text)
+    {
+        try
+        {
+            await _socketConn.SendPDC(this, text);
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+        }
+    }
+
+    /// <summary>
     /// Sends a CDM update to the server about this strip.
     /// </summary>
     /// <param name="state">CDM state.</param>
     public void SendCDMMessage(CDMState state)
     {
         _socketConn.SendCDMUpdate(this, state);
+    }
+
+    /// <summary>
+    /// Determines what to autofill, and autofills what is required.
+    /// </summary>
+    public void FillStrip()
+    {
+        if (_bayManager.AutoAssigner is null || _bayManager.AerodromeState.ATIS is null || DefaultStripType == StripType.ARRIVAL)
+        {
+            return;
+        }
+
+        try
+        {
+            var result = _bayManager.AutoAssigner.DetermineResult(this);
+
+            if (!string.IsNullOrEmpty(result.Runway) && string.IsNullOrEmpty(RWY))
+            {
+                RWY = result.Runway;
+            }
+
+            if (!string.IsNullOrEmpty(SID) && FDR.FlightRules == "V")
+            {
+                SetSID(FDR, null);
+            }
+
+            if (!string.IsNullOrEmpty(result.CFL))
+            {
+                CFL = int.Parse(RFL, CultureInfo.InvariantCulture) < int.Parse(result.CFL, CultureInfo.InvariantCulture) ? RFL : result.CFL;
+            }
+
+            if (result.Departures.Count > 0)
+            {
+                DepartureFrequency = AutoAssigner.DetermineDepFreq(result.Departures);
+            }
+
+            if (!string.IsNullOrEmpty(result.SID))
+            {
+                SID = result.SID;
+            }
+
+            Controller.AssignSSR();
+            SyncStrip();
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+        }
     }
 
     /// <summary>
