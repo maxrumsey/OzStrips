@@ -456,16 +456,20 @@ public sealed class OzStrips : IPlugin, IDisposable, ILabelPlugin
             {
                 case "OZSTRIPS_BAY":
                     item.Text = strip.Gate;
-                    return item;
+                    break;
                 case "OZSTRIPS_REMARKS":
                     item.Text = strip.Remark;
-                    return item;
+                    break;
                 case "OZSTRIPS_CLX":
                     item.Text = strip.CLX;
-                    return item;
+                    break;
                 default:
                     return null;
             }
+
+            item.Text = string.IsNullOrEmpty(item.Text) ? "      " : item.Text;
+
+            return item;
         }
         catch (Exception ex)
         {
