@@ -4,6 +4,7 @@
 - Added strip autofill feature.
 - Added Hoppies PDC send & receive functionality.
 - Added departure frequency box.
+- Added ability to define vatsys label items from ozstrips elements.
 
 ### Bugfixes
 - Fixed bug where resizing the stripboard when at a non-radar tower would revert the bays to the radar tower format.
