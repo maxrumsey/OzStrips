@@ -426,12 +426,18 @@ public sealed class OzStrips : IPlugin, IDisposable, ILabelPlugin
     /// <param name="flightDataRecord">FDR.</param>
     /// <param name="radarTrack">RadarTrack.</param>
     /// <returns>Custom label item.</returns>
-    public CustomLabelItem? GetCustomLabelItem(string itemType, Track track, FDP2.FDR flightDataRecord, RDP.RadarTrack radarTrack)
+    public CustomLabelItem? GetCustomLabelItem(string itemType, Track track, FDP2.FDR? flightDataRecord, RDP.RadarTrack radarTrack)
     {
         try
         {
+            if (flightDataRecord is null)
+            {
+                return null;
+            }
+
             var strip = _gui?.GetStripByFDR(flightDataRecord);
-            if (strip == null)
+
+            if (strip is null)
             {
                 return null;
             }
