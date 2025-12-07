@@ -39,6 +39,7 @@ public partial class DropDown : BaseForm
         MiddleClickClose = true;
         HasMinimizeButton = false;
         HasMaximizeButton = false;
+        HasSendBackButton = false;
     }
 
     private void AddElement(DropDownItem item)
@@ -50,18 +51,25 @@ public partial class DropDown : BaseForm
                 element = new GenericButton();
                 element.Text = item.Text;
                 element.Size = new(100, 28);
+                element.MouseUp += Element_MouseUp;
                 break;
             case DropDownItem.DropDownItemType.FREETEXT:
                 var tb = new TextBox();
                 element = tb;
                 tb.Text = item.Text;
                 tb.Size = new(100, 28);
+                element.KeyPress += (s, e) =>
+                {
+                    if (e.KeyChar == (char)Keys.Enter)
+                    {
+                        Complete?.Invoke(element, tb.Text);
+                        Close();
+                    }
+                };
                 break;
             default:
                 throw new InvalidOperationException("Unknown drop down item type");
         }
-
-        element.MouseUp += Element_MouseUp;
 
         flowLayoutPanel1.Controls.Add(element);
     }

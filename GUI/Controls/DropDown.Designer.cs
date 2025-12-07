@@ -36,19 +36,19 @@ partial class DropDown
             this.flowLayoutPanel1.AutoSize = true;
             this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(-2, 0);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 21);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(0, 0);
             this.flowLayoutPanel1.TabIndex = 0;
             // 
             // DropDown
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(132, 189);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Name = "DropDown";
+            this.Resizeable = false;
             this.Text = "ContextWindow";
             this.ResumeLayout(false);
             this.PerformLayout();
