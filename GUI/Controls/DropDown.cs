@@ -10,6 +10,10 @@ using System.Windows.Forms;
 using vatsys;
 
 namespace MaxRumsey.OzStripsPlugin.GUI.Controls;
+
+/// <summary>
+/// Drop down form.
+/// </summary>
 public partial class DropDown : BaseForm
 {
     /// <summary>
@@ -37,9 +41,6 @@ public partial class DropDown : BaseForm
     private void Setup()
     {
         MiddleClickClose = true;
-        HasMinimizeButton = false;
-        HasMaximizeButton = false;
-        HasSendBackButton = false;
     }
 
     private void AddElement(DropDownItem item)
