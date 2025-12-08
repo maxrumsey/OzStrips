@@ -235,6 +235,9 @@ public class StripController
         bm.Show(MainForm.MainFormInstance);
     }
 
+    /// <summary>
+    /// Opens the CDM window.
+    /// </summary>
     public void OpenCDM()
     {
         if (Strip.CDMResult is null)
@@ -442,47 +445,4 @@ public class StripController
         ResumeLayout();
     }
     */
-
-    /// <summary>
-    /// Callback for the heading alt return.
-    /// </summary>
-    /// <param name="source">The source.</param>
-    /// <param name="args">The arguments.</param>
-    private void HeadingAltReturned(object source, ModalReturnArgs args)
-    {
-        try
-        {
-            var control = (AltHdgControl)args.Child;
-            if (!string.IsNullOrEmpty(control.Alt))
-            {
-                Strip.CFL = control.Alt;
-            }
-
-            Strip.DepartureFrequency = control.DepFreq;
-            if (!string.IsNullOrEmpty(control.Runway) && Strip.RWY != control.Runway)
-            {
-                Strip.RWY = control.Runway;
-            }
-
-            if (!string.IsNullOrEmpty(control.SID) && Strip.SID != control.SID)
-            {
-                Strip.SID = control.SID;
-            }
-
-            Strip.SyncStrip();
-        }
-        catch
-        {
-        }
-    }
-
-    private void CLXBayReturned(object source, ModalReturnArgs args)
-    {
-        var control = (BayCLXControl)args.Child;
-        Strip.CLX = control.CLX;
-        Strip.Gate = control.Gate;
-        Strip.Remark = control.Remark;
-        FDP2.SetGlobalOps(Strip.FDR, control.Glop);
-        Strip.SyncStrip();
-    }
 }

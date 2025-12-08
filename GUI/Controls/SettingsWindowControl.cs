@@ -35,17 +35,6 @@ public partial class SettingsWindowControl : UserControl
 
         _socket = socketConn;
 
-        if (Properties.OzStripsSettings.Default.UseVatSysPopup)
-        {
-            rb_vatsys.Checked = true;
-            rb_ozstrips.Checked = false;
-        }
-        else
-        {
-            rb_vatsys.Checked = false;
-            rb_ozstrips.Checked = true;
-        }
-
         var servercontrol = rb_vatsim;
 
         switch (_socket.Server)
@@ -91,14 +80,6 @@ public partial class SettingsWindowControl : UserControl
     /// <param name="args">Arguments.</param>
     public void ModalReturned(object source, ModalReturnArgs args)
     {
-        var usevatsyspopup = false;
-        if (rb_vatsys.Checked)
-        {
-            usevatsyspopup = true;
-        }
-
-        Util.SetEnvVar("UseVatSysPopup", usevatsyspopup);
-
         Util.SetEnvVar("StripScale", tb_scale.Value / 100f);
 
         Util.SetEnvVar("KeepStripPicked", cb_keeppicked.Checked);
