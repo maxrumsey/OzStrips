@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MaxRumsey.OzStripsPlugin.GUI.DTO;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -31,6 +32,12 @@ public partial class DropDown : BaseForm
         {
             AddElement(item);
         }
+
+        PerformLayout();
+        flowLayoutPanel1.Size = new(100, 28 * items.Length);
+        ClientSize = new(100, (28 * items.Length) + 25);
+        MinimumSize = new(100, 28);
+        MaximumSize = ClientSize;
     }
 
     /// <summary>
@@ -71,6 +78,8 @@ public partial class DropDown : BaseForm
             default:
                 throw new InvalidOperationException("Unknown drop down item type");
         }
+
+        element.Margin = new(0);
 
         flowLayoutPanel1.Controls.Add(element);
     }
