@@ -11,7 +11,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI.Controls;
 /// <summary>
 /// Drop down item used by the DropDown Form.
 /// </summary>
-public class DropDownItem(DropDownItemType type, string text)
+public class DropDownItem(DropDownItemType type, string text, int maxlen = 3)
 {
     /// <summary>
     /// Gets or sets the type of drop down item.
@@ -38,4 +38,9 @@ public class DropDownItem(DropDownItemType type, string text)
         /// </summary>
         FREETEXT,
     }
+
+    /// <summary>
+    /// Max length for freetext items.
+    /// </summary>
+    public int MaxLen = maxlen;
 }

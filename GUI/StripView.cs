@@ -356,7 +356,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 _strip.Controller.OpenSIDWindow();
                 break;
             case StripElements.Actions.OPEN_HDG_ALT:
-                _strip.Controller.OpenHDGWindow();
+                _strip.Controller.OpenCLXBayModal("freq");
                 break;
             case StripElements.Actions.OPEN_REROUTE:
                 _strip.Controller.OpenRerouteMenu();

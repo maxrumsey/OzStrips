@@ -369,8 +369,8 @@ internal class AutoAssigner
     public static bool IsDepartureFreqAvailable(string freq)
     {
         var atc = Network.GetOnlineATCs;
-        var allFreqs = atc.SelectMany(x => x.Frequencies ?? []).Select(x => Conversions.FSDFrequencyToString(x)).ToArray() ?? [];
-
+        var allFreqs = atc.SelectMany(x => x.Frequencies ?? []).Select(x => Conversions.FSDFrequencyToString(x)).ToList() ?? [];
+        allFreqs.AddRange(Network.Me.Frequencies?.Select(x => Conversions.FSDFrequencyToString(x)) ?? []);
         return allFreqs.Contains(freq);
     }
 

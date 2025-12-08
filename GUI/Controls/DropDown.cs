@@ -38,6 +38,15 @@ public partial class DropDown : BaseForm
         ClientSize = new(100, (28 * items.Length) + 25);
         MinimumSize = new(100, 28);
         MaximumSize = ClientSize;
+        StartPosition = FormStartPosition.Manual;
+        Location = Cursor.Position;
+
+
+        foreach (var control in flowLayoutPanel1.Controls)
+        {
+            var textbox = control as TextBox;
+            textbox?.Select();
+        }
     }
 
     /// <summary>
@@ -66,9 +75,14 @@ public partial class DropDown : BaseForm
                 element = tb;
                 tb.Text = item.Text;
                 tb.Size = new(100, 28);
+                tb.MaxLength = item.MaxLen;
                 element.KeyPress += (s, e) =>
                 {
-                    if (e.KeyChar == (char)Keys.Enter)
+                    if (e.KeyChar == (char)Keys.Escape)
+                    {
+                        Close();
+                    }
+                    else if (e.KeyChar == (char)Keys.Enter)
                     {
                         Complete?.Invoke(element, tb.Text);
                         Close();
@@ -96,5 +110,116 @@ public partial class DropDown : BaseForm
         {
             Close();
         }
+    }
+
+    private static bool DropDownAlreadyOpen()
+    {
+        foreach (Form form in Application.OpenForms)
+        {
+            if (form is DropDown)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static void CreateDropDown(DropDownItem[] items, string title, Action<string> result)
+    {
+        if (DropDownAlreadyOpen())
+        {
+            return;
+        }
+        var dropdown = new DropDown(items, title);
+        dropdown.Complete += (s, e) =>
+        {
+            try
+            {
+                result(e);
+            }
+            catch (Exception ex)
+            {
+                Util.LogError(ex);
+            }
+        };
+        dropdown.Show(MainForm.MainFormInstance);
+    }
+
+    /// <summary>
+    /// Shows the gate drop down for the specified strip.
+    /// </summary>
+    /// <param name="strip">Strip.</param>
+    public static void ShowGateDropDown(Strip strip)
+    {
+        CreateDropDown([new(DropDownItem.DropDownItemType.FREETEXT, strip.Gate)], strip.FDR.Callsign, s =>
+        {
+            strip.Gate = s;
+            strip.SyncStrip();
+        });
+    }
+
+    /// <summary>
+    /// Shows the clx drop down for the specified strip.
+    /// </summary>
+    /// <param name="strip">Strip.</param>
+    public static void ShowCLXDropDown(Strip strip)
+    {
+        CreateDropDown([new(DropDownItem.DropDownItemType.FREETEXT, strip.CLX)], strip.FDR.Callsign, s =>
+        {
+            strip.CLX = s;
+            strip.SyncStrip();
+        });
+    }
+
+    /// <summary>
+    /// Shows the glop drop down for the specified strip.
+    /// </summary>
+    /// <param name="strip">Strip.</param>
+    public static void ShowGlopDropDown(Strip strip)
+    {
+        CreateDropDown([new(DropDownItem.DropDownItemType.FREETEXT, strip.FDR.GlobalOpData, 10)], strip.FDR.Callsign, s =>
+        {
+            if (!Network.Me.IsRealATC)
+            {
+                return;
+            }
+
+            strip.FDR.GlobalOpData = s;
+        });
+    }
+
+    /// <summary>
+    /// Shows the remark drop down for the specified strip.
+    /// </summary>
+    /// <param name="strip">Strip.</param>
+    public static void ShowRmkDropDown(Strip strip)
+    {
+        CreateDropDown([new(DropDownItem.DropDownItemType.FREETEXT, strip.Remark, 10)], strip.FDR.Callsign, s =>
+        {
+            strip.Remark = s;
+            strip.SyncStrip();
+        });
+    }
+
+    /// <summary>
+    /// Shows the dep freq drop down for the specified strip.
+    /// </summary>
+    /// <param name="strip">Strip.</param>
+    public static void ShowFreqDropDown(Strip strip)
+    {
+        List<DropDownItem> items = new();
+
+        foreach (var freq in strip.PossibleDepFreqs)
+        {
+            items.Add(new(DropDownItem.DropDownItemType.BUTTON, freq));
+        }
+
+        items.Add(new(DropDownItem.DropDownItemType.FREETEXT, string.Empty, 7));
+        CreateDropDown(items.ToArray(), strip.FDR.Callsign, s =>
+        {
+            strip.DepartureFrequency = s;
+            strip.SyncStrip();
+        });
     }
 }

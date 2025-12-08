@@ -121,17 +121,10 @@ public class StripController
     /// </summary>
     public void OpenCFLWindow()
     {
-        if (Properties.OzStripsSettings.Default.UseVatSysPopup)
+        var track = MMI.FindTrack(FDR);
+        if (track is not null)
         {
-            var track = MMI.FindTrack(FDR);
-            if (track is not null)
-            {
-                MMI.OpenCFLMenu(track, Cursor.Position);
-            }
-        }
-        else
-        {
-            OpenHdgAltModal("cfl");
+            MMI.OpenCFLMenu(track, Cursor.Position);
         }
     }
 
@@ -219,7 +212,7 @@ public class StripController
     /// </summary>
     public void OpenHDGWindow()
     {
-        OpenHdgAltModal("hdg");
+        OpenCLXBayModal("freq");
     }
 
     /// <summary>
@@ -227,14 +220,7 @@ public class StripController
     /// </summary>
     public void OpenRWYWindow()
     {
-        if (Properties.OzStripsSettings.Default.UseVatSysPopup)
-        {
-            MMI.OpenRWYMenu(FDR, Cursor.Position);
-        }
-        else
-        {
-            OpenHdgAltModal();
-        }
+        MMI.OpenRWYMenu(FDR, Cursor.Position);
     }
 
     /// <summary>
@@ -267,14 +253,7 @@ public class StripController
     /// </summary>
     public void OpenSIDWindow()
     {
-        if (Properties.OzStripsSettings.Default.UseVatSysPopup)
-        {
-            MMI.OpenSIDSTARMenu(FDR, Cursor.Position);
-        }
-        else
-        {
-            OpenHdgAltModal();
-        }
+        MMI.OpenSIDSTARMenu(FDR, Cursor.Position);
     }
 
     /// <summary>
@@ -283,11 +262,24 @@ public class StripController
     /// <param name="labelName">Label Name.</param>
     public void OpenCLXBayModal(string labelName)
     {
-        var modalChild = new BayCLXControl(Strip, labelName);
-        var bm = new BaseModal(modalChild, "SMC Menu :: " + Strip.FDR.Callsign);
-        modalChild.BaseModal = bm;
-        bm.ReturnEvent += CLXBayReturned;
-        bm.Show(MainForm.MainFormInstance);
+        switch (labelName)
+        {
+            case "std":
+                DropDown.ShowGateDropDown(Strip);
+                return;
+            case "clx":
+                DropDown.ShowCLXDropDown(Strip);
+                return;
+            case "glop":
+                DropDown.ShowGlopDropDown(Strip);
+                return;
+            case "remark":
+                DropDown.ShowRmkDropDown(Strip);
+                return;
+            case "freq":
+                DropDown.ShowFreqDropDown(Strip);
+                return;
+        }
     }
 
     /// <summary>
@@ -450,19 +442,6 @@ public class StripController
         ResumeLayout();
     }
     */
-
-    /// <summary>
-    /// Opens the heading/altitude modal dialog.
-    /// </summary>
-    /// <param name="activeLabel">The label item to be designated as the active control.</param>
-    protected void OpenHdgAltModal(string activeLabel = "")
-    {
-        var modalChild = new AltHdgControl(Strip, activeLabel);
-        var bm = new BaseModal(modalChild, "ACD Menu :: " + Strip.FDR.Callsign);
-        modalChild.BaseModal = bm;
-        bm.ReturnEvent += HeadingAltReturned;
-        bm.Show(MainForm.MainFormInstance);
-    }
 
     /// <summary>
     /// Callback for the heading alt return.
