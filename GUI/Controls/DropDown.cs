@@ -76,6 +76,7 @@ public partial class DropDown : BaseForm
                 tb.Text = item.Text;
                 tb.Size = new(100, 28);
                 tb.MaxLength = item.MaxLen;
+                tb.CharacterCasing = CharacterCasing.Upper;
                 element.KeyPress += (s, e) =>
                 {
                     if (e.KeyChar == (char)Keys.Escape)
@@ -152,7 +153,7 @@ public partial class DropDown : BaseForm
     /// <param name="strip">Strip.</param>
     public static void ShowGateDropDown(Strip strip)
     {
-        CreateDropDown([new(DropDownItem.DropDownItemType.FREETEXT, strip.Gate)], strip.FDR.Callsign, s =>
+        CreateDropDown([new(DropDownItem.DropDownItemType.FREETEXT, strip.Gate, 4)], strip.FDR.Callsign, s =>
         {
             strip.Gate = s;
             strip.SyncStrip();
