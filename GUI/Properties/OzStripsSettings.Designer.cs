@@ -106,5 +106,17 @@ namespace MaxRumsey.OzStripsPlugin.GUI.Properties {
                 this["ShowLastTransmit"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Keybinds {
+            get {
+                return ((string)(this["Keybinds"]));
+            }
+            set {
+                this["Keybinds"] = value;
+            }
+        }
     }
 }
