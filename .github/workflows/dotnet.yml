@@ -44,7 +44,7 @@ jobs:
         msiexec /a vatSysSetup.msi /qb TARGETDIR=${{ runner.temp }}\vatsys
 
     - name: Build
-      run: msbuild /t:build /m /v:minimal /p:"VatSysDir=${{ runner.temp }}\vatsys;OutDir=${{ runner.temp }}\build"
+      run: msbuild /t:build /m /v:minimal /p:"VatSysDir=${{ runner.temp }}\vatsys;OutDir=${{ runner.temp }}\build;TargetFramework=net481;"
     - name: Archive
       if: ${{ startsWith(github.ref, 'refs/tags/') }}
       uses: thedoctor0/zip-release@0.7.6
