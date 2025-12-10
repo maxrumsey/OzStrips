@@ -46,7 +46,7 @@ public class MainFormController : IDisposable
     /// <summary>
     /// Gets a value indicating whether or not the control key is being held down.
     /// </summary>
-    public static bool ControlHeld => Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
+    public static bool ControlHeld => Keyboard.GetKeyStates(KeybindManager.ActiveKeybinds[KeybindManager.KEYBINDS.MODIFIER1]) == KeyStates.Down;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MainFormController"/> class.
@@ -484,17 +484,17 @@ public class MainFormController : IDisposable
     {
         try
         {
-            if (keyData == (Keys.Up | Keys.Control))
+            if (keyData == (KeybindManager.GetKey(KeybindManager.KEYBINDS.UP) | KeybindManager.GetKey(KeybindManager.KEYBINDS.MODIFIER1)))
             {
                 _bayManager.PositionToNextBar(1);
                 return true;
             }
-            else if (keyData == (Keys.Down | Keys.Control))
+            else if (keyData == (KeybindManager.GetKey(KeybindManager.KEYBINDS.DOWN) | KeybindManager.GetKey(KeybindManager.KEYBINDS.MODIFIER1)))
             {
                 _bayManager.PositionToNextBar(-1);
                 return true;
             }
-            else if (keyData == (Keys.X | Keys.Alt))
+            else if (keyData == (KeybindManager.GetKey(KeybindManager.KEYBINDS.CROSS) | KeybindManager.GetKey(KeybindManager.KEYBINDS.MODIFIER2)))
             {
                 // If we didnt't delete a crossing bar, add one.
                 if (!_bayManager.DeleteBarByParams("Runway", 3, "XXX CROSSING XXX"))
@@ -504,56 +504,67 @@ public class MainFormController : IDisposable
 
                 return true;
             }
-            else if (keyData == (Keys.F | Keys.Control))
+            else if (keyData == (KeybindManager.GetKey(KeybindManager.KEYBINDS.FIND) | KeybindManager.GetKey(KeybindManager.KEYBINDS.MODIFIER1)))
             {
                 ShowQuickSearch();
 
                 return true;
             }
 
-            switch (keyData)
+            if (keyData.HasFlag(KeybindManager.GetKey(KeybindManager.KEYBINDS.UP)))
             {
-                case Keys.Up:
-                    _bayManager.PositionKey(1);
-                    return true;
-                case Keys.Down:
-                    _bayManager.PositionKey(-1);
-                    return true;
-                case Keys.Space:
-                    _bayManager.QueueUp();
-                    return true;
-                case Keys.Enter:
-                    _bayManager.SidTrigger();
-                    return true;
-                case Keys.Tab:
-                    _bayManager.CockStrip();
-                    return true;
-                case Keys.OemOpenBrackets:
-                    MoveLateralAerodrome(-1);
-                    return true;
-                case Keys.OemCloseBrackets:
-                    MoveLateralAerodrome(1);
-                    return true;
-                case Keys.Back:
-                    _bayManager.Inhibit();
-                    return true;
-                case Keys.X:
-                    _bayManager.CrossStrip();
-                    return true;
-                case Keys.F:
-                    _bayManager.FlipFlopStrip();
-                    return true;
-                case Keys.T:
-                    _bayManager.PickLastTransmit();
-                    return true;
-                case Keys.A:
-                    _bayManager.FillStrip();
-                    return true;
-                default:
-                    break;
+                _bayManager.PositionKey(1);
+            }
+            else if (keyData.HasFlag(KeybindManager.GetKey(KeybindManager.KEYBINDS.DOWN)))
+            {
+                _bayManager.PositionKey(-1);
+            }
+            else if (keyData.HasFlag(KeybindManager.GetKey(KeybindManager.KEYBINDS.QUEUE)))
+            {
+                _bayManager.QueueUp();
+            }
+            else if (keyData.HasFlag(KeybindManager.GetKey(KeybindManager.KEYBINDS.TRIGGER)))
+            {
+                _bayManager.SidTrigger();
+            }
+            else if (keyData.HasFlag(KeybindManager.GetKey(KeybindManager.KEYBINDS.COCK)))
+            {
+                _bayManager.CockStrip();
+            }
+            else if (keyData.HasFlag(KeybindManager.GetKey(KeybindManager.KEYBINDS.AERODROME_LEFT)))
+            {
+                MoveLateralAerodrome(-1);
+            }
+            else if (keyData.HasFlag(KeybindManager.GetKey(KeybindManager.KEYBINDS.AERODROME_RIGHT)))
+            {
+                MoveLateralAerodrome(1);
+            }
+            else if (keyData.HasFlag(KeybindManager.GetKey(KeybindManager.KEYBINDS.INHIBIT)))
+            {
+                _bayManager.Inhibit();
+            }
+            else if (keyData.HasFlag(KeybindManager.GetKey(KeybindManager.KEYBINDS.CROSS)))
+            {
+                _bayManager.CrossStrip();
+            }
+            else if (keyData.HasFlag(KeybindManager.GetKey(KeybindManager.KEYBINDS.FLIP)))
+            {
+                _bayManager.FlipFlopStrip();
+            }
+            else if (keyData.HasFlag(KeybindManager.GetKey(KeybindManager.KEYBINDS.LAST_TRANSMIT_PICK)))
+            {
+                _bayManager.PickLastTransmit();
+            }
+            else if (keyData.HasFlag(KeybindManager.GetKey(KeybindManager.KEYBINDS.AUTOFILL)))
+            {
+                _bayManager.FillStrip();
+            }
+            else
+            {
+                return false;
             }
 
-            _bayManager.ForceRerender();
+            return true;
         }
         catch (Exception ex)
         {

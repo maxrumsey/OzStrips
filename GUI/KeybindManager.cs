@@ -78,7 +78,9 @@ internal static class KeybindManager
         FLIP,
         AUTOFILL,
         LAST_TRANSMIT_PICK,
-        FORCE_MOVE,
+        MODIFIER1,
+        MODIFIER2,
+        FIND,
     }
 
     internal static readonly Dictionary<KEYBINDS, Key> DefaultKeybinds = new()
@@ -96,7 +98,9 @@ internal static class KeybindManager
         { KEYBINDS.FLIP, Key.F },
         { KEYBINDS.AUTOFILL, Key.A },
         { KEYBINDS.LAST_TRANSMIT_PICK, Key.T },
-        { KEYBINDS.FORCE_MOVE, Key.LeftCtrl },
+        { KEYBINDS.MODIFIER1, Key.LeftCtrl },
+        { KEYBINDS.MODIFIER2, Key.LeftAlt },
+        { KEYBINDS.FIND, Key.F },
     };
 
     internal static readonly Dictionary<KEYBINDS, string> Friendlyname = new()
@@ -114,6 +118,8 @@ internal static class KeybindManager
         { KEYBINDS.FLIP, "Flip Strip" },
         { KEYBINDS.AUTOFILL, "Autofill Strip" },
         { KEYBINDS.LAST_TRANSMIT_PICK, "Pick Last Transmit" },
-        { KEYBINDS.FORCE_MOVE, "Move Below Strip Modifier" },
+        { KEYBINDS.MODIFIER1, "Strip Action Modifier" },
+        { KEYBINDS.MODIFIER2, "Crossing Bar Modifier" },
+        { KEYBINDS.FIND, "Find Strip (MODIFIER)" },
     };
 }

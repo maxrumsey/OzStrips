@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Input;
 using System.Xml.Linq;
 using SkiaSharp;
 using vatsys;
@@ -33,14 +34,14 @@ internal class BarView(BayRenderController bayRC) : IRenderedStripItem
         DrawStripText(canvas);
     }
 
-    public void HandleClick(MouseEventArgs e)
+    public void HandleClick(System.Windows.Forms.MouseEventArgs e)
     {
         if (Item is null)
         {
             return;
         }
 
-        if (MainFormController.ControlHeld)
+        if (Keyboard.GetKeyStates(KeybindManager.ActiveKeybinds[KeybindManager.KEYBINDS.MODIFIER1]) == KeyStates.Down)
         {
             _bayRenderController.Bay.BayManager.DropStripBelow(Item);
             return;
