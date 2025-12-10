@@ -17,7 +17,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI;
 /// </summary>
 internal static class KeybindManager
 {
-    public static Dictionary<KEYBINDS, Key> ActiveKeybinds { get; private set; } = TryLoadKeybinds();
+    public static Dictionary<KEYBINDS, Key> ActiveKeybinds { get; private set; } = new();
 
     private static Dictionary<KEYBINDS, Key> TryLoadKeybinds()
     {
@@ -25,6 +25,11 @@ internal static class KeybindManager
 
         try
         {
+            if (string.IsNullOrEmpty(OzStripsSettings.Default.Keybinds))
+            {
+                return keybinds;
+            }
+
             var deserialized = JsonSerializer.Deserialize<Dictionary<KEYBINDS, Key>>(OzStripsSettings.Default.Keybinds);
 
             foreach (var keypair in deserialized ?? [])
@@ -70,7 +75,7 @@ internal static class KeybindManager
         FORCE_MOVE,
     }
 
-    internal static readonly ReadOnlyDictionary<KEYBINDS, Key> DefaultKeybinds = new(new Dictionary<KEYBINDS, Key>
+    internal static readonly Dictionary<KEYBINDS, Key> DefaultKeybinds = new()
     {
         { KEYBINDS.LAST_TRANSMIT_HIGHLIGHT, Key.W },
         { KEYBINDS.UP, Key.Up },
@@ -86,9 +91,9 @@ internal static class KeybindManager
         { KEYBINDS.AUTOFILL, Key.A },
         { KEYBINDS.LAST_TRANSMIT_PICK, Key.T },
         { KEYBINDS.FORCE_MOVE, Key.LeftCtrl },
-    });
+    };
 
-    internal static readonly ReadOnlyDictionary<KEYBINDS, string> Friendlyname = new(new Dictionary<KEYBINDS, string>
+    internal static readonly Dictionary<KEYBINDS, string> Friendlyname = new()
     {
         { KEYBINDS.LAST_TRANSMIT_HIGHLIGHT, "Highlight Last Transmit" },
         { KEYBINDS.UP, "Move Strip Up" },
@@ -104,5 +109,5 @@ internal static class KeybindManager
         { KEYBINDS.AUTOFILL, "Autofill Strip" },
         { KEYBINDS.LAST_TRANSMIT_PICK, "Pick Last Transmit" },
         { KEYBINDS.FORCE_MOVE, "Move Below Strip Modifier" },
-    });
+    };
 }

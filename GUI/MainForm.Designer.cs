@@ -63,6 +63,8 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.cDMRateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cdmTextBox = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.tt_pdcsound = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gitHubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.documentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -78,8 +80,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.autoFillUnavailableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tt_metar = new System.Windows.Forms.ToolTip(this.components);
             this.tt_clients = new System.Windows.Forms.ToolTip(this.components);
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.tt_pdcsound = new System.Windows.Forms.ToolStripMenuItem();
+            this.keyboardSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pl_controlbar.SuspendLayout();
             this.pl_atis.SuspendLayout();
             this.pl_ad.SuspendLayout();
@@ -263,7 +264,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             // modifyToolStripMenuItem
             // 
             this.modifyToolStripMenuItem.Name = "modifyToolStripMenuItem";
-            this.modifyToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.modifyToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.modifyToolStripMenuItem.Tag = "permanent";
             this.modifyToolStripMenuItem.Text = "Modify";
             this.modifyToolStripMenuItem.Click += new System.EventHandler(this.ModifyButtonClicked);
@@ -278,7 +279,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(157, 6);
             this.toolStripSeparator1.Tag = "permanent";
             // 
             // viewToolStripMenuItem
@@ -355,6 +356,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             // 
             this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settingsWindowToolStripMenuItem,
+            this.keyboardSettingsToolStripMenuItem,
             this.toolStripSeparator3,
             this.cDMRateToolStripMenuItem,
             this.cdmTextBox,
@@ -369,19 +371,19 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             // settingsWindowToolStripMenuItem
             // 
             this.settingsWindowToolStripMenuItem.Name = "settingsWindowToolStripMenuItem";
-            this.settingsWindowToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.settingsWindowToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.settingsWindowToolStripMenuItem.Text = "Settings Window";
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(193, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(209, 6);
             // 
             // cDMRateToolStripMenuItem
             // 
             this.cDMRateToolStripMenuItem.Enabled = false;
             this.cDMRateToolStripMenuItem.Name = "cDMRateToolStripMenuItem";
-            this.cDMRateToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.cDMRateToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.cDMRateToolStripMenuItem.Text = "CDM Rate";
             // 
             // cdmTextBox
@@ -389,6 +391,20 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.cdmTextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.cdmTextBox.Name = "cdmTextBox";
             this.cdmTextBox.Size = new System.Drawing.Size(100, 23);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(209, 6);
+            // 
+            // tt_pdcsound
+            // 
+            this.tt_pdcsound.Checked = true;
+            this.tt_pdcsound.CheckOnClick = true;
+            this.tt_pdcsound.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tt_pdcsound.Name = "tt_pdcsound";
+            this.tt_pdcsound.Size = new System.Drawing.Size(212, 22);
+            this.tt_pdcsound.Text = "PDC Sound";
             // 
             // helpToolStripMenuItem
             // 
@@ -499,19 +515,11 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             // 
             this.tt_clients.ToolTipTitle = "Online Clients";
             // 
-            // toolStripSeparator4
+            // keyboardSettingsToolStripMenuItem
             // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(193, 6);
-            // 
-            // tt_pdcsound
-            // 
-            this.tt_pdcsound.Checked = true;
-            this.tt_pdcsound.CheckOnClick = true;
-            this.tt_pdcsound.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.tt_pdcsound.Name = "tt_pdcsound";
-            this.tt_pdcsound.Size = new System.Drawing.Size(196, 22);
-            this.tt_pdcsound.Text = "PDC Sound";
+            this.keyboardSettingsToolStripMenuItem.Name = "keyboardSettingsToolStripMenuItem";
+            this.keyboardSettingsToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.keyboardSettingsToolStripMenuItem.Text = "Keyboard Settings";
             // 
             // MainForm
             // 
@@ -586,5 +594,6 @@ namespace MaxRumsey.OzStripsPlugin.GUI
         private ToolStripMenuItem autoFillUnavailableToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator4;
         private ToolStripMenuItem tt_pdcsound;
+        private ToolStripMenuItem keyboardSettingsToolStripMenuItem;
     }
 }

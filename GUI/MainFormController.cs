@@ -105,6 +105,7 @@ public class MainFormController : IDisposable
 
         _bayManager.BayRepository.ConfigureAndSizeFLPs();
         _mainForm.AerodromeManager.AerodromeListChanged += AerodromeListChanged;
+        KeybindManager.Reload();
     }
 
     private void NewPDCsReceived(object sender, string[] e)
@@ -993,6 +994,18 @@ public class MainFormController : IDisposable
         var bm = new BaseModal(modalChild, "OzStrips Settings");
         bm.ReturnEvent += modalChild.ModalReturned;
         bm.Show(_mainForm);
+    }
+
+    /// <summary>
+    /// Opens the settings window.
+    /// </summary>
+    /// <param name="sender">Sender.</param>
+    /// <param name="e">Args.</param>
+    public void ShowKeySettings(object sender, EventArgs e)
+    {
+        var modalChild = new KeybindChanger();
+        var bm = new BaseModal(modalChild, "OzStrips Key Settings");
+        bm.ShowDialog(_mainForm);
     }
 
     /// <summary>

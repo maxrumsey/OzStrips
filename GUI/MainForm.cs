@@ -308,6 +308,7 @@ public partial class MainForm : Form
         toolStripTextBox1.KeyPress += _mainFormController.AerodromeSelectorKeyDown;
         toolStripMenuItem1.Click += _mainFormController.ShowMessageList_Click;
         settingsWindowToolStripMenuItem.Click += _mainFormController.ShowSettings;
+        keyboardSettingsToolStripMenuItem.Click += _mainFormController.ShowKeySettings;
         cdmTextBox.KeyPress += _mainFormController.CDMRateKeyDown;
         ts_toggleCircuit.Click += _mainFormController.ToggleCircuitBay;
         toggleCDMToolStripMenuItem.Click += _mainFormController.ToggleCDM;

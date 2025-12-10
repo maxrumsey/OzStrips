@@ -14,6 +14,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI.Controls;
 public partial class KeybindChanger : UserControl
 {
     private Label? _activeKey;
+    private Button _resetButton;
 
     public KeybindChanger()
     {
@@ -23,32 +24,76 @@ public partial class KeybindChanger : UserControl
         {
             var label = new Label();
             label.Text = $"{KeybindManager.Friendlyname[keybind.Key]} : {keybind.Value.ToString()}";
+            label.BorderStyle = BorderStyle.FixedSingle;
             label.Tag = keybind.Key;
             label.Click += Clicked;
+            label.AutoSize = true;
+            label.Dock = DockStyle.Top;
+            label.Padding = new(4);
             flowLayoutPanel1.Controls.Add(label);
         }
 
-        KeyDown += KeyDownEv; ;
+        _resetButton = new Button();
+        _resetButton.Text = "Reset";
+        _resetButton.Click += ResetAll;
+        flowLayoutPanel1.Controls.Add(_resetButton);
+
+        _resetButton.TabStop = false;
     }
 
-    private void KeyDownEv(object sender, System.Windows.Forms.KeyEventArgs args)
+    private void ResetAll(object sender, EventArgs e)
+    {
+        KeybindManager.SaveKeybinds(DefaultKeybinds);
+        KeybindManager.Reload();
+        ResetAllLabels();
+
+        ActiveControl = null;
+    }
+
+    /// <summary>
+    /// Handles key presses to set keybinds.
+    /// </summary>
+    /// <param name="message">Message.</param>
+    /// <param name="newKey">New key.</param>
+    /// <returns>Successfully handled.</returns>
+    protected override bool ProcessCmdKey(ref Message message, Keys newKey)
     {
         if (_activeKey is null)
         {
-            return;
+            return false;
         }
 
+        newKey &= ~Keys.Modifiers;
+
         var key = (KEYBINDS)_activeKey.Tag;
-        var keybind = KeyInterop.KeyFromVirtualKey((int)args.KeyCode);
+        var keybind = KeyInterop.KeyFromVirtualKey((int)newKey);
 
+        KeybindManager.ActiveKeybinds[key] = keybind;
+        KeybindManager.SaveKeybinds(KeybindManager.ActiveKeybinds);
+        KeybindManager.Reload();
 
+        ResetAllLabels();
+
+        return true;
     }
 
     private void Clicked(object sender, EventArgs e)
     {
         var label = (Label)sender;
-
         SetActiveKey(label);
+    }
+
+    private void ResetAllLabels()
+    {
+        _activeKey = null;
+        foreach (Control control in flowLayoutPanel1.Controls)
+        {
+            if (control is Label label)
+            {
+                var key = (KEYBINDS)label.Tag;
+                label.Text = $"{KeybindManager.Friendlyname[key]} : {KeybindManager.ActiveKeybinds[key].ToString()}";
+            }
+        }
     }
 
     private void SetActiveKey(Label label)
