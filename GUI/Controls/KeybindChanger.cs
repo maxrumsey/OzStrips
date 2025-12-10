@@ -56,17 +56,20 @@ public partial class KeybindChanger : UserControl
     /// <param name="message">Message.</param>
     /// <param name="newKey">New key.</param>
     /// <returns>Successfully handled.</returns>
-    protected override bool ProcessCmdKey(ref Message message, Keys newKey)
+    protected override bool ProcessCmdKey(ref Message message, Keys _)
     {
         if (_activeKey is null)
         {
             return false;
         }
 
-        newKey &= ~Keys.Modifiers;
-
         var key = (KEYBINDS)_activeKey.Tag;
-        var keybind = KeyInterop.KeyFromVirtualKey((int)newKey);
+        var keybind = KeybindManager.GetPressedKeys().FirstOrDefault();
+
+        if (keybind == Key.None)
+        {
+            return false;
+        }
 
         KeybindManager.ActiveKeybinds[key] = keybind;
         KeybindManager.SaveKeybinds(KeybindManager.ActiveKeybinds);

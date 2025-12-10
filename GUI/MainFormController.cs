@@ -46,7 +46,7 @@ public class MainFormController : IDisposable
     /// <summary>
     /// Gets a value indicating whether or not the control key is being held down.
     /// </summary>
-    public static bool ControlHeld => Keyboard.GetKeyStates(KeybindManager.ActiveKeybinds[KeybindManager.KEYBINDS.MODIFIER1]) == KeyStates.Down;
+    public static bool ControlHeld => Keyboard.GetKeyStates(KeybindManager.ActiveKeybinds[KeybindManager.KEYBINDS.MODIFIER1]) != KeyStates.None;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MainFormController"/> class.
@@ -484,17 +484,18 @@ public class MainFormController : IDisposable
     {
         try
         {
-            if (keyData == (KeybindManager.GetKey(KeybindManager.KEYBINDS.UP) | KeybindManager.GetKey(KeybindManager.KEYBINDS.MODIFIER1)))
+            var keys = KeybindManager.GetPressedKeys();
+            if (keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.UP)) && keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.MODIFIER1)))
             {
                 _bayManager.PositionToNextBar(1);
                 return true;
             }
-            else if (keyData == (KeybindManager.GetKey(KeybindManager.KEYBINDS.DOWN) | KeybindManager.GetKey(KeybindManager.KEYBINDS.MODIFIER1)))
+            else if (keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.DOWN)) && keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.MODIFIER1)))
             {
                 _bayManager.PositionToNextBar(-1);
                 return true;
             }
-            else if (keyData == (KeybindManager.GetKey(KeybindManager.KEYBINDS.CROSS) | KeybindManager.GetKey(KeybindManager.KEYBINDS.MODIFIER2)))
+            else if (keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.CROSS)) && keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.MODIFIER2)))
             {
                 // If we didnt't delete a crossing bar, add one.
                 if (!_bayManager.DeleteBarByParams("Runway", 3, "XXX CROSSING XXX"))
@@ -504,58 +505,58 @@ public class MainFormController : IDisposable
 
                 return true;
             }
-            else if (keyData == (KeybindManager.GetKey(KeybindManager.KEYBINDS.FIND) | KeybindManager.GetKey(KeybindManager.KEYBINDS.MODIFIER1)))
+            else if (keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.FIND)) && keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.MODIFIER1)))
             {
                 ShowQuickSearch();
 
                 return true;
             }
 
-            if (keyData.HasFlag(KeybindManager.GetKey(KeybindManager.KEYBINDS.UP)))
+            if (keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.UP)))
             {
                 _bayManager.PositionKey(1);
             }
-            else if (keyData.HasFlag(KeybindManager.GetKey(KeybindManager.KEYBINDS.DOWN)))
+            else if (keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.DOWN)))
             {
                 _bayManager.PositionKey(-1);
             }
-            else if (keyData.HasFlag(KeybindManager.GetKey(KeybindManager.KEYBINDS.QUEUE)))
+            else if (keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.QUEUE)))
             {
                 _bayManager.QueueUp();
             }
-            else if (keyData.HasFlag(KeybindManager.GetKey(KeybindManager.KEYBINDS.TRIGGER)))
+            else if (keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.TRIGGER)))
             {
                 _bayManager.SidTrigger();
             }
-            else if (keyData.HasFlag(KeybindManager.GetKey(KeybindManager.KEYBINDS.COCK)))
+            else if (keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.COCK)))
             {
                 _bayManager.CockStrip();
             }
-            else if (keyData.HasFlag(KeybindManager.GetKey(KeybindManager.KEYBINDS.AERODROME_LEFT)))
+            else if (keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.AERODROME_LEFT)))
             {
                 MoveLateralAerodrome(-1);
             }
-            else if (keyData.HasFlag(KeybindManager.GetKey(KeybindManager.KEYBINDS.AERODROME_RIGHT)))
+            else if (keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.AERODROME_RIGHT)))
             {
                 MoveLateralAerodrome(1);
             }
-            else if (keyData.HasFlag(KeybindManager.GetKey(KeybindManager.KEYBINDS.INHIBIT)))
+            else if (keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.INHIBIT)))
             {
                 _bayManager.Inhibit();
             }
-            else if (keyData.HasFlag(KeybindManager.GetKey(KeybindManager.KEYBINDS.CROSS)))
+            else if (keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.CROSS)))
             {
                 _bayManager.CrossStrip();
             }
-            else if (keyData.HasFlag(KeybindManager.GetKey(KeybindManager.KEYBINDS.FLIP)))
+            else if (keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.FLIP)))
             {
                 _bayManager.FlipFlopStrip();
             }
-            else if (keyData.HasFlag(KeybindManager.GetKey(KeybindManager.KEYBINDS.LAST_TRANSMIT_PICK)))
+            else if (keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.LAST_TRANSMIT_PICK)))
             {
                 _bayManager.PickLastTransmit();
             }
-            else if (keyData.HasFlag(KeybindManager.GetKey(KeybindManager.KEYBINDS.AUTOFILL)))
+            else if (keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.AUTOFILL)))
             {
                 _bayManager.FillStrip();
             }
@@ -571,7 +572,7 @@ public class MainFormController : IDisposable
             Util.LogError(ex);
         }
 
-        return null;
+        return false;
     }
 
     /// <summary>

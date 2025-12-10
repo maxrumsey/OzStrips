@@ -19,10 +19,24 @@ internal static class KeybindManager
 {
     public static Dictionary<KEYBINDS, Key> ActiveKeybinds { get; private set; } = new();
 
-
-    public static Keys GetKey(KEYBINDS bind)
+    public static Key[] GetPressedKeys()
     {
-        return (Keys)KeyInterop.VirtualKeyFromKey(ActiveKeybinds[bind]);
+        var keys = new List<Key>();
+
+        foreach (Key key in Enum.GetValues(typeof(Key)))
+        {
+            if (key != Key.None && Keyboard.IsKeyDown(key))
+            {
+                keys.Add(key);
+            }
+        }
+
+        return [..keys];
+    }
+
+    public static Key GetKey(KEYBINDS bind)
+    {
+        return ActiveKeybinds[bind];
     }
 
     private static Dictionary<KEYBINDS, Key> TryLoadKeybinds()
