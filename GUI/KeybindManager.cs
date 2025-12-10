@@ -19,6 +19,12 @@ internal static class KeybindManager
 {
     public static Dictionary<KEYBINDS, Key> ActiveKeybinds { get; private set; } = new();
 
+
+    public static Keys GetKey(KEYBINDS bind)
+    {
+        return (Keys)KeyInterop.VirtualKeyFromKey(ActiveKeybinds[bind]);
+    }
+
     private static Dictionary<KEYBINDS, Key> TryLoadKeybinds()
     {
         var keybinds = new Dictionary<KEYBINDS, Key>(DefaultKeybinds);
