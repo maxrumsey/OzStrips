@@ -673,7 +673,7 @@ public sealed class Strip
             cockLevel = sc.CockLevel,
             crossing = sc.Crossing,
             remark = sc.Remark,
-            TOT = sc.TakeOffTime is not null ? sc.TakeOffTime!.ToString() : "\0",
+            TOT = sc.TakeOffTime?.ToString(CultureInfo.InvariantCulture) ?? "\0",
             ready = sc.Ready,
             StripKey = sc.StripKey,
             OverrideStripType = sc.OverrideStripType,
