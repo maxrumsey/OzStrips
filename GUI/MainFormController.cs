@@ -403,7 +403,7 @@ public class MainFormController : IDisposable
         try
         {
             _bayManager.WipeStrips();
-            _bayManager.StripRepository.Strips.Clear();
+            _bayManager.StripRepository.ClearStrips();
             _socketConn.Disconnect();
         }
         catch (Exception ex)

@@ -694,7 +694,7 @@ public sealed class SocketConn : IDisposable
     /// <returns>The cache data transfer object.</returns>
     private CacheDTO CreateCacheDTO()
     {
-        return new() { strips = _bayManager.StripRepository.Strips.ConvertAll(x => (StripDTO)x), };
+        return new() { strips = _bayManager.StripRepository.Strips.Select(x => (StripDTO)x).ToList(), };
     }
 
     private void ToggleFresh(object sender, ElapsedEventArgs e)
