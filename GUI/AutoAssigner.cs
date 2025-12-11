@@ -137,7 +137,7 @@ internal class AutoAssigner
             var type = strip.FDR.AircraftTypeAndWake;
 
             // if we can't find the type, assume its a prop.
-            var isJet = type is not null && Performance.GetPerformanceData(type)!.IsJet;
+            var isJet = type is not null && Performance.GetPerformanceData(type)?.IsJet == true;
 
             if (isJet != matchAsTrue)
             {
