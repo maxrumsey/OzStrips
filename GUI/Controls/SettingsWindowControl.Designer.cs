@@ -31,9 +31,9 @@
             this.cb_open = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.gb_int = new System.Windows.Forms.GroupBox();
+            this.cb_lasttransmit = new System.Windows.Forms.CheckBox();
             this.cb_preasort = new System.Windows.Forms.CheckBox();
             this.cb_keeppicked = new System.Windows.Forms.CheckBox();
-            this.llb_keyboard = new System.Windows.Forms.LinkLabel();
             this.gb_ads = new System.Windows.Forms.GroupBox();
             this.bt_add = new System.Windows.Forms.Button();
             this.tb_ad = new System.Windows.Forms.TextBox();
@@ -50,11 +50,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.tb_scale = new System.Windows.Forms.TrackBar();
-            this.gb_popup = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.rb_ozstrips = new System.Windows.Forms.RadioButton();
-            this.rb_vatsys = new System.Windows.Forms.RadioButton();
-            this.cb_lasttransmit = new System.Windows.Forms.CheckBox();
+            this.llb_keyboard = new System.Windows.Forms.LinkLabel();
             this.gp_main.SuspendLayout();
             this.gb_open.SuspendLayout();
             this.gb_int.SuspendLayout();
@@ -62,7 +58,6 @@
             this.gb_server.SuspendLayout();
             this.gb_scale.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tb_scale)).BeginInit();
-            this.gb_popup.SuspendLayout();
             this.SuspendLayout();
             // 
             // gp_main
@@ -72,7 +67,6 @@
             this.gp_main.Controls.Add(this.gb_ads);
             this.gp_main.Controls.Add(this.gb_server);
             this.gp_main.Controls.Add(this.gb_scale);
-            this.gp_main.Controls.Add(this.gb_popup);
             this.gp_main.Location = new System.Drawing.Point(4, 4);
             this.gp_main.Name = "gp_main";
             this.gp_main.Size = new System.Drawing.Size(469, 373);
@@ -84,7 +78,7 @@
             // 
             this.gb_open.Controls.Add(this.cb_open);
             this.gb_open.Controls.Add(this.label5);
-            this.gb_open.Location = new System.Drawing.Point(8, 256);
+            this.gb_open.Location = new System.Drawing.Point(7, 163);
             this.gb_open.Name = "gb_open";
             this.gb_open.Size = new System.Drawing.Size(222, 93);
             this.gb_open.TabIndex = 3;
@@ -120,6 +114,16 @@
             this.gb_int.TabStop = false;
             this.gb_int.Text = "Strip Interaction";
             // 
+            // cb_lasttransmit
+            // 
+            this.cb_lasttransmit.AutoSize = true;
+            this.cb_lasttransmit.Location = new System.Drawing.Point(7, 57);
+            this.cb_lasttransmit.Name = "cb_lasttransmit";
+            this.cb_lasttransmit.Size = new System.Drawing.Size(180, 17);
+            this.cb_lasttransmit.TabIndex = 2;
+            this.cb_lasttransmit.Text = "Highlight last transmitting aircraft.";
+            this.cb_lasttransmit.UseVisualStyleBackColor = true;
+            // 
             // cb_preasort
             // 
             this.cb_preasort.AutoSize = true;
@@ -139,17 +143,6 @@
             this.cb_keeppicked.TabIndex = 0;
             this.cb_keeppicked.Text = "Keep strip picked after action.";
             this.cb_keeppicked.UseVisualStyleBackColor = true;
-            // 
-            // llb_keyboard
-            // 
-            this.llb_keyboard.AutoSize = true;
-            this.llb_keyboard.Location = new System.Drawing.Point(237, 380);
-            this.llb_keyboard.Name = "llb_keyboard";
-            this.llb_keyboard.Size = new System.Drawing.Size(107, 13);
-            this.llb_keyboard.TabIndex = 3;
-            this.llb_keyboard.TabStop = true;
-            this.llb_keyboard.Text = "Keyboard Commands";
-            this.llb_keyboard.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.KeyboardCommandsOpened);
             // 
             // gb_ads
             // 
@@ -217,7 +210,7 @@
             this.gb_server.Controls.Add(this.rb_sb2);
             this.gb_server.Controls.Add(this.rb_sb1);
             this.gb_server.Controls.Add(this.rb_vatsim);
-            this.gb_server.Location = new System.Drawing.Point(7, 111);
+            this.gb_server.Location = new System.Drawing.Point(6, 18);
             this.gb_server.Name = "gb_server";
             this.gb_server.Size = new System.Drawing.Size(222, 143);
             this.gb_server.TabIndex = 1;
@@ -321,58 +314,16 @@
             this.tb_scale.TickStyle = System.Windows.Forms.TickStyle.Both;
             this.tb_scale.Value = 100;
             // 
-            // gb_popup
+            // llb_keyboard
             // 
-            this.gb_popup.Controls.Add(this.label1);
-            this.gb_popup.Controls.Add(this.rb_ozstrips);
-            this.gb_popup.Controls.Add(this.rb_vatsys);
-            this.gb_popup.Location = new System.Drawing.Point(7, 20);
-            this.gb_popup.Name = "gb_popup";
-            this.gb_popup.Size = new System.Drawing.Size(222, 84);
-            this.gb_popup.TabIndex = 0;
-            this.gb_popup.TabStop = false;
-            this.gb_popup.Text = "FDR Popup Types";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, 20);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(209, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Determines what type of popup box to use.";
-            // 
-            // rb_ozstrips
-            // 
-            this.rb_ozstrips.AutoSize = true;
-            this.rb_ozstrips.Location = new System.Drawing.Point(6, 59);
-            this.rb_ozstrips.Name = "rb_ozstrips";
-            this.rb_ozstrips.Size = new System.Drawing.Size(98, 17);
-            this.rb_ozstrips.TabIndex = 1;
-            this.rb_ozstrips.TabStop = true;
-            this.rb_ozstrips.Text = "OzStrips Popup";
-            this.rb_ozstrips.UseVisualStyleBackColor = true;
-            // 
-            // rb_vatsys
-            // 
-            this.rb_vatsys.AutoSize = true;
-            this.rb_vatsys.Location = new System.Drawing.Point(6, 36);
-            this.rb_vatsys.Name = "rb_vatsys";
-            this.rb_vatsys.Size = new System.Drawing.Size(91, 17);
-            this.rb_vatsys.TabIndex = 0;
-            this.rb_vatsys.TabStop = true;
-            this.rb_vatsys.Text = "vatSys Popup";
-            this.rb_vatsys.UseVisualStyleBackColor = true;
-            // 
-            // cb_lasttransmit
-            // 
-            this.cb_lasttransmit.AutoSize = true;
-            this.cb_lasttransmit.Location = new System.Drawing.Point(7, 57);
-            this.cb_lasttransmit.Name = "cb_lasttransmit";
-            this.cb_lasttransmit.Size = new System.Drawing.Size(180, 17);
-            this.cb_lasttransmit.TabIndex = 2;
-            this.cb_lasttransmit.Text = "Highlight last transmitting aircraft.";
-            this.cb_lasttransmit.UseVisualStyleBackColor = true;
+            this.llb_keyboard.AutoSize = true;
+            this.llb_keyboard.Location = new System.Drawing.Point(237, 380);
+            this.llb_keyboard.Name = "llb_keyboard";
+            this.llb_keyboard.Size = new System.Drawing.Size(107, 13);
+            this.llb_keyboard.TabIndex = 3;
+            this.llb_keyboard.TabStop = true;
+            this.llb_keyboard.Text = "Keyboard Commands";
+            this.llb_keyboard.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.KeyboardCommandsOpened);
             // 
             // SettingsWindowControl
             // 
@@ -391,18 +342,12 @@
             this.gb_scale.ResumeLayout(false);
             this.gb_scale.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tb_scale)).EndInit();
-            this.gb_popup.ResumeLayout(false);
-            this.gb_popup.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         private System.Windows.Forms.GroupBox gp_main;
-        private System.Windows.Forms.GroupBox gb_popup;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.RadioButton rb_ozstrips;
-        private System.Windows.Forms.RadioButton rb_vatsys;
         private System.Windows.Forms.GroupBox gb_server;
         private System.Windows.Forms.RadioButton rb_vatsim;
         private System.Windows.Forms.RadioButton rb_sb3;

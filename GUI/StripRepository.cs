@@ -15,10 +15,21 @@ namespace MaxRumsey.OzStripsPlugin.GUI;
 /// </summary>
 public class StripRepository
 {
+    private readonly List<Strip> _strips = [];
+
     /// <summary>
     /// Gets a list of strip controllers.
     /// </summary>
-    public List<Strip> Strips { get; } = [];
+    public Strip[] Strips
+    {
+        get
+        {
+            lock (_strips)
+            {
+                return [.._strips];
+            }
+        }
+    }
 
     /// <summary>
     /// Looks up strip by callsign.
@@ -193,6 +204,41 @@ public class StripRepository
         }
 
         socketConn.SendStripStatus(null, acid);
+    }
+
+    /// <summary>
+    /// Clears all strips.
+    /// </summary>
+    public void ClearStrips()
+    {
+        lock (_strips)
+        {
+            _strips.Clear();
+        }
+    }
+
+    /// <summary>
+    /// Removes a strip.
+    /// </summary>
+    /// <param name="strip">Strip.</param>
+    public void RemoveStrip(Strip strip)
+    {
+        lock (_strips)
+        {
+            _strips.Remove(strip);
+        }
+    }
+
+    /// <summary>
+    /// Adds a strip.
+    /// </summary>
+    /// <param name="strip">Strip.</param>
+    public void AddStrip(Strip strip)
+    {
+        lock (_strips)
+        {
+            _strips.Add(strip);
+        }
     }
 
     private static Strip CreateStrip(FDR fdr, BayManager bayManager, SocketConn socketConn, bool inhibitReorders = false)

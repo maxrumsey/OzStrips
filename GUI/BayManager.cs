@@ -364,7 +364,7 @@ public class BayManager
         };
 
         WipeStrips();
-        StripRepository.Strips.Clear();
+        StripRepository.ClearStrips();
 
         foreach (var fdr in FDP2.GetFDRs)
         {
@@ -527,7 +527,7 @@ public class BayManager
 
         if (save && !StripRepository.Strips.Contains(strip))
         {
-            StripRepository.Strips.Add(strip);
+            StripRepository.AddStrip(strip);
         }
 
         if (!inhibitreorders)

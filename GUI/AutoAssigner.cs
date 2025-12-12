@@ -132,9 +132,17 @@ internal class AutoAssigner
 
     internal bool CompliesWithCondition(RuleCondition rule, AssignmentResult result, Strip strip, bool matchAsTrue = true)
     {
-        if (!string.IsNullOrEmpty(rule.IsJet) && Performance.GetPerformanceData(strip.FDR.AircraftTypeAndWake)?.IsJet != matchAsTrue)
+        if (!string.IsNullOrEmpty(rule.IsJet))
         {
-            return false;
+            var type = strip.FDR.AircraftTypeAndWake;
+
+            // if we can't find the type, assume its a prop.
+            var isJet = type is not null && Performance.GetPerformanceData(type)?.IsJet == true;
+
+            if (isJet != matchAsTrue)
+            {
+                return false;
+            }
         }
 
         if (!string.IsNullOrEmpty(rule.VFR) && (strip.FDR.FlightRules == "V") != matchAsTrue)
@@ -361,8 +369,8 @@ internal class AutoAssigner
     public static bool IsDepartureFreqAvailable(string freq)
     {
         var atc = Network.GetOnlineATCs;
-        var allFreqs = atc.SelectMany(x => x.Frequencies ?? []).Select(x => Conversions.FSDFrequencyToString(x)).ToArray() ?? [];
-
+        var allFreqs = atc.SelectMany(x => x.Frequencies ?? []).Select(x => Conversions.FSDFrequencyToString(x)).ToList() ?? [];
+        allFreqs.AddRange(Network.Me.Frequencies?.Select(x => Conversions.FSDFrequencyToString(x)) ?? []);
         return allFreqs.Contains(freq);
     }
 

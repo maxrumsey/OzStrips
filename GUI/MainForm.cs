@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Interop;
 using MaxRumsey.OzStripsPlugin.GUI.Controls;
 using MaxRumsey.OzStripsPlugin.GUI.DTO;
 using MaxRumsey.OzStripsPlugin.GUI.Properties;
@@ -308,6 +309,7 @@ public partial class MainForm : Form
         toolStripTextBox1.KeyPress += _mainFormController.AerodromeSelectorKeyDown;
         toolStripMenuItem1.Click += _mainFormController.ShowMessageList_Click;
         settingsWindowToolStripMenuItem.Click += _mainFormController.ShowSettings;
+        keyboardSettingsToolStripMenuItem.Click += _mainFormController.ShowKeySettings;
         cdmTextBox.KeyPress += _mainFormController.CDMRateKeyDown;
         ts_toggleCircuit.Click += _mainFormController.ToggleCircuitBay;
         toggleCDMToolStripMenuItem.Click += _mainFormController.ToggleCDM;
