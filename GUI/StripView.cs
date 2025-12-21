@@ -457,6 +457,11 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
                 return _strip.CFL;
             case StripElements.Values.STAND:
+                if (!string.IsNullOrEmpty(_strip.AllocatedBay) && string.IsNullOrEmpty(_strip.Gate))
+                {
+                    return _strip.AllocatedBay;
+                }
+
                 return _strip.Gate;
             case StripElements.Values.GLOP:
                 return _strip.FDR.GlobalOpData;

@@ -310,6 +310,11 @@ public sealed class Strip
     public string Gate { get; set; } = string.Empty;
 
     /// <summary>
+    /// Gets or sets the allocated bay.
+    /// </summary>
+    public string AllocatedBay { get; set; } = string.Empty;
+
+    /// <summary>
     /// Gets the PDC request for this strip, if applicable.
     /// </summary>
     public PDCRequest? PDCRequest => _bayManager.AerodromeState.PDCRequests.FirstOrDefault(x => x.Callsign == FDR.Callsign);
