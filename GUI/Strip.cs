@@ -631,7 +631,8 @@ public sealed class Strip
     private static Dictionary<StripBay, StripBay> NextBayDep { get; } = new()
     {
         { StripBay.BAY_PREA, StripBay.BAY_CLEARED },
-        { StripBay.BAY_CLEARED, StripBay.BAY_PUSHED },
+        { StripBay.BAY_CLEARED, StripBay.BAY_COORDINATOR },
+        { StripBay.BAY_COORDINATOR, StripBay.BAY_PUSHED },
         { StripBay.BAY_PUSHED, StripBay.BAY_TAXI },
         { StripBay.BAY_TAXI, StripBay.BAY_HOLDSHORT },
         { StripBay.BAY_HOLDSHORT, StripBay.BAY_RUNWAY },
@@ -656,7 +657,8 @@ public sealed class Strip
     private static Dictionary<StripBay, StripBay> NextBayLocal { get; } = new()
     {
         { StripBay.BAY_PREA, StripBay.BAY_CLEARED },
-        { StripBay.BAY_CLEARED, StripBay.BAY_PUSHED },
+        { StripBay.BAY_CLEARED, StripBay.BAY_COORDINATOR },
+        { StripBay.BAY_COORDINATOR, StripBay.BAY_PUSHED },
         { StripBay.BAY_PUSHED, StripBay.BAY_TAXI },
         { StripBay.BAY_TAXI, StripBay.BAY_HOLDSHORT },
         { StripBay.BAY_HOLDSHORT, StripBay.BAY_RUNWAY },

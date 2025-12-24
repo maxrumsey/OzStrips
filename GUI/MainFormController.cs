@@ -155,9 +155,22 @@ public class MainFormController : IDisposable
     {
         SetClientList(_bayManager.AerodromeState.Connections);
         _mainForm.StatusPanel.Invalidate();
+
+        var specialLayoutChangeTriggered = false;
+
         if (_bayManager.CircuitActive != _bayManager.AerodromeState.CircuitActive)
         {
             _bayManager.CircuitActive = _bayManager.AerodromeState.CircuitActive;
+            specialLayoutChangeTriggered = true;
+        }
+        if (_bayManager.CoordinatorBayActive != _bayManager.AerodromeState.CoordinatorBayActive)
+        {
+            _bayManager.CoordinatorBayActive = _bayManager.AerodromeState.CoordinatorBayActive;
+            specialLayoutChangeTriggered = true;
+        }
+
+        if (specialLayoutChangeTriggered)
+        {
             AerodromeTypeChanged(this, EventArgs.Empty);
         }
 
@@ -172,6 +185,7 @@ public class MainFormController : IDisposable
         var bays = layouts.First(x => x.Name == "All").Elements.Select(x => x.Bay);
 
         var circuitBayDefined = bays.Any(x => x?.Circuit == true);
+        var coordinatorBayDefined = bays.Any(x => x?.Coordinator == true);
 
         foreach (var layout in layouts)
         {
@@ -193,12 +207,25 @@ public class MainFormController : IDisposable
                         continue;
                     }
 
+                    // If this is the coordinator bay and we don't have it enabled.
+                    if (element.Bay is null ||
+                        (element.Bay.Coordinator && !_bayManager.CoordinatorBayActive))
+                    {
+                        continue;
+                    }
+
                     var types = element.Bay.Types.ToList();
 
                     // If circuit mode is enabled, don't have duplicate circuit bays
                     if (_bayManager.CircuitActive && !element.Bay.Circuit && circuitBayDefined)
                     {
                         types.Remove(StripBay.BAY_CIRCUIT);
+                    }
+
+                    // If coordinator mode is enabled, don't have duplicate coordinate bays
+                    if (_bayManager.CoordinatorBayActive && !element.Bay.Coordinator && coordinatorBayDefined)
+                    {
+                        types.Remove(StripBay.BAY_COORDINATOR);
                     }
 
                     _ = new Bay(types, _bayManager, _socketConn, element.Name, element.Column, element.Bay.CDMDisplay);
@@ -727,6 +754,18 @@ public class MainFormController : IDisposable
         try
         {
             _socketConn.RequestCircuit(!_bayManager.CircuitActive);
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+        }
+    }
+
+    internal void ToggleCoordBay(object sender, EventArgs e)
+    {
+        try
+        {
+            _socketConn.RequestCoordinator(!_bayManager.CoordinatorBayActive);
         }
         catch (Exception ex)
         {
