@@ -516,6 +516,11 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             case StripElements.Values.PDC_INDICATOR:
             case StripElements.Values.TYPE:
             case StripElements.Values.SSR:
+                if (element.Value == StripElements.Values.STAND && !string.IsNullOrEmpty(_strip.AllocatedBay) && string.IsNullOrEmpty(_strip.Gate))
+                {
+                    return SKColors.LightGray;
+                }
+
                 if (element.Value == StripElements.Values.PDC_INDICATOR && _strip.StripType != StripType.ARRIVAL)
                 {
                     var requestedPDC = _strip.PDCRequest;
