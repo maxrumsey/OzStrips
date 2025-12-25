@@ -54,4 +54,9 @@ public enum StripBay
     /// Indicates the strip for an aircraft that is in the circuit.
     /// </summary>
     BAY_CIRCUIT,
+
+    /// <summary>
+    /// Indicates the strip for an aircraft that is in a "STANDBY FOR GROUND" bay.
+    /// </summary>
+    BAY_COORDINATOR,
 }

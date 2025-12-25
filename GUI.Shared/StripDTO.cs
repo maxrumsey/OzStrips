@@ -41,6 +41,11 @@ public class StripDTO
     public string GATE { get; set; } = string.Empty;
 
     /// <summary>
+    /// Gets or sets the server-allocated bay.
+    /// </summary>
+    public string AllocatedBay { get; set; } = string.Empty;
+
+    /// <summary>
     /// Gets or sets the time of takeoff.
     /// </summary>
     [JsonPropertyName(nameof(TOT))]

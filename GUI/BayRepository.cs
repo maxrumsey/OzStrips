@@ -115,7 +115,7 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
         }
 
         FindBay(strip)?.RemoveStrip(strip, true);
-        _bayManager.StripRepository.Strips.Remove(strip);
+        _bayManager.StripRepository.RemoveStrip(strip);
     }
 
     /// <summary>

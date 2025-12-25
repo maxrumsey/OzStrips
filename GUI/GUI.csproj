@@ -5,16 +5,15 @@
         <UseWPF>true</UseWPF>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
         <EmbeddedResourceUseDependentUponConvention>true</EmbeddedResourceUseDependentUponConvention>
-        <PlatformTarget>x86</PlatformTarget>
         <RootNamespace>MaxRumsey.OzStripsPlugin.GUI</RootNamespace>
         <ApplicationIcon>ozstrips.ico</ApplicationIcon>
         <CefSharpBuildAction>Content</CefSharpBuildAction>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <BaseOutputPath>$(MSBuildProgramFiles32)\vatSys\bin\Plugins\</BaseOutputPath>
         <OutputPath>$(HOMEPATH)\Documents\vatSys Files\Profiles\Australia\Plugins\OzStrips\</OutputPath>
-        <Platforms>AnyCPU</Platforms>
-      <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-      <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+        <PlatformTarget>x86</PlatformTarget>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net472|AnyCPU'">
       <Optimize>False</Optimize>
