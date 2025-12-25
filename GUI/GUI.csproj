@@ -30,11 +30,11 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net481|AnyCPU'">
       <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-      <NoWarn>1701;1702;CA1502;SA1201;SA1202;SA1204;SA1214</NoWarn>
+      <NoWarn>1701;1702;CA1502;SA1201;SA1202;SA1204;SA1214;CA1506</NoWarn>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net481|AnyCPU'">
       <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-      <NoWarn>1701;1702;CA1502;SA1201;SA1202;SA1204;SA1214</NoWarn>
+      <NoWarn>1701;1702;CA1502;SA1201;SA1202;SA1204;SA1214;CA1506</NoWarn>
     </PropertyGroup>
   
     <ItemGroup>
