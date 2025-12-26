@@ -85,7 +85,7 @@ public class BayManager
     {
         AerodromeCode = "????",
         CircuitActive = false,
-        CoordinatorBayActive = false;
+        CoordinatorBayActive = false,
         Connections = new List<string>(),
     };
 
