@@ -616,7 +616,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 /*
                     * HDG unassigned to radar sid in rwy bay.
                     */
-                if (element.Value == StripElements.Values.GLOP &&
+                if (element.Value == StripElements.Values.HDG &&
                     _strip.IsAlertActive(Shared.AlertTypes.NO_HDG))
                 {
                     return SKColors.Orange;
