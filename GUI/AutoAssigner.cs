@@ -173,6 +173,24 @@ internal class AutoAssigner
             }
         }
 
+        if (rule.WTC.Count > 0)
+        {
+            var matched = false;
+            foreach (var wtc in rule.WTC)
+            {
+                if (strip.FDR.AircraftWake == wtc)
+                {
+                    matched = true;
+                    break;
+                }
+            }
+
+            if (matched != matchAsTrue)
+            {
+                return false;
+            }
+        }
+
         if (rule.SID.Count > 0 && rule.SID.Contains(result.SID) != matchAsTrue)
         {
             return false;
