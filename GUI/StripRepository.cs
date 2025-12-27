@@ -81,7 +81,7 @@ public class StripRepository
         {
             if (controller.FDR.Callsign == fdr.Callsign)
             {
-                if (GetFDRIndex(fdr.Callsign) == -1 && controller.DefaultStripType != StripType.ARRIVAL)
+                if (GetFDRIndex(fdr.Callsign) == -1 && controller.DefaultStripType == StripType.DEPARTURE)
                 {
                     bayManager.BayRepository.DeleteStrip(controller);
                 }
