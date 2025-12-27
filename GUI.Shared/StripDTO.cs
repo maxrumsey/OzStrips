@@ -89,4 +89,9 @@ public class StripDTO
     /// Gets or sets PDC flags.
     /// </summary>
     public PDCRequest.PDCFlags PDCFlags { get; set; }
+
+    /// <summary>
+    /// Gets or sets the list of inhibited alerts.
+    /// </summary>
+    public AlertTypes InhibitedAlerts { get; set; }
 }

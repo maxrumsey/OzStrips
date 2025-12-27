@@ -142,6 +142,7 @@ public class StripRepository
                     strip.Ready = stripDTO.ready;
                     strip.OverrideStripType = stripDTO.OverrideStripType;
                     strip.PDCFlags = stripDTO.PDCFlags;
+                    strip.InhibitedAlerts = stripDTO.InhibitedAlerts;
 
                     if (changeBay)
                     {

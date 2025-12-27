@@ -691,6 +691,7 @@ public sealed class Strip
             OverrideStripType = sc.OverrideStripType,
             PDCFlags = sc.PDCFlags,
             DepartureFrequency = sc.DepartureFrequency,
+            InhibitedAlerts = sc.InhibitedAlerts,
         };
 
         return scDTO;
