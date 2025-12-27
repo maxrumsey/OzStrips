@@ -1,8 +1,12 @@
 # Changelog
-## v0.8.2
+## v0.8.3
 ### Features
 - Added OzBays integration.
 - Added toggleable coordinator bay.
+- Added ability to inhibit alerts.
+## v0.8.2
+### Bugfixes
+- Fixed bug where you strips could not be selected.
 ## v0.8.1
 ### Features
 - Added keybind changer.
