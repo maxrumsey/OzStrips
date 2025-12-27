@@ -18,6 +18,11 @@ namespace MaxRumsey.OzStripsPlugin.GUI.Shared
         public bool CircuitActive { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the coordinator bay is active.
+        /// </summary>
+        public bool CoordinatorBayActive { get; set; }
+
+        /// <summary>
         /// Gets or sets the aerodrome code.
         /// </summary>
         public string AerodromeCode { get; set; } = string.Empty;

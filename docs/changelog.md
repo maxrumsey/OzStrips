@@ -1,4 +1,15 @@
 # Changelog
+## v0.8.2
+### Features
+- Added OzBays integration.
+- Added toggleable coordinator bay.
+## v0.8.1
+### Features
+- Added keybind changer.
+- Removed edit windows in favour of dropdown.
+### Bugfixes
+- Fixed concurrency issue.
+- Fixed bug when trying to autofill a strip with an unknown type.
 ## v0.8.0
 ### Features
 - Added strip autofill feature.

@@ -85,6 +85,7 @@ public class BayManager
     {
         AerodromeCode = "????",
         CircuitActive = false,
+        CoordinatorBayActive = false,
         Connections = new List<string>(),
     };
 
@@ -92,6 +93,11 @@ public class BayManager
     /// Gets or sets a value indicating whether the circuit bay is active.
     /// </summary>
     public bool CircuitActive { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the coordinator bay is active.
+    /// </summary>
+    public bool CoordinatorBayActive { get; set; }
 
     /// <summary>
     /// Gets the bay the current picked striplistitem is from.

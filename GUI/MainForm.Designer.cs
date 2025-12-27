@@ -60,6 +60,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.toggleCDMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.keyboardSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.cDMRateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cdmTextBox = new System.Windows.Forms.ToolStripTextBox();
@@ -80,7 +81,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.autoFillUnavailableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tt_metar = new System.Windows.Forms.ToolTip(this.components);
             this.tt_clients = new System.Windows.Forms.ToolTip(this.components);
-            this.keyboardSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ts_toggleCoord = new System.Windows.Forms.ToolStripMenuItem();
             this.pl_controlbar.SuspendLayout();
             this.pl_atis.SuspendLayout();
             this.pl_ad.SuspendLayout();
@@ -288,6 +289,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.ts_mode,
             this.smartResizeToolStripMenuItem,
             this.ts_toggleCircuit,
+            this.ts_toggleCoord,
             this.toggleCDMToolStripMenuItem});
             this.viewToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.viewToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
@@ -298,7 +300,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             // ts_mode
             // 
             this.ts_mode.Name = "ts_mode";
-            this.ts_mode.Size = new System.Drawing.Size(220, 22);
+            this.ts_mode.Size = new System.Drawing.Size(252, 22);
             this.ts_mode.Text = "View Mode";
             // 
             // smartResizeToolStripMenuItem
@@ -309,7 +311,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.oneColumnToolStripMenuItem,
             this.colDisabledToolStripMenuItem});
             this.smartResizeToolStripMenuItem.Name = "smartResizeToolStripMenuItem";
-            this.smartResizeToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+            this.smartResizeToolStripMenuItem.Size = new System.Drawing.Size(252, 22);
             this.smartResizeToolStripMenuItem.Text = "Smart Resize";
             // 
             // threeColumnsToolStripMenuItem
@@ -343,13 +345,13 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             // ts_toggleCircuit
             // 
             this.ts_toggleCircuit.Name = "ts_toggleCircuit";
-            this.ts_toggleCircuit.Size = new System.Drawing.Size(220, 22);
+            this.ts_toggleCircuit.Size = new System.Drawing.Size(252, 22);
             this.ts_toggleCircuit.Text = "Toggle Circuit Bay";
             // 
             // toggleCDMToolStripMenuItem
             // 
             this.toggleCDMToolStripMenuItem.Name = "toggleCDMToolStripMenuItem";
-            this.toggleCDMToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+            this.toggleCDMToolStripMenuItem.Size = new System.Drawing.Size(252, 22);
             this.toggleCDMToolStripMenuItem.Text = "Toggle CDM";
             // 
             // settingsToolStripMenuItem
@@ -373,6 +375,12 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.settingsWindowToolStripMenuItem.Name = "settingsWindowToolStripMenuItem";
             this.settingsWindowToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.settingsWindowToolStripMenuItem.Text = "Settings Window";
+            // 
+            // keyboardSettingsToolStripMenuItem
+            // 
+            this.keyboardSettingsToolStripMenuItem.Name = "keyboardSettingsToolStripMenuItem";
+            this.keyboardSettingsToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.keyboardSettingsToolStripMenuItem.Text = "Keyboard Settings";
             // 
             // toolStripSeparator3
             // 
@@ -515,11 +523,11 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             // 
             this.tt_clients.ToolTipTitle = "Online Clients";
             // 
-            // keyboardSettingsToolStripMenuItem
+            // ts_toggleCoord
             // 
-            this.keyboardSettingsToolStripMenuItem.Name = "keyboardSettingsToolStripMenuItem";
-            this.keyboardSettingsToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
-            this.keyboardSettingsToolStripMenuItem.Text = "Keyboard Settings";
+            this.ts_toggleCoord.Name = "ts_toggleCoord";
+            this.ts_toggleCoord.Size = new System.Drawing.Size(252, 22);
+            this.ts_toggleCoord.Text = "Toggle Coordinator Bay";
             // 
             // MainForm
             // 
@@ -595,5 +603,6 @@ namespace MaxRumsey.OzStripsPlugin.GUI
         private ToolStripSeparator toolStripSeparator4;
         private ToolStripMenuItem tt_pdcsound;
         private ToolStripMenuItem keyboardSettingsToolStripMenuItem;
+        private ToolStripMenuItem ts_toggleCoord;
     }
 }

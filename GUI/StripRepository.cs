@@ -121,6 +121,7 @@ public class StripRepository
                     var changeBay = false;
                     strip.CLX = !string.IsNullOrWhiteSpace(stripDTO.CLX) ? stripDTO.CLX : string.Empty;
                     strip.Gate = stripDTO.GATE ?? string.Empty;
+                    strip.AllocatedBay = stripDTO.AllocatedBay ?? string.Empty;
 
                     strip.DepartureFrequency = stripDTO.DepartureFrequency ?? string.Empty;
 
