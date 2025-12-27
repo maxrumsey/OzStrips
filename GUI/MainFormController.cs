@@ -46,7 +46,7 @@ public class MainFormController : IDisposable
     /// <summary>
     /// Gets a value indicating whether or not the control key is being held down.
     /// </summary>
-    public static bool ControlHeld => Keyboard.GetKeyStates(KeybindManager.ActiveKeybinds[KeybindManager.KEYBINDS.MODIFIER1]) != KeyStates.None;
+    public static bool ControlHeld => Keyboard.GetKeyStates(KeybindManager.ActiveKeybinds[KeybindManager.KEYBINDS.MODIFIER1]).HasFlag(KeyStates.Down);
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MainFormController"/> class.
