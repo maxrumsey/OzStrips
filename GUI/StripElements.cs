@@ -63,6 +63,12 @@ public static class StripElements
         OPEN_PDC,
         OPEN_PM,
         OPEN_CDM,
+        INHIBIT_ROUTE,
+        INHIBIT_RFL,
+        INHIBIT_HDG,
+        INHIBIT_SID,
+        INHIBIT_SSR,
+        INHIBIT_READY,
     }
 
     public enum HoverActions

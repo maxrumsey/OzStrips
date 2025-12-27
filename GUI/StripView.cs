@@ -170,6 +170,10 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             {
                 action = clicked.RightClick;
             }
+            else if (e.Button == MouseButtons.Middle)
+            {
+                action = clicked.MiddleClick;
+            }
 
             HandleClickAction(action);
         }
@@ -382,6 +386,48 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 break;
             case StripElements.Actions.OPEN_PM:
                 MMI.OpenPMWindow(_strip.FDR.Callsign);
+                break;
+            case StripElements.Actions.INHIBIT_ROUTE:
+                if (_strip.IsAlertActive(Shared.AlertTypes.ROUTE))
+                {
+                    _strip.InhibitAlert(Shared.AlertTypes.ROUTE);
+                }
+
+                break;
+            case StripElements.Actions.INHIBIT_RFL:
+                if (_strip.IsAlertActive(Shared.AlertTypes.RFL))
+                {
+                    _strip.InhibitAlert(Shared.AlertTypes.RFL);
+                }
+
+                break;
+            case StripElements.Actions.INHIBIT_SSR:
+                if (_strip.IsAlertActive(Shared.AlertTypes.SSR))
+                {
+                    _strip.InhibitAlert(Shared.AlertTypes.SSR);
+                }
+
+                break;
+            case StripElements.Actions.INHIBIT_SID:
+                if (_strip.IsAlertActive(Shared.AlertTypes.VFR_SID))
+                {
+                    _strip.InhibitAlert(Shared.AlertTypes.VFR_SID);
+                }
+
+                break;
+            case StripElements.Actions.INHIBIT_READY:
+                if (_strip.IsAlertActive(Shared.AlertTypes.READY))
+                {
+                    _strip.InhibitAlert(Shared.AlertTypes.READY);
+                }
+
+                break;
+            case StripElements.Actions.INHIBIT_HDG:
+                if (_strip.IsAlertActive(Shared.AlertTypes.NO_HDG))
+                {
+                    _strip.InhibitAlert(Shared.AlertTypes.NO_HDG);
+                }
+
                 break;
         }
     }
