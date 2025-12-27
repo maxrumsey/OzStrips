@@ -129,19 +129,20 @@ public class StripController
     }
 
     /// <summary>
-    /// Determines the colour of the CFL highlight.
+    /// Determines whether the CFL alert should be active.
     /// </summary>
-    /// <returns>Colour.</returns>
-    public SKColor DetermineCFLBackColour()
+    /// <returns>Active.</returns>
+    public bool CFLAlertActive()
     {
         var first = FDR.ParsedRoute.FirstOrDefault()?.Intersection.LatLong;
         var last = FDR.ParsedRoute.LastOrDefault()?.Intersection.LatLong;
+        var active = false;
 
         if (first is null ||
             last is null ||
             first == last)
         {
-            return SKColor.Empty;
+            return false;
         }
 
         int[] eastRVSM = [41000, 45000, 49000];
@@ -151,7 +152,7 @@ public class StripController
         var positions = LogicalPositions.Positions.FirstOrDefault(e => e.Name == Strip.ParentAerodrome);
         if (positions is null)
         {
-            return SKColor.Empty;
+            return false;
         }
 
         var variation = positions.MagneticVariation;
@@ -167,44 +168,25 @@ public class StripController
         var digit = int.Parse(Strip.RFL[1].ToString(), CultureInfo.InvariantCulture);
         var shouldbeeven = digit % 2 == 0;
 
-        var colour = SKColor.Empty;
         if (even != shouldbeeven && FDR.RFL >= 3000 && Strip.StripType == StripType.DEPARTURE)
         {
-            colour = SKColors.OrangeRed;
-            ShowCFLToolTip = true;
+            active = true;
         }
         else
         {
-            ShowCFLToolTip = false;
+            active = false;
         }
 
         if (FDR.RFL >= 41000 && ((even && westRVSM.Contains(FDR.RFL)) || (!even && eastRVSM.Contains(FDR.RFL))))
         {
-            colour = SKColor.Empty;
-            ShowCFLToolTip = false;
+            active = false;
         }
         else if (FDR.RFL >= 41000 && Strip.StripType == StripType.DEPARTURE)
         {
-            colour = SKColors.OrangeRed;
-            ShowCFLToolTip = true;
+            active = true;
         }
 
-        return colour;
-    }
-
-    /// <summary>
-    /// Determines the colour of the Route highlight.
-    /// </summary>
-    /// <returns>Colour.</returns>
-    public SKColor DetermineRouteBackColour()
-    {
-        var colour = SKColor.Empty;
-        if (Strip.DodgyRoute)
-        {
-            colour = SKColors.Orange;
-        }
-
-        return colour;
+        return active;
     }
 
     /// <summary>

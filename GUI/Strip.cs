@@ -96,6 +96,11 @@ public sealed class Strip
     public string? CondensedRoute { get; set; } = string.Empty;
 
     /// <summary>
+    /// Gets or sets inhibited alerts.
+    /// </summary>
+    public Shared.AlertTypes InhibitedAlerts { get; set; }
+
+    /// <summary>
     /// Gets or sets a value indicating whether or not a list of valid routes has been selected.
     /// </summary>
     public DateTime RequestedRoutes { get; set; } = DateTime.MaxValue;
@@ -744,6 +749,47 @@ public sealed class Strip
         }
 
         SyncStrip();
+    }
+
+    /// <summary>
+    /// Inhibits display of an alert.
+    /// </summary>
+    /// <param name="alert">Alert to inhibit.</param>
+    public void InhibitAlert(Shared.AlertTypes alert)
+    {
+        if (!InhibitedAlerts.HasFlag(alert))
+        {
+            InhibitedAlerts |= alert;
+            SyncStrip();
+        }
+    }
+
+    /// <summary>
+    /// Determines whether or not an alert is active.
+    /// </summary>
+    /// <param name="alert">Alert to check.</param>
+    /// <returns>Alert is active.</returns>
+    /// <exception cref="ArgumentException">Invalid alert type passed.</exception>
+    public bool IsAlertActive(Shared.AlertTypes alert)
+    {
+        if (InhibitedAlerts.HasFlag(alert))
+        {
+            return false;
+        }
+
+        return alert switch
+        {
+            Shared.AlertTypes.RFL => Controller.CFLAlertActive(),
+            Shared.AlertTypes.SSR => !SquawkCorrect && CurrentBay >= StripBay.BAY_TAXI && StripType == StripType.DEPARTURE,
+            Shared.AlertTypes.ROUTE => DodgyRoute,
+            Shared.AlertTypes.NO_HDG => CurrentBay >= StripBay.BAY_HOLDSHORT &&
+                                string.IsNullOrEmpty(HDG) &&
+                                SID.Length == 3 &&
+                                StripType == StripType.DEPARTURE,
+            Shared.AlertTypes.READY => !Ready && (CurrentBay == StripBay.BAY_HOLDSHORT || CurrentBay == StripBay.BAY_RUNWAY) && StripType != StripType.ARRIVAL,
+            Shared.AlertTypes.VFR_SID => VFRSIDAssigned,
+            _ => throw new ArgumentException("Unknown alert type."),
+        };
     }
 
     /// <summary>

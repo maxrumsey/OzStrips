@@ -26,14 +26,6 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
     private static bool LastTransmitModifier => Keyboard.IsKeyDown(KeybindManager.ActiveKeybinds[KeybindManager.KEYBINDS.LAST_TRANSMIT_HIGHLIGHT]);
 
-    private bool ShowSSRError
-    {
-        get
-        {
-            return !_strip.SquawkCorrect && _strip.CurrentBay >= StripBay.BAY_TAXI && _strip.StripType == StripType.DEPARTURE;
-        }
-    }
-
     /// <summary>
     /// Gets or sets the root of the strip (taking into account strip cocking). The strip background is drawn from this point.
     /// </summary>
@@ -252,13 +244,13 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
                     break;
                 case StripElements.HoverActions.RFL_WARNING:
-                    if (_bayRenderController.HoveredItem != StripElements.HoverActions.RFL_WARNING && (_strip.Controller.ShowCFLToolTip || _strip.CFL.Contains("B")))
+                    if (_bayRenderController.HoveredItem != StripElements.HoverActions.RFL_WARNING && (_strip.IsAlertActive(Shared.AlertTypes.RFL) || _strip.CFL.Contains("B")))
                     {
                         _bayRenderController.HoveredItem = StripElements.HoverActions.RFL_WARNING;
                         _bayRenderController.ToolTip.Show(
                        (
                         (_strip.CFL.Contains("B") ? (_strip.CFL + "\n") : string.Empty) +
-                        (_strip.Controller.ShowCFLToolTip ? "Potentially non-compliant filed cruise level detected." : string.Empty)).Trim(),
+                        (_strip.IsAlertActive(Shared.AlertTypes.RFL) ? "Potentially non-compliant filed cruise level detected." : string.Empty)).Trim(),
                        _bayRenderController.SkControl,
                        e);
                     }
@@ -266,7 +258,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                     break;
                 case StripElements.HoverActions.SSR_WARNING:
                     if (_bayRenderController.HoveredItem != StripElements.HoverActions.SSR_WARNING &&
-                    ShowSSRError)
+                    _strip.IsAlertActive(Shared.AlertTypes.SSR))
                     {
                         _bayRenderController.HoveredItem = StripElements.HoverActions.SSR_WARNING;
                         _bayRenderController.ToolTip.Show("Incorrect SSR Code or Mode.", _bayRenderController.SkControl, e);
@@ -539,8 +531,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 /*
                 * Incorrect SSR Code & Mode C alert
                 */
-                if ((element.Value == StripElements.Values.SSR) &&
-                ShowSSRError)
+                if ((element.Value == StripElements.Values.SSR) && _strip.IsAlertActive(Shared.AlertTypes.SSR))
                 {
                     return SKColors.Orange;
                 }
@@ -580,10 +571,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                     * HDG unassigned to radar sid in rwy bay.
                     */
                 if (element.Value == StripElements.Values.GLOP &&
-                    _strip.CurrentBay >= StripBay.BAY_HOLDSHORT &&
-                    string.IsNullOrEmpty(_strip.HDG) &&
-                    _strip.SID.Length == 3 &&
-                    _strip.StripType == StripType.DEPARTURE)
+                    _strip.IsAlertActive(Shared.AlertTypes.NO_HDG))
                 {
                     return SKColors.Orange;
                 }
@@ -592,19 +580,19 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             case StripElements.Values.SID:
                 var sidcolour = SKColors.LimeGreen;
 
-                if (_strip.VFRSIDAssigned)
+                if (_strip.IsAlertActive(Shared.AlertTypes.VFR_SID))
                 {
                     sidcolour = SKColors.Orange;
                 }
 
                 return sidcolour;
             case StripElements.Values.CFL:
-                return _strip.Controller.DetermineCFLBackColour();
+                return _strip.IsAlertActive(Shared.AlertTypes.RFL) ? SKColors.OrangeRed : SKColors.Empty;
             case StripElements.Values.FIRST_WPT:
-                return _strip.Controller.DetermineRouteBackColour();
+                return _strip.IsAlertActive(Shared.AlertTypes.ROUTE) ? SKColors.OrangeRed : SKColors.Empty;
             case StripElements.Values.READY:
                 var colour = SKColor.Empty;
-                if (!_strip.Ready && (_strip.CurrentBay == StripBay.BAY_HOLDSHORT || _strip.CurrentBay == StripBay.BAY_RUNWAY) && _strip.StripType != StripType.ARRIVAL)
+                if (_strip.IsAlertActive(Shared.AlertTypes.READY))
                 {
                     colour = SKColors.Orange;
                 }
