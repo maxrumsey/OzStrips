@@ -1,4 +1,4 @@
-<!-- Be very careful ediitng the OzStrips configuration.
+<!-- Be very careful editing the OzStrips configuration.
      Do not make changes to this file, place an overwrite file in (PROFILE)/Plugins/AerodromeSettings.xml
      Changes between the two files are not additive. Changes in the Profile directory will overwrite this one.-->
 <AerodromeSettings>
