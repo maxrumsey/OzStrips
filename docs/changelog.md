@@ -4,6 +4,10 @@
 - Added OzBays integration.
 - Added toggleable coordinator bay.
 - Added ability to inhibit alerts.
+### Misc Changes
+- Added wake turb cat to autofill ruleset.
+### Bugfixes
+- Prevented preemptive deletion of FDRs
 ## v0.8.2
 ### Bugfixes
 - Fixed bug where you strips could not be selected.
