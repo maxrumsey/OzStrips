@@ -607,7 +607,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 break;
             case StripElements.Values.GLOP:
             case StripElements.Values.REMARK:
-            case StripElements.Values.HDG:
+            case StripElements.Values.DEPFREQ:
                 if (_strip.Crossing)
                 {
                     return SKColors.Red;
@@ -616,7 +616,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 /*
                     * HDG unassigned to radar sid in rwy bay.
                     */
-                if (element.Value == StripElements.Values.HDG &&
+                if (element.Value == StripElements.Values.DEPFREQ &&
                     _strip.IsAlertActive(Shared.AlertTypes.NO_HDG))
                 {
                     return SKColors.Orange;
