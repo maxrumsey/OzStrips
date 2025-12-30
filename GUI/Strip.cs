@@ -1076,6 +1076,7 @@ public sealed class Strip
 
             if (_bayManager.PickedStrip == this)
             {
+                _bayManager.PickedStripItem = nextBay.GetListItem(this);
                 _bayManager.RemovePicked(true);
             }
         }
