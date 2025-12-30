@@ -1072,7 +1072,12 @@ public sealed class Strip
 
         if (nextBay is not null)
         {
-            _bayManager.DropStrip(nextBay);
+            _bayManager.MoveStrip(nextBay, this);
+
+            if (_bayManager.PickedStrip == this)
+            {
+                _bayManager.RemovePicked(true);
+            }
         }
     }
 

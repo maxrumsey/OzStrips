@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.GUI.DTO;
 using MaxRumsey.OzStripsPlugin.GUI.Properties;
@@ -303,24 +304,36 @@ public class BayManager
     {
         if (PickedStrip != null)
         {
-            var newBay = bay.BayTypes.FirstOrDefault();
-            if (newBay == PickedStrip.CurrentBay)
+            if (MoveStrip(bay, PickedStrip));
             {
-                return;
+                PickedStripItem = bay.GetListItem(PickedStrip);
+                RemovePicked(true);
             }
-
-            PickedStrip.CurrentBay = newBay;
-            PickedStrip.SyncStrip();
-            UpdateBay(PickedStrip);
-
-            PickedStripItem = bay.GetListItem(PickedStrip);
-
-            RemovePicked(true);
         }
         else
         {
             MainFormController.Instance?.ForceStrip(null, null);
         }
+    }
+
+    /// <summary>
+    /// Moves a strip between bays.
+    /// </summary>
+    /// <param name="bay">Bay to move into.</param>
+    /// <param name="strip">Strip to move.</param>
+    /// <returns>Whether or not the strip was moved.</returns>
+    public bool MoveStrip(Bay bay, Strip strip)
+    {
+        var newBay = bay.BayTypes.FirstOrDefault();
+        if (newBay == strip.CurrentBay)
+        {
+            return false;
+        }
+
+        strip.CurrentBay = newBay;
+        strip.SyncStrip();
+        UpdateBay(strip);
+        return true;
     }
 
     /// <summary>
