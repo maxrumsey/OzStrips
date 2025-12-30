@@ -781,9 +781,13 @@ public sealed class Strip
         return alert switch
         {
             Shared.AlertTypes.RFL => Controller.CFLAlertActive(),
-            Shared.AlertTypes.SSR => !SquawkCorrect && CurrentBay >= StripBay.BAY_TAXI && StripType == StripType.DEPARTURE,
+            Shared.AlertTypes.SSR => !SquawkCorrect &&
+                                CurrentBay >= StripBay.BAY_TAXI &&
+                                CurrentBay != StripBay.BAY_COORDINATOR &&
+                                StripType == StripType.DEPARTURE,
             Shared.AlertTypes.ROUTE => DodgyRoute,
             Shared.AlertTypes.NO_HDG => CurrentBay >= StripBay.BAY_HOLDSHORT &&
+                                CurrentBay != StripBay.BAY_COORDINATOR &&
                                 string.IsNullOrEmpty(HDG) &&
                                 SID.Length == 3 &&
                                 StripType == StripType.DEPARTURE,

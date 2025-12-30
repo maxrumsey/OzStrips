@@ -231,7 +231,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
                         string str;
 
-                        if (_strip.DodgyRoute)
+                        if (_strip.IsAlertActive(Shared.AlertTypes.ROUTE))
                         {
                             var routes = new List<string>();
                             Array.ForEach(_strip.ValidRoutes, x => routes.Add("(" + x.AircraftType + ") " + x.RouteText));
@@ -272,10 +272,10 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 case StripElements.HoverActions.SID_TRIGGER:
                     var transExists = _strip.SIDTransition?.Length > 0;
                     if (_bayRenderController.HoveredItem != StripElements.HoverActions.SID_TRIGGER &&
-                        (transExists || _strip.VFRSIDAssigned))
+                        (transExists || _strip.IsAlertActive(Shared.AlertTypes.VFR_SID)))
                     {
                         _bayRenderController.HoveredItem = StripElements.HoverActions.SID_TRIGGER;
-                        _bayRenderController.ToolTip.Show((transExists ? _strip.SIDTransition + " Transition\n" : string.Empty) + (_strip.VFRSIDAssigned ? "VFR Aircraft issued a SID." : string.Empty), _bayRenderController.SkControl, e);
+                        _bayRenderController.ToolTip.Show((transExists ? _strip.SIDTransition + " Transition\n" : string.Empty) + (_strip.IsAlertActive(Shared.AlertTypes.VFR_SID) ? "VFR Aircraft issued a SID." : string.Empty), _bayRenderController.SkControl, e);
                     }
 
                     break;

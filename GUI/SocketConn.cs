@@ -595,6 +595,10 @@ public sealed class SocketConn : IDisposable
             }
         }
 
+        activeStrips.AddRange(_bayManager.StripRepository.Strips.Where(x => x.CurrentBay == StripBay.BAY_COORDINATOR));
+
+        activeStrips = activeStrips.Distinct().ToList();
+
         var cdmDTOs = new CDMAircraftList(
         pushedStrips.Select(x => new CDMAircraftDTO()
         {
