@@ -77,7 +77,7 @@ public class AerodromeSettings
 
     internal static string GetADSettingsPath()
     {
-        return Path.Combine(GetPluginsDirectory(), "AerodromeSettings.xml");
+        return Path.Combine(GetPluginsDirectory(), "Config", "AerodromeSettings.xml");
     }
 
     internal static string GetPluginsDirectory()
