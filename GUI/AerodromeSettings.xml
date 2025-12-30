@@ -17,7 +17,7 @@
     <LayoutDefinition Name="All">
       <Element Name="Preactive" Column="0"/>
       <Element Name="Cleared" Column="0"/>
-	    <Element Name="Coordinator" Column="0"/>
+	    <Element Name="Monitor SMC" Column="0"/>
 	    <Element Name="Pushback" Column="0"/>
       <Element Name="Taxi" Column="1"/>
       <Element Name="Holding Point" Column="1"/>
@@ -29,13 +29,13 @@
     <LayoutDefinition Name="ACD">
       <Element Name="Preactive" Column="0"/>
       <Element Name="Cleared" Column="1"/>
-	    <Element Name="Coordinator" Column="2"/>
+	    <Element Name="Monitor SMC" Column="2"/>
 	    <Element Name="Pushback" Column="2"/>
     </LayoutDefinition>
     <LayoutDefinition Name="ACD+SMC">
       <Element Name="Preactive" Column="0"/>
       <Element Name="Cleared" Column="0"/>
-	    <Element Name="Coordinator" Column="0"/>
+	    <Element Name="Monitor SMC" Column="0"/>
 	    <Element Name="Pushback" Column="1"/>
       <Element Name="Taxi" Column="1"/>
       <Element Name="Holding Point" Column="2"/>
@@ -43,7 +43,7 @@
     </LayoutDefinition>
     <LayoutDefinition Name="SMC">
       <Element Name="Cleared" Column="0"/>
-	    <Element Name="Coordinator" Column="0"/>
+	    <Element Name="Monitor SMC" Column="0"/>
 	    <Element Name="Pushback" Column="1"/>
       <Element Name="Taxi" Column="1"/>
       <Element Name="Holding Point" Column="2"/>
@@ -51,7 +51,7 @@
     </LayoutDefinition>
     <LayoutDefinition Name="SMC+ADC">
       <Element Name="Cleared" Column="0"/>
-	    <Element Name="Coordinator" Column="0"/>
+	    <Element Name="Monitor SMC" Column="0"/>
 	    <Element Name="Pushback" Column="0"/>
       <Element Name="Taxi" Column="1"/>
       <Element Name="Holding Point" Column="1"/>
@@ -111,7 +111,7 @@
         <Type>BAY_CLEARED</Type>
 		<Type>BAY_COORDINATOR</Type>
       </Bay>
-	  <Bay Name="Coordinator" Coordinator="true">
+	  <Bay Name="Monitor SMC" Coordinator="true">
 		  <Type>BAY_COORDINATOR</Type>
 	  </Bay>
       <Bay Name="Pushback">
