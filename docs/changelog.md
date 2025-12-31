@@ -6,8 +6,11 @@
 - Added ability to inhibit alerts.
 ### Misc Changes
 - Added wake turb cat to autofill ruleset.
+- Changed where the plugin looks for AerodromeSettings.xml
 ### Bugfixes
 - Prevented preemptive deletion of FDRs
+- Reworked how SID Triggering works
+- Fixed issue with heading warning not showing up in strips.
 ## v0.8.2
 ### Bugfixes
 - Fixed bug where you strips could not be selected.

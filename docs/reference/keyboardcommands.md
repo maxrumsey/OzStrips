@@ -1,4 +1,6 @@
-# Keyboard Commands
+# Default Keyboard Commands
+
+Keybinds can be modified from the Settings -> Keyboard Settings dropdown.
 
 | Key | Action |
 |---------|-------------|
