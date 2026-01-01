@@ -1080,6 +1080,17 @@ public sealed class Strip
                 _bayManager.RemovePicked(true);
             }
         }
+        else
+        {
+            CurrentBay = nextStripBay;
+            SyncStrip();
+            _bayManager.UpdateBay(this);
+
+            if (_bayManager.PickedStrip == this)
+            {
+                _bayManager.RemovePicked(true);
+            }
+        }
     }
 
     /// <summary>
