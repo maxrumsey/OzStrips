@@ -32,6 +32,11 @@ public class StripElement
     public StripElements.Actions RightClick { get; set; } = StripElements.Actions.NONE;
 
     /// <summary>
+    /// Gets or sets the MMC action.
+    /// </summary>
+    public StripElements.Actions MiddleClick { get; set; } = StripElements.Actions.NONE;
+
+    /// <summary>
     /// Gets or sets the left click action.
     /// </summary>
     public StripElements.HoverActions Hover { get; set; } = StripElements.HoverActions.NONE;

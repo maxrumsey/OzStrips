@@ -312,6 +312,7 @@ public partial class MainForm : Form
         keyboardSettingsToolStripMenuItem.Click += _mainFormController.ShowKeySettings;
         cdmTextBox.KeyPress += _mainFormController.CDMRateKeyDown;
         ts_toggleCircuit.Click += _mainFormController.ToggleCircuitBay;
+        ts_toggleCoord.Click += _mainFormController.ToggleCoordBay;
         toggleCDMToolStripMenuItem.Click += _mainFormController.ToggleCDM;
         pl_stat.Paint += _mainFormController.ConnStatusPaint;
         FormClosed += _mainFormController.MainForm_FormClosed;

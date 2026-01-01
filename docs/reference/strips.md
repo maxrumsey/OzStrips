@@ -44,6 +44,8 @@ You will only see strips for aircraft that have requested planned an ADES or ADE
 ^ Global Ops are visible to all controllers. Local Remarks are only visible to OzStrips users.
 
 ## Alerts
+All alerts, excluding the transition and worldflight alerts, can be inhibited my middle-mouse clicking on the alert box.
+
 ### Non-standard Cruising Altitude
 Indicates a pilot had filed a level that is non-compliant with the table of standard cruising levels per the Australian AIP.
 
@@ -71,3 +73,6 @@ An aircraft has commenced taxiing, without squawking Mode C and the correct code
 
 ### HDG not Assigned to Radar SID
 An aircraft departing on a RADAR SID does not have a heading issued, in the Holding Point or Runway Bay.
+
+## Bay Number
+At some Australian airports, the bay number will be autofilled using data from [OzBays](https://ozbays.xyz/). An OzBays inserted bay will have a gray background. To overwrite this bay, insert any text into the bay field, and this will display instead. If you want to see the OzBays allocated bay again, simply remove the bay you set.

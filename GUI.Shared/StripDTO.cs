@@ -41,6 +41,11 @@ public class StripDTO
     public string GATE { get; set; } = string.Empty;
 
     /// <summary>
+    /// Gets or sets the server-allocated bay.
+    /// </summary>
+    public string AllocatedBay { get; set; } = string.Empty;
+
+    /// <summary>
     /// Gets or sets the time of takeoff.
     /// </summary>
     [JsonPropertyName(nameof(TOT))]
@@ -84,4 +89,9 @@ public class StripDTO
     /// Gets or sets PDC flags.
     /// </summary>
     public PDCRequest.PDCFlags PDCFlags { get; set; }
+
+    /// <summary>
+    /// Gets or sets the list of inhibited alerts.
+    /// </summary>
+    public AlertTypes InhibitedAlerts { get; set; }
 }

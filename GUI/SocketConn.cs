@@ -458,6 +458,19 @@ public sealed class SocketConn : IDisposable
     }
 
     /// <summary>
+    /// Sends coordinator bay activity status to the server.
+    /// </summary>
+    /// <param name="status">Circuit enabled.</param>
+    public void RequestCoordinator(bool status)
+    {
+        AddMessage("c:RequestCircuit: " + status);
+        if (CanSendDTO)
+        {
+            _connection.InvokeAsync("UpdateCoordinatorMode", status);
+        }
+    }
+
+    /// <summary>
     /// Sends new CDM parameters to the server.
     /// </summary>
     /// <param name="param">CDM Parameters.</param>
@@ -581,6 +594,10 @@ public sealed class SocketConn : IDisposable
                 activeStrips.Clear();
             }
         }
+
+        activeStrips.AddRange(_bayManager.StripRepository.Strips.Where(x => x.CurrentBay == StripBay.BAY_COORDINATOR));
+
+        activeStrips = activeStrips.Distinct().ToList();
 
         var cdmDTOs = new CDMAircraftList(
         pushedStrips.Select(x => new CDMAircraftDTO()

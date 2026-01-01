@@ -81,7 +81,7 @@ public class StripRepository
         {
             if (controller.FDR.Callsign == fdr.Callsign)
             {
-                if (GetFDRIndex(fdr.Callsign) == -1)
+                if (GetFDRIndex(fdr.Callsign) == -1 && controller.DefaultStripType == StripType.DEPARTURE)
                 {
                     bayManager.BayRepository.DeleteStrip(controller);
                 }
@@ -121,6 +121,7 @@ public class StripRepository
                     var changeBay = false;
                     strip.CLX = !string.IsNullOrWhiteSpace(stripDTO.CLX) ? stripDTO.CLX : string.Empty;
                     strip.Gate = stripDTO.GATE ?? string.Empty;
+                    strip.AllocatedBay = stripDTO.AllocatedBay ?? string.Empty;
 
                     strip.DepartureFrequency = stripDTO.DepartureFrequency ?? string.Empty;
 
@@ -141,6 +142,7 @@ public class StripRepository
                     strip.Ready = stripDTO.ready;
                     strip.OverrideStripType = stripDTO.OverrideStripType;
                     strip.PDCFlags = stripDTO.PDCFlags;
+                    strip.InhibitedAlerts = stripDTO.InhibitedAlerts;
 
                     if (changeBay)
                     {

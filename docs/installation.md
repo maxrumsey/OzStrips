@@ -7,3 +7,5 @@ If you have a problem installing using the plugin manager, delete the `C:\Progra
 
 # Troubleshooting
 Have two OzStrips windows, or two "OzStrips" buttons in your Windows dropdown? This means there is an old version of the plugin hanging around. Check your C://Program Files (x86)/vatSys/bin/Plugins directory.
+
+Any OzStrips versions that contain "ozstrips.dll" should be removed. "ozstrips.dll" is only included within out-of-date versions.

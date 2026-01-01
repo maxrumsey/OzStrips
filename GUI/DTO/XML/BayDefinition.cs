@@ -17,6 +17,9 @@ public class BayDefinition
     [XmlAttribute("Circuit")]
     public bool Circuit;
 
+    [XmlAttribute("Coordinator")]
+    public bool Coordinator;
+
     [XmlAttribute("CDMDisplay")]
     public bool CDMDisplay;
 

@@ -96,6 +96,11 @@ public sealed class Strip
     public string? CondensedRoute { get; set; } = string.Empty;
 
     /// <summary>
+    /// Gets or sets inhibited alerts.
+    /// </summary>
+    public Shared.AlertTypes InhibitedAlerts { get; set; }
+
+    /// <summary>
     /// Gets or sets a value indicating whether or not a list of valid routes has been selected.
     /// </summary>
     public DateTime RequestedRoutes { get; set; } = DateTime.MaxValue;
@@ -308,6 +313,11 @@ public sealed class Strip
     /// Gets or sets the gate.
     /// </summary>
     public string Gate { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the allocated bay.
+    /// </summary>
+    public string AllocatedBay { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets the PDC request for this strip, if applicable.
@@ -626,7 +636,8 @@ public sealed class Strip
     private static Dictionary<StripBay, StripBay> NextBayDep { get; } = new()
     {
         { StripBay.BAY_PREA, StripBay.BAY_CLEARED },
-        { StripBay.BAY_CLEARED, StripBay.BAY_PUSHED },
+        { StripBay.BAY_CLEARED, StripBay.BAY_COORDINATOR },
+        { StripBay.BAY_COORDINATOR, StripBay.BAY_PUSHED },
         { StripBay.BAY_PUSHED, StripBay.BAY_TAXI },
         { StripBay.BAY_TAXI, StripBay.BAY_HOLDSHORT },
         { StripBay.BAY_HOLDSHORT, StripBay.BAY_RUNWAY },
@@ -651,7 +662,8 @@ public sealed class Strip
     private static Dictionary<StripBay, StripBay> NextBayLocal { get; } = new()
     {
         { StripBay.BAY_PREA, StripBay.BAY_CLEARED },
-        { StripBay.BAY_CLEARED, StripBay.BAY_PUSHED },
+        { StripBay.BAY_CLEARED, StripBay.BAY_COORDINATOR },
+        { StripBay.BAY_COORDINATOR, StripBay.BAY_PUSHED },
         { StripBay.BAY_PUSHED, StripBay.BAY_TAXI },
         { StripBay.BAY_TAXI, StripBay.BAY_HOLDSHORT },
         { StripBay.BAY_HOLDSHORT, StripBay.BAY_RUNWAY },
@@ -679,6 +691,7 @@ public sealed class Strip
             OverrideStripType = sc.OverrideStripType,
             PDCFlags = sc.PDCFlags,
             DepartureFrequency = sc.DepartureFrequency,
+            InhibitedAlerts = sc.InhibitedAlerts,
         };
 
         return scDTO;
@@ -737,6 +750,51 @@ public sealed class Strip
         }
 
         SyncStrip();
+    }
+
+    /// <summary>
+    /// Inhibits display of an alert.
+    /// </summary>
+    /// <param name="alert">Alert to inhibit.</param>
+    public void InhibitAlert(Shared.AlertTypes alert)
+    {
+        if (!InhibitedAlerts.HasFlag(alert))
+        {
+            InhibitedAlerts |= alert;
+            SyncStrip();
+        }
+    }
+
+    /// <summary>
+    /// Determines whether or not an alert is active.
+    /// </summary>
+    /// <param name="alert">Alert to check.</param>
+    /// <returns>Alert is active.</returns>
+    /// <exception cref="ArgumentException">Invalid alert type passed.</exception>
+    public bool IsAlertActive(Shared.AlertTypes alert)
+    {
+        if (InhibitedAlerts.HasFlag(alert))
+        {
+            return false;
+        }
+
+        return alert switch
+        {
+            Shared.AlertTypes.RFL => Controller.CFLAlertActive(),
+            Shared.AlertTypes.SSR => !SquawkCorrect &&
+                                CurrentBay >= StripBay.BAY_TAXI &&
+                                CurrentBay != StripBay.BAY_COORDINATOR &&
+                                StripType == StripType.DEPARTURE,
+            Shared.AlertTypes.ROUTE => DodgyRoute,
+            Shared.AlertTypes.NO_HDG => CurrentBay >= StripBay.BAY_HOLDSHORT &&
+                                CurrentBay != StripBay.BAY_COORDINATOR &&
+                                string.IsNullOrEmpty(HDG) &&
+                                SID.Length == 3 &&
+                                StripType == StripType.DEPARTURE,
+            Shared.AlertTypes.READY => !Ready && (CurrentBay == StripBay.BAY_HOLDSHORT || CurrentBay == StripBay.BAY_RUNWAY) && StripType != StripType.ARRIVAL,
+            Shared.AlertTypes.VFR_SID => VFRSIDAssigned,
+            _ => throw new ArgumentException("Unknown alert type."),
+        };
     }
 
     /// <summary>
@@ -978,10 +1036,10 @@ public sealed class Strip
                 return;
         }
 
-        var nextBay = CurrentBay;
+        var nextStripBay = CurrentBay;
         var nextBayFound = false;
         var currentStripBay = _bayManager.BayRepository.FindBay(this);
-
+        Bay? nextBay = null;
         if (currentStripBay == null)
         {
             return;
@@ -989,9 +1047,9 @@ public sealed class Strip
 
         while (!nextBayFound)
         {
-            if (stripBayResultDict.TryGetValue(nextBay, out var probedNextBay))
+            if (stripBayResultDict.TryGetValue(nextStripBay, out var probedNextBay))
             {
-                nextBay = probedNextBay;
+                nextStripBay = probedNextBay;
                 var proposedNewBay = _bayManager.BayRepository.Bays.FirstOrDefault(x => x.BayTypes.Contains(probedNextBay));
 
                 // SIDTriggering into a not-loaded stripbay (or into BAY_DEAD),
@@ -1003,6 +1061,7 @@ public sealed class Strip
                 if (proposedNewBay != currentStripBay)
                 {
                     nextBayFound = true;
+                    nextBay = proposedNewBay;
                 }
             }
             else
@@ -1011,11 +1070,26 @@ public sealed class Strip
             }
         }
 
-        if (nextBay != CurrentBay)
+        if (nextBay is not null)
         {
-            CurrentBay = nextBay;
-            _bayManager.UpdateBay(this);
+            _bayManager.MoveStrip(nextBay, this);
+
+            if (_bayManager.PickedStrip == this)
+            {
+                _bayManager.PickedStripItem = nextBay.GetListItem(this);
+                _bayManager.RemovePicked(true);
+            }
+        }
+        else
+        {
+            CurrentBay = nextStripBay;
             SyncStrip();
+            _bayManager.UpdateBay(this);
+
+            if (_bayManager.PickedStrip == this)
+            {
+                _bayManager.RemovePicked(true);
+            }
         }
     }
 

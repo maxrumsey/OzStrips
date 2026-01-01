@@ -26,14 +26,6 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
     private static bool LastTransmitModifier => Keyboard.IsKeyDown(KeybindManager.ActiveKeybinds[KeybindManager.KEYBINDS.LAST_TRANSMIT_HIGHLIGHT]);
 
-    private bool ShowSSRError
-    {
-        get
-        {
-            return !_strip.SquawkCorrect && _strip.CurrentBay >= StripBay.BAY_TAXI && _strip.StripType == StripType.DEPARTURE;
-        }
-    }
-
     /// <summary>
     /// Gets or sets the root of the strip (taking into account strip cocking). The strip background is drawn from this point.
     /// </summary>
@@ -178,6 +170,10 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             {
                 action = clicked.RightClick;
             }
+            else if (e.Button == MouseButtons.Middle)
+            {
+                action = clicked.MiddleClick;
+            }
 
             HandleClickAction(action);
         }
@@ -235,7 +231,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
                         string str;
 
-                        if (_strip.DodgyRoute)
+                        if (_strip.IsAlertActive(Shared.AlertTypes.ROUTE))
                         {
                             var routes = new List<string>();
                             Array.ForEach(_strip.ValidRoutes, x => routes.Add("(" + x.AircraftType + ") " + x.RouteText));
@@ -252,13 +248,13 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
                     break;
                 case StripElements.HoverActions.RFL_WARNING:
-                    if (_bayRenderController.HoveredItem != StripElements.HoverActions.RFL_WARNING && (_strip.Controller.ShowCFLToolTip || _strip.CFL.Contains("B")))
+                    if (_bayRenderController.HoveredItem != StripElements.HoverActions.RFL_WARNING && (_strip.IsAlertActive(Shared.AlertTypes.RFL) || _strip.CFL.Contains("B")))
                     {
                         _bayRenderController.HoveredItem = StripElements.HoverActions.RFL_WARNING;
                         _bayRenderController.ToolTip.Show(
                        (
                         (_strip.CFL.Contains("B") ? (_strip.CFL + "\n") : string.Empty) +
-                        (_strip.Controller.ShowCFLToolTip ? "Potentially non-compliant filed cruise level detected." : string.Empty)).Trim(),
+                        (_strip.IsAlertActive(Shared.AlertTypes.RFL) ? "Potentially non-compliant filed cruise level detected." : string.Empty)).Trim(),
                        _bayRenderController.SkControl,
                        e);
                     }
@@ -266,7 +262,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                     break;
                 case StripElements.HoverActions.SSR_WARNING:
                     if (_bayRenderController.HoveredItem != StripElements.HoverActions.SSR_WARNING &&
-                    ShowSSRError)
+                    _strip.IsAlertActive(Shared.AlertTypes.SSR))
                     {
                         _bayRenderController.HoveredItem = StripElements.HoverActions.SSR_WARNING;
                         _bayRenderController.ToolTip.Show("Incorrect SSR Code or Mode.", _bayRenderController.SkControl, e);
@@ -276,10 +272,10 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 case StripElements.HoverActions.SID_TRIGGER:
                     var transExists = _strip.SIDTransition?.Length > 0;
                     if (_bayRenderController.HoveredItem != StripElements.HoverActions.SID_TRIGGER &&
-                        (transExists || _strip.VFRSIDAssigned))
+                        (transExists || _strip.IsAlertActive(Shared.AlertTypes.VFR_SID)))
                     {
                         _bayRenderController.HoveredItem = StripElements.HoverActions.SID_TRIGGER;
-                        _bayRenderController.ToolTip.Show((transExists ? _strip.SIDTransition + " Transition\n" : string.Empty) + (_strip.VFRSIDAssigned ? "VFR Aircraft issued a SID." : string.Empty), _bayRenderController.SkControl, e);
+                        _bayRenderController.ToolTip.Show((transExists ? _strip.SIDTransition + " Transition\n" : string.Empty) + (_strip.IsAlertActive(Shared.AlertTypes.VFR_SID) ? "VFR Aircraft issued a SID." : string.Empty), _bayRenderController.SkControl, e);
                     }
 
                     break;
@@ -391,6 +387,48 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             case StripElements.Actions.OPEN_PM:
                 MMI.OpenPMWindow(_strip.FDR.Callsign);
                 break;
+            case StripElements.Actions.INHIBIT_ROUTE:
+                if (_strip.IsAlertActive(Shared.AlertTypes.ROUTE))
+                {
+                    _strip.InhibitAlert(Shared.AlertTypes.ROUTE);
+                }
+
+                break;
+            case StripElements.Actions.INHIBIT_RFL:
+                if (_strip.IsAlertActive(Shared.AlertTypes.RFL))
+                {
+                    _strip.InhibitAlert(Shared.AlertTypes.RFL);
+                }
+
+                break;
+            case StripElements.Actions.INHIBIT_SSR:
+                if (_strip.IsAlertActive(Shared.AlertTypes.SSR))
+                {
+                    _strip.InhibitAlert(Shared.AlertTypes.SSR);
+                }
+
+                break;
+            case StripElements.Actions.INHIBIT_SID:
+                if (_strip.IsAlertActive(Shared.AlertTypes.VFR_SID))
+                {
+                    _strip.InhibitAlert(Shared.AlertTypes.VFR_SID);
+                }
+
+                break;
+            case StripElements.Actions.INHIBIT_READY:
+                if (_strip.IsAlertActive(Shared.AlertTypes.READY))
+                {
+                    _strip.InhibitAlert(Shared.AlertTypes.READY);
+                }
+
+                break;
+            case StripElements.Actions.INHIBIT_HDG:
+                if (_strip.IsAlertActive(Shared.AlertTypes.NO_HDG))
+                {
+                    _strip.InhibitAlert(Shared.AlertTypes.NO_HDG);
+                }
+
+                break;
         }
     }
 
@@ -457,6 +495,11 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
                 return _strip.CFL;
             case StripElements.Values.STAND:
+                if (!string.IsNullOrEmpty(_strip.AllocatedBay) && string.IsNullOrEmpty(_strip.Gate))
+                {
+                    return _strip.AllocatedBay;
+                }
+
                 return _strip.Gate;
             case StripElements.Values.GLOP:
                 return _strip.FDR.GlobalOpData;
@@ -511,6 +554,11 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             case StripElements.Values.PDC_INDICATOR:
             case StripElements.Values.TYPE:
             case StripElements.Values.SSR:
+                if (element.Value == StripElements.Values.STAND && !string.IsNullOrEmpty(_strip.AllocatedBay) && string.IsNullOrEmpty(_strip.Gate))
+                {
+                    return SKColors.LightGray;
+                }
+
                 if (element.Value == StripElements.Values.PDC_INDICATOR && _strip.StripType != StripType.ARRIVAL)
                 {
                     var requestedPDC = _strip.PDCRequest;
@@ -529,8 +577,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 /*
                 * Incorrect SSR Code & Mode C alert
                 */
-                if ((element.Value == StripElements.Values.SSR) &&
-                ShowSSRError)
+                if ((element.Value == StripElements.Values.SSR) && _strip.IsAlertActive(Shared.AlertTypes.SSR))
                 {
                     return SKColors.Orange;
                 }
@@ -560,41 +607,39 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 break;
             case StripElements.Values.GLOP:
             case StripElements.Values.REMARK:
+            case StripElements.Values.DEPFREQ:
             case StripElements.Values.HDG:
+                /*
+                 * HDG unassigned to radar sid in rwy bay.
+                 */
+                if (element.Value == StripElements.Values.GLOP &&
+                    _strip.IsAlertActive(Shared.AlertTypes.NO_HDG))
+                {
+                    return SKColors.Orange;
+                }
+
                 if (_strip.Crossing)
                 {
                     return SKColors.Red;
-                }
-
-                /*
-                    * HDG unassigned to radar sid in rwy bay.
-                    */
-                if (element.Value == StripElements.Values.GLOP &&
-                    _strip.CurrentBay >= StripBay.BAY_HOLDSHORT &&
-                    string.IsNullOrEmpty(_strip.HDG) &&
-                    _strip.SID.Length == 3 &&
-                    _strip.StripType == StripType.DEPARTURE)
-                {
-                    return SKColors.Orange;
                 }
 
                 break;
             case StripElements.Values.SID:
                 var sidcolour = SKColors.LimeGreen;
 
-                if (_strip.VFRSIDAssigned)
+                if (_strip.IsAlertActive(Shared.AlertTypes.VFR_SID))
                 {
                     sidcolour = SKColors.Orange;
                 }
 
                 return sidcolour;
             case StripElements.Values.CFL:
-                return _strip.Controller.DetermineCFLBackColour();
+                return _strip.IsAlertActive(Shared.AlertTypes.RFL) ? SKColors.OrangeRed : SKColors.Empty;
             case StripElements.Values.FIRST_WPT:
-                return _strip.Controller.DetermineRouteBackColour();
+                return _strip.IsAlertActive(Shared.AlertTypes.ROUTE) ? SKColors.OrangeRed : SKColors.Empty;
             case StripElements.Values.READY:
                 var colour = SKColor.Empty;
-                if (!_strip.Ready && (_strip.CurrentBay == StripBay.BAY_HOLDSHORT || _strip.CurrentBay == StripBay.BAY_RUNWAY) && _strip.StripType != StripType.ARRIVAL)
+                if (_strip.IsAlertActive(Shared.AlertTypes.READY))
                 {
                     colour = SKColors.Orange;
                 }
