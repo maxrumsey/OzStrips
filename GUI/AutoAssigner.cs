@@ -58,7 +58,7 @@ internal class AutoAssigner
         }
         catch (YamlException ex)
         {
-            Util.ShowErrorBox($"Failed to serialize. Error at line {ex.Start.Index}");
+            Util.ShowErrorBox($"Failed to serialize. Error at line {ex.Start.Line}, character {ex.Start.Column}");
         }
         catch (Exception ex)
         {
