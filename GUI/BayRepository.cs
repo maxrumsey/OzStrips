@@ -159,7 +159,8 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
     /// </summary>
     /// <param name="bay">The bay.</param>
     /// <param name="verticalBoardNumber">The desired vertical board number.</param>
-    public void AddBay(Bay bay, int verticalBoardNumber)
+    /// <param name="totalNum">The total number of bays that will be present post-layout.</param>
+    public void AddBay(Bay bay, int verticalBoardNumber, int totalNum)
     {
         if (verticalBoardNumber >= _flpVerticalBoards.Count)
         {
@@ -174,22 +175,30 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
 
         /*
          * If less than 3 cols are present,
-         * lay out left-right, top to bottom.
+         * lay out top to bottom, left to right.
          */
         if (_currentLayoutIndex != 3)
         {
-            var bayNums = _flpVerticalBoards.Select(x => x.Controls.Count).ToArray();
+            var numBayCurrentlyPresent = _flpVerticalBoards.Select(x => x.Controls.Count).ToArray();
 
-            if (bayNums is null)
+            var index = 0;
+
+            foreach (var vertPanel in _flpVerticalBoards)
             {
-                throw new Exception("BayNums was null.");
-            }
+                if (vertPanel.Controls.Count >= totalNum / _flpVerticalBoards.Count)
+                {
+                    continue;
+                }
 
-            var index = Array.IndexOf(bayNums, bayNums.Min());
+                index = _flpVerticalBoards.IndexOf(vertPanel);
 
-            if (index < 0)
-            {
-                index = 0;
+                if (index == -1)
+                {
+                    // How did we get here?
+                    index = 0;
+                }
+
+                break;
             }
 
             verticalBoardNumber = index;

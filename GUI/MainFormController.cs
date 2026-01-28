@@ -198,6 +198,8 @@ public class MainFormController : IDisposable
             {
                 _bayManager.BayRepository.WipeBays();
 
+                var availableElements = new List<DTO.LayoutElement>();
+
                 foreach (var element in layout.Elements)
                 {
                     // If this is the circuit bay and we don't have it enabled.
@@ -214,7 +216,12 @@ public class MainFormController : IDisposable
                         continue;
                     }
 
-                    var types = element.Bay.Types.ToList();
+                    availableElements.Add(element);
+                }
+
+                foreach (var element in availableElements)
+                {
+                    var types = element.Bay!.Types.ToList();
 
                     // If circuit mode is enabled, don't have duplicate circuit bays
                     if (_bayManager.CircuitActive && !element.Bay.Circuit && circuitBayDefined)
@@ -228,7 +235,7 @@ public class MainFormController : IDisposable
                         types.Remove(StripBay.BAY_COORDINATOR);
                     }
 
-                    _ = new Bay(types, _bayManager, _socketConn, element.Name, element.Column, element.Bay.CDMDisplay);
+                    _ = new Bay(types, _bayManager, _socketConn, element.Name, element.Column, element.Bay.CDMDisplay, availableElements.Count);
                 }
 
                 _bayManager.BayRepository.ConfigureAndSizeFLPs();

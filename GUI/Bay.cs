@@ -29,8 +29,9 @@ public class Bay : System.IDisposable
     /// <param name="socketConn">The socket connection.</param>
     /// <param name="name">The name of the bay.</param>
     /// <param name="vertBoardNum">The vertical board number.</param>
-    /// <param name="CDMDisplay">Whether or not CDM stats are displayed here.</param>
-    public Bay(List<StripBay> bays, BayManager bayManager, SocketConn socketConn, string name, int vertBoardNum, bool CDMDisplay)
+    /// <param name="containsCDMDisplay">Whether or not CDM stats are displayed here.</param>
+    /// <param name="totalNumBays">The total number of bays that will exist post-layout.</param>
+    public Bay(List<StripBay> bays, BayManager bayManager, SocketConn socketConn, string name, int vertBoardNum, bool containsCDMDisplay, int totalNumBays)
     {
         BayTypes = bays;
         _bayManager = bayManager;
@@ -38,13 +39,13 @@ public class Bay : System.IDisposable
         _socketConnection = socketConn;
         Name = name;
         VerticalBoardNumber = vertBoardNum;
-        ChildPanel = new(bayManager, name, this, CDMDisplay, socketConn);
+        ChildPanel = new(bayManager, name, this, containsCDMDisplay, socketConn);
 
         _bayRenderController = new BayRenderController(this);
 
         _bayRenderController.Setup();
 
-        bayManager.BayRepository.AddBay(this, vertBoardNum);
+        bayManager.BayRepository.AddBay(this, vertBoardNum, totalNumBays);
     }
 
     /// <summary>
