@@ -163,6 +163,7 @@ public class MainFormController : IDisposable
             _bayManager.CircuitActive = _bayManager.AerodromeState.CircuitActive;
             specialLayoutChangeTriggered = true;
         }
+
         if (_bayManager.CoordinatorBayActive != _bayManager.AerodromeState.CoordinatorBayActive)
         {
             _bayManager.CoordinatorBayActive = _bayManager.AerodromeState.CoordinatorBayActive;
@@ -171,7 +172,7 @@ public class MainFormController : IDisposable
 
         if (specialLayoutChangeTriggered)
         {
-            AerodromeTypeChanged(this, EventArgs.Empty);
+            _bayManager.BayRepository.ConfigureAndSizeFLPs(true);
         }
 
         ResetCDMRateTextBox();
