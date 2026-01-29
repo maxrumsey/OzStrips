@@ -185,7 +185,7 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
 
             foreach (var vertPanel in _flpVerticalBoards)
             {
-                if (vertPanel.Controls.Count >= totalNum / _flpVerticalBoards.Count)
+                if (vertPanel.Controls.Count >= Math.Ceiling((float)totalNum / _flpVerticalBoards.Count))
                 {
                     continue;
                 }
