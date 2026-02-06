@@ -274,8 +274,16 @@ internal class AutoAssigner
     internal static string GetSIDName(Strip strip, string shortSID)
     {
         var rwys = Airspace2.GetRunways(strip.FDR.DepAirport);
+        var foundSIDs = rwys?.Select(x => x.SIDs.FirstOrDefault(x => x.sidStar.Name.Contains(shortSID)));
 
-        return rwys?.Select(x => x.SIDs.FirstOrDefault(x => x.sidStar.Name.Contains(shortSID)))?.FirstOrDefault(x => x.sidStar is not null).sidStar?.Name ?? shortSID;
+        // Match by regex instead.
+        if (shortSID.StartsWith("#", StringComparison.InvariantCulture))
+        {
+            var regex = new Regex(shortSID.Remove(0, 1));
+            foundSIDs = rwys?.Select(x => x.SIDs.FirstOrDefault(x => regex.IsMatch(x.sidStar.Name)));
+        }
+
+        return foundSIDs?.FirstOrDefault(x => x.sidStar is not null).sidStar?.Name ?? shortSID;
     }
 
     public string[] GetDepartureRunways()
