@@ -533,18 +533,22 @@ public sealed class Strip
     {
         get
         {
-            var firstWpt = FDR.ParsedRoute.FirstOrDefault()?.Intersection;
+            var aWpt = FDR.ParsedRoute.FirstOrDefault()?.Intersection;
 
+            // look for a waypoint like TESAT
             Util.DifferingAerodromeWaypoints.TryGetValue(FDR.DepAirport, out var falseFlagWaypoint);
 
             // Only match legit WPTs, non-airports, and non GPS / random coords.
             var firstLegitWaypoint = FDR.ParsedRoute.FirstOrDefault(x => x.Type == FDR.ExtractedRoute.Segment.SegmentTypes.WAYPOINT && x.Intersection.Type != Airspace2.Intersection.Types.Airport && !x.Intersection.Name.Any(char.IsDigit) && x.Intersection.Name != falseFlagWaypoint)?.Intersection;
-            if (firstWpt is null || firstLegitWaypoint is null)
+            var bWpt = firstLegitWaypoint?.LatLong;
+            bWpt ??= Airspace2.GetAirport(FDR.DesAirport).LatLong;
+
+            if (aWpt is null || bWpt is null)
             {
                 return -1;
             }
 
-            return (int)Conversions.CalculateTrack(firstWpt.LatLong, firstLegitWaypoint.LatLong);
+            return (int)Conversions.CalculateTrack(aWpt.LatLong, bWpt);
         }
     }
 
