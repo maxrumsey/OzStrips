@@ -241,12 +241,7 @@ public class MainFormController : IDisposable
                     {
                         try
                         {
-                            var fullName = _mainForm.AerodromeManager.Settings?.AutoMapAerodromes.FirstOrDefault(x => x.ICAOCode == _bayManager.AerodromeName)?.FullName;
-
-                            if (fullName is not null && bay.BayTypes.Contains(StripBay.BAY_RUNWAY))
-                            {
-                                MapManager.SetApplicableMaps([.. bay.Strips.Where(x => x.Type == StripItemType.BAR).Select(x => x.BarText ?? string.Empty)], fullName);
-                            }
+                            UpdateMaps();
                         }
                         catch (Exception ex)
                         {
@@ -295,6 +290,20 @@ public class MainFormController : IDisposable
     public void SetCustomAerodromeList(List<string> value)
     {
         _mainForm.AerodromeManager.ManuallySetAerodromes = value;
+    }
+
+    /// <summary>
+    /// Updates release and crossing maps.
+    /// </summary>
+    public void UpdateMaps()
+    {
+        var fullName = _mainForm.AerodromeManager.Settings?.AutoMapAerodromes.FirstOrDefault(x => x.ICAOCode == _bayManager.AerodromeName)?.FullName;
+        var bay = _bayManager.BayRepository.Bays.Find(x => x.BayTypes.Contains(StripBay.BAY_RUNWAY));
+
+        if (fullName is not null && bay is not null && bay.BayTypes.Contains(StripBay.BAY_RUNWAY))
+        {
+            MapManager.SetApplicableMaps([.. bay.Strips.Where(x => x.Type == StripItemType.BAR).Select(x => x.BarText ?? string.Empty)], fullName);
+        }
     }
 
     /// <summary>
@@ -351,6 +360,7 @@ public class MainFormController : IDisposable
                 SetATISCode("Z");
                 _mainForm.AerodromeManager.ConfigureAerodromeListForNewAerodrome(name);
                 SetTitle();
+                _mainForm.ReleaseButton.Enabled = _mainForm.AerodromeManager.Settings?.AutoMapAerodromes.Any(x => x.ICAOCode == _bayManager.AerodromeName) == true;
             }
         }
         catch (Exception ex)
@@ -770,6 +780,15 @@ public class MainFormController : IDisposable
             _mainForm.OpenPDCs.Text = $"Pending PDCs: {openPDCs}";
             _mainForm.OpenPDCs.BackColor = openPDCs > 0 ? Color.LightBlue : Color.Transparent;
             _mainForm.AutoFillAvailable.BackColor = autoFillAvailable ? Color.LightGreen : Color.Red;
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+        }
+
+        try
+        {
+            UpdateMaps();
         }
         catch (Exception ex)
         {

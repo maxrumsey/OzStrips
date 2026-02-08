@@ -122,7 +122,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.bt_flip.Size = new System.Drawing.Size(96, 37);
             this.bt_flip.TabIndex = 8;
             this.bt_flip.TabStop = false;
-            this.bt_flip.Text = "FLIP FLOP";
+            this.bt_flip.Text = "FLIP";
             this.bt_flip.UseVisualStyleBackColor = false;
             // 
             // bt_bar

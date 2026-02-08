@@ -59,6 +59,11 @@ public partial class MainForm : Form
     public Label AerodromeLabel => lb_ad;
 
     /// <summary>
+    /// Gets the release button.
+    /// </summary>
+    public Button ReleaseButton => bt_release;
+
+    /// <summary>
     /// Gets the metar tool tip.
     /// </summary>
     public ToolTip MetarToolTip => tt_metar;
