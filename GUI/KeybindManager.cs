@@ -95,6 +95,7 @@ internal static class KeybindManager
         MODIFIER1,
         MODIFIER2,
         FIND,
+        RELEASE,
     }
 
     internal static readonly Dictionary<KEYBINDS, Key> DefaultKeybinds = new()
@@ -115,6 +116,7 @@ internal static class KeybindManager
         { KEYBINDS.MODIFIER1, Key.LeftCtrl },
         { KEYBINDS.MODIFIER2, Key.LeftAlt },
         { KEYBINDS.FIND, Key.F },
+        { KEYBINDS.RELEASE, Key.R },
     };
 
     internal static readonly Dictionary<KEYBINDS, string> Friendlyname = new()
@@ -133,7 +135,7 @@ internal static class KeybindManager
         { KEYBINDS.AUTOFILL, "Autofill Strip" },
         { KEYBINDS.LAST_TRANSMIT_PICK, "Pick Last Transmit" },
         { KEYBINDS.MODIFIER1, "Strip Action Modifier" },
-        { KEYBINDS.MODIFIER2, "Crossing Bar Modifier" },
+        { KEYBINDS.MODIFIER2, "Bar Modifier" },
         { KEYBINDS.FIND, "Find Strip (MODIFIER)" },
     };
 }

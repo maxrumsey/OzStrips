@@ -584,6 +584,12 @@ public class MainFormController : IDisposable
 
                 return true;
             }
+            else if (keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.RELEASE)) && keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.MODIFIER2)))
+            {
+                ToggleReleaseBar();
+
+                return true;
+            }
             else if (keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.FIND)) && keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.MODIFIER1)))
             {
                 ShowQuickSearch();
