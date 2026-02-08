@@ -543,6 +543,15 @@ public sealed class Strip
             var bWpt = firstLegitWaypoint?.LatLong;
             bWpt ??= Airspace2.GetAirport(FDR.DesAirport).LatLong;
 
+            if (FirstWpt is not "#GPS#" and not "DCT")
+            {
+                var intersection = Airspace2.GetIntersection(FirstWpt);
+                if (intersection is not null)
+                {
+                    bWpt = intersection.LatLong;
+                }
+            }
+
             if (aWpt is null || bWpt is null)
             {
                 return -1;
