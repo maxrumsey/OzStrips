@@ -725,6 +725,48 @@ public class BayManager
     }
 
     /// <summary>
+    /// Toggles the presence of a cross/release bar, on the runway bay.
+    /// </summary>
+    /// <param name="runwayPair">Runway pair identifier as present in Maps.</param>
+    /// <param name="type">"Crossing" or "Released".</param>
+    public void ToggleCrossReleaseBar(string runwayPair, string type)
+    {
+        var bay = BayRepository.Bays.FirstOrDefault(x => x.BayTypes.Contains(StripBay.BAY_RUNWAY));
+
+        if (runwayPair.Length % 2 != 0)
+        {
+            throw new Exception("Malformed runway number.");
+        }
+
+        if (bay is null)
+        {
+            return;
+        }
+
+        var barType = 3;
+        runwayPair = runwayPair.Insert(runwayPair.Length / 2, "/");
+
+        var text = $"XXX CROSSING RWY {runwayPair} XXX";
+
+        if (type == "Released")
+        {
+            barType = 1;
+            text = $"Runway {runwayPair} Released to SMC";
+        }
+
+        var foundBar = bay.Strips.FirstOrDefault(x => x.Type == StripItemType.BAR && x.Style == barType && x.BarText?.StartsWith(text, StringComparison.InvariantCulture) == true);
+
+        if (foundBar is null)
+        {
+            bay.AddBar(barType, text);
+        }
+        else
+        {
+            bay.DeleteBar(foundBar);
+        }
+    }
+
+    /// <summary>
     /// Deletes a bar by params. Returns true if found.
     /// </summary>
     /// <param name="bayString">Bay name.</param>

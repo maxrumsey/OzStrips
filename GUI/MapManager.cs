@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using vatsys;
 
 namespace MaxRumsey.OzStripsPlugin.GUI;
 
@@ -64,6 +65,11 @@ internal static class MapManager
         var specificAerodromeDropDown = mapDropDown.DropDownItems.OfType<ToolStripMenuItem>().FirstOrDefault(item => item.Text == aerodromeName) ?? throw new Exception($"Can't locate {aerodromeName} map folder.");
 
         return [.. specificAerodromeDropDown.DropDownItems.OfType<ToolStripMenuItem>().Where(x => x.Text.StartsWith("Crossing", StringComparison.InvariantCulture) || x.Text.StartsWith("Released", StringComparison.InvariantCulture))];
+    }
+
+    internal static string[] GetRunwayNamesWithToggleableMaps(string aerodromeName, string mapNamePrefix)
+    {
+        return [.. DisplayMaps.Maps.Where(x => x.Folder == aerodromeName && x.Type == DisplayMaps.MapTypes.Ground_RWY && x.Name.StartsWith(mapNamePrefix, StringComparison.InvariantCulture)).Select(x => x.Name.Split('_')[1])];
     }
 
     internal static bool DoesBarExist(string[] barNames, string runwayPair, string mapType)

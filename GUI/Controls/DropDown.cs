@@ -223,4 +223,39 @@ public partial class DropDown : BaseForm
             strip.SyncStrip();
         });
     }
+
+    /// <summary>
+    /// Shows a crossing 
+    /// </summary>
+    /// <param name="fullAerodromeName">Full Aerodrome Name per Map dropdown.</param>
+    /// <param name="type">Crossing or Released.</param>
+    /// <param name="bayManager">Bay Manager.</param>
+    public static void ShowCrossingOrReleaseDropDown(string fullAerodromeName, string type, BayManager bayManager)
+    {
+        List<DropDownItem> items = new();
+
+        var runways = MapManager.GetRunwayNamesWithToggleableMaps(fullAerodromeName, type);
+
+        foreach (var runway in runways)
+        {
+            if (runway.Length % 2 != 0)
+            {
+                continue;
+            }
+
+            items.Add(new(DropDownItem.DropDownItemType.BUTTON, runway.Insert(runway.Length / 2, "/")));
+        }
+
+        CreateDropDown([.. items], "Runway", s =>
+        {
+            try
+            {
+                bayManager.ToggleCrossReleaseBar(s.Replace("/", string.Empty), type);
+            }
+            catch (Exception ex)
+            {
+                Util.LogError(ex);
+            }
+        });
+    }
 }

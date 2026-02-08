@@ -526,6 +526,25 @@ public class MainFormController : IDisposable
     }
 
     /// <summary>
+    /// Toggles the crossing bar in the runway bay.
+    /// </summary>
+    public void ToggleCrossBar()
+    {
+        var fullName = _mainForm.AerodromeManager.Settings?.AutoMapAerodromes.FirstOrDefault(x => x.ICAOCode == _bayManager.AerodromeName)?.FullName;
+
+        if (fullName is not null)
+        {
+            DropDown.ShowCrossingOrReleaseDropDown(fullName, "Crossing", _bayManager);
+        }
+
+        // If we didnt't delete a crossing bar, add one.
+        else if (!_bayManager.DeleteBarByParams("Runway", 3, "XXX CROSSING XXX"))
+        {
+            _bayManager.AddBar("Runway", 3, "XXX CROSSING XXX");
+        }
+    }
+
+    /// <summary>
     /// Overrides keypress event to capture all keypresses.
     /// </summary>
     /// <param name="msg">Sender.</param>
@@ -548,11 +567,7 @@ public class MainFormController : IDisposable
             }
             else if (keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.CROSS)) && keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.MODIFIER2)))
             {
-                // If we didnt't delete a crossing bar, add one.
-                if (!_bayManager.DeleteBarByParams("Runway", 3, "XXX CROSSING XXX"))
-                {
-                    _bayManager.AddBar("Runway", 3, "XXX CROSSING XXX");
-                }
+                ToggleCrossBar();
 
                 return true;
             }
@@ -837,7 +852,7 @@ public class MainFormController : IDisposable
     /// <param name="e">Eventargs.</param>
     public void CrossButton_Click(object sender, EventArgs e)
     {
-        _bayManager.CrossStrip();
+        ToggleCrossBar();
     }
 
     /// <summary>
