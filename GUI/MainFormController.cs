@@ -545,6 +545,19 @@ public class MainFormController : IDisposable
     }
 
     /// <summary>
+    /// Toggles the released bar in the runway bay.
+    /// </summary>
+    public void ToggleReleaseBar()
+    {
+        var fullName = _mainForm.AerodromeManager.Settings?.AutoMapAerodromes.FirstOrDefault(x => x.ICAOCode == _bayManager.AerodromeName)?.FullName;
+
+        if (fullName is not null)
+        {
+            DropDown.ShowCrossingOrReleaseDropDown(fullName, "Released", _bayManager);
+        }
+    }
+
+    /// <summary>
     /// Overrides keypress event to capture all keypresses.
     /// </summary>
     /// <param name="msg">Sender.</param>
@@ -846,13 +859,23 @@ public class MainFormController : IDisposable
     }
 
     /// <summary>
-    /// Crosses the selected strip.
+    /// Opens the cross bar menu.
     /// </summary>
     /// <param name="sender">The sender.</param>
     /// <param name="e">Eventargs.</param>
     public void CrossButton_Click(object sender, EventArgs e)
     {
         ToggleCrossBar();
+    }
+
+    /// <summary>
+    /// Opens the release bar menu.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">Eventargs.</param>
+    public void ReleaseButton_Click(object sender, EventArgs e)
+    {
+        ToggleReleaseBar();
     }
 
     /// <summary>
