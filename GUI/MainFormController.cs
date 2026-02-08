@@ -297,7 +297,7 @@ public class MainFormController : IDisposable
     /// </summary>
     public void UpdateMaps()
     {
-        var fullName = _mainForm.AerodromeManager.Settings?.AutoMapAerodromes.FirstOrDefault(x => x.ICAOCode == _bayManager.AerodromeName)?.FullName;
+        var fullName = _mainForm.AerodromeManager.Settings?.AutoMapAerodromes?.FirstOrDefault(x => x.ICAOCode == _bayManager.AerodromeName)?.FullName;
         var bay = _bayManager.BayRepository.Bays.Find(x => x.BayTypes.Contains(StripBay.BAY_RUNWAY));
 
         if (fullName is not null && bay is not null && bay.BayTypes.Contains(StripBay.BAY_RUNWAY) && !_mainForm.InhibitGroundMaps.Checked)
@@ -360,7 +360,7 @@ public class MainFormController : IDisposable
                 SetATISCode("Z");
                 _mainForm.AerodromeManager.ConfigureAerodromeListForNewAerodrome(name);
                 SetTitle();
-                _mainForm.ReleaseButton.Enabled = _mainForm.AerodromeManager.Settings?.AutoMapAerodromes.Any(x => x.ICAOCode == _bayManager.AerodromeName) == true;
+                _mainForm.ReleaseButton.Enabled = _mainForm.AerodromeManager.Settings?.AutoMapAerodromes?.Any(x => x.ICAOCode == _bayManager.AerodromeName) == true;
             }
         }
         catch (Exception ex)
@@ -540,7 +540,7 @@ public class MainFormController : IDisposable
     /// </summary>
     public void ToggleCrossBar()
     {
-        var fullName = _mainForm.AerodromeManager.Settings?.AutoMapAerodromes.FirstOrDefault(x => x.ICAOCode == _bayManager.AerodromeName)?.FullName;
+        var fullName = _mainForm.AerodromeManager.Settings?.AutoMapAerodromes?.FirstOrDefault(x => x.ICAOCode == _bayManager.AerodromeName)?.FullName;
 
         if (fullName is not null)
         {
@@ -559,7 +559,7 @@ public class MainFormController : IDisposable
     /// </summary>
     public void ToggleReleaseBar()
     {
-        var fullName = _mainForm.AerodromeManager.Settings?.AutoMapAerodromes.FirstOrDefault(x => x.ICAOCode == _bayManager.AerodromeName)?.FullName;
+        var fullName = _mainForm.AerodromeManager.Settings?.AutoMapAerodromes?.FirstOrDefault(x => x.ICAOCode == _bayManager.AerodromeName)?.FullName;
 
         if (fullName is not null)
         {
