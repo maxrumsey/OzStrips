@@ -236,7 +236,23 @@ public class MainFormController : IDisposable
                         types.Remove(StripBay.BAY_COORDINATOR);
                     }
 
-                    _ = new Bay(types, _bayManager, _socketConn, element.Name, element.Column, element.Bay.CDMDisplay, availableElements.Count);
+                    var bay = new Bay(types, _bayManager, _socketConn, element.Name, element.Column, element.Bay.CDMDisplay, availableElements.Count);
+                    bay.OnBarsChanged += (_, _) =>
+                    {
+                        try
+                        {
+                            var fullName = _mainForm.AerodromeManager.Settings?.AutoMapAerodromes.FirstOrDefault(x => x.ICAOCode == _bayManager.AerodromeName)?.FullName;
+
+                            if (fullName is not null && bay.BayTypes.Contains(StripBay.BAY_RUNWAY))
+                            {
+                                MapManager.SetApplicableMaps([.. bay.Strips.Where(x => x.Type == StripItemType.BAR).Select(x => x.BarText ?? string.Empty)], fullName);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Util.LogError(ex);
+                        }
+                    };
                 }
 
                 _bayManager.BayRepository.ConfigureAndSizeFLPs();

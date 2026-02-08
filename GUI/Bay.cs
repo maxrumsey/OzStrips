@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Runtime.InteropServices;
 using MaxRumsey.OzStripsPlugin.GUI.Controls;
 using MaxRumsey.OzStripsPlugin.GUI.DTO;
+using MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
 using MaxRumsey.OzStripsPlugin.GUI.Properties;
 using MaxRumsey.OzStripsPlugin.GUI.Shared;
 using Microsoft.SqlServer.Server;
@@ -423,6 +424,7 @@ public class Bay : System.IDisposable
         {
             Strips.Add(bar);
             ResizeBay();
+            OnBarsChanged?.Invoke(this, EventArgs.Empty);
 
             if (sync)
             {
@@ -448,6 +450,8 @@ public class Bay : System.IDisposable
         {
             _socketConnection.SyncBay(this);
         }
+
+        OnBarsChanged?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>
@@ -503,6 +507,8 @@ public class Bay : System.IDisposable
         {
             _socketConnection.SyncBay(this);
         }
+
+        OnBarsChanged?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>
@@ -521,7 +527,7 @@ public class Bay : System.IDisposable
     }
 
     /// <summary>
-    /// Gets if available a list item by strip name.
+    /// Gets if available a list item by strip name. Will create or delete a bar if needed.
     /// </summary>
     /// <param name="code">The code of the item.</param>
     /// <returns>The list item if there is a match, otherwise null.</returns>
@@ -547,6 +553,8 @@ public class Bay : System.IDisposable
         if (code == "\a" && returnedItem == null)
         {
             AddDivider(true, false);
+            OnBarsChanged?.Invoke(this, EventArgs.Empty);
+
             return GetListItemByStr(code);
         }
         else if (code[0] == '\a' && returnedItem is null)
@@ -558,6 +566,8 @@ public class Bay : System.IDisposable
             }
 
             AddBar(x, code.Substring(2), false);
+            OnBarsChanged?.Invoke(this, EventArgs.Empty);
+
             return GetListItemByStr(code);
         }
 
@@ -598,5 +608,18 @@ public class Bay : System.IDisposable
     public void Dispose()
     {
         ChildPanel.Dispose();
+    }
+
+    /// <summary>
+    /// Called when bars may be added or removed.
+    /// </summary>
+    public event EventHandler? OnBarsChanged;
+
+    /// <summary>
+    /// Called when this bay's bars may have been changed externally, and the bay needs to update accordingly.
+    /// </summary>
+    public void BarsChangedExternally()
+    {
+        OnBarsChanged?.Invoke(this, EventArgs.Empty);
     }
 }
