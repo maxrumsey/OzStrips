@@ -83,6 +83,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.tt_metar = new System.Windows.Forms.ToolTip(this.components);
             this.tt_clients = new System.Windows.Forms.ToolTip(this.components);
             this.bt_release = new System.Windows.Forms.Button();
+            this.tt_maps = new System.Windows.Forms.ToolStripMenuItem();
             this.pl_controlbar.SuspendLayout();
             this.pl_atis.SuspendLayout();
             this.pl_ad.SuspendLayout();
@@ -371,7 +372,8 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.cDMRateToolStripMenuItem,
             this.cdmTextBox,
             this.toolStripSeparator4,
-            this.tt_pdcsound});
+            this.tt_pdcsound,
+            this.tt_maps});
             this.settingsToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.settingsToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
@@ -381,25 +383,25 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             // settingsWindowToolStripMenuItem
             // 
             this.settingsWindowToolStripMenuItem.Name = "settingsWindowToolStripMenuItem";
-            this.settingsWindowToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.settingsWindowToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
             this.settingsWindowToolStripMenuItem.Text = "Settings Window";
             // 
             // keyboardSettingsToolStripMenuItem
             // 
             this.keyboardSettingsToolStripMenuItem.Name = "keyboardSettingsToolStripMenuItem";
-            this.keyboardSettingsToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.keyboardSettingsToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
             this.keyboardSettingsToolStripMenuItem.Text = "Keyboard Settings";
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(209, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(289, 6);
             // 
             // cDMRateToolStripMenuItem
             // 
             this.cDMRateToolStripMenuItem.Enabled = false;
             this.cDMRateToolStripMenuItem.Name = "cDMRateToolStripMenuItem";
-            this.cDMRateToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.cDMRateToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
             this.cDMRateToolStripMenuItem.Text = "CDM Rate";
             // 
             // cdmTextBox
@@ -411,7 +413,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(209, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(289, 6);
             // 
             // tt_pdcsound
             // 
@@ -419,7 +421,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.tt_pdcsound.CheckOnClick = true;
             this.tt_pdcsound.CheckState = System.Windows.Forms.CheckState.Checked;
             this.tt_pdcsound.Name = "tt_pdcsound";
-            this.tt_pdcsound.Size = new System.Drawing.Size(212, 22);
+            this.tt_pdcsound.Size = new System.Drawing.Size(292, 22);
             this.tt_pdcsound.Text = "PDC Sound";
             // 
             // helpToolStripMenuItem
@@ -545,6 +547,13 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.bt_release.Text = "XX RELEASE XX";
             this.bt_release.UseVisualStyleBackColor = false;
             // 
+            // tt_maps
+            // 
+            this.tt_maps.CheckOnClick = true;
+            this.tt_maps.Name = "tt_maps";
+            this.tt_maps.Size = new System.Drawing.Size(292, 22);
+            this.tt_maps.Text = "Inhibit Ground Map Updating";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -621,5 +630,6 @@ namespace MaxRumsey.OzStripsPlugin.GUI
         private ToolStripMenuItem keyboardSettingsToolStripMenuItem;
         private ToolStripMenuItem ts_toggleCoord;
         private Button bt_release;
+        private ToolStripMenuItem tt_maps;
     }
 }

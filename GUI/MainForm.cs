@@ -114,6 +114,11 @@ public partial class MainForm : Form
     public ToolStripMenuItem OpenPDCs => openPDCsToolStripMenuItem;
 
     /// <summary>
+    /// Gets the inhibit ground maps menu item.
+    /// </summary>
+    public ToolStripMenuItem InhibitGroundMaps => tt_maps;
+
+    /// <summary>
     /// Gets the autofill available menu item.
     /// </summary>
     public ToolStripMenuItem AutoFillAvailable => autoFillUnavailableToolStripMenuItem;

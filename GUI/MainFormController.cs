@@ -300,7 +300,7 @@ public class MainFormController : IDisposable
         var fullName = _mainForm.AerodromeManager.Settings?.AutoMapAerodromes.FirstOrDefault(x => x.ICAOCode == _bayManager.AerodromeName)?.FullName;
         var bay = _bayManager.BayRepository.Bays.Find(x => x.BayTypes.Contains(StripBay.BAY_RUNWAY));
 
-        if (fullName is not null && bay is not null && bay.BayTypes.Contains(StripBay.BAY_RUNWAY))
+        if (fullName is not null && bay is not null && bay.BayTypes.Contains(StripBay.BAY_RUNWAY) && !_mainForm.InhibitGroundMaps.Checked)
         {
             MapManager.SetApplicableMaps([.. bay.Strips.Where(x => x.Type == StripItemType.BAR).Select(x => x.BarText ?? string.Empty)], fullName);
         }
