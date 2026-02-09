@@ -26,11 +26,8 @@ public partial class BarCreator : UserControl
     {
         InitializeComponent();
 
-        _bartypes.Add("XXX CROSSING XXX", 3);
-        _bartypes.Add("Runway ## Released to SMC", 1);
         _bartypes.Add("CIRCUIT AREA RELEASED", 1);
         _bartypes.Add("Autorelease Suspended", 2);
-        _bartypes.Add("Standby For Ground", 1);
         _bartypes.Add("W - ###.# E - ###.#", 1);
 
         foreach (var bay in bayManager.BayRepository.Bays)
