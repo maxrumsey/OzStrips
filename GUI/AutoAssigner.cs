@@ -173,6 +173,24 @@ internal class AutoAssigner
             }
         }
 
+        if (rule.Airway.Count > 0)
+        {
+            var matched = false;
+            foreach (var airway in rule.Airway)
+            {
+                if (strip.FDR.ParsedRoute.Any(x => x.AirwayName == airway))
+                {
+                    matched = true;
+                    break;
+                }
+            }
+
+            if (matched != matchAsTrue)
+            {
+                return false;
+            }
+        }
+
         if (rule.WTC.Count > 0)
         {
             var matched = false;

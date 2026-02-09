@@ -31,6 +31,12 @@ public class RuleCondition
     public List<string> Waypoint { get; set; } = [];
 
     /// <summary>
+    /// Gets or sets a list of airways, where at least one must be in the planned route.
+    /// </summary>
+    [YamlMember(Alias = "airway")]
+    public List<string> Airway { get; set; } = [];
+
+    /// <summary>
     /// Gets or sets a list of wake turb cats, where at least one must match the aircraft
     /// </summary>
     [YamlMember(Alias = "WTC")]
