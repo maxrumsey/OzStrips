@@ -1,4 +1,5 @@
 ﻿using MaxRumsey.OzStripsPlugin.GUI.DTO;
+using MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -221,6 +222,41 @@ public partial class DropDown : BaseForm
         {
             strip.DepartureFrequency = s;
             strip.SyncStrip();
+        });
+    }
+
+    /// <summary>
+    /// Shows a crossing / release bar dropdown.
+    /// </summary>
+    /// <param name="autoMapAerodrome">Automap aerodrome file.</param>
+    /// <param name="type">Crossing or Released.</param>
+    /// <param name="bayManager">Bay Manager.</param>
+    public static void ShowCrossingOrReleaseDropDown(AutoMapAerodrome autoMapAerodrome, string type, BayManager bayManager)
+    {
+        List<DropDownItem> items = new();
+
+        var runways = autoMapAerodrome.RunwayPairs;
+
+        foreach (var runway in runways)
+        {
+            if (runway.Length % 2 != 0)
+            {
+                continue;
+            }
+
+            items.Add(new(DropDownItem.DropDownItemType.BUTTON, runway.Insert(runway.Length / 2, "/")));
+        }
+
+        CreateDropDown([.. items], "Runway", s =>
+        {
+            try
+            {
+                bayManager.ToggleCrossReleaseBar(s.Replace("/", string.Empty), type);
+            }
+            catch (Exception ex)
+            {
+                Util.LogError(ex);
+            }
         });
     }
 }

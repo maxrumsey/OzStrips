@@ -59,6 +59,11 @@ public partial class MainForm : Form
     public Label AerodromeLabel => lb_ad;
 
     /// <summary>
+    /// Gets the release button.
+    /// </summary>
+    public Button ReleaseButton => bt_release;
+
+    /// <summary>
     /// Gets the metar tool tip.
     /// </summary>
     public ToolTip MetarToolTip => tt_metar;
@@ -107,6 +112,11 @@ public partial class MainForm : Form
     /// Gets the open PDCs menu item.
     /// </summary>
     public ToolStripMenuItem OpenPDCs => openPDCsToolStripMenuItem;
+
+    /// <summary>
+    /// Gets the inhibit ground maps menu item.
+    /// </summary>
+    public ToolStripMenuItem InhibitGroundMaps => tt_maps;
 
     /// <summary>
     /// Gets the autofill available menu item.
@@ -305,6 +315,7 @@ public partial class MainForm : Form
         bt_flip.Click += _mainFormController.FlipFlopStrip;
         bt_bar.Click += _mainFormController.BarCreatorClick;
         bt_cross.Click += _mainFormController.CrossButton_Click;
+        bt_release.Click += _mainFormController.ReleaseButton_Click;
         bt_inhibit.Click += _mainFormController.Bt_inhibit_Click;
         toolStripTextBox1.KeyPress += _mainFormController.AerodromeSelectorKeyDown;
         toolStripMenuItem1.Click += _mainFormController.ShowMessageList_Click;

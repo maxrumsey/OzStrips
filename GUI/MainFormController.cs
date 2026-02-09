@@ -163,6 +163,7 @@ public class MainFormController : IDisposable
             _bayManager.CircuitActive = _bayManager.AerodromeState.CircuitActive;
             specialLayoutChangeTriggered = true;
         }
+
         if (_bayManager.CoordinatorBayActive != _bayManager.AerodromeState.CoordinatorBayActive)
         {
             _bayManager.CoordinatorBayActive = _bayManager.AerodromeState.CoordinatorBayActive;
@@ -171,7 +172,7 @@ public class MainFormController : IDisposable
 
         if (specialLayoutChangeTriggered)
         {
-            AerodromeTypeChanged(this, EventArgs.Empty);
+            _bayManager.BayRepository.ConfigureAndSizeFLPs(true);
         }
 
         ResetCDMRateTextBox();
@@ -235,7 +236,18 @@ public class MainFormController : IDisposable
                         types.Remove(StripBay.BAY_COORDINATOR);
                     }
 
-                    _ = new Bay(types, _bayManager, _socketConn, element.Name, element.Column, element.Bay.CDMDisplay, availableElements.Count);
+                    var bay = new Bay(types, _bayManager, _socketConn, element.Name, element.Column, element.Bay.CDMDisplay, availableElements.Count);
+                    bay.OnBarsChanged += (_, _) =>
+                    {
+                        try
+                        {
+                            UpdateMaps();
+                        }
+                        catch (Exception ex)
+                        {
+                            Util.LogError(ex);
+                        }
+                    };
                 }
 
                 _bayManager.BayRepository.ConfigureAndSizeFLPs();
@@ -278,6 +290,20 @@ public class MainFormController : IDisposable
     public void SetCustomAerodromeList(List<string> value)
     {
         _mainForm.AerodromeManager.ManuallySetAerodromes = value;
+    }
+
+    /// <summary>
+    /// Updates release and crossing maps.
+    /// </summary>
+    public void UpdateMaps()
+    {
+        var fullName = _mainForm.AerodromeManager.Settings?.AutoMapAerodromes?.FirstOrDefault(x => x.ICAOCode == _bayManager.AerodromeName)?.FullName;
+        var bay = _bayManager.BayRepository.Bays.Find(x => x.BayTypes.Contains(StripBay.BAY_RUNWAY));
+
+        if (fullName is not null && bay is not null && bay.BayTypes.Contains(StripBay.BAY_RUNWAY) && !_mainForm.InhibitGroundMaps.Checked)
+        {
+            MapManager.SetApplicableMaps([.. bay.Strips.Where(x => x.Type == StripItemType.BAR).Select(x => x.BarText ?? string.Empty)], fullName);
+        }
     }
 
     /// <summary>
@@ -334,6 +360,7 @@ public class MainFormController : IDisposable
                 SetATISCode("Z");
                 _mainForm.AerodromeManager.ConfigureAerodromeListForNewAerodrome(name);
                 SetTitle();
+                _mainForm.ReleaseButton.Enabled = _mainForm.AerodromeManager.Settings?.AutoMapAerodromes?.Any(x => x.ICAOCode == _bayManager.AerodromeName) == true;
             }
         }
         catch (Exception ex)
@@ -509,6 +536,38 @@ public class MainFormController : IDisposable
     }
 
     /// <summary>
+    /// Toggles the crossing bar in the runway bay.
+    /// </summary>
+    public void ToggleCrossBar()
+    {
+        var autoMapAerodrome = _mainForm.AerodromeManager.Settings?.AutoMapAerodromes?.FirstOrDefault(x => x.ICAOCode == _bayManager.AerodromeName);
+
+        if (autoMapAerodrome is not null)
+        {
+            DropDown.ShowCrossingOrReleaseDropDown(autoMapAerodrome, "Crossing", _bayManager);
+        }
+
+        // If we didnt't delete a crossing bar, add one.
+        else if (!_bayManager.DeleteBarByParams("Runway", 3, "XXX CROSSING XXX"))
+        {
+            _bayManager.AddBar("Runway", 3, "XXX CROSSING XXX");
+        }
+    }
+
+    /// <summary>
+    /// Toggles the released bar in the runway bay.
+    /// </summary>
+    public void ToggleReleaseBar()
+    {
+        var autoMapAerodrome = _mainForm.AerodromeManager.Settings?.AutoMapAerodromes?.FirstOrDefault(x => x.ICAOCode == _bayManager.AerodromeName);
+
+        if (autoMapAerodrome is not null)
+        {
+            DropDown.ShowCrossingOrReleaseDropDown(autoMapAerodrome, "Released", _bayManager);
+        }
+    }
+
+    /// <summary>
     /// Overrides keypress event to capture all keypresses.
     /// </summary>
     /// <param name="msg">Sender.</param>
@@ -531,11 +590,13 @@ public class MainFormController : IDisposable
             }
             else if (keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.CROSS)) && keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.MODIFIER2)))
             {
-                // If we didnt't delete a crossing bar, add one.
-                if (!_bayManager.DeleteBarByParams("Runway", 3, "XXX CROSSING XXX"))
-                {
-                    _bayManager.AddBar("Runway", 3, "XXX CROSSING XXX");
-                }
+                ToggleCrossBar();
+
+                return true;
+            }
+            else if (keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.RELEASE)) && keys.Contains(KeybindManager.GetKey(KeybindManager.KEYBINDS.MODIFIER2)))
+            {
+                ToggleReleaseBar();
 
                 return true;
             }
@@ -724,6 +785,15 @@ public class MainFormController : IDisposable
         {
             Util.LogError(ex);
         }
+
+        try
+        {
+            UpdateMaps();
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+        }
     }
 
     internal void MainFormSizeChanged(object sender, EventArgs e)
@@ -814,13 +884,23 @@ public class MainFormController : IDisposable
     }
 
     /// <summary>
-    /// Crosses the selected strip.
+    /// Opens the cross bar menu.
     /// </summary>
     /// <param name="sender">The sender.</param>
     /// <param name="e">Eventargs.</param>
     public void CrossButton_Click(object sender, EventArgs e)
     {
-        _bayManager.CrossStrip();
+        ToggleCrossBar();
+    }
+
+    /// <summary>
+    /// Opens the release bar menu.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">Eventargs.</param>
+    public void ReleaseButton_Click(object sender, EventArgs e)
+    {
+        ToggleReleaseBar();
     }
 
     /// <summary>

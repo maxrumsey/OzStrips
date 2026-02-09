@@ -57,6 +57,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.oneColumnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colDisabledToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_toggleCircuit = new System.Windows.Forms.ToolStripMenuItem();
+            this.ts_toggleCoord = new System.Windows.Forms.ToolStripMenuItem();
             this.toggleCDMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,7 +82,8 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.autoFillUnavailableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tt_metar = new System.Windows.Forms.ToolTip(this.components);
             this.tt_clients = new System.Windows.Forms.ToolTip(this.components);
-            this.ts_toggleCoord = new System.Windows.Forms.ToolStripMenuItem();
+            this.bt_release = new System.Windows.Forms.Button();
+            this.tt_maps = new System.Windows.Forms.ToolStripMenuItem();
             this.pl_controlbar.SuspendLayout();
             this.pl_atis.SuspendLayout();
             this.pl_ad.SuspendLayout();
@@ -94,6 +96,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.pl_controlbar.AutoSize = true;
             this.pl_controlbar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
             this.pl_controlbar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pl_controlbar.Controls.Add(this.bt_release);
             this.pl_controlbar.Controls.Add(this.bt_flip);
             this.pl_controlbar.Controls.Add(this.bt_bar);
             this.pl_controlbar.Controls.Add(this.pl_atis);
@@ -115,12 +118,12 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.bt_flip.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.bt_flip.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bt_flip.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.bt_flip.Location = new System.Drawing.Point(742, 3);
+            this.bt_flip.Location = new System.Drawing.Point(888, 3);
             this.bt_flip.Name = "bt_flip";
             this.bt_flip.Size = new System.Drawing.Size(96, 37);
             this.bt_flip.TabIndex = 8;
             this.bt_flip.TabStop = false;
-            this.bt_flip.Text = "FLIP FLOP";
+            this.bt_flip.Text = "FLIP";
             this.bt_flip.UseVisualStyleBackColor = false;
             // 
             // bt_bar
@@ -129,7 +132,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.bt_bar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.bt_bar.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bt_bar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
-            this.bt_bar.Location = new System.Drawing.Point(642, 3);
+            this.bt_bar.Location = new System.Drawing.Point(788, 3);
             this.bt_bar.Name = "bt_bar";
             this.bt_bar.Size = new System.Drawing.Size(96, 37);
             this.bt_bar.TabIndex = 7;
@@ -348,6 +351,12 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.ts_toggleCircuit.Size = new System.Drawing.Size(252, 22);
             this.ts_toggleCircuit.Text = "Toggle Circuit Bay";
             // 
+            // ts_toggleCoord
+            // 
+            this.ts_toggleCoord.Name = "ts_toggleCoord";
+            this.ts_toggleCoord.Size = new System.Drawing.Size(252, 22);
+            this.ts_toggleCoord.Text = "Toggle Coordinator Bay";
+            // 
             // toggleCDMToolStripMenuItem
             // 
             this.toggleCDMToolStripMenuItem.Name = "toggleCDMToolStripMenuItem";
@@ -363,7 +372,8 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.cDMRateToolStripMenuItem,
             this.cdmTextBox,
             this.toolStripSeparator4,
-            this.tt_pdcsound});
+            this.tt_pdcsound,
+            this.tt_maps});
             this.settingsToolStripMenuItem.Font = new System.Drawing.Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.settingsToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(96)))));
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
@@ -373,25 +383,25 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             // settingsWindowToolStripMenuItem
             // 
             this.settingsWindowToolStripMenuItem.Name = "settingsWindowToolStripMenuItem";
-            this.settingsWindowToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.settingsWindowToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
             this.settingsWindowToolStripMenuItem.Text = "Settings Window";
             // 
             // keyboardSettingsToolStripMenuItem
             // 
             this.keyboardSettingsToolStripMenuItem.Name = "keyboardSettingsToolStripMenuItem";
-            this.keyboardSettingsToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.keyboardSettingsToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
             this.keyboardSettingsToolStripMenuItem.Text = "Keyboard Settings";
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(209, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(289, 6);
             // 
             // cDMRateToolStripMenuItem
             // 
             this.cDMRateToolStripMenuItem.Enabled = false;
             this.cDMRateToolStripMenuItem.Name = "cDMRateToolStripMenuItem";
-            this.cDMRateToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.cDMRateToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
             this.cDMRateToolStripMenuItem.Text = "CDM Rate";
             // 
             // cdmTextBox
@@ -403,7 +413,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(209, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(289, 6);
             // 
             // tt_pdcsound
             // 
@@ -411,7 +421,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.tt_pdcsound.CheckOnClick = true;
             this.tt_pdcsound.CheckState = System.Windows.Forms.CheckState.Checked;
             this.tt_pdcsound.Name = "tt_pdcsound";
-            this.tt_pdcsound.Size = new System.Drawing.Size(212, 22);
+            this.tt_pdcsound.Size = new System.Drawing.Size(292, 22);
             this.tt_pdcsound.Text = "PDC Sound";
             // 
             // helpToolStripMenuItem
@@ -523,11 +533,26 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             // 
             this.tt_clients.ToolTipTitle = "Online Clients";
             // 
-            // ts_toggleCoord
+            // bt_release
             // 
-            this.ts_toggleCoord.Name = "ts_toggleCoord";
-            this.ts_toggleCoord.Size = new System.Drawing.Size(252, 22);
-            this.ts_toggleCoord.Text = "Toggle Coordinator Bay";
+            this.bt_release.BackColor = System.Drawing.Color.DodgerBlue;
+            this.bt_release.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bt_release.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bt_release.ForeColor = System.Drawing.Color.White;
+            this.bt_release.Location = new System.Drawing.Point(642, 3);
+            this.bt_release.Name = "bt_release";
+            this.bt_release.Size = new System.Drawing.Size(142, 37);
+            this.bt_release.TabIndex = 9;
+            this.bt_release.TabStop = false;
+            this.bt_release.Text = "XX RELEASE XX";
+            this.bt_release.UseVisualStyleBackColor = false;
+            // 
+            // tt_maps
+            // 
+            this.tt_maps.CheckOnClick = true;
+            this.tt_maps.Name = "tt_maps";
+            this.tt_maps.Size = new System.Drawing.Size(292, 22);
+            this.tt_maps.Text = "Inhibit Ground Map Updating";
             // 
             // MainForm
             // 
@@ -604,5 +629,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
         private ToolStripMenuItem tt_pdcsound;
         private ToolStripMenuItem keyboardSettingsToolStripMenuItem;
         private ToolStripMenuItem ts_toggleCoord;
+        private Button bt_release;
+        private ToolStripMenuItem tt_maps;
     }
 }

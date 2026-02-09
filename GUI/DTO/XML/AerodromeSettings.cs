@@ -44,6 +44,10 @@ public class AerodromeSettings
     [XmlArrayItem("AerodromeList")]
     public AerodromeList[]? AerodromeLists;
 
+    [XmlArray("AutoMapAerodromes")]
+    [XmlArrayItem("AutoMapAerodrome")]
+    public AutoMapAerodrome[]? AutoMapAerodromes;
+
     public string? PDCFormat;
 
     public string? AerodromeAutoFillLocation;
@@ -126,6 +130,7 @@ public class AerodromeSettings
         baseSettings.AerodromeLists = overwrite.AerodromeLists ?? baseSettings.AerodromeLists;
         baseSettings.AerodromeAutoFillLocation = overwrite.AerodromeAutoFillLocation ?? baseSettings.AerodromeAutoFillLocation;
         baseSettings.PDCFormat = overwrite.PDCFormat ?? baseSettings.PDCFormat;
+        baseSettings.AutoMapAerodromes = overwrite.AutoMapAerodromes ?? baseSettings.AutoMapAerodromes;
 
         return baseSettings;
     }

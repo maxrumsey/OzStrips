@@ -73,6 +73,8 @@ public partial class PDCControl : UserControl
             cfl = 0;
         }
 
+        var cfl_fl = cfl;
+
         cfl *= 100;
         var ssr = (_strip.FDR.AssignedSSRCode == -1) ? "XXXX" : Convert.ToString(_strip.FDR.AssignedSSRCode, 8).PadLeft(4, '0');
 
@@ -88,6 +90,9 @@ public partial class PDCControl : UserControl
         .Replace("{TRANS}", trans)
         .Replace("{ROUTE}", _strip.FDR.Route)
         .Replace("{CFL}", CPDLCify(cfl.ToString(CultureInfo.InvariantCulture)))
+        .Replace("{CFL_FL}", CPDLCify(cfl_fl.ToString(CultureInfo.InvariantCulture)))
+        .Replace("{RFL_FL}", CPDLCify(_strip.RFL.ToString(CultureInfo.InvariantCulture)))
+        .Replace("{RFL}", CPDLCify(_strip.FDR.RFL.ToString(CultureInfo.InvariantCulture)))
         .Replace("{FREQ}", CPDLCify(_strip.DepartureFrequency))
         .Replace("{SQUAWK}", CPDLCify(ssr))
         .Replace("{READBACK}", cb_delivery.Text);

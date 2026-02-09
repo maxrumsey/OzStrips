@@ -55,6 +55,7 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
         try
         {
             Bay? bay = null;
+            var barsDeleted = false;
             foreach (var currentBay in Bays)
             {
                 if (currentBay.BayTypes.Contains(bayDTO.bay))
@@ -82,15 +83,27 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
             // incase of dodgy timing
             foreach (var oldListItem in bay.Strips)
             {
-                if (!list.Contains(oldListItem) && oldListItem.Type == StripItemType.STRIP)
+                if (!list.Contains(oldListItem))
                 {
-                    list.Add(oldListItem);
+                    if (oldListItem.Type == StripItemType.STRIP)
+                    {
+                        list.Add(oldListItem);
+                    }
+                    else
+                    {
+                        barsDeleted = true;
+                    }
                 }
             }
 
             bay.Strips.Clear();
             bay.Strips.AddRange(list);
             bay.ResizeBay();
+
+            if (barsDeleted)
+            {
+                bay.BarsChangedExternally();
+            }
         }
         catch (Exception ex)
         {
@@ -185,7 +198,7 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
 
             foreach (var vertPanel in _flpVerticalBoards)
             {
-                if (vertPanel.Controls.Count >= totalNum / _flpVerticalBoards.Count)
+                if (vertPanel.Controls.Count >= Math.Ceiling((float)totalNum / _flpVerticalBoards.Count))
                 {
                     continue;
                 }
