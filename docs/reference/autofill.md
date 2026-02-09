@@ -78,6 +78,15 @@ Available conditional elements include:
 
 !!! tip
     To test the inverse of a `true` statement, use `if_not:`.
+    ```yaml
+        - if:
+            runway: ["16L"]
+          if_not:
+            VFR: "true"
+          SID: "WOL"
+    ```
+
+    This will match IFR aircraft departing from 16L, and give them the WOLx SID.
 
 Indentation is important. Each conditional statement should be indented by 4 spaces from the `- if:` statement. The 'true' block should be indented 2 spaces.
 
