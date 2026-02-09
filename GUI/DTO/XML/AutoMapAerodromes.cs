@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using System.Xml.Serialization;
 
 namespace MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
@@ -20,6 +21,17 @@ public class AutoMapAerodrome
     [XmlAttribute("FullName")]
     public string FullName;
 
-    [XmlText]
+    [XmlAttribute("ICAO")]
     public string ICAOCode;
+
+    [XmlText]
+    public string RawRunways;
+
+    public string[] RunwayPairs
+    {
+        get
+        {
+            return RawRunways.Split(',').Select(r => r.Trim().Replace("/", string.Empty)).ToArray();
+        }
+    }
 }

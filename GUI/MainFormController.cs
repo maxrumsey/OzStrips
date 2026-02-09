@@ -540,11 +540,11 @@ public class MainFormController : IDisposable
     /// </summary>
     public void ToggleCrossBar()
     {
-        var fullName = _mainForm.AerodromeManager.Settings?.AutoMapAerodromes?.FirstOrDefault(x => x.ICAOCode == _bayManager.AerodromeName)?.FullName;
+        var autoMapAerodrome = _mainForm.AerodromeManager.Settings?.AutoMapAerodromes?.FirstOrDefault(x => x.ICAOCode == _bayManager.AerodromeName);
 
-        if (fullName is not null)
+        if (autoMapAerodrome is not null)
         {
-            DropDown.ShowCrossingOrReleaseDropDown(fullName, "Crossing", _bayManager);
+            DropDown.ShowCrossingOrReleaseDropDown(autoMapAerodrome, "Crossing", _bayManager);
         }
 
         // If we didnt't delete a crossing bar, add one.
@@ -559,11 +559,11 @@ public class MainFormController : IDisposable
     /// </summary>
     public void ToggleReleaseBar()
     {
-        var fullName = _mainForm.AerodromeManager.Settings?.AutoMapAerodromes?.FirstOrDefault(x => x.ICAOCode == _bayManager.AerodromeName)?.FullName;
+        var autoMapAerodrome = _mainForm.AerodromeManager.Settings?.AutoMapAerodromes?.FirstOrDefault(x => x.ICAOCode == _bayManager.AerodromeName);
 
-        if (fullName is not null)
+        if (autoMapAerodrome is not null)
         {
-            DropDown.ShowCrossingOrReleaseDropDown(fullName, "Released", _bayManager);
+            DropDown.ShowCrossingOrReleaseDropDown(autoMapAerodrome, "Released", _bayManager);
         }
     }
 

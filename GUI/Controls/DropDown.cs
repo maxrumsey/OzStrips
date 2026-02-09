@@ -1,4 +1,5 @@
 ﻿using MaxRumsey.OzStripsPlugin.GUI.DTO;
+using MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -225,16 +226,16 @@ public partial class DropDown : BaseForm
     }
 
     /// <summary>
-    /// Shows a crossing 
+    /// Shows a crossing / release bar dropdown.
     /// </summary>
-    /// <param name="fullAerodromeName">Full Aerodrome Name per Map dropdown.</param>
+    /// <param name="autoMapAerodrome">Automap aerodrome file.</param>
     /// <param name="type">Crossing or Released.</param>
     /// <param name="bayManager">Bay Manager.</param>
-    public static void ShowCrossingOrReleaseDropDown(string fullAerodromeName, string type, BayManager bayManager)
+    public static void ShowCrossingOrReleaseDropDown(AutoMapAerodrome autoMapAerodrome, string type, BayManager bayManager)
     {
         List<DropDownItem> items = new();
 
-        var runways = MapManager.GetRunwayNamesWithToggleableMaps(fullAerodromeName, type);
+        var runways = autoMapAerodrome.RunwayPairs;
 
         foreach (var runway in runways)
         {
