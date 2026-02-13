@@ -5,13 +5,15 @@ To autofill a strip, pick the strip, (click on the callsign) and press "A". The 
 
 A heirarchy of departure frequencies are defined, and the first "primed" frequency is selected.
 
-e.g: At Melbourne, RWY 27 is nominated for departures. MAE and ELW are online. By default, a jet outbound via DOSEL will receive
-1. Runway 27.
-2. A procedural SID terminating at DOSEL.
-3. A CFL of 5000 feet.
-4. The first appropriate departure frequency online. (MAE)
+!!!example
+    At Melbourne, RWY 27 is nominated for departures. MAE and ELW are online. By default, a jet outbound via DOSEL will receive:
+    
+    1. Runway 27.
+    2. A procedural SID terminating at DOSEL.
+    3. A CFL of 5000 feet.
+    4. The first appropriate departure frequency online. (MAE)
 
-If that aircraft were to then require Runway 16, the controller would enter that runway, and re-attempt an autofill. In this case, the `ISPEG X` SID would be selected.
+    If that aircraft were to then require Runway 16, the controller would enter that runway, and re-attempt an autofill. In this case, the `ISPEG X` SID would be selected.
 
 ## Data Format
 To enable autofill at an aerodrome, create a `.yml` file titled by the aerodrome's ICAO code.
