@@ -8,3 +8,5 @@ plugins:
   - glightbox
 repo_url: https://github.com/maxrumsey/OzStrips
 repo_name: "OzStrips"
+markdown_extensions:
+  - admonition
