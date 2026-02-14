@@ -9,12 +9,12 @@ Select the relevant view mode. If operating top-down, select "All". If one aerod
 #### Example
 If ADC, SMC and ACD are online, but the ACD is not using OzStrips, the SMC would select "SMC+ACD".
 
-The Smart-Resize option can also be toggled through this menu.
+The Smart-Resize option can also be toggled from this menu.
 
-The presence of the Circuit bay is toggled using this option.
+The presence of the Circuit or Coordinator bay is toggled from this menu.
 
-#### Exception
-If you aren't connected to VATSIM, or connected as an observer, this function won't do anything.
+!!! warning
+    If you aren't connected to VATSIM, or connected as an observer, this function won't do anything.
 
 ### Settings
 The Settings window is accessed through this button.
@@ -34,6 +34,7 @@ The "CONN STAT" box will change colour depending on connection status to the OzS
 A blue outline means there are other users logged on at this aerodrome. Hover over this box to see the Callsigns.
 ### Time
 Displays the time in UTC / Zulu time.
+
 ### Aerodrome Name
 Displays the aerodrome name.
 

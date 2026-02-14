@@ -4,8 +4,10 @@ Make sure you are on the latest version of OzStrips!
 
 It takes roughly 10 seconds to connect, as OzStrips waits for vatSys to have downloaded all of it's Flight Plans.
 
+
+
 ## How do I order strips vertically?
-Click on the aircraft's callsign and press your arrow keys.
+Click on the aircraft's callsign and press your arrow keys. You can also move a picked strip above or below another strip, by Control+Clicking on that strip.
 
 ## What does the INHI button do?
 Pick an aircraft's strip **in OzStrips** and press INHI, the strip will disappear. To get the strip back, press Ctrl-F to select the strip from the quick search window, select the radar target on the ground radar, or select the strip / coupled tag within vatSys. Finally, click into the bay you want the strip to appear in.
@@ -25,6 +27,8 @@ Click on the aircraft's destination.
 If they haven't created a flight plan, create a flight plan for them, so that they will have a squawk code. They should appear in your Preactive bay, but if they don't, click on their **Ground Target** or **vatSys Strip** and click on the bay you want them to go into within OzStrips. If they still don't appear, check to make sure that either the ADES or ADEP airport is your selected airport.
 
 A Circuit bay can be toggled on using the Option within the **View** tool bar button.
+
+You can press the **Flip** button in the control bar to change the strip colour, for an aircraft with the same ADES and ADEP.
 
 ## Another aerodrome controller is not using OzStrips, what should I do?
 If a position (SMC, ADC or ACD) is not using OzStrips, you will need to ensure your current view includes theirs. 
