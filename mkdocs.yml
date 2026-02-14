@@ -1,9 +1,18 @@
 site_name: OzStrips
 theme:
   name: material
-markdown_extensions:
-  - attr_list
-  - md_in_html
+  features:
+    - navigation.footer
+  custom_dir: docs/overrides
+extra:
+  social:
+    - icon: fontawesome/brands/discord
+      link: https://discord.gg/VfqFvXeg6V
+    - icon: fontawesome/brands/github
+      link: https://github.com/maxrumsey/OzStrips
+  analytics:
+    provider: google
+    property: G-EG3B2DB3YJ
 plugins:
   - glightbox
 repo_url: https://github.com/maxrumsey/OzStrips
@@ -11,3 +20,4 @@ repo_name: "OzStrips"
 markdown_extensions:
   - admonition
   - attr_list
+  - md_in_html
