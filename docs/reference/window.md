@@ -6,11 +6,12 @@
 Set the Aerodrome by clicking on one of the options, or enter the 4 character ICAO code in the text field. 
 ### View
 Select the relevant view mode. If operating top-down, select "All". If one aerodrome is not using OzStrips, select the view mode that also encompasses their position.
-#### Example
-If ADC, SMC and ACD are online, but the ACD is not using OzStrips, the SMC would select "SMC+ACD".
 
+!!! example
+    If ADC, SMC and ACD are online, but the ACD is not using OzStrips, the SMC would select "SMC+ACD".
+#### Smart-Resize
 The Smart-Resize option can also be toggled from this menu.
-
+#### Bars
 The presence of the Circuit or Coordinator bay is toggled from this menu.
 
 !!! warning
