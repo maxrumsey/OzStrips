@@ -636,7 +636,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
             case StripElements.Values.RFL:
                 return _strip.IsAlertActive(Shared.AlertTypes.RFL) ? SKColors.Orange : SKColors.Empty;
             case StripElements.Values.FIRST_WPT:
-                return _strip.IsAlertActive(Shared.AlertTypes.ROUTE) ? SKColors.OrangeRed : SKColors.Empty;
+                return _strip.IsAlertActive(Shared.AlertTypes.ROUTE) ? SKColors.Orange : SKColors.Empty;
             case StripElements.Values.READY:
                 var colour = SKColor.Empty;
                 if (_strip.IsAlertActive(Shared.AlertTypes.READY))
