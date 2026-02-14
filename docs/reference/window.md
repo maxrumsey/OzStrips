@@ -40,8 +40,8 @@ Displays the aerodrome name.
 Hover over this to see the aerodrome metar.
 ### Inhibit Button
 With a strip picked, select this button to remove the strip from your stripboard.
-### Cross Button
-Pick a strip and press this button to add crossing highlights for situational awareness.
+### Cross and Release Button
+Toggle cross or release bars in the runway bay.
 ### Add Bar Button
 Adds a custom menu bar.
 ### Flip-Flop

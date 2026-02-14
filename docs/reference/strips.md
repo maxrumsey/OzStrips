@@ -30,8 +30,8 @@ You will only see strips for aircraft that have requested planned an ADES or ADE
 | **13** | **Holding Point** | Edit Holding Point | |
 | **14** | **SID** \* | Move strip to next bay | Change SID | (Yellow Outline) SID Transition Exists or (Orange Background) VFR Aircraft issued a SID |
 | **15** | **First Waypoint** | Open flightplan | Open Reroute Window | Potentially Incorrect Routing |
-| **16** | **Requested Level** | Open flightplan | |
-| **17** | **Cleared Level** | Change CFL | | Incorrect Cruising Level |
+| **16** | **Requested Level** | Open flightplan | | Incorrect Cruising Level |
+| **17** | **Cleared Level** | Change CFL |
 | **18** | **vatSys Global Ops Field** ^ | Edit | |
 | **19** | **OzStrips Remarks** ^ | Edit | |
 | **20** | **Departure Heading** | Edit Departure Heading | | No HDG input to Radar SID Departures |

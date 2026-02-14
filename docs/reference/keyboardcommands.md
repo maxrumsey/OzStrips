@@ -1,6 +1,7 @@
 # Default Keyboard Commands
 
-Keybinds can be modified from the Settings -> Keyboard Settings dropdown.
+!!! info
+    Keybinds can be modified from the Settings -> Keyboard Settings dropdown.
 
 | Key | Action |
 |---------|-------------|
@@ -12,6 +13,7 @@ Keybinds can be modified from the Settings -> Keyboard Settings dropdown.
 | Tab | Cock a strip. |
 | X | Mark a strip as crossing. |
 | Alt-X | Create a crossing bar in the runway field. |
+| Alt-R | Create a runway-released bar in the runway field. |
 | F | Flip-flop a strip. |
 | Ctrl-F | Open the Quick Search window. |
 | Backspace | Remove a selected strip / bar. |

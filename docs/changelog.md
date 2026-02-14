@@ -1,4 +1,19 @@
 # Changelog
+## v0.8.4
+### Features
+- Certain bars toggle certain ground maps.
+- Added a cross&release bar quick-add button/shortcut.
+### Misc Changes
+- Added additional PDC template fields.
+- Added ability to match Autofill SIDs with a Regex.
+- Added ability to match airways in route when autofilling.
+- Changed location of RFL warning to RFL.
+- Changed some alert colours.
+### Bugfixes
+- Change how departure radial is calculated.
+- Fixed bug where toggling a bay would reset the view mode to all.
+### Server Changes
+- Fixed bug where CDM departure reports were duplicated due to a race condition.
 ## v0.8.3
 ### Features
 - Added OzBays integration.
