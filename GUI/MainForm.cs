@@ -335,4 +335,9 @@ public partial class MainForm : Form
         overrideATISToolStripMenuItem.Click += _mainFormController.OverrideATISClick;
         tt_pdcsound.Click += _mainFormController.PDCSoundToggle;
     }
+
+    private void OpenDiscordLink(object sender, EventArgs e)
+    {
+        System.Diagnostics.Process.Start("https://discord.gg/VfqFvXeg6V");
+    }
 }

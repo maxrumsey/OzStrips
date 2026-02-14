@@ -34,6 +34,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.pl_controlbar = new System.Windows.Forms.Panel();
+            this.bt_release = new System.Windows.Forms.Button();
             this.bt_flip = new System.Windows.Forms.Button();
             this.bt_bar = new System.Windows.Forms.Button();
             this.pl_atis = new System.Windows.Forms.Panel();
@@ -67,6 +68,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.cdmTextBox = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.tt_pdcsound = new System.Windows.Forms.ToolStripMenuItem();
+            this.tt_maps = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gitHubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.documentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,8 +84,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.autoFillUnavailableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tt_metar = new System.Windows.Forms.ToolTip(this.components);
             this.tt_clients = new System.Windows.Forms.ToolTip(this.components);
-            this.bt_release = new System.Windows.Forms.Button();
-            this.tt_maps = new System.Windows.Forms.ToolStripMenuItem();
+            this.discordServerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pl_controlbar.SuspendLayout();
             this.pl_atis.SuspendLayout();
             this.pl_ad.SuspendLayout();
@@ -111,6 +112,20 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.pl_controlbar.Name = "pl_controlbar";
             this.pl_controlbar.Size = new System.Drawing.Size(1784, 45);
             this.pl_controlbar.TabIndex = 0;
+            // 
+            // bt_release
+            // 
+            this.bt_release.BackColor = System.Drawing.Color.DodgerBlue;
+            this.bt_release.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bt_release.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bt_release.ForeColor = System.Drawing.Color.White;
+            this.bt_release.Location = new System.Drawing.Point(642, 3);
+            this.bt_release.Name = "bt_release";
+            this.bt_release.Size = new System.Drawing.Size(142, 37);
+            this.bt_release.TabIndex = 9;
+            this.bt_release.TabStop = false;
+            this.bt_release.Text = "XX RELEASE XX";
+            this.bt_release.UseVisualStyleBackColor = false;
             // 
             // bt_flip
             // 
@@ -424,11 +439,19 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.tt_pdcsound.Size = new System.Drawing.Size(292, 22);
             this.tt_pdcsound.Text = "PDC Sound";
             // 
+            // tt_maps
+            // 
+            this.tt_maps.CheckOnClick = true;
+            this.tt_maps.Name = "tt_maps";
+            this.tt_maps.Size = new System.Drawing.Size(292, 22);
+            this.tt_maps.Text = "Inhibit Ground Map Updating";
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.gitHubToolStripMenuItem,
             this.documentationToolStripMenuItem,
+            this.discordServerToolStripMenuItem,
             this.changelogToolStripMenuItem,
             this.aboutToolStripMenuItem,
             this.toolStripSeparator2,
@@ -442,35 +465,35 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             // gitHubToolStripMenuItem
             // 
             this.gitHubToolStripMenuItem.Name = "gitHubToolStripMenuItem";
-            this.gitHubToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gitHubToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.gitHubToolStripMenuItem.Text = "GitHub";
             this.gitHubToolStripMenuItem.Click += new System.EventHandler(this.GitHubToolStripMenuItem_Click);
             // 
             // documentationToolStripMenuItem
             // 
             this.documentationToolStripMenuItem.Name = "documentationToolStripMenuItem";
-            this.documentationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.documentationToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.documentationToolStripMenuItem.Text = "Documentation";
             this.documentationToolStripMenuItem.Click += new System.EventHandler(this.DocumentationToolStripMenuItem_Click);
             // 
             // changelogToolStripMenuItem
             // 
             this.changelogToolStripMenuItem.Name = "changelogToolStripMenuItem";
-            this.changelogToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.changelogToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.changelogToolStripMenuItem.Text = "Changelog";
             this.changelogToolStripMenuItem.Click += new System.EventHandler(this.ChangelogToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(185, 6);
             // 
             // debugToolStripMenuItem
             // 
@@ -480,7 +503,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             this.reloadAerodromeListToolStripMenuItem,
             this.overrideATISToolStripMenuItem});
             this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
-            this.debugToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.debugToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.debugToolStripMenuItem.Text = "Debug";
             // 
             // toolStripMenuItem1
@@ -533,26 +556,12 @@ namespace MaxRumsey.OzStripsPlugin.GUI
             // 
             this.tt_clients.ToolTipTitle = "Online Clients";
             // 
-            // bt_release
+            // discordServerToolStripMenuItem
             // 
-            this.bt_release.BackColor = System.Drawing.Color.DodgerBlue;
-            this.bt_release.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.bt_release.Font = new System.Drawing.Font("Terminus (TTF)", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bt_release.ForeColor = System.Drawing.Color.White;
-            this.bt_release.Location = new System.Drawing.Point(642, 3);
-            this.bt_release.Name = "bt_release";
-            this.bt_release.Size = new System.Drawing.Size(142, 37);
-            this.bt_release.TabIndex = 9;
-            this.bt_release.TabStop = false;
-            this.bt_release.Text = "XX RELEASE XX";
-            this.bt_release.UseVisualStyleBackColor = false;
-            // 
-            // tt_maps
-            // 
-            this.tt_maps.CheckOnClick = true;
-            this.tt_maps.Name = "tt_maps";
-            this.tt_maps.Size = new System.Drawing.Size(292, 22);
-            this.tt_maps.Text = "Inhibit Ground Map Updating";
+            this.discordServerToolStripMenuItem.Name = "discordServerToolStripMenuItem";
+            this.discordServerToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.discordServerToolStripMenuItem.Text = "Discord Server";
+            this.discordServerToolStripMenuItem.Click += new System.EventHandler(this.OpenDiscordLink);
             // 
             // MainForm
             // 
@@ -631,5 +640,6 @@ namespace MaxRumsey.OzStripsPlugin.GUI
         private ToolStripMenuItem ts_toggleCoord;
         private Button bt_release;
         private ToolStripMenuItem tt_maps;
+        private ToolStripMenuItem discordServerToolStripMenuItem;
     }
 }
