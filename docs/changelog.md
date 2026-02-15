@@ -1,4 +1,7 @@
 # Changelog
+## v0.8.5
+### Bugfixes
+- Ensure dropdown windows open completely visible.
 ## v0.8.4
 ### Features
 - Certain bars toggle certain ground maps.
