@@ -42,6 +42,7 @@ public partial class DropDown : BaseForm
         StartPosition = FormStartPosition.Manual;
         Location = Cursor.Position;
 
+        MMI.EnsureWindowVisible(this);
 
         foreach (var control in flowLayoutPanel1.Controls)
         {
@@ -133,6 +134,7 @@ public partial class DropDown : BaseForm
         {
             return;
         }
+
         var dropdown = new DropDown(items, title);
         dropdown.Complete += (s, e) =>
         {
