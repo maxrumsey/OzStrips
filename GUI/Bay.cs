@@ -608,6 +608,7 @@ public class Bay : System.IDisposable
     public void Dispose()
     {
         ChildPanel.Dispose();
+        _bayRenderController.Dispose();
     }
 
     /// <summary>

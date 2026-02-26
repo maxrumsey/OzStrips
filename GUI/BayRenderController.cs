@@ -33,7 +33,9 @@ internal class BayRenderController(Bay bay) : IDisposable
 
     public void Dispose()
     {
-        throw new NotImplementedException();
+        ToolTip?.RemoveAll();
+        ToolTip?.Dispose();
+        SkControl?.Dispose();
     }
 
     public void Setup()
