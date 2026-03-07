@@ -42,6 +42,11 @@ public class StripElement
     public StripElements.HoverActions Hover { get; set; } = StripElements.HoverActions.NONE;
 
     /// <summary>
+    /// Gets or sets the border colour.
+    /// </summary>
+    public string BorderColour { get; set; } = "#000000";
+
+    /// <summary>
     /// Gets or sets the Origin.X.
     /// </summary>
     public int X { get; set; }
