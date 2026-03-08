@@ -248,6 +248,9 @@ public class AerodromeManager
     {
         sectorList.Add(currentSector);
 
+        /*
+         * MMI.SectorsControlled automatically recurses subsectors.
+
         foreach (var child in currentSector.SubSectors)
         {
             // TODO: look for all dupes
@@ -265,6 +268,7 @@ public class AerodromeManager
 
             RecurseSectors(sectorList, child);
         }
+        */
     }
 
     public enum AutoOpenModes
