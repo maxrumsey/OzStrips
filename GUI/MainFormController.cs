@@ -1079,21 +1079,55 @@ public class MainFormController : IDisposable
     /// <param name="e">Eventargs.</param>
     public void ConnStatusPaint(object sender, PaintEventArgs e)
     {
-        var borderWidth = 5;
-        var g = e.Graphics;
-        g.Clear(Color.Purple);
-        var coreBrush = new SolidBrush(_socketConn.Connected ? Color.Green : Color.OrangeRed);
+        if (e?.Graphics is null || _mainForm.IsDisposed || !_mainForm.StatusPanel.IsHandleCreated)
+        {
+            return;
+        }
 
-        var outerBrush = new SolidBrush(_bayManager.AerodromeState.Connections?.Count > 1 ? Color.Blue : coreBrush.Color);
+        try
+        {
+            var borderWidth = 5;
+            var g = e.Graphics;
+            g.Clear(Color.Purple);
 
-        var textBrush = new SolidBrush(Color.Black);
-        var font = new Font("Terminus (TTF)", 12F, System.Drawing.FontStyle.Bold);
+            using var coreBrush = new SolidBrush(_socketConn.Connected ? Color.Green : Color.OrangeRed);
+            var outerColor = _bayManager.AerodromeState.Connections?.Count > 1 ? Color.Blue : coreBrush.Color;
+            using var outerBrush = new SolidBrush(outerColor);
+            using var textBrush = new SolidBrush(Color.Black);
 
-        g.FillRectangle(outerBrush, e.ClipRectangle);
+            Font? font;
+            try
+            {
+                font = new Font("Terminus (TTF)", 12F, FontStyle.Bold);
+            }
+            catch (ArgumentException)
+            {
+                font = SystemFonts.DefaultFont;
+            }
 
-        g.FillRectangle(coreBrush, e.ClipRectangle.X + borderWidth, e.ClipRectangle.Y + borderWidth, e.ClipRectangle.Width - (borderWidth * 2), e.ClipRectangle.Height - (borderWidth * 2));
-
-        g.DrawString("CONN STAT", font, textBrush, e.ClipRectangle, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
+            try
+            {
+                g.FillRectangle(outerBrush, e.ClipRectangle);
+                g.FillRectangle(coreBrush, e.ClipRectangle.X + borderWidth, e.ClipRectangle.Y + borderWidth, e.ClipRectangle.Width - (borderWidth * 2), e.ClipRectangle.Height - (borderWidth * 2));
+                var fmt = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+                g.DrawString("CONN STAT", font, textBrush, e.ClipRectangle, fmt);
+            }
+            finally
+            {
+                if (font != SystemFonts.DefaultFont)
+                {
+                    font?.Dispose();
+                }
+            }
+        }
+        catch (InvalidOperationException)
+        {
+            // GDI+ can throw if control is disposed or graphics invalid; ignore to avoid crashing the process.
+        }
+        catch (ObjectDisposedException)
+        {
+            // Control or dependencies disposed during paint; ignore.
+        }
     }
 
     /// <summary>
@@ -1171,7 +1205,13 @@ public class MainFormController : IDisposable
     /// </summary>
     public void Dispose()
     {
+        _timer?.Stop();
         _timer?.Dispose();
+        if (!_mainForm.IsDisposed && _mainForm.StatusPanel.IsHandleCreated)
+        {
+            _mainForm.StatusPanel.Paint -= ConnStatusPaint;
+        }
+
         _mainForm.AerodromeManager.AerodromeListChanged -= AerodromeListChanged;
         _socketConn.Dispose();
     }
