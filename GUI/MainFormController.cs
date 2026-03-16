@@ -1124,9 +1124,9 @@ public class MainFormController : IDisposable
         {
             // GDI+ can throw if control is disposed or graphics invalid; ignore to avoid crashing the process.
         }
-        catch (ObjectDisposedException)
+        catch (Exception ex)
         {
-            // Control or dependencies disposed during paint; ignore.
+            Util.LogError(ex);
         }
     }
 
