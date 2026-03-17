@@ -201,7 +201,7 @@ public sealed class OzStrips : IPlugin, IDisposable, ILabelPlugin
         Directory.CreateDirectory(appdata_path);
         try
         {
-            File.Copy(assembly_folder + @"\libSkiaSharp.adll", appdata_path + "libSkiaSharp.dll", true);
+            File.Copy(assembly_folder + @"\libSkiaSharp.dll", appdata_path + "libSkiaSharp.dll", true);
         }
         catch
         {
