@@ -64,7 +64,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
             var elpaint = new SKPaint()
             {
-                Color = SKColors.Black,
+                Color = SKColor.Parse(element.BorderColour),
                 Style = SKPaintStyle.Stroke,
             };
 

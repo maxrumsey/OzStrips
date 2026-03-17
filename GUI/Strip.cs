@@ -429,7 +429,7 @@ public sealed class Strip
 
             var wpt = FirstWpt;
 
-            if (FDR.SID.Transitions.ContainsKey(wpt))
+            if (FDR.SID?.Transitions?.ContainsKey(wpt) == true)
             {
                 return wpt;
             }

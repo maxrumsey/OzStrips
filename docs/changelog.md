@@ -1,4 +1,13 @@
 # Changelog
+## v0.8.6
+### Bugfixes
+- Fixed crash for Win11 users caused by hovering over a tooltip.
+- Prevent non-activated subsectors from being included in calculation to determine which sectors controller is operating.
+- Fixed error caused by missing SID transition in vatsys FDR.
+### Misc Changes
+- Added Strip.xml customisation options.
+### Server Changes
+- Actually fixed CDM departure race condition.
 ## v0.8.5
 ### Bugfixes
 - Ensure dropdown windows open completely visible.
