@@ -55,6 +55,8 @@ public class AerodromeSettings
     [XmlElement("StripColour")]
     public StripColour[]? StripColours { get; set; }
 
+    public string? DefaultLayout { get; set; }
+
     internal static AerodromeSettings? Deserialize(string path)
     {
         try
@@ -135,6 +137,7 @@ public class AerodromeSettings
         baseSettings.PDCFormat = overwrite.PDCFormat ?? baseSettings.PDCFormat;
         baseSettings.AutoMapAerodromes = overwrite.AutoMapAerodromes ?? baseSettings.AutoMapAerodromes;
         baseSettings.StripColours = overwrite.StripColours ?? baseSettings.StripColours;
+        baseSettings.DefaultLayout = overwrite.DefaultLayout ?? baseSettings.DefaultLayout;
 
         return baseSettings;
     }
