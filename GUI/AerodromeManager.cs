@@ -34,6 +34,8 @@ public class AerodromeManager
 
     public static string PDCFormat = string.Empty;
 
+    public static StripColour[] StripColours = [];
+
     public bool AllowAutoOpen
     {
         get
@@ -165,6 +167,7 @@ public class AerodromeManager
         _defaultAerodromes = Settings?.DefaultAerodromes?.ToList() ?? new List<string>();
         AerodromeAutoFillLocation = Settings?.AerodromeAutoFillLocation ?? string.Empty;
         PDCFormat = Settings?.PDCFormat ?? string.Empty;
+        StripColours = Settings?.StripColours ?? [];
     }
 
     private void SectorsChanged(object sender, EventArgs e)

@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using MaxRumsey.OzStripsPlugin.GUI.DTO;
+using MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
 using MaxRumsey.OzStripsPlugin.GUI.Properties;
 using MaxRumsey.OzStripsPlugin.GUI.Shared;
 using OpenTK.Graphics;
@@ -672,13 +673,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
     {
         var color = SKColor.Empty;
 
-        color = _strip.StripType switch
-        {
-            StripType.ARRIVAL => SKColor.Parse("ffffa0"), // Light yellow for arrivals
-            StripType.DEPARTURE => SKColor.Parse("c1e6f2"), // Light blue for departures
-            StripType.LOCAL => SKColor.Parse("e6aedd"), // Light purple for local
-            _ => SKColor.Parse("404040"), // Default gray for unknown
-        };
+        color = SKColor.Parse(AerodromeManager.StripColours.FirstOrDefault(x => x.Type == _strip.StripType)?.Colour ?? throw new Exception($"Could not load strip colour for type {_strip.StripType}"));
 
         if (LastTransmitModifier && _bayRenderController.Bay.BayManager.LastTransmitManager.LastReceivedFrom != _strip.FDR.Callsign)
         {
