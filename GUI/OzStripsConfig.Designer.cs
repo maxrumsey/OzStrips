@@ -98,7 +98,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 0.8.6.
+        ///   Looks up a localized string similar to 0.8.7.
         /// </summary>
         public static string version {
             get {
