@@ -22,8 +22,10 @@ public partial class KeybindChanger : UserControl
 
         foreach (var keybind in KeybindManager.ActiveKeybinds)
         {
+            var friendlyName = KeybindManager.Friendlyname.TryGetValue(keybind.Key, out var friendlyNameOut) ? friendlyNameOut : keybind.Key.ToString();
+
             var label = new Label();
-            label.Text = $"{KeybindManager.Friendlyname[keybind.Key]} : {keybind.Value.ToString()}";
+            label.Text = $"{friendlyName} : {keybind.Value.ToString()}";
             label.BorderStyle = BorderStyle.FixedSingle;
             label.Tag = keybind.Key;
             label.Click += Clicked;

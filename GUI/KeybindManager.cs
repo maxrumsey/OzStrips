@@ -137,5 +137,6 @@ internal static class KeybindManager
         { KEYBINDS.MODIFIER1, "Strip Action Modifier" },
         { KEYBINDS.MODIFIER2, "Bar Modifier" },
         { KEYBINDS.FIND, "Find Strip (MODIFIER)" },
+        { KEYBINDS.RELEASE, "Release Runway" },
     };
 }
