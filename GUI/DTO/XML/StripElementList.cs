@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -52,6 +53,13 @@ public class StripElementList
     internal static void Load()
     {
         var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\Strip.xml");
+
+        var altPath = Path.Combine(AerodromeSettings.GetPluginsDirectory(), "Configs", "Strip.xml");
+
+        if (File.Exists(altPath))
+        {
+            path = altPath;
+        }
 
         Instance = Deserialize(path);
     }
