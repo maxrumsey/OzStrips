@@ -461,6 +461,11 @@ public sealed class OzStrips : IPlugin, IDisposable, ILabelPlugin
             switch (itemType)
             {
                 case "OZSTRIPS_BAY":
+                    if (!string.IsNullOrEmpty(strip.AllocatedBay) && string.IsNullOrEmpty(strip.Gate))
+                    {
+                        item.Text = strip.AllocatedBay;
+                    }
+
                     item.Text = strip.Gate;
                     break;
                 case "OZSTRIPS_REMARKS":
