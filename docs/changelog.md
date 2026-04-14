@@ -2,6 +2,7 @@
 ## v0.8.7
 ### Bugfixes
 - Fixed crash due to missing keybind "friendly name".
+- Assigned bay through OzBays visible on ground radar.
 ### Misc Changes
 - Can place override Strip.xml in config file.
 - Can define default layout name in config file.
