@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Globalization;
@@ -122,7 +122,7 @@ public sealed class OzStrips : IPlugin, IDisposable, ILabelPlugin
     /// <inheritdoc/>
     public void Dispose()
     {
-        _httpClient.Dispose();
+        // Do not dispose static _httpClient; it is shared for the process lifetime (CRIT-1).
         _gui?.Dispose();
     }
 
@@ -201,7 +201,7 @@ public sealed class OzStrips : IPlugin, IDisposable, ILabelPlugin
         Directory.CreateDirectory(appdata_path);
         try
         {
-            File.Copy(assembly_folder + @"\libSkiaSharp.adll", appdata_path + "libSkiaSharp.dll", true);
+            File.Copy(assembly_folder + @"\libSkiaSharp.dll", appdata_path + "libSkiaSharp.dll", true);
         }
         catch
         {

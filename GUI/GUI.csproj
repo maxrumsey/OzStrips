@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFrameworks>net481</TargetFrameworks>
         <UseWindowsForms>true</UseWindowsForms>
@@ -112,7 +112,7 @@
       <None Update="AerodromeSettings.xml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="libSkiaSharp.adll">
+      <None Update="libSkiaSharp.dll">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="libSkiaSharp.dylib">
