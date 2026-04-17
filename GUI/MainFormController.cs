@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -1095,7 +1096,13 @@ public class MainFormController : IDisposable
             var g = e.Graphics;
             g.Clear(Color.Purple);
 
-            using var coreBrush = new SolidBrush(_socketConn.Connected ? Color.Green : Color.OrangeRed);
+            using var coreBrush = new SolidBrush(_socketConn.State switch
+            {
+                SocketConn.ConnectionState.RECONNECTING => Color.Orange,
+                SocketConn.ConnectionState.CONNECTED => Color.Green,
+                SocketConn.ConnectionState.DISCONNECTED => Color.OrangeRed,
+                _ => Color.OrangeRed,
+            });
             var outerColor = _bayManager.AerodromeState.Connections?.Count > 1 ? Color.Blue : coreBrush.Color;
             using var outerBrush = new SolidBrush(outerColor);
             using var textBrush = new SolidBrush(Color.Black);

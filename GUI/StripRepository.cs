@@ -168,14 +168,12 @@ public class StripRepository
     /// <param name="cacheData">The cache data.</param>
     /// <param name="bayManager">The bay manager.</param>
     /// <param name="socketConn">The socket connection.</param>
-    public void LoadCache(List<StripDTO> cacheData, BayManager bayManager, SocketConn socketConn)
+    public void LoadCache(StripDTO[] cacheData, BayManager bayManager, SocketConn socketConn)
     {
         foreach (var stripDTO in cacheData)
         {
             UpdateStripData(stripDTO, bayManager);
         }
-
-        socketConn.ReadyForBayData();
     }
 
     /// <summary>

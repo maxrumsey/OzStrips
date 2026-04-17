@@ -3,16 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Timers;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
-using MaxRumsey.OzStripsPlugin.GUI.DTO;
 using MaxRumsey.OzStripsPlugin.GUI.Shared;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
 using vatsys;
 using static MaxRumsey.OzStripsPlugin.GUI.Shared.ConnectionMetadataDTO;
-using static MaxRumsey.OzStripsPlugin.GUI.SocketConn;
 
 namespace MaxRumsey.OzStripsPlugin.GUI;
 
@@ -26,10 +21,17 @@ public sealed class SocketConn : IDisposable
     private readonly BayManager _bayManager;
     private readonly bool _isDebug = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
 
-    private bool _freshClient = true;
-    private System.Timers.Timer? _oneMinTimer;
+    private bool FreshClient
+    {
+        get
+        {
+            return (DateTime.Now - (_aerodromeSubscriptionRegistered ?? DateTime.Now)) < TimeSpan.FromMinutes(1);
+        }
+    }
+
     private bool _versionShown;
     private bool _isDisposed;
+    private DateTime? _aerodromeSubscriptionRegistered;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SocketConn"/> class.
@@ -39,18 +41,16 @@ public sealed class SocketConn : IDisposable
     public SocketConn(BayManager bayManager, MainFormController mainForm)
     {
         _connection = new HubConnectionBuilder()
-            .WithUrl(OzStripsConfig.socketioaddr + "OzStripsHub")
+            .WithUrl(OzStripsConfig.socketioaddr + "ozstrips/hub/v2")
             .WithAutomaticReconnect()
             .Build();
 
         _bayManager = bayManager;
         _mainForm = mainForm;
 
-        _connection.Closed += async (error) => await ConnectionLost(error);
-
-        _connection.Reconnected += async (connId) => await MarkConnected();
-
-        _connection.Reconnecting += async (error) => await ConnectionLost(error);
+        _connection.Closed += async (error) => await ConnectionStateChanged(ConnectionState.DISCONNECTED, error);
+        _connection.Reconnected += async (connId) => await ConnectionStateChanged(ConnectionState.CONNECTED);
+        _connection.Reconnecting += async (error) => await ConnectionStateChanged(ConnectionState.RECONNECTING, error);
 
         _connection.On<StripDTO?>("StripUpdate", (StripDTO? scDTO) =>
         {
@@ -62,20 +62,20 @@ public sealed class SocketConn : IDisposable
             }
         });
 
-        _connection.On<List<StripDTO>?>("StripCache", (List<StripDTO>? scDTO) =>
+        _connection.On<StripDTO[]>("StripCache", (StripDTO[] scDTO) =>
         {
             AddMessage("s:StripCache: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
 
-            if (scDTO is not null && _freshClient)
+            if (scDTO is not null && FreshClient)
             {
-                InvokeOnGUI(() => _bayManager.StripRepository.LoadCache(scDTO, bayManager, this));
+                InvokeOnGUI(() => _bayManager.StripRepository.LoadCache(scDTO ?? [], bayManager, this));
             }
         });
 
         _connection.On("UpdateCache", [], async _ =>
         {
             AddMessage("s:UpdateCache: ");
-            if (!_freshClient)
+            if (!FreshClient)
             {
                 InvokeOnGUI(async () =>
                 {
@@ -96,7 +96,7 @@ public sealed class SocketConn : IDisposable
         _connection.On("UpdateBays", [], async _ =>
         {
             AddMessage("s:UpdateBays: ");
-            if (!_freshClient)
+            if (!FreshClient)
             {
                 InvokeOnGUI(async () =>
                 {
@@ -123,7 +123,7 @@ public sealed class SocketConn : IDisposable
         _connection.On("SendCDM", [], async (_) =>
         {
             AddMessage("s:SendCDM: ");
-            if (!_freshClient)
+            if (!FreshClient)
             {
                 InvokeOnGUI(async () =>
                 {
@@ -272,9 +272,9 @@ public sealed class SocketConn : IDisposable
     public Servers Server { get; set; } = Servers.VATSIM;
 
     /// <summary>
-    /// Gets or sets a value indicating whether the client is connected.
+    /// Gets the connection state.
     /// </summary>
-    public bool Connected { get; set; }
+    public ConnectionState State { get; private set; } = SocketConn.ConnectionState.DISCONNECTED;
 
     /// <summary>
     /// Gets a value indicating whether we should be able to send strip and bay updates to the server.
@@ -403,19 +403,6 @@ public sealed class SocketConn : IDisposable
     }
 
     /// <summary>
-    /// Requests bay order data from server.
-    /// </summary>
-    /// <param name="force">Whether or not to force fetching of bay data.</param>
-    public void ReadyForBayData(bool force = false)
-    {
-        if ((_freshClient || force) && Connected)
-        {
-            AddMessage("c:RequestBays:");
-            _connection.InvokeAsync("RequestBays");
-        }
-    }
-
-    /// <summary>
     /// Syncs the deletion of a controller.
     /// </summary>
     /// <param name="sc">The strip controller.</param>
@@ -487,29 +474,49 @@ public sealed class SocketConn : IDisposable
     /// Sets the aerodrome based on the bay manager.
     /// </summary>
     /// <returns>Task.</returns>
+    /// <exception cref="Exception">Server error.</exception>
+    /// <exception cref="ArgumentNullException">Connection data was not returned.</exception>
+    /// <exception cref="ArgumentException">Connection data did not match our copy.</exception>
     public async Task SubscribeToAerodrome()
     {
-        _freshClient = true;
-        _oneMinTimer = new()
-        {
-            AutoReset = false,
-            Interval = 60000,
-        };
-        _oneMinTimer.Elapsed += ToggleFresh;
         if (_connection.State == HubConnectionState.Connected) // was is io connected.
         {
             var connmetadata = new ConnectionMetadataDTO()
             {
                 Version = OzStripsConfig.version,
-                APIVersion = OzStripsConfig.apiversion,
+                APIVersion = "2",
                 Server = Server,
                 AerodromeName = _bayManager.AerodromeName,
                 Callsign = Network.Me.Callsign,
             };
+            var response = await _connection.InvokeAsync<AerodromeSubscriptionResponse>("SubscribeToAerodrome", connmetadata);
 
-            await _connection.InvokeAsync("ProvideVersion", OzStripsConfig.version);
-            await _connection.InvokeAsync("SubscribeToAerodrome", connmetadata);
-            _oneMinTimer.Start();
+            if (response.Error is not null)
+            {
+                throw response.Error;
+            }
+            else if (response is null)
+            {
+                throw new ArgumentNullException("Subscription response was not included after aerodrome subscription.");
+            }
+            else if (response.AerodromeICAO != _bayManager.AerodromeName ||
+                response.Server != Server)
+            {
+                throw new ArgumentException("Server details did not match retained details.");
+            }
+
+            InvokeOnGUI(() =>
+            {
+                _bayManager.StripRepository.LoadCache(response.StripCache ?? [], _bayManager, this);
+
+                foreach (var bay in response.Bays ?? [])
+                {
+                    InvokeOnGUI(() => _bayManager.BayRepository.UpdateOrder(bay));
+                }
+            });
+
+
+            _aerodromeSubscriptionRegistered = DateTime.Now;
         }
     }
 
@@ -646,8 +653,6 @@ public sealed class SocketConn : IDisposable
     /// <returns>Task.</returns>
     public async Task Connect()
     {
-        MMI.InvokeOnGUI(() => _mainForm.SetAerodrome(_bayManager.AerodromeName));
-
         if (!CanConnectToCurrentServer())
         {
             return;
@@ -656,11 +661,12 @@ public sealed class SocketConn : IDisposable
         try
         {
             AddMessage("c: Attempting connection " + OzStripsConfig.socketioaddr);
-            while (!_isDisposed && _connection.State == HubConnectionState.Disconnected)
+            while (!_isDisposed)
             {
                 try
                 {
                     await _connection.StartAsync();
+                    await ConnectionStateChanged(ConnectionState.CONNECTED);
                 }
                 catch (ObjectDisposedException)
                 {
@@ -668,14 +674,6 @@ public sealed class SocketConn : IDisposable
                 catch (Exception ex)
                 {
                     Errors.Add(ex, "OzStrips - Server Connection Failed");
-                }
-
-                if (_connection.State == HubConnectionState.Connected)
-                {
-                    await MarkConnected();
-                }
-                else
-                {
                     await Task.Delay(TimeSpan.FromSeconds(10));
                 }
             }
@@ -701,7 +699,6 @@ public sealed class SocketConn : IDisposable
     public async void Dispose()
     {
         _isDisposed = true;
-        _oneMinTimer?.Dispose();
         await _connection.DisposeAsync();
     }
 
@@ -714,16 +711,6 @@ public sealed class SocketConn : IDisposable
         return new() { strips = _bayManager.StripRepository.Strips.Select(x => (StripDTO)x).ToList(), };
     }
 
-    private void ToggleFresh(object sender, ElapsedEventArgs e)
-    {
-        try
-        {
-            _freshClient = false;
-        }
-        catch
-        {
-        }
-    }
 
     private bool CanConnectToCurrentServer()
     {
@@ -770,60 +757,64 @@ public sealed class SocketConn : IDisposable
         }
     }
 
-    private async Task MarkConnected()
+    private async Task ConnectionStateChanged(ConnectionState newState, Exception? ex = null)
     {
-        AddMessage("c: conn established");
-        if (Network.IsConnected)
-        {
-            Connected = true;
-            await SubscribeToAerodrome();
-
-            if (MainFormValid)
-            {
-                _mainForm.Invoke(() => _mainForm.SetConnStatus());
-            }
-
-            _bayManager.StripRepository.MarkAllStripsAsAwaitingRoutes();
-
-            await Task.Delay(TimeSpan.FromSeconds(60));
-            _freshClient = false;
-        }
-        else
-        {
-            AddMessage("c: disconnecting as vatsys connection was lost");
-            await _connection.StopAsync();
-        }
-    }
-
-    private async Task ConnectionLost(Exception? error)
-    {
-        if (_isDisposed)
+        if (_isDisposed || !MainFormValid)
         {
             return;
         }
 
-        if (Connected)
+        if (ex is not null)
         {
-            // prevent spamming of this func.
-            Connected = false;
-            _mainForm.Invoke(() => _mainForm.SetConnStatus());
-
-            // Delete circuit bay, once.
-            MMI.InvokeOnGUI(() => _mainForm.SetAerodrome(_bayManager.AerodromeName));
+            AddMessage($"Connection error: {ex.Message}");
         }
 
-        // This exists on the off chance we are connected but main form is not valid.
-        Connected = false;
-
-        if (error is not null)
+        if (newState == ConnectionState.CONNECTED && State is ConnectionState.RECONNECTING or ConnectionState.DISCONNECTED)
         {
-            AddMessage("server conn lost - " + error.Message);
-        }
+            _aerodromeSubscriptionRegistered = DateTime.Now;
+            State = ConnectionState.CONNECTED;
 
-        // Don't try to connect if we are not connected to the network.
-        if (_connection.State == HubConnectionState.Disconnected && Network.IsConnected)
-        {
-            await Connect();
+            if (!Network.IsConnected)
+            {
+                AddMessage("Connected, but network is not. Rejecting.");
+                Disconnect();
+                return;
+            }
+
+            AddMessage("Connected");
+
+            _mainForm.Invoke(_mainForm.SetConnStatus);
+            _bayManager.StripRepository.MarkAllStripsAsAwaitingRoutes();
         }
+        else if (newState == ConnectionState.DISCONNECTED && State is ConnectionState.RECONNECTING or ConnectionState.CONNECTED)
+        {
+            _aerodromeSubscriptionRegistered = null;
+            State = ConnectionState.DISCONNECTED;
+
+            _mainForm.Invoke(_mainForm.SetConnStatus);
+
+            if (Network.IsConnected)
+            {
+                await Connect();
+            }
+        }
+        else if (newState == ConnectionState.RECONNECTING && State is ConnectionState.DISCONNECTED or ConnectionState.CONNECTED)
+        {
+            if (!Network.IsConnected)
+            {
+                AddMessage("Reconnecting, but network is not connected. Rejecting.");
+                Disconnect();
+                return;
+            }
+
+            _mainForm.Invoke(_mainForm.SetConnStatus);
+        }
+    }
+
+    public enum ConnectionState
+    {
+        DISCONNECTED,
+        CONNECTED,
+        RECONNECTING,
     }
 }

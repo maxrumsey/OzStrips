@@ -250,7 +250,7 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
                 bay.ResizeBay();
             }
 
-            socketConn.ReadyForBayData(true);
+            _ = socketConn.SubscribeToAerodrome();
 
             ResizeStripBays();
         }
