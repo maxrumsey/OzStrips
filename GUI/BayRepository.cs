@@ -117,16 +117,6 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
     /// <param name="strip">The strip to delete.</param>
     public void DeleteStrip(Strip strip)
     {
-        // todo: add force delete server flag.
-
-        /*
-         * Don't send delete messages for deps incase they log back in.
-         */
-        if (strip.DefaultStripType == StripType.ARRIVAL)
-        {
-            strip.SendDeleteMessage();
-        }
-
         FindBay(strip)?.RemoveStrip(strip, true);
         _bayManager.StripRepository.RemoveStrip(strip);
     }

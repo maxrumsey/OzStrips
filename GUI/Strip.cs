@@ -849,14 +849,6 @@ public sealed class Strip
     }
 
     /// <summary>
-    /// Sends a strip deletion message to the server.
-    /// </summary>
-    public void SendDeleteMessage()
-    {
-        _socketConn.SyncDeletion(this);
-    }
-
-    /// <summary>
     /// Sends a Hoppies PDC to the server.
     /// </summary>
     /// <param name="text">PDC content.</param>

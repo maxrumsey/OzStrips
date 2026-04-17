@@ -185,6 +185,20 @@ public sealed class SocketConn : IDisposable
                 InvokeOnGUI(() => NewPDCsReceived?.Invoke(this, pdcs));
             }
         });
+
+        RegisterListener<string?>("VersionInfo", async appversion =>
+        {
+            if (appversion is null)
+            {
+                return;
+            }
+
+            if (!_versionShown && appversion != OzStripsConfig.version && !AerodromeManager.InhibitVersionCheck)
+            {
+                _versionShown = true;
+                InvokeOnGUI(() => Util.ShowInfoBox("New Update Available: " + appversion));
+            }
+        });
     }
 
     /// <summary>
