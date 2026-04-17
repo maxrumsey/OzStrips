@@ -22,6 +22,9 @@ public sealed class SocketConn : IDisposable
     private readonly BayManager _bayManager;
     private readonly bool _isDebug = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
     private readonly SemaphoreSlim _connectionSemaphore = new(1, 1);
+
+    private bool _serverPopupShown;
+
     private bool FreshClient
     {
         get
@@ -464,7 +467,10 @@ public sealed class SocketConn : IDisposable
 
                 foreach (var bay in response.Bays ?? [])
                 {
-                    InvokeOnGUI(() => _bayManager.BayRepository.UpdateOrder(bay));
+                    if (bay is not null)
+                    {
+                        InvokeOnGUI(() => _bayManager.BayRepository.UpdateOrder(bay));
+                    }
                 }
             });
 
@@ -614,10 +620,15 @@ public sealed class SocketConn : IDisposable
         {
             while (!_isDisposed)
             {
+                if (State != ConnectionState.DISCONNECTED)
+                {
+                    return;
+                }
+
                 // Try to catch internet errors etc
                 try
                 {
-                    if (!CanConnectToCurrentServer() || !MainFormController.ReadyForConnection)
+                    if (!MainFormController.ReadyForConnection || !CanConnectToCurrentServer())
                     {
                         return;
                     }
@@ -676,15 +687,17 @@ public sealed class SocketConn : IDisposable
     {
         if (!Network.IsOfficialServer && Server == Servers.VATSIM)
         {
-            // TODO: make sure settings isn't already open.
-            var result = Util.ShowQuestionBox("Connection to OzStrips main server detected while connected to the Sweatbox.\n\n" +
-                "Would you like to go to Settings and set Sweatbox mode?");
-
-            if (result == DialogResult.Yes)
+            if (!_serverPopupShown)
             {
-                _mainForm.ShowSettings(this, new());
-            }
+                _serverPopupShown = true;
+                var result = Util.ShowQuestionBox("Connection to OzStrips main server detected while connected to the Sweatbox.\n\n" +
+                    "Would you like to go to Settings and set Sweatbox mode?");
 
+                if (result == DialogResult.Yes)
+                {
+                    _mainForm.ShowSettings(this, new());
+                }
+            }
             return false;
         }
 
@@ -750,6 +763,7 @@ public sealed class SocketConn : IDisposable
         }
         else if (newState == ConnectionState.DISCONNECTED && State is ConnectionState.RECONNECTING or ConnectionState.CONNECTED)
         {
+            AddMessage("#Disconnected.");
             _aerodromeSubscriptionRegistered = null;
             State = ConnectionState.DISCONNECTED;
 
@@ -762,6 +776,7 @@ public sealed class SocketConn : IDisposable
         }
         else if (newState == ConnectionState.RECONNECTING && State is ConnectionState.DISCONNECTED or ConnectionState.CONNECTED)
         {
+            AddMessage("#Reconnecting.");
             if (!Network.IsConnected)
             {
                 AddMessage("#Reconnecting, but network is not connected. Rejecting.");
@@ -796,7 +811,7 @@ public sealed class SocketConn : IDisposable
 
     private void RegisterListener<T>(string name, Func<T, Task> func)
     {
-        _connection.On<MessageMetadata, T>(name, async (metadata, arg) =>
+        _connection.On(name, async (MessageMetadata metadata, T arg) =>
         {
             if (metadata.AerodromeICAO != _bayManager.AerodromeName ||
                 metadata.Server != Server)
@@ -813,15 +828,8 @@ public sealed class SocketConn : IDisposable
 
     private void RegisterListener(string name, Func<Task> func)
     {
-        _connection.On<MessageMetadata>(name, async (metadata) =>
+        _connection.On(name, async () =>
         {
-            if (metadata.AerodromeICAO != _bayManager.AerodromeName ||
-                metadata.Server != Server)
-            {
-                await SubscribeToAerodrome();
-                return;
-            }
-
             LogMessageContent(name);
 
             await func();

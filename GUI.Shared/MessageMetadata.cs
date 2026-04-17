@@ -7,9 +7,19 @@ using static MaxRumsey.OzStripsPlugin.GUI.Shared.ConnectionMetadataDTO;
 
 namespace MaxRumsey.OzStripsPlugin.GUI.Shared;
 
-public class MessageMetadata(string icao, Servers server)
+public class MessageMetadata
 {
-    public string AerodromeICAO { get; set; } = icao;
+    public string AerodromeICAO { get; set; }
 
-    public Servers Server { get; set; } = server;
+    public Servers Server { get; set; }
+
+    public MessageMetadata(string icao, Servers server)
+    {
+        AerodromeICAO = icao;
+        Server = server;
+    }
+
+    public MessageMetadata()
+    {
+    }
 }
