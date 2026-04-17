@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.GUI.Shared;
@@ -20,7 +21,7 @@ public sealed class SocketConn : IDisposable
     private readonly HubConnection _connection;
     private readonly BayManager _bayManager;
     private readonly bool _isDebug = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
-
+    private readonly SemaphoreSlim _connectionSemaphore = new(1, 1);
     private bool FreshClient
     {
         get
@@ -52,7 +53,7 @@ public sealed class SocketConn : IDisposable
         _connection.Reconnected += async (connId) => await ConnectionStateChanged(ConnectionState.CONNECTED);
         _connection.Reconnecting += async (error) => await ConnectionStateChanged(ConnectionState.RECONNECTING, error);
 
-        _connection.On<StripDTO?>("StripUpdate", (StripDTO? scDTO) =>
+        _connection.On("StripUpdate", (StripDTO? scDTO) =>
         {
             AddMessage("s:StripUpdate: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
 
@@ -62,7 +63,7 @@ public sealed class SocketConn : IDisposable
             }
         });
 
-        _connection.On<StripDTO[]>("StripCache", (StripDTO[] scDTO) =>
+        _connection.On("StripCache", (StripDTO[] scDTO) =>
         {
             AddMessage("s:StripCache: " + System.Text.Json.JsonSerializer.Serialize(scDTO));
 
@@ -141,7 +142,7 @@ public sealed class SocketConn : IDisposable
             return Task.CompletedTask;
         });
 
-        _connection.On<string?>("Atis", (string? code) =>
+        _connection.On("Atis", (string? code) =>
         {
             if (code is not null)
             {
@@ -149,7 +150,7 @@ public sealed class SocketConn : IDisposable
             }
         });
 
-        _connection.On<string?>("Metar", (string? metar) =>
+        _connection.On("Metar", (string? metar) =>
         {
             if (metar is not null)
             {
@@ -167,7 +168,7 @@ public sealed class SocketConn : IDisposable
             }
         });
 
-        _connection.On<StripKey?, RouteDTO[]?>("Routes", (StripKey? key, RouteDTO[]? routes) => // not functional.
+        _connection.On("Routes", (StripKey? key, RouteDTO[]? routes) => // not functional.
         {
             if (key is null ||
                 routes is null ||
@@ -196,7 +197,7 @@ public sealed class SocketConn : IDisposable
             }
         });
 
-        _connection.On<string?>("GetStripStatus", (string? acid) =>
+        _connection.On("GetStripStatus", (string? acid) =>
         {
             if (acid is not null)
             {
@@ -204,7 +205,8 @@ public sealed class SocketConn : IDisposable
             }
         });
 
-        _connection.On<string?>("VersionInfo", (string? appversion) => // not functional.
+
+        _connection.On("VersionInfo", (string? appversion) => // not functional.
         {
             if (appversion is null)
             {
@@ -218,7 +220,7 @@ public sealed class SocketConn : IDisposable
             }
         });
 
-        _connection.On<string?>("Message", (string? message) =>
+        _connection.On("Message", (string? message) =>
         {
             if (message is not null)
             {
@@ -226,7 +228,7 @@ public sealed class SocketConn : IDisposable
             }
         });
 
-        _connection.On<AerodromeState>("AerodromeStateUpdate", (AerodromeState state) =>
+        _connection.On("AerodromeStateUpdate", (AerodromeState state) =>
         {
             if (state.AerodromeCode == _bayManager.AerodromeName && state.AerodromeCode.Length > 0)
             {
@@ -236,7 +238,7 @@ public sealed class SocketConn : IDisposable
             }
         });
 
-        _connection.On<string[]?>("NewPDC", (string[]? pdcs) =>
+        _connection.On("NewPDC", (string[]? pdcs) =>
         {
             AddMessage($"s:NewPDC: {JsonSerializer.Serialize(pdcs)}");
             if (pdcs is not null && pdcs.Length > 0)
@@ -392,6 +394,7 @@ public sealed class SocketConn : IDisposable
     /// </summary>
     /// <param name="strip">Strip.</param>
     /// <param name="text">PDC text.</param>
+    /// <returns>Task.</returns>
     public async Task SendPDC(Strip strip, string text)
     {
         AddMessage("c:SendPDC: " + strip.FDR.Callsign);
@@ -515,8 +518,11 @@ public sealed class SocketConn : IDisposable
                 }
             });
 
-
             _aerodromeSubscriptionRegistered = DateTime.Now;
+        }
+        else
+        {
+            await Connect();
         }
     }
 
@@ -653,11 +659,7 @@ public sealed class SocketConn : IDisposable
     /// <returns>Task.</returns>
     public async Task Connect()
     {
-        if (!CanConnectToCurrentServer())
-        {
-            return;
-        }
-
+        await _connectionSemaphore.WaitAsync();
         try
         {
             AddMessage("c: Attempting connection " + OzStripsConfig.socketioaddr);
@@ -665,11 +667,13 @@ public sealed class SocketConn : IDisposable
             {
                 try
                 {
+                    if (!CanConnectToCurrentServer())
+                    {
+                        return;
+                    }
+
                     await _connection.StartAsync();
                     await ConnectionStateChanged(ConnectionState.CONNECTED);
-                }
-                catch (ObjectDisposedException)
-                {
                 }
                 catch (Exception ex)
                 {
@@ -680,10 +684,15 @@ public sealed class SocketConn : IDisposable
         }
         catch (ObjectDisposedException)
         {
+            return;
         }
         catch (Exception ex)
         {
             Util.LogError(ex);
+        }
+        finally
+        {
+            _connectionSemaphore.Release();
         }
     }
 
@@ -783,6 +792,8 @@ public sealed class SocketConn : IDisposable
 
             AddMessage("Connected");
 
+            await SubscribeToAerodrome();
+
             _mainForm.Invoke(_mainForm.SetConnStatus);
             _bayManager.StripRepository.MarkAllStripsAsAwaitingRoutes();
         }
@@ -816,5 +827,35 @@ public sealed class SocketConn : IDisposable
         DISCONNECTED,
         CONNECTED,
         RECONNECTING,
+    }
+
+    private void RegisterListener<T>(string name, Func<T, Task> func)
+    {
+        _connection.On<MessageMetadata, T>(name, async (metadata, arg) =>
+        {
+            if (metadata.AerodromeICAO != _bayManager.AerodromeName ||
+                metadata.Server != Server)
+            {
+                await SubscribeToAerodrome();
+                return;
+            }
+
+            await func(arg);
+        });
+    }
+
+    private void RegisterListener<T, T1>(string name, Func<T, T1, Task> func)
+    {
+        _connection.On<MessageMetadata, T, T1>(name, async (metadata, arg, arg2) =>
+        {
+            if (metadata.AerodromeICAO != _bayManager.AerodromeName ||
+                metadata.Server != Server)
+            {
+                await SubscribeToAerodrome();
+                return;
+            }
+
+            await func(arg, arg2);
+        });
     }
 }
