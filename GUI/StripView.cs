@@ -547,44 +547,14 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
 
                 break;
             case StripElements.Values.STAND:
-            case StripElements.Values.ADES:
-            case StripElements.Values.EOBT:
-            case StripElements.Values.WTC:
-            case StripElements.Values.ROUTE:
-            case StripElements.Values.FRUL:
-            case StripElements.Values.PDC_INDICATOR:
-            case StripElements.Values.TYPE:
-            case StripElements.Values.SSR:
-                if (element.Value == StripElements.Values.STAND && !string.IsNullOrEmpty(_strip.AllocatedBay) && string.IsNullOrEmpty(_strip.Gate))
+                if (!string.IsNullOrEmpty(_strip.AllocatedBay) && string.IsNullOrEmpty(_strip.Gate))
                 {
                     return SKColors.LightGray;
                 }
 
-                if (element.Value == StripElements.Values.PDC_INDICATOR && _strip.StripType != StripType.ARRIVAL)
-                {
-                    var requestedPDC = _strip.PDCRequest;
-
-                    if (requestedPDC is not null && requestedPDC.Flags.HasFlag(PDCRequest.PDCFlags.REQUESTED) && !_strip.PDCFlags.HasFlag(PDCRequest.PDCFlags.SENT))
-                    {
-                        if (DateTime.Now.Second % 2 == 0 && !_strip.PDCFlags.HasFlag(PDCRequest.PDCFlags.ACKNOWLEDGED))
-                        {
-                            return SKColors.White;
-                        }
-
-                        return SKColors.Yellow;
-                    }
-                }
-
-                /*
-                * Incorrect SSR Code & Mode C alert
-                */
-                if ((element.Value == StripElements.Values.SSR) && _strip.IsAlertActive(Shared.AlertTypes.SSR))
-                {
-                    return SKColors.Orange;
-                }
-
-                if ((element.Value == StripElements.Values.EOBT) &&
-                    _strip.CDMResult is not null &&
+                break;
+            case StripElements.Values.EOBT:
+                if (_strip.CDMResult is not null &&
                     _strip.CDMResult.Aircraft.State != CDMState.PUSHED)
                 {
                     if (_strip.ReadyToPush)
@@ -600,28 +570,35 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                     return SKColors.LightGray;
                 }
 
-                if (_strip.CockLevel == 1)
+                break;
+            case StripElements.Values.PDC_INDICATOR:
+                if (_strip.StripType != StripType.ARRIVAL)
                 {
-                    return SKColors.Cyan;
+                    var requestedPDC = _strip.PDCRequest;
+
+                    if (requestedPDC is not null && requestedPDC.Flags.HasFlag(PDCRequest.PDCFlags.REQUESTED) && !_strip.PDCFlags.HasFlag(PDCRequest.PDCFlags.SENT))
+                    {
+                        if (DateTime.Now.Second % 2 == 0 && !_strip.PDCFlags.HasFlag(PDCRequest.PDCFlags.ACKNOWLEDGED))
+                        {
+                            return SKColors.White;
+                        }
+
+                        return SKColors.Yellow;
+                    }
                 }
 
                 break;
-            case StripElements.Values.GLOP:
-            case StripElements.Values.REMARK:
-            case StripElements.Values.DEPFREQ:
-            case StripElements.Values.HDG:
-                /*
-                 * HDG unassigned to radar sid in rwy bay.
-                 */
-                if (element.Value == StripElements.Values.GLOP &&
-                    _strip.IsAlertActive(Shared.AlertTypes.NO_HDG))
+            case StripElements.Values.SSR:
+                if (_strip.IsAlertActive(Shared.AlertTypes.SSR))
                 {
                     return SKColors.Orange;
                 }
 
-                if (_strip.Crossing)
+                break;
+            case StripElements.Values.GLOP:
+                if (_strip.IsAlertActive(Shared.AlertTypes.NO_HDG))
                 {
-                    return SKColors.Red;
+                    return SKColors.Orange;
                 }
 
                 break;
@@ -646,6 +623,16 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 }
 
                 return colour;
+        }
+
+        if (element.CockableSpecified && _strip.CockLevel == 1)
+        {
+            return SKColors.Cyan;
+        }
+
+        if (element.CrossableSpecified && _strip.Crossing)
+        {
+            return SKColors.Red;
         }
 
         return SKColor.Empty;

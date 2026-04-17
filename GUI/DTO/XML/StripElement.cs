@@ -70,4 +70,28 @@ public class StripElement
     /// Gets or sets the font size in pixels.
     /// </summary>
     public int FontSize { get; set; } = 12;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not the element should be given the cocking highlight.
+    /// </summary>
+    [XmlAttribute("cockable")]
+    public bool Cockable { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not the element should be cocking highlight.
+    /// </summary>
+    [XmlIgnore]
+    public bool CockableSpecified { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not the element should be given the crossing highlight.
+    /// </summary>
+    [XmlAttribute("crossable")]
+    public bool Crossable { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not the element should be crossing highlight.
+    /// </summary>
+    [XmlIgnore]
+    public bool CrossableSpecified { get; set; }
 }
