@@ -917,10 +917,27 @@ public sealed class Strip
 
             if (!string.IsNullOrEmpty(result.SID))
             {
-                SID = result.SID;
+                if (SID != result.SID)
+                {
+                    DepartureChanged = true;
+                }
+
+                try
+                {
+                    SID = result.SID;
+                }
+                catch (Exception ex)
+                {
+                    // Ignore invalid SID errors.
+                    if (!ex.Message.Contains("SID"))
+                    {
+                        throw;
+                    }
+                }
             }
 
             Controller.AssignSSR();
+
             SyncStrip();
         }
         catch (Exception ex)
