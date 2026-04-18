@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.GUI.DTO;
 using MaxRumsey.OzStripsPlugin.GUI.Properties;
@@ -186,25 +187,33 @@ public class BayManager
     /// Forces a track into the first bay.
     /// </summary>
     /// <param name="socketConn">The socket connection.</param>
-    public void ForceStrip(SocketConn socketConn)
+    /// <returns>Task.</returns>
+    public async Task ForceStrip(SocketConn socketConn)
     {
-        if (MMI.SelectedTrack != null)
+        try
         {
-            var fdr = MMI.SelectedTrack.GetFDR();
-            if (fdr is null)
+            if (MMI.SelectedTrack != null)
             {
-                return;
-            }
+                var fdr = MMI.SelectedTrack.GetFDR();
+                if (fdr is null)
+                {
+                    return;
+                }
 
-            var controller = StripRepository.UpdateFDR(fdr, this, socketConn);
+                var controller = await StripRepository.UpdateFDR(fdr, this, socketConn);
 
-            if (controller != null && BayRepository.Bays[0] != null)
-            {
-                controller.CurrentBay = BayRepository.Bays[0].BayTypes[0];
-                controller.SyncStrip();
-                controller.FDR = fdr;
-                UpdateBay(controller);
+                if (controller != null && BayRepository.Bays[0] != null)
+                {
+                    controller.CurrentBay = BayRepository.Bays[0].BayTypes[0];
+                    controller.SyncStrip();
+                    controller.FDR = fdr;
+                    UpdateBay(controller);
+                }
             }
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
         }
     }
 
@@ -304,7 +313,7 @@ public class BayManager
     {
         if (PickedStrip != null)
         {
-            if (MoveStrip(bay, PickedStrip));
+            if (MoveStrip(bay, PickedStrip))
             {
                 PickedStripItem = bay.GetListItem(PickedStrip);
                 RemovePicked(true);
@@ -387,7 +396,7 @@ public class BayManager
 
         foreach (var fdr in FDP2.GetFDRs)
         {
-            StripRepository.UpdateFDR(fdr, this, socketConn, true);
+            _ = StripRepository.UpdateFDR(fdr, this, socketConn, true);
         }
 
         if (MainFormController.Instance?.IsDisposed == false)

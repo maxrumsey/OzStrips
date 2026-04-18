@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using MaxRumsey.OzStripsPlugin.GUI.Controls;
@@ -962,58 +963,65 @@ public sealed class Strip
     /// <summary>
     /// Refreshes strip properties, and determines if strip should be removed.
     /// </summary>
-    public void UpdateFDR()
+    public async void UpdateFDR()
     {
-        if (!DetermineSCValidity())
+        try
         {
-            _bayManager.BayRepository.DeleteStrip(this);
-            return;
-        }
-
-        // Route fetch will retry every minute.
-        if (ValidRoutes is null && (RequestedRoutes == DateTime.MaxValue || (DateTime.Now - RequestedRoutes) > TimeSpan.FromMinutes(1)))
-        {
-            _socketConn.RequestRoutes(this);
-            RequestedRoutes = DateTime.Now;
-        }
-
-        if (ValidRoutes is not null)
-        {
-            CondensedRoute = CleanVatsysRoute(FDR.Route);
-            DodgyRoute = true;
-            foreach (var validroute in ValidRoutes)
+            if (!DetermineSCValidity())
             {
-                if (validroute.RouteText.Contains(CondensedRoute))
-                {
-                    DodgyRoute = false;
-                }
+                _bayManager.BayRepository.DeleteStrip(this);
+                return;
             }
 
-            // If not departure or FDR active.
-            if (DefaultStripType != StripType.DEPARTURE || (int)FDR.State > 5)
+            // Route fetch will retry every minute.
+            if (ValidRoutes is null && (RequestedRoutes == DateTime.MaxValue || (DateTime.Now - RequestedRoutes) > TimeSpan.FromMinutes(1)))
             {
-                DodgyRoute = false;
+                await _socketConn.RequestRoutes(this);
+                RequestedRoutes = DateTime.Now;
             }
-            else
+
+            if (ValidRoutes is not null)
             {
-                // account for situations where aircraft joins route from interim point via sid.
-                if (DodgyRoute)
+                CondensedRoute = CleanVatsysRoute(FDR.Route);
+                DodgyRoute = true;
+                foreach (var validroute in ValidRoutes)
                 {
-                    var rte = string.Join(" ", CleanVatsysRoute(FDR.Route).Split(' ').Skip(1).ToArray());
-                    foreach (var validroute in ValidRoutes)
+                    if (validroute.RouteText.Contains(CondensedRoute))
                     {
-                        if (validroute.RouteText.Contains(rte))
-                        {
-                            DodgyRoute = false;
-                        }
+                        DodgyRoute = false;
                     }
                 }
 
-                if (!DodgyRoute && CondensedRoute == "FAIL")
+                // If not departure or FDR active.
+                if (DefaultStripType != StripType.DEPARTURE || (int)FDR.State > 5)
                 {
-                    DodgyRoute = true;
+                    DodgyRoute = false;
+                }
+                else
+                {
+                    // account for situations where aircraft joins route from interim point via sid.
+                    if (DodgyRoute)
+                    {
+                        var rte = string.Join(" ", CleanVatsysRoute(FDR.Route).Split(' ').Skip(1).ToArray());
+                        foreach (var validroute in ValidRoutes)
+                        {
+                            if (validroute.RouteText.Contains(rte))
+                            {
+                                DodgyRoute = false;
+                            }
+                        }
+                    }
+
+                    if (!DodgyRoute && CondensedRoute == "FAIL")
+                    {
+                        DodgyRoute = true;
+                    }
                 }
             }
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
         }
     }
 
@@ -1116,9 +1124,10 @@ public sealed class Strip
     /// <summary>
     /// Requests new strip data from the server, for new strips.
     /// </summary>
-    public void FetchStripData()
+    /// <returns>Task.</returns>
+    public async Task FetchStripData()
     {
-        _socketConn.RequestStrip(this);
+        await _socketConn.RequestStrip(this);
     }
 
     /// <summary>

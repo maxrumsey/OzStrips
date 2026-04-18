@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Media;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using MaxRumsey.OzStripsPlugin.GUI.Controls;
@@ -316,7 +317,7 @@ public class MainFormController : IDisposable
     /// Marks whether or not a connection is ready to be established to the server.
     /// </summary>
     /// <param name="readyForConnection">Whether or not a connection can be made.</param>
-    public void MarkConnectionReadiness(bool readyForConnection)
+    public async void MarkConnectionReadiness(bool readyForConnection)
     {
         try
         {
@@ -324,7 +325,7 @@ public class MainFormController : IDisposable
             _readyForConnection = readyForConnection;
             if (_readyForConnection)
             {
-                _socketConn.Connect();
+                await _socketConn.Connect();
             }
         }
         catch (Exception ex)
@@ -353,7 +354,7 @@ public class MainFormController : IDisposable
     /// Sets the current aerodrome. Called by the GUI, and subsequently calls SetAerodrome() for various managers.
     /// </summary>
     /// <param name="name">The aerodrome name.</param>
-    public void SetAerodrome(string name)
+    public async void SetAerodrome(string name)
     {
         try
         {
@@ -361,7 +362,7 @@ public class MainFormController : IDisposable
             {
                 _bayManager.PurgeDataAndSetNewAerodrome(name, _socketConn);
                 SetCircuitToolStripStatus();
-                _socketConn.SubscribeToAerodrome();
+                _ = _socketConn.SubscribeToAerodrome();
                 _mainForm.AerodromeLabel.Text = name;
                 SetATISCode("Z");
                 _mainForm.AerodromeManager.ConfigureAerodromeListForNewAerodrome(name);
@@ -484,9 +485,10 @@ public class MainFormController : IDisposable
     /// </summary>
     /// <param name="sender">Sending object.</param>
     /// <param name="e">EventArgs.</param>
-    public void ForceStrip(object? sender, EventArgs? e)
+    /// <returns>Task.</returns>
+    public async Task ForceStrip(object? sender, EventArgs? e)
     {
-        _bayManager.ForceStrip(_socketConn);
+        await _bayManager.ForceStrip(_socketConn);
     }
 
     /// <summary>
@@ -494,11 +496,12 @@ public class MainFormController : IDisposable
     /// </summary>
     /// <param name="fdr">The flgiht data record.</param>
     /// <remarks>Triggered from Connector plugin.</remarks>
-    public void UpdateFDR(FDP2.FDR fdr)
+    /// <returns>Task.</returns>
+    public async Task UpdateFDR(FDP2.FDR fdr)
     {
         try
         {
-            var strip = _bayManager.StripRepository.UpdateFDR(fdr, _bayManager, _socketConn);
+            var strip = await _bayManager.StripRepository.UpdateFDR(fdr, _bayManager, _socketConn);
 
             var pilot = Network.GetOnlinePilots.Find(x => x.Callsign == fdr.Callsign);
 

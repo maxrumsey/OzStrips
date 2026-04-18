@@ -103,7 +103,7 @@ public sealed class OzStrips : IPlugin, IDisposable, ILabelPlugin
     {
         if (_gui?.IsHandleCreated == true)
         {
-            MMI.InvokeOnGUI(() => _gui.Controller.UpdateFDR(updated));
+            MMI.InvokeOnGUI(() => _ = _gui.Controller.UpdateFDR(updated));
         }
     }
 

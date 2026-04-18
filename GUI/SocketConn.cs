@@ -90,30 +90,6 @@ public sealed class SocketConn : IDisposable
             }
         });
 
-        RegisterListener("UpdateBays", async () =>
-        {
-            if (!FreshClient)
-            {
-                InvokeOnGUI(async () =>
-                {
-                    try
-                    {
-                        foreach (var bay in bayManager.BayRepository.Bays)
-                        {
-                            if (bay is not null)
-                            {
-                                SyncBay(bay);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Util.LogError(ex);
-                    }
-                });
-            }
-        });
-
         RegisterListener("SendCDM", async () =>
         {
             if (!FreshClient)
@@ -281,7 +257,7 @@ public sealed class SocketConn : IDisposable
     {
         if (CanSendDTO)
         {
-            LogMessageContent("StripStatus", (StripDTO)strip, false);
+            LogMessageContent("StripStatus", strip is null ? null : (StripDTO)strip, false);
         }
 
         if (CanSendDTO && strip is not null)
@@ -346,12 +322,18 @@ public sealed class SocketConn : IDisposable
     /// Requests strip data from the server.
     /// </summary>
     /// <param name="strip">Strip to fetch.</param>
-    public void RequestStrip(Strip strip)
+    /// <returns>Task.</returns>
+    public async Task RequestStrip(Strip strip)
     {
         if (_connection.State == HubConnectionState.Connected)
         {
             LogMessageContent("RequestStrip", strip.StripKey, false);
-            _connection.InvokeAsync("RequestStrip", strip.StripKey);
+            var dto = await _connection.InvokeAsync<StripDTO?>("RequestStrip", strip.StripKey);
+
+            if (dto is not null)
+            {
+                _bayManager.StripRepository.UpdateStripData(dto, _bayManager);
+            }
         }
     }
 
@@ -433,52 +415,59 @@ public sealed class SocketConn : IDisposable
     /// <exception cref="ArgumentException">Connection data did not match our copy.</exception>
     public async Task SubscribeToAerodrome()
     {
-        if (_connection.State == HubConnectionState.Connected) // was is io connected.
+        try
         {
-            var connmetadata = new ConnectionMetadataDTO()
+            if (_connection.State == HubConnectionState.Connected) // was is io connected.
             {
-                Version = OzStripsConfig.version,
-                APIVersion = "2",
-                Server = Server,
-                AerodromeName = _bayManager.AerodromeName,
-                Callsign = Network.Me.Callsign,
-            };
-            LogMessageContent("SubscribeToAerodrome", connmetadata, false);
-
-            var response = await _connection.InvokeAsync<AerodromeSubscriptionResponse>("SubscribeToAerodrome", connmetadata);
-
-            if (response.Error is not null)
-            {
-                throw response.Error;
-            }
-            else if (response is null)
-            {
-                throw new ArgumentNullException("Subscription response was not included after aerodrome subscription.");
-            }
-            else if (response.AerodromeICAO != _bayManager.AerodromeName ||
-                response.Server != Server)
-            {
-                throw new ArgumentException("Server details did not match retained details.");
-            }
-
-            InvokeOnGUI(() =>
-            {
-                _bayManager.StripRepository.LoadCache(response.StripCache ?? [], _bayManager, this);
-
-                foreach (var bay in response.Bays ?? [])
+                var connmetadata = new ConnectionMetadataDTO()
                 {
-                    if (bay is not null)
-                    {
-                        InvokeOnGUI(() => _bayManager.BayRepository.UpdateOrder(bay));
-                    }
-                }
-            });
+                    Version = OzStripsConfig.version,
+                    APIVersion = "2",
+                    Server = Server,
+                    AerodromeName = _bayManager.AerodromeName,
+                    Callsign = Network.Me.Callsign,
+                };
+                LogMessageContent("SubscribeToAerodrome", connmetadata, false);
 
-            _aerodromeSubscriptionRegistered = DateTime.Now;
+                var response = await _connection.InvokeAsync<AerodromeSubscriptionResponse>("SubscribeToAerodrome", connmetadata);
+
+                if (response.Error is not null)
+                {
+                    throw response.Error;
+                }
+                else if (response is null)
+                {
+                    throw new ArgumentNullException("Subscription response was not included after aerodrome subscription.");
+                }
+                else if (response.AerodromeICAO != _bayManager.AerodromeName ||
+                    response.Server != Server)
+                {
+                    throw new ArgumentException("Server details did not match retained details.");
+                }
+
+                InvokeOnGUI(() =>
+                {
+                    _bayManager.StripRepository.LoadCache(response.StripCache ?? [], _bayManager, this);
+
+                    foreach (var bay in response.Bays ?? [])
+                    {
+                        if (bay is not null)
+                        {
+                            InvokeOnGUI(() => _bayManager.BayRepository.UpdateOrder(bay));
+                        }
+                    }
+                });
+
+                _aerodromeSubscriptionRegistered = DateTime.Now;
+            }
+            else
+            {
+                await Connect();
+            }
         }
-        else
+        catch (Exception ex)
         {
-            await Connect();
+            Util.LogError(ex);
         }
     }
 
