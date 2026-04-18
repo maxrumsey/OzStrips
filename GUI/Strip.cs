@@ -933,6 +933,10 @@ public sealed class Strip
                     {
                         throw;
                     }
+                    else
+                    {
+                        Util.LogText($"Tried to set invalid SID - {FDR.Callsign}@{FDR.DepAirport} - {result.SID}");
+                    }
                 }
             }
 
