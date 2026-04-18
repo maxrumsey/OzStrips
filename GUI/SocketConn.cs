@@ -588,14 +588,6 @@ public sealed class SocketConn : IDisposable
     }
 
     /// <summary>
-    /// Disconnects from the server.
-    /// </summary>
-    public void Close()
-    {
-        _connection.StopAsync();
-    }
-
-    /// <summary>
     /// Creates a connection to the server.
     /// </summary>
     /// <returns>Task.</returns>
@@ -802,16 +794,23 @@ public sealed class SocketConn : IDisposable
     {
         _connection.On(name, async (MessageMetadata metadata, T arg) =>
         {
-            if (metadata.AerodromeICAO != _bayManager.AerodromeName ||
-                metadata.Server != Server)
+            try
             {
-                await SubscribeToAerodrome();
-                return;
+                if (metadata.AerodromeICAO != _bayManager.AerodromeName ||
+                    metadata.Server != Server)
+                {
+                    await SubscribeToAerodrome();
+                    return;
+                }
+
+                LogMessageContent(name, arg);
+
+                await func(arg);
             }
-
-            LogMessageContent(name, arg);
-
-            await func(arg);
+            catch (Exception ex)
+            {
+                Util.LogError(ex);
+            }
         });
     }
 
@@ -819,9 +818,16 @@ public sealed class SocketConn : IDisposable
     {
         _connection.On(name, async () =>
         {
-            LogMessageContent(name);
+            try
+            {
+                LogMessageContent(name);
 
-            await func();
+                await func();
+            }
+            catch (Exception ex)
+            {
+                Util.LogError(ex);
+            }
         });
     }
 
