@@ -39,6 +39,7 @@ public static class StripElements
         ROUTE,
         DEPFREQ,
         ADEP,
+        DEP_CHANGED,
         NONE,
     }
 
@@ -71,6 +72,7 @@ public static class StripElements
         INHIBIT_SID,
         INHIBIT_SSR,
         INHIBIT_READY,
+        INHIBIT_DEPCHANGED,
     }
 
     public enum HoverActions

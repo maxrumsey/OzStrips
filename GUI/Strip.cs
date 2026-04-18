@@ -164,6 +164,11 @@ public sealed class Strip
     public FDR FDR { get; internal set; }
 
     /// <summary>
+    /// Gets or sets a value indicating whether or not the departure has been changed.
+    /// </summary>
+    public bool DepartureChanged { get; set; }
+
+    /// <summary>
     /// Gets or sets the PDC flags.
     /// </summary>
     public PDCRequest.PDCFlags PDCFlags { get; set; }
@@ -701,6 +706,7 @@ public sealed class Strip
             remark = sc.Remark,
             TOT = sc.TakeOffTime?.ToString(CultureInfo.InvariantCulture) ?? "\0",
             ready = sc.Ready,
+            DepartureChanged = sc.DepartureChanged,
             StripKey = sc.StripKey,
             OverrideStripType = sc.OverrideStripType,
             PDCFlags = sc.PDCFlags,
@@ -807,6 +813,7 @@ public sealed class Strip
                                 StripType == StripType.DEPARTURE,
             Shared.AlertTypes.READY => !Ready && (CurrentBay == StripBay.BAY_HOLDSHORT || CurrentBay == StripBay.BAY_RUNWAY) && StripType != StripType.ARRIVAL,
             Shared.AlertTypes.VFR_SID => VFRSIDAssigned,
+            Shared.AlertTypes.DEP_CHANGED => DepartureChanged,
             _ => throw new ArgumentException("Unknown alert type."),
         };
     }

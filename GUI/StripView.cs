@@ -430,6 +430,12 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 }
 
                 break;
+            case StripElements.Actions.INHIBIT_DEPCHANGED:
+                if (_strip.IsAlertActive(Shared.AlertTypes.DEP_CHANGED))
+                {
+                    _strip.InhibitAlert(Shared.AlertTypes.DEP_CHANGED);
+                }
+                break;
         }
     }
 
@@ -615,6 +621,13 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 return sidcolour;
             case StripElements.Values.RFL:
                 return _strip.IsAlertActive(Shared.AlertTypes.RFL) ? SKColors.Orange : SKColors.Empty;
+            case StripElements.Values.DEP_CHANGED:
+                if (_strip.DepartureChanged)
+                {
+                    return _strip.IsAlertActive(Shared.AlertTypes.DEP_CHANGED) ? SKColors.Orange : SKColors.Green;
+                }
+
+                break;
             case StripElements.Values.FIRST_WPT:
                 return _strip.IsAlertActive(Shared.AlertTypes.ROUTE) ? SKColors.Orange : SKColors.Empty;
             case StripElements.Values.READY:

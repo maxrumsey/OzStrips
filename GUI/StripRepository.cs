@@ -148,6 +148,7 @@ public class StripRepository
                     strip.Crossing = stripDTO.crossing;
                     strip.Controller?.SetCross(false);
                     strip.Ready = stripDTO.ready;
+                    strip.DepartureChanged = stripDTO.DepartureChanged ?? false;
                     strip.OverrideStripType = stripDTO.OverrideStripType;
                     strip.PDCFlags = stripDTO.PDCFlags;
                     strip.InhibitedAlerts = stripDTO.InhibitedAlerts;
