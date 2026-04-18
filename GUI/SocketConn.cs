@@ -238,13 +238,14 @@ public sealed class SocketConn : IDisposable
     /// Syncs the strip controller.
     /// </summary>
     /// <param name="sc">The strip controller.</param>
-    public void SyncSC(Strip sc)
+    /// <returns>Task.</returns>
+    public async Task SyncSC(Strip sc)
     {
         StripDTO scDTO = sc;
         if (CanSendDTO)
         {
             LogMessageContent("StripChange", scDTO, false);
-            _connection.InvokeAsync("StripChange", scDTO);
+            await _connection.InvokeAsync("StripChange", scDTO);
         }
     }
 
@@ -356,14 +357,12 @@ public sealed class SocketConn : IDisposable
     /// Sync the bay to the socket.
     /// </summary>
     /// <param name="bay">The bay to sync.</param>
-    public void SyncBay(Bay bay)
+    public void SyncBay(BayChange bayChange)
     {
-        BayDTO bayDTO = bay;
-
         if (CanSendDTO)
         {
-            LogMessageContent("BayChange", bayDTO, false);
-            _connection.InvokeAsync("BayChange", bayDTO);
+            LogMessageContent("BayChange", bayChange, false);
+            _connection.InvokeAsync("BayChange", bayChange);
         }
     }
 

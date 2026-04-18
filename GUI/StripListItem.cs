@@ -1,4 +1,5 @@
 ﻿using MaxRumsey.OzStripsPlugin.GUI.Controls;
+using MaxRumsey.OzStripsPlugin.GUI.Shared;
 using static vatsys.FDP2;
 
 namespace MaxRumsey.OzStripsPlugin.GUI;
@@ -68,5 +69,25 @@ public class StripListItem
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// Converts the strip item into a bay change argument.
+    /// </summary>
+    /// <returns>Bay change argument.</returns>
+    public BayChangeStripItem ToBayChangeArgument()
+    {
+        var barid = "\a";
+        if (Type == StripItemType.BAR)
+        {
+            barid += $"{Style}{BarText}";
+        }
+
+        return new()
+        {
+            IsStrip = Type == StripItemType.STRIP,
+            StripKey = Strip?.StripKey,
+            BarIdentifier = Type != StripItemType.STRIP ? barid : null,
+        };
     }
 }

@@ -309,19 +309,27 @@ public class BayManager
     /// Drop the strip to the specified bay.
     /// </summary>
     /// <param name="bay">The bay.</param>
-    public void DropStrip(Bay bay)
+    public async void DropStrip(Bay bay)
     {
-        if (PickedStrip != null)
+        try
         {
-            if (MoveStrip(bay, PickedStrip))
+            if (PickedStrip != null)
             {
-                PickedStripItem = bay.GetListItem(PickedStrip);
-                RemovePicked(true);
+                var res = await MoveStrip(bay, PickedStrip);
+                if (res)
+                {
+                    PickedStripItem = bay.GetListItem(PickedStrip);
+                    RemovePicked(true);
+                }
+            }
+            else
+            {
+                MainFormController.Instance?.ForceStrip(null, null);
             }
         }
-        else
+        catch (Exception ex)
         {
-            MainFormController.Instance?.ForceStrip(null, null);
+            Util.LogError(ex);
         }
     }
 
@@ -331,17 +339,25 @@ public class BayManager
     /// <param name="bay">Bay to move into.</param>
     /// <param name="strip">Strip to move.</param>
     /// <returns>Whether or not the strip was moved.</returns>
-    public bool MoveStrip(Bay bay, Strip strip)
+    public async Task<bool> MoveStrip(Bay bay, Strip strip)
     {
-        var newBay = bay.BayTypes.FirstOrDefault();
-        if (newBay == strip.CurrentBay)
+        try
         {
-            return false;
+            var newBay = bay.BayTypes.FirstOrDefault();
+            if (newBay == strip.CurrentBay)
+            {
+                return false;
+            }
+
+            strip.CurrentBay = newBay;
+            await strip.SyncStrip();
+            UpdateBay(strip);
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
         }
 
-        strip.CurrentBay = newBay;
-        strip.SyncStrip();
-        UpdateBay(strip);
         return true;
     }
 

@@ -1085,7 +1085,7 @@ public sealed class Strip
 
         if (nextBay is not null)
         {
-            _bayManager.MoveStrip(nextBay, this);
+            _ = _bayManager.MoveStrip(nextBay, this);
 
             if (_bayManager.PickedStrip == this)
             {
@@ -1215,9 +1215,16 @@ public sealed class Strip
     /// <summary>
     /// Sync the strip with the server.
     /// </summary>
-    public void SyncStrip()
+    /// <returns>Task.</returns>
+    public async Task SyncStrip()
     {
-        _socketConn.SyncSC(this);
+        try
+        {
+            await _socketConn.SyncSC(this);
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);        }
     }
 
     /// <summary>

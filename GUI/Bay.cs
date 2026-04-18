@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.InteropServices;
@@ -351,7 +352,20 @@ public class Bay : System.IDisposable
 
         ClientInitiatedStripMove(item, newPosition);
         ResizeBay();
-        _socketConnection.SyncBay(this);
+
+        BayChangeStripItem? argument = null;
+        if (newPosition != 0)
+        {
+            argument = Strips[newPosition - 1].ToBayChangeArgument();
+        }
+
+        _socketConnection.SyncBay(new()
+        {
+            Type = BayChange.BayChangeTypes.MOVE_ELEMENT_BELOW,
+            BayType = BayTypes[0],
+            TargetItem = item.ToBayChangeArgument(),
+            ArgumentItem = argument,
+        });
     }
 
     /// <summary>
@@ -368,7 +382,20 @@ public class Bay : System.IDisposable
 
         ClientInitiatedStripMove(item, abspos);
         ResizeBay();
-        _socketConnection.SyncBay(this);
+
+        BayChangeStripItem? argument = null;
+        if (abspos != 0)
+        {
+            argument = Strips[abspos - 1].ToBayChangeArgument();
+        }
+
+        _socketConnection.SyncBay(new()
+        {
+            Type = BayChange.BayChangeTypes.MOVE_ELEMENT_BELOW,
+            BayType = BayTypes[0],
+            TargetItem = item.ToBayChangeArgument(),
+            ArgumentItem = argument,
+        });
     }
 
     /// <summary>
@@ -428,7 +455,12 @@ public class Bay : System.IDisposable
 
             if (sync)
             {
-                _socketConnection.SyncBay(this);
+                _socketConnection.SyncBay(new()
+                {
+                    Type = BayChange.BayChangeTypes.ADD_BAR,
+                    BayType = BayTypes[0],
+                    TargetItem = bar.ToBayChangeArgument(),
+                });
             }
         }
 
@@ -448,7 +480,12 @@ public class Bay : System.IDisposable
 
         if (sync)
         {
-            _socketConnection.SyncBay(this);
+            _socketConnection.SyncBay(new()
+            {
+                Type = BayChange.BayChangeTypes.DELETE_BAR,
+                BayType = BayTypes[0],
+                TargetItem = bar.ToBayChangeArgument(),
+            });
         }
 
         OnBarsChanged?.Invoke(this, EventArgs.Empty);
@@ -505,7 +542,24 @@ public class Bay : System.IDisposable
         BayManager.BayRepository.ResizeStripBays();
         if (sync)
         {
-            _socketConnection.SyncBay(this);
+            if (currentItem is not null)
+            {
+                _socketConnection.SyncBay(new()
+                {
+                    Type = BayChange.BayChangeTypes.DELETE_BAR,
+                    BayType = BayTypes[0],
+                    TargetItem = currentItem.ToBayChangeArgument(),
+                });
+            }
+            else
+            {
+                _socketConnection.SyncBay(new()
+                {
+                    Type = BayChange.BayChangeTypes.ADD_BAR,
+                    BayType = BayTypes[0],
+                    TargetItem = Strips[0].ToBayChangeArgument(),
+                });
+            }
         }
 
         OnBarsChanged?.Invoke(this, EventArgs.Empty);
@@ -522,7 +576,6 @@ public class Bay : System.IDisposable
             var item = Strips.Find(a => a?.Strip == _bayManager.PickedStrip);
             ChangeStripPositionAbs(item, DivPosition);
             _bayManager.RemovePicked(true);
-            _socketConnection.SyncBay(this);
         }
     }
 
