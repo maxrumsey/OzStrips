@@ -376,7 +376,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                     if (!_strip.PDCRequest.Flags.HasFlag(PDCRequest.PDCFlags.ACKNOWLEDGED))
                     {
                         _strip.PDCFlags |= PDCRequest.PDCFlags.ACKNOWLEDGED;
-                        _strip.SyncStrip();
+                        _ = _strip.SyncStrip();
                     }
 
                     _strip.Controller.OpenPDCWindow();

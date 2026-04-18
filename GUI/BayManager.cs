@@ -205,7 +205,7 @@ public class BayManager
                 if (controller != null && BayRepository.Bays[0] != null)
                 {
                     controller.CurrentBay = BayRepository.Bays[0].BayTypes[0];
-                    controller.SyncStrip();
+                    _ = controller.SyncStrip();
                     controller.FDR = fdr;
                     UpdateBay(controller);
                 }
@@ -241,7 +241,7 @@ public class BayManager
         if (PickedStrip != null)
         {
             PickedStrip.CurrentBay = StripBay.BAY_DEAD;
-            PickedStrip.SyncStrip();
+            _ = PickedStrip.SyncStrip();
             UpdateBay(PickedStrip);
             RemovePicked(true, true);
         }

@@ -749,7 +749,7 @@ public sealed class Strip
             TakeOffTime = null;
         }
 
-        SyncStrip();
+        _ = SyncStrip();
     }
 
     /// <summary>
@@ -769,7 +769,7 @@ public sealed class Strip
             OverrideStripType = StripType.ARRIVAL;
         }
 
-        SyncStrip();
+        _ = SyncStrip();
     }
 
     /// <summary>
@@ -781,7 +781,7 @@ public sealed class Strip
         if (!InhibitedAlerts.HasFlag(alert))
         {
             InhibitedAlerts |= alert;
-            SyncStrip();
+            _ = SyncStrip();
         }
     }
 
@@ -942,7 +942,7 @@ public sealed class Strip
 
             Controller.AssignSSR();
 
-            SyncStrip();
+            _ = SyncStrip();
         }
         catch (Exception ex)
         {
@@ -1124,7 +1124,7 @@ public sealed class Strip
         else
         {
             CurrentBay = nextStripBay;
-            SyncStrip();
+            _ = SyncStrip();
             _bayManager.UpdateBay(this);
 
             if (_bayManager.PickedStrip == this)
