@@ -446,6 +446,8 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 return (_strip.FDR.AssignedSSRCode == -1) ? "XXXX" : Convert.ToString(_strip.FDR.AssignedSSRCode, 8).PadLeft(4, '0');
             case StripElements.Values.ADES:
                 return _strip.FDR.DesAirport;
+            case StripElements.Values.ADEP:
+                return _strip.FDR.DepAirport;
             case StripElements.Values.ROUTE:
                 if (_strip.FDR.TextOnly)
                 {
