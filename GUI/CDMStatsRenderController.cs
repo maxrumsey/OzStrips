@@ -1,29 +1,21 @@
-﻿using MaxRumsey.OzStripsPlugin.GUI;
-using MaxRumsey.OzStripsPlugin.GUI.DTO;
-using MaxRumsey.OzStripsPlugin.GUI.Properties;
-using OpenTK.Graphics.OpenGL;
-using OpenTK.Platform.Windows;
-using SkiaSharp;
-using SkiaSharp.Views.Desktop;
-using System;
-using System.Buffers.Text;
-using System.Collections.Generic;
+﻿using System;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using SkiaSharp;
+using SkiaSharp.Views.Desktop;
 using vatsys;
 
 namespace MaxRumsey.OzStripsPlugin.GUI;
 
 internal class CDMStatsRenderController : IDisposable
 {
-    private readonly BayManager _bayManager;
-    private readonly SocketConn _socketConn;
     private const int WIDTH = 300;
     private const int HEIGHT = 34;
     private const int FONTSIZE = 15;
+
+    private readonly BayManager _bayManager;
+    private readonly SocketConn _socketConn;
 
     private readonly Timer _renderTimer;
 

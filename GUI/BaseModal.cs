@@ -33,6 +33,9 @@ public partial class BaseModal : Form
         MouseMove += MouseMoved;
     }
 
+    /// <summary>
+    /// Gets the modal child.
+    /// </summary>
     public Control Child => _child;
 
     private void MouseMoved(object sender, MouseEventArgs e)

@@ -1252,7 +1252,8 @@ public sealed class Strip
         }
         catch (Exception ex)
         {
-            Util.LogError(ex);        }
+            Util.LogError(ex);
+        }
     }
 
     /// <summary>

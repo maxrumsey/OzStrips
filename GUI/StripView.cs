@@ -435,6 +435,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
                 {
                     _strip.InhibitAlert(Shared.AlertTypes.DEP_CHANGED);
                 }
+
                 break;
         }
     }

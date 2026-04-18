@@ -357,7 +357,6 @@ internal class AutoAssigner
                         if (matchArrs && !matchDeps)
                         {
                             // This sentence is arrivals only.
-
                             currentSentence.Clear();
                             continue;
                         }
@@ -395,7 +394,7 @@ internal class AutoAssigner
             }
         }
 
-        return runways.ToArray();
+        return [.. runways];
     }
 
     public string GetATISDepRunway()
@@ -420,7 +419,6 @@ internal class AutoAssigner
 
     public static string DetermineDepFreq(List<string> freqs)
     {
-
         foreach (var freq in freqs)
         {
             if (IsDepartureFreqAvailable(freq))

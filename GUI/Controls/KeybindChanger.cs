@@ -11,11 +11,18 @@ using System.Windows.Input;
 using static MaxRumsey.OzStripsPlugin.GUI.KeybindManager;
 
 namespace MaxRumsey.OzStripsPlugin.GUI.Controls;
+
+/// <summary>
+/// Keybind changer window.
+/// </summary>
 public partial class KeybindChanger : UserControl
 {
     private Label? _activeKey;
-    private Button _resetButton;
+    private readonly Button _resetButton;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="KeybindChanger"/> class.
+    /// </summary>
     public KeybindChanger()
     {
         InitializeComponent();
@@ -56,9 +63,9 @@ public partial class KeybindChanger : UserControl
     /// Handles key presses to set keybinds.
     /// </summary>
     /// <param name="message">Message.</param>
-    /// <param name="newKey">New key.</param>
+    /// <param name="keys">New key.</param>
     /// <returns>Successfully handled.</returns>
-    protected override bool ProcessCmdKey(ref Message message, Keys _)
+    protected override bool ProcessCmdKey(ref Message message, Keys keys)
     {
         if (_activeKey is null)
         {

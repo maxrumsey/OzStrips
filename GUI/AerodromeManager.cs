@@ -1,11 +1,9 @@
-﻿using MaxRumsey.OzStripsPlugin.GUI.DTO;
-using MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
-using MaxRumsey.OzStripsPlugin.GUI.Properties;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MaxRumsey.OzStripsPlugin.GUI.DTO;
+using MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
+using MaxRumsey.OzStripsPlugin.GUI.Properties;
 using vatsys;
 using static vatsys.SectorsVolumes;
 
@@ -16,26 +14,50 @@ namespace MaxRumsey.OzStripsPlugin.GUI;
 /// </summary>
 public class AerodromeManager
 {
-    private List<string> _defaultAerodromes = new();
+    private List<string> _defaultAerodromes = [];
 
-    private List<string> _manuallySetAerodromes = new();
+    private List<string> _manuallySetAerodromes = [];
 
     private string _previousAerodromeType = string.Empty;
 
-    public bool PreviouslyClosed;
+    /// <summary>
+    /// Gets or sets a value indicating whether OzStrips has been previously closed this session.
+    /// </summary>
+    public bool PreviouslyClosed { get; set; }
 
-    public string? AutoOpenAerodrome;
+    /// <summary>
+    /// Gets or sets applicable auto-open aerodrome for this position.
+    /// </summary>
+    public string? AutoOpenAerodrome { get; set; }
 
-    public List<string> ConcernedAerodromes = new();
+    /// <summary>
+    /// List of concerned aerodromes.
+    /// </summary>
+    private List<string> _concernedAerodromes = new();
 
-    public static bool InhibitVersionCheck;
+    /// <summary>
+    /// Gets or sets a value indicating whether or not the version check is inhibited.
+    /// </summary>
+    public static bool InhibitVersionCheck { get; set; }
 
-    public static string AerodromeAutoFillLocation = string.Empty;
+    /// <summary>
+    /// Gets or sets the base autofill file path.
+    /// </summary>
+    public static string AerodromeAutoFillLocation { get; set; } = string.Empty;
 
-    public static string PDCFormat = string.Empty;
+    /// <summary>
+    /// Gets or sets the default PDC format.
+    /// </summary>
+    public static string PDCFormat { get; set; } = string.Empty;
 
-    public static StripColour[] StripColours = [];
+    /// <summary>
+    /// Gets or sets default strip colours.
+    /// </summary>
+    public static StripColour[] StripColours { get; set; } = [];
 
+    /// <summary>
+    /// Gets a value indicating whether the window should autoopen.
+    /// </summary>
     public bool AllowAutoOpen
     {
         get
@@ -52,6 +74,9 @@ public class AerodromeManager
         }
     }
 
+    /// <summary>
+    /// Gets or sets a list of manually set aerodromes.
+    /// </summary>
     public List<string> ManuallySetAerodromes
     {
         get
@@ -62,23 +87,38 @@ public class AerodromeManager
         set
         {
             _manuallySetAerodromes = value;
-            AerodromeListChanged(this, EventArgs.Empty);
+            AerodromeListChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 
-    public AerodromeSettings? Settings;
+    /// <summary>
+    /// Gets or sets the aerodrome settings.
+    /// </summary>
+    public AerodromeSettings? Settings { get; set; }
 
-    public event EventHandler AerodromeListChanged;
+    /// <summary>
+    /// Called when the list of quick-switch aerodromes changes.
+    /// </summary>
+    public event EventHandler? AerodromeListChanged;
 
-    public event EventHandler OpenGUI;
+    /// <summary>
+    /// Called when the GUI is opened.
+    /// </summary>
+    public event EventHandler? OpenGUI;
 
-    public event EventHandler ViewListChanged;
+    /// <summary>
+    /// Called when the list of possible views changes.
+    /// </summary>
+    public event EventHandler? ViewListChanged;
 
+    /// <summary>
+    /// Gets the complete list of quick-switch aerodromes.
+    /// </summary>
     public List<string> AerodromeList
     {
         get
         {
-            var completeList = ConcernedAerodromes.ToList();
+            var completeList = _concernedAerodromes.ToList();
             completeList.AddRange(ManuallySetAerodromes);
 
             if (AutoOpenAerodrome is not null)
@@ -92,17 +132,25 @@ public class AerodromeManager
             }
 
             completeList.Sort();
-            completeList = completeList.Distinct().ToList();
+            completeList = [.. completeList.Distinct()];
 
             return completeList;
         }
     }
 
+    /// <summary>
+    /// Gets the aerodrome type.
+    /// </summary>
+    /// <param name="aerodrome">ICAO code.</param>
+    /// <returns>Aerodrome type.</returns>
     public string GetAerodromeType(string aerodrome)
     {
         return Settings?.AerodromeLists.FirstOrDefault(x => x.Aerodromes.Contains(aerodrome))?.Type ?? string.Empty;
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AerodromeManager"/> class.
+    /// </summary>
     public AerodromeManager()
     {
         MMI.PrimePositonChanged += PrimePositionChanged;
@@ -112,17 +160,27 @@ public class AerodromeManager
         InhibitVersionCheck = Settings?.InhibitVersionCheck ?? false;
     }
 
+    /// <summary>
+    /// Initialises the aerodrome manager.
+    /// </summary>
     public void Initialize()
     {
         PrimePositionChanged(this, EventArgs.Empty);
         SectorsChanged(this, EventArgs.Empty);
     }
 
+    /// <summary>
+    /// Called when a new window is opened.
+    /// </summary>
     public void InitialiseOnNewWindow()
     {
         _previousAerodromeType = string.Empty;
     }
 
+    /// <summary>
+    /// Configures the view list for a new aerodrome.
+    /// </summary>
+    /// <param name="aerodrome">New aerodrome.</param>
     public void ConfigureAerodromeListForNewAerodrome(string aerodrome)
     {
         var type = GetAerodromeType(aerodrome);
@@ -134,6 +192,12 @@ public class AerodromeManager
         }
     }
 
+    /// <summary>
+    /// Gets the list of layouts.
+    /// </summary>
+    /// <param name="filter">Filter by aerodrome type.</param>
+    /// <returns>List of layouts.</returns>
+    /// <exception cref="Exception">Loading error.</exception>
     public List<LayoutDefinition> ReturnLayouts(string filter)
     {
         if (Settings is null || Settings.Layouts is null)
@@ -160,6 +224,9 @@ public class AerodromeManager
         return layouts;
     }
 
+    /// <summary>
+    /// Loads settings.
+    /// </summary>
     public void LoadSettings()
     {
         Settings = AerodromeSettings.Load();
@@ -177,7 +244,7 @@ public class AerodromeManager
             try
             {
                 var sectorList = new List<Sector>();
-                ConcernedAerodromes.Clear();
+                _concernedAerodromes.Clear();
 
                 if (MMI.SectorsControlled == null)
                 {
@@ -205,11 +272,11 @@ public class AerodromeManager
                     // Add concerned aerodromes.
                     foreach (var concernedSector in concernedSectors)
                     {
-                        ConcernedAerodromes.AddRange(concernedSector.Aerodromes);
+                        _concernedAerodromes.AddRange(concernedSector.Aerodromes);
                     }
                 }
 
-                ConcernedAerodromes = ConcernedAerodromes.Distinct().ToList();
+                _concernedAerodromes = [.. _concernedAerodromes.Distinct()];
 
                 AerodromeListChanged?.Invoke(this, new());
             }
@@ -243,7 +310,6 @@ public class AerodromeManager
             {
                 Util.LogError(ex, "OzStrips");
             }
-
         });
     }
 
@@ -274,10 +340,24 @@ public class AerodromeManager
         */
     }
 
+    /// <summary>
+    /// Possible auto-open modes.
+    /// </summary>
     public enum AutoOpenModes
     {
+        /// <summary>
+        /// Only auto-open once.
+        /// </summary>
         OncePerSession,
+
+        /// <summary>
+        /// Always auto-open.
+        /// </summary>
         Always,
-        Never
+
+        /// <summary>
+        /// Never auto-open.
+        /// </summary>
+        Never,
     }
 }

@@ -37,7 +37,7 @@ public class RuleCondition
     public List<string> Airway { get; set; } = [];
 
     /// <summary>
-    /// Gets or sets a list of wake turb cats, where at least one must match the aircraft
+    /// Gets or sets a list of wake turb cats, where at least one must match the aircraft.
     /// </summary>
     [YamlMember(Alias = "WTC")]
     public List<string> WTC { get; set; } = [];
@@ -55,7 +55,7 @@ public class RuleCondition
     public string IsJet { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets a value indicating whether the aircraft is vfr
+    /// Gets or sets a value indicating whether the aircraft is vfr.
     /// </summary>
     [YamlMember(Alias = "VFR")]
     public string VFR { get; set; } = string.Empty;

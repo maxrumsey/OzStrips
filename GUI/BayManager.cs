@@ -88,7 +88,7 @@ public class BayManager
         AerodromeCode = "????",
         CircuitActive = false,
         CoordinatorBayActive = false,
-        Connections = new List<string>(),
+        Connections = [],
     };
 
     /// <summary>
@@ -615,7 +615,7 @@ public class BayManager
                 strip.DeactivateStrip();
             }
 
-            CDMState? state = SharedCDMConstants.BAY_STATE_MAP.ContainsKey(strip.CurrentBay) ? SharedCDMConstants.BAY_STATE_MAP[strip.CurrentBay] : null;
+            CDMState? state = SharedCDMConstants.BayStateMap.ContainsKey(strip.CurrentBay) ? SharedCDMConstants.BayStateMap[strip.CurrentBay] : null;
 
             if (state is not null)
             {

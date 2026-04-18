@@ -14,10 +14,15 @@ namespace MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
 /// </summary>
 [Serializable]
 [XmlRoot("AutoOpen")]
-
 public class AutoOpen
 {
-    public string Aerodrome;
+    /// <summary>
+    /// Gets or sets the aerodrome ICAO code.
+    /// </summary>
+    public string Aerodrome { get; set; } = string.Empty;
 
-    public string Position;
+    /// <summary>
+    /// Gets or sets the position name.
+    /// </summary>
+    public string Position { get; set; } = string.Empty;
 }

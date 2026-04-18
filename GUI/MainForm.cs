@@ -26,7 +26,7 @@ public partial class MainForm : Form
     /// Initializes a new instance of the <see cref="MainForm"/> class.
     /// </summary>
     /// <param name="readyForConnection">Whether the client can establish a server connection.</param>
-    /// <param name="aerodromeManager">The Aerodrome Manager</param>
+    /// <param name="aerodromeManager">The Aerodrome Manager.</param>
     public MainForm(bool readyForConnection, AerodromeManager aerodromeManager)
     {
         MainFormInstance = this;
@@ -155,6 +155,9 @@ public partial class MainForm : Form
         }
     }
 
+    /// <summary>
+    /// Gets the mainform controller.
+    /// </summary>
     public MainFormController Controller
     {
         get
@@ -207,6 +210,9 @@ public partial class MainForm : Form
         System.Diagnostics.Process.Start("https://maxrumsey.xyz/OzStrips/changelog");
     }
 
+    /// <summary>
+    /// Set ups smartresize checkboxes.
+    /// </summary>
     public void SetSmartResizeCheckBox()
     {
         colDisabledToolStripMenuItem.Checked = false;
@@ -271,7 +277,7 @@ public partial class MainForm : Form
         // Try to prevent designer auto-deletion.
         _flpMain = new();
         _flpMain.AutoScroll = true;
-        _flpMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
+        _flpMain.BackColor = System.Drawing.Color.FromArgb(160, 170, 170);
         _flpMain.Dock = System.Windows.Forms.DockStyle.Fill;
         _flpMain.Location = new System.Drawing.Point(0, 25);
         _flpMain.Margin = new System.Windows.Forms.Padding(0);
@@ -284,6 +290,9 @@ public partial class MainForm : Form
         Controls.SetChildIndex(_flpMain, 0);
     }
 
+    /// <summary>
+    /// Set ups the control bar visibility.
+    /// </summary>
     public void SetControlBarScrollBar()
     {
         var margin = 0;
@@ -306,7 +315,7 @@ public partial class MainForm : Form
     /// <summary>
     /// Opens the defined input field.
     /// </summary>
-    /// <param name="strip">Strip,</param>
+    /// <param name="strip">Strip.</param>
     /// <param name="type">Label name.</param>
     public static void OpenWindow(Strip strip, string type) => MainFormController.OpenWindow(strip, type);
 

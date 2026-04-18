@@ -117,7 +117,7 @@ public partial class PDCControl : UserControl
         LayoutPDC();
     }
 
-    private void cb_delivery_SelectedIndexChanged(object sender, EventArgs e)
+    private void CB_Delivery_SelectedIndexChanged(object sender, EventArgs e)
     {
         LayoutPDC();
     }

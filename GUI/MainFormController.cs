@@ -721,7 +721,7 @@ public class MainFormController : IDisposable
     /// <summary>
     /// Opens the defined input field.
     /// </summary>
-    /// <param name="strip">Strip,</param>
+    /// <param name="strip">Strip.</param>
     /// <param name="type">Label name.</param>
     public static void OpenWindow(Strip strip, string type)
     {

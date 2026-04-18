@@ -282,9 +282,7 @@ public class Bay : System.IDisposable
                     }
                 }
 
-    #pragma warning disable CS8602 // Dereference of a possibly null reference.
-                abovetheBar = abovetheBar.OrderByDescending(x => x.Strip.FDR.Callsign).ToList();
-    #pragma warning restore CS8602 // Dereference of a possibly null reference.
+                abovetheBar = [.. abovetheBar.OrderByDescending(x => x.Strip!.FDR.Callsign)];
 
                 Strips.AddRange(abovetheBar);
             }
@@ -414,7 +412,6 @@ public class Bay : System.IDisposable
             if (queueBarIndex != -1 && index < queueBarIndex)
             {
                 // send CDM update
-
                 _socketConnection.SendCDMUpdate(item.Strip, CDMState.ACTIVE);
             }
         }

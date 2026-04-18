@@ -492,7 +492,7 @@ public sealed class OzStrips : IPlugin, IDisposable, ILabelPlugin
     /// <summary>
     /// Gets the ASD track custom colour.
     /// </summary>
-    /// <param name="track">Aircraft track</param>
+    /// <param name="track">Aircraft track.</param>
     /// <returns>Null.</returns>
     public CustomColour? SelectASDTrackColour(Track track)
     {

@@ -1,14 +1,7 @@
-﻿using MaxRumsey.OzStripsPlugin.GUI.DTO;
-using MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
 using vatsys;
 
 namespace MaxRumsey.OzStripsPlugin.GUI.Controls;
@@ -212,7 +205,7 @@ public partial class DropDown : BaseForm
     /// <param name="strip">Strip.</param>
     public static void ShowFreqDropDown(Strip strip)
     {
-        List<DropDownItem> items = new();
+        List<DropDownItem> items = [];
 
         foreach (var freq in strip.PossibleDepFreqs)
         {

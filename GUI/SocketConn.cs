@@ -356,7 +356,7 @@ public sealed class SocketConn : IDisposable
     /// <summary>
     /// Sync the bay to the socket.
     /// </summary>
-    /// <param name="bay">The bay to sync.</param>
+    /// <param name="bayChange">The bay to sync.</param>
     public void SyncBay(BayChange bayChange)
     {
         if (CanSendDTO)
@@ -662,7 +662,6 @@ public sealed class SocketConn : IDisposable
         return new() { strips = _bayManager.StripRepository.Strips.Select(x => (StripDTO)x).ToList(), };
     }
 
-
     private bool CanConnectToCurrentServer()
     {
         if (!Network.IsOfficialServer && Server == Servers.VATSIM)
@@ -678,6 +677,7 @@ public sealed class SocketConn : IDisposable
                     _mainForm.ShowSettings(this, new());
                 }
             }
+
             return false;
         }
 

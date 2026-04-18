@@ -102,7 +102,6 @@ public class StripRepository
                     }
                 }
             }
-
         }
         catch (Exception ex)
         {

@@ -14,14 +14,19 @@ namespace MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
 /// </summary>
 [Serializable]
 [XmlRoot("ConcernedSector")]
-
 public class ConcernedSector
 {
+    /// <summary>
+    /// Gets or sets the list of aerodromes.
+    /// </summary>
     [XmlArray("Aerodromes")]
     [XmlArrayItem("Aerodrome")]
-    public string[] Aerodromes;
+    public string[] Aerodromes { get; set; } = [];
 
+    /// <summary>
+    /// Gets or sets the list of positions.
+    /// </summary>
     [XmlArray("Positions")]
     [XmlArrayItem("Position")]
-    public string[] Positions;
+    public string[] Positions { get; set; } = [];
 }

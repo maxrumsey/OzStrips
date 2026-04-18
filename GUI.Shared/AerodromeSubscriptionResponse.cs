@@ -12,6 +12,22 @@ namespace MaxRumsey.OzStripsPlugin.GUI.Shared;
 public class AerodromeSubscriptionResponse
 {
     /// <summary>
+    /// Initializes a new instance of the <see cref="AerodromeSubscriptionResponse"/> class.
+    /// </summary>
+    public AerodromeSubscriptionResponse()
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AerodromeSubscriptionResponse"/> class.
+    /// </summary>
+    /// <param name="ex">Exception.</param>
+    public AerodromeSubscriptionResponse(Exception ex)
+    {
+        Error = ex;
+    }
+
+    /// <summary>
     /// Gets or sets the aerodrome ICAO.
     /// </summary>
     public string AerodromeICAO { get; set; } = string.Empty;
@@ -35,20 +51,4 @@ public class AerodromeSubscriptionResponse
     /// Gets or sets the connection error.
     /// </summary>
     public Exception? Error { get; set; }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="AerodromeSubscriptionResponse"/> class.
-    /// </summary>
-    public AerodromeSubscriptionResponse()
-    {
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="AerodromeSubscriptionResponse"/> class.
-    /// </summary>
-    /// <param name="ex">Exception.</param>
-    public AerodromeSubscriptionResponse(Exception ex)
-    {
-        Error = ex;
-    }
 }

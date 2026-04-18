@@ -1,14 +1,9 @@
-﻿using MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
-using vatsys;
+using MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
 
 namespace MaxRumsey.OzStripsPlugin.GUI.DTO;
 
