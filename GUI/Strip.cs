@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
@@ -31,6 +32,7 @@ public sealed class Strip
 
     private readonly BayManager _bayManager;
     private readonly SocketConn _socketConn;
+    private readonly SemaphoreSlim _routeFetchSemaphore = new(1, 1);
     ////private readonly StripLayoutTypes StripType;
 
     private bool _crossing;
@@ -1002,10 +1004,21 @@ public sealed class Strip
             }
 
             // Route fetch will retry every minute.
-            if (ValidRoutes is null && (RequestedRoutes == DateTime.MaxValue || (DateTime.Now - RequestedRoutes) > TimeSpan.FromMinutes(1)))
+            if (ValidRoutes is null)
             {
-                await _socketConn.RequestRoutes(this);
-                RequestedRoutes = DateTime.Now;
+                await _routeFetchSemaphore.WaitAsync();
+                try
+                {
+                    if (RequestedRoutes == DateTime.MaxValue || (DateTime.Now - RequestedRoutes) > TimeSpan.FromMinutes(1))
+                    {
+                        await _socketConn.RequestRoutes(this);
+                        RequestedRoutes = DateTime.Now;
+                    }
+                }
+                finally
+                {
+                    _routeFetchSemaphore.Release();
+                }
             }
 
             if (ValidRoutes is not null)

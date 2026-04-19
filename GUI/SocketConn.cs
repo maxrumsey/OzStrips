@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.GUI.Shared;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
 using vatsys;
 using static MaxRumsey.OzStripsPlugin.GUI.Shared.ConnectionMetadataDTO;
@@ -302,20 +304,32 @@ public sealed class SocketConn : IDisposable
     /// <returns>Task.</returns>
     public async Task RequestRoutes(Strip sc)
     {
-        LogMessageContent("GetRoutes", sc.StripKey, false);
-
-        if (_connection.State == HubConnectionState.Connected)
+        try
         {
-            var routes = await _connection.InvokeAsync<RouteDTO[]?>("GetRoutes", sc.StripKey);
+            LogMessageContent("GetRoutes", sc.StripKey, false);
 
-            if (
-                routes is null ||
-                routes.Length == 0)
+            if (_connection.State == HubConnectionState.Connected)
             {
-                return;
-            }
+                var routes = await _connection.InvokeAsync<RouteDTO[]?>("GetRoutes", sc.StripKey);
 
-            sc.ValidRoutes = routes;
+                if (
+                    routes is null ||
+                    routes.Length == 0)
+                {
+                    return;
+                }
+
+                sc.ValidRoutes = routes;
+            }
+        }
+        catch (TimeoutException)
+        {
+        }
+        catch (HubException)
+        {
+        }
+        catch (System.Text.Json.JsonException)
+        {
         }
     }
 
@@ -836,7 +850,7 @@ public sealed class SocketConn : IDisposable
 
         if (args is not null)
         {
-            json = JsonSerializer.Serialize(args);
+            json = System.Text.Json.JsonSerializer.Serialize(args);
         }
 
         AddMessage($"{(server ? 's' : 'c')}-{funcName}: {json}");
