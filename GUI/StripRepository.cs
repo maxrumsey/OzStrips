@@ -221,6 +221,7 @@ public class StripRepository
     {
         lock (_strips)
         {
+            _strips.ForEach(strip => strip.Dispose());
             _strips.Clear();
         }
     }
@@ -235,6 +236,7 @@ public class StripRepository
         {
             _strips.Remove(strip);
         }
+        strip.Dispose();
     }
 
     /// <summary>

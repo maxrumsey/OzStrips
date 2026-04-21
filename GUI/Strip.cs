@@ -22,7 +22,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI;
 /// <summary>
 /// Responsible for strip logic, represents a Vatsys FDR.
 /// </summary>
-public sealed class Strip
+public sealed class Strip : IDisposable
 {
     private static readonly Regex _headingRegex = new(@"H(\d{3})");
     private static readonly Regex _firstWptLatLongRegex = new(@"^[^\d/]+$");
@@ -1356,5 +1356,13 @@ public sealed class Strip
             Util.LogText($"PARSER, RTE: {rawRoute}, ERR: {ex.Message}\n{ex.StackTrace}");
             return "\0";
         }
+    }
+
+    /// <summary>
+    /// Disposes of the strip.
+    /// </summary>
+    public void Dispose()
+    {
+        _routeFetchSemaphore.Dispose();
     }
 }
