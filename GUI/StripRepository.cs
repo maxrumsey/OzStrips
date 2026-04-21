@@ -236,6 +236,7 @@ public class StripRepository
         {
             _strips.Remove(strip);
         }
+
         strip.Dispose();
     }
 
