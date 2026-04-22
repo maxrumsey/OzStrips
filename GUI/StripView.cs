@@ -181,7 +181,7 @@ internal class StripView(Strip strip, BayRenderController bayRC) : IRenderedStri
         else
         {
             // If no strip element was clicked, treat as a strip being dropped onto the bay.
-            _bayRenderController.Bay.BayManager.DropStrip(_bayRenderController.Bay);
+            _ = _bayRenderController.Bay.BayManager.DropStrip(_bayRenderController.Bay);
         }
     }
 

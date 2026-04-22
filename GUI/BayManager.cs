@@ -309,7 +309,8 @@ public class BayManager
     /// Drop the strip to the specified bay.
     /// </summary>
     /// <param name="bay">The bay.</param>
-    public async void DropStrip(Bay bay)
+    /// <returns>Task.</returns>
+    public async Task DropStrip(Bay bay)
     {
         try
         {
@@ -366,23 +367,30 @@ public class BayManager
     /// </summary>
     /// <param name="targetItem">The target item to drop below.</param>
     /// <exception cref="Exception">Strip insertion failed.</exception>
-    public void DropStripBelow(StripListItem targetItem)
+    public async void DropStripBelow(StripListItem targetItem)
     {
-        var newBay = BayRepository.FindBay(targetItem);
-
-        if (newBay is null || PickedStrip is null)
+        try
         {
-            return;
+            var newBay = BayRepository.FindBay(targetItem);
+
+            if (newBay is null || PickedStrip is null)
+            {
+                return;
+            }
+
+            var strip = PickedStrip;
+            var position = newBay.Strips.FindIndex(x => x == targetItem);
+
+            await DropStrip(newBay);
+
+            var stripListItem = newBay.GetListItem(strip) ?? throw new Exception("Could not find strip within new bay after moving it.");
+
+            newBay.ChangeStripPositionAbs(stripListItem, position);
         }
-
-        var strip = PickedStrip;
-        var position = newBay.Strips.FindIndex(x => x == targetItem);
-
-        DropStrip(newBay);
-
-        var stripListItem = newBay.GetListItem(strip) ?? throw new Exception("Could not find strip within new bay after moving it.");
-
-        newBay.ChangeStripPositionAbs(stripListItem, position);
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+        }
     }
 
     /// <summary>

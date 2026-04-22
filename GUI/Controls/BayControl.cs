@@ -149,7 +149,7 @@ public partial class BayControl : UserControl
 
     private void LabelBayNameClicked(object sender, EventArgs e)
     {
-        _bayManager.DropStrip(_ownerBay);
+        _ = _bayManager.DropStrip(_ownerBay);
     }
 
     private void ButtonQueueClicked(object sender, EventArgs e)
