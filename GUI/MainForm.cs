@@ -6,9 +6,11 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Interop;
+using GUI.Connector;
 using MaxRumsey.OzStripsPlugin.GUI.Controls;
 using MaxRumsey.OzStripsPlugin.GUI.DTO;
 using MaxRumsey.OzStripsPlugin.GUI.Properties;
+using MaxRumsey.OzStripsPlugin.GUI.Shared;
 using vatsys;
 
 namespace MaxRumsey.OzStripsPlugin.GUI;
@@ -17,7 +19,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI;
 /// The main application form.
 /// </summary>
 /// All but the most basic of logic is abstracted to MainFormController
-public partial class MainForm : Form
+public partial class MainForm : Form, IStripsWindow
 {
     private readonly MainFormController _mainFormController;
     private NoScrollFLP _flpMain = null!;
@@ -348,5 +350,23 @@ public partial class MainForm : Form
     private void OpenDiscordLink(object sender, EventArgs e)
     {
         System.Diagnostics.Process.Start("https://discord.gg/VfqFvXeg6V");
+    }
+
+    /// <inheritdoc/>
+    public StripDTO? GetDTO(string callsign)
+    {
+        return ((IStripsWindow)_mainFormController).GetDTO(callsign);
+    }
+
+    /// <inheritdoc/>
+    public bool InQueue(StripKey key)
+    {
+        return ((IStripsWindow)_mainFormController).InQueue(key);
+    }
+
+    /// <inheritdoc/>
+    public CDMResultDTO? GetCDMResult(StripKey key)
+    {
+        return ((IStripsWindow)_mainFormController).GetCDMResult(key);
     }
 }

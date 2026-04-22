@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
+using GUI.Connector;
 using MaxRumsey.OzStripsPlugin.GUI.Controls;
 using MaxRumsey.OzStripsPlugin.GUI.Shared;
 using vatsys;
@@ -19,7 +20,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI;
 /// <summary>
 /// ViewModel equivalent for the MainForm.
 /// </summary>
-public class MainFormController : IDisposable
+public class MainFormController : IDisposable, IStripsWindow
 {
     private FormWindowState _lastState = FormWindowState.Minimized;
     private bool _postresizechecked = true;
@@ -1269,6 +1270,43 @@ public class MainFormController : IDisposable
     public object Invoke(Action act)
     {
         return _mainForm.Invoke(act);
+    }
+
+    /// <inheritdoc/>
+    public StripDTO? GetDTO(string callsign)
+    {
+        var strip = _bayManager.StripRepository.GetStrip(callsign);
+
+        return strip is null ? null : (StripDTO)strip;
+    }
+
+    /// <inheritdoc/>
+    public bool InQueue(StripKey key)
+    {
+        var strip = _bayManager.StripRepository.GetStrip(key);
+
+        if (strip is null)
+        {
+            return false;
+        }
+
+        var bay = _bayManager.BayRepository.FindBay(strip);
+
+        if (bay is null)
+        {
+            return false;
+        }
+
+        var stripPos = bay.Strips.FindIndex(x => x.Strip == strip);
+        var barPos = bay.Strips.FindIndex(x => x.BarText == "\a");
+
+        return stripPos < barPos;
+    }
+
+    /// <inheritdoc/>
+    public CDMResultDTO? GetCDMResult(StripKey key)
+    {
+        return _bayManager.AerodromeState.CDMResults.Find(x => x.Aircraft.Key.Matches(key));
     }
 
     /// <summary>
