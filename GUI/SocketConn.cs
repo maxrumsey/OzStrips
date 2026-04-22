@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Threading;
@@ -26,6 +27,9 @@ public sealed class SocketConn : IDisposable
     private readonly SemaphoreSlim _connectionSemaphore = new(1, 1);
 
     private bool _serverPopupShown;
+    private bool _enableAutoReconnect = true;
+    private DateTime _lastDesyncResolution = DateTime.MinValue;
+    private bool _synchronised;
 
     private bool FreshClient
     {
@@ -180,6 +184,30 @@ public sealed class SocketConn : IDisposable
                 InvokeOnGUI(() => Util.ShowInfoBox("New Update Available: " + appversion));
             }
         });
+
+        RegisterListener("OutOfSync", async () =>
+        {
+            InvokeOnGUI(async () =>
+            {
+                if (DateTime.Now - _lastDesyncResolution < TimeSpan.FromSeconds(5))
+                {
+                    return;
+                }
+
+                var res = Util.ShowQuestionBox("Client became desynchronised from server. Reconnect?");
+                if (res == DialogResult.Yes)
+                {
+                    _lastDesyncResolution = DateTime.Now;
+                    await SubscribeToAerodrome();
+                }
+                else
+                {
+                    _lastDesyncResolution = DateTime.Now;
+                    _enableAutoReconnect = false;
+                    Disconnect();
+                }
+            });
+        });
     }
 
     /// <summary>
@@ -232,7 +260,7 @@ public sealed class SocketConn : IDisposable
     {
         get
         {
-            return _connection.State == HubConnectionState.Connected && (Network.Me.IsRealATC || _isDebug);
+            return _connection.State == HubConnectionState.Connected && (Network.Me.IsRealATC || _isDebug) && _synchronised;
         }
     }
 
@@ -247,7 +275,7 @@ public sealed class SocketConn : IDisposable
         if (CanSendDTO)
         {
             LogMessageContent("StripChange", scDTO, false);
-            await _connection.InvokeAsync("StripChange", scDTO);
+            await _connection.InvokeAsync("StripChange", scDTO, GetMessageMetadata());
         }
     }
 
@@ -265,11 +293,11 @@ public sealed class SocketConn : IDisposable
 
         if (CanSendDTO && strip is not null)
         {
-            _connection.InvokeAsync("StripStatus", (StripDTO)strip, acid);
+            _connection.InvokeAsync("StripStatus", (StripDTO)strip, acid, GetMessageMetadata());
         }
         else if (CanSendDTO)
         {
-            _connection.InvokeAsync("StripStatus", null, acid);
+            _connection.InvokeAsync("StripStatus", null, acid, GetMessageMetadata());
         }
     }
 
@@ -293,7 +321,7 @@ public sealed class SocketConn : IDisposable
         if (CanSendDTO && list.Count > 0)
         {
             LogMessageContent("UplinkCDMAircraft", list, false);
-            _connection.InvokeAsync("UplinkCDMAircraft", list);
+            _connection.InvokeAsync("UplinkCDMAircraft", list, GetMessageMetadata());
         }
     }
 
@@ -308,9 +336,9 @@ public sealed class SocketConn : IDisposable
         {
             LogMessageContent("GetRoutes", sc.StripKey, false);
 
-            if (_connection.State == HubConnectionState.Connected)
+            if (_connection.State == HubConnectionState.Connected && _synchronised)
             {
-                var routes = await _connection.InvokeAsync<RouteDTO[]?>("GetRoutes", sc.StripKey);
+                var routes = await _connection.InvokeAsync<RouteDTO[]?>("GetRoutes", sc.StripKey, GetMessageMetadata());
 
                 if (
                     routes is null ||
@@ -340,10 +368,10 @@ public sealed class SocketConn : IDisposable
     /// <returns>Task.</returns>
     public async Task RequestStrip(Strip strip)
     {
-        if (_connection.State == HubConnectionState.Connected)
+        if (_connection.State == HubConnectionState.Connected && _synchronised)
         {
             LogMessageContent("RequestStrip", strip.StripKey, false);
-            var dto = await _connection.InvokeAsync<StripDTO?>("RequestStrip", strip.StripKey);
+            var dto = await _connection.InvokeAsync<StripDTO?>("RequestStrip", strip.StripKey, GetMessageMetadata());
 
             if (dto is not null)
             {
@@ -363,7 +391,7 @@ public sealed class SocketConn : IDisposable
         if (CanSendDTO)
         {
             LogMessageContent("SendPDC", text, false);
-            await _connection.InvokeAsync("SendPDC", (StripDTO)strip, text);
+            await _connection.InvokeAsync("SendPDC", (StripDTO)strip, text, GetMessageMetadata());
         }
     }
 
@@ -376,7 +404,7 @@ public sealed class SocketConn : IDisposable
         if (CanSendDTO)
         {
             LogMessageContent("BayChange", bayChange, false);
-            _connection.InvokeAsync("BayChange", bayChange);
+            _connection.InvokeAsync("BayChange", bayChange, GetMessageMetadata());
         }
     }
 
@@ -389,7 +417,7 @@ public sealed class SocketConn : IDisposable
         if (CanSendDTO)
         {
             LogMessageContent("UpdateCircuitMode", status, false);
-            _connection.InvokeAsync("UpdateCircuitMode", status);
+            _connection.InvokeAsync("UpdateCircuitMode", status, GetMessageMetadata());
         }
     }
 
@@ -402,7 +430,7 @@ public sealed class SocketConn : IDisposable
         if (CanSendDTO)
         {
             LogMessageContent("UpdateCoordinatorMode", status, false);
-            _connection.InvokeAsync("UpdateCoordinatorMode", status);
+            _connection.InvokeAsync("UpdateCoordinatorMode", status, GetMessageMetadata());
         }
     }
 
@@ -415,7 +443,7 @@ public sealed class SocketConn : IDisposable
         if (CanSendDTO)
         {
             LogMessageContent("ChangeCDMParameters", param, false);
-            _connection.InvokeAsync("ChangeCDMParameters", param);
+            _connection.InvokeAsync("ChangeCDMParameters", param, GetMessageMetadata());
         }
     }
 
@@ -442,7 +470,9 @@ public sealed class SocketConn : IDisposable
                 };
                 LogMessageContent("SubscribeToAerodrome", connmetadata, false);
 
+                _synchronised = false;
                 var response = await _connection.InvokeAsync<AerodromeSubscriptionResponse>("SubscribeToAerodrome", connmetadata);
+                _synchronised = true;
 
                 if (response.Error is not null)
                 {
@@ -475,6 +505,7 @@ public sealed class SocketConn : IDisposable
             }
             else
             {
+                _enableAutoReconnect = true;
                 await Connect();
             }
         }
@@ -518,7 +549,7 @@ public sealed class SocketConn : IDisposable
         if (CanSendDTO)
         {
             LogMessageContent("StripCache", cacheDTO, false);
-            await _connection.InvokeAsync("StripCache", cacheDTO);
+            await _connection.InvokeAsync("StripCache", cacheDTO, GetMessageMetadata());
         }
     }
 
@@ -660,6 +691,14 @@ public sealed class SocketConn : IDisposable
         _connection.StopAsync();
     }
 
+    /// <summary>
+    /// Marks the server as desynchronised when effecting an aerodrome change.
+    /// </summary>
+    public void MarkDesynchronised()
+    {
+        _synchronised = false;
+    }
+
     /// <inheritdoc/>
     public async void Dispose()
     {
@@ -763,7 +802,7 @@ public sealed class SocketConn : IDisposable
 
             _mainForm.Invoke(_mainForm.SetConnStatus);
 
-            if (Network.IsConnected)
+            if (Network.IsConnected && _enableAutoReconnect)
             {
                 await Connect();
             }
@@ -854,5 +893,14 @@ public sealed class SocketConn : IDisposable
         }
 
         AddMessage($"{(server ? 's' : 'c')}-{funcName}: {json}");
+    }
+
+    private MessageMetadata GetMessageMetadata()
+    {
+        return new()
+        {
+            Server = Server,
+            AerodromeICAO = _bayManager.AerodromeName,
+        };
     }
 }

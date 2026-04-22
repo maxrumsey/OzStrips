@@ -360,6 +360,7 @@ public class MainFormController : IDisposable
         {
             if (_bayManager != null)
             {
+                _socketConn.MarkDesynchronised();
                 _bayManager.PurgeDataAndSetNewAerodrome(name, _socketConn);
                 SetCircuitToolStripStatus();
                 _ = _socketConn.SubscribeToAerodrome();
