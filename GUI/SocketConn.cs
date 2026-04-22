@@ -749,17 +749,25 @@ public sealed class SocketConn : IDisposable
     {
         if (MainFormValid)
         {
-            _mainForm.Invoke(() =>
+            try
             {
-                try
+                _mainForm.Invoke(() =>
                 {
-                    action();
-                }
-                catch (Exception ex)
-                {
-                    Util.LogError(ex);
-                }
-            });
+                    try
+                    {
+                        action();
+                    }
+                    catch (Exception ex)
+                    {
+                        Util.LogError(ex);
+                    }
+                });
+            }
+
+            // This is really stupid.
+            catch (ObjectDisposedException)
+            {
+            }
         }
     }
 
