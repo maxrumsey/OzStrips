@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
 using vatsys;
@@ -72,6 +73,46 @@ public partial class DropDown : BaseForm
                 tb.Size = new(100, 28);
                 tb.MaxLength = item.MaxLen;
                 tb.CharacterCasing = CharacterCasing.Upper;
+                element.KeyDown += (s, e) =>
+                {
+                    if (e.Control && e.KeyCode == Keys.A)
+                    {
+                        return;
+                    }
+                    else if (e.KeyCode == Keys.Menu)
+                    {
+                        e.SuppressKeyPress = true;
+                        return;
+                    }
+                    else if ((e.Control && e.KeyCode != Keys.ControlKey) ||
+                             (e.Alt && e.KeyCode != Keys.Alt))
+                    {
+                        if (e.KeyCode == Keys.Back)
+                        {
+                            return;
+                        }
+
+                        e.SuppressKeyPress = true;
+
+                        var key = e.KeyCode.ToString();
+                        if (key.Length > 1)
+                        {
+                            key = key.Substring(key.Length - 1);
+                        }
+
+                        var pos = tb.SelectionStart;
+
+                        var newText = tb.Text
+                            .Remove(pos, tb.SelectionLength)
+                            .Insert(pos, key);
+
+                        if (newText.Length <= tb.MaxLength)
+                        {
+                            tb.Text = newText;
+                            tb.SelectionStart = pos + 1;
+                        }
+                    }
+                };
                 element.KeyPress += (s, e) =>
                 {
                     if (e.KeyChar == (char)Keys.Escape)
