@@ -40,12 +40,12 @@ public class BayChange
     /// <summary>
     /// Gets or sets the element being moved/deleted/added.
     /// </summary>
-    public BayChangeStripItem? TargetItem { get; set; }
+    public BayItem? TargetItem { get; set; }
 
     /// <summary>
     /// Gets or sets the element **above** the item being moved/deleted/added where relevant.
     /// </summary>
-    public BayChangeStripItem? ArgumentItem { get; set; }
+    public BayItem? ArgumentItem { get; set; }
 
     /// <summary>
     /// Gets or sets the described bay type.

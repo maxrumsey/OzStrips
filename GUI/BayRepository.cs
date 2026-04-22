@@ -71,9 +71,9 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
 
             var list = new List<StripListItem>();
 
-            foreach (var dtoItem in bayDTO.list)
+            foreach (var dtoItem in bayDTO.Items)
             {
-                var listItem = bay.GetListItemByStr(dtoItem);
+                var listItem = bay.GetListItemByBayItem(dtoItem);
                 if (listItem != null)
                 {
                     list.Add(listItem);

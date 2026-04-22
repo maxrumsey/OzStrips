@@ -21,4 +21,9 @@ public class BayDTO
     /// </summary>
     [JsonPropertyName("list")]
     public List<string> list { get; set; } = [];
+
+    /// <summary>
+    /// Gets or sets the bay items.
+    /// </summary>
+    public BayItem[] Items { get; set; } = [];
 }

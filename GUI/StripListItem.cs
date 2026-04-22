@@ -75,7 +75,7 @@ public class StripListItem
     /// Converts the strip item into a bay change argument.
     /// </summary>
     /// <returns>Bay change argument.</returns>
-    public BayChangeStripItem ToBayChangeArgument()
+    public BayItem ToBayChangeArgument()
     {
         var barid = "\a";
         if (Type == StripItemType.BAR)
