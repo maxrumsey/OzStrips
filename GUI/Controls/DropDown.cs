@@ -223,7 +223,7 @@ public partial class DropDown : BaseForm
                 return;
             }
 
-            strip.FDR.GlobalOpData = s;
+            FDP2.SetGlobalOps(strip.FDR, s);
         });
     }
 
