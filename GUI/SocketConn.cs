@@ -922,7 +922,7 @@ public sealed class SocketConn : IAsyncDisposable
             TaskContinuationOptions.OnlyOnCanceled);
     }
 
-    /// <inheritdoc>/>.
+    /// <inheritdoc/>
     public async ValueTask DisposeAsync()
     {
         _isDisposed = true;

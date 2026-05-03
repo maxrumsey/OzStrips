@@ -37,6 +37,8 @@ public class MainFormController : IDisposable, IStripsWindow
     private bool _readyForConnection;
     private bool _permitPDCSound = true;
     private Action<object, EventArgs>? _defaultLayout;
+    private Font? _connWindowFont;
+    private readonly StringFormat _connWindowFormat = new() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
 
     /// <summary>
     /// Gets the current instance of the MainForm controller.
@@ -1112,30 +1114,17 @@ public class MainFormController : IDisposable, IStripsWindow
             using var outerBrush = new SolidBrush(outerColor);
             using var textBrush = new SolidBrush(Color.Black);
 
-            Font? font;
             try
             {
-                font = new Font("Terminus (TTF)", 12F, FontStyle.Bold);
+                _connWindowFont ??= new Font("Terminus (TTF)", 12F, FontStyle.Bold);
             }
-            catch (ArgumentException)
+            catch
             {
-                font = SystemFonts.DefaultFont;
             }
 
-            try
-            {
-                g.FillRectangle(outerBrush, e.ClipRectangle);
-                g.FillRectangle(coreBrush, e.ClipRectangle.X + borderWidth, e.ClipRectangle.Y + borderWidth, e.ClipRectangle.Width - (borderWidth * 2), e.ClipRectangle.Height - (borderWidth * 2));
-                var fmt = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
-                g.DrawString("CONN STAT", font, textBrush, e.ClipRectangle, fmt);
-            }
-            finally
-            {
-                if (font != SystemFonts.DefaultFont)
-                {
-                    font?.Dispose();
-                }
-            }
+            g.FillRectangle(outerBrush, e.ClipRectangle);
+            g.FillRectangle(coreBrush, e.ClipRectangle.X + borderWidth, e.ClipRectangle.Y + borderWidth, e.ClipRectangle.Width - (borderWidth * 2), e.ClipRectangle.Height - (borderWidth * 2));
+            g.DrawString("CONN STAT", _connWindowFont ?? Form.DefaultFont, textBrush, e.ClipRectangle, _connWindowFormat);
         }
         catch (InvalidOperationException)
         {
@@ -1232,6 +1221,9 @@ public class MainFormController : IDisposable, IStripsWindow
         _mainForm.AerodromeManager.AerodromeListChanged -= AerodromeListChanged;
 
         _socketConn.DisposeAsync().AsTask().ContinueWith(t => Util.LogError(t.Exception?.InnerException ?? new Exception("Failed to dispose of SocketConn.")), TaskContinuationOptions.NotOnRanToCompletion);
+        Instance = null;
+        _connWindowFont?.Dispose();
+        _connWindowFormat.Dispose();
     }
 
     private void AerodromeListChanged(object sender, EventArgs e)
