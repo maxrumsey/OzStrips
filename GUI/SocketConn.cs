@@ -827,6 +827,12 @@ public sealed class SocketConn : IDisposable
 
             _mainForm.Invoke(_mainForm.SetConnStatus);
         }
+        else
+        {
+#if DEBUG
+            Errors.Add(new($"Connection state changed in an unexpected manner {State} to {newState}."));
+#endif
+        }
     }
 
     /// <summary>
