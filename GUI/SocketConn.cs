@@ -18,7 +18,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI;
 /// <summary>
 /// Handles communications by the sockets.
 /// </summary>
-public sealed class SocketConn : IDisposable
+public sealed class SocketConn : IAsyncDisposable
 {
     private readonly MainFormController _mainForm;
     private readonly HubConnection _connection;
@@ -35,7 +35,7 @@ public sealed class SocketConn : IDisposable
     {
         get
         {
-            return (DateTime.Now - (_aerodromeSubscriptionRegistered ?? DateTime.Now)) < TimeSpan.FromMinutes(1);
+            return _aerodromeSubscriptionRegistered is null ? true : (DateTime.Now - _aerodromeSubscriptionRegistered) < TimeSpan.FromMinutes(1);
         }
     }
 
@@ -293,11 +293,11 @@ public sealed class SocketConn : IDisposable
 
         if (CanSendDTO && strip is not null)
         {
-            _connection.InvokeAsync("StripStatus", (StripDTO)strip, acid, GetMessageMetadata());
+            FireAndForget(_connection.SendAsync("StripStatus", (StripDTO)strip, acid, GetMessageMetadata()));
         }
         else if (CanSendDTO)
         {
-            _connection.InvokeAsync("StripStatus", null, acid, GetMessageMetadata());
+            FireAndForget(_connection.SendAsync("StripStatus", null, acid, GetMessageMetadata()));
         }
     }
 
@@ -321,7 +321,7 @@ public sealed class SocketConn : IDisposable
         if (CanSendDTO && list.Count > 0)
         {
             LogMessageContent("UplinkCDMAircraft", list, false);
-            _connection.InvokeAsync("UplinkCDMAircraft", list, GetMessageMetadata());
+            FireAndForget(_connection.SendAsync("UplinkCDMAircraft", list, GetMessageMetadata()));
         }
     }
 
@@ -404,7 +404,7 @@ public sealed class SocketConn : IDisposable
         if (CanSendDTO)
         {
             LogMessageContent("BayChange", bayChange, false);
-            _connection.InvokeAsync("BayChange", bayChange, GetMessageMetadata());
+            FireAndForget(_connection.SendAsync("BayChange", bayChange, GetMessageMetadata()));
         }
     }
 
@@ -417,7 +417,7 @@ public sealed class SocketConn : IDisposable
         if (CanSendDTO)
         {
             LogMessageContent("UpdateCircuitMode", status, false);
-            _connection.InvokeAsync("UpdateCircuitMode", status, GetMessageMetadata());
+            FireAndForget(_connection.SendAsync("UpdateCircuitMode", status, GetMessageMetadata()));
         }
     }
 
@@ -430,7 +430,7 @@ public sealed class SocketConn : IDisposable
         if (CanSendDTO)
         {
             LogMessageContent("UpdateCoordinatorMode", status, false);
-            _connection.InvokeAsync("UpdateCoordinatorMode", status, GetMessageMetadata());
+            FireAndForget(_connection.SendAsync("UpdateCoordinatorMode", status, GetMessageMetadata()));
         }
     }
 
@@ -443,7 +443,7 @@ public sealed class SocketConn : IDisposable
         if (CanSendDTO)
         {
             LogMessageContent("ChangeCDMParameters", param, false);
-            _connection.InvokeAsync("ChangeCDMParameters", param, GetMessageMetadata());
+            FireAndForget(_connection.SendAsync("ChangeCDMParameters", param, GetMessageMetadata()));
         }
     }
 
@@ -549,7 +549,7 @@ public sealed class SocketConn : IDisposable
         if (CanSendDTO)
         {
             LogMessageContent("StripCache", cacheDTO, false);
-            await _connection.InvokeAsync("StripCache", cacheDTO, GetMessageMetadata());
+            await _connection.SendAsync("StripCache", cacheDTO, GetMessageMetadata());
         }
     }
 
@@ -697,13 +697,6 @@ public sealed class SocketConn : IDisposable
     public void MarkDesynchronised()
     {
         _synchronised = false;
-    }
-
-    /// <inheritdoc/>
-    public async void Dispose()
-    {
-        _isDisposed = true;
-        await _connection.DisposeAsync();
     }
 
     /// <summary>
@@ -916,5 +909,23 @@ public sealed class SocketConn : IDisposable
             Server = Server,
             AerodromeICAO = _bayManager.AerodromeName,
         };
+    }
+
+    private static void FireAndForget(Task task)
+    {
+        task.ContinueWith(
+            t => Util.LogError(t.Exception!.InnerException!),
+            TaskContinuationOptions.OnlyOnFaulted);
+
+        task.ContinueWith(
+            t => Util.LogError(new OperationCanceledException("A server invocation was cancelled.")),
+            TaskContinuationOptions.OnlyOnCanceled);
+    }
+
+    /// <inheritdoc>/>.
+    public async ValueTask DisposeAsync()
+    {
+        _isDisposed = true;
+        await _connection.DisposeAsync();
     }
 }

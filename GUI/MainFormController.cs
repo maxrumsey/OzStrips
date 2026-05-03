@@ -1230,7 +1230,8 @@ public class MainFormController : IDisposable, IStripsWindow
         }
 
         _mainForm.AerodromeManager.AerodromeListChanged -= AerodromeListChanged;
-        _socketConn.Dispose();
+
+        _socketConn.DisposeAsync().AsTask().ContinueWith(t => Util.LogError(t.Exception?.InnerException ?? new Exception("Failed to dispose of SocketConn.")), TaskContinuationOptions.NotOnRanToCompletion);
     }
 
     private void AerodromeListChanged(object sender, EventArgs e)
