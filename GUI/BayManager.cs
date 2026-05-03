@@ -425,14 +425,19 @@ public class BayManager
 
         if (MainFormController.Instance?.IsDisposed == false)
         {
-            LockWindowUpdate(MainFormController.Instance.Handle);
-
-            foreach (var bay in BayRepository.Bays)
+            try
             {
-                bay.ResizeBay();
-            }
+                LockWindowUpdate(MainFormController.Instance.Handle);
 
-            LockWindowUpdate(IntPtr.Zero);
+                foreach (var bay in BayRepository.Bays)
+                {
+                    bay.ResizeBay();
+                }
+            }
+            finally
+            {
+                LockWindowUpdate(IntPtr.Zero);
+            }
         }
 
         BayRepository.ResizeStripBays();
@@ -498,17 +503,17 @@ public class BayManager
             }
 
             if (!SetPickedStripClass(strip))
-                {
-                    /*
-                     * Strip is inhibited.
-                     */
+            {
+                /*
+                    * Strip is inhibited.
+                    */
 
-                    RemovePicked(false, true);
-                    PickedStripItem = new()
-                    {
-                        Strip = strip,
-                    };
-                }
+                RemovePicked(false, true);
+                PickedStripItem = new()
+                {
+                    Strip = strip,
+                };
+            }
         }
         else
         {
