@@ -457,6 +457,7 @@ public class Bay : System.IDisposable
     {
         var containsDiv = false;
         StripListItem? currentItem = null;
+        var wasRemoved = false;
         foreach (var item in Strips)
         {
             if (item.Type == StripItemType.QUEUEBAR)
@@ -479,6 +480,7 @@ public class Bay : System.IDisposable
         }
         else if (currentItem is not null && force is null or false)
         {
+            wasRemoved = true;
             Strips.Remove(currentItem);
         }
 
@@ -486,7 +488,7 @@ public class Bay : System.IDisposable
         BayManager.BayRepository.ResizeStripBays();
         if (sync)
         {
-            if (currentItem is not null)
+            if (currentItem is not null && wasRemoved)
             {
                 _socketConnection.SyncBay(new()
                 {
@@ -516,7 +518,7 @@ public class Bay : System.IDisposable
     {
         if (_bayManager.PickedStrip != null && OwnsStrip(_bayManager.PickedStrip))
         {
-            AddDivider(true, false);
+            AddDivider(true, true);
             var item = Strips.Find(a => a?.Strip == _bayManager.PickedStrip);
             ChangeStripPositionAbs(item, DivPosition);
             _bayManager.RemovePicked(true);
