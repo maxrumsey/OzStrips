@@ -29,7 +29,7 @@ public sealed class SocketConn : IDisposable
     private bool _serverPopupShown;
     private bool _enableAutoReconnect = true;
     private DateTime _lastDesyncResolution = DateTime.MinValue;
-    private bool _synchronised;
+    private volatile bool _synchronised;
 
     private bool FreshClient
     {
