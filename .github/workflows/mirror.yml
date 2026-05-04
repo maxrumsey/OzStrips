@@ -3,7 +3,7 @@ name: Mirror to Secondary Repository
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   mirror:
