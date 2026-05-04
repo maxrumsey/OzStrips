@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -237,6 +238,37 @@ internal class AutoAssigner
 
             // if we matched all the runways, and the rule has been met.
             if (unmatchedRunways.Count == 0 != matchAsTrue)
+            {
+                return false;
+            }
+        }
+
+        if (rule.ZuluTimes.Count > 0)
+        {
+            var matched = false;
+            var curTime = int.Parse(DateTime.UtcNow.ToString("HHmm", CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
+
+            foreach (var timePair in rule.ZuluTimes)
+            {
+                var timeSet = timePair.Split('-');
+                if (timeSet.Length != 2 || timeSet.Any(x => x.Length != 4 || !x.All(char.IsDigit)))
+                {
+                    Util.LogError(new ArgumentException($"Time {timePair} was invalid."));
+                    continue;
+                }
+
+                var time1 = int.Parse(timeSet[0], CultureInfo.InvariantCulture);
+                var time2 = int.Parse(timeSet[1], CultureInfo.InvariantCulture);
+
+                matched |= curTime > time1 && curTime < time2;
+
+                if (matched)
+                {
+                    break;
+                }
+            }
+
+            if (matched != matchAsTrue)
             {
                 return false;
             }

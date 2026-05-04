@@ -65,4 +65,10 @@ public class RuleCondition
     /// </summary>
     [YamlMember(Alias = "radials")]
     public List<string> Radials { get; set; } = [];
+
+    /// <summary>
+    /// Gets or sets a list of zulu times.
+    /// </summary>
+    [YamlMember(Alias = "time")]
+    public List<string> ZuluTimes { get; set; } = [];
 }
