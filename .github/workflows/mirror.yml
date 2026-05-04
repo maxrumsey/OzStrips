@@ -1,0 +1,38 @@
+name: Mirror to Secondary Repository
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history so the mirror is complete
+
+      - name: Push to secondary repository
+        env:
+          TARGET_REPO: ${{ secrets.TARGET_REPO }}        # e.g. git@github.com:org/repo.git
+          SSH_PRIVATE_KEY: ${{ secrets.MIRROR_SSH_KEY }} # Private key with write access to target
+        run: |
+          # Write the deploy key
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+          # Trust GitHub's host key
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+          # Configure git
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name  "github-actions[bot]"
+
+          # Add the target remote and force-push everything
+          git remote add mirror "$TARGET_REPO"
+          git push mirror --force --all       # all branches
+          git push mirror --force --tags      # all tags
