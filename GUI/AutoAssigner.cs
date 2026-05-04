@@ -25,6 +25,7 @@ internal class AutoAssigner
     private readonly List<AssignmentRule> _assignmentRules = [];
 
     private readonly Regex _rwyNameRegex = new(@"^(\d{2}[LRC]?|[LRC])$");
+    private readonly Regex _tempRegex = new(@"\n?\s*\+?\s*\[TMP\] (-?\d{1,2})");
 
     internal AutoAssigner(BayManager bayManager)
     {
@@ -149,6 +150,24 @@ internal class AutoAssigner
         if (!string.IsNullOrEmpty(rule.VFR) && (strip.FDR.FlightRules == "V") != matchAsTrue)
         {
             return false;
+        }
+
+        if (!string.IsNullOrEmpty(rule.TempAbove) && !string.IsNullOrEmpty(_bayManager.AerodromeState.ATIS))
+        {
+            var reg = _tempRegex.Match(_bayManager.AerodromeState.ATIS);
+
+            if (!reg.Success || reg.Groups.Count != 2 || !int.TryParse(reg.Groups[1].Value, out var temp))
+            {
+                Util.ShowErrorBox("The temperature field was not included in the ATIS, or was invalid.");
+                return false;
+            }
+
+            var minTemp = int.Parse(rule.TempAbove, CultureInfo.InvariantCulture);
+
+            if (minTemp <= temp != matchAsTrue)
+            {
+                return false;
+            }
         }
 
         if (rule.Runway.Count > 0 && rule.Runway.Contains(result.Runway) != matchAsTrue)

@@ -77,6 +77,8 @@ Available conditional elements include:
 | `atis_dep_rwy: ["34L", "16L"]` | Current runway mode on the ATIS references both `34L` and `16L` as departure runways |
 | `radials: ["241-360", "0-066"]` | Track from aerodrome to first non-SID, non-lat/long waypoint falls between the nominated radials (*note the passage of North*) |
 | `waypoint: ["OLSEM", "BANDA"]` | Aircraft's FDR route includes either `OLSEM` or `BANDA` |
+| `time: ["2200-2359", "0000-0200"]` | The current **zulu** time is within the specified range. |
+| `temp_above: "30"` | The ATIS temperature is at or above the specified value. |
 
 !!! tip
     To test the inverse of a `true` statement, use `if_not:`.

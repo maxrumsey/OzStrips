@@ -71,4 +71,10 @@ public class RuleCondition
     /// </summary>
     [YamlMember(Alias = "time")]
     public List<string> ZuluTimes { get; set; } = [];
+
+    /// <summary>
+    /// Gets or sets the min-temp to match.
+    /// </summary>
+    [YamlMember(Alias = "temp_above")]
+    public string TempAbove { get; set; } = string.Empty;
 }
