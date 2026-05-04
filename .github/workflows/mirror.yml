@@ -15,6 +15,25 @@ jobs:
         with:
           fetch-depth: 0  # Full history so the mirror is complete
 
+      - name: Remove this workflow from the tree
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name  "github-actions[bot]"
+
+          # Remove the workflow file from the index without touching the working tree
+          git rm --cached .github/workflows/mirror.yml
+
+          # If .github/workflows is now empty, remove it too
+          if [ -z "$(ls .github/workflows/ 2>/dev/null)" ]; then
+            git rm --cached -r .github/workflows
+          fi
+          if [ -z "$(ls .github/ 2>/dev/null)" ]; then
+            git rm --cached -r .github
+          fi
+
+          # Amend the commit so the push to the mirror never includes this file
+          git commit --amend --no-edit
+
       - name: Push to secondary repository
         env:
           TARGET_REPO: ${{ secrets.TARGET_REPO }}        # e.g. git@github.com:org/repo.git
@@ -27,10 +46,6 @@ jobs:
 
           # Trust GitHub's host key
           ssh-keyscan github.com >> ~/.ssh/known_hosts
-
-          # Configure git
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name  "github-actions[bot]"
 
           # Add the target remote and force-push everything
           git remote add mirror "$TARGET_REPO"
