@@ -19,12 +19,12 @@ public class CDMResultDTO
     /// <summary>
     /// Gets or sets the TSAT.
     /// </summary>
-    public DateTime TSAT { get; set; } = DateTime.MaxValue;
+    public DateTimeOffset TSAT { get; set; } = DateTimeOffset.MaxValue;
 
     /// <summary>
     /// Gets or sets the CTOT.
     /// </summary>
-    public DateTime CTOT { get; set; } = DateTime.MaxValue;
+    public DateTimeOffset CTOT { get; set; } = DateTimeOffset.MaxValue;
 
     /// <summary>
     /// Gets or sets the final computed slot type.

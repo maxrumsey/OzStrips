@@ -58,5 +58,5 @@ public class PDCRequest
     /// Gets or sets the last modified time of this PDC request.
     /// </summary>
     [JsonIgnore]
-    public DateTime LastModified { get; set; } = DateTime.Now;
+    public DateTimeOffset LastModified { get; set; } = DateTimeOffset.Now;
 }

@@ -29,17 +29,17 @@ public class CDMAircraftDTO
     /// <summary>
     /// Gets or sets the TOBT.
     /// </summary>
-    public DateTime TOBT { get; set; } = DateTime.MaxValue;
+    public DateTimeOffset TOBT { get; set; } = DateTimeOffset.MaxValue;
 
     /// <summary>
     /// Gets or sets the AOBT.
     /// </summary>
-    public DateTime AOBT { get; set; } = DateTime.MaxValue;
+    public DateTimeOffset AOBT { get; set; } = DateTimeOffset.MaxValue;
 
     /// <summary>
     /// Gets or sets the ATOT.
     /// </summary>
-    public DateTime ATOT { get; set; } = DateTime.MaxValue;
+    public DateTimeOffset ATOT { get; set; } = DateTimeOffset.MaxValue;
 
     /// <summary>
     /// Gets or sets the current state.

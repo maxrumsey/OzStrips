@@ -19,5 +19,5 @@ public class CDMDepartureDTO
     /// <summary>
     /// Gets or sets the ATOT.
     /// </summary>
-    public DateTime ATOT { get; set; } = DateTime.MaxValue;
+    public DateTimeOffset ATOT { get; set; } = DateTimeOffset.MaxValue;
 }

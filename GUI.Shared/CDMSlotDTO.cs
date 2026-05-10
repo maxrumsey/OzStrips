@@ -14,5 +14,5 @@ public class CDMSlotDTO
     /// <summary>
     /// Gets or sets the planned take off time.
     /// </summary>
-    public DateTime PTOT { get; set; } = DateTime.MaxValue;
+    public DateTimeOffset PTOT { get; set; } = DateTimeOffset.MaxValue;
 }
