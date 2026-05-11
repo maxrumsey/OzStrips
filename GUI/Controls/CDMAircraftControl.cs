@@ -49,7 +49,7 @@ public partial class CDMAircraftControl : UserControl
         lb_items.Items.Add($"Projected Final Priority: {cdmDTO.FinalSlotType.ToString()}");
     }
 
-    private static string GetUserFriendlyDateTime(DateTime time)
+    private static string GetUserFriendlyDateTime(DateTimeOffset time)
     {
         if (time != DateTime.MaxValue)
         {

@@ -1,4 +1,13 @@
 # Changelog
+## v0.9.0
+### Misc Changes
+- Added new autofill rule options for YSWS
+- Added ability to toggle circuit bays from non-default aerodrome types.
+- Dropdown text entry will ignore alt + ctrl.
+- Various additional strip items.
+### Server Changes
+- Significant rework of how server connections are handled.
+- Changes how bay content is synced.
 ## v0.8.7
 ### Bugfixes
 - Fixed crash due to missing keybind "friendly name".
