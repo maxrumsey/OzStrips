@@ -152,6 +152,18 @@ internal class AutoAssigner
             return false;
         }
 
+        if (!string.IsNullOrEmpty(rule.ATISRegex) && !string.IsNullOrEmpty(_bayManager.AerodromeState.ATIS))
+        {
+            var regex = new Regex(rule.ATISRegex);
+
+            var res = regex.Match(_bayManager.AerodromeState.ATIS);
+
+            if (res.Success != matchAsTrue)
+            {
+                return false;
+            }
+        }
+
         if (!string.IsNullOrEmpty(rule.TempAbove) && !string.IsNullOrEmpty(_bayManager.AerodromeState.ATIS))
         {
             var reg = _tempRegex.Match(_bayManager.AerodromeState.ATIS);

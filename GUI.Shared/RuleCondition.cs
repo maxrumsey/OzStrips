@@ -77,4 +77,10 @@ public class RuleCondition
     /// </summary>
     [YamlMember(Alias = "temp_above")]
     public string TempAbove { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the regex to match against the ATIS.
+    /// </summary>
+    [YamlMember(Alias = "atis_regex")]
+    public string ATISRegex { get; set;  } = string.Empty;
 }
