@@ -24,6 +24,12 @@ public class AerodromeList
     public string Type { get; set; } = null!;
 
     /// <summary>
+    /// Gets or sets whether the circuit should be enabled.
+    /// </summary>
+    [XmlAttribute("EnableCircuit")]
+    public string EnableCircuit { get; set; } = string.Empty;
+
+    /// <summary>
     /// Gets or sets aerodrome ICAO codes.
     /// </summary>
     [XmlElement("Aerodrome")]

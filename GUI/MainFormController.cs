@@ -1079,10 +1079,10 @@ public class MainFormController : IDisposable, IStripsWindow
     /// </summary>
     public void SetCircuitToolStripStatus()
     {
-        var isRadarTower = string.IsNullOrEmpty(_mainForm.AerodromeManager.GetAerodromeType(_bayManager.AerodromeName));
+        var circuitBayEnabled = _mainForm.AerodromeManager.CircuitBayEnabled(_bayManager.AerodromeName);
         var canSend = _socketConn.HaveSendPerms;
 
-        _mainForm.ToggleCircuitToolStrip.Enabled = isRadarTower && canSend;
+        _mainForm.ToggleCircuitToolStrip.Enabled = circuitBayEnabled && canSend;
     }
 
     /// <summary>

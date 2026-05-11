@@ -149,6 +149,18 @@ public class AerodromeManager
     }
 
     /// <summary>
+    /// Determines if this aerodrome list should have the circuit bay enabled.
+    /// </summary>
+    /// <param name="aerodrome">ICAO Code.</param>
+    /// <returns>Activity status.</returns>
+    public bool CircuitBayEnabled(string aerodrome)
+    {
+        var list = Settings?.AerodromeLists.FirstOrDefault(x => x.Aerodromes.Contains(aerodrome));
+
+        return string.IsNullOrEmpty(list?.Type) || list?.EnableCircuit == "true";
+    }
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="AerodromeManager"/> class.
     /// </summary>
     public AerodromeManager()
