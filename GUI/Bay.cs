@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.InteropServices;
@@ -98,59 +99,6 @@ public class Bay : System.IDisposable
     /// Gets the current bay manager.
     /// </summary>
     public BayManager BayManager { get; }
-
-    /// <summary>
-    /// Converts the Bay into a Bay Transfer object.
-    /// </summary>
-    /// <param name="bay">The bay to convert.</param>
-    public static implicit operator BayDTO(Bay bay)
-    {
-        var bayDTO = new BayDTO { bay = bay.BayTypes[0] };
-        var childList = new List<string>();
-        foreach (var item in bay.Strips)
-        {
-            switch (item.Type)
-            {
-                case StripItemType.STRIP when item.Strip is not null:
-                    childList.Add(item.Strip.FDR.Callsign);
-                    break;
-                case StripItemType.QUEUEBAR:
-                    childList.Add("\a"); // indicates q-bar
-                    break;
-                case StripItemType.BAR:
-                    childList.Add($"\a{item.Style}{item.BarText}");
-                    break;
-            }
-        }
-
-        // Inhibit sending of items above the queue bar in the PREACTIVE bay.
-        if (bay.BayTypes.Contains(StripBay.BAY_PREA))
-        {
-            var belowTheQueueBar = new List<string>();
-            var found = false;
-
-            foreach (var bayEl in childList)
-            {
-                belowTheQueueBar.Add(bayEl);
-                if (bayEl == "\a")
-                {
-                    childList = belowTheQueueBar;
-                    found = true;
-                    break;
-                }
-            }
-
-            // If no queue bar, don't sync any PREA changes.
-            if (!found)
-            {
-                childList.Clear();
-            }
-        }
-
-        bayDTO.list = childList;
-
-        return bayDTO;
-    }
 
     /// <summary>
     /// Gets the scaled height of a strip.
@@ -281,9 +229,7 @@ public class Bay : System.IDisposable
                     }
                 }
 
-    #pragma warning disable CS8602 // Dereference of a possibly null reference.
-                abovetheBar = abovetheBar.OrderByDescending(x => x.Strip.FDR.Callsign).ToList();
-    #pragma warning restore CS8602 // Dereference of a possibly null reference.
+                abovetheBar = [.. abovetheBar.OrderByDescending(x => x.Strip!.FDR.Callsign)];
 
                 Strips.AddRange(abovetheBar);
             }
@@ -351,7 +297,20 @@ public class Bay : System.IDisposable
 
         ClientInitiatedStripMove(item, newPosition);
         ResizeBay();
-        _socketConnection.SyncBay(this);
+
+        BayItem? argument = null;
+        if (newPosition != 0)
+        {
+            argument = Strips[newPosition - 1].ToBayChangeArgument();
+        }
+
+        _socketConnection.SyncBay(new()
+        {
+            Type = BayChange.BayChangeTypes.MOVE_ELEMENT_BELOW,
+            BayType = BayTypes[0],
+            TargetItem = item.ToBayChangeArgument(),
+            ArgumentItem = argument,
+        });
     }
 
     /// <summary>
@@ -368,7 +327,20 @@ public class Bay : System.IDisposable
 
         ClientInitiatedStripMove(item, abspos);
         ResizeBay();
-        _socketConnection.SyncBay(this);
+
+        BayItem? argument = null;
+        if (abspos != 0)
+        {
+            argument = Strips[abspos - 1].ToBayChangeArgument();
+        }
+
+        _socketConnection.SyncBay(new()
+        {
+            Type = BayChange.BayChangeTypes.MOVE_ELEMENT_BELOW,
+            BayType = BayTypes[0],
+            TargetItem = item.ToBayChangeArgument(),
+            ArgumentItem = argument,
+        });
     }
 
     /// <summary>
@@ -387,7 +359,6 @@ public class Bay : System.IDisposable
             if (queueBarIndex != -1 && index < queueBarIndex)
             {
                 // send CDM update
-
                 _socketConnection.SendCDMUpdate(item.Strip, CDMState.ACTIVE);
             }
         }
@@ -428,7 +399,12 @@ public class Bay : System.IDisposable
 
             if (sync)
             {
-                _socketConnection.SyncBay(this);
+                _socketConnection.SyncBay(new()
+                {
+                    Type = BayChange.BayChangeTypes.ADD_BAR,
+                    BayType = BayTypes[0],
+                    TargetItem = bar.ToBayChangeArgument(),
+                });
             }
         }
 
@@ -448,7 +424,12 @@ public class Bay : System.IDisposable
 
         if (sync)
         {
-            _socketConnection.SyncBay(this);
+            _socketConnection.SyncBay(new()
+            {
+                Type = BayChange.BayChangeTypes.DELETE_BAR,
+                BayType = BayTypes[0],
+                TargetItem = bar.ToBayChangeArgument(),
+            });
         }
 
         OnBarsChanged?.Invoke(this, EventArgs.Empty);
@@ -476,6 +457,7 @@ public class Bay : System.IDisposable
     {
         var containsDiv = false;
         StripListItem? currentItem = null;
+        var wasRemoved = false;
         foreach (var item in Strips)
         {
             if (item.Type == StripItemType.QUEUEBAR)
@@ -498,6 +480,7 @@ public class Bay : System.IDisposable
         }
         else if (currentItem is not null && force is null or false)
         {
+            wasRemoved = true;
             Strips.Remove(currentItem);
         }
 
@@ -505,7 +488,24 @@ public class Bay : System.IDisposable
         BayManager.BayRepository.ResizeStripBays();
         if (sync)
         {
-            _socketConnection.SyncBay(this);
+            if (currentItem is not null && wasRemoved)
+            {
+                _socketConnection.SyncBay(new()
+                {
+                    Type = BayChange.BayChangeTypes.DELETE_BAR,
+                    BayType = BayTypes[0],
+                    TargetItem = currentItem.ToBayChangeArgument(),
+                });
+            }
+            else
+            {
+                _socketConnection.SyncBay(new()
+                {
+                    Type = BayChange.BayChangeTypes.ADD_BAR,
+                    BayType = BayTypes[0],
+                    TargetItem = Strips[0].ToBayChangeArgument(),
+                });
+            }
         }
 
         OnBarsChanged?.Invoke(this, EventArgs.Empty);
@@ -518,11 +518,10 @@ public class Bay : System.IDisposable
     {
         if (_bayManager.PickedStrip != null && OwnsStrip(_bayManager.PickedStrip))
         {
-            AddDivider(true, false);
+            AddDivider(true, true);
             var item = Strips.Find(a => a?.Strip == _bayManager.PickedStrip);
             ChangeStripPositionAbs(item, DivPosition);
             _bayManager.RemovePicked(true);
-            _socketConnection.SyncBay(this);
         }
     }
 
@@ -541,10 +540,6 @@ public class Bay : System.IDisposable
                 returnedItem = stripListItem;
             }
             else if (code[0] == '\a' && stripListItem.Type == StripItemType.BAR && stripListItem.BarText == code.Substring(Math.Min(2, code.Length)))
-            {
-                returnedItem = stripListItem;
-            }
-            else if (stripListItem.Type == StripItemType.STRIP && stripListItem.Strip?.FDR.Callsign == code)
             {
                 returnedItem = stripListItem;
             }
@@ -569,6 +564,27 @@ public class Bay : System.IDisposable
             OnBarsChanged?.Invoke(this, EventArgs.Empty);
 
             return GetListItemByStr(code);
+        }
+
+        return returnedItem;
+    }
+
+    /// <summary>
+    /// Gets if available a list item by bay item. Will create or delete a bar if needed.
+    /// </summary>
+    /// <param name="bayItem">The bayItem..</param>
+    /// <returns>The list item if there is a match, otherwise null.</returns>
+    public StripListItem? GetListItemByBayItem(BayItem bayItem)
+    {
+        StripListItem? returnedItem = null;
+
+        if (bayItem.IsStrip && bayItem.StripKey is not null)
+        {
+            returnedItem = Strips.FirstOrDefault(x => x.Type == StripItemType.STRIP && x.Strip!.StripKey.Matches(bayItem.StripKey));
+        }
+        else
+        {
+            returnedItem = GetListItemByStr(bayItem.BarIdentifier ?? string.Empty);
         }
 
         return returnedItem;

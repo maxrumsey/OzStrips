@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Media;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
+using GUI.Connector;
 using MaxRumsey.OzStripsPlugin.GUI.Controls;
 using MaxRumsey.OzStripsPlugin.GUI.Shared;
 using vatsys;
@@ -17,7 +20,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI;
 /// <summary>
 /// ViewModel equivalent for the MainForm.
 /// </summary>
-public class MainFormController : IDisposable
+public class MainFormController : IDisposable, IStripsWindow
 {
     private FormWindowState _lastState = FormWindowState.Minimized;
     private bool _postresizechecked = true;
@@ -34,6 +37,8 @@ public class MainFormController : IDisposable
     private bool _readyForConnection;
     private bool _permitPDCSound = true;
     private Action<object, EventArgs>? _defaultLayout;
+    private Font? _connWindowFont;
+    private readonly StringFormat _connWindowFormat = new() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
 
     /// <summary>
     /// Gets the current instance of the MainForm controller.
@@ -315,7 +320,7 @@ public class MainFormController : IDisposable
     /// Marks whether or not a connection is ready to be established to the server.
     /// </summary>
     /// <param name="readyForConnection">Whether or not a connection can be made.</param>
-    public void MarkConnectionReadiness(bool readyForConnection)
+    public async void MarkConnectionReadiness(bool readyForConnection)
     {
         try
         {
@@ -323,7 +328,7 @@ public class MainFormController : IDisposable
             _readyForConnection = readyForConnection;
             if (_readyForConnection)
             {
-                _socketConn.Connect();
+                await _socketConn.Connect();
             }
         }
         catch (Exception ex)
@@ -352,15 +357,16 @@ public class MainFormController : IDisposable
     /// Sets the current aerodrome. Called by the GUI, and subsequently calls SetAerodrome() for various managers.
     /// </summary>
     /// <param name="name">The aerodrome name.</param>
-    public void SetAerodrome(string name)
+    public async void SetAerodrome(string name)
     {
         try
         {
             if (_bayManager != null)
             {
+                _socketConn.MarkDesynchronised();
                 _bayManager.PurgeDataAndSetNewAerodrome(name, _socketConn);
                 SetCircuitToolStripStatus();
-                _socketConn.SubscribeToAerodrome();
+                _ = _socketConn.SubscribeToAerodrome();
                 _mainForm.AerodromeLabel.Text = name;
                 SetATISCode("Z");
                 _mainForm.AerodromeManager.ConfigureAerodromeListForNewAerodrome(name);
@@ -483,9 +489,10 @@ public class MainFormController : IDisposable
     /// </summary>
     /// <param name="sender">Sending object.</param>
     /// <param name="e">EventArgs.</param>
-    public void ForceStrip(object? sender, EventArgs? e)
+    /// <returns>Task.</returns>
+    public async Task ForceStrip(object? sender, EventArgs? e)
     {
-        _bayManager.ForceStrip(_socketConn);
+        await _bayManager.ForceStrip(_socketConn);
     }
 
     /// <summary>
@@ -493,11 +500,12 @@ public class MainFormController : IDisposable
     /// </summary>
     /// <param name="fdr">The flgiht data record.</param>
     /// <remarks>Triggered from Connector plugin.</remarks>
-    public void UpdateFDR(FDP2.FDR fdr)
+    /// <returns>Task.</returns>
+    public async Task UpdateFDR(FDP2.FDR fdr)
     {
         try
         {
-            var strip = _bayManager.StripRepository.UpdateFDR(fdr, _bayManager, _socketConn);
+            var strip = await _bayManager.StripRepository.UpdateFDR(fdr, _bayManager, _socketConn);
 
             var pilot = Network.GetOnlinePilots.Find(x => x.Callsign == fdr.Callsign);
 
@@ -717,7 +725,7 @@ public class MainFormController : IDisposable
     /// <summary>
     /// Opens the defined input field.
     /// </summary>
-    /// <param name="strip">Strip,</param>
+    /// <param name="strip">Strip.</param>
     /// <param name="type">Label name.</param>
     public static void OpenWindow(Strip strip, string type)
     {
@@ -1071,10 +1079,10 @@ public class MainFormController : IDisposable
     /// </summary>
     public void SetCircuitToolStripStatus()
     {
-        var isRadarTower = string.IsNullOrEmpty(_mainForm.AerodromeManager.GetAerodromeType(_bayManager.AerodromeName));
+        var circuitBayEnabled = _mainForm.AerodromeManager.CircuitBayEnabled(_bayManager.AerodromeName);
         var canSend = _socketConn.HaveSendPerms;
 
-        _mainForm.ToggleCircuitToolStrip.Enabled = isRadarTower && canSend;
+        _mainForm.ToggleCircuitToolStrip.Enabled = circuitBayEnabled && canSend;
     }
 
     /// <summary>
@@ -1095,35 +1103,28 @@ public class MainFormController : IDisposable
             var g = e.Graphics;
             g.Clear(Color.Purple);
 
-            using var coreBrush = new SolidBrush(_socketConn.Connected ? Color.Green : Color.OrangeRed);
+            using var coreBrush = new SolidBrush(_socketConn.State switch
+            {
+                SocketConn.ConnectionState.RECONNECTING => Color.Orange,
+                SocketConn.ConnectionState.CONNECTED => Color.Green,
+                SocketConn.ConnectionState.DISCONNECTED => Color.OrangeRed,
+                _ => Color.OrangeRed,
+            });
             var outerColor = _bayManager.AerodromeState.Connections?.Count > 1 ? Color.Blue : coreBrush.Color;
             using var outerBrush = new SolidBrush(outerColor);
             using var textBrush = new SolidBrush(Color.Black);
 
-            Font? font;
             try
             {
-                font = new Font("Terminus (TTF)", 12F, FontStyle.Bold);
+                _connWindowFont ??= new Font("Terminus (TTF)", 12F, FontStyle.Bold);
             }
-            catch (ArgumentException)
+            catch
             {
-                font = SystemFonts.DefaultFont;
             }
 
-            try
-            {
-                g.FillRectangle(outerBrush, e.ClipRectangle);
-                g.FillRectangle(coreBrush, e.ClipRectangle.X + borderWidth, e.ClipRectangle.Y + borderWidth, e.ClipRectangle.Width - (borderWidth * 2), e.ClipRectangle.Height - (borderWidth * 2));
-                var fmt = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
-                g.DrawString("CONN STAT", font, textBrush, e.ClipRectangle, fmt);
-            }
-            finally
-            {
-                if (font != SystemFonts.DefaultFont)
-                {
-                    font?.Dispose();
-                }
-            }
+            g.FillRectangle(outerBrush, e.ClipRectangle);
+            g.FillRectangle(coreBrush, e.ClipRectangle.X + borderWidth, e.ClipRectangle.Y + borderWidth, e.ClipRectangle.Width - (borderWidth * 2), e.ClipRectangle.Height - (borderWidth * 2));
+            g.DrawString("CONN STAT", _connWindowFont ?? Form.DefaultFont, textBrush, e.ClipRectangle, _connWindowFormat);
         }
         catch (InvalidOperationException)
         {
@@ -1218,7 +1219,11 @@ public class MainFormController : IDisposable
         }
 
         _mainForm.AerodromeManager.AerodromeListChanged -= AerodromeListChanged;
-        _socketConn.Dispose();
+
+        _socketConn.DisposeAsync().AsTask().ContinueWith(t => Util.LogError(t.Exception?.InnerException ?? new Exception("Failed to dispose of SocketConn.")), TaskContinuationOptions.NotOnRanToCompletion);
+        Instance = null;
+        _connWindowFont?.Dispose();
+        _connWindowFormat.Dispose();
     }
 
     private void AerodromeListChanged(object sender, EventArgs e)
@@ -1258,6 +1263,43 @@ public class MainFormController : IDisposable
     public object Invoke(Action act)
     {
         return _mainForm.Invoke(act);
+    }
+
+    /// <inheritdoc/>
+    public StripDTO? GetDTO(string callsign)
+    {
+        var strip = _bayManager.StripRepository.GetStrip(callsign);
+
+        return strip is null ? null : (StripDTO)strip;
+    }
+
+    /// <inheritdoc/>
+    public bool InQueue(StripKey key)
+    {
+        var strip = _bayManager.StripRepository.GetStrip(key);
+
+        if (strip is null)
+        {
+            return false;
+        }
+
+        var bay = _bayManager.BayRepository.FindBay(strip);
+
+        if (bay is null)
+        {
+            return false;
+        }
+
+        var stripPos = bay.Strips.FindIndex(x => x.Strip == strip);
+        var barPos = bay.Strips.FindIndex(x => x.BarText == "\a");
+
+        return stripPos < barPos;
+    }
+
+    /// <inheritdoc/>
+    public CDMResultDTO? GetCDMResult(StripKey key)
+    {
+        return _bayManager.AerodromeState.CDMResults.Find(x => x.Aircraft.Key.Matches(key));
     }
 
     /// <summary>

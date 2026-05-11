@@ -86,6 +86,7 @@
     <Content Include="ozstrips.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GUI.Connector\GUI.Connector.csproj" />
     <ProjectReference Include="..\GUI.Shared\GUI.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>

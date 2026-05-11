@@ -208,7 +208,7 @@ internal class BayRenderController(Bay bay) : IDisposable
         }
         else
         {
-            Bay.BayManager.DropStrip(Bay);
+            _ = Bay.BayManager.DropStrip(Bay);
         }
 
         Redraw();

@@ -82,7 +82,7 @@ public class StripController
 
         if (sync)
         {
-            Strip.SyncStrip();
+            _ = Strip.SyncStrip();
         }
     }
 
@@ -94,7 +94,7 @@ public class StripController
     {
         if (sync)
         {
-            Strip.SyncStrip();
+            _ = Strip.SyncStrip();
         }
     }
 
@@ -311,7 +311,7 @@ public class StripController
     public void ToggleReady()
     {
         Strip.Ready = !Strip.Ready;
-        Strip.SyncStrip();
+        _ = Strip.SyncStrip();
     }
 
     /*

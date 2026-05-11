@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -24,6 +25,7 @@ internal class AutoAssigner
     private readonly List<AssignmentRule> _assignmentRules = [];
 
     private readonly Regex _rwyNameRegex = new(@"^(\d{2}[LRC]?|[LRC])$");
+    private readonly Regex _tempRegex = new(@"\n?\s*\+?\s*\[TMP\] (-?\d{1,2})");
 
     internal AutoAssigner(BayManager bayManager)
     {
@@ -150,6 +152,36 @@ internal class AutoAssigner
             return false;
         }
 
+        if (!string.IsNullOrEmpty(rule.ATISRegex) && !string.IsNullOrEmpty(_bayManager.AerodromeState.ATIS))
+        {
+            var regex = new Regex(rule.ATISRegex);
+
+            var res = regex.Match(_bayManager.AerodromeState.ATIS);
+
+            if (res.Success != matchAsTrue)
+            {
+                return false;
+            }
+        }
+
+        if (!string.IsNullOrEmpty(rule.TempAbove) && !string.IsNullOrEmpty(_bayManager.AerodromeState.ATIS))
+        {
+            var reg = _tempRegex.Match(_bayManager.AerodromeState.ATIS);
+
+            if (!reg.Success || reg.Groups.Count != 2 || !int.TryParse(reg.Groups[1].Value, out var temp))
+            {
+                Util.ShowErrorBox("The temperature field was not included in the ATIS, or was invalid.");
+                return false;
+            }
+
+            var minTemp = int.Parse(rule.TempAbove, CultureInfo.InvariantCulture);
+
+            if (minTemp <= temp != matchAsTrue)
+            {
+                return false;
+            }
+        }
+
         if (rule.Runway.Count > 0 && rule.Runway.Contains(result.Runway) != matchAsTrue)
         {
             return false;
@@ -237,6 +269,37 @@ internal class AutoAssigner
 
             // if we matched all the runways, and the rule has been met.
             if (unmatchedRunways.Count == 0 != matchAsTrue)
+            {
+                return false;
+            }
+        }
+
+        if (rule.ZuluTimes.Count > 0)
+        {
+            var matched = false;
+            var curTime = int.Parse(DateTime.UtcNow.ToString("HHmm", CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
+
+            foreach (var timePair in rule.ZuluTimes)
+            {
+                var timeSet = timePair.Split('-');
+                if (timeSet.Length != 2 || timeSet.Any(x => x.Length != 4 || !x.All(char.IsDigit)))
+                {
+                    Util.LogError(new ArgumentException($"Time {timePair} was invalid."));
+                    continue;
+                }
+
+                var time1 = int.Parse(timeSet[0], CultureInfo.InvariantCulture);
+                var time2 = int.Parse(timeSet[1], CultureInfo.InvariantCulture);
+
+                matched |= curTime > time1 && curTime < time2;
+
+                if (matched)
+                {
+                    break;
+                }
+            }
+
+            if (matched != matchAsTrue)
             {
                 return false;
             }
@@ -357,7 +420,6 @@ internal class AutoAssigner
                         if (matchArrs && !matchDeps)
                         {
                             // This sentence is arrivals only.
-
                             currentSentence.Clear();
                             continue;
                         }
@@ -395,7 +457,7 @@ internal class AutoAssigner
             }
         }
 
-        return runways.ToArray();
+        return [.. runways];
     }
 
     public string GetATISDepRunway()
@@ -420,7 +482,6 @@ internal class AutoAssigner
 
     public static string DetermineDepFreq(List<string> freqs)
     {
-
         foreach (var freq in freqs)
         {
             if (IsDepartureFreqAvailable(freq))

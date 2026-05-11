@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -68,6 +69,11 @@ public static class Util
     /// <param name="source">Source string.</param>
     public static async void LogError(Exception error, string source = "OzStrips")
     {
+        if (Debugger.IsAttached)
+        {
+            Debugger.Break();
+        }
+
         Errors.Add(error, source);
 
         try

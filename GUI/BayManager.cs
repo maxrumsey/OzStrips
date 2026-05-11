@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.GUI.DTO;
 using MaxRumsey.OzStripsPlugin.GUI.Properties;
@@ -87,7 +88,7 @@ public class BayManager
         AerodromeCode = "????",
         CircuitActive = false,
         CoordinatorBayActive = false,
-        Connections = new List<string>(),
+        Connections = [],
     };
 
     /// <summary>
@@ -186,25 +187,33 @@ public class BayManager
     /// Forces a track into the first bay.
     /// </summary>
     /// <param name="socketConn">The socket connection.</param>
-    public void ForceStrip(SocketConn socketConn)
+    /// <returns>Task.</returns>
+    public async Task ForceStrip(SocketConn socketConn)
     {
-        if (MMI.SelectedTrack != null)
+        try
         {
-            var fdr = MMI.SelectedTrack.GetFDR();
-            if (fdr is null)
+            if (MMI.SelectedTrack != null)
             {
-                return;
-            }
+                var fdr = MMI.SelectedTrack.GetFDR();
+                if (fdr is null)
+                {
+                    return;
+                }
 
-            var controller = StripRepository.UpdateFDR(fdr, this, socketConn);
+                var controller = await StripRepository.UpdateFDR(fdr, this, socketConn);
 
-            if (controller != null && BayRepository.Bays[0] != null)
-            {
-                controller.CurrentBay = BayRepository.Bays[0].BayTypes[0];
-                controller.SyncStrip();
-                controller.FDR = fdr;
-                UpdateBay(controller);
+                if (controller != null && BayRepository.Bays[0] != null)
+                {
+                    controller.CurrentBay = BayRepository.Bays[0].BayTypes[0];
+                    _ = controller.SyncStrip();
+                    controller.FDR = fdr;
+                    UpdateBay(controller);
+                }
             }
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
         }
     }
 
@@ -232,7 +241,7 @@ public class BayManager
         if (PickedStrip != null)
         {
             PickedStrip.CurrentBay = StripBay.BAY_DEAD;
-            PickedStrip.SyncStrip();
+            _ = PickedStrip.SyncStrip();
             UpdateBay(PickedStrip);
             RemovePicked(true, true);
         }
@@ -300,19 +309,28 @@ public class BayManager
     /// Drop the strip to the specified bay.
     /// </summary>
     /// <param name="bay">The bay.</param>
-    public void DropStrip(Bay bay)
+    /// <returns>Task.</returns>
+    public async Task DropStrip(Bay bay)
     {
-        if (PickedStrip != null)
+        try
         {
-            if (MoveStrip(bay, PickedStrip));
+            if (PickedStrip != null)
             {
-                PickedStripItem = bay.GetListItem(PickedStrip);
-                RemovePicked(true);
+                var res = await MoveStrip(bay, PickedStrip);
+                if (res)
+                {
+                    PickedStripItem = bay.GetListItem(PickedStrip);
+                    RemovePicked(true);
+                }
+            }
+            else
+            {
+                MainFormController.Instance?.ForceStrip(null, null);
             }
         }
-        else
+        catch (Exception ex)
         {
-            MainFormController.Instance?.ForceStrip(null, null);
+            Util.LogError(ex);
         }
     }
 
@@ -322,17 +340,25 @@ public class BayManager
     /// <param name="bay">Bay to move into.</param>
     /// <param name="strip">Strip to move.</param>
     /// <returns>Whether or not the strip was moved.</returns>
-    public bool MoveStrip(Bay bay, Strip strip)
+    public async Task<bool> MoveStrip(Bay bay, Strip strip)
     {
-        var newBay = bay.BayTypes.FirstOrDefault();
-        if (newBay == strip.CurrentBay)
+        try
         {
-            return false;
+            var newBay = bay.BayTypes.FirstOrDefault();
+            if (newBay == strip.CurrentBay)
+            {
+                return false;
+            }
+
+            strip.CurrentBay = newBay;
+            await strip.SyncStrip();
+            UpdateBay(strip);
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
         }
 
-        strip.CurrentBay = newBay;
-        strip.SyncStrip();
-        UpdateBay(strip);
         return true;
     }
 
@@ -341,23 +367,30 @@ public class BayManager
     /// </summary>
     /// <param name="targetItem">The target item to drop below.</param>
     /// <exception cref="Exception">Strip insertion failed.</exception>
-    public void DropStripBelow(StripListItem targetItem)
+    public async void DropStripBelow(StripListItem targetItem)
     {
-        var newBay = BayRepository.FindBay(targetItem);
-
-        if (newBay is null || PickedStrip is null)
+        try
         {
-            return;
+            var newBay = BayRepository.FindBay(targetItem);
+
+            if (newBay is null || PickedStrip is null)
+            {
+                return;
+            }
+
+            var strip = PickedStrip;
+            var position = newBay.Strips.FindIndex(x => x == targetItem);
+
+            await DropStrip(newBay);
+
+            var stripListItem = newBay.GetListItem(strip) ?? throw new Exception("Could not find strip within new bay after moving it.");
+
+            newBay.ChangeStripPositionAbs(stripListItem, position);
         }
-
-        var strip = PickedStrip;
-        var position = newBay.Strips.FindIndex(x => x == targetItem);
-
-        DropStrip(newBay);
-
-        var stripListItem = newBay.GetListItem(strip) ?? throw new Exception("Could not find strip within new bay after moving it.");
-
-        newBay.ChangeStripPositionAbs(stripListItem, position);
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+        }
     }
 
     /// <summary>
@@ -387,19 +420,24 @@ public class BayManager
 
         foreach (var fdr in FDP2.GetFDRs)
         {
-            StripRepository.UpdateFDR(fdr, this, socketConn, true);
+            _ = StripRepository.UpdateFDR(fdr, this, socketConn, true);
         }
 
         if (MainFormController.Instance?.IsDisposed == false)
         {
-            LockWindowUpdate(MainFormController.Instance.Handle);
-
-            foreach (var bay in BayRepository.Bays)
+            try
             {
-                bay.ResizeBay();
-            }
+                LockWindowUpdate(MainFormController.Instance.Handle);
 
-            LockWindowUpdate(IntPtr.Zero);
+                foreach (var bay in BayRepository.Bays)
+                {
+                    bay.ResizeBay();
+                }
+            }
+            finally
+            {
+                LockWindowUpdate(IntPtr.Zero);
+            }
         }
 
         BayRepository.ResizeStripBays();
@@ -465,17 +503,17 @@ public class BayManager
             }
 
             if (!SetPickedStripClass(strip))
-                {
-                    /*
-                     * Strip is inhibited.
-                     */
+            {
+                /*
+                    * Strip is inhibited.
+                    */
 
-                    RemovePicked(false, true);
-                    PickedStripItem = new()
-                    {
-                        Strip = strip,
-                    };
-                }
+                RemovePicked(false, true);
+                PickedStripItem = new()
+                {
+                    Strip = strip,
+                };
+            }
         }
         else
         {
@@ -590,7 +628,7 @@ public class BayManager
                 strip.DeactivateStrip();
             }
 
-            CDMState? state = SharedCDMConstants.BAY_STATE_MAP.ContainsKey(strip.CurrentBay) ? SharedCDMConstants.BAY_STATE_MAP[strip.CurrentBay] : null;
+            CDMState? state = SharedCDMConstants.BayStateMap.ContainsKey(strip.CurrentBay) ? SharedCDMConstants.BayStateMap[strip.CurrentBay] : null;
 
             if (state is not null)
             {

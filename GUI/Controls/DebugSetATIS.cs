@@ -18,7 +18,6 @@ public partial class DebugSetATIS : UserControl
     /// <summary>
     /// Initializes a new instance of the <see cref="DebugSetATIS"/> class.
     /// </summary>
-    /// <param name="controller">The strip.</param>
     public DebugSetATIS()
     {
         InitializeComponent();

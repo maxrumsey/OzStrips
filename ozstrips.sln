@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.9.34622.214
+# Visual Studio Version 18
+VisualStudioVersion = 18.5.11709.299 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GUI", "GUI\GUI.csproj", "{93CE671F-FF82-4149-BD52-32BC15120384}"
 EndProject
@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GUI.Shared", "GUI.Shared\GUI.Shared.csproj", "{940BC7F0-D764-40B8-8799-276B87A1F229}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GUI.Connector", "GUI.Connector\GUI.Connector.csproj", "{86456DC6-230D-49FC-A5CB-5946F75957A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,10 @@ Global
 		{940BC7F0-D764-40B8-8799-276B87A1F229}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{940BC7F0-D764-40B8-8799-276B87A1F229}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{940BC7F0-D764-40B8-8799-276B87A1F229}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86456DC6-230D-49FC-A5CB-5946F75957A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86456DC6-230D-49FC-A5CB-5946F75957A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86456DC6-230D-49FC-A5CB-5946F75957A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86456DC6-230D-49FC-A5CB-5946F75957A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

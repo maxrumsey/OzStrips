@@ -15,18 +15,29 @@ namespace MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
 /// </summary>
 [Serializable]
 [XmlRoot("AutoMapAerodrome")]
-
 public class AutoMapAerodrome
 {
+    /// <summary>
+    /// Gets or sets the aerodrome full name per the vatsys dropdown.
+    /// </summary>
     [XmlAttribute("FullName")]
-    public string FullName;
+    public string FullName { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Gets or sets the aerodrome ICAO code.
+    /// </summary>
     [XmlAttribute("ICAO")]
-    public string ICAOCode;
+    public string ICAOCode { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Gets or sets the list of raw runway pairs.
+    /// </summary>
     [XmlText]
-    public string RawRunways;
+    public string RawRunways { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Gets the list of runwya pairs.
+    /// </summary>
     public string[] RunwayPairs
     {
         get

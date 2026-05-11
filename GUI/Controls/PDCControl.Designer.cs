@@ -73,7 +73,7 @@
             this.cb_delivery.Size = new System.Drawing.Size(82, 21);
             this.cb_delivery.TabIndex = 3;
             this.cb_delivery.Text = "DELIVERY";
-            this.cb_delivery.SelectedIndexChanged += new System.EventHandler(this.cb_delivery_SelectedIndexChanged);
+            this.cb_delivery.SelectedIndexChanged += new System.EventHandler(this.CB_Delivery_SelectedIndexChanged);
             // 
             // label1
             // 

@@ -1,14 +1,8 @@
-﻿using MaxRumsey.OzStripsPlugin.GUI.DTO;
-using MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
 using vatsys;
 
 namespace MaxRumsey.OzStripsPlugin.GUI.Controls;
@@ -79,6 +73,46 @@ public partial class DropDown : BaseForm
                 tb.Size = new(100, 28);
                 tb.MaxLength = item.MaxLen;
                 tb.CharacterCasing = CharacterCasing.Upper;
+                element.KeyDown += (s, e) =>
+                {
+                    if (e.Control && e.KeyCode == Keys.A)
+                    {
+                        return;
+                    }
+                    else if (e.KeyCode == Keys.Menu)
+                    {
+                        e.SuppressKeyPress = true;
+                        return;
+                    }
+                    else if ((e.Control && e.KeyCode != Keys.ControlKey) ||
+                             (e.Alt && e.KeyCode != Keys.Alt))
+                    {
+                        if (e.KeyCode == Keys.Back)
+                        {
+                            return;
+                        }
+
+                        e.SuppressKeyPress = true;
+
+                        var key = e.KeyCode.ToString();
+                        if (key.Length > 1)
+                        {
+                            key = key.Substring(key.Length - 1);
+                        }
+
+                        var pos = tb.SelectionStart;
+
+                        var newText = tb.Text
+                            .Remove(pos, tb.SelectionLength)
+                            .Insert(pos, key);
+
+                        if (newText.Length <= tb.MaxLength)
+                        {
+                            tb.Text = newText;
+                            tb.SelectionStart = pos + 1;
+                        }
+                    }
+                };
                 element.KeyPress += (s, e) =>
                 {
                     if (e.KeyChar == (char)Keys.Escape)
@@ -159,7 +193,7 @@ public partial class DropDown : BaseForm
         CreateDropDown([new(DropDownItem.DropDownItemType.FREETEXT, strip.Gate, 4)], strip.FDR.Callsign, s =>
         {
             strip.Gate = s;
-            strip.SyncStrip();
+            _ = strip.SyncStrip();
         });
     }
 
@@ -172,7 +206,7 @@ public partial class DropDown : BaseForm
         CreateDropDown([new(DropDownItem.DropDownItemType.FREETEXT, strip.CLX)], strip.FDR.Callsign, s =>
         {
             strip.CLX = s;
-            strip.SyncStrip();
+            _ = strip.SyncStrip();
         });
     }
 
@@ -189,7 +223,7 @@ public partial class DropDown : BaseForm
                 return;
             }
 
-            strip.FDR.GlobalOpData = s;
+            FDP2.SetGlobalOps(strip.FDR, s);
         });
     }
 
@@ -202,7 +236,7 @@ public partial class DropDown : BaseForm
         CreateDropDown([new(DropDownItem.DropDownItemType.FREETEXT, strip.Remark, 10)], strip.FDR.Callsign, s =>
         {
             strip.Remark = s;
-            strip.SyncStrip();
+            _ = strip.SyncStrip();
         });
     }
 
@@ -212,7 +246,7 @@ public partial class DropDown : BaseForm
     /// <param name="strip">Strip.</param>
     public static void ShowFreqDropDown(Strip strip)
     {
-        List<DropDownItem> items = new();
+        List<DropDownItem> items = [];
 
         foreach (var freq in strip.PossibleDepFreqs)
         {
@@ -223,7 +257,7 @@ public partial class DropDown : BaseForm
         CreateDropDown(items.ToArray(), strip.FDR.Callsign, s =>
         {
             strip.DepartureFrequency = s;
-            strip.SyncStrip();
+            _ = strip.SyncStrip();
         });
     }
 

@@ -12,7 +12,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI.Shared;
 /// </summary>
 public class CDMAerodromeConfig
 {
-    private DateTime _lastModified = DateTime.Now;
+    private DateTimeOffset _lastModified = DateTimeOffset.Now;
 
     /// <summary>
     /// Gets or sets the aerodrome code.
@@ -42,9 +42,9 @@ public class CDMAerodromeConfig
     /// <summary>
     /// Gets or sets when this record was last modified.
     /// </summary>
-    public DateTime LastModified
+    public DateTimeOffset LastModified
     {
         get => _lastModified;
-        set => _lastModified = DateTime.Now;
+        set => _lastModified = DateTimeOffset.Now;
     }
 }

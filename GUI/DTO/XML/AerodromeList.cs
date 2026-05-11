@@ -17,9 +17,21 @@ namespace MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
 
 public class AerodromeList
 {
+    /// <summary>
+    /// Gets or sets type of aerodrome.
+    /// </summary>
     [XmlAttribute("Type")]
-    public string Type;
+    public string Type { get; set; } = null!;
 
+    /// <summary>
+    /// Gets or sets whether the circuit should be enabled.
+    /// </summary>
+    [XmlAttribute("EnableCircuit")]
+    public string EnableCircuit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets aerodrome ICAO codes.
+    /// </summary>
     [XmlElement("Aerodrome")]
-    public string[] Aerodromes;
+    public string[] Aerodromes { get; set; } = null!;
 }

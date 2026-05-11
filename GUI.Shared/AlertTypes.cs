@@ -41,4 +41,9 @@ public enum AlertTypes
     /// Aircraft not ready.
     /// </summary>
     READY = 32,
+
+    /// <summary>
+    /// Aircraft SID has changed.
+    /// </summary>
+    DEP_CHANGED = 64,
 }

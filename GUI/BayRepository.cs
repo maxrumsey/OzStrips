@@ -71,9 +71,9 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
 
             var list = new List<StripListItem>();
 
-            foreach (var dtoItem in bayDTO.list)
+            foreach (var dtoItem in bayDTO.Items)
             {
-                var listItem = bay.GetListItemByStr(dtoItem);
+                var listItem = bay.GetListItemByBayItem(dtoItem);
                 if (listItem != null)
                 {
                     list.Add(listItem);
@@ -117,16 +117,6 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
     /// <param name="strip">The strip to delete.</param>
     public void DeleteStrip(Strip strip)
     {
-        // todo: add force delete server flag.
-
-        /*
-         * Don't send delete messages for deps incase they log back in.
-         */
-        if (strip.DefaultStripType == StripType.ARRIVAL)
-        {
-            strip.SendDeleteMessage();
-        }
-
         FindBay(strip)?.RemoveStrip(strip, true);
         _bayManager.StripRepository.RemoveStrip(strip);
     }
@@ -250,7 +240,7 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
                 bay.ResizeBay();
             }
 
-            socketConn.ReadyForBayData(true);
+            _ = socketConn.SubscribeToAerodrome();
 
             ResizeStripBays();
         }

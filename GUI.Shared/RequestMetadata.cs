@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 namespace MaxRumsey.OzStripsPlugin.GUI.Shared;
 
 /// <summary>
-/// CDM departure information.
+/// Metadata included with every request.
 /// </summary>
-public class CDMDepartureDTO
+public class RequestMetadata
 {
     /// <summary>
-    /// Gets or sets the callsign.
+    /// Gets or sets the aerodrome icao code.
     /// </summary>
-    public string Callsign { get; set; } = string.Empty;
+    public string AerodromeICAO { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets the ATOT.
+    /// Gets or sets the server code.
     /// </summary>
-    public DateTimeOffset ATOT { get; set; } = DateTimeOffset.MaxValue;
+    public int ServerCode { get; set; }
 }

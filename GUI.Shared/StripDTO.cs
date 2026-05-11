@@ -76,6 +76,11 @@ public class StripDTO
     public bool ready { get; set; }
 
     /// <summary>
+    /// Gets or sets a value indicating whether the aircraft departure has bene changed.
+    /// </summary>
+    public bool? DepartureChanged { get; set; }
+
+    /// <summary>
     /// Gets or sets the strip key which uniquely identifies the strip.
     /// </summary>
     public StripKey StripKey { get; set; } = new();

@@ -5,6 +5,8 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using MaxRumsey.OzStripsPlugin.GUI.Controls;
@@ -20,7 +22,7 @@ namespace MaxRumsey.OzStripsPlugin.GUI;
 /// <summary>
 /// Responsible for strip logic, represents a Vatsys FDR.
 /// </summary>
-public sealed class Strip
+public sealed class Strip : IDisposable
 {
     private static readonly Regex _headingRegex = new(@"H(\d{3})");
     private static readonly Regex _firstWptLatLongRegex = new(@"^[^\d/]+$");
@@ -30,6 +32,7 @@ public sealed class Strip
 
     private readonly BayManager _bayManager;
     private readonly SocketConn _socketConn;
+    private readonly SemaphoreSlim _routeFetchSemaphore = new(1, 1);
     ////private readonly StripLayoutTypes StripType;
 
     private bool _crossing;
@@ -161,6 +164,11 @@ public sealed class Strip
     /// Gets the flight data record.
     /// </summary>
     public FDR FDR { get; internal set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not the departure has been changed.
+    /// </summary>
+    public bool DepartureChanged { get; set; }
 
     /// <summary>
     /// Gets or sets the PDC flags.
@@ -700,6 +708,7 @@ public sealed class Strip
             remark = sc.Remark,
             TOT = sc.TakeOffTime?.ToString(CultureInfo.InvariantCulture) ?? "\0",
             ready = sc.Ready,
+            DepartureChanged = sc.DepartureChanged,
             StripKey = sc.StripKey,
             OverrideStripType = sc.OverrideStripType,
             PDCFlags = sc.PDCFlags,
@@ -742,7 +751,7 @@ public sealed class Strip
             TakeOffTime = null;
         }
 
-        SyncStrip();
+        _ = SyncStrip();
     }
 
     /// <summary>
@@ -762,7 +771,7 @@ public sealed class Strip
             OverrideStripType = StripType.ARRIVAL;
         }
 
-        SyncStrip();
+        _ = SyncStrip();
     }
 
     /// <summary>
@@ -774,7 +783,7 @@ public sealed class Strip
         if (!InhibitedAlerts.HasFlag(alert))
         {
             InhibitedAlerts |= alert;
-            SyncStrip();
+            _ = SyncStrip();
         }
     }
 
@@ -806,6 +815,7 @@ public sealed class Strip
                                 StripType == StripType.DEPARTURE,
             Shared.AlertTypes.READY => !Ready && (CurrentBay == StripBay.BAY_HOLDSHORT || CurrentBay == StripBay.BAY_RUNWAY) && StripType != StripType.ARRIVAL,
             Shared.AlertTypes.VFR_SID => VFRSIDAssigned,
+            Shared.AlertTypes.DEP_CHANGED => DepartureChanged,
             _ => throw new ArgumentException("Unknown alert type."),
         };
     }
@@ -846,14 +856,6 @@ public sealed class Strip
     {
         var adPair = fdr.DepAirport + fdr.DesAirport;
         return adPair != OriginalAerodromePair;
-    }
-
-    /// <summary>
-    /// Sends a strip deletion message to the server.
-    /// </summary>
-    public void SendDeleteMessage()
-    {
-        _socketConn.SyncDeletion(this);
     }
 
     /// <summary>
@@ -917,11 +919,32 @@ public sealed class Strip
 
             if (!string.IsNullOrEmpty(result.SID))
             {
-                SID = result.SID;
+                if (SID != result.SID)
+                {
+                    DepartureChanged = true;
+                }
+
+                try
+                {
+                    SID = result.SID;
+                }
+                catch (Exception ex)
+                {
+                    // Ignore invalid SID errors.
+                    if (!ex.Message.Contains("SID"))
+                    {
+                        throw;
+                    }
+                    else
+                    {
+                        Util.LogText($"Tried to set invalid SID - {FDR.Callsign}@{FDR.DepAirport} - {result.SID}");
+                    }
+                }
             }
 
             Controller.AssignSSR();
-            SyncStrip();
+
+            _ = SyncStrip();
         }
         catch (Exception ex)
         {
@@ -970,58 +993,76 @@ public sealed class Strip
     /// <summary>
     /// Refreshes strip properties, and determines if strip should be removed.
     /// </summary>
-    public void UpdateFDR()
+    public async void UpdateFDR()
     {
-        if (!DetermineSCValidity())
+        try
         {
-            _bayManager.BayRepository.DeleteStrip(this);
-            return;
-        }
-
-        // Route fetch will retry every minute.
-        if (ValidRoutes is null && (RequestedRoutes == DateTime.MaxValue || (DateTime.Now - RequestedRoutes) > TimeSpan.FromMinutes(1)))
-        {
-            _socketConn.RequestRoutes(this);
-            RequestedRoutes = DateTime.Now;
-        }
-
-        if (ValidRoutes is not null)
-        {
-            CondensedRoute = CleanVatsysRoute(FDR.Route);
-            DodgyRoute = true;
-            foreach (var validroute in ValidRoutes)
+            if (!DetermineSCValidity())
             {
-                if (validroute.RouteText.Contains(CondensedRoute))
+                _bayManager.BayRepository.DeleteStrip(this);
+                return;
+            }
+
+            // Route fetch will retry every minute.
+            if (ValidRoutes is null)
+            {
+                await _routeFetchSemaphore.WaitAsync();
+                try
                 {
-                    DodgyRoute = false;
+                    if (RequestedRoutes == DateTime.MaxValue || (DateTime.Now - RequestedRoutes) > TimeSpan.FromMinutes(1))
+                    {
+                        await _socketConn.RequestRoutes(this);
+                        RequestedRoutes = DateTime.Now;
+                    }
+                }
+                finally
+                {
+                    _routeFetchSemaphore.Release();
                 }
             }
 
-            // If not departure or FDR active.
-            if (DefaultStripType != StripType.DEPARTURE || (int)FDR.State > 5)
+            if (ValidRoutes is not null)
             {
-                DodgyRoute = false;
-            }
-            else
-            {
-                // account for situations where aircraft joins route from interim point via sid.
-                if (DodgyRoute)
+                CondensedRoute = CleanVatsysRoute(FDR.Route);
+                DodgyRoute = true;
+                foreach (var validroute in ValidRoutes)
                 {
-                    var rte = string.Join(" ", CleanVatsysRoute(FDR.Route).Split(' ').Skip(1).ToArray());
-                    foreach (var validroute in ValidRoutes)
+                    if (validroute.RouteText.Contains(CondensedRoute))
                     {
-                        if (validroute.RouteText.Contains(rte))
-                        {
-                            DodgyRoute = false;
-                        }
+                        DodgyRoute = false;
                     }
                 }
 
-                if (!DodgyRoute && CondensedRoute == "FAIL")
+                // If not departure or FDR active.
+                if (DefaultStripType != StripType.DEPARTURE || (int)FDR.State > 5)
                 {
-                    DodgyRoute = true;
+                    DodgyRoute = false;
+                }
+                else
+                {
+                    // account for situations where aircraft joins route from interim point via sid.
+                    if (DodgyRoute)
+                    {
+                        var rte = string.Join(" ", CleanVatsysRoute(FDR.Route).Split(' ').Skip(1).ToArray());
+                        foreach (var validroute in ValidRoutes)
+                        {
+                            if (validroute.RouteText.Contains(rte))
+                            {
+                                DodgyRoute = false;
+                            }
+                        }
+                    }
+
+                    if (!DodgyRoute && CondensedRoute == "FAIL")
+                    {
+                        DodgyRoute = true;
+                    }
                 }
             }
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
         }
     }
 
@@ -1085,7 +1126,7 @@ public sealed class Strip
 
         if (nextBay is not null)
         {
-            _bayManager.MoveStrip(nextBay, this);
+            _ = _bayManager.MoveStrip(nextBay, this);
 
             if (_bayManager.PickedStrip == this)
             {
@@ -1096,7 +1137,7 @@ public sealed class Strip
         else
         {
             CurrentBay = nextStripBay;
-            SyncStrip();
+            _ = SyncStrip();
             _bayManager.UpdateBay(this);
 
             if (_bayManager.PickedStrip == this)
@@ -1124,9 +1165,10 @@ public sealed class Strip
     /// <summary>
     /// Requests new strip data from the server, for new strips.
     /// </summary>
-    public void FetchStripData()
+    /// <returns>Task.</returns>
+    public async Task FetchStripData()
     {
-        _socketConn.RequestStrip(this);
+        await _socketConn.RequestStrip(this);
     }
 
     /// <summary>
@@ -1214,9 +1256,17 @@ public sealed class Strip
     /// <summary>
     /// Sync the strip with the server.
     /// </summary>
-    public void SyncStrip()
+    /// <returns>Task.</returns>
+    public async Task SyncStrip()
     {
-        _socketConn.SyncSC(this);
+        try
+        {
+            await _socketConn.SyncSC(this);
+        }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+        }
     }
 
     /// <summary>
@@ -1306,5 +1356,13 @@ public sealed class Strip
             Util.LogText($"PARSER, RTE: {rawRoute}, ERR: {ex.Message}\n{ex.StackTrace}");
             return "\0";
         }
+    }
+
+    /// <summary>
+    /// Disposes of the strip.
+    /// </summary>
+    public void Dispose()
+    {
+        _routeFetchSemaphore.Dispose();
     }
 }

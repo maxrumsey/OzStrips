@@ -37,7 +37,7 @@ public class RuleCondition
     public List<string> Airway { get; set; } = [];
 
     /// <summary>
-    /// Gets or sets a list of wake turb cats, where at least one must match the aircraft
+    /// Gets or sets a list of wake turb cats, where at least one must match the aircraft.
     /// </summary>
     [YamlMember(Alias = "WTC")]
     public List<string> WTC { get; set; } = [];
@@ -55,7 +55,7 @@ public class RuleCondition
     public string IsJet { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets a value indicating whether the aircraft is vfr
+    /// Gets or sets a value indicating whether the aircraft is vfr.
     /// </summary>
     [YamlMember(Alias = "VFR")]
     public string VFR { get; set; } = string.Empty;
@@ -65,4 +65,22 @@ public class RuleCondition
     /// </summary>
     [YamlMember(Alias = "radials")]
     public List<string> Radials { get; set; } = [];
+
+    /// <summary>
+    /// Gets or sets a list of zulu times.
+    /// </summary>
+    [YamlMember(Alias = "time")]
+    public List<string> ZuluTimes { get; set; } = [];
+
+    /// <summary>
+    /// Gets or sets the min-temp to match.
+    /// </summary>
+    [YamlMember(Alias = "temp_above")]
+    public string TempAbove { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the regex to match against the ATIS.
+    /// </summary>
+    [YamlMember(Alias = "atis_regex")]
+    public string ATISRegex { get; set;  } = string.Empty;
 }

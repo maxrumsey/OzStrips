@@ -40,7 +40,7 @@ public class DropDownItem(DropDownItemType type, string text, int maxlen = 3)
     }
 
     /// <summary>
-    /// Max length for freetext items.
+    /// Gets or sets the max length for freetext items.
     /// </summary>
-    public int MaxLen = maxlen;
+    public int MaxLen { get; set; } = maxlen;
 }

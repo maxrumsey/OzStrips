@@ -22,39 +22,72 @@ public class AerodromeSettings
     /// Gets or sets a list of concerned positions.
     /// </summary>
     [XmlArray("ConcernedSectors")]
-    public ConcernedSector[]? ConcernedSectors;
+    public ConcernedSector[]? ConcernedSectors { get; set; }
 
+    /// <summary>
+    /// Gets or sets a list of auto-open positions.
+    /// </summary>
     [XmlArray("AutoOpens")]
-    public AutoOpen[]? AutoOpens;
+    public AutoOpen[]? AutoOpens { get; set; }
 
+    /// <summary>
+    /// Gets or sets a list of default aerodromes.
+    /// </summary>
     [XmlArray("DefaultAerodromes")]
     [XmlArrayItem("Aerodrome")]
-    public string[]? DefaultAerodromes;
+    public string[]? DefaultAerodromes { get; set; }
 
-    public bool InhibitVersionCheck;
+    /// <summary>
+    /// Gets or sets a value indicating whether the version check is inhibited.
+    /// </summary>
+    public bool InhibitVersionCheck { get; set; }
 
+    /// <summary>
+    /// Gets or sets a list of bay types.
+    /// </summary>
     [XmlArray("BayTypes")]
-    public BayType[]? Bays;
+    public BayType[]? Bays { get; set; }
 
+    /// <summary>
+    /// Gets or sets a list of layout definitions.
+    /// </summary>
     [XmlArray("LayoutDefinitions")]
     [XmlArrayItem("LayoutDefinition")]
-    public LayoutDefinition[]? Layouts;
+    public LayoutDefinition[]? Layouts { get; set; }
 
+    /// <summary>
+    /// Gets or sets a list of aerodromes.
+    /// </summary>
     [XmlArray("AerodromeLists")]
     [XmlArrayItem("AerodromeList")]
-    public AerodromeList[]? AerodromeLists;
+    public AerodromeList[]? AerodromeLists { get; set; }
 
+    /// <summary>
+    /// Gets or sets a list of auto-map aerodromes.
+    /// </summary>
     [XmlArray("AutoMapAerodromes")]
     [XmlArrayItem("AutoMapAerodrome")]
-    public AutoMapAerodrome[]? AutoMapAerodromes;
+    public AutoMapAerodrome[]? AutoMapAerodromes { get; set; }
 
-    public string? PDCFormat;
+    /// <summary>
+    /// Gets or sets the default PDC format.
+    /// </summary>
+    public string? PDCFormat { get; set; }
 
-    public string? AerodromeAutoFillLocation;
+    /// <summary>
+    /// Gets or sets the default autofill file path.
+    /// </summary>
+    public string? AerodromeAutoFillLocation { get; set; }
 
+    /// <summary>
+    /// Gets or sets a list of default strip colours.
+    /// </summary>
     [XmlElement("StripColour")]
     public StripColour[]? StripColours { get; set; }
 
+    /// <summary>
+    /// Gets or sets the default layout.
+    /// </summary>
     public string? DefaultLayout { get; set; }
 
     internal static AerodromeSettings? Deserialize(string path)
@@ -104,6 +137,11 @@ public class AerodromeSettings
         return string.Empty;
     }
 
+    /// <summary>
+    /// Loads the aerodrome settings.
+    /// </summary>
+    /// <returns>Aerodrome settings.</returns>
+    /// <exception cref="Exception">Loading error.</exception>
     public static AerodromeSettings? Load()
     {
         var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\AerodromeSettings.xml");

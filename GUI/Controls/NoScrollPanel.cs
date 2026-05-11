@@ -10,7 +10,7 @@ public class NoScrollPanel : Panel
     /// <summary>
     /// Prevents scrolling to control.
     /// </summary>
-    /// <param name="activeControl">The active control</param>
+    /// <param name="activeControl">The active control.</param>
     /// <returns>Point.</returns>
     protected override System.Drawing.Point ScrollToControl(System.Windows.Forms.Control activeControl)
     {

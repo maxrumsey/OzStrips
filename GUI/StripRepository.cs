@@ -75,33 +75,40 @@ public class StripRepository
     /// <param name="socketConn">The socket connection.</param>
     /// <param name="inhibitReorders">Whether or not to inhibit strip reordering.</param>
     /// <returns>The appropriate strip controller for the FDR.</returns>
-    public Strip UpdateFDR(FDR fdr, BayManager bayManager, SocketConn socketConn, bool inhibitReorders = false)
+    public async Task<Strip> UpdateFDR(FDR fdr, BayManager bayManager, SocketConn socketConn, bool inhibitReorders = false)
     {
-        foreach (var controller in Strips)
+        try
         {
-            if (controller.FDR.Callsign == fdr.Callsign)
+            foreach (var controller in Strips)
             {
-                if (GetFDRIndex(fdr.Callsign) == -1 && controller.DefaultStripType == StripType.DEPARTURE)
+                if (controller.FDR.Callsign == fdr.Callsign)
                 {
-                    bayManager.BayRepository.DeleteStrip(controller);
-                }
+                    if (GetFDRIndex(fdr.Callsign) == -1 && controller.DefaultStripType == StripType.DEPARTURE)
+                    {
+                        bayManager.BayRepository.DeleteStrip(controller);
+                    }
 
-                // If ades / adep changed, delete and recreate strip.
-                if (controller.ADESADEPPairChanged(fdr))
-                {
-                    bayManager.BayRepository.DeleteStrip(controller);
-                    return CreateStrip(fdr, bayManager, socketConn, inhibitReorders);
-                }
-                else
-                {
-                    controller.FDR = fdr;
-                    controller.UpdateFDR();
-                    return controller;
+                    // If ades / adep changed, delete and recreate strip.
+                    if (controller.ADESADEPPairChanged(fdr))
+                    {
+                        bayManager.BayRepository.DeleteStrip(controller);
+                        return await CreateStrip(fdr, bayManager, socketConn, inhibitReorders);
+                    }
+                    else
+                    {
+                        controller.FDR = fdr;
+                        controller.UpdateFDR();
+                        return controller;
+                    }
                 }
             }
         }
+        catch (Exception ex)
+        {
+            Util.LogError(ex);
+        }
 
-        return CreateStrip(fdr, bayManager, socketConn, inhibitReorders);
+        return await CreateStrip(fdr, bayManager, socketConn, inhibitReorders);
     }
 
     /// <summary>
@@ -140,6 +147,7 @@ public class StripRepository
                     strip.Crossing = stripDTO.crossing;
                     strip.Controller?.SetCross(false);
                     strip.Ready = stripDTO.ready;
+                    strip.DepartureChanged = stripDTO.DepartureChanged ?? false;
                     strip.OverrideStripType = stripDTO.OverrideStripType;
                     strip.PDCFlags = stripDTO.PDCFlags;
                     strip.InhibitedAlerts = stripDTO.InhibitedAlerts;
@@ -168,14 +176,12 @@ public class StripRepository
     /// <param name="cacheData">The cache data.</param>
     /// <param name="bayManager">The bay manager.</param>
     /// <param name="socketConn">The socket connection.</param>
-    public void LoadCache(List<StripDTO> cacheData, BayManager bayManager, SocketConn socketConn)
+    public void LoadCache(StripDTO[] cacheData, BayManager bayManager, SocketConn socketConn)
     {
         foreach (var stripDTO in cacheData)
         {
             UpdateStripData(stripDTO, bayManager);
         }
-
-        socketConn.ReadyForBayData();
     }
 
     /// <summary>
@@ -215,6 +221,7 @@ public class StripRepository
     {
         lock (_strips)
         {
+            _strips.ForEach(strip => strip.Dispose());
             _strips.Clear();
         }
     }
@@ -229,6 +236,8 @@ public class StripRepository
         {
             _strips.Remove(strip);
         }
+
+        strip.Dispose();
     }
 
     /// <summary>
@@ -243,11 +252,11 @@ public class StripRepository
         }
     }
 
-    private static Strip CreateStrip(FDR fdr, BayManager bayManager, SocketConn socketConn, bool inhibitReorders = false)
+    private static async Task<Strip> CreateStrip(FDR fdr, BayManager bayManager, SocketConn socketConn, bool inhibitReorders = false)
     {
         var stripController = new Strip(fdr, bayManager, socketConn);
         bayManager.AddStrip(stripController, true, inhibitReorders);
-        stripController.FetchStripData();
+        await stripController.FetchStripData();
         return stripController;
     }
 }

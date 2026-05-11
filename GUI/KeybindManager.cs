@@ -1,14 +1,8 @@
-﻿using MaxRumsey.OzStripsPlugin.GUI.Properties;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Drawing.Text;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Input;
+using MaxRumsey.OzStripsPlugin.GUI.Properties;
 
 namespace MaxRumsey.OzStripsPlugin.GUI;
 

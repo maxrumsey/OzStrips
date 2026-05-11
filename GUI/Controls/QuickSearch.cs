@@ -170,6 +170,7 @@ public partial class QuickSearch : UserControl
             {
                 selIndex = dataGridView1.Rows.Count - 1;
             }
+
             dataGridView1.Rows[selIndex].Selected = true;
         }
     }
