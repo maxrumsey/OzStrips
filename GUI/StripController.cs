@@ -134,6 +134,11 @@ public class StripController
     /// <returns>Active.</returns>
     public bool CFLAlertActive()
     {
+        if (AerodromeManager.UseNose)
+        {
+            return CFLAlertActiveNOSE();
+        }
+
         var first = FDR.ParsedRoute.FirstOrDefault()?.Intersection.LatLong;
         var last = FDR.ParsedRoute.LastOrDefault()?.Intersection.LatLong;
         var active = false;
@@ -178,6 +183,63 @@ public class StripController
         }
 
         if (FDR.RFL >= 41000 && ((even && westRVSM.Contains(FDR.RFL)) || (!even && eastRVSM.Contains(FDR.RFL))))
+        {
+            active = false;
+        }
+        else if (FDR.RFL >= 41000 && Strip.StripType == StripType.DEPARTURE)
+        {
+            active = true;
+        }
+
+        return active;
+    }
+
+    private bool CFLAlertActiveNOSE()
+    {
+        var first = FDR.ParsedRoute.FirstOrDefault()?.Intersection.LatLong;
+        var last = FDR.ParsedRoute.LastOrDefault()?.Intersection.LatLong;
+        var active = false;
+
+        if (first is null ||
+            last is null ||
+            first == last)
+        {
+            return false;
+        }
+
+        int[] northRVSM = [41000, 45000, 49000];
+        int[] southRVSM = [43000, 47000, 51000];
+
+        var track = Conversions.CalculateTrack(first, last);
+        var positions = LogicalPositions.Positions.FirstOrDefault(e => e.Name == Strip.ParentAerodrome);
+        if (positions is null)
+        {
+            return false;
+        }
+
+        var variation = positions.MagneticVariation;
+        track += variation;
+
+        var even = false;
+
+        if (track is >= 090 and < 270)
+        {
+            even = true;
+        }
+
+        var digit = int.Parse(Strip.RFL[1].ToString(), CultureInfo.InvariantCulture);
+        var shouldbeeven = digit % 2 == 0;
+
+        if (even != shouldbeeven && FDR.RFL >= 3000 && Strip.StripType == StripType.DEPARTURE)
+        {
+            active = true;
+        }
+        else
+        {
+            active = false;
+        }
+
+        if (FDR.RFL >= 41000 && ((even && southRVSM.Contains(FDR.RFL)) || (!even && northRVSM.Contains(FDR.RFL))))
         {
             active = false;
         }

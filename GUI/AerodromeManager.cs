@@ -51,6 +51,11 @@ public class AerodromeManager
     public static string PDCFormat { get; set; } = string.Empty;
 
     /// <summary>
+    /// Gets or sets a value indicating whether NOSE alt rules should be used.
+    /// </summary>
+    public static bool UseNose { get; set; }
+
+    /// <summary>
     /// Gets or sets default strip colours.
     /// </summary>
     public static StripColour[] StripColours { get; set; } = [];
@@ -253,6 +258,7 @@ public class AerodromeManager
         PDCFormat = Settings?.PDCFormat ?? string.Empty;
         StripColours = Settings?.StripColours ?? [];
         RadarTransInhibitedSIDS = Settings?.InhibitRadarTransAerodromes ?? [];
+        UseNose = !string.IsNullOrEmpty(Settings?.UseNose);
     }
 
     private void SectorsChanged(object sender, EventArgs e)

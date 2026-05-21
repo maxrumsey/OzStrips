@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -84,6 +85,12 @@ public class AerodromeSettings
     /// </summary>
     [XmlElement("StripColour")]
     public StripColour[]? StripColours { get; set; }
+
+    /// <summary>
+    /// Gets or sets a string when present indicates that nose rules should be used.
+    /// </summary>
+    [XmlElement("UseNose")]
+    public string UseNose { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the default layout.
@@ -184,6 +191,7 @@ public class AerodromeSettings
         baseSettings.StripColours = overwrite.StripColours ?? baseSettings.StripColours;
         baseSettings.DefaultLayout = overwrite.DefaultLayout ?? baseSettings.DefaultLayout;
         baseSettings.InhibitRadarTransAerodromes = overwrite.InhibitRadarTransAerodromes ?? baseSettings.InhibitRadarTransAerodromes;
+        baseSettings.UseNose = overwrite.UseNose ?? baseSettings.UseNose;
 
         return baseSettings;
     }
