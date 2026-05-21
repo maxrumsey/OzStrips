@@ -56,6 +56,11 @@ public class AerodromeManager
     public static StripColour[] StripColours { get; set; } = [];
 
     /// <summary>
+    /// Gets or sets a list of SIDs that forcefully do not have a radar transition.
+    /// </summary>
+    public static string[] RadarTransInhibitedSIDS { get; set; } = [];
+
+    /// <summary>
     /// Gets a value indicating whether the window should autoopen.
     /// </summary>
     public bool AllowAutoOpen
@@ -247,6 +252,7 @@ public class AerodromeManager
         AerodromeAutoFillLocation = Settings?.AerodromeAutoFillLocation ?? string.Empty;
         PDCFormat = Settings?.PDCFormat ?? string.Empty;
         StripColours = Settings?.StripColours ?? [];
+        RadarTransInhibitedSIDS = Settings?.InhibitRadarTransAerodromes ?? [];
     }
 
     private void SectorsChanged(object sender, EventArgs e)

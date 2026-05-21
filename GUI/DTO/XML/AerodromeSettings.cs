@@ -90,6 +90,13 @@ public class AerodromeSettings
     /// </summary>
     public string? DefaultLayout { get; set; }
 
+    /// <summary>
+    /// Gets or sets a list of SIDs that forcefully should not display a radar transition.
+    /// </summary>
+    [XmlArray("InhibitRadarTransSID")]
+    [XmlArrayItem("SID")]
+    public string[] InhibitRadarTransAerodromes { get; set; } = [];
+
     internal static AerodromeSettings? Deserialize(string path)
     {
         try
@@ -176,6 +183,7 @@ public class AerodromeSettings
         baseSettings.AutoMapAerodromes = overwrite.AutoMapAerodromes ?? baseSettings.AutoMapAerodromes;
         baseSettings.StripColours = overwrite.StripColours ?? baseSettings.StripColours;
         baseSettings.DefaultLayout = overwrite.DefaultLayout ?? baseSettings.DefaultLayout;
+        baseSettings.InhibitRadarTransAerodromes = overwrite.InhibitRadarTransAerodromes ?? baseSettings.InhibitRadarTransAerodromes;
 
         return baseSettings;
     }

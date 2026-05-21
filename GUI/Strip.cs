@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using MaxRumsey.OzStripsPlugin.GUI.Controls;
 using MaxRumsey.OzStripsPlugin.GUI.DTO;
+using MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
 using MaxRumsey.OzStripsPlugin.GUI.Properties;
 using MaxRumsey.OzStripsPlugin.GUI.Shared;
 using vatsys;
@@ -440,6 +441,11 @@ public sealed class Strip : IDisposable
             if (FDR.SID?.Transitions?.ContainsKey(wpt) == true)
             {
                 return wpt;
+            }
+
+            if (AerodromeManager.RadarTransInhibitedSIDS.Any(x => new Regex(x).IsMatch(SID)))
+            {
+                return null;
             }
 
             return "RADAR";
