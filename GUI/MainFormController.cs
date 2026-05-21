@@ -27,7 +27,27 @@ public class MainFormController : IDisposable, IStripsWindow
     private string _clientsOnline = string.Empty;
     private string _layoutName = "All";
 
-    private readonly string _defaultLayoutName;
+    private string _requestedDefaultLayoutName;
+
+    private string DefaultLayoutName
+    {
+        get
+        {
+            if (_mainForm.AerodromeManager.ReturnLayouts(_mainForm.AerodromeManager.GetAerodromeType(_bayManager.AerodromeName)).Any(x => x.Name == _requestedDefaultLayoutName))
+            {
+                return _requestedDefaultLayoutName;
+            }
+            else
+            {
+                return "All";
+            }
+        }
+
+        set
+        {
+            _requestedDefaultLayoutName = value;
+        }
+    }
 
     private readonly MainForm _mainForm;
     private readonly Timer _timer;
@@ -77,8 +97,8 @@ public class MainFormController : IDisposable, IStripsWindow
         _timer.Start();
         _mainForm.AerodromeManager.InitialiseOnNewWindow();
 
-        _defaultLayoutName = _mainForm.AerodromeManager.Settings?.DefaultLayout ?? "All";
-        _layoutName = _defaultLayoutName;
+        DefaultLayoutName = _mainForm.AerodromeManager.Settings?.DefaultLayout ?? "All";
+        _layoutName = DefaultLayoutName;
     }
 
     /// <summary>
@@ -193,7 +213,7 @@ public class MainFormController : IDisposable, IStripsWindow
         _mainForm.ViewListToolStrip.DropDownItems.Clear();
 
         var layouts = _mainForm.AerodromeManager.ReturnLayouts(_mainForm.AerodromeManager.GetAerodromeType(_bayManager.AerodromeName));
-        var bays = layouts.First(x => x.Name == _defaultLayoutName).Elements.Select(x => x.Bay);
+        var bays = layouts.First(x => x.Name == DefaultLayoutName).Elements.Select(x => x.Bay);
 
         var circuitBayDefined = bays.Any(x => x?.Circuit == true);
         var coordinatorBayDefined = bays.Any(x => x?.Coordinator == true);
@@ -266,7 +286,7 @@ public class MainFormController : IDisposable, IStripsWindow
                 SetTitle();
             };
 
-            if (layout.Name == _defaultLayoutName)
+            if (layout.Name == DefaultLayoutName)
             {
                 _bayManager.BayRepository.SetLayout(action);
                 _defaultLayout = action;
