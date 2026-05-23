@@ -1,4 +1,13 @@
 # Changelog
+## v0.9.1
+### Misc Changes
+- Added destination autofill regex
+- Added NOSE altitude ruleset
+- Added ability to override RADAR Trans to no trans.
+### Bugfixes
+- Fixed temp regex issue for autofill file
+- Allow linebreaks in ATIS debug window
+- Fixed no default layout found
 ## v0.9.0
 ### Misc Changes
 - Added new autofill rule options for YSWS
