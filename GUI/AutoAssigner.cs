@@ -25,7 +25,7 @@ internal class AutoAssigner
     private readonly List<AssignmentRule> _assignmentRules = [];
 
     private readonly Regex _rwyNameRegex = new(@"^(\d{2}[LRC]?|[LRC])$");
-    private readonly Regex _tempRegex = new(@"\n?\s*\+?\s*\[TMP\] (-?\d{1,2})");
+    private readonly Regex _tempRegex = new(@"\n?\s*\+?\s*\[?TMP\]?:? (-?\d{1,2})");
 
     internal AutoAssigner(BayManager bayManager)
     {
