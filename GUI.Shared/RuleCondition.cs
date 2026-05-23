@@ -79,6 +79,12 @@ public class RuleCondition
     public string TempAbove { get; set; } = string.Empty;
 
     /// <summary>
+    /// Gets or sets the destination regex to match.
+    /// </summary>
+    [YamlMember(Alias = "dest_regex")]
+    public string DestRegex { get; set; } = string.Empty;
+
+    /// <summary>
     /// Gets or sets the regex to match against the ATIS.
     /// </summary>
     [YamlMember(Alias = "atis_regex")]

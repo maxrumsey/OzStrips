@@ -164,6 +164,18 @@ internal class AutoAssigner
             }
         }
 
+        if (!string.IsNullOrEmpty(rule.DestRegex))
+        {
+            var regex = new Regex(rule.DestRegex);
+
+            var res = regex.Match(strip.FDR.DesAirport);
+
+            if (res.Success != matchAsTrue)
+            {
+                return false;
+            }
+        }
+
         if (!string.IsNullOrEmpty(rule.TempAbove) && !string.IsNullOrEmpty(_bayManager.AerodromeState.ATIS))
         {
             var reg = _tempRegex.Match(_bayManager.AerodromeState.ATIS);
