@@ -33,6 +33,11 @@ public class MainFormController : IDisposable, IStripsWindow
     {
         get
         {
+            if (_bayManager is null)
+            {
+                return _layoutName;
+            }
+
             if (_mainForm.AerodromeManager.ReturnLayouts(_mainForm.AerodromeManager.GetAerodromeType(_bayManager.AerodromeName)).Any(x => x.Name == _requestedDefaultLayoutName))
             {
                 return _requestedDefaultLayoutName;

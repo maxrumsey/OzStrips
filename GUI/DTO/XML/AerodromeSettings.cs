@@ -90,7 +90,7 @@ public class AerodromeSettings
     /// Gets or sets a string when present indicates that nose rules should be used.
     /// </summary>
     [XmlElement("UseNose")]
-    public string UseNose { get; set; } = string.Empty;
+    public string? UseNose { get; set; }
 
     /// <summary>
     /// Gets or sets the default layout.
@@ -190,7 +190,7 @@ public class AerodromeSettings
         baseSettings.AutoMapAerodromes = overwrite.AutoMapAerodromes ?? baseSettings.AutoMapAerodromes;
         baseSettings.StripColours = overwrite.StripColours ?? baseSettings.StripColours;
         baseSettings.DefaultLayout = overwrite.DefaultLayout ?? baseSettings.DefaultLayout;
-        baseSettings.InhibitRadarTransAerodromes = overwrite.InhibitRadarTransAerodromes ?? baseSettings.InhibitRadarTransAerodromes;
+        baseSettings.InhibitRadarTransAerodromes = overwrite.InhibitRadarTransAerodromes?.Length > 0 ? overwrite.InhibitRadarTransAerodromes : baseSettings.InhibitRadarTransAerodromes;
         baseSettings.UseNose = overwrite.UseNose ?? baseSettings.UseNose;
 
         return baseSettings;
