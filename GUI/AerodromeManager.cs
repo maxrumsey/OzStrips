@@ -66,6 +66,11 @@ public class AerodromeManager
     public static string[] RadarTransInhibitedSIDS { get; set; } = [];
 
     /// <summary>
+    /// Gets or sets a list of SIDs that require a heading to be passed like a radar sid.
+    /// </summary>
+    public static string[] RequireHeadingSIDs { get; set; } = [];
+
+    /// <summary>
     /// Gets a value indicating whether the window should autoopen.
     /// </summary>
     public bool AllowAutoOpen
@@ -257,7 +262,8 @@ public class AerodromeManager
         AerodromeAutoFillLocation = Settings?.AerodromeAutoFillLocation ?? string.Empty;
         PDCFormat = Settings?.PDCFormat ?? string.Empty;
         StripColours = Settings?.StripColours ?? [];
-        RadarTransInhibitedSIDS = Settings?.InhibitRadarTransAerodromes ?? [];
+        RadarTransInhibitedSIDS = Settings?.InhibitRadarTransSIDs ?? [];
+        RequireHeadingSIDs = Settings?.RequireHeadingSIDs ?? [];
         UseNose = !string.IsNullOrEmpty(Settings?.UseNose);
     }
 

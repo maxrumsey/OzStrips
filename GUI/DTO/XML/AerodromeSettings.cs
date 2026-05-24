@@ -102,7 +102,14 @@ public class AerodromeSettings
     /// </summary>
     [XmlArray("InhibitRadarTransSID")]
     [XmlArrayItem("SID")]
-    public string[] InhibitRadarTransAerodromes { get; set; } = [];
+    public string[] InhibitRadarTransSIDs { get; set; } = [];
+
+    /// <summary>
+    /// Gets or sets a list of SIDs that require a heading to be set.
+    /// </summary>
+    [XmlArray("RequireHeadingSID")]
+    [XmlArrayItem("SID")]
+    public string[] RequireHeadingSIDs { get; set; } = [];
 
     internal static AerodromeSettings? Deserialize(string path)
     {
@@ -190,7 +197,8 @@ public class AerodromeSettings
         baseSettings.AutoMapAerodromes = overwrite.AutoMapAerodromes ?? baseSettings.AutoMapAerodromes;
         baseSettings.StripColours = overwrite.StripColours ?? baseSettings.StripColours;
         baseSettings.DefaultLayout = overwrite.DefaultLayout ?? baseSettings.DefaultLayout;
-        baseSettings.InhibitRadarTransAerodromes = overwrite.InhibitRadarTransAerodromes?.Length > 0 ? overwrite.InhibitRadarTransAerodromes : baseSettings.InhibitRadarTransAerodromes;
+        baseSettings.InhibitRadarTransSIDs = overwrite.InhibitRadarTransSIDs?.Length > 0 ? overwrite.InhibitRadarTransSIDs : baseSettings.InhibitRadarTransSIDs;
+        baseSettings.RequireHeadingSIDs = overwrite.RequireHeadingSIDs?.Length > 0 ? overwrite.RequireHeadingSIDs : baseSettings.RequireHeadingSIDs;
         baseSettings.UseNose = overwrite.UseNose ?? baseSettings.UseNose;
 
         return baseSettings;

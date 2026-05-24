@@ -817,7 +817,7 @@ public sealed class Strip : IDisposable
             Shared.AlertTypes.NO_HDG => CurrentBay >= StripBay.BAY_HOLDSHORT &&
                                 CurrentBay != StripBay.BAY_COORDINATOR &&
                                 string.IsNullOrEmpty(HDG) &&
-                                SID.Length == 3 &&
+                                IsHeadingRequiredForSID() &&
                                 StripType == StripType.DEPARTURE,
             Shared.AlertTypes.READY => !Ready && (CurrentBay == StripBay.BAY_HOLDSHORT || CurrentBay == StripBay.BAY_RUNWAY) && StripType != StripType.ARRIVAL,
             Shared.AlertTypes.VFR_SID => VFRSIDAssigned,
@@ -1370,5 +1370,23 @@ public sealed class Strip : IDisposable
     public void Dispose()
     {
         _routeFetchSemaphore.Dispose();
+    }
+
+    private bool IsHeadingRequiredForSID()
+    {
+        // Radar SID
+        if (SID.Length == 3)
+        {
+            return true;
+        }
+
+        var found = false;
+
+        foreach (var sid in AerodromeManager.RequireHeadingSIDs)
+        {
+            found |= new Regex(sid).IsMatch(SID);
+        }
+
+        return found;
     }
 }
