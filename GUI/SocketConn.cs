@@ -637,40 +637,46 @@ public sealed class SocketConn : IAsyncDisposable
     /// <returns>Task.</returns>
     public async Task Connect()
     {
-        AddMessage("#Attempting connection " + OzStripsConfig.socketioaddr);
-        await _connectionSemaphore.WaitAsync();
-
-        // try-catch to ensure semaphore is released.
         try
         {
-            while (!_isDisposed)
-            {
-                if (State != ConnectionState.DISCONNECTED)
-                {
-                    return;
-                }
+            AddMessage("#Attempting connection " + OzStripsConfig.socketioaddr);
+            await _connectionSemaphore.WaitAsync();
 
-                // Try to catch internet errors etc
-                try
+            // try-catch to ensure semaphore is released.
+            try
+            {
+                while (!_isDisposed)
                 {
-                    if (!MainFormController.ReadyForConnection || !CanConnectToCurrentServer())
+                    if (State != ConnectionState.DISCONNECTED)
                     {
                         return;
                     }
 
-                    await _connection.StartAsync();
-                    break;
-                }
-                catch (Exception ex)
-                {
-                    Errors.Add(ex, "OzStrips - Server Connection Failed");
-                    await Task.Delay(TimeSpan.FromSeconds(10 + ((new Random().NextDouble() * 4) - 2)));
+                    // Try to catch internet errors etc
+                    try
+                    {
+                        if (!MainFormController.ReadyForConnection || !CanConnectToCurrentServer())
+                        {
+                            return;
+                        }
+
+                        await _connection.StartAsync();
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        Errors.Add(ex, "OzStrips - Server Connection Failed");
+                        await Task.Delay(TimeSpan.FromSeconds(10 + ((new Random().NextDouble() * 4) - 2)));
+                    }
                 }
             }
+            finally
+            {
+                _connectionSemaphore.Release();
+            }
         }
-        finally
+        catch (ObjectDisposedException)
         {
-            _connectionSemaphore.Release();
         }
 
         try
