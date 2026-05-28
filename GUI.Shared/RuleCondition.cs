@@ -83,4 +83,10 @@ public class RuleCondition
     /// </summary>
     [YamlMember(Alias = "atis_regex")]
     public string ATISRegex { get; set;  } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the regex to match against the destination airport ICAO.
+    /// </summary>
+    [YamlMember(Alias = "dest_regex")]
+    public string DestinationRegex { get; set; } = string.Empty;
 }
