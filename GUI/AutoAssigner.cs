@@ -365,6 +365,7 @@ internal class AutoAssigner
     }
 
     internal static string GetSIDName(Strip strip, string shortSID, string preferredRunway = "")
+<<<<<<< HEAD
     {
         if (!strip.FDR.DepAirport.StartsWith("NZ", StringComparison.OrdinalIgnoreCase))
         {
@@ -426,18 +427,74 @@ internal class AutoAssigner
     }
 
     private static string GetLegacySIDName(Strip strip, string shortSID)
+=======
+>>>>>>> db0646c10af757a781c6522ddbebfa97af475a4f
     {
         var rwys = Airspace2.GetRunways(strip.FDR.DepAirport);
-        var foundSIDs = rwys?.Select(x => x.SIDs.FirstOrDefault(x => x.sidStar.Name.Contains(shortSID)));
-
-        // Match by regex instead.
-        if (shortSID.StartsWith("#", StringComparison.InvariantCulture))
+        var runwayHints = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        if (!string.IsNullOrWhiteSpace(preferredRunway))
         {
-            var regex = new Regex(shortSID.Remove(0, 1));
-            foundSIDs = rwys?.Select(x => x.SIDs.FirstOrDefault(x => regex.IsMatch(x.sidStar.Name)));
+            runwayHints.Add(preferredRunway);
         }
 
-        return foundSIDs?.FirstOrDefault(x => x.sidStar is not null).sidStar?.Name ?? shortSID;
+        if (!string.IsNullOrWhiteSpace(strip.RWY))
+        {
+            runwayHints.Add(strip.RWY);
+        }
+
+        var assignedRunway = strip.FDR.DepartureRunway?.Name;
+        if (!string.IsNullOrWhiteSpace(assignedRunway))
+        {
+            runwayHints.Add(assignedRunway!);
+        }
+
+        var orderedRunways = rwys?
+            .OrderByDescending(x => runwayHints.Contains(x.Name))
+            .ToList() ?? [];
+
+        var routeWaypoints = strip.FDR.ParsedRoute
+            .Select(x => x.Intersection.Name)
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var foundSIDs = new List<string>();
+
+        if (shortSID.StartsWith("#", StringComparison.InvariantCulture))
+        {
+            var regex = new Regex(shortSID.Remove(0, 1), RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+            foreach (var runway in orderedRunways)
+            {
+                foundSIDs.AddRange(runway.SIDs
+                    .Select(x => x.sidStar?.Name ?? string.Empty)
+                    .Where(x => !string.IsNullOrWhiteSpace(x) && regex.IsMatch(x)));
+            }
+        }
+        else
+        {
+            foreach (var runway in orderedRunways)
+            {
+                foundSIDs.AddRange(runway.SIDs
+                    .Select(x => x.sidStar?.Name ?? string.Empty)
+                    .Where(x => !string.IsNullOrWhiteSpace(x) && x.IndexOf(shortSID, StringComparison.OrdinalIgnoreCase) >= 0));
+            }
+        }
+
+        return foundSIDs.FirstOrDefault(x => SIDNameContainsRouteWaypoint(x, routeWaypoints)) ??
+            foundSIDs.FirstOrDefault() ??
+            shortSID;
+    }
+
+    private static bool SIDNameContainsRouteWaypoint(string sidName, HashSet<string> routeWaypoints)
+    {
+        foreach (var waypoint in routeWaypoints)
+        {
+            if (waypoint.Length >= 3 && sidName.IndexOf(waypoint, StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static bool SIDNameContainsRouteWaypoint(string sidName, HashSet<string> routeWaypoints)
