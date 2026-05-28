@@ -25,6 +25,8 @@ internal class AutoAssigner
     private readonly List<AssignmentRule> _assignmentRules = [];
 
     private readonly Regex _rwyNameRegex = new(@"^(\d{2}[LRC]?|[LRC])$");
+    private readonly Regex _euroScopeApproachRunwayRegex = new(@"\bAPPROACH\s+RUNWAYS?\s+(?<runways>.*?)(?=\b(?:DRY|WET|FRICTION|DEPARTURE|TRANSITION|WEATHER|WIND|VISIBILITY|CLOUDS|TEMPERATURE|DEW|QNH|NO\s+SIGNIFICANT|ACKNOWLEDGE)\b|$)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+    private readonly Regex _runwayTokenRegex = new(@"\b(?<number>[0-3]?\d)\s*(?<side>L|R|C|LEFT|RIGHT|CENTRE|CENTER)?\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
     private readonly Regex _tempRegex = new(@"\n?\s*\+?\s*\[TMP\] (-?\d{1,2})");
 
     internal AutoAssigner(BayManager bayManager)
@@ -110,7 +112,7 @@ internal class AutoAssigner
 
                 if (!string.IsNullOrEmpty(rule.SID))
                 {
-                    result.SID = GetSIDName(strip, rule.SID);
+                    result.SID = GetSIDName(strip, rule.SID, result.Runway);
                 }
 
                 if (rule.Departures.Count > 0)
@@ -136,12 +138,11 @@ internal class AutoAssigner
     {
         if (!string.IsNullOrEmpty(rule.IsJet))
         {
-            var type = strip.FDR.AircraftTypeAndWake;
+            var requestedJet = !bool.TryParse(rule.IsJet, out var parsedJet) || parsedJet;
+            var isJet = IsJetAircraft(strip);
+            var matched = isJet == requestedJet;
 
-            // if we can't find the type, assume its a prop.
-            var isJet = type is not null && Performance.GetPerformanceData(type)?.IsJet == true;
-
-            if (isJet != matchAsTrue)
+            if (matched != matchAsTrue)
             {
                 return false;
             }
@@ -159,6 +160,17 @@ internal class AutoAssigner
             var res = regex.Match(_bayManager.AerodromeState.ATIS);
 
             if (res.Success != matchAsTrue)
+            {
+                return false;
+            }
+        }
+
+        if (!string.IsNullOrEmpty(rule.DestinationRegex))
+        {
+            var regex = new Regex(rule.DestinationRegex, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+            var matched = regex.IsMatch(strip.FDR.DesAirport ?? string.Empty);
+
+            if (matched != matchAsTrue)
             {
                 return false;
             }
@@ -352,7 +364,68 @@ internal class AutoAssigner
         return true;
     }
 
-    internal static string GetSIDName(Strip strip, string shortSID)
+    internal static string GetSIDName(Strip strip, string shortSID, string preferredRunway = "")
+    {
+        if (!strip.FDR.DepAirport.StartsWith("NZ", StringComparison.OrdinalIgnoreCase))
+        {
+            return GetLegacySIDName(strip, shortSID);
+        }
+
+        var rwys = Airspace2.GetRunways(strip.FDR.DepAirport);
+        var runwayHints = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        if (!string.IsNullOrWhiteSpace(preferredRunway))
+        {
+            runwayHints.Add(preferredRunway);
+        }
+
+        if (!string.IsNullOrWhiteSpace(strip.RWY))
+        {
+            runwayHints.Add(strip.RWY);
+        }
+
+        var assignedRunway = strip.FDR.DepartureRunway?.Name;
+        if (!string.IsNullOrWhiteSpace(assignedRunway))
+        {
+            runwayHints.Add(assignedRunway!);
+        }
+
+        var orderedRunways = rwys?
+            .OrderByDescending(x => runwayHints.Contains(x.Name))
+            .ToList() ?? [];
+
+        var routeWaypoints = strip.FDR.ParsedRoute
+            .Select(x => x.Intersection.Name)
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var foundSIDs = new List<string>();
+
+        if (shortSID.StartsWith("#", StringComparison.InvariantCulture))
+        {
+            var regex = new Regex(shortSID.Remove(0, 1), RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+            foreach (var runway in orderedRunways)
+            {
+                foundSIDs.AddRange(runway.SIDs
+                    .Select(x => x.sidStar?.Name ?? string.Empty)
+                    .Where(x => !string.IsNullOrWhiteSpace(x) && regex.IsMatch(x)));
+            }
+        }
+        else
+        {
+            foreach (var runway in orderedRunways)
+            {
+                foundSIDs.AddRange(runway.SIDs
+                    .Select(x => x.sidStar?.Name ?? string.Empty)
+                    .Where(x => !string.IsNullOrWhiteSpace(x) && x.IndexOf(shortSID, StringComparison.OrdinalIgnoreCase) >= 0));
+            }
+        }
+
+        return foundSIDs.FirstOrDefault(x => SIDNameContainsRouteWaypoint(x, routeWaypoints)) ??
+            foundSIDs.FirstOrDefault() ??
+            shortSID;
+    }
+
+    private static string GetLegacySIDName(Strip strip, string shortSID)
     {
         var rwys = Airspace2.GetRunways(strip.FDR.DepAirport);
         var foundSIDs = rwys?.Select(x => x.SIDs.FirstOrDefault(x => x.sidStar.Name.Contains(shortSID)));
@@ -367,6 +440,19 @@ internal class AutoAssigner
         return foundSIDs?.FirstOrDefault(x => x.sidStar is not null).sidStar?.Name ?? shortSID;
     }
 
+    private static bool SIDNameContainsRouteWaypoint(string sidName, HashSet<string> routeWaypoints)
+    {
+        foreach (var waypoint in routeWaypoints)
+        {
+            if (waypoint.Length >= 3 && sidName.IndexOf(waypoint, StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public string[] GetDepartureRunways()
     {
         if (string.IsNullOrEmpty(_bayManager.AerodromeState.ATIS))
@@ -374,14 +460,65 @@ internal class AutoAssigner
             return [];
         }
 
-        var runwayLine = _bayManager.AerodromeState.ATIS.ToUpperInvariant().Split('\n').FirstOrDefault(x => x.Contains("[RWY]") || x.Contains("RWY:")) ?? string.Empty;
+        var atis = _bayManager.AerodromeState.ATIS.ToUpperInvariant();
+        var runwayLine = atis.Split('\n').FirstOrDefault(x => x.Contains("[RWY]") || x.Contains("RWY:")) ?? string.Empty;
 
         if (!string.IsNullOrEmpty(runwayLine))
         {
-            return GetDepartureRunways(runwayLine);
+            var taggedRunways = GetTaggedRunways(runwayLine);
+            if (taggedRunways.Length > 0)
+            {
+                return taggedRunways;
+            }
         }
 
-        return [];
+        var euroScopeApproachRunways = GetEuroScopeRunways(atis, _euroScopeApproachRunwayRegex);
+        return euroScopeApproachRunways.Length > 0 ? euroScopeApproachRunways : [];
+    }
+
+    private string[] GetTaggedRunways(string runwayLine)
+    {
+        var compactRunways = GetRunwaysFromText(runwayLine);
+        return compactRunways.Length > 0 ? compactRunways : GetDepartureRunways(runwayLine);
+    }
+
+    private string[] GetEuroScopeRunways(string atis, Regex regex)
+    {
+        var match = regex.Match(atis);
+        return match.Success ? GetRunwaysFromText(match.Groups["runways"].Value) : [];
+    }
+
+    private string[] GetRunwaysFromText(string text)
+    {
+        var runways = new List<string>();
+        foreach (Match match in _runwayTokenRegex.Matches(text ?? string.Empty))
+        {
+            if (!int.TryParse(match.Groups["number"].Value, out var number) || number is < 1 or > 36)
+            {
+                continue;
+            }
+
+            var runway = number.ToString("00", CultureInfo.InvariantCulture) + RunwaySideToLetter(match.Groups["side"].Value);
+            if (!runways.Contains(runway))
+            {
+                runways.Add(runway);
+            }
+        }
+
+        return [.. runways];
+    }
+
+    private static string RunwaySideToLetter(string side)
+    {
+        return side.ToUpperInvariant() switch
+        {
+            "LEFT" => "L",
+            "RIGHT" => "R",
+            "CENTRE" => "C",
+            "CENTER" => "C",
+            "L" or "R" or "C" => side.ToUpperInvariant(),
+            _ => string.Empty,
+        };
     }
 
     private string[] GetDepartureRunways(string rwyLine)
@@ -478,6 +615,24 @@ internal class AutoAssigner
         var allFreqs = atc.SelectMany(x => x.Frequencies ?? []).Select(x => Conversions.FSDFrequencyToString(x)).ToList() ?? [];
         allFreqs.AddRange(Network.Me.Frequencies?.Select(x => Conversions.FSDFrequencyToString(x)) ?? []);
         return allFreqs.Contains(freq);
+    }
+
+    private static bool IsJetAircraft(Strip strip)
+    {
+        var aircraftTypeAndWake = strip.FDR.AircraftTypeAndWake;
+        var aircraftTypeText = aircraftTypeAndWake.ToString().Trim().ToUpperInvariant();
+
+        return Performance.GetPerformanceData(aircraftTypeAndWake)?.IsJet == true ||
+            LooksLikeJetType(aircraftTypeText);
+    }
+
+    private static bool LooksLikeJetType(string aircraftType)
+    {
+        aircraftType = (aircraftType ?? string.Empty).Split('/').First().Trim().ToUpperInvariant();
+        return Regex.IsMatch(
+            aircraftType,
+            @"^(A(20|21|30|31|32|33|34|35|38|3ST)|B(3[789]|7\d{2}|CS)|CRJ|E(135|145|170|175|190|195|290|295)|F28|F70|F100|MD|DC9|GLF|CL(30|35|60)|C17|C5|C25|C56X|LJ|FA|H25|PRM|HDJT)",
+            RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
     }
 
     public static string DetermineDepFreq(List<string> freqs)
