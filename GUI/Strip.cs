@@ -1024,14 +1024,7 @@ public sealed class Strip : IDisposable
             if (ValidRoutes is not null)
             {
                 CondensedRoute = CleanVatsysRoute(FDR.Route);
-                DodgyRoute = true;
-                foreach (var validroute in ValidRoutes)
-                {
-                    if (validroute.RouteText.Contains(CondensedRoute))
-                    {
-                        DodgyRoute = false;
-                    }
-                }
+                DodgyRoute = !MatchesAnyStandardRoute(CondensedRoute, ValidRoutes);
 
                 // If not departure or FDR active.
                 if (DefaultStripType != StripType.DEPARTURE || (int)FDR.State > 5)
@@ -1044,16 +1037,10 @@ public sealed class Strip : IDisposable
                     if (DodgyRoute)
                     {
                         var rte = string.Join(" ", CleanVatsysRoute(FDR.Route).Split(' ').Skip(1).ToArray());
-                        foreach (var validroute in ValidRoutes)
-                        {
-                            if (validroute.RouteText.Contains(rte))
-                            {
-                                DodgyRoute = false;
-                            }
-                        }
+                        DodgyRoute = !MatchesAnyStandardRoute(rte, ValidRoutes);
                     }
 
-                    if (!DodgyRoute && CondensedRoute == "FAIL")
+                    if (!DodgyRoute && (CondensedRoute == "FAIL" || CondensedRoute == "\0"))
                     {
                         DodgyRoute = true;
                     }
@@ -1356,6 +1343,76 @@ public sealed class Strip : IDisposable
             Util.LogText($"PARSER, RTE: {rawRoute}, ERR: {ex.Message}\n{ex.StackTrace}");
             return "\0";
         }
+    }
+
+    private static bool MatchesAnyStandardRoute(string filedRoute, IEnumerable<RouteDTO> validRoutes)
+    {
+        return !string.IsNullOrWhiteSpace(filedRoute) &&
+            filedRoute != "\0" &&
+            filedRoute != "FAIL" &&
+            validRoutes.Any(validRoute => RouteTokenSequencesOverlap(filedRoute, validRoute.RouteText));
+    }
+
+    private static bool RouteTokenSequencesOverlap(string filedRoute, string standardRoute)
+    {
+        var filedTokens = RouteTokens(filedRoute);
+        var standardTokens = RouteTokens(standardRoute);
+
+        return filedTokens.Length > 0 &&
+            standardTokens.Length > 0 &&
+            (ContainsTokenSequence(standardTokens, filedTokens) || ContainsTokenSequence(filedTokens, standardTokens));
+    }
+
+    private static string[] RouteTokens(string route)
+    {
+        return (route ?? string.Empty)
+            .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
+            .Select(NormaliseRouteToken)
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .ToArray();
+    }
+
+    private static string NormaliseRouteToken(string routeElement)
+    {
+        routeElement = (routeElement ?? string.Empty).Trim().Trim(',', ';').ToUpperInvariant();
+
+        if (string.IsNullOrWhiteSpace(routeElement) ||
+            routeElement == "DCT" ||
+            _gpscoordRegex.Match(routeElement).Success ||
+            _sidRouteRegex.Match(routeElement).Success)
+        {
+            return string.Empty;
+        }
+
+        return routeElement.Contains("/") ? routeElement.Split('/').First() : routeElement;
+    }
+
+    private static bool ContainsTokenSequence(string[] haystack, string[] needle)
+    {
+        if (needle.Length == 0 || haystack.Length < needle.Length)
+        {
+            return false;
+        }
+
+        for (var i = 0; i <= haystack.Length - needle.Length; i++)
+        {
+            var matched = true;
+            for (var j = 0; j < needle.Length; j++)
+            {
+                if (!string.Equals(haystack[i + j], needle[j], StringComparison.OrdinalIgnoreCase))
+                {
+                    matched = false;
+                    break;
+                }
+            }
+
+            if (matched)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>
