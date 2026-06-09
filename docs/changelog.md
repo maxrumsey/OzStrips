@@ -8,6 +8,7 @@
 - Fixed temp regex issue for autofill file
 - Allow linebreaks in ATIS debug window
 - Fixed no default layout found
+- Fixed sema4 disposal issue.
 ## v0.9.0
 ### Misc Changes
 - Added new autofill rule options for YSWS
