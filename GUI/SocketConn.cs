@@ -260,7 +260,7 @@ public sealed class SocketConn : IAsyncDisposable
     {
         get
         {
-            return _connection.State == HubConnectionState.Connected && (Network.Me.IsRealATC || _isDebug) && _synchronised;
+            return _connection.State == HubConnectionState.Connected && (Network.Me.IsRealATC || _isDebug) && _synchronised && !_isDisposed;
         }
     }
 

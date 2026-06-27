@@ -37,6 +37,7 @@ public sealed class Strip : IDisposable
     ////private readonly StripLayoutTypes StripType;
 
     private bool _crossing;
+    private bool _disposed;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Strip"/> class.
@@ -1023,7 +1024,10 @@ public sealed class Strip : IDisposable
                 }
                 finally
                 {
-                    _routeFetchSemaphore.Release();
+                    if (!_disposed)
+                    {
+                        _routeFetchSemaphore.Release();
+                    }
                 }
             }
 
@@ -1369,6 +1373,7 @@ public sealed class Strip : IDisposable
     /// </summary>
     public void Dispose()
     {
+        _disposed = true;
         _routeFetchSemaphore.Dispose();
     }
 

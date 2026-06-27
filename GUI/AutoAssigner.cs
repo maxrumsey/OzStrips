@@ -253,9 +253,25 @@ internal class AutoAssigner
             }
         }
 
-        if (rule.SID.Count > 0 && rule.SID.Contains(result.SID) != matchAsTrue)
+        if (rule.SID.Count > 0)
         {
-            return false;
+            var matched = false;
+            var acc_sid = string.IsNullOrEmpty(strip.SID) ? result.SID : strip.SID;
+
+            foreach (var sid in rule.SID)
+            {
+                var regex = new Regex(sid);
+
+                if (regex.IsMatch(acc_sid))
+                {
+                    matched = true;
+                }
+            }
+
+            if (matched != matchAsTrue)
+            {
+                return false;
+            }
         }
 
         if (rule.AtisDepRunway.Count > 0)
