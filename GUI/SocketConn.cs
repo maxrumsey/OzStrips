@@ -709,7 +709,7 @@ public sealed class SocketConn : IAsyncDisposable
             activity?.AddTag("ozstrips.activeStripsCount", activeStrips.Count);
 
             LogMessageContent("UplinkCDMAircraft", cdmDTOs, false);
-            await _connection.SendAsync("UplinkCDMAircraft", cdmDTOs);
+            FireAndForget(_connection.SendAsync("UplinkCDMAircraft", cdmDTOs, GetMessageMetadata()));
         }
     }
 
@@ -974,6 +974,10 @@ public sealed class SocketConn : IAsyncDisposable
                     return;
                 }
 
+                var hasParent = ActivityContext.TryParse(metadata.TraceID, traceState: null, out var parentContext);
+
+                using var activity = Telemetry.ActivitySource.StartActivity($"SocketConn.Received.{name}", ActivityKind.Server, hasParent ? parentContext : default);
+
                 LogMessageContent(name, arg);
 
                 await func(arg);
@@ -1016,13 +1020,13 @@ public sealed class SocketConn : IAsyncDisposable
         AddMessage($"{(server ? 's' : 'c')}-{funcName}: {json}");
     }
 
-    private MessageMetadata GetMessageMetadata(string id = "")
+    private MessageMetadata GetMessageMetadata()
     {
         return new()
         {
             Server = Server,
             AerodromeICAO = _bayManager.AerodromeName,
-            TraceID = id,
+            TraceID = Activity.Current?.Id ?? string.Empty,
         };
     }
 
