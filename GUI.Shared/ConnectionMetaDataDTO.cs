@@ -61,4 +61,9 @@ public record ConnectionMetadataDTO
     /// Gets or sets the user callsign.
     /// </summary>
     public string Callsign { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the parent trace ID.
+    /// </summary>
+    public string TraceID { get; set; } = string.Empty;
 }

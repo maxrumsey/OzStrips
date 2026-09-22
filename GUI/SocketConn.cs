@@ -537,7 +537,9 @@ public sealed class SocketConn : IAsyncDisposable
                     Server = Server,
                     AerodromeName = _bayManager.AerodromeName,
                     Callsign = Network.Me.Callsign,
+                    TraceID = Activity.Current?.Id ?? string.Empty,
                 };
+
                 LogMessageContent("SubscribeToAerodrome", connmetadata, false);
 
                 _synchronised = false;
