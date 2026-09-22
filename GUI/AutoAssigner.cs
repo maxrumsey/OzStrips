@@ -11,6 +11,7 @@ using System.Windows.Automation;
 using System.Windows.Forms.VisualStyles;
 using MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
 using MaxRumsey.OzStripsPlugin.GUI.Shared;
+using Microsoft.Extensions.Logging;
 using vatsys;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
@@ -23,6 +24,8 @@ internal class AutoAssigner
     private readonly BayManager _bayManager;
     private readonly string _aerodrome;
     private readonly List<AssignmentRule> _assignmentRules = [];
+
+    private readonly ILogger<AutoAssigner> _logger = Telemetry.LoggerFactory.CreateLogger<AutoAssigner>();
 
     private readonly Regex _rwyNameRegex = new(@"^(\d{2}[LRC]?|[LRC])$");
     private readonly Regex _tempRegex = new(@"\n?\s*\+?\s*\[?TMP\]?:? (-?\d{1,2})");
@@ -37,6 +40,8 @@ internal class AutoAssigner
 
     internal void LoadData(string filePrefix)
     {
+        _logger.LogTrace("Loading assignment rules for {Aerodrome} from {FilePrefix}", _aerodrome, filePrefix);
+
         try
         {
             var deserializer = new DeserializerBuilder()
@@ -64,6 +69,7 @@ internal class AutoAssigner
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "Failed to load data.");
             Util.LogError(ex);
         }
     }
@@ -87,6 +93,10 @@ internal class AutoAssigner
 
     internal AssignmentResult DetermineResult(Strip strip)
     {
+        using var activity = Telemetry.ActivitySource.StartActivity("AutoAssigner.DetermineResult", System.Diagnostics.ActivityKind.Internal);
+        activity?.SetTag("ozstrips.aerodrome", _aerodrome);
+        activity?.SetTag("ozstrips.callsign", strip.FDR.Callsign);
+
         var result = new AssignmentResult(strip.RWY);
 
         foreach (var rule in _assignmentRules)
@@ -101,21 +111,25 @@ internal class AutoAssigner
                 if (!string.IsNullOrEmpty(rule.Runway))
                 {
                     result.Runway = rule.Runway;
+                    _logger.LogTrace("Setting runway to {runway}", rule.Runway);
                 }
 
                 if (!string.IsNullOrEmpty(rule.CFL))
                 {
                     result.CFL = rule.CFL;
+                    _logger.LogTrace("Setting CFL to {cfl}", rule.CFL);
                 }
 
                 if (!string.IsNullOrEmpty(rule.SID))
                 {
                     result.SID = GetSIDName(strip, rule.SID);
+                    _logger.LogTrace("Setting SID to {SID}", rule.SID);
                 }
 
                 if (rule.Departures.Count > 0)
                 {
                     result.Departures = rule.Departures;
+                    _logger.LogTrace("Setting departures to {departures}", string.Join(", ", rule.Departures));
                 }
 
                 if (!string.IsNullOrEmpty(rule.AssignDepRunway))
@@ -124,6 +138,7 @@ internal class AutoAssigner
                     if (!string.IsNullOrEmpty(atisRwy))
                     {
                         result.Runway = atisRwy;
+                        _logger.LogTrace("Auto-setting runway to {runway}", atisRwy);
                     }
                 }
             }
@@ -377,6 +392,7 @@ internal class AutoAssigner
             }
         }
 
+        _logger.LogTrace("Rule matched.");
         return true;
     }
 

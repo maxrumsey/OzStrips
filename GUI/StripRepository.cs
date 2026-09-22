@@ -118,6 +118,9 @@ public class StripRepository
     /// <param name="bayManager">The bay manager.</param>
     public void UpdateStripData(StripDTO stripDTO, BayManager bayManager)
     {
+        using var activity = Telemetry.ActivitySource.StartActivity("StripRepository.UpdateStripData");
+        activity?.SetTag("ozstrips.callsign", stripDTO.StripKey.Callsign);
+
         // todo: move this to strip class?
         try
         {
@@ -178,6 +181,7 @@ public class StripRepository
     /// <param name="socketConn">The socket connection.</param>
     public void LoadCache(StripDTO[] cacheData, BayManager bayManager, SocketConn socketConn)
     {
+        using var activity = Telemetry.ActivitySource.StartActivity("StripRepository.LoadCache");
         foreach (var stripDTO in cacheData)
         {
             UpdateStripData(stripDTO, bayManager);

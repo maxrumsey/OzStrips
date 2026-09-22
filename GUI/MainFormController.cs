@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics.Metrics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -53,6 +54,8 @@ public class MainFormController : IDisposable, IStripsWindow
             _requestedDefaultLayoutName = value;
         }
     }
+
+    private Counter<int> _changedAerodromeMeter = Telemetry.Meter.CreateCounter<int>("changed_aerodrome", "changes", "Number of times the aerodrome has been changed");
 
     private readonly MainForm _mainForm;
     private readonly Timer _timer;
@@ -188,6 +191,9 @@ public class MainFormController : IDisposable, IStripsWindow
 
     private void AerodromeStateChanged(object sender, EventArgs e)
     {
+        using var activity = Telemetry.ActivitySource.StartActivity("AerodromeStateChanged");
+        activity?.AddTag("aerodrome", _bayManager.AerodromeName);
+
         SetClientList(_bayManager.AerodromeState.Connections);
         _mainForm.StatusPanel.Invalidate();
 
@@ -215,6 +221,8 @@ public class MainFormController : IDisposable, IStripsWindow
 
     private void AerodromeTypeChanged(object sender, EventArgs e)
     {
+        using var activity = Telemetry.ActivitySource.StartActivity("AerodromeTypeChanged");
+
         _mainForm.ViewListToolStrip.DropDownItems.Clear();
 
         var layouts = _mainForm.AerodromeManager.ReturnLayouts(_mainForm.AerodromeManager.GetAerodromeType(_bayManager.AerodromeName));
@@ -347,6 +355,8 @@ public class MainFormController : IDisposable, IStripsWindow
     /// <param name="readyForConnection">Whether or not a connection can be made.</param>
     public async void MarkConnectionReadiness(bool readyForConnection)
     {
+        using var activity = Telemetry.ActivitySource.StartActivity("MarkedConnectionReady");
+
         try
         {
             SetCircuitToolStripStatus();
@@ -360,6 +370,7 @@ public class MainFormController : IDisposable, IStripsWindow
         {
             Util.LogError(ex);
         }
+        activity?.SetStatus(System.Diagnostics.ActivityStatusCode.Ok);
     }
 
     /// <summary>
@@ -384,6 +395,10 @@ public class MainFormController : IDisposable, IStripsWindow
     /// <param name="name">The aerodrome name.</param>
     public async void SetAerodrome(string name)
     {
+        using var activity = Telemetry.ActivitySource.StartActivity("SetAerodrome");
+        activity?.SetTag("aerodrome.code", name);
+        _changedAerodromeMeter.Add(1, new KeyValuePair<string, object?>("aerodrome", name));
+
         try
         {
             if (_bayManager != null)
@@ -497,6 +512,8 @@ public class MainFormController : IDisposable, IStripsWindow
     /// </summary>
     public void DisconnectVATSIM()
     {
+        using var activity = Telemetry.ActivitySource.StartActivity("Disconnect");
+
         try
         {
             _bayManager.WipeStrips();
@@ -528,6 +545,7 @@ public class MainFormController : IDisposable, IStripsWindow
     /// <returns>Task.</returns>
     public async Task UpdateFDR(FDP2.FDR fdr)
     {
+        using var activity = Telemetry.ActivitySource.StartActivity("FDRUpdateReceived");
         try
         {
             var strip = await _bayManager.StripRepository.UpdateFDR(fdr, _bayManager, _socketConn);

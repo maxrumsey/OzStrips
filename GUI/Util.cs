@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using vatsys;
 
@@ -14,6 +15,8 @@ namespace MaxRumsey.OzStripsPlugin.GUI;
 /// </summary>
 public static class Util
 {
+    private static ILogger? _logger;
+
     /// <summary>
     /// Creates an error box with a specified message.
     /// </summary>
@@ -69,6 +72,8 @@ public static class Util
     /// <param name="source">Source string.</param>
     public static async void LogError(Exception error, string source = "OzStrips")
     {
+        _logger ??= Telemetry.LoggerFactory.CreateLogger("Util");
+
         if (Debugger.IsAttached)
         {
             Debugger.Break();
@@ -76,22 +81,7 @@ public static class Util
 
         Errors.Add(error, source);
 
-        try
-        {
-            using var client = new HttpClient();
-            var data = new Dictionary<string, string>
-                {
-                    { "error", "ERROR: " + error.Message + "\n" + error.StackTrace },
-                    { "version", OzStripsConfig.version },
-                };
-            var uri = (OzStripsConfig.socketioaddr + "Crash").Replace("//", "/").Replace(":/", "://");
-            var task = client.PostAsync(uri, new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json"));
-            _ = await task.ConfigureAwait(false);
-        }
-        catch (Exception ex)
-        {
-            Errors.Add(ex, "OzStrips Error Reporter");
-        }
+        _logger.LogError(error, "An error occurred in {Source}", source);
     }
 
     /// <summary>
@@ -100,21 +90,8 @@ public static class Util
     /// <param name="text">Text to log.</param>
     public static async void LogText(string text)
     {
-        try
-        {
-            using var client = new HttpClient();
-            var data = new Dictionary<string, string>
-                {
-                    { "error", "DIAG: " + text },
-                };
-            var uri = (OzStripsConfig.socketioaddr + "/crash").Replace("//", "/").Replace(":/", "://");
-            var task = client.PostAsync(uri, new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json"));
-            _ = await task.ConfigureAwait(false);
-        }
-        catch
-        {
-            return;
-        }
+        _logger ??= Telemetry.LoggerFactory.CreateLogger("Util");
+        _logger.LogWarning(text);
     }
 
     /// <summary>

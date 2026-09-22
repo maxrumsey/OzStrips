@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.GUI.DTO;
 using MaxRumsey.OzStripsPlugin.GUI.Properties;
 using MaxRumsey.OzStripsPlugin.GUI.Shared;
+using Microsoft.Extensions.Logging;
 using OpenTK.Graphics.ES11;
 using vatsys;
 using static vatsys.FDP2;
@@ -33,6 +34,8 @@ public class BayManager
     {
         BayRepository = new(main, this);
     }
+
+    private ILogger<BayManager> _logger = Telemetry.LoggerFactory.CreateLogger<BayManager>();
 
     /// <summary>
     /// Gets or sets the loaded autoassigner.
@@ -200,6 +203,8 @@ public class BayManager
                     return;
                 }
 
+                _logger.LogInformation("Forcing strip for {callsign}.", fdr.Callsign);
+
                 var controller = await StripRepository.UpdateFDR(fdr, this, socketConn);
 
                 if (controller != null && BayRepository.Bays[0] != null)
@@ -240,6 +245,7 @@ public class BayManager
     {
         if (PickedStrip != null)
         {
+            _logger.LogInformation("Inhibiting strip for {callsign}.", PickedStrip.StripKey.Callsign);
             PickedStrip.CurrentBay = StripBay.BAY_DEAD;
             _ = PickedStrip.SyncStrip();
             UpdateBay(PickedStrip);
@@ -350,6 +356,7 @@ public class BayManager
                 return false;
             }
 
+            _logger.LogInformation("Moving strip for {callsign} from bay {oldBay} to bay {newBay}.", strip.FDR.Callsign, strip.CurrentBay, newBay);
             strip.CurrentBay = newBay;
             await strip.SyncStrip();
             UpdateBay(strip);
@@ -563,8 +570,13 @@ public class BayManager
     /// <param name="inhibitreorders">Whether or not to inhibit strip reodering.</param>
     public void AddStrip(Strip strip, bool save = true, bool inhibitreorders = false)
     {
+        using var activity = Telemetry.ActivitySource.StartActivity("BayManager.AddStrip", System.Diagnostics.ActivityKind.Internal);
+        activity?.SetTag("ozstrips.strip.callsign", strip.FDR.Callsign);
+        activity?.SetTag("ozstrips.aerodrome", AerodromeName);
+
         if (!strip.DetermineSCValidity())
         {
+            _logger.LogInformation("Strip {callsign} is invalid, not adding to bays.", strip.FDR.Callsign);
             return;
         }
 
@@ -584,6 +596,7 @@ public class BayManager
 
         if (save && !StripRepository.Strips.Contains(strip))
         {
+            _logger.LogTrace("Saving strip.");
             StripRepository.AddStrip(strip);
         }
 
@@ -601,6 +614,10 @@ public class BayManager
     /// Called by inhibits, moving strips, sid triggers, server pos updates.
     public void UpdateBay(Strip strip, bool serverInitiated = false)
     {
+        using var activity = Telemetry.ActivitySource.StartActivity("BayManager.UpdateBay", System.Diagnostics.ActivityKind.Internal);
+        activity?.SetTag("ozstrips.strip.callsign", strip.FDR.Callsign);
+        activity?.SetTag("ozstrips.aerodrome", AerodromeName);
+
         foreach (var bay in BayRepository.Bays)
         {
             if (bay.OwnsStrip(strip))

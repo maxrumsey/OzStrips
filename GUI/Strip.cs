@@ -14,6 +14,7 @@ using MaxRumsey.OzStripsPlugin.GUI.DTO;
 using MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
 using MaxRumsey.OzStripsPlugin.GUI.Properties;
 using MaxRumsey.OzStripsPlugin.GUI.Shared;
+using Microsoft.Extensions.Logging;
 using vatsys;
 
 using static vatsys.FDP2;
@@ -38,6 +39,8 @@ public sealed class Strip : IDisposable
 
     private bool _crossing;
     private bool _disposed;
+
+    private readonly ILogger<Strip> _logger = Telemetry.LoggerFactory.CreateLogger<Strip>();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Strip"/> class.
@@ -895,8 +898,16 @@ public sealed class Strip : IDisposable
     /// </summary>
     public void FillStrip()
     {
+        using var activity = Telemetry.ActivitySource.StartActivity("FillStrip", System.Diagnostics.ActivityKind.Internal);
+        activity?.SetTag("ozstrips.callsign", FDR.Callsign);
+
+        _logger.LogInformation("Filling strip for {Callsign}", FDR.Callsign);
+
         if (_bayManager.AutoAssigner is null || _bayManager.AerodromeState.ATIS is null || DefaultStripType == StripType.ARRIVAL)
         {
+            _logger.LogWarning("Failed to fill strip.");
+            activity?.SetStatus(System.Diagnostics.ActivityStatusCode.Error);
+
             return;
         }
 
@@ -1081,6 +1092,8 @@ public sealed class Strip : IDisposable
     /// </summary>
     public void SIDTrigger()
     {
+        _logger.LogInformation("SID Triggering {Callsign} from {CurrentBay}", FDR.Callsign, CurrentBay);
+
         // TODO: do something with this.
         Dictionary<StripBay, StripBay> stripBayResultDict;
 

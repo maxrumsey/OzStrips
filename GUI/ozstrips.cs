@@ -1,6 +1,12 @@
-﻿using System;
+﻿using MaxRumsey.OzStripsPlugin.GUI;
+using MaxRumsey.OzStripsPlugin.GUI.DTO;
+using Microsoft.Extensions.Logging;
+using Microsoft.Win32;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Diagnostics.Metrics;
 using System.Globalization;
 using System.IO;
 using System.Net.Http;
@@ -8,10 +14,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
-using MaxRumsey.OzStripsPlugin.GUI;
-using MaxRumsey.OzStripsPlugin.GUI.DTO;
-using Microsoft.Win32;
-using Newtonsoft.Json;
 using vatsys;
 using vatsys.Plugin;
 
@@ -33,20 +35,16 @@ public sealed class OzStrips : IPlugin, IDisposable, ILabelPlugin
     private System.Timers.Timer? _connectionTimer;
     private bool _readyForConnection;
 
+    private readonly ILogger<OzStrips> _logger;
+    private readonly Counter<long> _loaded;
+    private readonly Counter<long> _opened;
+
+
     /// <summary>
     /// Initializes a new instance of the <see cref="OzStrips"/> class.
     /// </summary>
     public OzStrips()
     {
-        try
-        {
-            _ = SendCrash();
-        }
-        catch (Exception ex)
-        {
-            Util.LogError(ex, "OzStrips Error Reporter");
-        }
-
         try
         {
             SetAndCreateEnvVar();
@@ -55,6 +53,12 @@ public sealed class OzStrips : IPlugin, IDisposable, ILabelPlugin
         {
             Util.LogError(ex);
         }
+
+        Telemetry.Initialize();
+
+        _logger = Telemetry.LoggerFactory.CreateLogger<OzStrips>();
+        _loaded = Telemetry.Meter.CreateCounter<long>("ozstrips_plugin_loaded", description: "Counts the number of times the OzStrips plugin has been loaded.");
+        _opened = Telemetry.Meter.CreateCounter<long>("ozstrips_window_opened", description: "Counts the number of times the OzStrips window has been opened.");
 
         EnsureDpiAwareness();
 
@@ -70,7 +74,17 @@ public sealed class OzStrips : IPlugin, IDisposable, ILabelPlugin
         MMI.SelectedGroundTrackChanged += SelectedGroundTrackChanged;
         Network.OnlinePilotsChanged += Network_OnlinePilotsChanged;
 
-        AppDomain.CurrentDomain.UnhandledException += ErrorHandler;
+        _loaded.Add(1);
+
+        Application.ApplicationExit += (s, e) => Telemetry.Shutdown();
+        AppDomain.CurrentDomain.ProcessExit += (s, e) => Telemetry.Shutdown();
+        // Catch the crash path too — otherwise a fault-exit app never flushes
+        Application.ThreadException += (s, e) =>
+        {
+            var logger = Telemetry.LoggerFactory.CreateLogger("UnhandledException");
+            logger.LogError(e.Exception, "Unhandled UI thread exception");
+            Telemetry.Shutdown();
+        };
 
         _aerodromeManager.Initialize();
 
@@ -169,31 +183,6 @@ public sealed class OzStrips : IPlugin, IDisposable, ILabelPlugin
         }
     }
 
-    private static async Task SendCrash()
-    {
-        try
-        {
-            if (File.Exists(Helpers.GetFilesFolder() + "ozstrips_log.txt"))
-            {
-                var str = File.ReadAllText(Helpers.GetFilesFolder() + "ozstrips_log.txt");
-                if (str.ToLower(CultureInfo.InvariantCulture).Contains("ozstrips"))
-                {
-                    var data = new Dictionary<string, string>
-                {
-                    { "error", str },
-                };
-                    File.Delete(Helpers.GetFilesFolder() + "ozstrips_log.txt");
-                    var uri = (OzStripsConfig.socketioaddr + "/crash").Replace("//", "/").Replace(":/", "://");
-                    _ = await _httpClient.PostAsync(uri, new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json")).ConfigureAwait(false);
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Errors.Add(ex, "OzStrips Error Reporter");
-        }
-    }
-
     private static void SetAndCreateEnvVar()
     {
         var appdata_path = Util.SetAndReturnDLLVar();
@@ -278,6 +267,8 @@ public sealed class OzStrips : IPlugin, IDisposable, ILabelPlugin
 
     private void OpenGUI()
     {
+        _opened.Add(1);
+
         if (_gui?.IsDisposed != false)
         {
             _gui = new(_readyForConnection, _aerodromeManager);

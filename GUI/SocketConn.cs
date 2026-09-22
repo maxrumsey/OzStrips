@@ -1,5 +1,10 @@
-﻿using System;
+﻿using MaxRumsey.OzStripsPlugin.GUI.Shared;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -7,9 +12,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MaxRumsey.OzStripsPlugin.GUI.Shared;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.SignalR.Client;
+using System.Windows.Input;
 using vatsys;
 using static MaxRumsey.OzStripsPlugin.GUI.Shared.ConnectionMetadataDTO;
 
@@ -25,6 +28,8 @@ public sealed class SocketConn : IAsyncDisposable
     private readonly BayManager _bayManager;
     private readonly bool _isDebug = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
     private readonly SemaphoreSlim _connectionSemaphore = new(1, 1);
+
+    private readonly ILogger<SocketConn> _logger = Telemetry.LoggerFactory.CreateLogger<SocketConn>();
 
     private bool _serverPopupShown;
     private bool _enableAutoReconnect = true;
@@ -66,7 +71,12 @@ public sealed class SocketConn : IAsyncDisposable
         {
             if (scDTO is not null)
             {
-                InvokeOnGUI(() => _bayManager.StripRepository.UpdateStripData(scDTO, bayManager));
+                InvokeOnGUI(() =>
+                {
+                    using var activity = Telemetry.ActivitySource.StartActivity("SocketConn.Received.StripUpdate");
+                    activity?.SetTag("ozstrips.callsign", scDTO.StripKey.Callsign);
+                    _bayManager.StripRepository.UpdateStripData(scDTO, bayManager);
+                });
             }
         });
 
@@ -74,7 +84,11 @@ public sealed class SocketConn : IAsyncDisposable
         {
             if (scDTO is not null && FreshClient)
             {
-                InvokeOnGUI(() => _bayManager.StripRepository.LoadCache(scDTO ?? [], bayManager, this));
+                InvokeOnGUI(() =>
+                {
+                    using var activity = Telemetry.ActivitySource.StartActivity("SocketConn.Received.StripCache");
+                    _bayManager.StripRepository.LoadCache(scDTO ?? [], bayManager, this);
+                });
             }
         });
 
@@ -84,6 +98,7 @@ public sealed class SocketConn : IAsyncDisposable
             {
                 InvokeOnGUI(async () =>
                 {
+                    using var activity = Telemetry.ActivitySource.StartActivity("SocketConn.Received.UpdateCache");
                     try
                     {
                         await SendCache();
@@ -102,6 +117,7 @@ public sealed class SocketConn : IAsyncDisposable
             {
                 InvokeOnGUI(async () =>
                 {
+                    using var activity = Telemetry.ActivitySource.StartActivity("SocketConn.Received.SendCDM");
                     try
                     {
                         await SendCDMFull();
@@ -118,7 +134,11 @@ public sealed class SocketConn : IAsyncDisposable
         {
             if (code is not null)
             {
-                InvokeOnGUI(() => mainForm.SetATISCode(code));
+                InvokeOnGUI(() =>
+                {
+                    using var activity = Telemetry.ActivitySource.StartActivity("SocketConn.Received.Atis");
+                    mainForm.SetATISCode(code);
+                });
             }
         });
 
@@ -126,7 +146,11 @@ public sealed class SocketConn : IAsyncDisposable
         {
             if (metar is not null)
             {
-                InvokeOnGUI(() => mainForm.SetMetar(metar));
+                InvokeOnGUI(() =>
+                {
+                    using var activity = Telemetry.ActivitySource.StartActivity("SocketConn.Received.Metar");
+                    mainForm.SetMetar(metar);
+                });
             }
         });
 
@@ -134,7 +158,12 @@ public sealed class SocketConn : IAsyncDisposable
         {
             if (bayDTO is not null)
             {
-                InvokeOnGUI(() => bayManager.BayRepository.UpdateOrder(bayDTO));
+                InvokeOnGUI(() =>
+                {
+                    using var activity = Telemetry.ActivitySource.StartActivity("SocketConn.Received.BayUpdate");
+                    activity?.SetTag("ozstrips.bay", bayDTO.bay.ToString());
+                    bayManager.BayRepository.UpdateOrder(bayDTO);
+                });
             }
         });
 
@@ -142,7 +171,11 @@ public sealed class SocketConn : IAsyncDisposable
         {
             if (acid is not null)
             {
-                InvokeOnGUI(() => _bayManager.StripRepository.GetStripStatus(acid, this));
+                InvokeOnGUI(() =>
+                {
+                    using var activity = Telemetry.ActivitySource.StartActivity("SocketConn.Received.GetStripStatus");
+                    _bayManager.StripRepository.GetStripStatus(acid, this);
+                });
             }
         });
 
@@ -150,7 +183,11 @@ public sealed class SocketConn : IAsyncDisposable
         {
             if (message is not null)
             {
-                InvokeOnGUI(() => Util.ShowWarnBox(message));
+                InvokeOnGUI(() =>
+                {
+                    using var activity = Telemetry.ActivitySource.StartActivity("SocketConn.Received.Message");
+                    Util.ShowWarnBox(message);
+                });
             }
         });
 
@@ -158,6 +195,7 @@ public sealed class SocketConn : IAsyncDisposable
         {
             if (state is not null)
             {
+                using var activity = Telemetry.ActivitySource.StartActivity("SocketConn.Received.AerodromeStateUpdate");
                 _bayManager.AerodromeState = state;
                 InvokeOnGUI(() => AerodromeStateChanged?.Invoke(this, EventArgs.Empty));
             }
@@ -167,6 +205,7 @@ public sealed class SocketConn : IAsyncDisposable
         {
             if (pdcs is not null && pdcs.Length > 0)
             {
+                using var activity = Telemetry.ActivitySource.StartActivity("SocketConn.Received.NewPDC");
                 InvokeOnGUI(() => NewPDCsReceived?.Invoke(this, pdcs));
             }
         });
@@ -177,6 +216,9 @@ public sealed class SocketConn : IAsyncDisposable
             {
                 return;
             }
+
+            using var activity = Telemetry.ActivitySource.StartActivity("SocketConn.Received.VersionInfo");
+            activity?.SetTag("version", appversion);
 
             if (!_versionShown && appversion != OzStripsConfig.version && !AerodromeManager.InhibitVersionCheck)
             {
@@ -189,6 +231,7 @@ public sealed class SocketConn : IAsyncDisposable
         {
             InvokeOnGUI(async () =>
             {
+                using var activity = Telemetry.ActivitySource.StartActivity("SocketConn.Received.OutOfSync");
                 if (DateTime.Now - _lastDesyncResolution < TimeSpan.FromSeconds(5))
                 {
                     return;
@@ -274,6 +317,7 @@ public sealed class SocketConn : IAsyncDisposable
         StripDTO scDTO = sc;
         if (CanSendDTO)
         {
+            _logger.LogInformation("Syncing strip for {callsign}.", sc.StripKey.Callsign);
             LogMessageContent("StripChange", scDTO, false);
             await _connection.InvokeAsync("StripChange", scDTO, GetMessageMetadata());
         }
@@ -286,6 +330,11 @@ public sealed class SocketConn : IAsyncDisposable
     /// <param name="acid">Strip callsign.</param>
     public void SendStripStatus(Strip? strip, string acid)
     {
+        using var activity = Telemetry.ActivitySource.StartActivity("SendStripStatus");
+        activity?.AddTag("acid", acid);
+
+        _logger.LogInformation("Sending strip status for {callsign}.", acid);
+
         if (CanSendDTO)
         {
             LogMessageContent("StripStatus", strip is null ? null : (StripDTO)strip, false);
@@ -308,6 +357,11 @@ public sealed class SocketConn : IAsyncDisposable
     /// <param name="state">Current state.</param>
     public void SendCDMUpdate(Strip strip, CDMState state)
     {
+        using var activity = Telemetry.ActivitySource.StartActivity("SendCDMUpdate");
+        activity?.SetTag("ozstrips.callsign", strip.StripKey.Callsign);
+        activity?.SetTag("ozstrips.cdm.state", state);
+        activity?.SetTag("ozstrips.cdm.rwy", strip.RWY);
+
         var dto = new CDMAircraftDTO()
         {
             Key = strip.StripKey,
@@ -320,8 +374,13 @@ public sealed class SocketConn : IAsyncDisposable
 
         if (CanSendDTO && list.Count > 0)
         {
+            _logger.LogInformation("Sending CDM update.");
             LogMessageContent("UplinkCDMAircraft", list, false);
             FireAndForget(_connection.SendAsync("UplinkCDMAircraft", list, GetMessageMetadata()));
+        }
+        else if (CanSendDTO)
+        {
+            _logger.LogWarning("Aircraft CDM update was not sent.");
         }
     }
 
@@ -334,6 +393,7 @@ public sealed class SocketConn : IAsyncDisposable
     {
         try
         {
+            _logger.LogInformation("Requesting routes for {callsign}.", sc.StripKey.Callsign);
             LogMessageContent("GetRoutes", sc.StripKey, false);
 
             if (_connection.State == HubConnectionState.Connected && _synchronised)
@@ -370,6 +430,8 @@ public sealed class SocketConn : IAsyncDisposable
     {
         if (_connection.State == HubConnectionState.Connected && _synchronised)
         {
+            _logger.LogInformation("Requesting strip data for {callsign}.", strip.StripKey.Callsign);
+
             LogMessageContent("RequestStrip", strip.StripKey, false);
             var dto = await _connection.InvokeAsync<StripDTO?>("RequestStrip", strip.StripKey, GetMessageMetadata());
 
@@ -390,6 +452,7 @@ public sealed class SocketConn : IAsyncDisposable
     {
         if (CanSendDTO)
         {
+            _logger.LogInformation("Sending PDC to server for {callsign}.", strip.StripKey.Callsign);
             LogMessageContent("SendPDC", text, false);
             await _connection.InvokeAsync("SendPDC", (StripDTO)strip, text, GetMessageMetadata());
         }
@@ -403,6 +466,8 @@ public sealed class SocketConn : IAsyncDisposable
     {
         if (CanSendDTO)
         {
+            _logger.LogInformation("Sending bay change to server: {bayChange}", bayChange);
+
             LogMessageContent("BayChange", bayChange, false);
             FireAndForget(_connection.SendAsync("BayChange", bayChange, GetMessageMetadata()));
         }
@@ -416,6 +481,7 @@ public sealed class SocketConn : IAsyncDisposable
     {
         if (CanSendDTO)
         {
+            _logger.LogInformation("Sending circuit activity status to server: {status}", status);
             LogMessageContent("UpdateCircuitMode", status, false);
             FireAndForget(_connection.SendAsync("UpdateCircuitMode", status, GetMessageMetadata()));
         }
@@ -429,6 +495,7 @@ public sealed class SocketConn : IAsyncDisposable
     {
         if (CanSendDTO)
         {
+            _logger.LogInformation("Sending coordinator activity status to server: {status}", status);
             LogMessageContent("UpdateCoordinatorMode", status, false);
             FireAndForget(_connection.SendAsync("UpdateCoordinatorMode", status, GetMessageMetadata()));
         }
@@ -442,6 +509,7 @@ public sealed class SocketConn : IAsyncDisposable
     {
         if (CanSendDTO)
         {
+            _logger.LogInformation("Sending CDM parameters to server.");
             LogMessageContent("ChangeCDMParameters", param, false);
             FireAndForget(_connection.SendAsync("ChangeCDMParameters", param, GetMessageMetadata()));
         }
@@ -456,6 +524,8 @@ public sealed class SocketConn : IAsyncDisposable
     /// <exception cref="ArgumentException">Connection data did not match our copy.</exception>
     public async Task SubscribeToAerodrome()
     {
+        using var activity = Telemetry.ActivitySource.StartActivity("SocketConn.SubscribeToAerodrome");
+        activity?.AddTag("conn.SignalRState", _connection.State.ToString());
         try
         {
             if (_connection.State == HubConnectionState.Connected) // was is io connected.
@@ -476,6 +546,7 @@ public sealed class SocketConn : IAsyncDisposable
 
                 if (response.Error is not null)
                 {
+                    activity?.AddException(response.Error);
                     throw response.Error;
                 }
                 else if (response is null)
@@ -521,6 +592,8 @@ public sealed class SocketConn : IAsyncDisposable
     /// <param name="type">Server connection type.</param>
     public async void SetServerType(Servers type)
     {
+        using var activity = Telemetry.ActivitySource.StartActivity("SocketConn.SetServerType");
+        _logger.LogInformation("Setting server type to {type}", type);
         try
         {
             Server = type;
@@ -528,6 +601,7 @@ public sealed class SocketConn : IAsyncDisposable
 
             if (!CanConnectToCurrentServer())
             {
+                _logger.LogTrace("Can't connect to current server");
                 return;
             }
 
@@ -548,6 +622,7 @@ public sealed class SocketConn : IAsyncDisposable
         var cacheDTO = CreateCacheDTO();
         if (CanSendDTO)
         {
+            _logger.LogInformation("Sending strip cache to server.");
             LogMessageContent("StripCache", cacheDTO, false);
             await _connection.SendAsync("StripCache", cacheDTO, GetMessageMetadata());
         }
@@ -559,6 +634,8 @@ public sealed class SocketConn : IAsyncDisposable
     /// <returns>Task.</returns>
     public async Task SendCDMFull()
     {
+        using var activity = Telemetry.ActivitySource.StartActivity("SocketConn.SendCDMFull");
+
         var clearedBay = _bayManager.BayRepository.Bays.FirstOrDefault(x => x.BayTypes.Contains(StripBay.BAY_CLEARED));
 
         var activeStrips = new List<Strip>();
@@ -626,6 +703,11 @@ public sealed class SocketConn : IAsyncDisposable
 
         if (CanSendDTO)
         {
+            _logger.LogInformation("CDM uplink of {count} aircraft to server.", cdmDTOs.Count);
+            activity?.AddTag("ozstrips.pushedStripsCount", pushedStrips.Count());
+            activity?.AddTag("ozstrips.depStripsCount", depStrips.Count());
+            activity?.AddTag("ozstrips.activeStripsCount", activeStrips.Count);
+
             LogMessageContent("UplinkCDMAircraft", cdmDTOs, false);
             await _connection.SendAsync("UplinkCDMAircraft", cdmDTOs);
         }
@@ -637,6 +719,8 @@ public sealed class SocketConn : IAsyncDisposable
     /// <returns>Task.</returns>
     public async Task Connect()
     {
+        using var activity = Telemetry.ActivitySource.StartActivity("SocketConn.Connect");
+
         try
         {
             AddMessage("#Attempting connection " + OzStripsConfig.socketioaddr);
@@ -649,6 +733,7 @@ public sealed class SocketConn : IAsyncDisposable
                 {
                     if (State != ConnectionState.DISCONNECTED)
                     {
+                        activity?.SetTag("conn.state", State.ToString());
                         return;
                     }
 
@@ -657,14 +742,24 @@ public sealed class SocketConn : IAsyncDisposable
                     {
                         if (!MainFormController.ReadyForConnection || !CanConnectToCurrentServer())
                         {
+                            _logger.LogWarning("Connection attempt aborted due to MainForm not ready or server type not allowed.");
                             return;
                         }
 
-                        await _connection.StartAsync();
+                        Task startTask;
+
+                        using (ExecutionContext.SuppressFlow())
+                        {
+                            startTask = _connection.StartAsync();
+                        }
+
+                        await startTask;
+
                         break;
                     }
                     catch (Exception ex)
                     {
+                        activity?.AddException(ex);
                         Errors.Add(ex, "OzStrips - Server Connection Failed");
                         await Task.Delay(TimeSpan.FromSeconds(10 + ((new Random().NextDouble() * 4) - 2)));
                     }
@@ -682,10 +777,12 @@ public sealed class SocketConn : IAsyncDisposable
         try
         {
             await ConnectionStateChanged(ConnectionState.CONNECTED);
+            activity?.SetTag("conn.state", State.ToString());
         }
         catch (Exception ex)
         {
             Util.LogError(ex);
+            activity?.AddException(ex);
         }
     }
 
@@ -694,6 +791,7 @@ public sealed class SocketConn : IAsyncDisposable
     /// </summary>
     public void Disconnect()
     {
+        _logger.LogInformation("Disconnected");
         _connection.StopAsync();
     }
 
@@ -720,6 +818,8 @@ public sealed class SocketConn : IAsyncDisposable
         {
             if (!_serverPopupShown)
             {
+                _logger.LogInformation("Attempted connection to server while on sweatbox.");
+
                 _serverPopupShown = true;
                 var result = Util.ShowQuestionBox("Connection to OzStrips main server detected while connected to the Sweatbox.\n\n" +
                     "Would you like to go to Settings and set Sweatbox mode?");
@@ -772,13 +872,19 @@ public sealed class SocketConn : IAsyncDisposable
 
     private async Task ConnectionStateChanged(ConnectionState newState, Exception? ex = null)
     {
+        using var activity = Telemetry.ActivitySource.StartActivity("SocketConn.ConnectionStateChanged");
+        activity?.AddTag("conn.newState", newState.ToString());
+        activity?.AddTag("conn.oldState", State.ToString());
+
         if (_isDisposed || !MainFormValid)
         {
+            activity?.Dispose();
             return;
         }
 
         if (ex is not null)
         {
+            activity?.AddException(ex);
             AddMessage($"#Connection error: {ex.Message}");
         }
 
@@ -898,6 +1004,8 @@ public sealed class SocketConn : IAsyncDisposable
 
     private void LogMessageContent(string funcName, object? args = null, bool server = true)
     {
+        _logger.LogTrace($"{(server ? 's' : 'c')}-{funcName}");
+
         var json = string.Empty;
 
         if (args is not null)
@@ -908,12 +1016,13 @@ public sealed class SocketConn : IAsyncDisposable
         AddMessage($"{(server ? 's' : 'c')}-{funcName}: {json}");
     }
 
-    private MessageMetadata GetMessageMetadata()
+    private MessageMetadata GetMessageMetadata(string id = "")
     {
         return new()
         {
             Server = Server,
             AerodromeICAO = _bayManager.AerodromeName,
+            TraceID = id,
         };
     }
 

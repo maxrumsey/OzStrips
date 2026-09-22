@@ -9,7 +9,9 @@ using MaxRumsey.OzStripsPlugin.GUI.DTO;
 using MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
 using MaxRumsey.OzStripsPlugin.GUI.Properties;
 using MaxRumsey.OzStripsPlugin.GUI.Shared;
+using Microsoft.Extensions.Logging;
 using Microsoft.SqlServer.Server;
+using YamlDotNet.Serialization.BufferedDeserialization;
 using static vatsys.FDP2;
 
 namespace MaxRumsey.OzStripsPlugin.GUI;
@@ -22,6 +24,8 @@ public class Bay : System.IDisposable
     private readonly BayManager _bayManager;
     private readonly SocketConn _socketConnection;
     private readonly BayRenderController _bayRenderController;
+
+    private readonly ILogger<Bay> _logger = Telemetry.LoggerFactory.CreateLogger<Bay>();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Bay"/> class.
@@ -372,6 +376,8 @@ public class Bay : System.IDisposable
     /// <param name="sync">Whether or not to sync bar to server.</param>
     public void AddBar(int type, string text, bool sync = true)
     {
+        _logger.LogTrace("Adding bar {BarName} in bay {BayName}", text, Name);
+
         var bar = new StripListItem()
         {
             Type = StripItemType.BAR,
@@ -518,6 +524,8 @@ public class Bay : System.IDisposable
     {
         if (_bayManager.PickedStrip != null && OwnsStrip(_bayManager.PickedStrip))
         {
+            _logger.LogTrace("Queueing up {PickedStrip} in bay {BayName}", _bayManager.PickedStrip?.FDR.Callsign, Name);
+
             AddDivider(true, true);
             var item = Strips.Find(a => a?.Strip == _bayManager.PickedStrip);
             ChangeStripPositionAbs(item, DivPosition);

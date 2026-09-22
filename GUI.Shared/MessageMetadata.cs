@@ -39,4 +39,9 @@ public class MessageMetadata
     /// Gets or sets the server type.
     /// </summary>
     public Servers Server { get; set; }
+
+    /// <summary>
+    /// Gets or sets the trace id.
+    /// </summary>
+    public string TraceID { get; set; } = null!;
 }

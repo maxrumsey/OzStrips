@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using MaxRumsey.OzStripsPlugin.GUI.DTO;
 using MaxRumsey.OzStripsPlugin.GUI.Properties;
 using MaxRumsey.OzStripsPlugin.GUI.Shared;
+using Microsoft.Extensions.Logging;
 using vatsys;
 
 namespace MaxRumsey.OzStripsPlugin.GUI;
@@ -19,6 +20,8 @@ namespace MaxRumsey.OzStripsPlugin.GUI;
 public class BayRepository(FlowLayoutPanel main, BayManager sender)
 {
     private readonly List<FlowLayoutPanel> _flpVerticalBoards = [];
+
+    private readonly ILogger<BayRepository> _logger = Telemetry.LoggerFactory.CreateLogger<BayRepository>();
 
     private readonly BayManager _bayManager = sender;
 
@@ -52,6 +55,8 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
     /// <param name="bayDTO">The bay data.</param>
     public void UpdateOrder(BayDTO bayDTO)
     {
+        _logger.LogTrace("Updating bay order for bay {BayType} with {ItemCount} items", bayDTO.bay, bayDTO.Items.Length);
+
         try
         {
             Bay? bay = null;
@@ -220,6 +225,7 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
     /// <param name="socketConn">Socket connection.</param>
     public void ReloadStrips(SocketConn socketConn)
     {
+        using var activity = Telemetry.ActivitySource.StartActivity("BayRepository.ReloadStrips", System.Diagnostics.ActivityKind.Internal);
         try
         {
             foreach (var strip in _bayManager.StripRepository.Strips)
