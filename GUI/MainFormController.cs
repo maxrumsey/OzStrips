@@ -176,7 +176,7 @@ public class MainFormController : IDisposable, IStripsWindow
     /// </summary>
     public void SetTitle()
     {
-        _mainForm.Title = $"OzStrips :: {_bayManager.AerodromeName}-{_socketConn.Server} :: {_layoutName}";
+        _mainForm.Title = $"OzStrips :: {_bayManager.AerodromeName}-{_socketConn.AIT.Suffix} :: {_layoutName}";
     }
 
     /// <summary>
@@ -1211,7 +1211,7 @@ public class MainFormController : IDisposable, IStripsWindow
             return;
         }
 
-        var modalChild = new SettingsWindowControl(_socketConn, _mainForm.AerodromeManager.ManuallySetAerodromes);
+        var modalChild = new SettingsWindowControl(_mainForm.AerodromeManager.ManuallySetAerodromes);
         var bm = new BaseModal(modalChild, "OzStrips Settings");
         bm.ReturnEvent += modalChild.ModalReturned;
         bm.Show(_mainForm);

@@ -30,12 +30,28 @@ public class AerodromeSubscriptionResponse
     /// <summary>
     /// Gets or sets the aerodrome ICAO.
     /// </summary>
-    public string AerodromeICAO { get; set; } = string.Empty;
+    [Obsolete("Included for backwards compatibility.")]
+    public string AerodromeICAO
+    {
+        get => AIT.ICAOCode;
+        set => AIT.ICAOCode = value;
+    }
 
     /// <summary>
     /// Gets or sets the server code.
     /// </summary>
-    public ConnectionMetadataDTO.Servers Server { get; set; }
+    [Obsolete("Included for backwards compatibility.")]
+
+    public ConnectionMetadataDTO.Servers Server
+    {
+        get => (ConnectionMetadataDTO.Servers)AIT.OldServerNumber;
+        set => AIT.OldServerNumber = (int)value;
+    }
+
+    /// <summary>
+    /// Gets or sets the aerodrome identification token (AIT).
+    /// </summary>
+    public AerodromeIdentificationToken AIT { get; set; } = new AerodromeIdentificationToken();
 
     /// <summary>
     /// Gets or sets the list of strips.

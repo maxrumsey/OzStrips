@@ -274,9 +274,9 @@ public sealed class SocketConn : IAsyncDisposable
     public List<string> Messages { get; } = [];
 
     /// <summary>
-    /// Gets or sets the current server type.
+    /// Gets or sets the aerodrome identification token.
     /// </summary>
-    public Servers Server { get; set; } = Servers.VATSIM;
+    public AerodromeIdentificationToken AIT { get; set; } = new();
 
     /// <summary>
     /// Gets the connection state.
@@ -526,16 +526,25 @@ public sealed class SocketConn : IAsyncDisposable
     {
         using var activity = Telemetry.ActivitySource.StartActivity("SocketConn.SubscribeToAerodrome");
         activity?.AddTag("conn.SignalRState", _connection.State.ToString());
+
         try
         {
+            try
+            {
+                AIT.ICAOCode = _bayManager.AerodromeName;
+            }
+            catch
+            {
+                return;
+            }
+
             if (_connection.State == HubConnectionState.Connected) // was is io connected.
             {
                 var connmetadata = new ConnectionMetadataDTO()
                 {
                     Version = OzStripsConfig.version,
                     APIVersion = "2",
-                    Server = Server,
-                    AerodromeName = _bayManager.AerodromeName,
+                    AIT = AIT,
                     Callsign = Network.Me.Callsign,
                     TraceID = Activity.Current?.Id ?? string.Empty,
                 };
@@ -555,8 +564,7 @@ public sealed class SocketConn : IAsyncDisposable
                 {
                     throw new ArgumentNullException("Subscription response was not included after aerodrome subscription.");
                 }
-                else if (response.AerodromeICAO != _bayManager.AerodromeName ||
-                    response.Server != Server)
+                else if (!response.AIT.IsMatch(AIT))
                 {
                     throw new ArgumentException("Server details did not match retained details.");
                 }
@@ -592,27 +600,9 @@ public sealed class SocketConn : IAsyncDisposable
     /// Sets the server type.
     /// </summary>
     /// <param name="type">Server connection type.</param>
-    public async void SetServerType(Servers type)
+    public void SetServerType(Servers type)
     {
-        using var activity = Telemetry.ActivitySource.StartActivity("SocketConn.SetServerType");
-        _logger.LogInformation("Setting server type to {type}", type);
-        try
-        {
-            Server = type;
-            ServerTypeChanged?.Invoke(this, EventArgs.Empty);
-
-            if (!CanConnectToCurrentServer())
-            {
-                _logger.LogTrace("Can't connect to current server");
-                return;
-            }
-
-            await SubscribeToAerodrome();
-        }
-        catch (Exception ex)
-        {
-            Util.LogError(ex);
-        }
+        var a = AIT;
     }
 
     /// <summary>
@@ -816,7 +806,7 @@ public sealed class SocketConn : IAsyncDisposable
 
     private bool CanConnectToCurrentServer()
     {
-        if (!Network.IsOfficialServer && Server == Servers.VATSIM)
+        if (!Network.IsOfficialServer && !AIT.IsSweatbox)
         {
             if (!_serverPopupShown)
             {
@@ -969,8 +959,7 @@ public sealed class SocketConn : IAsyncDisposable
         {
             try
             {
-                if (metadata.AerodromeICAO != _bayManager.AerodromeName ||
-                    metadata.Server != Server)
+                if (!metadata.AIT.IsMatch(AIT))
                 {
                     await SubscribeToAerodrome();
                     return;
@@ -1026,8 +1015,7 @@ public sealed class SocketConn : IAsyncDisposable
     {
         return new()
         {
-            Server = Server,
-            AerodromeICAO = _bayManager.AerodromeName,
+            AIT = AIT,
             TraceID = Activity.Current?.Id ?? string.Empty,
         };
     }

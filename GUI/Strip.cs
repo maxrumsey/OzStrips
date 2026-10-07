@@ -141,11 +141,11 @@ public sealed class Strip : IDisposable
     /// <summary>
     /// Gets the current server code.
     /// </summary>
-    public ConnectionMetadataDTO.Servers Server
+    public string AerodromeIdentificationString
     {
         get
         {
-            return _socketConn.Server;
+            return _socketConn.AIT.StringToken;
         }
     }
 

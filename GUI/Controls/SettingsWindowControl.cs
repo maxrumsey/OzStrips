@@ -15,8 +15,6 @@ namespace MaxRumsey.OzStripsPlugin.GUI.Controls;
 /// </summary>
 public partial class SettingsWindowControl : UserControl
 {
-    private readonly SocketConn _socket;
-
     private readonly List<string> _autoOpenOptions = new()
     {
         "Once per session",
@@ -29,30 +27,9 @@ public partial class SettingsWindowControl : UserControl
     /// </summary>
     /// <param name="socketConn">Socket Controller.</param>
     /// <param name="aerodromes">List of aerodromes.</param>
-    public SettingsWindowControl(SocketConn socketConn, List<string> aerodromes)
+    public SettingsWindowControl(List<string> aerodromes)
     {
         InitializeComponent();
-
-        _socket = socketConn;
-
-        var servercontrol = rb_vatsim;
-
-        switch (_socket.Server)
-        {
-            case Servers.SWEATBOX1:
-                servercontrol = rb_sb1;
-                break;
-            case Servers.SWEATBOX2:
-                servercontrol = rb_sb2;
-                break;
-            case Servers.SWEATBOX3:
-                servercontrol = rb_sb3;
-                break;
-            default:
-                break;
-        }
-
-        servercontrol.Checked = true;
 
         foreach (var s in aerodromes)
         {
@@ -91,26 +68,6 @@ public partial class SettingsWindowControl : UserControl
         Util.SetEnvVar("ShowLastTransmit", cb_lasttransmit.Checked);
 
         MainFormController.Instance?.ForceResize();
-    }
-
-    private void SBButtonClick(object sender, EventArgs e)
-    {
-        var type = Servers.VATSIM;
-
-        if (rb_sb1.Checked)
-        {
-            type = Servers.SWEATBOX1;
-        }
-        else if (rb_sb2.Checked)
-        {
-            type = Servers.SWEATBOX2;
-        }
-        else if (rb_sb3.Checked)
-        {
-            type = Servers.SWEATBOX3;
-        }
-
-        _socket.SetServerType(type);
     }
 
     private void ADAddClick(object sender, EventArgs e)
