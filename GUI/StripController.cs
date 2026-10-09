@@ -82,7 +82,7 @@ public class StripController
 
         if (sync)
         {
-            _ = Strip.SyncStrip();
+            Strip.SyncStrip();
         }
     }
 
@@ -94,7 +94,7 @@ public class StripController
     {
         if (sync)
         {
-            _ = Strip.SyncStrip();
+            Strip.SyncStrip();
         }
     }
 
@@ -289,7 +289,7 @@ public class StripController
             return;
         }
 
-        var modalChild = new CDMAircraftControl(Strip.CDMResult, Strip.ParentAerodrome + Strip.Server);
+        var modalChild = new CDMAircraftControl(Strip.CDMResult, Strip.AerodromeIdentificationString);
         var bm = new BaseModal(modalChild, "CDM Details :: " + Strip.FDR.Callsign);
 
         bm.Show(MainForm.MainFormInstance);
@@ -373,7 +373,7 @@ public class StripController
     public void ToggleReady()
     {
         Strip.Ready = !Strip.Ready;
-        _ = Strip.SyncStrip();
+        Strip.SyncStrip();
     }
 
     /*

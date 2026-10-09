@@ -761,7 +761,7 @@ public sealed class Strip : IDisposable
             TakeOffTime = null;
         }
 
-        _ = SyncStrip();
+        SyncStrip();
     }
 
     /// <summary>
@@ -781,7 +781,7 @@ public sealed class Strip : IDisposable
             OverrideStripType = StripType.ARRIVAL;
         }
 
-        _ = SyncStrip();
+        SyncStrip();
     }
 
     /// <summary>
@@ -793,7 +793,7 @@ public sealed class Strip : IDisposable
         if (!InhibitedAlerts.HasFlag(alert))
         {
             InhibitedAlerts |= alert;
-            _ = SyncStrip();
+            SyncStrip();
         }
     }
 
@@ -962,7 +962,7 @@ public sealed class Strip : IDisposable
 
             Controller.AssignSSR();
 
-            _ = SyncStrip();
+            SyncStrip();
         }
         catch (Exception ex)
         {
@@ -1160,7 +1160,7 @@ public sealed class Strip : IDisposable
         else
         {
             CurrentBay = nextStripBay;
-            _ = SyncStrip();
+            SyncStrip();
             _bayManager.UpdateBay(this);
 
             if (_bayManager.PickedStrip == this)
@@ -1279,12 +1279,11 @@ public sealed class Strip : IDisposable
     /// <summary>
     /// Sync the strip with the server.
     /// </summary>
-    /// <returns>Task.</returns>
-    public async Task SyncStrip()
+    public void SyncStrip()
     {
         try
         {
-            await _socketConn.SyncSC(this);
+            _socketConn.SyncSC(this);
         }
         catch (Exception ex)
         {

@@ -31,7 +31,6 @@ public sealed class SocketConn : IAsyncDisposable
 
     private readonly ILogger<SocketConn> _logger = Telemetry.LoggerFactory.CreateLogger<SocketConn>();
 
-    private bool _serverPopupShown;
     private bool _enableAutoReconnect = true;
     private DateTime _lastDesyncResolution = DateTime.MinValue;
     private volatile bool _synchronised;
@@ -311,15 +310,17 @@ public sealed class SocketConn : IAsyncDisposable
     /// Syncs the strip controller.
     /// </summary>
     /// <param name="sc">The strip controller.</param>
-    /// <returns>Task.</returns>
-    public async Task SyncSC(Strip sc)
+    public void SyncSC(Strip sc)
     {
         StripDTO scDTO = sc;
         if (CanSendDTO)
         {
+            using var activity = Telemetry.ActivitySource.StartActivity("SocketConn.SyncStrip");
+            activity?.AddTag("acid", sc.FDR.Callsign);
+
             _logger.LogInformation("Syncing strip for {callsign}.", sc.StripKey.Callsign);
             LogMessageContent("StripChange", scDTO, false);
-            await _connection.InvokeAsync("StripChange", scDTO, GetMessageMetadata());
+            FireAndForget(_connection.InvokeAsync("StripChange", scDTO, GetMessageMetadata()));
         }
     }
 
@@ -804,27 +805,8 @@ public sealed class SocketConn : IAsyncDisposable
         return new() { strips = _bayManager.StripRepository.Strips.Select(x => (StripDTO)x).ToList(), };
     }
 
-    private bool CanConnectToCurrentServer()
+    private static bool CanConnectToCurrentServer()
     {
-        if (!Network.IsOfficialServer && !AIT.IsSweatbox)
-        {
-            if (!_serverPopupShown)
-            {
-                _logger.LogInformation("Attempted connection to server while on sweatbox.");
-
-                _serverPopupShown = true;
-                var result = Util.ShowQuestionBox("Connection to OzStrips main server detected while connected to the Sweatbox.\n\n" +
-                    "Would you like to go to Settings and set Sweatbox mode?");
-
-                if (result == DialogResult.Yes)
-                {
-                    _mainForm.ShowSettings(this, new());
-                }
-            }
-
-            return false;
-        }
-
         return true;
     }
 

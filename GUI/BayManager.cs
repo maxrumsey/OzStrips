@@ -210,7 +210,7 @@ public class BayManager
                 if (controller != null && BayRepository.Bays[0] != null)
                 {
                     controller.CurrentBay = BayRepository.Bays[0].BayTypes[0];
-                    _ = controller.SyncStrip();
+                    controller.SyncStrip();
                     controller.FDR = fdr;
                     UpdateBay(controller);
                 }
@@ -247,7 +247,7 @@ public class BayManager
         {
             _logger.LogInformation("Inhibiting strip for {callsign}.", PickedStrip.StripKey.Callsign);
             PickedStrip.CurrentBay = StripBay.BAY_DEAD;
-            _ = PickedStrip.SyncStrip();
+            PickedStrip.SyncStrip();
             UpdateBay(PickedStrip);
             RemovePicked(true, true);
         }
@@ -358,7 +358,7 @@ public class BayManager
 
             _logger.LogInformation("Moving strip for {callsign} from bay {oldBay} to bay {newBay}.", strip.FDR.Callsign, strip.CurrentBay, newBay);
             strip.CurrentBay = newBay;
-            await strip.SyncStrip();
+            strip.SyncStrip();
             UpdateBay(strip);
         }
         catch (Exception ex)

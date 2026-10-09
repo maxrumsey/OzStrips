@@ -193,7 +193,7 @@ public partial class DropDown : BaseForm
         CreateDropDown([new(DropDownItem.DropDownItemType.FREETEXT, strip.Gate, 4)], strip.FDR.Callsign, s =>
         {
             strip.Gate = s;
-            _ = strip.SyncStrip();
+            strip.SyncStrip();
         });
     }
 
@@ -206,7 +206,7 @@ public partial class DropDown : BaseForm
         CreateDropDown([new(DropDownItem.DropDownItemType.FREETEXT, strip.CLX)], strip.FDR.Callsign, s =>
         {
             strip.CLX = s;
-            _ = strip.SyncStrip();
+            strip.SyncStrip();
         });
     }
 
@@ -236,7 +236,7 @@ public partial class DropDown : BaseForm
         CreateDropDown([new(DropDownItem.DropDownItemType.FREETEXT, strip.Remark, 10)], strip.FDR.Callsign, s =>
         {
             strip.Remark = s;
-            _ = strip.SyncStrip();
+            strip.SyncStrip();
         });
     }
 
@@ -257,7 +257,7 @@ public partial class DropDown : BaseForm
         CreateDropDown(items.ToArray(), strip.FDR.Callsign, s =>
         {
             strip.DepartureFrequency = s;
-            _ = strip.SyncStrip();
+            strip.SyncStrip();
         });
     }
 
