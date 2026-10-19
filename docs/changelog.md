@@ -1,4 +1,7 @@
 # Changelog
+## v0.9.3
+### Bugfixes
+- Fixed issue with CDM strips keep-alive.
 ## v0.9.2
 ### Misc Changes
 - Changed SID autofill option to be a regex, and match against current or incoming SID set.
