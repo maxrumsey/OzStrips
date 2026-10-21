@@ -1,4 +1,5 @@
-﻿using MaxRumsey.OzStripsPlugin.GUI.Shared;
+﻿using MaxRumsey.OzStripsPlugin.GUI.DTO;
+using MaxRumsey.OzStripsPlugin.GUI.Shared;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Logging;
@@ -6,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text.Json;
@@ -28,6 +30,8 @@ public sealed class SocketConn : IAsyncDisposable
     private readonly BayManager _bayManager;
     private readonly bool _isDebug = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisualStudioEdition"));
     private readonly SemaphoreSlim _connectionSemaphore = new(1, 1);
+
+    private readonly HttpClient _httpClient = new();
 
     private readonly ILogger<SocketConn> _logger = Telemetry.LoggerFactory.CreateLogger<SocketConn>();
 
@@ -769,6 +773,26 @@ public sealed class SocketConn : IAsyncDisposable
 
         try
         {
+            if (Network.IsOfficialServer)
+            {
+                AIT.Suffix = string.Empty;
+            }
+            else
+            {
+                var suffix = "INVALID";
+
+                var res = await _httpClient.GetAsync("https://sweatbox1.vatpac.org/session?cid=" + Network.ControllerId);
+                var text = await res.Content.ReadAsStringAsync();
+                var tok = JsonSerializer.Deserialize<SweatboxSession>(text);
+
+                if (res.IsSuccessStatusCode && tok?.SessionId.Length > 8)
+                {
+                    suffix = tok.SessionId[^8..];
+                }
+
+                AIT.Suffix = suffix;
+            }
+
             await ConnectionStateChanged(ConnectionState.CONNECTED);
             activity?.SetTag("conn.state", State.ToString());
         }
