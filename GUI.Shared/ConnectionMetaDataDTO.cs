@@ -51,7 +51,7 @@ public record ConnectionMetadataDTO
     /// Gets or sets the aerodrome ICAO.
     /// </summary>
     [Obsolete("Included for backwards compatibility.")]
-    public string AerodromeICAO
+    public string AerodromeName
     {
         get => AIT.ICAOCode;
         set => AIT.ICAOCode = value;
