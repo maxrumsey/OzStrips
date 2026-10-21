@@ -28,6 +28,7 @@ public class AerodromeIdentificationToken
             {
                 throw new ArgumentException("ICAO code must be 4 characters long.");
             }
+
             _icaoCode = value.ToUpperInvariant();
         }
     }
