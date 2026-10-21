@@ -578,11 +578,12 @@ public sealed class SocketConn : IAsyncDisposable
                 {
                     _bayManager.StripRepository.LoadCache(response.StripCache ?? [], _bayManager, this);
 
+                    using var activity = Telemetry.ActivitySource.StartActivity("SocketConn.SubscribeToAerodrome.LoadBays");
                     foreach (var bay in response.Bays ?? [])
                     {
                         if (bay is not null)
                         {
-                            InvokeOnGUI(() => _bayManager.BayRepository.UpdateOrder(bay));
+                            _bayManager.BayRepository.UpdateOrder(bay);
                         }
                     }
                 });
@@ -599,15 +600,6 @@ public sealed class SocketConn : IAsyncDisposable
         {
             Util.LogError(ex);
         }
-    }
-
-    /// <summary>
-    /// Sets the server type.
-    /// </summary>
-    /// <param name="type">Server connection type.</param>
-    public void SetServerType(Servers type)
-    {
-        var a = AIT;
     }
 
     /// <summary>
@@ -791,6 +783,7 @@ public sealed class SocketConn : IAsyncDisposable
                 }
 
                 AIT.Suffix = suffix;
+                ServerTypeChanged?.Invoke(this, EventArgs.Empty);
             }
 
             await ConnectionStateChanged(ConnectionState.CONNECTED);

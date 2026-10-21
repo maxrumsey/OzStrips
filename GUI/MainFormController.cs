@@ -176,7 +176,9 @@ public class MainFormController : IDisposable, IStripsWindow
     /// </summary>
     public void SetTitle()
     {
-        _mainForm.Title = $"OzStrips :: {_bayManager.AerodromeName}-{_socketConn.AIT.Suffix} :: {_layoutName}";
+        var suffix = string.IsNullOrEmpty(_socketConn.AIT.Suffix) ? "VATSIM" : _socketConn.AIT.Suffix;
+
+        _mainForm.Title = $"OzStrips :: {_bayManager.AerodromeName}-{suffix} :: {_layoutName}";
     }
 
     /// <summary>
@@ -370,6 +372,7 @@ public class MainFormController : IDisposable, IStripsWindow
         {
             Util.LogError(ex);
         }
+
         activity?.SetStatus(System.Diagnostics.ActivityStatusCode.Ok);
     }
 

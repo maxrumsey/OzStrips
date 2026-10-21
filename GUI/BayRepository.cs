@@ -66,11 +66,22 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
                 if (currentBay.BayTypes.Contains(bayDTO.bay))
                 {
                     bay = currentBay;
+
+                    /*
+                     * If this is a sub-bay, reject ordering.
+                     */
+                    if (currentBay.BayTypes[0] != bayDTO.bay)
+                    {
+                        _logger.LogTrace("Rejecting bayorder for bay {} in {}", bayDTO.bay, currentBay.Name);
+
+                        return;
+                    }
                 }
             }
 
             if (bay == null)
             {
+                _logger.LogTrace("Failed to find bay.");
                 return;
             }
 
