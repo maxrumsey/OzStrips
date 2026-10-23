@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,9 @@ namespace MaxRumsey.OzStripsPlugin.GUI;
 public class StripRepository
 {
     private readonly List<Strip> _strips = [];
+
+    private static readonly Counter<int> _fdrUpdateCounter = Telemetry.Meter.CreateCounter<int>("StripRepository.FDRUpdate");
+    private static readonly Counter<int> _createStripCounter = Telemetry.Meter.CreateCounter<int>("StripRepository.FDRUpdate");
 
     /// <summary>
     /// Gets a list of strip controllers.
@@ -77,6 +81,7 @@ public class StripRepository
     /// <returns>The appropriate strip controller for the FDR.</returns>
     public async Task<Strip> UpdateFDR(FDR fdr, BayManager bayManager, SocketConn socketConn, bool inhibitReorders = false)
     {
+        _fdrUpdateCounter.Add(1);
         try
         {
             foreach (var controller in Strips)
@@ -270,6 +275,8 @@ public class StripRepository
 
     private static async Task<Strip> CreateStrip(FDR fdr, BayManager bayManager, SocketConn socketConn, bool inhibitReorders = false)
     {
+        _createStripCounter.Add(1);
+
         var stripController = new Strip(fdr, bayManager, socketConn);
         bayManager.AddStrip(stripController, true, inhibitReorders);
         socketConn.SoftSyncStrip(stripController);

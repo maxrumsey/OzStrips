@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -31,6 +32,8 @@ public sealed class Strip : IDisposable
     private static readonly Regex _sidRouteRegex = new(@"^[\w\d]+\/[\d]{2}\w?");
     private static readonly Regex _gpscoordRegex = new(@"^[\d]+\w[\d]+\w");
     private static readonly Regex _airwayRegex = new(@"^\w\d+");
+
+    private static Counter<int> _autoFillCounter = Telemetry.Meter.CreateCounter<int>("Strip.FillStrip");
 
     private readonly BayManager _bayManager;
     private readonly SocketConn _socketConn;
@@ -902,6 +905,7 @@ public sealed class Strip : IDisposable
         using var activity = Telemetry.ActivitySource.StartActivity("FillStrip", System.Diagnostics.ActivityKind.Internal);
         activity?.SetTag("ozstrips.callsign", FDR.Callsign);
 
+        _autoFillCounter.Add(1);
         _logger.LogInformation("Filling strip for {Callsign}", FDR.Callsign);
 
         if (_bayManager.AutoAssigner is null || _bayManager.AerodromeState.ATIS is null || DefaultStripType == StripType.ARRIVAL)
