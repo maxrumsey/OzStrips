@@ -3,9 +3,11 @@ using MaxRumsey.OzStripsPlugin.GUI.Shared;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Logging;
+using OpenTelemetry.Metrics;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
@@ -34,6 +36,11 @@ public sealed class SocketConn : IAsyncDisposable
     private readonly HttpClient _httpClient = new();
 
     private readonly ILogger<SocketConn> _logger = Telemetry.LoggerFactory.CreateLogger<SocketConn>();
+
+    private readonly Counter<int> _aerodromeChanged = Telemetry.Meter.CreateCounter<int>("SocketConn.AerodromeSubscription");
+    private readonly Counter<int> _cdmSyncCounter = Telemetry.Meter.CreateCounter<int>("SocketConn.CDMSync");
+    private readonly Counter<int> _stripSyncCounter = Telemetry.Meter.CreateCounter<int>("SocketConn.StripSync");
+
 
     private bool _enableAutoReconnect = true;
     private DateTime _lastDesyncResolution = DateTime.MinValue;
@@ -322,6 +329,8 @@ public sealed class SocketConn : IAsyncDisposable
             using var activity = Telemetry.ActivitySource.StartActivity("SocketConn.SyncStrip");
             activity?.AddTag("acid", sc.FDR.Callsign);
 
+            _stripSyncCounter.Add(1);
+
             _logger.LogDebug("Syncing strip for {callsign}.", sc.StripKey.Callsign);
             LogMessageContent("StripChange", scDTO, false);
             FireAndForget(_connection.InvokeAsync("StripChange", scDTO, GetMessageMetadata()));
@@ -387,6 +396,8 @@ public sealed class SocketConn : IAsyncDisposable
         activity?.SetTag("ozstrips.callsign", strip.StripKey.Callsign);
         activity?.SetTag("ozstrips.cdm.state", state);
         activity?.SetTag("ozstrips.cdm.rwy", strip.RWY);
+
+        _cdmSyncCounter.Add(1);
 
         var dto = new CDMAircraftDTO()
         {
@@ -552,6 +563,8 @@ public sealed class SocketConn : IAsyncDisposable
     {
         using var activity = Telemetry.ActivitySource.StartActivity("SocketConn.SubscribeToAerodrome");
         activity?.AddTag("conn.SignalRState", _connection.State.ToString());
+
+        _aerodromeChanged.Add(1);
 
         try
         {
