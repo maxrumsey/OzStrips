@@ -60,8 +60,6 @@ internal static class Telemetry
 
         _loggerFactory = Microsoft.Extensions.Logging.LoggerFactory.Create(builder =>
         {
-            builder.AddFilter("MaxRumsey.OzStripsPlugin.GUI.SocketConn", Debugger.IsAttached ? LogLevel.Trace : LogLevel.Information);
-
             builder.AddOpenTelemetry(o =>
             {
                 o.SetResourceBuilder(resourceBuilder);

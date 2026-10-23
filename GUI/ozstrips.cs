@@ -76,14 +76,18 @@ public sealed class OzStrips : IPlugin, IDisposable, ILabelPlugin
 
         _loaded.Add(1);
 
-        Application.ApplicationExit += (s, e) => Telemetry.Shutdown();
         AppDomain.CurrentDomain.ProcessExit += (s, e) => Telemetry.Shutdown();
+
         // Catch the crash path too — otherwise a fault-exit app never flushes
-        Application.ThreadException += (s, e) =>
+        AppDomain.CurrentDomain.UnhandledException += (s, e) =>
         {
             var logger = Telemetry.LoggerFactory.CreateLogger("UnhandledException");
-            logger.LogError(e.Exception, "Unhandled UI thread exception");
-            Telemetry.Shutdown();
+            logger.LogError(e.ExceptionObject as Exception, "Unhandled UI thread exception");
+
+            if (e.IsTerminating)
+            {
+                Telemetry.Shutdown();
+            }
         };
 
         _aerodromeManager.Initialize();
