@@ -55,6 +55,7 @@ public sealed class Strip : IDisposable
         ParentAerodrome = bayManager.AerodromeName;
         _socketConn = socketConn;
         CurrentBay = StripBay.BAY_PREA;
+
         if (StripType == StripType.ARRIVAL)
         {
             CurrentBay = StripBay.BAY_ARRIVAL;

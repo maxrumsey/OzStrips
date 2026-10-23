@@ -15,7 +15,7 @@ internal static class Telemetry
 {
     private const string _serviceName = "ozstrips-client";
 
-    private static string OltpEndpoint => Debugger.IsAttached ? "http://localhost:4318" : "https://oltp.maxrumsey.com"; // todo: fix
+    private static string OltpEndpoint => Debugger.IsAttached ? "http://localhost:4318" : "https://oltp.maxrumsey.xyz";
 
     public static readonly ActivitySource ActivitySource = new ActivitySource(_serviceName);
     public static readonly Meter Meter = new Meter(_serviceName);
@@ -29,10 +29,10 @@ internal static class Telemetry
     public static void Initialize()
     {
         var resourceBuilder = ResourceBuilder.CreateDefault()
-            .AddService(serviceName: _serviceName, serviceVersion: GetVersion())
+            .AddService(serviceName: _serviceName, serviceVersion: GetVersion(), serviceNamespace: "ozstrips")
             .AddAttributes(new[]
             {
-                    new KeyValuePair<string, object>("deployment.environment", Debugger.IsAttached ? "dev" : "prod"),
+                    new KeyValuePair<string, object>("deployment.environment", Debugger.IsAttached ? "development" : "production"),
                     new KeyValuePair<string, object>("host.name", Environment.MachineName),
             });
 
@@ -60,6 +60,8 @@ internal static class Telemetry
 
         _loggerFactory = Microsoft.Extensions.Logging.LoggerFactory.Create(builder =>
         {
+            builder.AddFilter("MaxRumsey.OzStripsPlugin.GUI.SocketConn", Debugger.IsAttached ? LogLevel.Trace : LogLevel.Information);
+
             builder.AddOpenTelemetry(o =>
             {
                 o.SetResourceBuilder(resourceBuilder);
@@ -86,6 +88,6 @@ internal static class Telemetry
     }
 
     private static string GetVersion() =>
-        System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        OzStripsConfig.version;
 
 }

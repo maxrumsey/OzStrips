@@ -322,9 +322,30 @@ public sealed class SocketConn : IAsyncDisposable
             using var activity = Telemetry.ActivitySource.StartActivity("SocketConn.SyncStrip");
             activity?.AddTag("acid", sc.FDR.Callsign);
 
-            _logger.LogInformation("Syncing strip for {callsign}.", sc.StripKey.Callsign);
+            _logger.LogDebug("Syncing strip for {callsign}.", sc.StripKey.Callsign);
             LogMessageContent("StripChange", scDTO, false);
             FireAndForget(_connection.InvokeAsync("StripChange", scDTO, GetMessageMetadata()));
+        }
+    }
+
+    /// <summary>
+    /// Soft-syncs a list of strips to the server. If this strip exists on the server, it wont be synced.
+    /// </summary>
+    /// <param name="sc">The strip controllers.</param>
+    public void SoftSyncStrip(Strip sc)
+    {
+        var scDTO = (StripDTO)sc;
+        if (CanSendDTO)
+        {
+            using var activity = Telemetry.ActivitySource.StartActivity("SocketConn.SoftSyncStrip");
+
+            activity?.AddTag("ozstrips.callsign", scDTO.StripKey.Callsign);
+
+            _logger.LogTrace("SoftSyncing strip {acid}", scDTO.StripKey.Callsign);
+
+            LogMessageContent("SoftSyncStrip", scDTO, false);
+
+            FireAndForget(_connection.InvokeAsync("SoftSyncStrip", scDTO, GetMessageMetadata()));
         }
     }
 
@@ -338,7 +359,7 @@ public sealed class SocketConn : IAsyncDisposable
         using var activity = Telemetry.ActivitySource.StartActivity("SendStripStatus");
         activity?.AddTag("acid", acid);
 
-        _logger.LogInformation("Sending strip status for {callsign}.", acid);
+        _logger.LogDebug("Sending strip status for {callsign}.", acid);
 
         if (CanSendDTO)
         {
@@ -379,7 +400,7 @@ public sealed class SocketConn : IAsyncDisposable
 
         if (CanSendDTO && list.Count > 0)
         {
-            _logger.LogInformation("Sending CDM update.");
+            _logger.LogDebug("Sending CDM update.");
             LogMessageContent("UplinkCDMAircraft", list, false);
             FireAndForget(_connection.SendAsync("UplinkCDMAircraft", list, GetMessageMetadata()));
         }
@@ -398,7 +419,7 @@ public sealed class SocketConn : IAsyncDisposable
     {
         try
         {
-            _logger.LogInformation("Requesting routes for {callsign}.", sc.StripKey.Callsign);
+            _logger.LogTrace("Requesting routes for {callsign}.", sc.StripKey.Callsign);
             LogMessageContent("GetRoutes", sc.StripKey, false);
 
             if (_connection.State == HubConnectionState.Connected && _synchronised)
@@ -435,7 +456,7 @@ public sealed class SocketConn : IAsyncDisposable
     {
         if (_connection.State == HubConnectionState.Connected && _synchronised)
         {
-            _logger.LogInformation("Requesting strip data for {callsign}.", strip.StripKey.Callsign);
+            _logger.LogDebug("Requesting strip data for {callsign}.", strip.StripKey.Callsign);
 
             LogMessageContent("RequestStrip", strip.StripKey, false);
             var dto = await _connection.InvokeAsync<StripDTO?>("RequestStrip", strip.StripKey, GetMessageMetadata());
@@ -457,7 +478,7 @@ public sealed class SocketConn : IAsyncDisposable
     {
         if (CanSendDTO)
         {
-            _logger.LogInformation("Sending PDC to server for {callsign}.", strip.StripKey.Callsign);
+            _logger.LogDebug("Sending PDC to server for {callsign}.", strip.StripKey.Callsign);
             LogMessageContent("SendPDC", text, false);
             await _connection.InvokeAsync("SendPDC", (StripDTO)strip, text, GetMessageMetadata());
         }
@@ -471,7 +492,7 @@ public sealed class SocketConn : IAsyncDisposable
     {
         if (CanSendDTO)
         {
-            _logger.LogInformation("Sending bay change to server: {bayChange}", bayChange);
+            _logger.LogDebug("Sending bay change to server: {bayChange}", bayChange);
 
             LogMessageContent("BayChange", bayChange, false);
             FireAndForget(_connection.SendAsync("BayChange", bayChange, GetMessageMetadata()));
@@ -486,7 +507,7 @@ public sealed class SocketConn : IAsyncDisposable
     {
         if (CanSendDTO)
         {
-            _logger.LogInformation("Sending circuit activity status to server: {status}", status);
+            _logger.LogDebug("Sending circuit activity status to server: {status}", status);
             LogMessageContent("UpdateCircuitMode", status, false);
             FireAndForget(_connection.SendAsync("UpdateCircuitMode", status, GetMessageMetadata()));
         }
@@ -500,7 +521,7 @@ public sealed class SocketConn : IAsyncDisposable
     {
         if (CanSendDTO)
         {
-            _logger.LogInformation("Sending coordinator activity status to server: {status}", status);
+            _logger.LogDebug("Sending coordinator activity status to server: {status}", status);
             LogMessageContent("UpdateCoordinatorMode", status, false);
             FireAndForget(_connection.SendAsync("UpdateCoordinatorMode", status, GetMessageMetadata()));
         }
@@ -514,7 +535,7 @@ public sealed class SocketConn : IAsyncDisposable
     {
         if (CanSendDTO)
         {
-            _logger.LogInformation("Sending CDM parameters to server.");
+            _logger.LogDebug("Sending CDM parameters to server.");
             LogMessageContent("ChangeCDMParameters", param, false);
             FireAndForget(_connection.SendAsync("ChangeCDMParameters", param, GetMessageMetadata()));
         }
@@ -586,6 +607,8 @@ public sealed class SocketConn : IAsyncDisposable
                             _bayManager.BayRepository.UpdateOrder(bay);
                         }
                     }
+
+                    _bayManager.StripRepository.SoftSyncAll(this);
                 });
 
                 _aerodromeSubscriptionRegistered = DateTime.Now;
@@ -611,7 +634,7 @@ public sealed class SocketConn : IAsyncDisposable
         var cacheDTO = CreateCacheDTO();
         if (CanSendDTO)
         {
-            _logger.LogInformation("Sending strip cache to server.");
+            _logger.LogTrace("Sending strip cache to server.");
             LogMessageContent("StripCache", cacheDTO, false);
             await _connection.SendAsync("StripCache", cacheDTO, GetMessageMetadata());
         }
@@ -692,7 +715,7 @@ public sealed class SocketConn : IAsyncDisposable
 
         if (CanSendDTO)
         {
-            _logger.LogInformation("CDM uplink of {count} aircraft to server.", cdmDTOs.Count);
+            _logger.LogDebug("CDM uplink of {count} aircraft to server.", cdmDTOs.Count);
             activity?.AddTag("ozstrips.pushedStripsCount", pushedStrips.Count());
             activity?.AddTag("ozstrips.depStripsCount", depStrips.Count());
             activity?.AddTag("ozstrips.activeStripsCount", activeStrips.Count);
@@ -771,9 +794,9 @@ public sealed class SocketConn : IAsyncDisposable
             }
             else
             {
-                var suffix = "INVALID";
+                var suffix = "SWEATBOX";
 
-                var res = await _httpClient.GetAsync("https://sweatbox1.vatpac.org/session?cid=" + Network.ControllerId);
+                var res = await _httpClient.GetAsync($"https://{Network.ServerIP}/session?cid=" + Network.ControllerId);
                 var text = await res.Content.ReadAsStringAsync();
                 var tok = JsonSerializer.Deserialize<SweatboxSession>(text);
 
@@ -783,8 +806,9 @@ public sealed class SocketConn : IAsyncDisposable
                 }
 
                 AIT.Suffix = suffix;
-                ServerTypeChanged?.Invoke(this, EventArgs.Empty);
             }
+
+            ServerTypeChanged?.Invoke(this, EventArgs.Empty);
 
             await ConnectionStateChanged(ConnectionState.CONNECTED);
             activity?.SetTag("conn.state", State.ToString());

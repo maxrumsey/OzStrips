@@ -189,6 +189,18 @@ public class StripRepository
     }
 
     /// <summary>
+    /// Performs a non-destructive synchronization of all entities.
+    /// </summary>
+    /// <param name="conn">Socketconn.</param>
+    public void SoftSyncAll(SocketConn conn)
+    {
+        foreach (var strip in Strips)
+        {
+            conn.SoftSyncStrip(strip);
+        }
+    }
+
+    /// <summary>
     /// Marks all strips as awaiting routes to be fetched from the server. Called on connection establishment.
     /// </summary>
     public void MarkAllStripsAsAwaitingRoutes()
@@ -260,6 +272,8 @@ public class StripRepository
     {
         var stripController = new Strip(fdr, bayManager, socketConn);
         bayManager.AddStrip(stripController, true, inhibitReorders);
+        socketConn.SoftSyncStrip(stripController);
+
         await stripController.FetchStripData();
         return stripController;
     }

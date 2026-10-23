@@ -55,7 +55,7 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
     /// <param name="bayDTO">The bay data.</param>
     public void UpdateOrder(BayDTO bayDTO)
     {
-        _logger.LogTrace("Updating bay order for bay {BayType} with {ItemCount} items", bayDTO.bay, bayDTO.Items.Length);
+        _logger.LogDebug("Updating bay order for bay {BayType} with {ItemCount} items", bayDTO.bay, bayDTO.Items.Length);
 
         try
         {
@@ -72,7 +72,7 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
                      */
                     if (currentBay.BayTypes[0] != bayDTO.bay)
                     {
-                        _logger.LogTrace("Rejecting bayorder for bay {} in {}", bayDTO.bay, currentBay.Name);
+                        _logger.LogDebug("Rejecting bayorder for bay {} in {}", bayDTO.bay, currentBay.Name);
 
                         return;
                     }
@@ -81,7 +81,7 @@ public class BayRepository(FlowLayoutPanel main, BayManager sender)
 
             if (bay == null)
             {
-                _logger.LogTrace("Failed to find bay.");
+                _logger.LogDebug("Failed to find bay.");
                 return;
             }
 
