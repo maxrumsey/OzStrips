@@ -72,7 +72,7 @@ internal static class Telemetry
                     exp.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.HttpProtobuf;
                 });
             });
-            builder.SetMinimumLevel(Debugger.IsAttached ? LogLevel.Trace : LogLevel.Information);
+            builder.SetMinimumLevel(Debugger.IsAttached ? LogLevel.Trace : LogLevel.Debug);
         });
     }
 
