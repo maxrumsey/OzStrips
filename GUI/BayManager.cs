@@ -636,11 +636,11 @@ public class BayManager
 
         if (!serverInitiated)
         {
-            if (strip.CurrentBay >= StripBay.BAY_CLEARED)
+            if (strip.CurrentBay >= StripBay.BAY_TAXI)
             {
                 strip.CoordinateStrip();
             }
-            else if (strip.CurrentBay == StripBay.BAY_PREA)
+            else if (strip.CurrentBay is >= StripBay.BAY_PREA and < StripBay.BAY_TAXI)
             {
                 strip.DeactivateStrip();
             }
