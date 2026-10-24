@@ -33,7 +33,7 @@ public sealed class Strip : IDisposable
     private static readonly Regex _gpscoordRegex = new(@"^[\d]+\w[\d]+\w");
     private static readonly Regex _airwayRegex = new(@"^\w\d+");
 
-    private static Counter<int> _autoFillCounter = Telemetry.Meter.CreateCounter<int>("Strip.FillStrip");
+    private static readonly Counter<int> _autoFillCounter = Telemetry.Meter.CreateCounter<int>("Strip.FillStrip");
 
     private readonly BayManager _bayManager;
     private readonly SocketConn _socketConn;
@@ -82,7 +82,7 @@ public sealed class Strip : IDisposable
     {
         get
         {
-            return _bayManager.AerodromeState.CDMParameters?.Enabled == true ? _bayManager.AerodromeState.CDMResults.Find(x => x.Aircraft.Key.Matches(StripKey)) : null;
+            return _bayManager.AerodromeState.CDMParameters?.Enabled == true ? _bayManager.AerodromeState.CDMResults.Find(x => x.Aircraft?.Key.Matches(StripKey) == true) : null;
         }
     }
 
@@ -378,9 +378,14 @@ public sealed class Strip : IDisposable
         {
             if (CDMResult is not null)
             {
-                if (CDMResult.Aircraft.State != CDMState.ACTIVE)
+                if (CDMResult.Aircraft!.State != CDMState.ACTIVE)
                 {
                     return string.Empty;
+                }
+
+                if (CDMResult.TSAT == DateTimeOffset.MaxValue)
+                {
+                    return "****";
                 }
 
                 return CDMResult.TSAT.ToUniversalTime().ToString("HHmm", CultureInfo.InvariantCulture);

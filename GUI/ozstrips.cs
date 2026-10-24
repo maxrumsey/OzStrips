@@ -1,9 +1,4 @@
-﻿using MaxRumsey.OzStripsPlugin.GUI;
-using MaxRumsey.OzStripsPlugin.GUI.DTO;
-using Microsoft.Extensions.Logging;
-using Microsoft.Win32;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics.Metrics;
@@ -14,6 +9,11 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
+using MaxRumsey.OzStripsPlugin.GUI;
+using MaxRumsey.OzStripsPlugin.GUI.DTO;
+using Microsoft.Extensions.Logging;
+using Microsoft.Win32;
+using Newtonsoft.Json;
 using vatsys;
 using vatsys.Plugin;
 
@@ -38,7 +38,6 @@ public sealed class OzStrips : IPlugin, IDisposable, ILabelPlugin
     private readonly ILogger<OzStrips> _logger;
     private readonly Counter<long> _loaded;
     private readonly Counter<long> _opened;
-
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OzStrips"/> class.

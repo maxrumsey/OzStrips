@@ -25,7 +25,6 @@ public partial class SettingsWindowControl : UserControl
     /// <summary>
     /// Initializes a new instance of the <see cref="SettingsWindowControl"/> class.
     /// </summary>
-    /// <param name="socketConn">Socket Controller.</param>
     /// <param name="aerodromes">List of aerodromes.</param>
     public SettingsWindowControl(List<string> aerodromes)
     {

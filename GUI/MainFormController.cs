@@ -55,7 +55,7 @@ public class MainFormController : IDisposable, IStripsWindow
         }
     }
 
-    private Counter<int> _changedAerodromeMeter = Telemetry.Meter.CreateCounter<int>("changed_aerodrome", "changes", "Number of times the aerodrome has been changed");
+    private readonly Counter<int> _changedAerodromeMeter = Telemetry.Meter.CreateCounter<int>("changed_aerodrome", "changes", "Number of times the aerodrome has been changed");
 
     private readonly MainForm _mainForm;
     private readonly Timer _timer;
@@ -1345,7 +1345,7 @@ public class MainFormController : IDisposable, IStripsWindow
     /// <inheritdoc/>
     public CDMResultDTO? GetCDMResult(StripKey key)
     {
-        return _bayManager.AerodromeState.CDMResults.Find(x => x.Aircraft.Key.Matches(key));
+        return _bayManager.AerodromeState.CDMResults.Find(x => x.Aircraft?.Key.Matches(key) == true);
     }
 
     /// <summary>

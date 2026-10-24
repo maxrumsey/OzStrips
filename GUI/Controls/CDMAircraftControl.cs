@@ -22,7 +22,7 @@ public partial class CDMAircraftControl : UserControl
         InitializeComponent();
 
         _adCode = adCode;
-        _callsign = cdmDTO.Aircraft.Key.Callsign;
+        _callsign = cdmDTO.Aircraft!.Key.Callsign;
 
         var slotPTOT = cdmDTO.Slot?.PTOT;
 

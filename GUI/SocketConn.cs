@@ -1,10 +1,4 @@
-﻿using MaxRumsey.OzStripsPlugin.GUI.DTO;
-using MaxRumsey.OzStripsPlugin.GUI.Shared;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.Extensions.Logging;
-using OpenTelemetry.Metrics;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Metrics;
@@ -17,6 +11,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
+using MaxRumsey.OzStripsPlugin.GUI.DTO;
+using MaxRumsey.OzStripsPlugin.GUI.Shared;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Extensions.Logging;
+using OpenTelemetry.Metrics;
 using vatsys;
 using static MaxRumsey.OzStripsPlugin.GUI.Shared.ConnectionMetadataDTO;
 
@@ -40,7 +40,6 @@ public sealed class SocketConn : IAsyncDisposable
     private readonly Counter<int> _aerodromeChanged = Telemetry.Meter.CreateCounter<int>("SocketConn.AerodromeSubscription");
     private readonly Counter<int> _cdmSyncCounter = Telemetry.Meter.CreateCounter<int>("SocketConn.CDMSync");
     private readonly Counter<int> _stripSyncCounter = Telemetry.Meter.CreateCounter<int>("SocketConn.StripSync");
-
 
     private bool _enableAutoReconnect = true;
     private DateTime _lastDesyncResolution = DateTime.MinValue;
