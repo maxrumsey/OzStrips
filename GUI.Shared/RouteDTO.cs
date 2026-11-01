@@ -13,12 +13,10 @@ public class RouteDTO
     /// <summary>
     /// Gets or sets the aircraft type.
     /// </summary>
-    [JsonPropertyName("acft")]
     public string AircraftType { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the route information.
     /// </summary>
-    [JsonPropertyName("route")]
     public string RouteText { get; set; } = string.Empty;
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MaxRumsey.OzStripsPlugin.GUI.Shared;
+﻿namespace MaxRumsey.OzStripsPlugin.GUI.Shared;
 
 /// <summary>
 /// Types of CDM slots, with associated priority values.
@@ -40,4 +34,9 @@ public enum CDMSlotTypes
     /// Early with a slot.
     /// </summary>
     EARLY_NONCOMPLIANT,
+
+    /// <summary>
+    /// Aircraft that couldnt be allocated a final departure slot.
+    /// </summary>
+    UNSEQUENCED,
 }

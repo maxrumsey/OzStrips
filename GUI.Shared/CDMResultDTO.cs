@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace MaxRumsey.OzStripsPlugin.GUI.Shared;
 
@@ -55,12 +50,6 @@ public class CDMResultDTO
     /// Gets or sets a valid and correlated slot.
     /// </summary>
     public CDMSlotDTO? Slot { get; set; }
-
-    /// <summary>
-    /// Gets or sets the duration of the ground stop.
-    /// </summary>
-    [JsonRequired]
-    public TimeSpan GroundStopLength { get; set; } = TimeSpan.MaxValue;
 
     /// <summary>
     /// Gets or sets a value indicating whether the entity is affected by a ground stop.

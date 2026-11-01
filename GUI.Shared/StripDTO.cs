@@ -31,7 +31,6 @@ public class StripDTO
     /// <summary>
     /// Gets or sets the departure frequency.
     /// </summary>
-    [JsonPropertyName("departurefreq")]
     public string DepartureFrequency { get; set; } = string.Empty;
 
     /// <summary>

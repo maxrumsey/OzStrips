@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace MaxRumsey.OzStripsPlugin.GUI.Shared;
 
@@ -53,4 +48,9 @@ public class CDMAircraftDTO
     /// </summary>
     [JsonRequired]
     public CDMState State { get; set; } = CDMState.PREACTIVE;
+
+    /// <summary>
+    /// Gets or sets the ID.
+    /// </summary>
+    public Guid ID { get; set; } = Guid.Empty;
 }
