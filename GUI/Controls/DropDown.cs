@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Media;
 using MaxRumsey.OzStripsPlugin.GUI.DTO.XML;
 using vatsys;
 
@@ -29,9 +31,22 @@ public partial class DropDown : BaseForm
         }
 
         PerformLayout();
-        flowLayoutPanel1.Size = new(100, 28 * items.Length);
-        ClientSize = new(100, (28 * items.Length) + 25);
-        MinimumSize = new(100, 28);
+        var x = 100;
+        var textbox_x = (items.Max(x => x.MaxLen) * 8) + 10;
+
+        if (textbox_x > x)
+        {
+            x = textbox_x;
+        }
+
+        foreach (Control item in flowLayoutPanel1.Controls)
+        {
+            item.Size = new(x, item.Size.Height);
+        }
+
+        flowLayoutPanel1.Size = new(x, 28 * items.Length);
+        ClientSize = new(x, (28 * items.Length) + 25);
+        MinimumSize = new(x, 28);
         MaximumSize = ClientSize;
         StartPosition = FormStartPosition.Manual;
         Location = Cursor.Position;
