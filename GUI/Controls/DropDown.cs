@@ -216,7 +216,7 @@ public partial class DropDown : BaseForm
     /// <param name="strip">Strip.</param>
     public static void ShowGlopDropDown(Strip strip)
     {
-        CreateDropDown([new(DropDownItem.DropDownItemType.FREETEXT, strip.FDR.GlobalOpData, 10)], strip.FDR.Callsign, s =>
+        CreateDropDown([new(DropDownItem.DropDownItemType.FREETEXT, strip.FDR.GlobalOpData, 15)], strip.FDR.Callsign, s =>
         {
             if (!Network.Me.IsRealATC)
             {
@@ -233,7 +233,7 @@ public partial class DropDown : BaseForm
     /// <param name="strip">Strip.</param>
     public static void ShowRmkDropDown(Strip strip)
     {
-        CreateDropDown([new(DropDownItem.DropDownItemType.FREETEXT, strip.Remark, 10)], strip.FDR.Callsign, s =>
+        CreateDropDown([new(DropDownItem.DropDownItemType.FREETEXT, strip.Remark, 15)], strip.FDR.Callsign, s =>
         {
             strip.Remark = s;
             strip.SyncStrip();
