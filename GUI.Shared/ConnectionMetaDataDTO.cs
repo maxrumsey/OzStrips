@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MaxRumsey.OzStripsPlugin.GUI.Shared;
+﻿namespace MaxRumsey.OzStripsPlugin.GUI.Shared;
 
 /// <summary>
 /// Represents metadata about the connection to the OzStrips server.
@@ -77,6 +71,11 @@ public record ConnectionMetadataDTO
     /// Gets or sets the user callsign.
     /// </summary>
     public string Callsign { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the user's vatsim id.
+    /// </summary>
+    public string VatsimID { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the parent trace ID.
